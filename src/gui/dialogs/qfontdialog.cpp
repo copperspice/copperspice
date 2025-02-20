@@ -103,7 +103,7 @@ static constexpr const Qt::WindowFlags DefaultWindowFlags =
    Qt::Dialog | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint;
 
 QFontDialogPrivate::QFontDialogPrivate()
-   : writingSystem(QFontDatabase::Any), options(QSharedPointer<QFontDialogOptions>::create())
+   : writingSystem(QFontDatabase::Any), m_options(QSharedPointer<QFontDialogOptions>::create())
 {
 }
 
@@ -202,7 +202,7 @@ void QFontDialogPrivate::init()
 
    writingSystemAccel->setIndent(2);
 
-   size = 0;
+   m_size = 0;
    smoothScalable = false;
 
    QObject::connect(writingSystemCombo, cs_mp_cast<int>(&QComboBox::activated), q,
@@ -399,12 +399,12 @@ void QFontDialogPrivate::initHelper(QPlatformDialogHelper *h)
    QObject::connect(tmp, &QPlatformFontDialogHelper::currentFontChanged, d, &QFontDialog::currentFontChanged);
    QObject::connect(tmp, &QPlatformFontDialogHelper::fontSelected,       d, &QFontDialog::fontSelected);
 
-   tmp->setOptions(options);
+   tmp->setOptions(m_options);
 }
 
 void QFontDialogPrivate::helperPrepareShow(QPlatformDialogHelper *)
 {
-   options->setWindowTitle(q_func()->windowTitle());
+   m_options->setWindowTitle(q_func()->windowTitle());
 }
 
 void QFontDialogPrivate::updateFamilies()
@@ -454,7 +454,7 @@ void QFontDialogPrivate::updateFamilies()
    QFont f;
 
    // do the right thing for a list of family names in the font.
-   QFontDatabase::parseFontName(family, foundryName1, familyName1);
+   QFontDatabase::parseFontName(m_family, foundryName1, familyName1);
 
    QStringList::const_iterator it = familyNames.constBegin();
    int i = 0;
@@ -511,7 +511,7 @@ void QFontDialogPrivate::updateStyles()
 {
    Q_Q(QFontDialog);
 
-   QStringList styles = fdb.styles(familyList->currentText());
+   QStringList styles = m_fdb.styles(familyList->currentText());
    styleList->model()->setStringList(styles);
 
    if (styles.isEmpty()) {
@@ -560,7 +560,7 @@ void QFontDialogPrivate::updateStyles()
          styleEdit->selectAll();
       }
 
-      smoothScalable = fdb.isSmoothlyScalable(familyList->currentText(), styleList->currentText());
+      smoothScalable = m_fdb.isSmoothlyScalable(familyList->currentText(), styleList->currentText());
    }
 
    updateSizes();
@@ -571,7 +571,7 @@ void QFontDialogPrivate::updateSizes()
    Q_Q(QFontDialog);
 
    if (! familyList->currentText().isEmpty()) {
-      QList<int> sizes = fdb.pointSizes(familyList->currentText(), styleList->currentText());
+      QList<int> sizes = m_fdb.pointSizes(familyList->currentText(), styleList->currentText());
 
       int i       = 0;
       int current = -1;
@@ -580,7 +580,7 @@ void QFontDialogPrivate::updateSizes()
       for (auto item : sizes) {
          str_sizes.append(QString::number(item));
 
-         if (current == -1 && item >= size) {
+         if (current == -1 && item >= m_size) {
             current = i;
          }
 
@@ -594,7 +594,7 @@ void QFontDialogPrivate::updateSizes()
       }
 
       sizeEdit->blockSignals(true);
-      sizeEdit->setText((smoothScalable ? QString::number(size) : sizeList->currentText()));
+      sizeEdit->setText((smoothScalable ? QString::number(m_size) : sizeList->currentText()));
 
       if (q->style()->styleHint(QStyle::SH_FontDialog_SelectAssociatedText, nullptr, q) && sizeList->hasFocus()) {
          sizeEdit->selectAll();
@@ -613,7 +613,8 @@ void QFontDialogPrivate::_q_updateSample()
 {
    // compute new font
    int pSize = sizeEdit->text().toInteger<int>();
-   QFont newFont(fdb.font(familyList->currentText(), style, pSize));
+
+   QFont newFont(m_fdb.font(familyList->currentText(), style, pSize));
    newFont.setStrikeOut(strikeout->isChecked());
    newFont.setUnderline(underline->isChecked());
 
@@ -637,7 +638,7 @@ void QFontDialogPrivate::updateSampleFont(const QFont &newFont)
 void QFontDialogPrivate::_q_writingSystemHighlighted(int index)
 {
    writingSystem = QFontDatabase::WritingSystem(index);
-   sampleEdit->setText(fdb.writingSystemSample(writingSystem));
+   sampleEdit->setText(m_fdb.writingSystemSample(writingSystem));
    updateFamilies();
 }
 
@@ -645,8 +646,8 @@ void QFontDialogPrivate::_q_familyHighlighted(int i)
 {
    Q_Q(QFontDialog);
 
-   family = familyList->text(i);
-   familyEdit->setText(family);
+   m_family = familyList->text(i);
+   familyEdit->setText(m_family);
 
    if (q->style()->styleHint(QStyle::SH_FontDialog_SelectAssociatedText, nullptr, q)
       && familyList->hasFocus()) {
@@ -685,29 +686,33 @@ void QFontDialogPrivate::_q_sizeHighlighted(int index)
       sizeEdit->selectAll();
    }
 
-   size = s.toInteger<int>();
+   m_size = s.toInteger<int>();
    _q_updateSample();
 }
 
 void QFontDialogPrivate::_q_sizeChanged(const QString &s)
 {
    // no need to check if the conversion is valid, since we have an QIntValidator in the size edit
-   int size = s.toInteger<int>();
-   if (this->size == size) {
+   int newSize = s.toInteger<int>();
+
+   if (m_size == newSize) {
       return;
    }
 
-   this->size = size;
+   m_size = newSize;
+
    if (sizeList->count() != 0) {
       int i;
+
       for (i = 0; i < sizeList->count() - 1; i++) {
-         if (sizeList->text(i).toInteger<int>() >= this->size) {
+         if (sizeList->text(i).toInteger<int>() >= m_size) {
             break;
          }
       }
+
       sizeList->blockSignals(true);
 
-      if (sizeList->text(i).toInteger<int>() == this->size) {
+      if (sizeList->text(i).toInteger<int>() == m_size) {
          sizeList->setCurrentItem(i);
 
       } else {
@@ -748,13 +753,13 @@ void QFontDialog::setCurrentFont(const QFont &font)
 {
    Q_D(QFontDialog);
 
-   d->family = font.family();
-   d->style  = d->fdb.styleString(font);
-   d->size   = font.pointSize();
+   d->m_family = font.family();
+   d->style    = d->m_fdb.styleString(font);
+   d->m_size   = font.pointSize();
 
-   if (d->size == -1) {
+   if (d->m_size == -1) {
       QFontInfo fi(font);
-      d->size = fi.pointSize();
+      d->m_size = fi.pointSize();
    }
 
    d->strikeout->setChecked(font.strikeOut());
@@ -799,7 +804,7 @@ void QFontDialog::setOption(FontDialogOption option, bool on)
 bool QFontDialog::testOption(FontDialogOption option) const
 {
    Q_D(const QFontDialog);
-   return d->options->testOption(static_cast<QFontDialogOptions::FontDialogOption>(option));
+   return d->m_options->testOption(static_cast<QFontDialogOptions::FontDialogOption>(option));
 }
 
 void QFontDialog::setOptions(FontDialogOptions options)
@@ -810,14 +815,14 @@ void QFontDialog::setOptions(FontDialogOptions options)
       return;
    }
 
-   d->options->setOptions(QFontDialogOptions::FontDialogOptions(int(options)));
+   d->m_options->setOptions(QFontDialogOptions::FontDialogOptions(int(options)));
    d->buttonBox->setVisible(!(options & NoButtons));
 }
 
 QFontDialog::FontDialogOptions QFontDialog::options() const
 {
    Q_D(const QFontDialog);
-   return QFontDialog::FontDialogOptions(int(d->options->options()));
+   return QFontDialog::FontDialogOptions(int(d->m_options->options()));
 }
 
 void QFontDialog::open(QObject *receiver, const QString &member)
@@ -900,7 +905,7 @@ bool QFontDialogPrivate::canBeNativeDialog() const
       return false;
    }
 
-   if (options->options() & QFontDialog::DontUseNativeDialog) {
+   if (m_options->options() & QFontDialog::DontUseNativeDialog) {
       return false;
    }
 

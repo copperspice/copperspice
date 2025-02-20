@@ -87,10 +87,12 @@ void QRasterPlatformPixmap::resize(int width, int height)
    }
 
    image = QImage(width, height, format);
-   w = width;
-   h = height;
-   d = image.depth();
-   is_null = (w <= 0 || h <= 0);
+
+   m_pixmap_w = width;
+   m_pixmap_h = height;
+   m_pixmap_d = image.depth();
+
+   is_null = (m_pixmap_w <= 0 || m_pixmap_h <= 0);
 
    if (pixelType() == BitmapType && !image.isNull()) {
       image.setColorCount(2);
@@ -231,15 +233,15 @@ QImage QRasterPlatformPixmap::toImage(const QRect &rect) const
       return image;
    }
 
-   QRect clipped = rect.intersected(QRect(0, 0, w, h));
-   const uint du = uint(d);
+   QRect clipped = rect.intersected(QRect(0, 0, m_pixmap_w, m_pixmap_h));
+   const uint du = uint(m_pixmap_d);
 
    if ((du % 8 == 0) && (((uint(clipped.x()) * du)) % 32 == 0)) {
       QImage newImage(image.scanLine(clipped.y()) + clipped.x() * (du / 8),
-         clipped.width(), clipped.height(),
-         image.bytesPerLine(), image.format());
+            clipped.width(), clipped.height(), image.bytesPerLine(), image.format());
 
       newImage.setDevicePixelRatio(image.devicePixelRatio());
+
       return newImage;
 
    } else {
@@ -254,30 +256,31 @@ QPaintEngine *QRasterPlatformPixmap::paintEngine() const
 
 int QRasterPlatformPixmap::metric(QPaintDevice::PaintDeviceMetric metric) const
 {
-   QImageData *d = image.d;
-   if (!d) {
+   QImageData *imageData = image.d;
+
+   if (! imageData) {
       return 0;
    }
 
    // override the image dpi with the screen dpi when rendering to a pixmap
    switch (metric) {
       case QPaintDevice::PdmWidth:
-         return w;
+         return m_pixmap_w;
 
       case QPaintDevice::PdmHeight:
-         return h;
+         return m_pixmap_h;
 
       case QPaintDevice::PdmWidthMM:
-         return qRound(d->width * 25.4 / qt_defaultDpiX());
+         return qRound(imageData->width * 25.4 / qt_defaultDpiX());
 
       case QPaintDevice::PdmHeightMM:
-         return qRound(d->height * 25.4 / qt_defaultDpiY());
+         return qRound(imageData->height * 25.4 / qt_defaultDpiY());
 
       case QPaintDevice::PdmNumColors:
-         return d->colortable.size();
+         return imageData->colortable.size();
 
       case QPaintDevice::PdmDepth:
-         return this->d;
+         return m_pixmap_d;
 
       case QPaintDevice::PdmDpiX:
          return qt_defaultDpiX();
@@ -318,12 +321,11 @@ void QRasterPlatformPixmap::createPixmapForImage(QImage &sourceImage, Qt::ImageC
 
       } else {
          if (sourceImage.depth() == 1) {
-            format = sourceImage.hasAlphaChannel()
-               ? QImage::Format_ARGB32_Premultiplied : QImage::Format_RGB32;
+            format = sourceImage.hasAlphaChannel() ? QImage::Format_ARGB32_Premultiplied : QImage::Format_RGB32;
 
          } else {
             QImage::Format opaqueFormat = QNativeImage::systemFormat();
-            QImage::Format alphaFormat = qt_alphaVersionForPainting(opaqueFormat);
+            QImage::Format alphaFormat  = qt_alphaVersionForPainting(opaqueFormat);
 
             if (! sourceImage.hasAlphaChannel()) {
                format = opaqueFormat;
@@ -335,6 +337,7 @@ void QRasterPlatformPixmap::createPixmapForImage(QImage &sourceImage, Qt::ImageC
                // more efficient conversion
 
                format = opaqueFormat;
+
             } else {
                format = alphaFormat;
             }
@@ -347,6 +350,7 @@ void QRasterPlatformPixmap::createPixmapForImage(QImage &sourceImage, Qt::ImageC
 
       inPlace = inPlace && sourceImage.isDetached();
       image = sourceImage;
+
       if (!inPlace) {
          image.detach();
       }
@@ -363,13 +367,17 @@ void QRasterPlatformPixmap::createPixmapForImage(QImage &sourceImage, Qt::ImageC
    }
 
    if (image.d) {
-      w = image.d->width;
-      h = image.d->height;
-      d = image.d->depth;
+      m_pixmap_w = image.d->width;
+      m_pixmap_h = image.d->height;
+      m_pixmap_d = image.d->depth;
+
    } else {
-      w = h = d = 0;
+      m_pixmap_w = 0;
+      m_pixmap_h = 0;
+      m_pixmap_d = 0;
    }
-   is_null = (w <= 0 || h <= 0);
+
+   is_null = (m_pixmap_w <= 0 || m_pixmap_h <= 0);
 
    if (image.d) {
       image.d->devicePixelRatio = sourceImage.devicePixelRatio();

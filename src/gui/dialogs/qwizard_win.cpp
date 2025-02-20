@@ -252,7 +252,7 @@ void QVistaBackButton::paintEvent(QPaintEvent *)
 }
 
 QVistaHelper::QVistaHelper(QWizard *wizard)
-   : QObject(wizard), pressed(false), wizard(wizard), backButton_(nullptr)
+   : QObject(wizard), pressed(false), m_vistaWizard(wizard), m_backButton(nullptr)
 {
    QVistaHelper::m_devicePixelRatio = wizard->devicePixelRatio();
    is_vista = QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA && resolveSymbols();
@@ -262,8 +262,8 @@ QVistaHelper::QVistaHelper(QWizard *wizard)
    }
 
    if (is_vista) {
-      backButton_ = new QVistaBackButton(wizard);
-      backButton_->hide();
+      m_backButton = new QVistaBackButton(wizard);
+      m_backButton->hide();
    }
 
    // Handle diff between Windows 7 and Vista
@@ -278,7 +278,7 @@ QVistaHelper::~QVistaHelper()
 }
 void QVistaHelper::updateCustomMargins(bool vistaMargins)
 {
-   if (QWindow *window = wizard->windowHandle()) {
+   if (QWindow *window = m_vistaWizard->windowHandle()) {
       // Reduce top frame to zero since we paint it ourselves. Use
       // device pixel to avoid rounding errors.
       const QMargins customMarginsDp = vistaMargins
@@ -325,9 +325,9 @@ QVistaHelper::VistaState QVistaHelper::vistaState()
 
 void QVistaHelper::disconnectBackButton()
 {
-   if (backButton_) {
+   if (m_backButton != nullptr) {
       // Leave QStyleSheetStyle's connections on destroyed() intact.
-      backButton_->disconnect(SLOT(clicked()));
+      m_backButton->disconnect(SLOT(clicked()));
    }
 }
 
@@ -337,10 +337,8 @@ QColor QVistaHelper::basicWindowFrameColor()
    HWND handle   = QApplicationPrivate::getHWNDForWidget(QApplication::desktop());
    HANDLE hTheme = pOpenThemeData(handle, L"WINDOW");
 
-   pGetThemeColor(
-      hTheme, WIZ_WP_CAPTION, WIZ_CS_ACTIVE,
-      wizard->isActiveWindow() ? WIZ_TMT_FILLCOLORHINT : WIZ_TMT_BORDERCOLORHINT,
-      &rgb);
+   pGetThemeColor(hTheme, WIZ_WP_CAPTION, WIZ_CS_ACTIVE,
+      m_vistaWizard->isActiveWindow() ? WIZ_TMT_FILLCOLORHINT : WIZ_TMT_BORDERCOLORHINT, &rgb);
 
    BYTE r = GetRValue(rgb);
    BYTE g = GetGValue(rgb);
@@ -408,25 +406,24 @@ static bool getCaptionQFont(int dpi, QFont *result)
 
 void QVistaHelper::drawTitleBar(QPainter *painter)
 {
-   Q_ASSERT(backButton_);
+   Q_ASSERT(m_backButton);
    QPoint origin;
 
-   const bool isWindow = wizard->isWindow();
-   const HDC hdc = QVistaHelper::backingStoreDC(wizard, &origin);
+   const bool isWindow = m_vistaWizard->isWindow();
+   const HDC hdc = QVistaHelper::backingStoreDC(m_vistaWizard, &origin);
 
    if (vistaState() == VistaAero && isWindow) {
-      drawBlackRect(QRect(0, 0, wizard->width(),
-            titleBarSize() + topOffset()), hdc);
+      drawBlackRect(QRect(0, 0, m_vistaWizard->width(), titleBarSize() + topOffset()), hdc);
    }
 
-   const int btnTop = backButton_->mapToParent(QPoint()).y();
-   const int btnHeight = backButton_->size().height();
+   const int btnTop    = m_backButton->mapToParent(QPoint()).y();
+   const int btnHeight = m_backButton->size().height();
    const int verticalCenter = (btnTop + btnHeight / 2) - 1;
 
-   const QString text = wizard->window()->windowTitle();
+   const QString text = m_vistaWizard->window()->windowTitle();
 
    QFont font;
-   if (! isWindow || !getCaptionQFont(wizard->logicalDpiY() * wizard->devicePixelRatio(), &font)) {
+   if (! isWindow || ! getCaptionQFont(m_vistaWizard->logicalDpiY() * m_vistaWizard->devicePixelRatio(), &font)) {
       font = QApplication::font("QMdiSubWindowTitleBar");
    }
 
@@ -443,8 +440,8 @@ void QVistaHelper::drawTitleBar(QPainter *painter)
       glowOffset = glowSize();
    }
 
-   const int titleLeft = (wizard->layoutDirection() == Qt::LeftToRight
-         ? titleOffset() - glowOffset : wizard->width() - titleOffset() - textWidth + glowOffset);
+   const int titleLeft = (m_vistaWizard->layoutDirection() == Qt::LeftToRight
+         ? titleOffset() - glowOffset : m_vistaWizard->width() - titleOffset() - textWidth + glowOffset);
 
    const QRect textRectangle(titleLeft, verticalCenter - textHeight / 2, textWidth, textHeight);
 
@@ -457,14 +454,13 @@ void QVistaHelper::drawTitleBar(QPainter *painter)
       painter->restore();
    }
 
-   const QIcon windowIcon = wizard->windowIcon();
+   const QIcon windowIcon = m_vistaWizard->windowIcon();
 
    if (! windowIcon.isNull()) {
       const int size = QVistaHelper::iconSize();
 
-      const int iconLeft = (wizard->layoutDirection() == Qt::LeftToRight
-            ? leftMargin()
-            : wizard->width() - leftMargin() - size);
+      const int iconLeft = (m_vistaWizard->layoutDirection() == Qt::LeftToRight
+            ? leftMargin() : m_vistaWizard->width() - leftMargin() - size);
 
       const QPoint pos(origin.x() + iconLeft, origin.y() + verticalCenter - size / 2);
       const QPoint posDp = pos * QVistaHelper::m_devicePixelRatio;
@@ -540,9 +536,9 @@ void QVistaHelper::setMouseCursor(QPoint pos)
 {
 #ifndef QT_NO_CURSOR
    if (rtTop.contains(pos)) {
-      wizard->setCursor(Qt::SizeVerCursor);
+      m_vistaWizard->setCursor(Qt::SizeVerCursor);
    } else {
-      wizard->setCursor(Qt::ArrowCursor);
+      m_vistaWizard->setCursor(Qt::ArrowCursor);
    }
 #endif
 }
@@ -574,11 +570,11 @@ bool QVistaHelper::handleWinEvent(MSG *message, long *result)
    }
 
    bool status = false;
-   if (wizard->wizardStyle() == QWizard::AeroStyle && vistaState() == VistaAero) {
+   if (m_vistaWizard->wizardStyle() == QWizard::AeroStyle && vistaState() == VistaAero) {
       status = winEvent(message, result);
 
       if (message->message == WM_NCPAINT) {
-         wizard->update();
+         m_vistaWizard->update();
       }
    }
 
@@ -589,38 +585,39 @@ void QVistaHelper::resizeEvent(QResizeEvent *event)
 {
    (void) event;
 
-   rtTop = QRect (0, 0, wizard->width(), frameSize());
+   rtTop = QRect (0, 0, m_vistaWizard->width(), frameSize());
    int height = captionSize() + topOffset();
 
    if (vistaState() == VistaBasic) {
       height -= titleBarSize();
    }
 
-   rtTitle = QRect (0, frameSize(), wizard->width(), height);
+   rtTitle = QRect (0, frameSize(), m_vistaWizard->width(), height);
 }
 
 void QVistaHelper::paintEvent(QPaintEvent *event)
 {
    (void) event;
 
-   QPainter painter(wizard);
+   QPainter painter(m_vistaWizard);
    drawTitleBar(&painter);
 }
 
 void QVistaHelper::mouseMoveEvent(QMouseEvent *event)
 {
-   if (wizard->windowState() & Qt::WindowMaximized) {
+   if (m_vistaWizard->windowState() & Qt::WindowMaximized) {
       event->ignore();
       return;
    }
 
-   QRect rect = wizard->geometry();
+   QRect rect = m_vistaWizard->geometry();
+
    if (pressed) {
       switch (change) {
          case resizeTop: {
             const int dy = event->pos().y() - pressedPos.y();
-            if ((dy > 0 && rect.height() > wizard->minimumHeight())
-               || (dy < 0 && rect.height() < wizard->maximumHeight())) {
+
+            if ((dy > 0 && rect.height() > m_vistaWizard->minimumHeight()) || (dy < 0 && rect.height() < m_vistaWizard->maximumHeight())) {
                rect.setTop(rect.top() + dy);
             }
          }
@@ -636,7 +633,8 @@ void QVistaHelper::mouseMoveEvent(QMouseEvent *event)
          default:
             break;
       }
-      wizard->setGeometry(rect);
+
+      m_vistaWizard->setGeometry(rect);
 
    } else if (vistaState() == VistaAero) {
       setMouseCursor(event->pos());
@@ -649,7 +647,7 @@ void QVistaHelper::mousePressEvent(QMouseEvent *event)
 {
    change = noChange;
 
-   if (event->button() != Qt::LeftButton || wizard->windowState() & Qt::WindowMaximized) {
+   if (event->button() != Qt::LeftButton || m_vistaWizard->windowState() & Qt::WindowMaximized) {
       event->ignore();
       return;
    }
@@ -677,7 +675,8 @@ void QVistaHelper::mouseReleaseEvent(QMouseEvent *event)
 
    if (pressed) {
       pressed = false;
-      wizard->releaseMouse();
+      m_vistaWizard->releaseMouse();
+
       if (vistaState() == VistaAero) {
          setMouseCursor(event->pos());
       }
@@ -688,7 +687,7 @@ void QVistaHelper::mouseReleaseEvent(QMouseEvent *event)
 
 bool QVistaHelper::eventFilter(QObject *obj, QEvent *event)
 {
-   if (obj != wizard) {
+   if (obj != m_vistaWizard) {
       return QObject::eventFilter(obj, event);
    }
 
@@ -764,7 +763,7 @@ HWND QVistaHelper::wizardHWND() const
    // Do not use winId() as this enforces native children of the parent
    // widget when called before show() as happens when calling setWizardStyle().
 
-   if (QWindow *window = wizard->windowHandle()) {
+   if (QWindow *window = m_vistaWizard->windowHandle()) {
       if (window->handle()) {
          if (void *vHwnd = QGuiApplication::platformNativeInterface()->nativeResourceForWindow(QByteArray("handle"), window)) {
             return static_cast<HWND>(vHwnd);
@@ -947,7 +946,7 @@ bool QVistaHelper::resolveSymbols()
 
 int QVistaHelper::titleOffset()
 {
-   int iconOffset = wizard ->windowIcon().isNull() ? 0 : iconSize() + textSpacing;
+   int iconOffset = m_vistaWizard ->windowIcon().isNull() ? 0 : iconSize() + textSpacing;
    return leftMargin() + iconOffset;
 }
 

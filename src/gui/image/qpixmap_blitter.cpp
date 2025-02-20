@@ -59,7 +59,7 @@ QBlittable *QBlittablePlatformPixmap::blittable() const
 {
    if (! m_blittable) {
       QBlittablePlatformPixmap *that = const_cast<QBlittablePlatformPixmap *>(this);
-      that->m_blittable.reset(this->createBlittable(QSize(w, h), m_alpha));
+      that->m_blittable.reset(this->createBlittable(QSize(m_pixmap_w, m_pixmap_h), m_alpha));
    }
 
    return m_blittable.data();
@@ -76,11 +76,13 @@ void QBlittablePlatformPixmap::resize(int width, int height)
    m_blittable.reset(nullptr);
    m_engine.reset(nullptr);
 
-   d = QGuiApplication::primaryScreen()->depth();
+   m_pixmap_d = QGuiApplication::primaryScreen()->depth();
 
-   w = width;
-   h = height;
-   is_null = (w <= 0 || h <= 0);
+   m_pixmap_w = width;
+   m_pixmap_h = height;
+
+   is_null = (m_pixmap_w <= 0 || m_pixmap_h <= 0);
+
    setSerialNumber(++global_ser_no);
 }
 
@@ -88,16 +90,16 @@ int QBlittablePlatformPixmap::metric(QPaintDevice::PaintDeviceMetric metric) con
 {
    switch (metric) {
       case QPaintDevice::PdmWidth:
-         return w;
+         return m_pixmap_w;
 
       case QPaintDevice::PdmHeight:
-         return h;
+         return m_pixmap_h;
 
       case QPaintDevice::PdmWidthMM:
-         return qRound(w * 25.4 / qt_defaultDpiX());
+         return qRound(m_pixmap_w * 25.4 / qt_defaultDpiX());
 
       case QPaintDevice::PdmHeightMM:
-         return qRound(h * 25.4 / qt_defaultDpiY());
+         return qRound(m_pixmap_h * 25.4 / qt_defaultDpiY());
 
       case QPaintDevice::PdmDepth:
          return 32;
@@ -128,11 +130,11 @@ void QBlittablePlatformPixmap::fill(const QColor &color)
 {
    if (blittable()->capabilities() & QBlittable::AlphaFillRectCapability) {
       blittable()->unlock();
-      blittable()->alphaFillRect(QRectF(0, 0, w, h), color, QPainter::CompositionMode_Source);
+      blittable()->alphaFillRect(QRectF(0, 0, m_pixmap_w, m_pixmap_h), color, QPainter::CompositionMode_Source);
 
    } else if (color.alpha() == 255 && blittable()->capabilities() & QBlittable::SolidRectCapability) {
       blittable()->unlock();
-      blittable()->fillRect(QRectF(0, 0, w, h), color);
+      blittable()->fillRect(QRectF(0, 0, m_pixmap_w, m_pixmap_h), color);
 
    } else {
       // Need to be backed with an alpha channel now. It would be nice
@@ -175,7 +177,7 @@ void QBlittablePlatformPixmap::fromImage(const QImage &image, Qt::ImageConversio
    m_devicePixelRatio = image.devicePixelRatio();
 
    resize(image.width(), image.height());
-   markRasterOverlay(QRect(0, 0, w, h));
+   markRasterOverlay(QRect(0, 0, m_pixmap_w, m_pixmap_h));
    QImage *thisImg = buffer();
 
    QImage correctFormatPic = image;

@@ -177,7 +177,7 @@ class QToolBarAreaLayout
    static constexpr const uchar ToolBarStateMarker   = 0xfe;
    static constexpr const uchar ToolBarStateMarkerEx = 0xfc;
 
-   QRect rect;
+   QRect m_toolBarAreaRect;
    const QMainWindow *mainWindow;
    QToolBarAreaLayoutInfo docks[4];
    bool visible;

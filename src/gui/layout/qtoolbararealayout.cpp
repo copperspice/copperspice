@@ -647,7 +647,7 @@ QToolBarAreaLayout::QToolBarAreaLayout(const QMainWindow *win) : mainWindow(win)
 QRect QToolBarAreaLayout::fitLayout()
 {
    if (!visible) {
-      return rect;
+      return m_toolBarAreaRect;
    }
 
    QSize left_hint = docks[QInternal::LeftDock].sizeHint();
@@ -655,17 +655,12 @@ QRect QToolBarAreaLayout::fitLayout()
    QSize top_hint = docks[QInternal::TopDock].sizeHint();
    QSize bottom_hint = docks[QInternal::BottomDock].sizeHint();
 
-   QRect center = rect.adjusted(left_hint.width(), top_hint.height(),
-         -right_hint.width(), -bottom_hint.height());
+   QRect center = m_toolBarAreaRect.adjusted(left_hint.width(), top_hint.height(), -right_hint.width(), -bottom_hint.height());
 
-   docks[QInternal::TopDock].rect = QRect(rect.left(), rect.top(),
-         rect.width(), top_hint.height());
-   docks[QInternal::LeftDock].rect = QRect(rect.left(), center.top(),
-         left_hint.width(), center.height());
-   docks[QInternal::RightDock].rect = QRect(center.right() + 1, center.top(),
-         right_hint.width(), center.height());
-   docks[QInternal::BottomDock].rect = QRect(rect.left(), center.bottom() + 1,
-         rect.width(), bottom_hint.height());
+   docks[QInternal::TopDock].rect    = QRect(m_toolBarAreaRect.left(), m_toolBarAreaRect.top(), m_toolBarAreaRect.width(), top_hint.height());
+   docks[QInternal::LeftDock].rect   = QRect(m_toolBarAreaRect.left(), center.top(), left_hint.width(), center.height());
+   docks[QInternal::RightDock].rect  = QRect(center.right() + 1, center.top(), right_hint.width(), center.height());
+   docks[QInternal::BottomDock].rect = QRect(m_toolBarAreaRect.left(), center.bottom() + 1, m_toolBarAreaRect.width(), bottom_hint.height());
 
    docks[QInternal::TopDock].fitLayout();
 
@@ -945,12 +940,15 @@ void QToolBarAreaLayout::apply(bool animate)
                   QSize size = tbl->expandedSize(geo.size());
                   geo.setSize(size);
                   geo.moveTopRight(tr);
-                  if (geo.bottom() > rect.bottom()) {
-                     geo.moveBottom(rect.bottom());
+
+                  if (geo.bottom() > m_toolBarAreaRect.bottom()) {
+                     geo.moveBottom(m_toolBarAreaRect.bottom());
                   }
-                  if (geo.right() > rect.right()) {
-                     geo.moveRight(rect.right());
+
+                  if (geo.right() > m_toolBarAreaRect.right()) {
+                     geo.moveRight(m_toolBarAreaRect.right());
                   }
+
                   if (geo.left() < 0) {
                      geo.moveLeft(0);
                   }
@@ -1143,7 +1141,8 @@ void QToolBarAreaLayout::clear()
    for (int i = 0; i < QInternal::DockCount; ++i) {
       docks[i].clear();
    }
-   rect = QRect();
+
+   m_toolBarAreaRect = QRect();
 }
 
 QToolBarAreaLayoutItem *QToolBarAreaLayout::item(const QList<int> &path)

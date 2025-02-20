@@ -620,13 +620,13 @@ bool QToolBarLayout::layoutActions(const QSize &size)
 
    extension->setEnabled(popupMenu == nullptr || !extensionMenuContainsOnlyWidgetActions);
 
-   // we have to do the show/hide here, because it triggers more calls to setGeometry :(
-   for (int i = 0; i < showWidgets.count(); ++i) {
-      showWidgets.at(i)->show();
+   // do the show/hide here because it triggers more calls to setGeometry
+   for (int j = 0; j < showWidgets.count(); ++j) {
+      showWidgets.at(j)->show();
    }
 
-   for (int i = 0; i < hideWidgets.count(); ++i) {
-      hideWidgets.at(i)->hide();
+   for (int j = 0; j < hideWidgets.count(); ++j) {
+      hideWidgets.at(j)->hide();
    }
 
    return ranOutOfSpace;
@@ -689,7 +689,7 @@ QSize QToolBarLayout::expandedSize(const QSize &size) const
    int i = 0;
 
    while (i < items.count()) {
-      int count = 0;
+      int countItems = 0;
 
       int size     = 0;
       int prev     = -1;
@@ -700,11 +700,11 @@ QSize QToolBarLayout::expandedSize(const QSize &size) const
             continue;
          }
 
-         int newSize = size + (count == 0 ? 0 : spacing) + geomArray[i].minimumSize;
+         int newSize = size + (countItems == 0 ? 0 : spacing) + geomArray[i].minimumSize;
          rowHeight = qMax(rowHeight, perp(o, items.at(i)->sizeHint()));
 
          if (prev != -1 && newSize > space) {
-            if (count > 1 && size + spacing + extensionExtent > space) {
+            if (countItems > 1 && size + spacing + extensionExtent > space) {
                size -= spacing + geomArray[prev].minimumSize;
                i = prev;
             }
@@ -714,7 +714,8 @@ QSize QToolBarLayout::expandedSize(const QSize &size) const
 
          size = newSize;
          prev = i;
-         ++count;
+
+         ++countItems;
       }
 
       w = qMax(size, w);

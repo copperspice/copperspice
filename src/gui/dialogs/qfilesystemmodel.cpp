@@ -1135,7 +1135,8 @@ void QFileSystemModelPrivate::sortChildren(int column, const QModelIndex &parent
    if (! disableRecursiveSort) {
       for (int i = 0; i < q->rowCount(parent); ++i) {
          const QModelIndex childIndex = q->index(i, 0, parent);
-         QFileSystemModelPrivate::QFileSystemNode *indexNode = node(childIndex);
+
+         indexNode = node(childIndex);
 
          // Only do a recursive sort on visible nodes
          if (indexNode->isVisible) {

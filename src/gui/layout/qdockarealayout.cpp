@@ -491,10 +491,10 @@ QSize QDockAreaLayoutInfo::sizeHint() const
    return result;
 }
 
-bool QDockAreaLayoutInfo::expansive(Qt::Orientation o) const
+bool QDockAreaLayoutInfo::expansive(Qt::Orientation newOrientation) const
 {
    for (int i = 0; i < item_list.size(); ++i) {
-      if (item_list.at(i).expansive(o)) {
+      if (item_list.at(i).expansive(newOrientation)) {
          return true;
       }
    }

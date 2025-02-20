@@ -207,34 +207,34 @@ class QWizardField
    void resolve(const QVector<QWizardDefaultProperty> &defaultPropertyTable);
    void findProperty(const QWizardDefaultProperty *properties, int propertyCount);
 
-   QWizardPage *page;
-   QObject *object;
+   QWizardPage *m_page;
+   QObject *m_object;
 
-   bool mandatory;
+   bool m_mandatory;
 
-   QString  name;
-   QString  property;
-   QString  changedSignal;
-   QVariant initialValue;
+   QString  m_name;
+   QString  m_property;
+   QString  m_changedSignal;
+   QVariant m_initialValue;
 };
 
 QWizardField::QWizardField(QWizardPage *page, const QString &spec, QObject *object,
       const QString &property, const QString &changedSignal)
-   : page(page), object(object), mandatory(false), name(spec), property(property), changedSignal(changedSignal)
+   : m_page(page), m_object(object), m_mandatory(false), m_name(spec), m_property(property), m_changedSignal(changedSignal)
 {
-   if (name.endsWith('*')) {
-      name.chop(1);
-      mandatory = true;
+   if (m_name.endsWith('*')) {
+      m_name.chop(1);
+      m_mandatory = true;
    }
 }
 
 void QWizardField::resolve(const QVector<QWizardDefaultProperty> &defaultPropertyTable)
 {
-   if (property.isEmpty()) {
+   if (m_property.isEmpty()) {
       findProperty(defaultPropertyTable.constData(), defaultPropertyTable.count());
    }
 
-   initialValue = object->property(property);
+   m_initialValue = m_object->property(m_property);
 }
 
 void QWizardField::findProperty(const QWizardDefaultProperty *properties, int propertyCount)
@@ -242,10 +242,11 @@ void QWizardField::findProperty(const QWizardDefaultProperty *properties, int pr
    QString className;
 
    for (int i = 0; i < propertyCount; ++i) {
-      if (objectInheritsXAndXIsCloserThanY(object, properties[i].m_className, className)) {
-         className     = properties[i].m_className;
-         property      = properties[i].m_property;
-         changedSignal = properties[i].m_changedSignal;
+      if (objectInheritsXAndXIsCloserThanY(m_object, properties[i].m_className, className)) {
+         className = properties[i].m_className;
+
+         m_property      = properties[i].m_property;
+         m_changedSignal = properties[i].m_changedSignal;
       }
    }
 }
@@ -584,19 +585,19 @@ class QWizardAntiFlickerWidget : public QWidget
 {
 #if ! defined(QT_NO_STYLE_WINDOWSVISTA)
  public:
-   QWizardAntiFlickerWidget(QWizard *wizard, QWizardPrivate *wizardPrivate)
-      : QWidget(wizard), wizardPrivate(wizardPrivate)
+   QWizardAntiFlickerWidget(QWizard *wizard_a, QWizardPrivate *wizard_b)
+      : QWidget(wizard_a), m_flickerWizard(wizard_b)
    { }
 
-   QWizardPrivate *wizardPrivate;
+   QWizardPrivate *m_flickerWizard;
 
  protected:
    void paintEvent(QPaintEvent *) override;
 
 #else
  public:
-   QWizardAntiFlickerWidget(QWizard *wizard, QWizardPrivate *)
-      : QWidget(wizard)
+   QWizardAntiFlickerWidget(QWizard *wizard_a, QWizardPrivate *)
+      : QWidget(wizard_a)
    { }
 
 #endif
@@ -867,19 +868,19 @@ void QWizardPrivate::addField(const QWizardField &field)
    QWizardField myField = field;
    myField.resolve(defaultPropertyTable);
 
-   if (fieldIndexMap.contains(myField.name)) {
-      qWarning("QWizardPage::addField() Duplicate field %s", csPrintable(myField.name));
+   if (fieldIndexMap.contains(myField.m_name)) {
+      qWarning("QWizardPage::addField() Duplicate field %s", csPrintable(myField.m_name));
       return;
    }
 
-   fieldIndexMap.insert(myField.name, fields.count());
+   fieldIndexMap.insert(myField.m_name, fields.count());
    fields += myField;
 
-   if (myField.mandatory && ! myField.changedSignal.isEmpty()) {
-      QObject::connect(myField.object, myField.changedSignal, myField.page, SLOT(_q_changedSignal()));
+   if (myField.m_mandatory && ! myField.m_changedSignal.isEmpty()) {
+      QObject::connect(myField.m_object, myField.m_changedSignal, myField.m_page, SLOT(_q_changedSignal()));
    }
 
-   QObject::connect(myField.object, &QObject::destroyed, q, &QWizard::_q_handleFieldObjectDestroyed);
+   QObject::connect(myField.m_object, &QObject::destroyed, q, &QWizard::_q_handleFieldObjectDestroyed);
 }
 
 void QWizardPrivate::removeFieldAt(int index)
@@ -887,13 +888,13 @@ void QWizardPrivate::removeFieldAt(int index)
    Q_Q(QWizard);
 
    const QWizardField &field = fields.at(index);
-   fieldIndexMap.remove(field.name);
+   fieldIndexMap.remove(field.m_name);
 
-   if (field.mandatory && ! field.changedSignal.isEmpty()) {
-      QObject::disconnect(field.object, field.changedSignal, field.page, SLOT(_q_changedSignal()));
+   if (field.m_mandatory && ! field.m_changedSignal.isEmpty()) {
+      QObject::disconnect(field.m_object, field.m_changedSignal, field.m_page, SLOT(_q_changedSignal()));
    }
 
-   QObject::disconnect(field.object, &QObject::destroyed, q, &QWizard::_q_handleFieldObjectDestroyed);
+   QObject::disconnect(field.m_object, &QObject::destroyed, q, &QWizard::_q_handleFieldObjectDestroyed);
    fields.remove(index);
 }
 
@@ -1941,9 +1942,9 @@ void QWizardPrivate::_q_handleFieldObjectDestroyed(QObject *object)
    while (it != fields.end()) {
       const QWizardField &field = *it;
 
-      if (field.object == object) {
-         destroyed_index = fieldIndexMap.value(field.name, -1);
-         fieldIndexMap.remove(field.name);
+      if (field.m_object == object) {
+         destroyed_index = fieldIndexMap.value(field.m_name, -1);
+         fieldIndexMap.remove(field.m_name);
          it = fields.erase(it);
 
       } else {
@@ -2010,11 +2011,14 @@ QPixmap QWizardPrivate::findDefaultBackgroundPixmap()
 
 void QWizardAntiFlickerWidget::paintEvent(QPaintEvent *)
 {
-   if (wizardPrivate->isVistaThemeEnabled()) {
+   if (m_flickerWizard->isVistaThemeEnabled()) {
       int leftMargin, topMargin, rightMargin, bottomMargin;
-      wizardPrivate->buttonLayout->getContentsMargins(
+
+      m_flickerWizard->buttonLayout->getContentsMargins(
          &leftMargin, &topMargin, &rightMargin, &bottomMargin);
-      const int buttonLayoutTop = wizardPrivate->buttonLayout->contentsRect().top() - topMargin;
+
+      const int buttonLayoutTop = m_flickerWizard->buttonLayout->contentsRect().top() - topMargin;
+
       QPainter painter(this);
 
       const QBrush brush(QColor(240, 240, 240));                      // ### hardcoded for now
@@ -2022,7 +2026,7 @@ void QWizardAntiFlickerWidget::paintEvent(QPaintEvent *)
       painter.setPen(QPen(QBrush(QColor(223, 223, 223)), 0));         // ### hardcoded for now
       painter.drawLine(0, buttonLayoutTop, width(), buttonLayoutTop);
 
-      if (wizardPrivate->isVistaThemeEnabled(QVistaHelper::VistaBasic)) {
+      if (m_flickerWizard->isVistaThemeEnabled(QVistaHelper::VistaBasic)) {
          if (window()->isActiveWindow()) {
             painter.setPen(QPen(QBrush(QColor(169, 191, 214)), 0));   // ### hardcoded for now
          } else {
@@ -2181,7 +2185,7 @@ void QWizard::removePage(int id)
       d->pageVBoxLayout->removeWidget(removedPage);
 
       for (int i = d->fields.count() - 1; i >= 0; --i) {
-         if (d->fields.at(i).page == removedPage) {
+         if (d->fields.at(i).m_page == removedPage) {
             removedPage->d_func()->pendingFields += d->fields.at(i);
             d->removeFieldAt(i);
          }
@@ -2262,8 +2266,8 @@ void QWizard::setField(const QString &name, const QVariant &value)
    if (index != -1) {
       const QWizardField &field = d->fields.at(index);
 
-      if (! field.object->setProperty(field.property, value)) {
-         qWarning("QWizard::setField() Unable to write to property '%s'", field.property.constData());
+      if (! field.m_object->setProperty(field.m_property, value)) {
+         qWarning("QWizard::setField() Unable to write to property '%s'", field.m_property.constData());
       }
 
       return;
@@ -2279,7 +2283,7 @@ QVariant QWizard::field(const QString &name) const
    int index = d->fieldIndexMap.value(name, -1);
    if (index != -1) {
       const QWizardField &field = d->fields.at(index);
-      return field.object->property(field.property);
+      return field.m_object->property(field.m_property);
    }
 
    qWarning("QWizard::field() Field '%s' does not exist", csPrintable(name));
@@ -2917,8 +2921,9 @@ void QWizardPage::cleanupPage()
 
       for (int i = 0; i < fields.count(); ++i) {
          const QWizardField &field = fields.at(i);
-         if (field.page == this) {
-            field.object->setProperty(field.property, field.initialValue);
+
+         if (field.m_page == this) {
+            field.m_object->setProperty(field.m_property, field.m_initialValue);
          }
       }
    }
@@ -2941,14 +2946,16 @@ bool QWizardPage::isComplete() const
 
    for (int i = wizardFields.count() - 1; i >= 0; --i) {
       const QWizardField &field = wizardFields.at(i);
-      if (field.page == this && field.mandatory) {
-         QVariant value = field.object->property(field.property);
-         if (value == field.initialValue) {
+
+      if (field.m_page == this && field.m_mandatory) {
+         QVariant value = field.m_object->property(field.m_property);
+
+         if (value == field.m_initialValue) {
             return false;
          }
 
 #ifndef QT_NO_LINEEDIT
-         if (QLineEdit *lineEdit = qobject_cast<QLineEdit *>(field.object)) {
+         if (QLineEdit *lineEdit = qobject_cast<QLineEdit *>(field.m_object)) {
             if (! lineEdit->hasAcceptableInput()) {
                return false;
             }
@@ -2956,7 +2963,7 @@ bool QWizardPage::isComplete() const
 #endif
 
 #ifndef QT_NO_SPINBOX
-         if (QAbstractSpinBox *spinBox = qobject_cast<QAbstractSpinBox *>(field.object)) {
+         if (QAbstractSpinBox *spinBox = qobject_cast<QAbstractSpinBox *>(field.m_object)) {
             if (! spinBox->hasAcceptableInput()) {
                return false;
             }

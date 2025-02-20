@@ -102,15 +102,15 @@ class QFontDialogPrivate : public QDialogPrivate
 
    QDialogButtonBox *buttonBox;
 
-   QFontDatabase fdb;
-   QString family;
+   QFontDatabase m_fdb;
+   QString m_family;
    QFontDatabase::WritingSystem writingSystem;
    QString style;
-   int size;
+   int m_size;
    bool smoothScalable;
 
    QFont selectedFont;
-   QSharedPointer<QFontDialogOptions> options;
+   QSharedPointer<QFontDialogOptions> m_options;
    QPointer<QObject> receiverToDisconnectOnClose;
    QString memberToDisconnectOnClose;
 

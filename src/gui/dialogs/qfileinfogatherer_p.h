@@ -191,8 +191,8 @@ class QFileInfoGatherer : public QThread
    QWaitCondition condition;
    QAtomicInt abort;
 
-   QStack<QString> path;
-   QStack<QStringList> files;
+   QStack<QString> m_infoPath;
+   QStack<QStringList> m_infoFiles;
 
 #ifndef QT_NO_FILESYSTEMWATCHER
    QFileSystemWatcher *watcher;

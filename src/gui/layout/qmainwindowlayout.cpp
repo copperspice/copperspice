@@ -482,7 +482,7 @@ void QMainWindowLayoutState::fitLayout()
 #ifdef QT_NO_TOOLBAR
    r = rect;
 #else
-   toolBarAreaLayout.rect = rect;
+   toolBarAreaLayout.m_toolBarAreaRect = rect;
    r = toolBarAreaLayout.fitLayout();
 #endif
 

@@ -101,17 +101,18 @@ void QFileInfoGatherer::fetchExtendedInformation(const QString &path, const QStr
    QMutexLocker locker(&mutex);
 
    // See if we already have this dir/file in our queue
-   int loc = this->path.lastIndexOf(path);
+   int loc = m_infoPath.lastIndexOf(path);
 
    while (loc > 0)  {
-      if (this->files.at(loc) == files) {
+      if (m_infoFiles.at(loc) == files) {
          return;
       }
-      loc = this->path.lastIndexOf(path, loc - 1);
+
+      loc = m_infoPath.lastIndexOf(path, loc - 1);
    }
 
-   this->path.push(path);
-   this->files.push(files);
+   m_infoPath.push(path);
+   m_infoFiles.push(files);
 
    condition.wakeAll();
 
@@ -158,8 +159,7 @@ void QFileInfoGatherer::run()
    while (true) {
       QMutexLocker locker(&mutex);
 
-      while (! abort.load() && path.isEmpty()) {
-
+      while (! abort.load() && m_infoPath.isEmpty()) {
          condition.wait(&mutex);
       }
 
@@ -167,11 +167,12 @@ void QFileInfoGatherer::run()
          return;
       }
 
+      const QString thisPath = m_infoPath.front();
+      m_infoPath.pop_front();
 
-      const QString thisPath = path.front();
-      path.pop_front();
-      const QStringList thisList = files.front();
-      files.pop_front();
+      const QStringList thisList = m_infoFiles.front();
+      m_infoFiles.pop_front();
+
       locker.unlock();
       getFileInfos(thisPath, thisList);
    }

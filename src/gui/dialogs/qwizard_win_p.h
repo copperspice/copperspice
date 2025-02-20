@@ -80,13 +80,14 @@ class QVistaHelper : public QObject
    void paintEvent(QPaintEvent *event);
 
    QVistaBackButton *backButton() const {
-      return backButton_;
+      return m_backButton;
    }
 
    void disconnectBackButton();
+
    void hideBackButton() {
-      if (backButton_) {
-         backButton_->hide();
+      if (m_backButton != nullptr) {
+         m_backButton->hide();
       }
    }
 
@@ -140,7 +141,7 @@ class QVistaHelper : public QObject
    static int glowSize();
 
    int leftMargin() {
-      return backButton_->isVisible() ? backButtonSize() + iconSpacing : 0;
+      return m_backButton->isVisible() ? backButtonSize() + iconSpacing : 0;
    }
 
    int titleOffset();
@@ -165,8 +166,9 @@ class QVistaHelper : public QObject
    bool pressed;
    QRect rtTop;
    QRect rtTitle;
-   QWizard *wizard;
-   QVistaBackButton *backButton_;
+
+   QWizard *m_vistaWizard;
+   QVistaBackButton *m_backButton;
 
    int titleBarOffset;  // Extra spacing above the text
    int iconSpacing;     // Space between button and icon
