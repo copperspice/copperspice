@@ -171,7 +171,7 @@ ByteStream::ByteStream(QByteArray *byteArray, bool fileBacking)
 }
 
 ByteStream::ByteStream(bool fileBacking)
-   : dev(new QBuffer(&ba)), fileBackingEnabled(fileBacking), fileBackingActive(false), handleDirty(false)
+   : dev(new QBuffer(&m_pdfByteArray)), fileBackingEnabled(fileBacking), fileBackingActive(false), handleDirty(false)
 {
    dev->open(QIODevice::ReadWrite);
 }
@@ -318,7 +318,7 @@ void ByteStream::prepareBuffer()
       delete dev;
       dev = newFile;
 
-      ba.clear();
+      m_pdfByteArray.clear();
       fileBackingActive = true;
    }
 
@@ -1911,8 +1911,8 @@ void QPdfEnginePrivate::embedFont(QFontSubset *font)
 
    {
       addXrefEntry(fontObject);
-      QByteArray font;
-      QPdf::ByteStream s(&font);
+      QByteArray newFont;
+      QPdf::ByteStream s(&newFont);
 
       s << "<< /Type /Font\n"
             "/Subtype /Type0\n"
@@ -1923,7 +1923,7 @@ void QPdfEnginePrivate::embedFont(QFontSubset *font)
             ">>\n"
             "endobj\n";
 
-      write(font);
+      write(newFont);
    }
 }
 
@@ -2710,7 +2710,7 @@ int QPdfEnginePrivate::addConstantAlphaObject(int brushAlpha, int penAlpha)
    return object;
 }
 
-int QPdfEnginePrivate::addBrushPattern(const QTransform &m, bool *specifyColor, int *gStateObject)
+int QPdfEnginePrivate::addBrushPattern(const QTransform &transformMatrix, bool *specifyColor, int *gStateObject)
 {
    int paintType = 2;             // Uncolored tiling
    int w = 8;
@@ -2719,7 +2719,7 @@ int QPdfEnginePrivate::addBrushPattern(const QTransform &m, bool *specifyColor, 
    *specifyColor = true;
    *gStateObject = 0;
 
-   QTransform matrix = m;
+   QTransform matrix = transformMatrix;
    matrix.translate(brushOrigin.x(), brushOrigin.y());
    matrix = matrix * pageMatrix();
 
@@ -2757,10 +2757,10 @@ int QPdfEnginePrivate::addBrushPattern(const QTransform &m, bool *specifyColor, 
          w = image.width();
          h = image.height();
 
-         QTransform m(w, 0, 0, -h, 0, h);
+         QTransform newMatrix(w, 0, 0, -h, 0, h);
          QPdf::ByteStream s(&pattern);
 
-         s << QPdf::generateMatrix(m);
+         s << QPdf::generateMatrix(newMatrix);
          s << "/Im" << imageObject << " Do\n";
       }
    }

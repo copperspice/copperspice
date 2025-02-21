@@ -30,7 +30,7 @@
 QEmulationPaintEngine::QEmulationPaintEngine(QPaintEngineEx *engine)
    : real_engine(engine)
 {
-   QPaintEngine::state = real_engine->state();
+   m_engineState = real_engine->state();
 }
 
 QPaintEngine::Type QEmulationPaintEngine::type() const
@@ -247,7 +247,7 @@ void QEmulationPaintEngine::transformChanged()
 
 void QEmulationPaintEngine::setState(QPainterState *s)
 {
-   QPaintEngine::state = s;
+   m_engineState = s;
    real_engine->setState(s);
 }
 

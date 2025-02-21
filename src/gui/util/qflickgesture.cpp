@@ -346,7 +346,7 @@ QFlickGesturePrivate::QFlickGesturePrivate()
 
 QFlickGestureRecognizer::QFlickGestureRecognizer(Qt::MouseButton button)
 {
-   this->button = button;
+   m_flickGestureButton = button;
 }
 
 QGesture *QFlickGestureRecognizer::create(QObject *target)
@@ -354,13 +354,13 @@ QGesture *QFlickGestureRecognizer::create(QObject *target)
 #ifndef QT_NO_GRAPHICSVIEW
    QGraphicsObject *go = qobject_cast<QGraphicsObject *>(target);
 
-   if (go && button == Qt::NoButton) {
+   if (go && m_flickGestureButton == Qt::NoButton) {
       go->setAcceptTouchEvents(true);
    }
 
 #endif
 
-   return new QFlickGesture(target, button);
+   return new QFlickGesture(target, m_flickGestureButton);
 }
 
 QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, QObject *watched, QEvent *event)
@@ -411,7 +411,7 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
             return Ignore;
          }
 
-         if (button != Qt::NoButton) {
+         if (m_flickGestureButton != Qt::NoButton) {
             me = static_cast<const QMouseEvent *>(event);
             globalPos = me->globalPos();
          }
@@ -427,7 +427,7 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
             return Ignore;
          }
 
-         if (button != Qt::NoButton) {
+         if (m_flickGestureButton != Qt::NoButton) {
             gsme = static_cast<const QGraphicsSceneMouseEvent *>(event);
             globalPos = gsme->screenPos();
          }
@@ -438,7 +438,7 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
       case QEvent::TouchBegin:
       case QEvent::TouchEnd:
       case QEvent::TouchUpdate:
-         if (button == Qt::NoButton) {
+         if (m_flickGestureButton == Qt::NoButton) {
             te = static_cast<const QTouchEvent *>(event);
 
             if (! te->touchPoints().isEmpty()) {
@@ -484,7 +484,7 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
 
    switch (event->type()) {
       case QEvent::MouseButtonPress:
-         if (me && me->button() == button && me->buttons() == button) {
+         if (me && me->button() == m_flickGestureButton && me->buttons() == m_flickGestureButton) {
             point = me->globalPos();
             inputType = QScroller::InputPress;
          } else if (me) {
@@ -495,7 +495,7 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
          break;
 
       case QEvent::MouseButtonRelease:
-         if (me && me->button() == button) {
+         if (me && me->button() == m_flickGestureButton) {
             point = me->globalPos();
             inputType = QScroller::InputRelease;
          }
@@ -503,7 +503,7 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
          break;
 
       case QEvent::MouseMove:
-         if (me && me->buttons() == button) {
+         if (me && me->buttons() == m_flickGestureButton) {
             point = me->globalPos();
             inputType = QScroller::InputMove;
          }
@@ -513,7 +513,7 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
 #ifndef QT_NO_GRAPHICSVIEW
 
       case QEvent::GraphicsSceneMousePress:
-         if (gsme && gsme->button() == button && gsme->buttons() == button) {
+         if (gsme && gsme->button() == m_flickGestureButton && gsme->buttons() == m_flickGestureButton) {
             point = gsme->scenePos();
             inputType = QScroller::InputPress;
          } else if (gsme) {
@@ -524,7 +524,7 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
          break;
 
       case QEvent::GraphicsSceneMouseRelease:
-         if (gsme && gsme->button() == button) {
+         if (gsme && gsme->button() == m_flickGestureButton) {
             point = gsme->scenePos();
             inputType = QScroller::InputRelease;
          }
@@ -532,7 +532,7 @@ QGestureRecognizer::Result QFlickGestureRecognizer::recognize(QGesture *state, Q
          break;
 
       case QEvent::GraphicsSceneMouseMove:
-         if (gsme && gsme->buttons() == button) {
+         if (gsme && gsme->buttons() == m_flickGestureButton) {
             point = gsme->scenePos();
             inputType = QScroller::InputMove;
          }

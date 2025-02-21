@@ -851,8 +851,9 @@ void QSvgPaintEngine::drawEllipse(const QRectF &r)
     const bool isCircle = r.width() == r.height();
     *d->stream << '<' << (isCircle ? "circle" : "ellipse");
 
-    if (state->pen().isCosmetic())
+    if (m_engineState->pen().isCosmetic()) {
         *d->stream << " vector-effect=\"non-scaling-stroke\"";
+    }
 
     const QPointF c = r.center();
     *d->stream << " cx=\"" << c.x() << "\" cy=\"" << c.y();
@@ -869,7 +870,7 @@ void QSvgPaintEngine::drawPath(const QPainterPath &p)
    Q_D(QSvgPaintEngine);
 
    *d->stream << "<path vector-effect=\""
-              << (state->pen().isCosmetic() ? "non-scaling-stroke" : "none")
+              << (m_engineState->pen().isCosmetic() ? "non-scaling-stroke" : "none")
               << "\" fill-rule=\""
               << (p.fillRule() == Qt::OddEvenFill ? "evenodd" : "nonzero")
               << "\" d=\"";
@@ -923,7 +924,7 @@ void QSvgPaintEngine::drawPolygon(const QPointF *points, int pointCount,
 
    if (mode == PolylineMode) {
       stream() << "<polyline fill=\"none\" vector-effect=\""
-               << (state->pen().isCosmetic() ? "non-scaling-stroke" : "none")
+               << (m_engineState->pen().isCosmetic() ? "non-scaling-stroke" : "none")
                << "\" points=\"";
       for (int i = 0; i < pointCount; ++i) {
          const QPointF &pt = points[i];
@@ -942,8 +943,11 @@ void QSvgPaintEngine::drawRects(const QRectF *rects, int rectCount)
     for (int i=0; i < rectCount; ++i) {
         const QRectF &rect = rects[i].normalized();
         *d->stream << "<rect";
-        if (state->pen().isCosmetic())
+
+        if (m_engineState->pen().isCosmetic()) {
             *d->stream << " vector-effect=\"non-scaling-stroke\"";
+        }
+
         *d->stream << " x=\"" << rect.x() << "\" y=\"" << rect.y()
                    << "\" width=\"" << rect.width() << "\" height=\"" << rect.height()
                    << "\"/>" << endl;

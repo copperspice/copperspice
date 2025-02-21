@@ -757,7 +757,7 @@ void QPixmap::detach()
 
    if (id == QPlatformPixmap::RasterClass) {
       QRasterPlatformPixmap *rasterData = static_cast<QRasterPlatformPixmap *>(pd);
-      rasterData->image.detach();
+      rasterData->m_rasterImage.detach();
    }
 
    if (data->is_cached && data->ref.load() == 1) {

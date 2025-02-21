@@ -110,11 +110,11 @@ class Q_GUI_EXPORT QPaintEngineEx : public QPaintEngine
    virtual void setState(QPainterState *s);
 
    QPainterState *state() {
-      return static_cast<QPainterState *>(QPaintEngine::state);
+      return static_cast<QPainterState *>(m_engineState);
    }
 
    const QPainterState *state() const {
-      return static_cast<const QPainterState *>(QPaintEngine::state);
+      return static_cast<const QPainterState *>(m_engineState);
    }
 
    virtual void sync() {}

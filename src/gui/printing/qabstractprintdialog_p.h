@@ -42,7 +42,7 @@ class QAbstractPrintDialogPrivate : public QDialogPrivate
 
  public:
    QAbstractPrintDialogPrivate()
-      : printer(nullptr), pd(nullptr), ownsPrinter(false)
+      : printer(nullptr), m_printDialog(nullptr), ownsPrinter(false)
       , options(QAbstractPrintDialog::PrintToFile | QAbstractPrintDialog::PrintPageRange |
                 QAbstractPrintDialog::PrintCollateCopies | QAbstractPrintDialog::PrintShowPageSize),
         minPage(0), maxPage(INT_MAX)
@@ -52,7 +52,8 @@ class QAbstractPrintDialogPrivate : public QDialogPrivate
    }
 
    QPrinter *printer;
-   QPrinterPrivate *pd;
+   QPrinterPrivate *m_printDialog;
+
    bool ownsPrinter;
    QPointer<QObject> receiverToDisconnectOnClose;
    QString memberToDisconnectOnClose;

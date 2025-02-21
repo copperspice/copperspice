@@ -74,7 +74,7 @@ class QFlickGestureRecognizer : public QGestureRecognizer
    void reset(QGesture *state) override;
 
  private:
-   Qt::MouseButton button;          // NoButton == Touch
+   Qt::MouseButton m_flickGestureButton;          // NoButton == Touch
 };
 
 #endif // QT_NO_GESTURES

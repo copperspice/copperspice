@@ -56,8 +56,9 @@ bool QMacPrintEngine::begin(QPaintDevice *dev)
       d->initialize();
    }
 
-   d->paintEngine->state = state;
+   d->paintEngine->m_engineState = m_engineState;
    d->paintEngine->begin(dev);
+
    Q_ASSERT_X(d->state == QPrinter::Idle, "QMacPrintEngine", "printer already active");
 
    if (PMSessionValidatePrintSettings(d->session(), d->settings(), kPMDontWantBoolean) != noErr
@@ -331,11 +332,11 @@ bool QMacPrintEnginePrivate::newPage_helper()
    cgEngine->d_func()->orig_xform = CGContextGetCTM(cgContext);
    cgEngine->d_func()->setClip(nullptr);
 
-   cgEngine->state->dirtyFlags = QPaintEngine::DirtyFlag(QPaintEngine::AllDirty
+   cgEngine->m_engineState->dirtyFlags = QPaintEngine::DirtyFlag(QPaintEngine::AllDirty
          & ~(QPaintEngine::DirtyClipEnabled | QPaintEngine::DirtyClipRegion | QPaintEngine::DirtyClipPath));
 
    if (cgEngine->painter()->hasClipping()) {
-      cgEngine->state->dirtyFlags |= QPaintEngine::DirtyClipEnabled;
+      cgEngine->m_engineState->dirtyFlags |= QPaintEngine::DirtyClipEnabled;
    }
 
    cgEngine->syncState();

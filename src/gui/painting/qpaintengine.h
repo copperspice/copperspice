@@ -221,7 +221,7 @@ class Q_GUI_EXPORT QPaintEngine
  protected:
    QPaintEngine(QPaintEnginePrivate &data, PaintEngineFeatures devcaps = PaintEngineFeatures());
 
-   QPaintEngineState *state;
+   QPaintEngineState *m_engineState;
    PaintEngineFeatures gccaps;
 
    uint active : 1;
@@ -315,20 +315,20 @@ inline void QPaintEngine::fix_neg_rect(int *x, int *y, int *w, int *h)
 
 inline bool QPaintEngine::testDirty(DirtyFlags df)
 {
-   Q_ASSERT(state);
-   return ((state->dirtyFlags & df) != 0);
+   Q_ASSERT(m_engineState);
+   return ((m_engineState->dirtyFlags & df) != 0);
 }
 
 inline void QPaintEngine::setDirty(DirtyFlags df)
 {
-   Q_ASSERT(state);
-   state->dirtyFlags |= df;
+   Q_ASSERT(m_engineState);
+   m_engineState->dirtyFlags |= df;
 }
 
 inline void QPaintEngine::clearDirty(DirtyFlags df)
 {
-   Q_ASSERT(state);
-   state->dirtyFlags &= ~static_cast<uint>(df);
+   Q_ASSERT(m_engineState);
+   m_engineState->dirtyFlags &= ~static_cast<uint>(df);
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QTextItem::RenderFlags)

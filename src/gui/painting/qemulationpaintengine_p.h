@@ -66,11 +66,11 @@ class QEmulationPaintEngine : public QPaintEngineEx
    }
 
    QPainterState *state() {
-      return (QPainterState *)QPaintEngine::state;
+      return (QPainterState *)m_engineState;
    }
 
    const QPainterState *state() const {
-      return (const QPainterState *)QPaintEngine::state;
+      return (const QPainterState *)m_engineState;
    }
 
    QPaintEngineEx *real_engine;

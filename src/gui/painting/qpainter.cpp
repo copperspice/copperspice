@@ -835,20 +835,19 @@ void QPainterPrivate::updateEmulationSpecifier(QPainterState *s)
 void QPainterPrivate::updateStateImpl(QPainterState *newState)
 {
    // ### we might have to call QPainter::begin() here
-   if (!engine->state) {
-      engine->state = newState;
+
+   if (! engine->m_engineState) {
+      engine->m_engineState = newState;
       engine->setDirty(QPaintEngine::AllDirty);
    }
 
-   if (engine->state->painter() != newState->painter)
-   {
+   if (engine->m_engineState->painter() != newState->painter) {
       // could break with clip regions vs paths.
       engine->setDirty(QPaintEngine::AllDirty);
-   }
 
-   else if (engine->state != newState) {
-      newState->dirtyFlags |= QPaintEngine::DirtyFlags(static_cast<QPainterState *>(engine->state)->changeFlags);
+   } else if (engine->m_engineState != newState) {
       // Upon restore, revert all changes since last save
+      newState->dirtyFlags |= QPaintEngine::DirtyFlags(static_cast<QPainterState *>(engine->m_engineState)->changeFlags);
 
    } else {
        // We need to store all changes made so that restore can deal with them
@@ -860,7 +859,7 @@ void QPainterPrivate::updateStateImpl(QPainterState *newState)
    // Unset potential dirty background mode
    newState->dirtyFlags &= ~(QPaintEngine::DirtyBackgroundMode | QPaintEngine::DirtyBackground);
 
-   engine->state = newState;
+   engine->m_engineState = newState;
    engine->updateState(*newState);
    engine->clearDirty(QPaintEngine::AllDirty);
 
@@ -869,9 +868,9 @@ void QPainterPrivate::updateStateImpl(QPainterState *newState)
 void QPainterPrivate::updateState(QPainterState *newState)
 {
    if (! newState) {
-      engine->state = newState;
+      engine->m_engineState = newState;
 
-   } else if (newState->state() || engine->state != newState) {
+   } else if (newState->state() || engine->m_engineState != newState) {
       updateStateImpl(newState);
    }
 }
@@ -974,7 +973,7 @@ void QPainter::save()
    } else {
       d->updateState(d->state);
       d->state = new QPainterState(d->states.back());
-      d->engine->state = d->state;
+      d->engine->m_engineState = d->state;
    }
 
    d->states.push_back(d->state);
@@ -1124,7 +1123,7 @@ bool QPainter::begin(QPaintDevice *pd)
    if (d->extended) {
       d->extended->setState(d->state);
    } else {
-      d->engine->state = d->state;
+      d->engine->m_engineState = d->state;
    }
 
    switch (pd->devType()) {

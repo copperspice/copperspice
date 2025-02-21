@@ -38,7 +38,8 @@
 class QGraphicsLinearLayoutPrivate : public QGraphicsLayoutPrivate
 {
  public:
-   QGraphicsLinearLayoutPrivate(Qt::Orientation orientation) : orientation(orientation)
+   QGraphicsLinearLayoutPrivate(Qt::Orientation orientation)
+      : m_orientation(orientation)
    { }
 
    void removeGridItem(QGridLayoutItem *gridItem);
@@ -47,21 +48,22 @@ class QGraphicsLinearLayoutPrivate : public QGraphicsLayoutPrivate
    int gridRow(int index) const;
    int gridColumn(int index) const;
 
-   Qt::Orientation orientation;
+   Qt::Orientation m_orientation;
    mutable QScopedPointer<QGraphicsLayoutStyleInfo> m_styleInfo;
    QGraphicsGridLayoutEngine engine;
 };
 
 void QGraphicsLinearLayoutPrivate::removeGridItem(QGridLayoutItem *gridItem)
 {
-   int index = gridItem->firstRow(orientation);
+   int index = gridItem->firstRow(m_orientation);
    engine.removeItem(gridItem);
-   engine.removeRows(index, 1, orientation);
+   engine.removeRows(index, 1, m_orientation);
 }
 
 void QGraphicsLinearLayoutPrivate::fixIndex(int *index) const
 {
-   int count = engine.rowCount(orientation);
+   int count = engine.rowCount(m_orientation);
+
    if (uint(*index) > uint(count)) {
       *index = count;
    }
@@ -69,7 +71,7 @@ void QGraphicsLinearLayoutPrivate::fixIndex(int *index) const
 
 int QGraphicsLinearLayoutPrivate::gridRow(int index) const
 {
-   if (orientation == Qt::Horizontal) {
+   if (m_orientation == Qt::Horizontal) {
       return 0;
    }
 
@@ -78,7 +80,7 @@ int QGraphicsLinearLayoutPrivate::gridRow(int index) const
 
 int QGraphicsLinearLayoutPrivate::gridColumn(int index) const
 {
-   if (orientation == Qt::Vertical) {
+   if (m_orientation == Qt::Vertical) {
       return 0;
    }
 
@@ -124,9 +126,10 @@ QGraphicsLinearLayout::~QGraphicsLinearLayout()
 void QGraphicsLinearLayout::setOrientation(Qt::Orientation orientation)
 {
    Q_D(QGraphicsLinearLayout);
-   if (orientation != d->orientation) {
+
+   if (orientation != d->m_orientation) {
       d->engine.transpose();
-      d->orientation = orientation;
+      d->m_orientation = orientation;
       invalidate();
    }
 }
@@ -134,7 +137,7 @@ void QGraphicsLinearLayout::setOrientation(Qt::Orientation orientation)
 Qt::Orientation QGraphicsLinearLayout::orientation() const
 {
    Q_D(const QGraphicsLinearLayout);
-   return d->orientation;
+   return d->m_orientation;
 }
 
 void QGraphicsLinearLayout::insertItem(int index, QGraphicsLayoutItem *item)
@@ -156,7 +159,8 @@ void QGraphicsLinearLayout::insertItem(int index, QGraphicsLayoutItem *item)
    Q_ASSERT(item);
 
    d->fixIndex(&index);
-   d->engine.insertRow(index, d->orientation);
+   d->engine.insertRow(index, d->m_orientation);
+
    QGraphicsGridLayoutEngineItem *gridEngineItem = new QGraphicsGridLayoutEngineItem(item, d->gridRow(index),
                d->gridColumn(index), 1, 1, Qt::EmptyFlag);
 
@@ -169,8 +173,8 @@ void QGraphicsLinearLayout::insertStretch(int index, int stretch)
    Q_D(QGraphicsLinearLayout);
 
    d->fixIndex(&index);
-   d->engine.insertRow(index, d->orientation);
-   d->engine.setRowStretchFactor(index, stretch, d->orientation);
+   d->engine.insertRow(index, d->m_orientation);
+   d->engine.setRowStretchFactor(index, stretch, d->m_orientation);
    invalidate();
 }
 
@@ -222,20 +226,20 @@ void QGraphicsLinearLayout::setSpacing(qreal spacing)
 qreal QGraphicsLinearLayout::spacing() const
 {
    Q_D(const QGraphicsLinearLayout);
-   return d->engine.spacing(d->orientation, d->styleInfo());
+   return d->engine.spacing(d->m_orientation, d->styleInfo());
 }
 
 void QGraphicsLinearLayout::setItemSpacing(int index, qreal spacing)
 {
    Q_D(QGraphicsLinearLayout);
-   d->engine.setRowSpacing(index, spacing, d->orientation);
+   d->engine.setRowSpacing(index, spacing, d->m_orientation);
    invalidate();
 }
 
 qreal QGraphicsLinearLayout::itemSpacing(int index) const
 {
    Q_D(const QGraphicsLinearLayout);
-   return d->engine.rowSpacing(index, d->orientation);
+   return d->engine.rowSpacing(index, d->m_orientation);
 }
 
 void QGraphicsLinearLayout::setStretchFactor(QGraphicsLayoutItem *item, int stretch)
@@ -250,7 +254,8 @@ void QGraphicsLinearLayout::setStretchFactor(QGraphicsLayoutItem *item, int stre
    if (stretchFactor(item) == stretch) {
       return;
    }
-   d->engine.setStretchFactor(item, stretch, d->orientation);
+
+   d->engine.setStretchFactor(item, stretch, d->m_orientation);
    invalidate();
 }
 
@@ -262,7 +267,8 @@ int QGraphicsLinearLayout::stretchFactor(QGraphicsLayoutItem *item) const
       qWarning("QGraphicsLinearLayout::setStretchFactor() Unable to return a stretch factor for an invalid item (nullptr)");
       return 0;
    }
-   return d->engine.stretchFactor(item, d->orientation);
+
+   return d->engine.stretchFactor(item, d->m_orientation);
 }
 
 void QGraphicsLinearLayout::setAlignment(QGraphicsLayoutItem *item, Qt::Alignment alignment)

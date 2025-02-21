@@ -60,7 +60,7 @@ class Q_GUI_EXPORT QRasterPlatformPixmap : public QPlatformPixmap
    int metric(QPaintDevice::PaintDeviceMetric metric) const override;
    void createPixmapForImage(QImage &sourceImage, Qt::ImageConversionFlags flags, bool inPlace);
    void setImage(const QImage &image);
-   QImage image;
+   QImage m_rasterImage;
 
  private:
    friend class QPixmap;

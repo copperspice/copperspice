@@ -1017,7 +1017,7 @@ void QPaintEngineEx::drawPixmapFragments(const QPainter::PixmapFragment *fragmen
 
 void QPaintEngineEx::setState(QPainterState *s)
 {
-   QPaintEngine::state = s;
+   m_engineState = s;
 }
 
 void QPaintEngineEx::updateState(const QPaintEngineState &)

@@ -396,7 +396,7 @@ QRectF QAlphaPaintEnginePrivate::addPenWidth(const QPainterPath &path)
       return (path.controlPointRect() * m_transform).boundingRect();
    }
 
-   bool cosmetic = qt_pen_is_cosmetic(m_pen, q->state->renderHints());
+   bool cosmetic = qt_pen_is_cosmetic(m_pen, q->m_engineState->renderHints());
 
    if (cosmetic) {
       tmp = path * m_transform;

@@ -129,7 +129,7 @@ void QAbstractPrintDialog::setPrintRange(PrintRange range)
 QAbstractPrintDialog::PrintRange QAbstractPrintDialog::printRange() const
 {
    Q_D(const QAbstractPrintDialog);
-   return QAbstractPrintDialog::PrintRange(d->pd->printRange);
+   return QAbstractPrintDialog::PrintRange(d->m_printDialog->printRange);
 }
 
 void QAbstractPrintDialog::setMinMax(int min, int max)
@@ -198,7 +198,8 @@ void QAbstractPrintDialogPrivate::setPrinter(QPrinter *newPrinter)
       printer = new QPrinter;
       ownsPrinter = true;
    }
-   pd = printer->d_func();
+
+   m_printDialog = printer->d_func();
 }
 
 void QAbstractPrintDialog::setOptionTabs(const QList<QWidget *> &tabs)

@@ -215,7 +215,7 @@ class DrawTextItemRecorder: public QPaintEngine
          currentItem.color = m_currentColor;
       }
 
-      QTransform matrix = m_untransformedCoordinates ? QTransform() : state->transform();
+      QTransform matrix = m_untransformedCoordinates ? QTransform() : m_engineState->transform();
       matrix.translate(position.x(), position.y());
 
       QVarLengthArray<glyph_t> glyphs;

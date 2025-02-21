@@ -1027,8 +1027,8 @@ static bool read_xpm_body(QIODevice *device, const char *const *source, int &ind
 
    if (device) {
       // Rewind unused characters, and skip to the end of the XPM struct.
-      for (int i = state.size() - 1; i >= 0; --i) {
-         device->ungetChar(state[i]);
+      for (int j = state.size() - 1; j >= 0; --j) {
+         device->ungetChar(state[j]);
       }
 
       char c;

@@ -96,7 +96,7 @@ class QWin32PrintEnginePrivate : public QAlphaPaintEnginePrivate
 
  public:
    QWin32PrintEnginePrivate()
-      : hPrinter(nullptr), globalDevMode(nullptr), devMode(nullptr), pInfo(nullptr), hMem(nullptr), hdc(nullptr),
+      : hPrinter(nullptr), globalDevMode(nullptr), devMode(nullptr), pInfo(nullptr), hMem(nullptr), m_hdc(nullptr),
         ownsDevMode(false), mode(QPrinter::ScreenResolution), state(QPrinter::Idle),
         resolution(0), m_pageLayout(QPageLayout(QPageSize(QPageSize::A4),
         QPageLayout::Portrait, QMarginsF(0, 0, 0, 0))),
@@ -150,7 +150,7 @@ class QWin32PrintEnginePrivate : public QAlphaPaintEnginePrivate
    PRINTER_INFO_2 *pInfo;
    HGLOBAL hMem;
 
-   HDC hdc;
+   HDC m_hdc;
 
    // True if devMode was allocated separately from pInfo.
    bool ownsDevMode;
@@ -196,7 +196,7 @@ class QWin32PrintEnginePrivate : public QAlphaPaintEnginePrivate
    uint txop;
 
    QColor brush_color;
-   QPen pen;
+   QPen m_pen;
    QColor pen_color;
    QSizeF paper_size;
 

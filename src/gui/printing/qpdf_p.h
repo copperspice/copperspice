@@ -86,7 +86,7 @@ namespace QPdf {
         void prepareBuffer();
 
         QIODevice *dev;
-        QByteArray ba;
+        QByteArray m_pdfByteArray;
         bool fileBackingEnabled;
         bool fileBackingActive;
         bool handleDirty;

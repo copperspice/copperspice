@@ -68,9 +68,11 @@ class QPixmapCacheEntry : public QPixmap
       if (pd && pd->classId() == QPlatformPixmap::RasterClass) {
          QRasterPlatformPixmap *d = static_cast<QRasterPlatformPixmap *>(pd);
 
-         if (!d->image.isNull() && d->image.d->paintEngine && ! d->image.d->paintEngine->isActive()) {
-            delete d->image.d->paintEngine;
-            d->image.d->paintEngine = nullptr;
+         if (! d->m_rasterImage.isNull() && d->m_rasterImage.d->paintEngine &&
+               ! d->m_rasterImage.d->paintEngine->isActive()) {
+
+            delete d->m_rasterImage.d->paintEngine;
+            d->m_rasterImage.d->paintEngine = nullptr;
          }
       }
    }
