@@ -294,7 +294,7 @@ void QAbstractSpinBox::stepBy(int steps)
 
    const QVariant old = d->value;
 
-   QString tmp = d->edit->displayText();
+   QString tmp   = d->edit->displayText();
    int cursorPos = d->edit->cursorPosition();
 
    bool dontstep = false;

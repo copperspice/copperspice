@@ -758,9 +758,9 @@ bool QTextHtmlImporter::closeTag()
                }
             }
 
-            // we don't need an extra block after tables, so we don't
-            // claim to have closed one for the creation of a new one
-            // in import()
+            // do not need an extra block after tables, so do not
+            // claim to have closed one for the creation of a new one in import()
+
             blockTagClosed = false;
             compressNextWhitespace = RemoveWhiteSpace;
 

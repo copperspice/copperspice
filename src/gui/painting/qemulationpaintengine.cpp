@@ -33,7 +33,6 @@ QEmulationPaintEngine::QEmulationPaintEngine(QPaintEngineEx *engine)
    QPaintEngine::state = real_engine->state();
 }
 
-
 QPaintEngine::Type QEmulationPaintEngine::type() const
 {
    return real_engine->type();

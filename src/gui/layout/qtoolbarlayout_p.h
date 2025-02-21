@@ -85,24 +85,30 @@ class QToolBarLayout : public QLayout
    bool hasExpandFlag() const;
 
    void updateMacBorderMetrics();
+
    GUI_CS_SLOT_1(Public, void setExpanded(bool b))
    GUI_CS_SLOT_2(setExpanded)
 
  private:
-   QList<QToolBarItem *> items;
-   bool dirty, expanding, empty, expandFlag;
-   QSize m_toolBarLayoutHint;
-   QSize minSize;
-   QVector<QLayoutStruct> geomArray;
-   QRect handRect;
-   QToolBarExtension *extension;
-
    void updateGeomArray() const;
    QToolBarItem *createItem(QAction *action);
+
+   QSize m_toolBarLayoutHint;
+   QSize minSize;
+
+   bool dirty;
+   bool expanding;
+   bool empty;
+   bool expandFlag;
+
+   QVector<QLayoutStruct> geomArray;
+   QRect handRect;
+
+   QList<QToolBarItem *> items;
+   QToolBarExtension *extension;
    QMenu *popupMenu;
 };
 
 #endif // QT_NO_TOOLBAR
-
 
 #endif // QTOOLBARLAYOUT_P_H

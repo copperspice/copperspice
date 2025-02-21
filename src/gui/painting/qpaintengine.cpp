@@ -367,6 +367,7 @@ void QPaintEngine::drawLines(const QLineF *linePtr, int lineCount)
          if (state->pen().capStyle() != Qt::FlatCap) {
             drawPoints(pts, 1);
          }
+
          continue;
       }
 
@@ -538,7 +539,6 @@ void QPaintEnginePrivate::drawBoxTextItem(const QPointF &p, const QTextItemInt &
    for (int k = 0; k < positions.size(); k++) {
       painter->drawRect(QRectF(positions[k].toPointF(), s));
    }
+
    painter->restore();
 }
-
-

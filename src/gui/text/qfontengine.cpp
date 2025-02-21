@@ -314,6 +314,7 @@ void QFontEngine::getGlyphPositions(const QGlyphLayout &glyphs, const QTransform
                positions[current].x = gpos_x;
                positions[current].y = gpos_y;
                glyphs_out[current]  = kashidaGlyph;
+
                ++current;
             }
 
@@ -642,6 +643,7 @@ void QFontEngine::addBitmapFontToPath(qreal x, qreal y, const QGlyphLayout &glyp
          for (int yi = 0; yi < h; ++yi) {
             const uchar *src = imageData + yi * srcBpl;
             uchar *dst = bitmapData + yi * destBpl;
+
             for (int xi = 0; xi < w; ++xi) {
                const int byte = xi / 8;
                const int bit = xi % 8;
@@ -1608,12 +1610,15 @@ void QFontEngineBox::draw(QPaintEngine *p, qreal x, qreal y, const QTextItemInt 
    QPainter *painter = p->painter();
    painter->save();
    painter->setBrush(Qt::NoBrush);
+
    QPen pen = painter->pen();
    pen.setWidthF(lineThickness().toReal());
    painter->setPen(pen);
+
    for (int k = 0; k < positions.size(); k++) {
       painter->drawRect(QRectF(positions[k].toPointF(), s));
    }
+
    painter->restore();
 }
 

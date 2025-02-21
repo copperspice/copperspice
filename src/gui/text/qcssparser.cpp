@@ -635,31 +635,37 @@ QSize ValueExtractor::sizeValue(const Declaration &decl)
 void ValueExtractor::sizeValues(const Declaration &decl, QSize *radii)
 {
    radii[0] = sizeValue(decl);
+
    for (int i = 1; i < 4; i++) {
       radii[i] = radii[0];
    }
 }
 
-bool ValueExtractor::extractBorder(int *borders, QBrush *colors, BorderStyle *styles,
-   QSize *radii)
+bool ValueExtractor::extractBorder(int *borders, QBrush *colors, BorderStyle *styles, QSize *radii)
 {
    extractFont();
    bool hit = false;
+
    for (int i = 0; i < declarations.count(); i++) {
       const Declaration &decl = declarations.at(i);
+
       switch (decl.d->propertyId) {
          case BorderLeftWidth:
             borders[LeftEdge] = lengthValue(decl);
             break;
+
          case BorderRightWidth:
             borders[RightEdge] = lengthValue(decl);
             break;
+
          case BorderTopWidth:
             borders[TopEdge] = lengthValue(decl);
             break;
+
          case BorderBottomWidth:
             borders[BottomEdge] = lengthValue(decl);
             break;
+
          case BorderWidth:
             lengthValues(decl, borders);
             break;
@@ -667,15 +673,19 @@ bool ValueExtractor::extractBorder(int *borders, QBrush *colors, BorderStyle *st
          case BorderLeftColor:
             colors[LeftEdge] = decl.brushValue(pal);
             break;
+
          case BorderRightColor:
             colors[RightEdge] = decl.brushValue(pal);
             break;
+
          case BorderTopColor:
             colors[TopEdge] = decl.brushValue(pal);
             break;
+
          case BorderBottomColor:
             colors[BottomEdge] = decl.brushValue(pal);
             break;
+
          case BorderColor:
             decl.brushValues(colors, pal);
             break;
@@ -683,15 +693,19 @@ bool ValueExtractor::extractBorder(int *borders, QBrush *colors, BorderStyle *st
          case BorderTopStyle:
             styles[TopEdge] = decl.styleValue();
             break;
+
          case BorderBottomStyle:
             styles[BottomEdge] = decl.styleValue();
             break;
+
          case BorderLeftStyle:
             styles[LeftEdge] = decl.styleValue();
             break;
+
          case BorderRightStyle:
             styles[RightEdge] = decl.styleValue();
             break;
+
          case BorderStyles:
             decl.styleValues(styles);
             break;
@@ -719,15 +733,19 @@ bool ValueExtractor::extractBorder(int *borders, QBrush *colors, BorderStyle *st
          case BorderLeft:
             borderValue(decl, &borders[LeftEdge], &styles[LeftEdge], &colors[LeftEdge]);
             break;
+
          case BorderTop:
             borderValue(decl, &borders[TopEdge], &styles[TopEdge], &colors[TopEdge]);
             break;
+
          case BorderRight:
             borderValue(decl, &borders[RightEdge], &styles[RightEdge], &colors[RightEdge]);
             break;
+
          case BorderBottom:
             borderValue(decl, &borders[BottomEdge], &styles[BottomEdge], &colors[BottomEdge]);
             break;
+
          case Border:
             borderValue(decl, &borders[LeftEdge], &styles[LeftEdge], &colors[LeftEdge]);
             borders[TopEdge] = borders[RightEdge] = borders[BottomEdge] = borders[LeftEdge];
@@ -738,26 +756,29 @@ bool ValueExtractor::extractBorder(int *borders, QBrush *colors, BorderStyle *st
          default:
             continue;
       }
+
       hit = true;
    }
 
    return hit;
 }
 
-bool ValueExtractor::extractOutline(int *borders, QBrush *colors, BorderStyle *styles,
-   QSize *radii, int *offsets)
+bool ValueExtractor::extractOutline(int *borders, QBrush *colors, BorderStyle *styles, QSize *radii, int *offsets)
 {
    extractFont();
    bool hit = false;
 
    for (int i = 0; i < declarations.count(); i++) {
       const Declaration &decl = declarations.at(i);
+
       switch (decl.d->propertyId) {
          case OutlineWidth:
             lengthValues(decl, borders);
             break;
+
          case OutlineColor:
             decl.brushValues(colors, pal);
+
             break;
          case OutlineStyle:
             decl.styleValues(styles);
@@ -766,18 +787,23 @@ bool ValueExtractor::extractOutline(int *borders, QBrush *colors, BorderStyle *s
          case OutlineTopLeftRadius:
             radii[0] = sizeValue(decl);
             break;
+
          case OutlineTopRightRadius:
             radii[1] = sizeValue(decl);
             break;
+
          case OutlineBottomLeftRadius:
             radii[2] = sizeValue(decl);
             break;
+
          case OutlineBottomRightRadius:
             radii[3] = sizeValue(decl);
             break;
+
          case OutlineRadius:
             sizeValues(decl, radii);
             break;
+
          case OutlineOffset:
             lengthValues(decl, offsets);
             break;
@@ -806,6 +832,7 @@ static Qt::Alignment parseAlignment(const QCss::Value *values, int count)
       if (values[i].type != Value::KnownIdentifier) {
          break;
       }
+
       switch (values[i].variant.toInt()) {
          case Value_Left:
             a[i] = Qt::AlignLeft;
@@ -1147,6 +1174,7 @@ void ValueExtractor::borderValue(const Declaration &decl, int *width, QCss::Bord
    if (decl.d->values.at(i).type == Value::Length || decl.d->values.at(i).type == Value::Number) {
       data.width = lengthValue(decl.d->values.at(i));
       *width = lengthValueFromData(data.width, f);
+
       if (++i >= decl.d->values.count()) {
          decl.d->parsed = QVariant::fromValue<BorderData>(data);
          return;
@@ -1154,12 +1182,15 @@ void ValueExtractor::borderValue(const Declaration &decl, int *width, QCss::Bord
    }
 
    data.style = parseStyleValue(decl.d->values.at(i));
+
    if (data.style != BorderStyle_Unknown) {
       *style = data.style;
+
       if (++i >= decl.d->values.count()) {
          decl.d->parsed = QVariant::fromValue<BorderData>(data);
          return;
       }
+
    } else {
       data.style = BorderStyle_None;
    }
@@ -1172,7 +1203,7 @@ void ValueExtractor::borderValue(const Declaration &decl, int *width, QCss::Bord
 }
 
 static void parseShorthandBackgroundProperty(const QVector<QCss::Value> &values, BrushData *brush, QString *image,
-   Repeat *repeat, Qt::Alignment *alignment, const QPalette &pal)
+      Repeat *repeat, Qt::Alignment *alignment, const QPalette &pal)
 {
    *brush     = BrushData();
    *image     = QString();
@@ -1219,12 +1250,12 @@ static void parseShorthandBackgroundProperty(const QVector<QCss::Value> &values,
 }
 
 bool ValueExtractor::extractBackground(QBrush *brush, QString *image, Repeat *repeat,
-   Qt::Alignment *alignment, Origin *origin, Attachment *attachment,
-   Origin *clip)
+      Qt::Alignment *alignment, Origin *origin, Attachment *attachment, Origin *clip)
 {
    bool hit = false;
    for (int i = 0; i < declarations.count(); ++i) {
       const Declaration &decl = declarations.at(i);
+
       if (decl.d->values.isEmpty()) {
          continue;
       }
@@ -1233,11 +1264,13 @@ bool ValueExtractor::extractBackground(QBrush *brush, QString *image, Repeat *re
          case BackgroundColor:
             *brush = decl.brushValue();
             break;
+
          case BackgroundImage:
             if (val.type == Value::Uri) {
                *image = val.variant.toString();
             }
             break;
+
          case BackgroundRepeat:
             if (decl.d->parsed.isValid()) {
                *repeat = static_cast<Repeat>(decl.d->parsed.toInt());
@@ -1247,15 +1280,19 @@ bool ValueExtractor::extractBackground(QBrush *brush, QString *image, Repeat *re
                decl.d->parsed = *repeat;
             }
             break;
+
          case BackgroundPosition:
             *alignment = decl.alignmentValue();
             break;
+
          case BackgroundOrigin:
             *origin = decl.originValue();
             break;
+
          case BackgroundClip:
             *clip = decl.originValue();
             break;
+
          case Background:
             if (decl.d->parsed.isValid()) {
                BackgroundData data = (decl.d->parsed).value<BackgroundData>();
@@ -1273,9 +1310,11 @@ bool ValueExtractor::extractBackground(QBrush *brush, QString *image, Repeat *re
                }
             }
             break;
+
          case BackgroundAttachment:
             *attachment = decl.attachmentValue();
             break;
+
          default:
             continue;
       }
@@ -1577,6 +1616,7 @@ bool ValueExtractor::extractPalette(QBrush *fg, QBrush *sfg, QBrush *sbg, QBrush
    bool hit = false;
    for (int i = 0; i < declarations.count(); ++i) {
       const Declaration &decl = declarations.at(i);
+
       switch (decl.d->propertyId) {
          case Color:
             *fg = decl.brushValue(pal);
@@ -1599,6 +1639,7 @@ bool ValueExtractor::extractPalette(QBrush *fg, QBrush *sfg, QBrush *sbg, QBrush
       }
       hit = true;
    }
+
    return hit;
 }
 
@@ -1630,9 +1671,11 @@ bool ValueExtractor::extractImage(QIcon *icon, Qt::Alignment *a, QSize *size)
                }
             }
             break;
+
          case QtImageAlignment:
             *a = decl.alignmentValue();
             break;
+
          default:
             continue;
       }
@@ -2024,11 +2067,13 @@ Qt::Alignment Declaration::alignmentValue() const
 void Declaration::borderImageValue(QString *image, int *cuts, TileMode *h, TileMode *v) const
 {
    *image = uriValue();
+
    for (int i = 0; i < 4; i++) {
       cuts[i] = -1;
    }
 
-   *h = *v = TileMode_Stretch;
+   *h = TileMode_Stretch;
+   *v = TileMode_Stretch;
 
    if (d->values.count() < 2) {
       return;
@@ -2930,6 +2975,7 @@ bool Parser::parseProperty(Declaration *decl)
 bool Parser::parseRuleset(StyleRule *styleRule)
 {
    Selector sel;
+
    if (! parseSelector(&sel)) {
       return false;
    }

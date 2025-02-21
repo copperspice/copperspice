@@ -650,9 +650,9 @@ QRect QToolBarAreaLayout::fitLayout()
       return m_toolBarAreaRect;
    }
 
-   QSize left_hint = docks[QInternal::LeftDock].sizeHint();
-   QSize right_hint = docks[QInternal::RightDock].sizeHint();
-   QSize top_hint = docks[QInternal::TopDock].sizeHint();
+   QSize left_hint   = docks[QInternal::LeftDock].sizeHint();
+   QSize right_hint  = docks[QInternal::RightDock].sizeHint();
+   QSize top_hint    = docks[QInternal::TopDock].sizeHint();
    QSize bottom_hint = docks[QInternal::BottomDock].sizeHint();
 
    QRect center = m_toolBarAreaRect.adjusted(left_hint.width(), top_hint.height(), -right_hint.width(), -bottom_hint.height());
@@ -663,7 +663,6 @@ QRect QToolBarAreaLayout::fitLayout()
    docks[QInternal::BottomDock].rect = QRect(m_toolBarAreaRect.left(), center.bottom() + 1, m_toolBarAreaRect.width(), bottom_hint.height());
 
    docks[QInternal::TopDock].fitLayout();
-
    docks[QInternal::LeftDock].fitLayout();
    docks[QInternal::RightDock].fitLayout();
    docks[QInternal::BottomDock].fitLayout();
@@ -952,6 +951,7 @@ void QToolBarAreaLayout::apply(bool animate)
                   if (geo.left() < 0) {
                      geo.moveLeft(0);
                   }
+
                   if (geo.top() < 0) {
                      geo.moveTop(0);
                   }

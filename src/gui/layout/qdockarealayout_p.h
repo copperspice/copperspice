@@ -150,6 +150,7 @@ class QDockAreaLayoutInfo
    bool isEmpty() const;
    bool hasFixedSize() const;
    QList<int> findSeparator(const QPoint &pos) const;
+
    int next(int idx) const;
    int prev(int idx) const;
 
@@ -168,22 +169,14 @@ class QDockAreaLayoutInfo
 
    QMainWindowLayout *mainWindowLayout() const;
 
-   mutable QVector<QWidget *> separatorWidgets;
-   QList<QDockAreaLayoutItem> item_list;
-
 #ifndef QT_NO_TABBAR
    void updateSeparatorWidgets() const;
    QSet<QWidget *> usedSeparatorWidgets() const;
-#endif
 
-#ifndef QT_NO_TABBAR
    quintptr currentTabId() const;
    void setCurrentTab(QWidget *widget);
    void setCurrentTabId(quintptr id);
    QRect tabContentRect() const;
-   bool tabbed;
-   QTabBar *tabBar;
-   int tabBarShape;
 
    void reparentWidgets(QWidget *p);
    bool updateTabBar() const;
@@ -197,6 +190,7 @@ class QDockAreaLayoutInfo
 #endif
 
    const int *m_dockAreaSep;
+   mutable QVector<QWidget *> separatorWidgets;
    QInternal::DockPosition m_dockPos;
 
    Qt::Orientation m_dockAreaOrientation;
@@ -204,6 +198,13 @@ class QDockAreaLayoutInfo
    QMainWindow *mainWindow;
 
    QRect m_dockAreaInfoRect;
+   QList<QDockAreaLayoutItem> item_list;
+
+#ifndef QT_NO_TABBAR
+   bool tabbed;
+   QTabBar *tabBar;
+   int tabBarShape;
+#endif
 };
 
 class QDockAreaLayout
@@ -217,18 +218,7 @@ class QDockAreaLayout
       FloatingDockWidgetTabMarker = 0xf9
    };
 
-   Qt::DockWidgetArea corners[4];      // use a Qt::Corner for indexing
-   QLayoutItem *centralWidgetItem;
-   QMainWindow *mainWindow;
-   QRect centralWidgetRect;
    QDockAreaLayout(QMainWindow *win);
-   int sep;                            // separator extent
-
-   // determines if we should use the sizehint for the dock areas
-   // (true until the layout is restored or the central widget is set)
-   bool fallbackToSizeHints;
-
-   mutable QVector<QWidget *> separatorWidgets;
 
    bool isValid() const;
 
@@ -265,15 +255,13 @@ class QDockAreaLayout
 
    void addDockWidget(QInternal::DockPosition pos, QDockWidget *dockWidget, Qt::Orientation orientation);
    bool restoreDockWidget(QDockWidget *dockWidget);
-   void splitDockWidget(QDockWidget *after, QDockWidget *dockWidget,
-      Qt::Orientation orientation);
+   void splitDockWidget(QDockWidget *after, QDockWidget *dockWidget, Qt::Orientation orientation);
    void tabifyDockWidget(QDockWidget *first, QDockWidget *second);
    void resizeDocks(const QList<QDockWidget *> &docks, const QList<int> &sizes, Qt::Orientation o);
 
    void apply(bool animate);
 
-   void paintSeparators(QPainter *p, QWidget *widget, const QRegion &clip,
-      const QPoint &mouse) const;
+   void paintSeparators(QPainter *p, QWidget *widget, const QRegion &clip, const QPoint &mouse) const;
    QRegion separatorRegion() const;
    int separatorMove(const QList<int> &separator, const QPoint &origin, const QPoint &dest);
 
@@ -298,8 +286,23 @@ class QDockAreaLayout
 #endif
 
    void styleChangedEvent();
+
+   // determines if we should use the sizehint for the dock areas
+   // (true until the layout is restored or the central widget is set)
+   bool fallbackToSizeHints;
+
+   mutable QVector<QWidget *> separatorWidgets;
+
+   Qt::DockWidgetArea corners[4];      // use a Qt::Corner for indexing
+
    QRect m_dockAreaRect;
+   QLayoutItem *centralWidgetItem;
+   QMainWindow *mainWindow;
+   QRect centralWidgetRect;
+
    QDockAreaLayoutInfo m_docks[4];
+
+   int sep;                            // separator extent
 };
 
 #endif // QT_NO_QDOCKWIDGET

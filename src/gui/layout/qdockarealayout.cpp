@@ -597,7 +597,7 @@ void QDockAreaLayoutInfo::fitItems()
 
       bool gap = item.flags & QDockAreaLayoutItem::GapItem;
       if (previous && !gap) {
-         if (!(previous->flags & QDockAreaLayoutItem::GapItem)) {
+         if (! (previous->flags & QDockAreaLayoutItem::GapItem)) {
             QLayoutStruct &ls = layout_struct_list[j++];
             ls.init();
             ls.minimumSize = ls.maximumSize = ls.sizeHint = previous->hasFixedSize(m_dockAreaOrientation) ? 0 : *m_dockAreaSep;
@@ -1143,7 +1143,7 @@ QLayoutItem *QDockAreaLayoutInfo::plug(const QList<int> &path)
       int prev = this->prev(index);
       int next = this->next(index);
 
-      if (prev != -1 && !(item_list.at(prev).flags & QDockAreaLayoutItem::GapItem)) {
+      if (prev != -1 && ! (item_list.at(prev).flags & QDockAreaLayoutItem::GapItem)) {
          item.pos  += *m_dockAreaSep;
          item.size -= *m_dockAreaSep;
       }
@@ -1191,7 +1191,7 @@ QLayoutItem *QDockAreaLayoutInfo::unplug(const QList<int> &path)
 #endif
 
    {
-      if (prev != -1 && !(item_list.at(prev).flags & QDockAreaLayoutItem::GapItem)) {
+      if (prev != -1 && ! (item_list.at(prev).flags & QDockAreaLayoutItem::GapItem)) {
          item.pos  -= *m_dockAreaSep;
          item.size += *m_dockAreaSep;
       }
@@ -3642,9 +3642,9 @@ void QDockAreaLayout::apply(bool animate)
    for (int i = 0; i < QInternal::DockCount; ++i) {
       m_docks[i].apply(animate);
    }
+
    if (centralWidgetItem != nullptr && !centralWidgetItem->isEmpty()) {
-      widgetAnimator.animate(centralWidgetItem->widget(), centralWidgetRect,
-         animate);
+      widgetAnimator.animate(centralWidgetItem->widget(), centralWidgetRect, animate);
    }
 
 #ifndef QT_NO_TABBAR
@@ -3810,7 +3810,7 @@ QLayoutItem *QDockAreaLayout::takeAt(int *x, int index)
    }
 
    if (centralWidgetItem && (*x)++ == index) {
-      QLayoutItem *ret = centralWidgetItem;
+      QLayoutItem *ret  = centralWidgetItem;
       centralWidgetItem = nullptr;
       return ret;
    }

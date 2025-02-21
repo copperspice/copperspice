@@ -306,6 +306,7 @@ inline void QPaintEngine::fix_neg_rect(int *x, int *y, int *w, int *h)
       *w = -*w;
       *x -= *w - 1;
    }
+
    if (*h < 0) {
       *h = -*h;
       *y -= *h - 1;
@@ -333,7 +334,5 @@ inline void QPaintEngine::clearDirty(DirtyFlags df)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QTextItem::RenderFlags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPaintEngine::PaintEngineFeatures)
 Q_DECLARE_OPERATORS_FOR_FLAGS(QPaintEngine::DirtyFlags)
-
-
 
 #endif

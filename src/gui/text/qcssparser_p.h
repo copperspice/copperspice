@@ -949,7 +949,8 @@ struct Q_GUI_EXPORT ValueExtractor {
    int fontExtracted;
    QPalette pal;
 };
-} // namespace QCss
+
+}   // namespace
 
 CS_DECLARE_METATYPE(QCss::BackgroundData)
 CS_DECLARE_METATYPE(QCss::LengthData)

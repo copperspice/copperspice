@@ -302,21 +302,18 @@ class QTextHtmlParser
    static int lookupElement(const QString &element);
 
  protected:
-   QTextHtmlParserNode *newNode(int parent);
-   QVector<QTextHtmlParserNode> nodes;
-   QString txt;
-   int pos, len;
-
    bool textEditMode;
-
    void parse();
    void parseTag();
    void parseCloseTag();
    void parseExclamationTag();
+
    QString parseEntity();
    QString parseWord();
+
    QTextHtmlParserNode *resolveParent();
    void resolveNode();
+
    QStringList parseAttributes();
    void applyAttributes(const QStringList &attributes);
    void eatSpace();
@@ -328,6 +325,13 @@ class QTextHtmlParser
 
    bool nodeIsChildOf(int i, QTextHTMLElements id) const;
 
+   QTextHtmlParserNode *newNode(int parent);
+   QVector<QTextHtmlParserNode> nodes;
+
+   QString txt;
+
+   int pos;
+   int len;
 
 #ifndef QT_NO_CSSPARSER
    QVector<QCss::Declaration> declarationsForNode(int node) const;

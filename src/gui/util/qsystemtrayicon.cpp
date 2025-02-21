@@ -529,11 +529,10 @@ void QSystemTrayIconPrivate::showMessage_sys_qpa(const QString &title,
 void QSystemTrayIconPrivate::addPlatformMenu(QMenu *menu) const
 {
    if (menu->platformMenu()) {
-      return;   // The platform menu already exists.
+      return;   // platform menu already exists
    }
 
-   // The recursion depth is the same as menu depth, so should not
-   // be higher than 3 levels.
+   // recursion depth is the same as menu depth, so should not be higher than 3 levels
    QListIterator<QAction *> it(menu->actions());
 
    while (it.hasNext()) {
@@ -544,7 +543,7 @@ void QSystemTrayIconPrivate::addPlatformMenu(QMenu *menu) const
       }
    }
 
-   // This menu should be processed *after* its children, otherwise
+   // menu should be processed *after* its children, otherwise
    // setMenu() is not called on respective QPlatformMenuItems.
    QPlatformMenu *platformMenu = qpa_sys->createMenu();
 

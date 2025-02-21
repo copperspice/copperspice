@@ -161,13 +161,11 @@ void QTextDocument::undo()
    d->undoRedo(true);
 }
 
-
 void QTextDocument::redo()
 {
    Q_D(QTextDocument);
    d->undoRedo(false);
 }
-
 
 void QTextDocument::appendUndoItem(QAbstractUndoItem *item)
 {
@@ -207,7 +205,6 @@ QTextOption QTextDocument::defaultTextOption() const
    return d->defaultTextOption;
 }
 
-
 void QTextDocument::setDefaultTextOption(const QTextOption &option)
 {
    Q_D(QTextDocument);
@@ -218,7 +215,6 @@ void QTextDocument::setDefaultTextOption(const QTextOption &option)
    }
 }
 
-
 QUrl QTextDocument::baseUrl() const
 {
    Q_D(const QTextDocument);
@@ -228,15 +224,17 @@ QUrl QTextDocument::baseUrl() const
 void QTextDocument::setBaseUrl(const QUrl &url)
 {
    Q_D(QTextDocument);
+
    if (d->baseUrl != url) {
       d->baseUrl = url;
+
       if (d->lout) {
          d->lout->documentChanged(0, 0, d->length());
       }
+
       emit baseUrlChanged(url);
    }
 }
-
 
 Qt::CursorMoveStyle QTextDocument::defaultCursorMoveStyle() const
 {
@@ -253,7 +251,9 @@ void QTextDocument::setDefaultCursorMoveStyle(Qt::CursorMoveStyle style)
 void QTextDocument::markContentsDirty(int from, int length)
 {
    Q_D(QTextDocument);
+
    d->documentChange(from, length);
+
    if (!d->inContentsChange) {
       if (d->lout) {
          d->lout->documentChanged(d->docChangeFrom, d->docChangeOldLength, d->docChangeLength);
@@ -280,7 +280,6 @@ bool QTextDocument::useDesignMetrics() const
    Q_D(const QTextDocument);
    return d->defaultTextOption.useDesignMetrics();
 }
-
 
 void QTextDocument::drawContents(QPainter *p, const QRectF &rect)
 {
@@ -346,8 +345,6 @@ qreal QTextDocument::indentWidth() const
    return d->indentWidth;
 }
 
-
-
 void QTextDocument::setIndentWidth(qreal width)
 {
    Q_D(QTextDocument);
@@ -407,7 +404,6 @@ int QTextDocument::characterCount() const
    return d->length();
 }
 
-
 QChar QTextDocument::characterAt(int pos) const
 {
    Q_D(const QTextDocument);
@@ -440,7 +436,7 @@ QString QTextDocument::defaultStyleSheet() const
    Q_D(const QTextDocument);
    return d->defaultStyleSheet;
 }
-#endif // QT_NO_CSSPARSER
+#endif
 
 bool QTextDocument::isUndoAvailable() const
 {
@@ -455,7 +451,6 @@ bool QTextDocument::isRedoAvailable() const
    return d->isRedoAvailable();
 }
 
-
 int QTextDocument::availableUndoSteps() const
 {
    Q_D(const QTextDocument);
@@ -469,7 +464,6 @@ int QTextDocument::availableRedoSteps() const
    return d->availableRedoSteps();
 }
 
-
 int QTextDocument::revision() const
 {
    Q_D(const QTextDocument);
@@ -482,7 +476,6 @@ void QTextDocument::setDocumentLayout(QAbstractTextDocumentLayout *layout)
    d->setLayout(layout);
 }
 
-
 QAbstractTextDocumentLayout *QTextDocument::documentLayout() const
 {
    Q_D(const QTextDocument);
@@ -492,8 +485,6 @@ QAbstractTextDocumentLayout *QTextDocument::documentLayout() const
    }
    return d->lout;
 }
-
-
 
 QString QTextDocument::metaInformation(MetaInformation info) const
 {
@@ -563,9 +554,7 @@ void QTextDocument::setPlainText(const QString &text)
    d->enableUndoRedo(previousState);
 }
 
-
 #ifndef QT_NO_TEXTHTMLPARSER
-
 void QTextDocument::setHtml(const QString &html)
 {
    Q_D(QTextDocument);
@@ -578,7 +567,6 @@ void QTextDocument::setHtml(const QString &html)
    d->endEditBlock();
    d->enableUndoRedo(previousState);
 }
-
 #endif
 
 QTextCursor QTextDocument::find(const QString &subString, int from, FindFlags options) const
@@ -1201,7 +1189,6 @@ static QString colorValue(QColor color)
 
    return result;
 }
-
 
 QTextHtmlExporter::QTextHtmlExporter(const QTextDocument *_doc)
    : doc(_doc), fragmentMarkers(false)
@@ -2367,4 +2354,3 @@ QTextDocumentPrivate *QTextDocument::docHandle() const
    Q_D(const QTextDocument);
    return const_cast<QTextDocumentPrivate *>(d);
 }
-

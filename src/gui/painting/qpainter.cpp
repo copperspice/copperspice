@@ -841,26 +841,24 @@ void QPainterPrivate::updateStateImpl(QPainterState *newState)
    }
 
    if (engine->state->painter() != newState->painter)
-      // ### this could break with clip regions vs paths.
    {
+      // could break with clip regions vs paths.
       engine->setDirty(QPaintEngine::AllDirty);
    }
 
-   // Upon restore, revert all changes since last save
    else if (engine->state != newState) {
       newState->dirtyFlags |= QPaintEngine::DirtyFlags(static_cast<QPainterState *>(engine->state)->changeFlags);
-   }
+      // Upon restore, revert all changes since last save
 
-   // We need to store all changes made so that restore can deal with them
-   else {
+   } else {
+       // We need to store all changes made so that restore can deal with them
       newState->changeFlags |= newState->dirtyFlags;
    }
 
    updateEmulationSpecifier(newState);
 
    // Unset potential dirty background mode
-   newState->dirtyFlags &= ~(QPaintEngine::DirtyBackgroundMode
-         | QPaintEngine::DirtyBackground);
+   newState->dirtyFlags &= ~(QPaintEngine::DirtyBackgroundMode | QPaintEngine::DirtyBackground);
 
    engine->state = newState;
    engine->updateState(*newState);
@@ -870,7 +868,7 @@ void QPainterPrivate::updateStateImpl(QPainterState *newState)
 
 void QPainterPrivate::updateState(QPainterState *newState)
 {
-   if (!newState) {
+   if (! newState) {
       engine->state = newState;
 
    } else if (newState->state() || engine->state != newState) {
@@ -978,12 +976,14 @@ void QPainter::save()
       d->state = new QPainterState(d->states.back());
       d->engine->state = d->state;
    }
+
    d->states.push_back(d->state);
 }
 
 void QPainter::restore()
 {
    Q_D(QPainter);
+
    if (d->states.size() <= 1) {
       qWarning("QPainter::restore() Unbalanced save / restore states");
       return;
@@ -1131,6 +1131,7 @@ bool QPainter::begin(QPaintDevice *pd)
       case QInternal::Pixmap: {
          QPixmap *pm = static_cast<QPixmap *>(pd);
          Q_ASSERT(pm);
+
          if (pm->isNull()) {
             qWarning("QPainter::begin() Unable to paint on a invalid pixmap");
             qt_cleanup_painter_state(d);

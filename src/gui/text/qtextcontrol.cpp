@@ -275,6 +275,7 @@ bool QTextControlPrivate::cursorMoveKeyEvent(QKeyEvent *e)
       if (cursor.position() != oldCursorPos) {
          emit q->cursorPositionChanged();
       }
+
       emit q->microFocusChanged();
    } else if (ignoreNavigationEvents && isNavigationEvent && oldSelection.anchor() == cursor.anchor()) {
       return false;
@@ -291,6 +292,7 @@ void QTextControlPrivate::updateCurrentCharFormat()
    Q_Q(QTextControl);
 
    QTextCharFormat fmt = cursor.charFormat();
+
    if (fmt == lastCharFormat) {
       return;
    }
@@ -332,6 +334,7 @@ void QTextControlPrivate::outdent()
       QTextBlockFormat modifier;
       modifier.setIndent(blockFmt.indent() - 1);
       cursor.mergeBlockFormat(modifier);
+
    } else {
       QTextListFormat listFmt = list->format();
       listFmt.setIndent(listFmt.indent() - 1);
@@ -415,10 +418,12 @@ void QTextControlPrivate::setContent(Qt::TextFormat format, const QString &text,
    const QTextCharFormat charFormatForInsertion = cursor.charFormat();
 
    bool clearDocument = true;
+
    if (! doc) {
       if (document) {
          doc = document;
          clearDocument = false;
+
       } else {
          palette = QApplication::palette("QTextControl");
          doc = new QTextDocument(q);
@@ -1708,8 +1713,7 @@ void QTextControlPrivate::mousePressEvent(QEvent *e, Qt::MouseButton button, con
          cursor.clearSelection();
       }
    }
-   if (!(button & Qt::LeftButton) ||
-      !((interactionFlags & Qt::TextSelectableByMouse) || (interactionFlags & Qt::TextEditable))) {
+   if (! (button & Qt::LeftButton) || ! ((interactionFlags & Qt::TextSelectableByMouse) || (interactionFlags & Qt::TextEditable))) {
       e->ignore();
       return;
    }

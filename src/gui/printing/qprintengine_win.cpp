@@ -179,16 +179,17 @@ bool QWin32PrintEngine::end()
       EndDoc(d->hdc);
    }
 
-   d->state = QPrinter::Idle;
+   d->state  = QPrinter::Idle;
    d->reinit = true;
+
    return true;
 }
 
 bool QWin32PrintEngine::newPage()
 {
    Q_D(QWin32PrintEngine);
-   Q_ASSERT(isActive());
 
+   Q_ASSERT(isActive());
    Q_ASSERT(d->hdc);
 
    flushAndInit();
@@ -321,7 +322,6 @@ int QWin32PrintEngine::metric(QPaintDevice::PaintDeviceMetric m) const
          break;
 
       case QPaintDevice::PdmWidthMM:
-
          val = d->m_paintSizeMM.width();
          break;
 
@@ -361,7 +361,7 @@ int QWin32PrintEngine::metric(QPaintDevice::PaintDeviceMetric m) const
    return val;
 }
 
-void QWin32PrintEngine::updateState(const QPaintEngineState & state)
+void QWin32PrintEngine::updateState(const QPaintEngineState &state)
 {
    Q_D(QWin32PrintEngine);
 
@@ -404,11 +404,12 @@ void QWin32PrintEngine::updateState(const QPaintEngineState & state)
    }
 }
 
-void QWin32PrintEngine::updateClipPath(const QPainterPath & clipPath, Qt::ClipOperation op)
+void QWin32PrintEngine::updateClipPath(const QPainterPath &clipPath, Qt::ClipOperation op)
 {
    Q_D(QWin32PrintEngine);
 
    bool doclip = true;
+
    if (op == Qt::NoClip) {
       SelectClipRgn(d->hdc, nullptr);
       doclip = false;
@@ -418,24 +419,27 @@ void QWin32PrintEngine::updateClipPath(const QPainterPath & clipPath, Qt::ClipOp
       QPainterPath xformed = clipPath * d->matrix;
 
       if (xformed.isEmpty()) {
-
          HRGN empty = CreateRectRgn(-0x1000000, -0x1000000, -0x0fffffff, -0x0ffffff);
          SelectClipRgn(d->hdc, empty);
          DeleteObject(empty);
+
       } else {
          d->composeGdiPath(xformed);
+
          const int ops[] = {
             -1,         // Qt::NoClip, covered above
             RGN_COPY,   // Qt::ReplaceClip
             RGN_AND,    // Qt::IntersectClip
             RGN_OR      // Qt::UniteClip
             };
+
          Q_ASSERT(op > 0 && unsigned(op) <= sizeof(ops) / sizeof(int));
          SelectClipPath(d->hdc, ops[op]);
       }
    }
 
    QPainterPath aclip = qt_regionToPath(alphaClipping());
+
    if (!aclip.isEmpty()) {
       QTransform tx(d->stretch_x, 0, 0, d->stretch_y, d->origin_x, d->origin_y);
       d->composeGdiPath(tx.map(aclip));
@@ -443,7 +447,7 @@ void QWin32PrintEngine::updateClipPath(const QPainterPath & clipPath, Qt::ClipOp
    }
 }
 
-void QWin32PrintEngine::updateMatrix(const QTransform & m) {
+void QWin32PrintEngine::updateMatrix(const QTransform &m) {
    Q_D(QWin32PrintEngine);
 
    QTransform stretch(d->stretch_x, 0, 0, d->stretch_y, d->origin_x, d->origin_y);
@@ -453,7 +457,7 @@ void QWin32PrintEngine::updateMatrix(const QTransform & m) {
    d->complex_xform = (d->txop > QTransform::TxScale);
 }
 
-void QWin32PrintEngine::drawPixmap(const QRectF & targetRect, const QPixmap & originalPixmap, const QRectF & sourceRect) {
+void QWin32PrintEngine::drawPixmap(const QRectF &targetRect, const QPixmap &originalPixmap, const QRectF &sourceRect) {
    Q_D(QWin32PrintEngine);
 
    QAlphaPaintEngine::drawPixmap(targetRect, originalPixmap, sourceRect);
@@ -552,7 +556,7 @@ void QWin32PrintEngine::drawPixmap(const QRectF & targetRect, const QPixmap & or
    RestoreDC(d->hdc, dc_state);
 }
 
-void QWin32PrintEngine::drawTiledPixmap(const QRectF & r, const QPixmap & pm, const QPointF & pos)
+void QWin32PrintEngine::drawTiledPixmap(const QRectF &r, const QPixmap & pm, const QPointF &pos)
 {
    Q_D(QWin32PrintEngine);
 
@@ -612,7 +616,7 @@ void QWin32PrintEngine::drawTiledPixmap(const QRectF & r, const QPixmap & pm, co
    }
 }
 
-void QWin32PrintEnginePrivate::composeGdiPath(const QPainterPath & path)
+void QWin32PrintEnginePrivate::composeGdiPath(const QPainterPath &path)
 {
    if (!BeginPath(hdc)) {
       qErrnoWarning("QWin32PrintEnginePrivate::drawPath: BeginPath failed");
@@ -622,11 +626,11 @@ void QWin32PrintEnginePrivate::composeGdiPath(const QPainterPath & path)
    int start = -1;
    for (int i = 0; i < path.elementCount(); ++i) {
       const QPainterPath::Element &elm = path.elementAt(i);
+
       switch (elm.type) {
          case QPainterPath::MoveToElement:
-            if (start >= 0
-               && path.elementAt(start).x == path.elementAt(i - 1).x
-               && path.elementAt(start).y == path.elementAt(i - 1).y) {
+            if (start >= 0 && path.elementAt(start).x == path.elementAt(i - 1).x
+                  && path.elementAt(start).y == path.elementAt(i - 1).y) {
                CloseFigure(hdc);
             }
             start = i;
@@ -645,6 +649,7 @@ void QWin32PrintEnginePrivate::composeGdiPath(const QPainterPath & path)
             PolyBezierTo(hdc, pts, 3);
             break;
          }
+
          default:
             qFatal("QWin32PaintEngine::drawPath: Unhandled type: %d", elm.type);
       }
@@ -662,7 +667,7 @@ void QWin32PrintEnginePrivate::composeGdiPath(const QPainterPath & path)
    SetPolyFillMode(hdc, path.fillRule() == Qt::WindingFill ? WINDING : ALTERNATE);
 }
 
-void QWin32PrintEnginePrivate::fillPath_dev(const QPainterPath & path, const QColor & color)
+void QWin32PrintEnginePrivate::fillPath_dev(const QPainterPath &path, const QColor &color)
 {
    composeGdiPath(path);
 
@@ -672,13 +677,14 @@ void QWin32PrintEnginePrivate::fillPath_dev(const QPainterPath & path, const QCo
    DeleteObject(SelectObject(hdc, old_brush));
 }
 
-void QWin32PrintEnginePrivate::strokePath_dev(const QPainterPath & path, const QColor & color, qreal penWidth)
+void QWin32PrintEnginePrivate::strokePath_dev(const QPainterPath &path, const QColor &color, qreal penWidth)
 {
    composeGdiPath(path);
+
    LOGBRUSH brush;
-   brush.lbStyle = BS_SOLID;
-   brush.lbColor = RGB(color.red(), color.green(), color.blue());
-   DWORD capStyle = PS_ENDCAP_SQUARE;
+   brush.lbStyle   = BS_SOLID;
+   brush.lbColor   = RGB(color.red(), color.green(), color.blue());
+   DWORD capStyle  = PS_ENDCAP_SQUARE;
    DWORD joinStyle = PS_JOIN_BEVEL;
    if (pen.capStyle() == Qt::FlatCap) {
       capStyle = PS_ENDCAP_FLAT;
@@ -700,12 +706,12 @@ void QWin32PrintEnginePrivate::strokePath_dev(const QPainterPath & path, const Q
    DeleteObject(SelectObject(hdc, old_pen));
 }
 
-void QWin32PrintEnginePrivate::fillPath(const QPainterPath & path, const QColor & color)
+void QWin32PrintEnginePrivate::fillPath(const QPainterPath &path, const QColor &color)
 {
    fillPath_dev(path * matrix, color);
 }
 
-void QWin32PrintEnginePrivate::strokePath(const QPainterPath & path, const QColor & color)
+void QWin32PrintEnginePrivate::strokePath(const QPainterPath &path, const QColor &color)
 {
    Q_Q(QWin32PrintEngine);
    QPainterPathStroker stroker;
@@ -727,6 +733,7 @@ void QWin32PrintEnginePrivate::strokePath(const QPainterPath & path, const QColo
       strokePath_dev(path * matrix, color, width);
    } else {
       stroker.setWidth(width);
+
       if (cosmetic) {
          stroke = stroker.createStroke(path * matrix);
       } else {
@@ -761,7 +768,7 @@ void QWin32PrintEngine::drawPath(const QPainterPath & path)
    }
 }
 
-void QWin32PrintEngine::drawPolygon(const QPointF * points, int pointCount, PolygonDrawMode mode)
+void QWin32PrintEngine::drawPolygon(const QPointF *points, int pointCount, PolygonDrawMode mode)
 {
    QAlphaPaintEngine::drawPolygon(points, pointCount, mode);
 
@@ -800,10 +807,10 @@ void QWin32PrintEnginePrivate::initialize()
 {
    release();
 
-   Q_ASSERT(!hPrinter);
+   Q_ASSERT(! hPrinter);
    Q_ASSERT(!hdc);
-   Q_ASSERT(!devMode);
-   Q_ASSERT(!pInfo);
+   Q_ASSERT(! devMode);
+   Q_ASSERT(! pInfo);
 
    if (!m_printDevice.isValid()) {
       return;
@@ -867,6 +874,7 @@ void QWin32PrintEnginePrivate::initialize()
    Q_ASSERT(pInfo);
 
    initHDC();
+
    if (devMode) {
       num_copies = devMode->dmCopies;
       devMode->dmCollate = DMCOLLATE_TRUE;
@@ -882,6 +890,7 @@ void QWin32PrintEnginePrivate::initHDC()
    dpi_x = GetDeviceCaps(hdc, LOGPIXELSX);
    dpi_y = GetDeviceCaps(hdc, LOGPIXELSY);
    dpi_display = GetDeviceCaps(display_dc, LOGPIXELSY);
+
    ReleaseDC(nullptr, display_dc);
 
    if (dpi_display == 0) {
@@ -895,12 +904,14 @@ void QWin32PrintEnginePrivate::initHDC()
          stretch_x = dpi_x / double(dpi_display);
          stretch_y = dpi_y / double(dpi_display);
          break;
+
       case QPrinter::PrinterResolution:
       case QPrinter::HighResolution:
          resolution = dpi_y;
          stretch_x = 1;
          stretch_y = 1;
          break;
+
       default:
          break;
    }

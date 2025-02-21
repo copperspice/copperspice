@@ -649,8 +649,7 @@ void QFontDialogPrivate::_q_familyHighlighted(int i)
    m_family = familyList->text(i);
    familyEdit->setText(m_family);
 
-   if (q->style()->styleHint(QStyle::SH_FontDialog_SelectAssociatedText, nullptr, q)
-      && familyList->hasFocus()) {
+   if (q->style()->styleHint(QStyle::SH_FontDialog_SelectAssociatedText, nullptr, q) && familyList->hasFocus()) {
       familyEdit->selectAll();
    }
 
@@ -681,8 +680,7 @@ void QFontDialogPrivate::_q_sizeHighlighted(int index)
    QString s = sizeList->text(index);
    sizeEdit->setText(s);
 
-   if (q->style()->styleHint(QStyle::SH_FontDialog_SelectAssociatedText, nullptr, q)
-         && sizeEdit->hasFocus()) {
+   if (q->style()->styleHint(QStyle::SH_FontDialog_SelectAssociatedText, nullptr, q) && sizeEdit->hasFocus()) {
       sizeEdit->selectAll();
    }
 

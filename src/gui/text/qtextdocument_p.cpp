@@ -389,7 +389,7 @@ int QTextDocumentPrivate::insert_block(int pos, int strPos, int format, int bloc
 }
 
 int QTextDocumentPrivate::insertBlock(QChar blockSeparator, int pos, int blockFormat,
-   int charFormat, QTextUndoCommand::Operation op)
+      int charFormat, QTextUndoCommand::Operation op)
 {
    Q_ASSERT(formats.format(blockFormat).isBlockFormat());
    Q_ASSERT(formats.format(charFormat).isCharFormat());
@@ -420,7 +420,7 @@ int QTextDocumentPrivate::insertBlock(QChar blockSeparator, int pos, int blockFo
    QTextBlockData *tmpBlock = blocks.fragment(b);
 
    QT_INIT_TEXTUNDOCOMMAND(c, QTextUndoCommand::BlockInserted, (editBlock != 0),
-      op, charFormat, strPos, pos, blockFormat, static_cast<quint32>(tmpBlock->revision));
+         op, charFormat, strPos, pos, blockFormat, static_cast<quint32>(tmpBlock->revision));
 
    appendUndoItem(c);
    Q_ASSERT(undoState == undoStack.size());
@@ -748,7 +748,7 @@ void QTextDocumentPrivate::setCharFormat(int pos, int length, const QTextCharFor
 
       Q_ASSERT(formats.format(fragment->format).type() == QTextFormat::CharFormat);
 
-      int offset = pos - it.position();
+      int offset    = pos - it.position();
       int length = qMin(static_cast<int>(endPos - pos), static_cast<int>(fragment->size_array[0] - offset));
       int oldFormat = fragment->format;
 

@@ -45,7 +45,7 @@ namespace QPdf {
 
     class ByteStream
     {
-    public:
+     public:
         // fileBacking means that ByteStream will buffer the contents on disk
         // if the size exceeds a certain threshold. In this case, if a byte
         // array was passed in, its contents may no longer correspond to the

@@ -96,20 +96,6 @@ class QBoxLayoutPrivate : public QLayoutPrivate
       dirty = true;
    }
 
-   QList<QBoxLayoutItem *> list;
-   QVector<QLayoutStruct> geomArray;
-   int hfwWidth;
-   int hfwHeight;
-   int hfwMinHeight;
-   QSize sizeHint;
-   QSize minSize;
-   QSize maxSize;
-   int leftMargin, topMargin, rightMargin, bottomMargin;
-   Qt::Orientations expanding;
-   uint hasHfw : 1;
-   uint dirty : 1;
-   QBoxLayout::Direction dir;
-
    void deleteAll() {
       while (! list.isEmpty()) {
          delete list.takeFirst();
@@ -121,8 +107,31 @@ class QBoxLayoutPrivate : public QLayoutPrivate
 
    void effectiveMargins(int *left, int *top, int *right, int *bottom) const;
    QLayoutItem *replaceAt(int index, QLayoutItem *) override;
+
+   QList<QBoxLayoutItem *> list;
+   QVector<QLayoutStruct> geomArray;
+
+   int hfwWidth;
+   int hfwHeight;
+   int hfwMinHeight;
+
    int m_spacing;
 
+   int leftMargin;
+   int topMargin;
+   int rightMargin;
+   int bottomMargin;
+
+   uint hasHfw : 1;
+   uint dirty : 1;
+
+   QSize sizeHint;
+   QSize minSize;
+   QSize maxSize;
+
+   Qt::Orientations expanding;
+
+   QBoxLayout::Direction dir;
 };
 
 QBoxLayoutPrivate::~QBoxLayoutPrivate()
@@ -496,8 +505,7 @@ int QBoxLayout::spacing() const
 
    } else {
       return qSmartSpacing(this, d->dir == LeftToRight || d->dir == RightToLeft
-            ? QStyle::PM_LayoutHorizontalSpacing
-            : QStyle::PM_LayoutVerticalSpacing);
+            ? QStyle::PM_LayoutHorizontalSpacing : QStyle::PM_LayoutVerticalSpacing);
    }
 }
 
@@ -512,9 +520,11 @@ void QBoxLayout::setSpacing(int spacing)
 QSize QBoxLayout::sizeHint() const
 {
    Q_D(const QBoxLayout);
+
    if (d->dirty) {
       const_cast<QBoxLayout *>(this)->d_func()->setupGeom();
    }
+
    return d->sizeHint;
 }
 

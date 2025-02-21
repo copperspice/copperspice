@@ -952,9 +952,11 @@ QString QDateTimeEdit::textFromDateTime(const QDateTime &dateTime) const
 QDateTime QDateTimeEdit::dateTimeFromText(const QString &text) const
 {
    Q_D(const QDateTimeEdit);
+
    QString copy = text;
    int pos = d->edit->cursorPosition();
    QValidator::State state = QValidator::Acceptable;
+
    return d->validateAndInterpret(copy, pos, state);
 }
 

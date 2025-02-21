@@ -48,6 +48,8 @@ class QAbstractPrintDialogPrivate : public QDialogPrivate
         minPage(0), maxPage(INT_MAX)
    {  }
 
+   virtual void setTabs(const QList<QWidget *> &) {
+   }
 
    QPrinter *printer;
    QPrinterPrivate *pd;
@@ -57,7 +59,6 @@ class QAbstractPrintDialogPrivate : public QDialogPrivate
 
    QAbstractPrintDialog::PrintDialogOptions options;
 
-   virtual void setTabs(const QList<QWidget *> &) {}
    void setPrinter(QPrinter *newPrinter);
    int minPage;
    int maxPage;
