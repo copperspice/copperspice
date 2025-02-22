@@ -40,7 +40,8 @@ QTextCopyHelper::QTextCopyHelper(const QTextCursor &_source, const QTextCursor &
    src       = _source.d->priv;
    dst       = _destination.d->priv;
    insertPos = _destination.position();
-   this->forceCharFormat = forceCharFormat;
+
+   m_forceCharFormat      = forceCharFormat;
    primaryCharFormatIndex = convertFormatIndex(fmt);
 
    cursor = _source;
@@ -80,7 +81,8 @@ int QTextCopyHelper::appendFragment(int pos, int endPos, int objectIndex)
       || (frag->size_array[0] == 1 && src->formatCollection()->format(frag->format).objectIndex() != -1));
 
    int charFormatIndex;
-   if (forceCharFormat) {
+
+   if (m_forceCharFormat) {
       charFormatIndex = primaryCharFormatIndex;
    } else {
       charFormatIndex = convertFormatIndex(frag->format, objectIndex);
@@ -390,10 +392,12 @@ void QTextHtmlImporter::import()
    hasBlock = true;
    forceBlockMerging = false;
    compressNextWhitespace = RemoveWhiteSpace;
-   blockTagClosed = false;
+
+   m_blockTagClosed = false;
+
    for (currentNodeIdx = 0; currentNodeIdx < count(); ++currentNodeIdx) {
       currentNode = &at(currentNodeIdx);
-      wsm = textEditMode ? QTextHtmlParserNode::WhiteSpacePreWrap : currentNode->wsm;
+      wsm = m_textEditMode ? QTextHtmlParserNode::WhiteSpacePreWrap : currentNode->wsm;
 
       /*
        * process each node in three stages:
@@ -415,16 +419,17 @@ void QTextHtmlImporter::import()
        *      means there was a tag closing in the input html
        */
 
-      if (currentNodeIdx > 0 && (currentNode->parent != currentNodeIdx - 1)) {
-         blockTagClosed = closeTag();
+      if (currentNodeIdx > 0 && (currentNode->m_parserNodeParent != currentNodeIdx - 1)) {
+         m_blockTagClosed = closeTag();
+
          // visually collapse subsequent block tags, but if the element after the closed block tag
          // is for example an inline element (!isBlock) we have to make sure we start a new paragraph by setting
          // hasBlock to false.
 
-         if (blockTagClosed && !currentNode->isBlock() && currentNode->id != Html_unknown) {
+         if (m_blockTagClosed && ! currentNode->isBlock() && currentNode->id != Html_unknown) {
             hasBlock = false;
 
-         } else if (blockTagClosed && hasBlock) {
+         } else if (m_blockTagClosed && hasBlock) {
             // when collapsing subsequent block tags we need to clear the block format
             QTextBlockFormat blockFormat = currentNode->blockFormat;
             blockFormat.setIndent(indent);
@@ -462,11 +467,8 @@ void QTextHtmlImporter::import()
       }
 
       // make sure there's a block for 'Blah' after <ul><li>foo</ul>Blah
-      if (blockTagClosed
-         && !hasBlock
-         && !currentNode->isBlock()
-         && !currentNode->text.isEmpty() && !currentNode->hasOnlyWhitespace()
-         && currentNode->displayMode == QTextHtmlElement::DisplayInline) {
+      if (m_blockTagClosed && ! hasBlock && ! currentNode->isBlock() && ! currentNode->text.isEmpty() &&
+            ! currentNode->hasOnlyWhitespace() && currentNode->displayMode == QTextHtmlElement::DisplayInline) {
 
          QTextBlockFormat block = currentNode->blockFormat;
          block.setIndent(indent);
@@ -521,10 +523,10 @@ bool QTextHtmlImporter::appendNodeText()
             continue;
          }
 
-         if (wsm == QTextHtmlParserNode::WhiteSpacePre || textEditMode) {
+         if (wsm == QTextHtmlParserNode::WhiteSpacePre || m_textEditMode) {
 
             if (ch == '\n') {
-               if (textEditMode) {
+               if (m_textEditMode) {
                   continue;
                }
 
@@ -608,14 +610,16 @@ QTextHtmlImporter::ProcessNodeResult QTextHtmlImporter::processSpecialNodes()
       case Html_ul: {
          QTextListFormat::Style style = currentNode->listStyle;
 
-         if (currentNode->id == Html_ul && !currentNode->hasOwnListStyle && currentNode->parent) {
-            const QTextHtmlParserNode *n = &at(currentNode->parent);
+         if (currentNode->id == Html_ul && !currentNode->hasOwnListStyle && currentNode->m_parserNodeParent) {
+            const QTextHtmlParserNode *n = &at(currentNode->m_parserNodeParent);
+
             while (n) {
                if (n->id == Html_ul) {
                   style = nextListStyle(currentNode->listStyle);
                }
-               if (n->parent) {
-                  n = &at(n->parent);
+
+               if (n->m_parserNodeParent) {
+                  n = &at(n->m_parserNodeParent);
                } else {
                   n = nullptr;
                }
@@ -806,7 +810,7 @@ bool QTextHtmlImporter::closeTag()
             break;
       }
 
-      closedNode = &at(closedNode->parent);
+      closedNode = &at(closedNode->m_parserNodeParent);
       --depth;
    }
 
@@ -1041,13 +1045,12 @@ QTextHtmlImporter::ProcessNodeResult QTextHtmlImporter::processBlockNode()
    int bottomMargin = this->bottomMargin(currentNodeIdx);
 
    // for list items we may want to collapse with the bottom margin of the list.
-   const QTextHtmlParserNode *parentNode = currentNode->parent ? &at(currentNode->parent) : nullptr;
+   const QTextHtmlParserNode *parentNode = currentNode->m_parserNodeParent ? &at(currentNode->m_parserNodeParent) : nullptr;
 
-   if ((currentNode->id == Html_li || currentNode->id == Html_dt || currentNode->id == Html_dd)
-      && parentNode
-      && (parentNode->isListStart() || parentNode->id == Html_dl)
-      && (parentNode->children.last() == currentNodeIdx)) {
-      bottomMargin = qMax(bottomMargin, this->bottomMargin(currentNode->parent));
+   if ((currentNode->id == Html_li || currentNode->id == Html_dt || currentNode->id == Html_dd) &&
+         parentNode && (parentNode->isListStart() || parentNode->id == Html_dl) &&
+         (parentNode->children.last() == currentNodeIdx)) {
+      bottomMargin = qMax(bottomMargin, this->bottomMargin(currentNode->m_parserNodeParent));
    }
 
    if (block.bottomMargin() != bottomMargin) {
@@ -1154,7 +1157,8 @@ QTextHtmlImporter::ProcessNodeResult QTextHtmlImporter::processBlockNode()
    }
 
    hasBlock = true;
-   blockTagClosed = false;
+   m_blockTagClosed = false;
+
    return ContinueWithCurrentNode;
 }
 

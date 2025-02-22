@@ -278,7 +278,7 @@ class QTextItemInt : public QTextItem
 {
  public:
    QTextItemInt()
-      : justified(false), underlineStyle(QTextCharFormat::NoUnderline), logClusters(nullptr), f(nullptr), fontEngine(nullptr)
+      : justified(false), underlineStyle(QTextCharFormat::NoUnderline), logClusters(nullptr), f(nullptr), m_textItemFontEngine(nullptr)
    { }
 
    QTextItemInt(const QScriptItem &si, QFont *font, const QTextCharFormat &format = QTextCharFormat());
@@ -308,7 +308,7 @@ class QTextItemInt : public QTextItem
    const QFont *f;
 
    QGlyphLayout glyphs;
-   QFontEngine *fontEngine;
+   QFontEngine *m_textItemFontEngine;
 };
 
 struct QScriptItem {
@@ -541,7 +541,8 @@ class Q_GUI_EXPORT QTextEngine
 
    QFixed minWidth;
    QFixed maxWidth;
-   QPointF position;
+   QPointF m_position;
+
    uint ignoreBidi  : 1;
    uint cacheGlyphs : 1;
    uint stackEngine : 1;

@@ -222,19 +222,19 @@ class QTextDocumentPrivate
    }
 
    bool isUndoAvailable() const {
-      return undoEnabled && undoState > 0;
+      return undoEnabled && m_undoState > 0;
    }
 
    bool isRedoAvailable() const {
-      return undoEnabled && undoState < undoStack.size();
+      return undoEnabled && m_undoState < undoStack.size();
    }
 
    int availableUndoSteps() const {
-      return undoEnabled ? undoState : 0;
+      return undoEnabled ? m_undoState : 0;
    }
 
    int availableRedoSteps() const {
-      return undoEnabled ? qMax(undoStack.size() - undoState - 1, 0) : 0;
+      return undoEnabled ? qMax(undoStack.size() - m_undoState - 1, 0) : 0;
    }
 
    QString buffer() const {
@@ -417,8 +417,9 @@ class QTextDocumentPrivate
    uint unreachableCharacterCount;
 
    QVector<QTextUndoCommand> undoStack;
+
    bool undoEnabled;
-   int undoState;
+   int m_undoState;
    int revision;
 
    // position in undo stack of the last setModified(false) call
@@ -457,7 +458,7 @@ class QTextTable;
 class QTextHtmlExporter
 {
  public:
-   QTextHtmlExporter(const QTextDocument *_doc);
+   QTextHtmlExporter(const QTextDocument *doc);
 
    enum ExportMode {
       ExportEntireDocument,
@@ -494,7 +495,7 @@ class QTextHtmlExporter
 
    QString html;
    QTextCharFormat defaultCharFormat;
-   const QTextDocument *doc;
+   const QTextDocument *m_textHtmlDoc;
    bool fragmentMarkers;
 };
 

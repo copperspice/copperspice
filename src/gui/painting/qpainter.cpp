@@ -3584,7 +3584,7 @@ void QPainterPrivate::drawGlyphs(const quint32 *glyphArray, QFixedPoint *positio
 
    } else {
       QTextItemInt textItem;
-      textItem.fontEngine = fontEngine;
+      textItem.m_textItemFontEngine = fontEngine;
 
       QVarLengthArray<QFixed, 128> advances(glyphCount);
       QVarLengthArray<QGlyphJustification, 128> glyphJustifications(glyphCount);
@@ -4188,8 +4188,8 @@ void QPainterPrivate::drawTextItem(const QPointF &p, const QTextItem &_ti, QText
    if (! ti.glyphs.numGlyphs) {
       // nothing to do
 
-   } else if (ti.fontEngine->type() == QFontEngine::Multi) {
-      QFontEngineMulti *multi = static_cast<QFontEngineMulti *>(ti.fontEngine);
+   } else if (ti.m_textItemFontEngine->type() == QFontEngine::Multi) {
+      QFontEngineMulti *multi = static_cast<QFontEngineMulti *>(ti.m_textItemFontEngine);
 
       const QGlyphLayout &glyphs = ti.glyphs;
       int which = glyphs.glyphs[0] >> 24;
@@ -4287,7 +4287,7 @@ void QPainterPrivate::drawTextItem(const QPointF &p, const QTextItem &_ti, QText
       }
    }
 
-   drawTextItemDecoration(q, p, ti.fontEngine, textEngine, ti.underlineStyle,
+   drawTextItemDecoration(q, p, ti.m_textItemFontEngine, textEngine, ti.underlineStyle,
       ti.flags, ti.width.toReal(), ti.charFormat);
 
    if (state->renderHints != oldRenderHints) {

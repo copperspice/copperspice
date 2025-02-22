@@ -466,7 +466,7 @@ int QTextHtmlParser::lookupElement(const QString &element)
 }
 
 QTextHtmlParserNode::QTextHtmlParserNode()
-   : parent(0), id(Html_unknown),
+   : m_parserNodeParent(0), id(Html_unknown),
      cssFloat(QTextFrameFormat::InFlow), hasOwnListStyle(false),
      hasCssListIndent(false), isEmptyParagraph(false), isTextFrame(false), isRootFrame(false),
      displayMode(QTextHtmlElement::DisplayInline), hasHref(false),
@@ -503,10 +503,10 @@ QTextHtmlParserNode *QTextHtmlParser::newNode(int parent)
 
             int lastSibling = count() - 2;
 
-            while (lastSibling && at(lastSibling).parent != lastNode->parent
+            while (lastSibling && at(lastSibling).m_parserNodeParent != lastNode->m_parserNodeParent
                   && at(lastSibling).displayMode == QTextHtmlElement::DisplayInline) {
 
-               lastSibling = at(lastSibling).parent;
+               lastSibling = at(lastSibling).m_parserNodeParent;
             }
 
             if (at(lastSibling).displayMode == QTextHtmlElement::DisplayInline) {
@@ -537,19 +537,23 @@ QTextHtmlParserNode *QTextHtmlParser::newNode(int parent)
       newNode = &nodes.last();
    }
 
-   newNode->parent = parent;
+   newNode->m_parserNodeParent = parent;
+
    return newNode;
 }
 
-void QTextHtmlParser::parse(const QString &text, const QTextDocument *_resourceProvider)
+void QTextHtmlParser::parse(const QString &text, const QTextDocument *resourceProvider)
 {
    nodes.clear();
    nodes.resize(1);
+
    txt = text;
    pos = 0;
    len = txt.length();
-   textEditMode = false;
-   resourceProvider = _resourceProvider;
+
+   m_textEditMode     = false;
+   m_resourceProvider = resourceProvider;
+
    parse();
 }
 
@@ -558,7 +562,7 @@ int QTextHtmlParser::depth(int i) const
    int depth = 0;
 
    while (i) {
-      i = at(i).parent;
+      i = at(i).m_parserNodeParent;
       ++depth;
    }
 
@@ -583,7 +587,7 @@ int QTextHtmlParser::margin(int i, int mar) const
          }
 
          m += node->margin[mar];
-         i = node->parent;
+         i = node->m_parserNodeParent;
       }
    }
 
@@ -642,8 +646,7 @@ void QTextHtmlParser::parseTag()
       parseExclamationTag();
 
       if (nodes.last().wsm != QTextHtmlParserNode::WhiteSpacePre
-         && nodes.last().wsm != QTextHtmlParserNode::WhiteSpacePreWrap
-         && !textEditMode) {
+            && nodes.last().wsm != QTextHtmlParserNode::WhiteSpacePreWrap && ! m_textEditMode) {
          eatSpace();
       }
       return;
@@ -670,7 +673,7 @@ void QTextHtmlParser::parseTag()
    int p = last();
 
    while (p && at(p).tag.size() == 0) {
-      p = at(p).parent;
+      p = at(p).m_parserNodeParent;
    }
 
    QTextHtmlParserNode *node = newNode(p);
@@ -700,8 +703,9 @@ void QTextHtmlParser::parseTag()
 
    const int nodeIndex = nodes.count() - 1; // this new node is always the last
 #ifndef QT_NO_CSSPARSER
-   node->applyCssDeclarations(declarationsForNode(nodeIndex), resourceProvider);
+   node->applyCssDeclarations(declarationsForNode(nodeIndex), m_resourceProvider);
 #endif
+
    applyAttributes(node->attributes);
 
    // finish tag
@@ -726,7 +730,7 @@ void QTextHtmlParser::parseTag()
    }
 
    if (node->mayNotHaveChildren() || tagClosed) {
-      newNode(node->parent);
+      newNode(node->m_parserNodeParent);
       resolveNode();
    }
 }
@@ -750,7 +754,7 @@ void QTextHtmlParser::parseCloseTag()
    }
 
    while (p && at(p).tag != tag) {
-      p = at(p).parent;
+      p = at(p).m_parserNodeParent;
    }
 
    // simply ignore the tag if we can't find
@@ -774,7 +778,7 @@ void QTextHtmlParser::parseCloseTag()
 
    }
 
-   newNode(at(p).parent);
+   newNode(at(p).m_parserNodeParent);
    resolveNode();
 }
 
@@ -923,15 +927,16 @@ QTextHtmlParserNode *QTextHtmlParser::resolveParent()
 {
    QTextHtmlParserNode *node = &nodes.last();
 
-   int p = node->parent;
+   int p = node->m_parserNodeParent;
 
    // Excel gives us buggy HTML with just tr without surrounding table tags
    // or with just td tags
 
    if (node->id == Html_td) {
       int n = p;
+
       while (n && at(n).id != Html_tr) {
-         n = at(n).parent;
+         n = at(n).m_parserNodeParent;
       }
 
       if (!n) {
@@ -939,14 +944,14 @@ QTextHtmlParserNode *QTextHtmlParser::resolveParent()
          nodes.insert(nodes.count() - 1, QTextHtmlParserNode());
 
          QTextHtmlParserNode *table = &nodes[nodes.count() - 3];
-         table->parent = p;
+         table->m_parserNodeParent = p;
          table->id  = Html_table;
          table->tag = "table";
 
          table->children.append(nodes.count() - 2); // add row as child
 
          QTextHtmlParserNode *row = &nodes[nodes.count() - 2];
-         row->parent = nodes.count() - 3; // table as parent
+         row->m_parserNodeParent = nodes.count() - 3;    // table as parent
          row->id  = Html_tr;
          row->tag = "tr";
 
@@ -959,13 +964,13 @@ QTextHtmlParserNode *QTextHtmlParser::resolveParent()
       int n = p;
 
       while (n && at(n).id != Html_table) {
-         n = at(n).parent;
+         n = at(n).m_parserNodeParent;
       }
 
       if (!n) {
          nodes.insert(nodes.count() - 1, QTextHtmlParserNode());
          QTextHtmlParserNode *table = &nodes[nodes.count() - 2];
-         table->parent = p;
+         table->m_parserNodeParent = p;
          table->id  = Html_table;
          table->tag = "table";
 
@@ -995,18 +1000,18 @@ QTextHtmlParserNode *QTextHtmlParser::resolveParent()
    //
    if (node->id == Html_p) {
       while (p && !at(p).isBlock()) {
-         p = at(p).parent;
+         p = at(p).m_parserNodeParent;
       }
 
       if (!p || at(p).id != Html_p) {
-         p = node->parent;
+         p = node->m_parserNodeParent;
       }
    }
 
    // some elements are not self nesting
    if (node->id == at(p).id
       && node->isNotSelfNesting()) {
-      p = at(p).parent;
+      p = at(p).m_parserNodeParent;
    }
 
    // some elements are not allowed in certain contexts
@@ -1014,10 +1019,10 @@ QTextHtmlParserNode *QTextHtmlParser::resolveParent()
       // ### make new styles aware of empty tags
       || at(p).mayNotHaveChildren()
    ) {
-      p = at(p).parent;
+      p = at(p).m_parserNodeParent;
    }
 
-   node->parent = p;
+   node->m_parserNodeParent = p;
 
    // makes it easier to traverse the tree, later
    nodes[p].children.append(nodes.count() - 1);
@@ -1028,7 +1033,7 @@ QTextHtmlParserNode *QTextHtmlParser::resolveParent()
 void QTextHtmlParser::resolveNode()
 {
    QTextHtmlParserNode *node = &nodes.last();
-   const QTextHtmlParserNode *parent = &nodes.at(node->parent);
+   const QTextHtmlParserNode *parent = &nodes.at(node->m_parserNodeParent);
    node->initializeProperties(parent, this);
 }
 
@@ -1038,13 +1043,16 @@ bool QTextHtmlParserNode::isNestedList(const QTextHtmlParser *parser) const
       return false;
    }
 
-   int p = parent;
+   int p = m_parserNodeParent;
+
    while (p) {
       if (parser->at(p).isListStart()) {
          return true;
       }
-      p = parser->at(p).parent;
+
+      p = parser->at(p).m_parserNodeParent;
    }
+
    return false;
 }
 
@@ -1704,6 +1712,7 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
                if (! c.isValid()) {
                   qWarning("QTextHtmlParser::applyAttributes() Unknown color name '%s'", csPrintable(value));
                }
+
                node->charFormat.setForeground(c);
             }
             break;
@@ -1779,8 +1788,9 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
 
                node->charFormat.setBackground(c);
 
-               node->applyBackgroundImage(value, resourceProvider);
             } else if (key == "background") {
+               node->applyBackgroundImage(value, m_resourceProvider);
+
             }
             break;
 
@@ -1797,8 +1807,8 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
                }
                node->charFormat.setBackground(c);
 
-               node->applyBackgroundImage(value, resourceProvider);
             } else if (key == "background") {
+               node->applyBackgroundImage(value, m_resourceProvider);
 
             } else if (key == "rowspan") {
                if (setIntAttribute(&node->tableCellRowSpan, value)) {
@@ -1824,8 +1834,8 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
                }
                node->charFormat.setBackground(c);
 
-               node->applyBackgroundImage(value, resourceProvider);
             } else if (key == "background") {
+               node->applyBackgroundImage(value, m_resourceProvider);
 
             } else if (key == "cellspacing") {
                setFloatAttribute(&node->tableCellSpacing, value);
@@ -1846,8 +1856,8 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
                seenQt3Richtext = true;
             }
 
-               textEditMode = true;
             if (key == "content" && value == "1" && seenQt3Richtext) {
+               m_textEditMode = true;
             }
             break;
 
@@ -1872,7 +1882,7 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
 
       if (key == "style") {
 #ifndef QT_NO_CSSPARSER
-         node->parseStyleAttribute(value, resourceProvider);
+         node->parseStyleAttribute(value, m_resourceProvider);
 #endif
 
       } else if (key == "align") {
@@ -1947,7 +1957,7 @@ void QTextHtmlParser::applyAttributes(const QStringList &attributes)
    }
 
 #ifndef QT_NO_CSSPARSER
-   if (resourceProvider && !linkHref.isEmpty() && linkType == QLatin1String("text/css")) {
+   if (m_resourceProvider && !linkHref.isEmpty() && linkType == "text/css") {
       importStyleSheet(linkHref);
    }
 #endif
@@ -1958,7 +1968,7 @@ class QTextHtmlStyleSelector : public QCss::StyleSelector
 {
  public:
    QTextHtmlStyleSelector(const QTextHtmlParser *parser)
-      : parser(parser)
+      : m_parser(parser)
    {
       nameCaseSensitivity = Qt::CaseInsensitive;
    }
@@ -1973,12 +1983,12 @@ class QTextHtmlStyleSelector : public QCss::StyleSelector
    void freeNode(NodePtr node) const override;
 
  private:
-   const QTextHtmlParser *parser;
+   const QTextHtmlParser *m_parser;
 };
 
 QStringList QTextHtmlStyleSelector::nodeNames(NodePtr node) const
 {
-   return QStringList(parser->at(node.id).tag.toLower());
+   return QStringList(m_parser->at(node.id).tag.toLower());
 }
 #endif
 
@@ -1995,8 +2005,9 @@ static inline int findAttribute(const QStringList &attributes, const QString &na
 
 QString QTextHtmlStyleSelector::attribute(NodePtr node, const QString &name) const
 {
-   const QStringList &attributes = parser->at(node.id).attributes;
+   const QStringList &attributes = m_parser->at(node.id).attributes;
    const int idx = findAttribute(attributes, name);
+
    if (idx == -1) {
       return QString();
    }
@@ -2006,7 +2017,7 @@ QString QTextHtmlStyleSelector::attribute(NodePtr node, const QString &name) con
 
 bool QTextHtmlStyleSelector::hasAttributes(NodePtr node) const
 {
-   const QStringList &attributes = parser->at(node.id).attributes;
+   const QStringList &attributes = m_parser->at(node.id).attributes;
    return !attributes.isEmpty();
 }
 
@@ -2021,7 +2032,7 @@ QCss::StyleSelector::NodePtr QTextHtmlStyleSelector::parentNode(NodePtr node) co
    parent.id = 0;
 
    if (node.id) {
-      parent.id = parser->at(node.id).parent;
+      parent.id = m_parser->at(node.id).m_parserNodeParent;
    }
 
    return parent;
@@ -2040,16 +2051,21 @@ QCss::StyleSelector::NodePtr QTextHtmlStyleSelector::previousSiblingNode(NodePtr
    if (! node.id) {
       return sibling;
    }
-   int parent = parser->at(node.id).parent;
+
+   int parent = m_parser->at(node.id).m_parserNodeParent;
 
    if (! parent) {
       return sibling;
    }
-   const int childIdx = parser->at(parent).children.indexOf(node.id);
+
+   const int childIdx = m_parser->at(parent).children.indexOf(node.id);
+
    if (childIdx <= 0) {
       return sibling;
    }
-   sibling.id = parser->at(parent).children.at(childIdx - 1);
+
+   sibling.id = m_parser->at(parent).children.at(childIdx - 1);
+
    return sibling;
 }
 
@@ -2070,7 +2086,7 @@ void QTextHtmlParser::resolveStyleSheetImports(const QCss::StyleSheet &sheet)
 
 void QTextHtmlParser::importStyleSheet(const QString &href)
 {
-   if (! resourceProvider) {
+   if (! m_resourceProvider) {
       return;
    }
 
@@ -2080,7 +2096,7 @@ void QTextHtmlParser::importStyleSheet(const QString &href)
       }
    }
 
-   QVariant res = resourceProvider->resource(QTextDocument::StyleSheetResource, QUrl(href));
+   QVariant res = m_resourceProvider->resource(QTextDocument::StyleSheetResource, QUrl(href));
    QString css;
 
    if (res.type() == QVariant::String) {
@@ -2346,12 +2362,11 @@ QVector<QCss::Declaration> QTextHtmlParser::declarationsForNode(int node) const
    QTextHtmlStyleSelector selector(this);
 
    int idx = 0;
-   selector.styleSheets.resize((resourceProvider ? 1 : 0)
-      + externalStyleSheets.count()
-      + inlineStyleSheets.count());
+   selector.styleSheets.resize((m_resourceProvider ? 1 : 0)
+         + externalStyleSheets.count() + inlineStyleSheets.count());
 
-   if (resourceProvider) {
-      selector.styleSheets[idx++] = resourceProvider->docHandle()->parsedDefaultStyleSheet;
+   if (m_resourceProvider) {
+      selector.styleSheets[idx++] = m_resourceProvider->docHandle()->parsedDefaultStyleSheet;
    }
 
    for (int i = 0; i < externalStyleSheets.count(); ++i, ++idx) {
@@ -2400,7 +2415,8 @@ bool QTextHtmlParser::nodeIsChildOf(int i, QTextHTMLElements id) const
       if (at(i).id == id) {
          return true;
       }
-      i = at(i).parent;
+
+      i = at(i).m_parserNodeParent;
    }
 
    return false;

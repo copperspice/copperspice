@@ -3809,11 +3809,12 @@ QStackTextEngine::QStackTextEngine(const QString &string, const QFont &f)
 
 QTextItemInt::QTextItemInt(const QScriptItem &si, QFont *font, const QTextCharFormat &format)
    : justified(false), underlineStyle(QTextCharFormat::NoUnderline), charFormat(format),
-     logClusters(nullptr), f(nullptr), fontEngine(nullptr)
+     logClusters(nullptr), f(nullptr), m_textItemFontEngine(nullptr)
 {
    f = font;
-   fontEngine = f->d->engineForScript(si.analysis.script);
-   Q_ASSERT(fontEngine);
+   m_textItemFontEngine = f->d->engineForScript(si.analysis.script);
+
+   Q_ASSERT(m_textItemFontEngine);
 
    initWithScriptItem(si);
 }
@@ -3821,7 +3822,7 @@ QTextItemInt::QTextItemInt(const QScriptItem &si, QFont *font, const QTextCharFo
 QTextItemInt::QTextItemInt(const QGlyphLayout &g, QFont *font, QString::const_iterator begin,
       const QString::const_iterator end, QFontEngine *fe, const QTextCharFormat &format)
    : flags(Qt::EmptyFlag), justified(false), underlineStyle(QTextCharFormat::NoUnderline), charFormat(format),
-     m_iter(begin), m_end(end), logClusters(nullptr), f(font),  glyphs(g), fontEngine(fe)
+     m_iter(begin), m_end(end), logClusters(nullptr), f(font),  glyphs(g), m_textItemFontEngine(fe)
 {
 }
 
@@ -3867,7 +3868,7 @@ QTextItemInt QTextItemInt::midItem(QFontEngine *fontEngine, int firstGlyphIndex,
    const int end   = firstGlyphIndex + len;
 
    ti.glyphs     = glyphs.mid(firstGlyphIndex, len);
-   ti.fontEngine = fontEngine;
+   ti.m_textItemFontEngine = fontEngine;
 
    if (logClusters && (m_iter != m_end)) {
       const int logClusterOffset = logClusters[0];

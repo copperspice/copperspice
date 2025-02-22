@@ -301,18 +301,18 @@ void QFontEngine::getGlyphPositions(const QGlyphLayout &glyphs, const QTransform
             for (uint k = 0; k < glyphs.justifications[i].nKashidas; ++k) {
                xpos -= kashidaWidth;
 
-               QFixed gpos_x = xpos + glyphs.offsets[i].x;
-               QFixed gpos_y = ypos + glyphs.offsets[i].y;
+               QFixed gpos_x2 = xpos + glyphs.offsets[i].x;
+               QFixed gpos_y2 = ypos + glyphs.offsets[i].y;
 
                if (transform) {
-                  QPointF gpos(gpos_x.toReal(), gpos_y.toReal());
+                  QPointF gpos(gpos_x2.toReal(), gpos_y2.toReal());
                   gpos = gpos * matrix;
-                  gpos_x = QFixed::fromReal(gpos.x());
-                  gpos_y = QFixed::fromReal(gpos.y());
+                  gpos_x2 = QFixed::fromReal(gpos.x());
+                  gpos_y2 = QFixed::fromReal(gpos.y());
                }
 
-               positions[current].x = gpos_x;
-               positions[current].y = gpos_y;
+               positions[current].x = gpos_x2;
+               positions[current].y = gpos_y2;
                glyphs_out[current]  = kashidaGlyph;
 
                ++current;
@@ -645,15 +645,15 @@ void QFontEngine::addBitmapFontToPath(qreal x, qreal y, const QGlyphLayout &glyp
             uchar *dst = bitmapData + yi * destBpl;
 
             for (int xi = 0; xi < w; ++xi) {
-               const int byte = xi / 8;
-               const int bit = xi % 8;
+               const int byte_value = xi / 8;
+               const int bit_value  = xi % 8;
 
-               if (bit == 0) {
-                  dst[byte] = 0;
+               if (bit_value == 0) {
+                  dst[byte_value] = 0;
                }
 
                if (src[xi]) {
-                  dst[byte] |= 128 >> bit;
+                  dst[byte_value] |= 128 >> bit_value;
                }
             }
          }
@@ -1008,12 +1008,12 @@ void QFontEngine::loadKerningPairs(QFixed scalingFactor)
    const uchar *table = reinterpret_cast<const uchar *>(tab.constData());
    const uchar *end = table + tab.size();
 
-   quint16 version;
-   if (! qSafeFromBigEndian(table, end, &version)) {
+   quint16 tableVersion;
+   if (! qSafeFromBigEndian(table, end, &tableVersion)) {
       return;
    }
 
-   if (version != 0) {
+   if (tableVersion != 0) {
       return;
    }
 
@@ -1028,8 +1028,8 @@ void QFontEngine::loadKerningPairs(QFixed scalingFactor)
       for (int i = 0; i < numTables; ++i) {
          const uchar *header = table + offset;
 
-         quint16 version;
-         if (! qSafeFromBigEndian(header, end, &version)) {
+         quint16 headerVersion;
+         if (! qSafeFromBigEndian(header, end, &headerVersion)) {
             goto end;
          }
 
@@ -1043,7 +1043,7 @@ void QFontEngine::loadKerningPairs(QFixed scalingFactor)
             goto end;
          }
 
-         if (version == 0 && coverage == 0x0001) {
+         if (headerVersion == 0 && coverage == 0x0001) {
 
             if (offset + length > tab.size()) {
                goto end;
@@ -1061,26 +1061,26 @@ void QFontEngine::loadKerningPairs(QFixed scalingFactor)
             }
 
             int off = 8;
-            for (int i = 0; i < nPairs; ++i) {
+            for (int j = 0; j < nPairs; ++j) {
                QFontEngine::KernPair p;
 
-               quint16 tmp;
-               if (! qSafeFromBigEndian(data + off, end, &tmp)) {
+               quint16 dataValue;
+               if (! qSafeFromBigEndian(data + off, end, &dataValue)) {
                   goto end;
                }
 
-               p.left_right = uint(tmp) << 16;
-               if (! qSafeFromBigEndian(data + off + 2, end, &tmp)) {
+               p.left_right = uint(dataValue) << 16;
+               if (! qSafeFromBigEndian(data + off + 2, end, &dataValue)) {
                   goto end;
                }
 
-               p.left_right |= tmp;
+               p.left_right |= dataValue;
 
-               if (!qSafeFromBigEndian(data + off + 4, end, &tmp)) {
+               if (! qSafeFromBigEndian(data + off + 4, end, &dataValue)) {
                   goto end;
                }
 
-               p.adjust = QFixed(int(short(tmp))) / scalingFactor;
+               p.adjust = QFixed(int(short(dataValue))) / scalingFactor;
                kerning_pairs.append(p);
                off += 6;
             }
@@ -1601,7 +1601,8 @@ void QFontEngineBox::draw(QPaintEngine *p, qreal x, qreal y, const QTextItemInt 
    QVarLengthArray<QFixedPoint> positions;
    QVarLengthArray<glyph_t> glyphs;
    QTransform matrix = QTransform::fromTranslate(x, y - _size);
-   ti.fontEngine->getGlyphPositions(ti.glyphs, matrix, ti.flags, glyphs, positions);
+
+   ti.m_textItemFontEngine->getGlyphPositions(ti.glyphs, matrix, ti.flags, glyphs, positions);
 
    if (glyphs.size() == 0) {
       return;

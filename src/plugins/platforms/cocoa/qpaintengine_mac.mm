@@ -1163,7 +1163,7 @@ void QCoreGraphicsPaintEngine::drawTextItem(const QPointF &pos, const QTextItem 
 
    Q_ASSERT(type() == QPaintEngine::CoreGraphics);
 
-   QFontEngine *fe = ti.fontEngine;
+   QFontEngine *fe = ti.m_textItemFontEngine;
 
    const bool textAA = ((m_engineState->renderHints() & QPainter::TextAntialiasing)
          && (fe->fontDef.pointSize > QCoreTextFontEngine::antialiasingThreshold)

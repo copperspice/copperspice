@@ -1190,10 +1190,10 @@ static QString colorValue(QColor color)
    return result;
 }
 
-QTextHtmlExporter::QTextHtmlExporter(const QTextDocument *_doc)
-   : doc(_doc), fragmentMarkers(false)
+QTextHtmlExporter::QTextHtmlExporter(const QTextDocument *doc)
+   : m_textHtmlDoc(doc), fragmentMarkers(false)
 {
-   const QFont defaultFont = doc->defaultFont();
+   const QFont defaultFont = m_textHtmlDoc->defaultFont();
    defaultCharFormat.setFont(defaultFont);
 
    // don't export those for the default font since we cannot turn them off with CSS
@@ -1215,7 +1215,8 @@ QString QTextHtmlExporter::toHtml(const QString &encoding, ExportMode mode)
       html += QString::fromLatin1("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=%1\" />").formatArg(encoding);
    }
 
-   QString title  = doc->metaInformation(QTextDocument::DocumentTitle);
+   QString title = m_textHtmlDoc->metaInformation(QTextDocument::DocumentTitle);
+
    if (! title.isEmpty()) {
       html += "<title>" + title + "</title>";
    }
@@ -1254,7 +1255,7 @@ QString QTextHtmlExporter::toHtml(const QString &encoding, ExportMode mode)
 
       html += '\"';
 
-      const QTextFrameFormat fmt = doc->rootFrame()->frameFormat();
+      const QTextFrameFormat fmt = m_textHtmlDoc->rootFrame()->frameFormat();
       emitBackgroundAttribute(fmt);
 
    } else {
@@ -1263,16 +1264,16 @@ QString QTextHtmlExporter::toHtml(const QString &encoding, ExportMode mode)
 
    html += '>';
 
-   QTextFrameFormat rootFmt = doc->rootFrame()->frameFormat();
+   QTextFrameFormat rootFmt = m_textHtmlDoc->rootFrame()->frameFormat();
    rootFmt.clearProperty(QTextFormat::BackgroundBrush);
 
    QTextFrameFormat defaultFmt;
-   defaultFmt.setMargin(doc->documentMargin());
+   defaultFmt.setMargin(m_textHtmlDoc->documentMargin());
 
    if (rootFmt == defaultFmt) {
-      emitFrame(doc->rootFrame()->begin());
+      emitFrame(m_textHtmlDoc->rootFrame()->begin());
    } else {
-      emitTextFrame(doc->rootFrame());
+      emitTextFrame(m_textHtmlDoc->rootFrame());
    }
 
    html += "</body></html>";
@@ -1694,7 +1695,7 @@ void QTextHtmlExporter::emitFragment(const QTextFragment &fragment)
             html += " style=\"vertical-align: top;\"";
          }
 
-         if (QTextFrame *imageFrame = qobject_cast<QTextFrame *>(doc->objectForFormat(imgFmt))) {
+         if (QTextFrame *imageFrame = qobject_cast<QTextFrame *>(m_textHtmlDoc->objectForFormat(imgFmt))) {
             emitFloatStyle(imageFrame->frameFormat().position());
          }
 
@@ -1837,10 +1838,12 @@ void QTextHtmlExporter::emitBlock(const QTextBlock &block)
       if (p > 0) {
          --p;
       }
-      QTextDocumentPrivate::FragmentIterator frag = doc->docHandle()->find(p);
-      QChar ch = doc->docHandle()->buffer().at(frag->stringPosition);
-      if (ch == QTextBeginningOfFrame
-         || ch == QTextEndOfFrame) {
+
+      QTextDocumentPrivate::FragmentIterator frag = m_textHtmlDoc->docHandle()->find(p);
+
+      QChar ch = m_textHtmlDoc->docHandle()->buffer().at(frag->stringPosition);
+
+      if (ch == QTextBeginningOfFrame || ch == QTextEndOfFrame) {
          return;
       }
    }
@@ -1985,7 +1988,7 @@ void QTextHtmlExporter::emitBlock(const QTextBlock &block)
    }
 
    QTextBlock::iterator it = block.begin();
-   if (fragmentMarkers && !it.atEnd() && block == doc->begin()) {
+   if (fragmentMarkers && !it.atEnd() && block == m_textHtmlDoc->begin()) {
       html += QLatin1String("<!--StartFragment-->");
    }
 
@@ -1993,7 +1996,7 @@ void QTextHtmlExporter::emitBlock(const QTextBlock &block)
       emitFragment(it.fragment());
    }
 
-   if (fragmentMarkers && block.position() + block.length() == doc->docHandle()->length()) {
+   if (fragmentMarkers && block.position() + block.length() == m_textHtmlDoc->docHandle()->length()) {
       html += QLatin1String("<!--EndFragment-->");
    }
 
@@ -2084,7 +2087,7 @@ void QTextHtmlExporter::emitBackgroundAttribute(const QTextFormat &format)
          const bool isPixmap = qHasPixmapTexture(brush);
          const qint64 cacheKey = isPixmap ? brush.texture().cacheKey() : brush.textureImage().cacheKey();
 
-         const QString url = findUrlForImage(doc, cacheKey, isPixmap);
+         const QString url = findUrlForImage(m_textHtmlDoc, cacheKey, isPixmap);
 
          if (!url.isEmpty()) {
             emitAttribute("background", url);
@@ -2240,10 +2243,9 @@ void QTextHtmlExporter::emitFrame(QTextFrame::iterator frameIt)
    if (!frameIt.atEnd()) {
       QTextFrame::iterator next = frameIt;
       ++next;
-      if (next.atEnd()
-         && frameIt.currentFrame() == nullptr
-         && frameIt.parentFrame() != doc->rootFrame()
-         && frameIt.currentBlock().begin().atEnd()) {
+
+      if (next.atEnd() && frameIt.currentFrame() == nullptr && frameIt.parentFrame() != m_textHtmlDoc->rootFrame()
+            && frameIt.currentBlock().begin().atEnd()) {
          return;
       }
    }

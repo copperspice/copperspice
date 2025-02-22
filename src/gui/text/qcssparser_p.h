@@ -947,7 +947,7 @@ struct Q_GUI_EXPORT ValueExtractor {
    QFont f;
    int adjustment;
    int fontExtracted;
-   QPalette pal;
+   QPalette m_palette;
 };
 
 }   // namespace

@@ -534,8 +534,8 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
          }
 
          if (layout->lineCount()) {
-            QTextLine line = layout->lineAt(i);
-            newPosition = line.xToCursor(x) + blockIt.position();
+            QTextLine lineAt = layout->lineAt(i);
+            newPosition = lineAt.xToCursor(x) + blockIt.position();
          } else {
             newPosition = blockIt.position();
          }
@@ -673,8 +673,8 @@ bool QTextCursorPrivate::movePosition(QTextCursor::MoveOperation op, QTextCursor
          }
 
          if (layout->lineCount()) {
-            QTextLine line = layout->lineAt(i);
-            newPosition = line.xToCursor(x) + blockIt.position();
+            QTextLine lineAt = layout->lineAt(i);
+            newPosition = lineAt.xToCursor(x) + blockIt.position();
          } else {
             newPosition = blockIt.position();
          }
@@ -1035,10 +1035,10 @@ QTextCursor::QTextCursor(QTextDocumentPrivate *p, int pos)
    d->setX();
 }
 
-QTextCursor::QTextCursor(QTextCursorPrivate *d)
+QTextCursor::QTextCursor(QTextCursorPrivate *textCursorData)
 {
-   Q_ASSERT(d);
-   this->d = d;
+   Q_ASSERT(textCursorData);
+   d = textCursorData;
 }
 
 QTextCursor::QTextCursor(const QTextCursor &cursor)

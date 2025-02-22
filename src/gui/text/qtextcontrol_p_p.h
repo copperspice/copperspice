@@ -98,7 +98,7 @@ class QTextControlPrivate
    QRectF selectionRect(const QTextCursor &cursor) const;
 
    QRectF selectionRect() const {
-      return selectionRect(this->cursor);
+      return selectionRect(m_textControlCursor);
    }
 
    QString anchorForCursor(const QTextCursor &anchor) const;
@@ -145,7 +145,7 @@ class QTextControlPrivate
 
    QTextDocument *doc;
    bool cursorOn;
-   QTextCursor cursor;
+   QTextCursor m_textControlCursor;
    bool cursorIsFocusIndicator;
    QTextCharFormat lastCharFormat;
 

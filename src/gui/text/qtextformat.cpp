@@ -449,14 +449,14 @@ void QTextFormat::merge(const QTextFormat &other)
       return;
    }
 
-   QTextFormatPrivate *d = this->d;
+   QTextFormatPrivate *textFormatData = d;
 
    const QVector<QTextFormatPrivate::Property> &otherProps = other.d->props;
-   d->props.reserve(d->props.size() + otherProps.size());
+   textFormatData->props.reserve(textFormatData->props.size() + otherProps.size());
 
    for (int i = 0; i < otherProps.count(); ++i) {
       const QTextFormatPrivate::Property &p = otherProps.at(i);
-      d->insertProperty(p.key, p.value);
+      textFormatData->insertProperty(p.key, p.value);
    }
 }
 

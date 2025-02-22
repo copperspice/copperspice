@@ -84,7 +84,7 @@ void QRawFont::loadFromData(const QByteArray &fontData, qreal pixelSize, QFont::
    }
 
    m_fontPrivate->cleanUp();
-   m_fontPrivate->hintingPreference = hintingPreference;
+   m_fontPrivate->m_hintingPreference = hintingPreference;
    m_fontPrivate->loadFromData(fontData, pixelSize, hintingPreference);
 }
 
@@ -263,7 +263,7 @@ bool QRawFont::advancesForGlyphIndexes(const quint32 *glyphIndexes, QPointF *adv
 
 QFont::HintingPreference QRawFont::hintingPreference() const
 {
-   return m_fontPrivate->isValid() ? m_fontPrivate->hintingPreference : QFont::PreferDefaultHinting;
+   return m_fontPrivate->isValid() ? m_fontPrivate->m_hintingPreference : QFont::PreferDefaultHinting;
 }
 
 QByteArray QRawFont::fontTable(const char *tagName) const
@@ -343,7 +343,7 @@ QRawFont QRawFont::fromFont(const QFont &font, QFontDatabase::WritingSystem writ
 
    if (fe != nullptr) {
       rawFont.m_fontPrivate->setFontEngine(fe);
-      rawFont.m_fontPrivate->hintingPreference = font.hintingPreference();
+      rawFont.m_fontPrivate->m_hintingPreference = font.hintingPreference();
    }
 
    return rawFont;

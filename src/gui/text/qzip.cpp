@@ -407,24 +407,26 @@ struct FileHeader {
 class QZipPrivate
 {
  public:
-   QZipPrivate(QIODevice *device, bool ownDev)
-      : device(device), ownDevice(ownDev), dirtyFileTree(true), start_of_directory(0) {
+   QZipPrivate(QIODevice *device, bool isOwnDevice)
+      : m_zipDevice(device), ownDevice(isOwnDevice), dirtyFileTree(true), m_start_of_directory(0) {
    }
 
    ~QZipPrivate() {
       if (ownDevice) {
-         delete device;
+         delete m_zipDevice;
       }
    }
 
    QZipReader::FileInfo fillFileInfo(int index) const;
 
-   QIODevice *device;
+   QIODevice *m_zipDevice;
    bool ownDevice;
    bool dirtyFileTree;
+
    QVector<FileHeader> fileHeaders;
    QByteArray comment;
-   uint start_of_directory;
+
+   uint m_start_of_directory;
 };
 
 QZipReader::FileInfo QZipPrivate::fillFileInfo(int index) const
@@ -553,12 +555,12 @@ void QZipReaderPrivate::scanFiles()
       return;
    }
 
-   if (! (device->isOpen() || device->open(QIODevice::ReadOnly))) {
+   if (! (m_zipDevice->isOpen() || m_zipDevice->open(QIODevice::ReadOnly))) {
       status = QZipReader::FileOpenError;
       return;
    }
 
-   if ((device->openMode() & QIODevice::ReadOnly) == 0) {
+   if ((m_zipDevice->openMode() & QIODevice::ReadOnly) == 0) {
       // only read the index from readable files.
       status = QZipReader::FileReadError;
       return;
@@ -566,7 +568,7 @@ void QZipReaderPrivate::scanFiles()
 
    dirtyFileTree = false;
    uchar tmp[4];
-   device->read((char *)tmp, 4);
+   m_zipDevice->read((char *)tmp, 4);
 
    if (readUInt(tmp) != 0x04034b50) {
       qWarning() << "QZip::scanFiles() This is not a valid zip file";
@@ -580,14 +582,16 @@ void QZipReaderPrivate::scanFiles()
    EndOfDirectory eod;
 
    while (start_of_directory == -1) {
-      const int pos = device->size() - int(sizeof(EndOfDirectory)) - i;
+      const int pos = m_zipDevice->size() - int(sizeof(EndOfDirectory)) - i;
+
       if (pos < 0 || i > 65535) {
          qWarning() << "QZip::scanFiles() End Of Directory was not found";
          return;
       }
 
-      device->seek(pos);
-      device->read((char *)&eod, sizeof(EndOfDirectory));
+      m_zipDevice->seek(pos);
+      m_zipDevice->read((char *)&eod, sizeof(EndOfDirectory));
+
       if (readUInt(eod.signature) == 0x06054b50) {
          break;
       }
@@ -609,13 +613,14 @@ void QZipReaderPrivate::scanFiles()
       qWarning() << "QZip::scanFiles() Failed to parse zip file";
    }
 
-   comment = device->read(qMin(comment_length, i));
+   comment = m_zipDevice->read(qMin(comment_length, i));
 
-   device->seek(start_of_directory);
+   m_zipDevice->seek(start_of_directory);
 
    for (i = 0; i < num_dir_entries; ++i) {
       FileHeader header;
-      int read = device->read((char *) &header.h, sizeof(CentralFileHeader));
+      int read = m_zipDevice->read((char *) &header.h, sizeof(CentralFileHeader));
+
       if (read < (int)sizeof(CentralFileHeader)) {
          qWarning() << "QZip::scanFiles() Failed to read header, index may be incomplete";
          break;
@@ -627,14 +632,15 @@ void QZipReaderPrivate::scanFiles()
       }
 
       int l = readUShort(header.h.file_name_length);
-      header.file_name = device->read(l);
+      header.file_name = m_zipDevice->read(l);
+
       if (header.file_name.length() != l) {
          qWarning() << "QZip::scanFiles() Failed to read filename from zip index, index may be incomplete";
          break;
       }
 
       l = readUShort(header.h.extra_field_length);
-      header.extra_field = device->read(l);
+      header.extra_field = m_zipDevice->read(l);
 
       if (header.extra_field.length() != l) {
          qWarning() << "QZip::scanFiles() Failed to read extra field in zip file, skipping file, index may be incomplete";
@@ -642,7 +648,7 @@ void QZipReaderPrivate::scanFiles()
       }
 
       l = readUShort(header.h.file_comment_length);
-      header.file_comment = device->read(l);
+      header.file_comment = m_zipDevice->read(l);
 
       if (header.file_comment.length() != l) {
          qWarning() << "QZip::scanFiles() Failed to read read file comment, index may be incomplete";
@@ -670,11 +676,12 @@ void QZipWriterPrivate::addEntry(EntryType type, const QString &fileName, const 
          contents).constData() : "");
 #endif
 
-   if (! (device->isOpen() || device->open(QIODevice::WriteOnly))) {
+   if (! (m_zipDevice->isOpen() || m_zipDevice->open(QIODevice::WriteOnly))) {
       status = QZipWriter::FileOpenError;
       return;
    }
-   device->seek(start_of_directory);
+
+   m_zipDevice->seek(m_start_of_directory);
 
    // don't compress small files
    QZipWriter::CompressionPolicy compression = compressionPolicy;
@@ -775,15 +782,16 @@ void QZipWriterPrivate::addEntry(EntryType type, const QString &fileName, const 
    }
 
    writeUInt(header.h.external_file_attributes, mode << 16);
-   writeUInt(header.h.offset_local_header, start_of_directory);
+   writeUInt(header.h.offset_local_header, m_start_of_directory);
 
    fileHeaders.append(header);
 
    LocalFileHeader h = header.h.toLocalHeader();
-   device->write((const char *)&h, sizeof(LocalFileHeader));
-   device->write(header.file_name);
-   device->write(data);
-   start_of_directory = device->pos();
+   m_zipDevice->write((const char *)&h, sizeof(LocalFileHeader));
+   m_zipDevice->write(header.file_name);
+   m_zipDevice->write(data);
+
+   m_start_of_directory = m_zipDevice->pos();
    dirtyFileTree = true;
 }
 
@@ -826,17 +834,18 @@ QZipReader::~QZipReader()
 
 QIODevice *QZipReader::device() const
 {
-   return d->device;
+   return d->m_zipDevice;
 }
 
 bool QZipReader::isReadable() const
 {
-   return d->device->isReadable();
+   return d->m_zipDevice->isReadable();
 }
 
 bool QZipReader::exists() const
 {
-   QFile *f = qobject_cast<QFile *> (d->device);
+   QFile *f = qobject_cast<QFile *> (d->m_zipDevice);
+
    if (f == nullptr) {
       return true;
    }
@@ -904,13 +913,13 @@ QByteArray QZipReader::fileData(const QString &fileName) const
    int uncompressed_size = readUInt(header.h.uncompressed_size);
    int start = readUInt(header.h.offset_local_header);
 
-   d->device->seek(start);
+   d->m_zipDevice->seek(start);
 
    LocalFileHeader lh;
-   d->device->read((char *)&lh, sizeof(LocalFileHeader));
+   d->m_zipDevice->read((char *)&lh, sizeof(LocalFileHeader));
 
    uint skip = readUShort(lh.file_name_length) + readUShort(lh.extra_field_length);
-   d->device->seek(d->device->pos() + skip);
+   d->m_zipDevice->seek(d->m_zipDevice->pos() + skip);
 
    int compression_method = readUShort(lh.compression_method);
 
@@ -919,7 +928,7 @@ QByteArray QZipReader::fileData(const QString &fileName) const
       return QByteArray();
    }
 
-   QByteArray compressed = d->device->read(compressed_size);
+   QByteArray compressed = d->m_zipDevice->read(compressed_size);
    if (compression_method == CompressionMethodStored) {
       // no compression
       compressed.truncate(uncompressed_size);
@@ -1034,7 +1043,7 @@ QZipReader::Status QZipReader::status() const
 
 void QZipReader::close()
 {
-   d->device->close();
+   d->m_zipDevice->close();
 }
 
 QZipWriter::QZipWriter(const QString &fileName, QIODevice::OpenMode mode)
@@ -1078,17 +1087,17 @@ QZipWriter::~QZipWriter()
 
 QIODevice *QZipWriter::device() const
 {
-   return d->device;
+   return d->m_zipDevice;
 }
 
 bool QZipWriter::isWritable() const
 {
-   return d->device->isWritable();
+   return d->m_zipDevice->isWritable();
 }
 
 bool QZipWriter::exists() const
 {
-   QFile *f = qobject_cast<QFile *> (d->device);
+   QFile *f = qobject_cast<QFile *> (d->m_zipDevice);
 
    if (f == nullptr) {
       return true;
@@ -1164,23 +1173,23 @@ void QZipWriter::addSymLink(const QString &fileName, const QString &destination)
 
 void QZipWriter::close()
 {
-   if (!(d->device->openMode() & QIODevice::WriteOnly)) {
-      d->device->close();
+   if (! (d->m_zipDevice->openMode() & QIODevice::WriteOnly)) {
+      d->m_zipDevice->close();
       return;
    }
 
-   d->device->seek(d->start_of_directory);
+   d->m_zipDevice->seek(d->m_start_of_directory);
 
    // write new directory
    for (int i = 0; i < d->fileHeaders.size(); ++i) {
       const FileHeader &header = d->fileHeaders.at(i);
-      d->device->write((const char *)&header.h, sizeof(CentralFileHeader));
-      d->device->write(header.file_name);
-      d->device->write(header.extra_field);
-      d->device->write(header.file_comment);
+      d->m_zipDevice->write((const char *)&header.h, sizeof(CentralFileHeader));
+      d->m_zipDevice->write(header.file_name);
+      d->m_zipDevice->write(header.extra_field);
+      d->m_zipDevice->write(header.file_comment);
    }
 
-   int dir_size = d->device->pos() - d->start_of_directory;
+   int dir_size = d->m_zipDevice->pos() - d->m_start_of_directory;
 
    // write end of directory
    EndOfDirectory eod;
@@ -1192,12 +1201,12 @@ void QZipWriter::close()
    writeUShort(eod.num_dir_entries_this_disk, d->fileHeaders.size());
    writeUShort(eod.num_dir_entries, d->fileHeaders.size());
    writeUInt(eod.directory_size, dir_size);
-   writeUInt(eod.dir_start_offset, d->start_of_directory);
+   writeUInt(eod.dir_start_offset, d->m_start_of_directory);
    writeUShort(eod.comment_length, d->comment.length());
 
-   d->device->write((const char *)&eod, sizeof(EndOfDirectory));
-   d->device->write(d->comment);
-   d->device->close();
+   d->m_zipDevice->write((const char *)&eod, sizeof(EndOfDirectory));
+   d->m_zipDevice->write(d->comment);
+   d->m_zipDevice->close();
 }
 
 #endif // QT_NO_TEXTODFWRITER

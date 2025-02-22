@@ -60,7 +60,7 @@ class QTextCopyHelper
 
    int insertPos;
 
-   bool forceCharFormat;
+   bool m_forceCharFormat;
    int primaryCharFormatIndex;
 
    QTextCursor cursor;
@@ -210,7 +210,7 @@ class QTextHtmlImporter : public QTextHtmlParser
    ImportMode importMode;
    bool hasBlock;
    bool forceBlockMerging;
-   bool blockTagClosed;
+   bool m_blockTagClosed;
    int currentNodeIdx;
    const QTextHtmlParserNode *currentNode;
 };

@@ -39,12 +39,12 @@ class QRawFontPrivate
 {
  public:
    QRawFontPrivate()
-      : fontEngine(nullptr), hintingPreference(QFont::PreferDefaultHinting), thread(nullptr)
+      : fontEngine(nullptr), m_hintingPreference(QFont::PreferDefaultHinting), thread(nullptr)
    {
    }
 
    QRawFontPrivate(const QRawFontPrivate &other)
-      : fontEngine(other.fontEngine), hintingPreference(other.hintingPreference), thread(other.thread)
+      : fontEngine(other.fontEngine), m_hintingPreference(other.m_hintingPreference), thread(other.thread)
    {
       if (fontEngine != nullptr) {
          fontEngine->m_refCount.ref();
@@ -57,7 +57,7 @@ class QRawFontPrivate
 
    void cleanUp() {
       setFontEngine(nullptr);
-      hintingPreference = QFont::PreferDefaultHinting;
+      m_hintingPreference = QFont::PreferDefaultHinting;
    }
 
    bool isValid() const {
@@ -97,7 +97,7 @@ class QRawFontPrivate
    }
 
    QFontEngine *fontEngine;
-   QFont::HintingPreference hintingPreference;
+   QFont::HintingPreference m_hintingPreference;
 
  private:
    QThread *thread;

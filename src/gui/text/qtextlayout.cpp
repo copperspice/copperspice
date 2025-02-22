@@ -452,12 +452,12 @@ QTextLine QTextLayout::lineForTextPosition(int pos) const
 
 QPointF QTextLayout::position() const
 {
-   return d->position;
+   return d->m_position;
 }
 
 void QTextLayout::setPosition(const QPointF &p)
 {
-   d->position = p;
+   d->m_position = p;
 }
 
 QRectF QTextLayout::boundingRect() const
@@ -623,7 +623,7 @@ void QTextLayout::draw(QPainter *p, const QPointF &pos, const QVector<FormatRang
       d->itemize();
    }
 
-   QPointF position = pos + d->position;
+   QPointF position = pos + d->m_position;
 
    QFixed clipy = (INT_MIN / 256);
    QFixed clipe = (INT_MAX / 256);
@@ -807,7 +807,7 @@ void QTextLayout::drawCursor(QPainter *painter, const QPointF &pos, int cursorPo
       d->itemize();
    }
 
-   QPointF position = pos + d->position;
+   QPointF position = pos + d->m_position;
 
    cursorPosition = qBound(0, cursorPosition, d->layoutData->string.length());
    int line = d->lineNumberForTextPosition(cursorPosition);
@@ -1930,9 +1930,9 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
             } else {
                // si.isTab
 
-               QFont f = m_textEngine->font(si);
+               QFont newFont = m_textEngine->font(si);
 
-               QTextItemInt gf(si, &f, format);
+               QTextItemInt gf(si, &newFont, format);
                gf.width = iterator.itemWidth;
 
                QPainterPrivate::get(p)->drawTextItem(QPointF(iterator.x.toReal(), y.toReal()), gf, m_textEngine);
@@ -1940,7 +1940,7 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
                if (m_textEngine->option.flags() & QTextOption::ShowTabsAndSpaces) {
                   QChar visualTab(0x2192);
 
-                  int w   = QFontMetrics(f).width(visualTab);
+                  int w   = QFontMetrics(newFont).width(visualTab);
                   qreal x = iterator.itemWidth.toReal() - w; // Right-aligned
 
                   if (x < 0) {
@@ -1974,35 +1974,35 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
       gf.justified   = line.justified;
       gf.initWithScriptItem(si);
 
-      Q_ASSERT(gf.fontEngine);
+      Q_ASSERT(gf.m_textItemFontEngine);
 
-      QPointF pos(iterator.x.toReal(), itemBaseLine.toReal());
+      QPointF newPosition(iterator.x.toReal(), itemBaseLine.toReal());
 
       if (format.penProperty(QTextFormat::TextOutline).style() != Qt::NoPen) {
          QPainterPath path;
          path.setFillRule(Qt::WindingFill);
 
          if (gf.glyphs.numGlyphs) {
-            gf.fontEngine->addOutlineToPath(pos.x(), pos.y(), gf.glyphs, &path, gf.flags);
+            gf.m_textItemFontEngine->addOutlineToPath(newPosition.x(), newPosition.y(), gf.glyphs, &path, gf.flags);
          }
 
          if (gf.flags) {
-            const QFontEngine *fe = gf.fontEngine;
+            const QFontEngine *fe = gf.m_textItemFontEngine;
             const qreal lw = fe->lineThickness().toReal();
 
             if (gf.flags & QTextItem::Underline) {
                qreal offs = fe->underlinePosition().toReal();
-               path.addRect(pos.x(), pos.y() + offs, gf.width.toReal(), lw);
+               path.addRect(newPosition.x(), newPosition.y() + offs, gf.width.toReal(), lw);
             }
 
             if (gf.flags & QTextItem::Overline) {
                qreal offs = fe->ascent().toReal() + 1;
-               path.addRect(pos.x(), pos.y() - offs, gf.width.toReal(), lw);
+               path.addRect(newPosition.x(), newPosition.y() - offs, gf.width.toReal(), lw);
             }
 
             if (gf.flags & QTextItem::StrikeOut) {
                qreal offs = fe->ascent().toReal() / 3;
-               path.addRect(pos.x(), pos.y() - offs, gf.width.toReal(), lw);
+               path.addRect(newPosition.x(), newPosition.y() - offs, gf.width.toReal(), lw);
             }
          }
 
@@ -2137,28 +2137,29 @@ qreal QTextLine::cursorToX(int *cursorPos, Edge edge) const
          break;
       }
 
-      QScriptItem &si = m_textEngine->layoutData->items[item];
-      if (! si.num_glyphs) {
+      QScriptItem &newSi = m_textEngine->layoutData->items[item];
+      if (! newSi.num_glyphs) {
          m_textEngine->shape(item);
       }
 
-      if (si.analysis.flags >= QScriptAnalysis::TabOrObject) {
-         x += si.width;
+      if (newSi.analysis.flags >= QScriptAnalysis::TabOrObject) {
+         x += newSi.width;
          continue;
       }
+
       const int itemLength = m_textEngine->length(item);
-      int start = qMax(line.from, si.position);
-      int end   = qMin(lineEnd, si.position + itemLength);
+      int start = qMax(line.from, newSi.position);
+      int end   = qMin(lineEnd, newSi.position + itemLength);
 
-      logClusters = m_textEngine->logClusters(&si);
+      logClusters = m_textEngine->logClusters(&newSi);
 
-      int gs = logClusters[start - si.position];
-      int ge = (end == si.position + itemLength) ? si.num_glyphs - 1 : logClusters[end - si.position - 1];
+      int gs = logClusters[start - newSi.position];
+      int ge = (end == newSi.position + itemLength) ? newSi.num_glyphs - 1 : logClusters[end - newSi.position - 1];
 
-      QGlyphLayout glyphs = m_textEngine->shapedGlyphs(&si);
+      QGlyphLayout newGlyphs = m_textEngine->shapedGlyphs(&newSi);
 
       while (gs <= ge) {
-         x += glyphs.effectiveAdvance(gs);
+         x += newGlyphs.effectiveAdvance(gs);
          ++gs;
       }
    }

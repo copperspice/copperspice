@@ -2807,16 +2807,16 @@ void QRasterPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textIte
    QRasterPaintEngineState *s = state();
    QTransform matrix = s->matrix;
 
-   if (shouldDrawCachedGlyphs(ti.fontEngine, matrix)) {
+   if (shouldDrawCachedGlyphs(ti.m_textItemFontEngine, matrix)) {
       QVarLengthArray<QFixedPoint> positions;
       QVarLengthArray<glyph_t> glyphs;
 
       matrix.translate(p.x(), p.y());
-      ti.fontEngine->getGlyphPositions(ti.glyphs, matrix, ti.flags, glyphs, positions);
+      ti.m_textItemFontEngine->getGlyphPositions(ti.glyphs, matrix, ti.flags, glyphs, positions);
 
-      drawCachedGlyphs(glyphs.size(), glyphs.constData(), positions.constData(), ti.fontEngine);
+      drawCachedGlyphs(glyphs.size(), glyphs.constData(), positions.constData(), ti.m_textItemFontEngine);
 
-   } else if (matrix.type() < QTransform::TxProject && ti.fontEngine->supportsTransformation(matrix)) {
+   } else if (matrix.type() < QTransform::TxProject && ti.m_textItemFontEngine->supportsTransformation(matrix)) {
       bool invertible;
       QTransform invMat = matrix.inverted(&invertible);
 
@@ -2827,11 +2827,11 @@ void QRasterPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textIte
       QVarLengthArray<QFixedPoint> positions;
       QVarLengthArray<glyph_t> glyphs;
 
-      ti.fontEngine->getGlyphPositions(ti.glyphs, QTransform::fromTranslate(p.x(), p.y()),
-         ti.flags, glyphs, positions);
+      ti.m_textItemFontEngine->getGlyphPositions(ti.glyphs, QTransform::fromTranslate(p.x(), p.y()),
+            ti.flags, glyphs, positions);
 
       QPair<int, int> range = visibleGlyphRange(invMat.mapRect(clipBoundingRect()),
-            ti.fontEngine, glyphs.data(), positions.data(), glyphs.size());
+            ti.m_textItemFontEngine, glyphs.data(), positions.data(), glyphs.size());
 
       if (range.first >= range.second) {
          return;
@@ -2840,10 +2840,11 @@ void QRasterPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textIte
       QStaticTextItem staticTextItem;
       staticTextItem.color = s->pen.color();
       staticTextItem.font = s->font;
-      staticTextItem.setFontEngine(ti.fontEngine);
+      staticTextItem.setFontEngine(ti.m_textItemFontEngine);
       staticTextItem.numGlyphs = range.second - range.first;
       staticTextItem.glyphs = glyphs.data() + range.first;
       staticTextItem.glyphPositions = positions.data() + range.first;
+
       QPaintEngineEx::drawStaticTextItem(&staticTextItem);
 
    } else {

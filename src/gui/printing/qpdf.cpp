@@ -1163,7 +1163,7 @@ void QPdfEngine::drawTextItem(const QPointF &p, const QTextItem &textItem)
 
    const QTextItemInt &ti = static_cast<const QTextItemInt &>(textItem);
 
-   Q_ASSERT(ti.fontEngine->type() != QFontEngine::Multi);
+   Q_ASSERT(ti.m_textItemFontEngine->type() != QFontEngine::Multi);
 
    d->drawTextItem(p, ti);
    d->hasPen = hp;
@@ -2966,9 +2966,9 @@ void QPdfEnginePrivate::drawTextItem(const QPointF &p, const QTextItemInt &ti)
    Q_Q(QPdfEngine);
 
    if (ti.charFormat.isAnchor()) {
-      qreal size      = ti.fontEngine->fontDef.pixelSize;
-      int synthesized = ti.fontEngine->synthesized();
-      qreal stretch   = synthesized & QFontEngine::SynthesizedStretch ? ti.fontEngine->fontDef.stretch / 100. : 1.;
+      qreal size      = ti.m_textItemFontEngine->fontDef.pixelSize;
+      int synthesized = ti.m_textItemFontEngine->synthesized();
+      qreal stretch   = synthesized & QFontEngine::SynthesizedStretch ? ti.m_textItemFontEngine->fontDef.stretch / 100. : 1.;
 
       QTransform trans;
 
@@ -3018,7 +3018,7 @@ void QPdfEnginePrivate::drawTextItem(const QPointF &p, const QTextItemInt &ti)
       }
    }
 
-   QFontEngine *fe = ti.fontEngine;
+   QFontEngine *fe = ti.m_textItemFontEngine;
 
    QFontEngine::FaceId face_id = fe->faceId();
    bool noEmbed = false;
@@ -3050,20 +3050,20 @@ void QPdfEnginePrivate::drawTextItem(const QPointF &p, const QTextItemInt &ti)
       currentPage->fonts.append(font->object_id);
    }
 
-   qreal size = ti.fontEngine->fontDef.pixelSize;
+   qreal size = ti.m_textItemFontEngine->fontDef.pixelSize;
 
    QVarLengthArray<glyph_t> glyphs;
    QVarLengthArray<QFixedPoint> positions;
    QTransform m = QTransform::fromTranslate(p.x(), p.y());
 
-   ti.fontEngine->getGlyphPositions(ti.glyphs, m, ti.flags, glyphs, positions);
+   ti.m_textItemFontEngine->getGlyphPositions(ti.glyphs, m, ti.flags, glyphs, positions);
 
    if (glyphs.size() == 0) {
       return;
    }
 
-   int synthesized = ti.fontEngine->synthesized();
-   qreal stretch   = synthesized & QFontEngine::SynthesizedStretch ? ti.fontEngine->fontDef.stretch / 100. : 1.;
+   int synthesized = ti.m_textItemFontEngine->synthesized();
+   qreal stretch   = synthesized & QFontEngine::SynthesizedStretch ? ti.m_textItemFontEngine->fontDef.stretch / 100. : 1.;
 
    *currentPage << "BT\n"
          << "/F" << font->object_id << size << "Tf "

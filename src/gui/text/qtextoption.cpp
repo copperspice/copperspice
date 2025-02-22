@@ -88,15 +88,15 @@ void QTextOption::setTabArray(const QList<qreal> &tabStops)
       d = new QTextOptionPrivate;
    }
 
-   QList<QTextOption::Tab> tabs;
-   QTextOption::Tab tab;
+   QList<QTextOption::Tab> tabList;
+   QTextOption::Tab newTab;
 
    for (qreal pos : tabStops) {
-      tab.position = pos;
-      tabs.append(tab);
+      newTab.position = pos;
+      tabList.append(newTab);
    }
 
-   d->tabStops = tabs;
+   d->tabStops = tabList;
 }
 
 void QTextOption::setTabs(const QList<QTextOption::Tab> &tabStops)

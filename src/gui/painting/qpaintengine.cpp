@@ -341,7 +341,7 @@ void QPaintEngine::drawTextItem(const QPointF &p, const QTextItem &textItem)
    path.setFillRule(Qt::WindingFill);
 
    if (ti.glyphs.numGlyphs) {
-      ti.fontEngine->addOutlineToPath(0, 0, ti.glyphs, &path, ti.flags);
+      ti.m_textItemFontEngine->addOutlineToPath(0, 0, ti.glyphs, &path, ti.flags);
    }
 
    if (! path.isEmpty()) {
@@ -516,11 +516,12 @@ void QPaintEnginePrivate::drawBoxTextItem(const QPointF &p, const QTextItemInt &
    }
 
    // any fixes here should probably also be done in QFontEngineBox::draw
-   const int size = qRound(ti.fontEngine->ascent());
+   const int size = qRound(ti.m_textItemFontEngine->ascent());
+
    QVarLengthArray<QFixedPoint> positions;
    QVarLengthArray<glyph_t> glyphs;
    QTransform matrix = QTransform::fromTranslate(p.x(), p.y() - size);
-   ti.fontEngine->getGlyphPositions(ti.glyphs, matrix, ti.flags, glyphs, positions);
+   ti.m_textItemFontEngine->getGlyphPositions(ti.glyphs, matrix, ti.flags, glyphs, positions);
 
    if (glyphs.size() == 0) {
       return;
@@ -531,8 +532,9 @@ void QPaintEnginePrivate::drawBoxTextItem(const QPointF &p, const QTextItemInt &
    QPainter *painter = q_func()->m_engineState->painter();
    painter->save();
    painter->setBrush(Qt::NoBrush);
+
    QPen pen = painter->pen();
-   pen.setWidthF(ti.fontEngine->lineThickness().toReal());
+   pen.setWidthF(ti.m_textItemFontEngine->lineThickness().toReal());
    painter->setPen(pen);
 
    for (int k = 0; k < positions.size(); k++) {

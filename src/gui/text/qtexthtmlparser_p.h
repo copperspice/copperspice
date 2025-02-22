@@ -135,7 +135,9 @@ struct QTextHtmlParserNode {
    QString tag;
    QString text;
    QStringList attributes;
-   int parent;
+
+   int m_parserNodeParent;
+
    QVector<int> children;
    QTextHTMLElements id;
    QTextCharFormat charFormat;
@@ -302,7 +304,6 @@ class QTextHtmlParser
    static int lookupElement(const QString &element);
 
  protected:
-   bool textEditMode;
    void parse();
    void parseTag();
    void parseCloseTag();
@@ -333,6 +334,10 @@ class QTextHtmlParser
    int pos;
    int len;
 
+   bool m_textEditMode;
+
+   const QTextDocument *m_resourceProvider;
+
 #ifndef QT_NO_CSSPARSER
    QVector<QCss::Declaration> declarationsForNode(int node) const;
    void resolveStyleSheetImports(const QCss::StyleSheet &sheet);
@@ -354,7 +359,6 @@ class QTextHtmlParser
    QVector<QCss::StyleSheet> inlineStyleSheets;
 #endif
 
-   const QTextDocument *resourceProvider;
 };
 
 #endif // QT_NO_TEXTHTMLPARSER

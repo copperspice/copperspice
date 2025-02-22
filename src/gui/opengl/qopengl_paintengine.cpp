@@ -1619,8 +1619,8 @@ void QOpenGL2PaintEngineEx::drawTextItem(const QPointF &p, const QTextItem &text
 
    QTransform::TransformationType txtype = s->matrix.type();
 
-   QFontEngine::GlyphFormat glyphFormat = ti.fontEngine->glyphFormat != QFontEngine::Format_None
-                                          ? ti.fontEngine->glyphFormat : d->glyphCacheFormat;
+   QFontEngine::GlyphFormat glyphFormat = ti.m_textItemFontEngine->glyphFormat != QFontEngine::Format_None
+         ? ti.m_textItemFontEngine->glyphFormat : d->glyphCacheFormat;
 
    if (glyphFormat == QFontEngine::Format_A32) {
       if (d->device->context()->format().alphaBufferSize() > 0 || txtype > QTransform::TxTranslate
@@ -1630,15 +1630,15 @@ void QOpenGL2PaintEngineEx::drawTextItem(const QPointF &p, const QTextItem &text
       }
    }
 
-   if (shouldDrawCachedGlyphs(ti.fontEngine, s->matrix)) {
+   if (shouldDrawCachedGlyphs(ti.m_textItemFontEngine, s->matrix)) {
       QVarLengthArray<QFixedPoint> positions;
       QVarLengthArray<glyph_t> glyphs;
       QTransform matrix = QTransform::fromTranslate(p.x(), p.y());
-      ti.fontEngine->getGlyphPositions(ti.glyphs, matrix, ti.flags, glyphs, positions);
+      ti.m_textItemFontEngine->getGlyphPositions(ti.glyphs, matrix, ti.flags, glyphs, positions);
 
       {
          QStaticTextItem staticTextItem;
-         staticTextItem.setFontEngine(ti.fontEngine);
+         staticTextItem.setFontEngine(ti.m_textItemFontEngine);
          staticTextItem.glyphs = glyphs.data();
          staticTextItem.numGlyphs = glyphs.size();
          staticTextItem.glyphPositions = positions.data();

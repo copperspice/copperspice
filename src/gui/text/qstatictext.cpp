@@ -203,7 +203,7 @@ class DrawTextItemRecorder: public QPaintEngine
       const QTextItemInt &ti = static_cast<const QTextItemInt &>(textItem);
 
       QStaticTextItem currentItem;
-      currentItem.setFontEngine(ti.fontEngine);
+      currentItem.setFontEngine(ti.m_textItemFontEngine);
 
       currentItem.font           = ti.font();
       currentItem.glyphOffset    = m_glyphs.size();    // Store offset into glyph pool
@@ -220,7 +220,7 @@ class DrawTextItemRecorder: public QPaintEngine
 
       QVarLengthArray<glyph_t> glyphs;
       QVarLengthArray<QFixedPoint> positions;
-      ti.fontEngine->getGlyphPositions(ti.glyphs, matrix, ti.flags, glyphs, positions);
+      ti.m_textItemFontEngine->getGlyphPositions(ti.glyphs, matrix, ti.flags, glyphs, positions);
 
       int size = glyphs.size();
       Q_ASSERT(size == positions.size());
