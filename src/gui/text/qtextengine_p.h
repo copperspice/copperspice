@@ -541,7 +541,7 @@ class Q_GUI_EXPORT QTextEngine
 
    QFixed minWidth;
    QFixed maxWidth;
-   QPointF m_position;
+   QPointF m_textPosition;
 
    uint ignoreBidi  : 1;
    uint cacheGlyphs : 1;

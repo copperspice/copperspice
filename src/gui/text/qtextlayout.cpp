@@ -452,12 +452,12 @@ QTextLine QTextLayout::lineForTextPosition(int pos) const
 
 QPointF QTextLayout::position() const
 {
-   return d->m_position;
+   return d->m_textPosition;
 }
 
 void QTextLayout::setPosition(const QPointF &p)
 {
-   d->m_position = p;
+   d->m_textPosition = p;
 }
 
 QRectF QTextLayout::boundingRect() const
@@ -623,7 +623,7 @@ void QTextLayout::draw(QPainter *p, const QPointF &pos, const QVector<FormatRang
       d->itemize();
    }
 
-   QPointF position = pos + d->m_position;
+   QPointF position = pos + d->m_textPosition;
 
    QFixed clipy = (INT_MIN / 256);
    QFixed clipe = (INT_MAX / 256);
@@ -807,7 +807,7 @@ void QTextLayout::drawCursor(QPainter *painter, const QPointF &pos, int cursorPo
       d->itemize();
    }
 
-   QPointF position = pos + d->m_position;
+   QPointF position = pos + d->m_textPosition;
 
    cursorPosition = qBound(0, cursorPosition, d->layoutData->string.length());
    int line = d->lineNumberForTextPosition(cursorPosition);
@@ -2027,7 +2027,7 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
             gf.glyphs.numGlyphs = 0;   // slightly less elegant than it should be
          }
 
-         QPainterPrivate::get(p)->drawTextItem(pos, gf, m_textEngine);
+         QPainterPrivate::get(p)->drawTextItem(newPosition, gf, m_textEngine);
       }
 
       if (si.analysis.flags == QScriptAnalysis::Space && (m_textEngine->option.flags() & QTextOption::ShowTabsAndSpaces)) {
