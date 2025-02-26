@@ -250,7 +250,7 @@ QVariant QFontEngineQPF2::extractHeaderField(const uchar *data, HeaderTag reques
 QFontEngineQPF2::QFontEngineQPF2(const QFontDef &def, const QByteArray &data)
    : QFontEngine(QPF2), fontData(reinterpret_cast<const uchar *>(data.constData())), dataSize(data.size())
 {
-   fontDef    = def;
+   m_fontDef  = def;
    cache_cost = 100;
    cmap       = nullptr;
    cmapOffset = 0;
@@ -563,7 +563,7 @@ void QPF2Generator::writeHeader()
    header.dataSize = 0;
    dev->write((const char *)&header, sizeof(header));
 
-   writeTaggedString(QFontEngineQPF2::Tag_FontName, fe->fontDef.family);
+   writeTaggedString(QFontEngineQPF2::Tag_FontName, fe->m_fontDef.family);
 
    QFontEngine::FaceId face = fe->faceId();
    writeTaggedString(QFontEngineQPF2::Tag_FileName,  face.filename);
@@ -587,9 +587,9 @@ void QPF2Generator::writeHeader()
    writeTaggedQFixed(QFontEngineQPF2::Tag_MinLeftBearing, QFixed::fromReal(fe->minLeftBearing()));
    writeTaggedQFixed(QFontEngineQPF2::Tag_MinRightBearing, QFixed::fromReal(fe->minRightBearing()));
    writeTaggedQFixed(QFontEngineQPF2::Tag_UnderlinePosition, fe->underlinePosition());
-   writeTaggedUInt8(QFontEngineQPF2::Tag_PixelSize, fe->fontDef.pixelSize);
-   writeTaggedUInt8(QFontEngineQPF2::Tag_Weight, fe->fontDef.weight);
-   writeTaggedUInt8(QFontEngineQPF2::Tag_Style, fe->fontDef.style);
+   writeTaggedUInt8(QFontEngineQPF2::Tag_PixelSize, fe->m_fontDef.pixelSize);
+   writeTaggedUInt8(QFontEngineQPF2::Tag_Weight, fe->m_fontDef.weight);
+   writeTaggedUInt8(QFontEngineQPF2::Tag_Style, fe->m_fontDef.style);
 
    writeTaggedUInt8(QFontEngineQPF2::Tag_GlyphFormat, QFontEngineQPF2::AlphamapGlyphs);
 

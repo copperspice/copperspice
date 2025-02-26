@@ -942,9 +942,9 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
       fontEngine = QWindowsFontDatabase::createEngine(request, QWindowsContext::instance()->defaultDPI(), sharedFontData());
 
       if (fontEngine) {
-         if (request.family != fontEngine->fontDef.family) {
+         if (request.family != fontEngine->m_fontDef.family) {
             qWarning("QWindowsFontDatabase::fontEngine() Failed to load font, using fallback instead: %s ",
-               csPrintable(fontEngine->fontDef.family));
+               csPrintable(fontEngine->m_fontDef.family));
 
             if (fontEngine->m_refCount.load() == 0) {
                delete fontEngine;
@@ -957,7 +957,7 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
 
             // Override the generated font name
             static_cast<QWindowsFontEngine *>(fontEngine)->setUniqueFamilyName(uniqueFamilyName);
-            fontEngine->fontDef.family = actualFontName;
+            fontEngine->m_fontDef.family = actualFontName;
             UniqueFontData uniqueData;
             uniqueData.handle = fontHandle;
             uniqueData.refCount.ref();
@@ -982,14 +982,14 @@ QFontEngine *QWindowsFontDatabase::fontEngine(const QByteArray &fontData, qreal 
          bool oblique = qFromBigEndian<quint16>(os2Table->selection) & 128;
 
          if (italic) {
-            fontEngine->fontDef.style = QFont::StyleItalic;
+            fontEngine->m_fontDef.style = QFont::StyleItalic;
          } else if (oblique) {
-            fontEngine->fontDef.style = QFont::StyleOblique;
+            fontEngine->m_fontDef.style = QFont::StyleOblique;
          } else {
-            fontEngine->fontDef.style = QFont::StyleNormal;
+            fontEngine->m_fontDef.style = QFont::StyleNormal;
          }
 
-         fontEngine->fontDef.weight = QPlatformFontDatabase::weightFromInteger(qFromBigEndian<quint16>(os2Table->weightClass));
+         fontEngine->m_fontDef.weight = QPlatformFontDatabase::weightFromInteger(qFromBigEndian<quint16>(os2Table->weightClass));
       }
    }
 

@@ -42,7 +42,7 @@ QPlatformPixmap *QPlatformPixmap::create(int w, int h, PixelType type)
 }
 
 QPlatformPixmap::QPlatformPixmap(PixelType pixelType, int objectId)
-   : m_pixmap_w(0), m_pixmap_h(0), m_pixmap_d(0), is_null(true), ref(0), detach_no(0), type(pixelType),
+   : m_pixmap_w(0), m_pixmap_h(0), m_pixmap_d(0), is_null(true), ref(0), detach_no(0), m_platformType(pixelType),
      id(objectId), ser_no(0), is_cached(false)
 {
 }

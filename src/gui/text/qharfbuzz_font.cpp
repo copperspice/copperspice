@@ -334,8 +334,8 @@ static std::shared_ptr<hb_font_t> internal_hb_font_create(QFontEngine *fe)
       return nullptr;
    }
 
-   const double y_ppem = fe->fontDef.pixelSize;
-   const double x_ppem = (fe->fontDef.pixelSize * fe->fontDef.stretch) / 100.0;
+   const double y_ppem = fe->m_fontDef.pixelSize;
+   const double x_ppem = (fe->m_fontDef.pixelSize * fe->m_fontDef.stretch) / 100.0;
 
    hb_font_set_funcs(font, cs_get_font_funcs(), fe, nullptr);
 
@@ -346,7 +346,7 @@ static std::shared_ptr<hb_font_t> internal_hb_font_create(QFontEngine *fe)
 #endif
 
    hb_font_set_ppem(font, x_ppem, y_ppem);
-   hb_font_set_ptem(font, fe->fontDef.pointSize);
+   hb_font_set_ptem(font, fe->m_fontDef.pointSize);
 
    return retval;
 }

@@ -107,13 +107,15 @@ namespace {
 
         void updateFamilyNameAndStyle()
         {
-            fontDef.family = QString::fromLatin1(freetype->face->family_name);
+            m_fontDef.family = QString::fromLatin1(freetype->m_ft_face->family_name);
 
-            if (freetype->face->style_flags & FT_STYLE_FLAG_ITALIC)
-                fontDef.style = QFont::StyleItalic;
+            if (freetype->m_ft_face->style_flags & FT_STYLE_FLAG_ITALIC) {
+               m_fontDef.style = QFont::StyleItalic;
+            }
 
-            if (freetype->face->style_flags & FT_STYLE_FLAG_BOLD)
-                fontDef.weight = QFont::Bold;
+            if (freetype->m_ft_face->style_flags & FT_STYLE_FLAG_BOLD) {
+               m_fontDef.weight = QFont::Bold;
+            }
         }
 
         bool initFromData(const QByteArray &fontData)

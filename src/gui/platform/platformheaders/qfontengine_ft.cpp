@@ -156,7 +156,7 @@ FT_Library qt_getFreetype()
 int QFreetypeFace::fsType() const
 {
    int fsType = 0;
-   TT_OS2 *os2 = (TT_OS2 *)FT_Get_Sfnt_Table(face, ft_sfnt_os2);
+   TT_OS2 *os2 = (TT_OS2 *)FT_Get_Sfnt_Table(m_ft_face, ft_sfnt_os2);
 
    if (os2) {
       fsType = os2->fsType;
@@ -167,16 +167,16 @@ int QFreetypeFace::fsType() const
 
 int QFreetypeFace::getPointInOutline(glyph_t glyph, int flags, quint32 point, QFixed *xpos, QFixed *ypos, quint32 *nPoints)
 {
-   if (int error = FT_Load_Glyph(face, glyph, flags)) {
+   if (int error = FT_Load_Glyph(m_ft_face, glyph, flags)) {
       return error;
    }
 
-   if (face->glyph->format != FT_GLYPH_FORMAT_OUTLINE) {
+   if (m_ft_face->glyph->format != FT_GLYPH_FORMAT_OUTLINE) {
       // some error, might be an Invalid_SubTable
       return -1;
    }
 
-   *nPoints = face->glyph->outline.n_points;
+   *nPoints = m_ft_face->glyph->outline.n_points;
    if (! (*nPoints)) {
       return 0;
    }
@@ -186,8 +186,8 @@ int QFreetypeFace::getPointInOutline(glyph_t glyph, int flags, quint32 point, QF
       return -1;
    }
 
-   *xpos = QFixed::fromFixed(face->glyph->outline.points[point].x);
-   *ypos = QFixed::fromFixed(face->glyph->outline.points[point].y);
+   *xpos = QFixed::fromFixed(m_ft_face->glyph->outline.points[point].x);
+   *ypos = QFixed::fromFixed(m_ft_face->glyph->outline.points[point].y);
 
    return 0;
 }
@@ -262,21 +262,22 @@ QFreetypeFace *QFreetypeFace::getFace(const QFontEngine::FaceId &face_id, const 
          return nullptr;
       }
 
-      newFreetype->face        = face;
-      newFreetype->ref         = 1;
-      newFreetype->xsize       = 0;
-      newFreetype->ysize       = 0;
-      newFreetype->matrix.xx   = 0x10000;
-      newFreetype->matrix.yy   = 0x10000;
-      newFreetype->matrix.xy   = 0;
-      newFreetype->matrix.yx   = 0;
       newFreetype->unicode_map = nullptr;
       newFreetype->symbol_map  = nullptr;
+      newFreetype->m_ft_face      = face;
+      newFreetype->ref            = 1;
+      newFreetype->m_ft_xSize     = 0;
+      newFreetype->m_ft_ySize     = 0;
+      newFreetype->m_ft_matrix.xx = 0x10000;
+      newFreetype->m_ft_matrix.yy = 0x10000;
+      newFreetype->m_ft_matrix.xy = 0;
+      newFreetype->m_ft_matrix.yx = 0;
 
       memset(newFreetype->cmapCache, 0, sizeof(newFreetype->cmapCache));
 
-      for (int i = 0; i < newFreetype->face->num_charmaps; ++i) {
-         FT_CharMap cm = newFreetype->face->charmaps[i];
+      for (int i = 0; i < newFreetype->m_ft_face->num_charmaps; ++i) {
+         FT_CharMap cm = newFreetype->m_ft_face->charmaps[i];
+
          switch (cm->encoding) {
             case FT_ENCODING_UNICODE:
                newFreetype->unicode_map = cm;
@@ -301,11 +302,11 @@ QFreetypeFace *QFreetypeFace::getFace(const QFontEngine::FaceId &face_id, const 
          }
       }
 
-      if (!FT_IS_SCALABLE(newFreetype->face) && newFreetype->face->num_fixed_sizes == 1)  {
-         FT_Set_Char_Size(face, newFreetype->face->available_sizes[0].x_ppem, newFreetype->face->available_sizes[0].y_ppem, 0, 0);
+      if (! FT_IS_SCALABLE(newFreetype->m_ft_face) && newFreetype->m_ft_face->num_fixed_sizes == 1)  {
+         FT_Set_Char_Size(face, newFreetype->m_ft_face->available_sizes[0].x_ppem, newFreetype->m_ft_face->available_sizes[0].y_ppem, 0, 0);
       }
 
-      FT_Set_Charmap(newFreetype->face, newFreetype->unicode_map);
+      FT_Set_Charmap(newFreetype->m_ft_face, newFreetype->unicode_map);
 
       try {
          freetypeData->faces.insert(face_id, newFreetype.data());
@@ -326,14 +327,14 @@ void QFreetypeFace::cleanup()
 {
    m_hb_FTFace.reset();
 
-   FT_Done_Face(face);
-   face = nullptr;
+   FT_Done_Face(m_ft_face);
+   m_ft_face = nullptr;
 }
 
 void QFreetypeFace::release(const QFontEngine::FaceId &face_id)
 {
    if (! ref.deref()) {
-      if (face) {
+      if (m_ft_face) {
          QtFreetypeData *freetypeData = qt_getFreetypeData();
 
          cleanup();
@@ -362,31 +363,34 @@ void QFreetypeFace::computeSize(const QFontDef &fontDef, int *xsize, int *ysize,
     * Bitmap only faces must match exactly, so find the closest
     * one (height dominant search)
     */
-   if (!(face->face_flags & FT_FACE_FLAG_SCALABLE)) {
+
+   if (! (m_ft_face->face_flags & FT_FACE_FLAG_SCALABLE)) {
       int best = 0;
 
-      for (int i = 1; i < face->num_fixed_sizes; i++) {
-         if (qAbs(*ysize -  face->available_sizes[i].y_ppem) <
-            qAbs(*ysize - face->available_sizes[best].y_ppem) ||
-            (qAbs(*ysize - face->available_sizes[i].y_ppem) ==
-               qAbs(*ysize - face->available_sizes[best].y_ppem) &&
-               qAbs(*xsize - face->available_sizes[i].x_ppem) <
-               qAbs(*xsize - face->available_sizes[best].x_ppem))) {
+      for (int i = 1; i < m_ft_face->num_fixed_sizes; i++) {
+         if (qAbs(*ysize -  m_ft_face->available_sizes[i].y_ppem) <
+               qAbs(*ysize - m_ft_face->available_sizes[best].y_ppem) ||
+               (qAbs(*ysize - m_ft_face->available_sizes[i].y_ppem) ==
+               qAbs(*ysize - m_ft_face->available_sizes[best].y_ppem) &&
+               qAbs(*xsize - m_ft_face->available_sizes[i].x_ppem) <
+               qAbs(*xsize - m_ft_face->available_sizes[best].x_ppem))) {
             best = i;
          }
       }
 
-      if (FT_Set_Char_Size(face, face->available_sizes[best].x_ppem, face->available_sizes[best].y_ppem, 0, 0) == 0) {
-         *xsize = face->available_sizes[best].x_ppem;
-         *ysize = face->available_sizes[best].y_ppem;
+      if (FT_Set_Char_Size(m_ft_face, m_ft_face->available_sizes[best].x_ppem, m_ft_face->available_sizes[best].y_ppem, 0, 0) == 0) {
+         *xsize = m_ft_face->available_sizes[best].x_ppem;
+         *ysize = m_ft_face->available_sizes[best].y_ppem;
 
       } else {
          int err = 1;
 
-         if (!(face->face_flags & FT_FACE_FLAG_SCALABLE) && ysize == nullptr && face->num_fixed_sizes >= 1) {
+         if (! (m_ft_face->face_flags & FT_FACE_FLAG_SCALABLE) && ysize == nullptr && m_ft_face->num_fixed_sizes >= 1) {
             // work around FT 2.1.10 problem with BDF without PIXEL_SIZE property
-            err = FT_Set_Pixel_Sizes(face, face->available_sizes[0].width, face->available_sizes[0].height);
-            if (err && face->num_fixed_sizes == 1) {
+
+            err = FT_Set_Pixel_Sizes(m_ft_face, m_ft_face->available_sizes[0].width, m_ft_face->available_sizes[0].height);
+
+            if (err && m_ft_face->num_fixed_sizes == 1) {
                err = 0;   //even more of a workaround...
             }
          }
@@ -404,45 +408,45 @@ void QFreetypeFace::computeSize(const QFontDef &fontDef, int *xsize, int *ysize,
 QFontEngine::Properties QFreetypeFace::properties() const
 {
    QFontEngine::Properties p;
-   p.postscriptName = FT_Get_Postscript_Name(face);
+   p.postscriptName = FT_Get_Postscript_Name(m_ft_face);
    PS_FontInfoRec font_info;
 
-   if (FT_Get_PS_Font_Info(face, &font_info) == 0) {
+   if (FT_Get_PS_Font_Info(m_ft_face, &font_info) == 0) {
       p.copyright = font_info.notice;
    }
 
-   if (FT_IS_SCALABLE(face)) {
-      p.ascent = face->ascender;
-      p.descent = -face->descender;
-      p.leading = face->height - face->ascender + face->descender;
-      p.emSquare = face->units_per_EM;
-      p.boundingBox = QRectF(face->bbox.xMin, -face->bbox.yMax,
-            face->bbox.xMax - face->bbox.xMin,
-            face->bbox.yMax - face->bbox.yMin);
+   if (FT_IS_SCALABLE(m_ft_face)) {
+      p.ascent   = m_ft_face->ascender;
+      p.descent  = -m_ft_face->descender;
+      p.leading  = m_ft_face->height - m_ft_face->ascender + m_ft_face->descender;
+      p.emSquare = m_ft_face->units_per_EM;
+
+      p.boundingBox = QRectF(m_ft_face->bbox.xMin, -m_ft_face->bbox.yMax,
+            m_ft_face->bbox.xMax - m_ft_face->bbox.xMin, m_ft_face->bbox.yMax - m_ft_face->bbox.yMin);
 
    } else {
-      p.ascent  = QFixed::fromFixed(face->size->metrics.ascender);
-      p.descent = QFixed::fromFixed(-face->size->metrics.descender);
-      p.leading = QFixed::fromFixed(face->size->metrics.height - face->size->metrics.ascender +
-            face->size->metrics.descender);
-      p.emSquare = face->size->metrics.y_ppem;
+      p.ascent  = QFixed::fromFixed(m_ft_face->size->metrics.ascender);
+      p.descent = QFixed::fromFixed(-m_ft_face->size->metrics.descender);
+      p.leading = QFixed::fromFixed(m_ft_face->size->metrics.height - m_ft_face->size->metrics.ascender + m_ft_face->size->metrics.descender);
 
-      // p.boundingBox = QRectF(-p.ascent.toReal(), 0, (p.ascent + p.descent).toReal(), face->size->metrics.max_advance/64.);
+      p.emSquare = m_ft_face->size->metrics.y_ppem;
+
+      // p.boundingBox = QRectF(-p.ascent.toReal(), 0, (p.ascent + p.descent).toReal(), m_ft_face->size->metrics.max_advance/64.);
 
       p.boundingBox = QRectF(0, -p.ascent.toReal(),
-            face->size->metrics.max_advance / 64, (p.ascent + p.descent).toReal() );
+            m_ft_face->size->metrics.max_advance / 64, (p.ascent + p.descent).toReal() );
    }
 
    p.italicAngle = 0;
    p.capHeight = p.ascent;
-   p.lineWidth = face->underline_thickness;
+   p.lineWidth = m_ft_face->underline_thickness;
 
    return p;
 }
 
 bool QFreetypeFace::getSfntTable(uint tag, uchar *buffer, uint *length) const
 {
-   return ft_getSfntTable(face, tag, buffer, length);
+   return ft_getSfntTable(m_ft_face, tag, buffer, length);
 }
 
 /* Some fonts (such as MingLiu rely on hinting to scale different
@@ -701,18 +705,18 @@ static void convoluteBitmap(const uchar *src, uchar *dst, int width, int height,
 QFontEngineFT::QFontEngineFT(const QFontDef &fd)
    : QFontEngine(Freetype)
 {
-   fontDef    = fd;
-   matrix.xx  = 0x10000;
-   matrix.yy  = 0x10000;
-   matrix.xy  = 0;
-   matrix.yx  = 0;
+   m_fontDef  = fd;
+   m_fontEngineMatrix.xx  = 0x10000;
+   m_fontEngineMatrix.yy  = 0x10000;
+   m_fontEngineMatrix.xy  = 0;
+   m_fontEngineMatrix.yx  = 0;
    cache_cost = 100 * 1024;
 
    kerning_pairs_loaded = false;
-   transform = false;
-   embolden  = false;
-   obliquen  = false;
-   antialias = true;
+   m_transform = false;
+   m_embolden  = false;
+   m_obliquen  = false;
+   m_antialias = true;
 
    freetype = nullptr;
 
@@ -758,7 +762,7 @@ bool QFontEngineFT::init(FaceId faceId, bool antialias, GlyphFormat format, QFre
    }
 
    defaultFormat = format;
-   this->antialias = antialias;
+   m_antialias = antialias;
 
    if (! antialias) {
       glyphFormat = QFontEngine::Format_Mono;
@@ -773,28 +777,28 @@ bool QFontEngineFT::init(FaceId faceId, bool antialias, GlyphFormat format, QFre
    PS_FontInfoRec psrec;
 
    // do not assume that type1 fonts are symbol fonts by default
-   if (FT_Get_PS_Font_Info(freetype->face, &psrec) == FT_Err_Ok) {
-      symbol = bool(fontDef.family.contains("symbol", Qt::CaseInsensitive));
+   if (FT_Get_PS_Font_Info(freetype->m_ft_face, &psrec) == FT_Err_Ok) {
+      symbol = bool(m_fontDef.family.contains("symbol", Qt::CaseInsensitive));
    }
 
-   freetype->computeSize(fontDef, &xsize, &ysize, &defaultGlyphSet.outline_drawing);
+   freetype->computeSize(m_fontDef, &xsize, &ysize, &defaultGlyphSet.outline_drawing);
 
    FT_Face face = lockFace();
 
    if (FT_IS_SCALABLE(face)) {
-      bool fake_oblique = (fontDef.style != QFont::StyleNormal) && !(face->style_flags & FT_STYLE_FLAG_ITALIC);
+      bool fake_oblique = (m_fontDef.style != QFont::StyleNormal) && !(face->style_flags & FT_STYLE_FLAG_ITALIC);
       if (fake_oblique) {
-         obliquen = true;
+         m_obliquen = true;
       }
 
-      FT_Set_Transform(face, &matrix, nullptr);
-      freetype->matrix = matrix;
+      FT_Set_Transform(face, &m_fontEngineMatrix, nullptr);
+      freetype->m_ft_matrix = m_fontEngineMatrix;
 
       // fake bold
-      if ((fontDef.weight >= QFont::Bold) && !(face->style_flags & FT_STYLE_FLAG_BOLD) && !FT_IS_FIXED_WIDTH(face)) {
+      if ((m_fontDef.weight >= QFont::Bold) && !(face->style_flags & FT_STYLE_FLAG_BOLD) && !FT_IS_FIXED_WIDTH(face)) {
          if (const TT_OS2 *os2 = reinterpret_cast<const TT_OS2 *>(FT_Get_Sfnt_Table(face, ft_sfnt_os2))) {
             if (os2->usWeightClass < 750) {
-               embolden = true;
+               m_embolden = true;
             }
          }
       }
@@ -805,7 +809,7 @@ bool QFontEngineFT::init(FaceId faceId, bool antialias, GlyphFormat format, QFre
 
    } else {
       // copied from QFontEngineQPF, ad hoc algorithm
-      int score = fontDef.weight * fontDef.pixelSize;
+      int score = m_fontDef.weight * m_fontDef.pixelSize;
       line_thickness = score / 700;
 
       // looks better with thicker line for small pointsizes
@@ -821,7 +825,7 @@ bool QFontEngineFT::init(FaceId faceId, bool antialias, GlyphFormat format, QFre
    }
 
 
-   metrics = face->size->metrics;
+   m_fontEngineMetrics = face->size->metrics;
 
    /*
       TrueType fonts with embedded bitmaps may have a bitmap font specific
@@ -837,8 +841,8 @@ bool QFontEngineFT::init(FaceId faceId, bool antialias, GlyphFormat format, QFre
 
             FT_Select_Size(face, i);
             if (face->size->metrics.ascender + face->size->metrics.descender > 0) {
-               metrics.ascender = face->size->metrics.ascender;
-               metrics.descender = face->size->metrics.descender;
+               m_fontEngineMetrics.ascender  = face->size->metrics.ascender;
+               m_fontEngineMetrics.descender = face->size->metrics.descender;
             }
             FT_Set_Char_Size(face, xsize, ysize, 0, 0);
 
@@ -848,7 +852,7 @@ bool QFontEngineFT::init(FaceId faceId, bool antialias, GlyphFormat format, QFre
       }
    }
 
-   fontDef.styleName = QString::fromUtf8(face->style_name);
+   m_fontDef.styleName = QString::fromUtf8(face->style_name);
 
    if (! freetype->m_hb_FTFace) {
       faceData.user_data = face;
@@ -967,8 +971,8 @@ QFontEngineFT::Glyph *QFontEngineFT::loadGlyph(QGlyphSet *set, uint glyph,
       return &emptyGlyph;
    }
 
-   FT_Face face     = freetype->face;
-   FT_Matrix matrix = freetype->matrix;
+   FT_Face face     = freetype->m_ft_face;
+   FT_Matrix matrix = freetype->m_ft_matrix;
 
    FT_Vector v;
    v.x = format == Format_Mono ? 0 : FT_Pos(subPixelPosition.value());
@@ -1020,11 +1024,11 @@ QFontEngineFT::Glyph *QFontEngineFT::loadGlyph(QGlyphSet *set, uint glyph,
    }
 
    FT_GlyphSlot slot = face->glyph;
-   if (embolden) {
+   if (m_embolden) {
       FT_GlyphSlot_Embolden(slot);
    }
 
-   if (obliquen) {
+   if (m_obliquen) {
       FT_GlyphSlot_Oblique(slot);
 
       // While Embolden alters the metrics of the slot, oblique does not, so we need
@@ -1240,18 +1244,19 @@ QFontEngineFT::Glyph *QFontEngineFT::loadGlyph(QGlyphSet *set, uint glyph,
          }
 
          bitmap.pixel_mode = format == Format_Mono ? FT_PIXEL_MODE_MONO : FT_PIXEL_MODE_GRAY;
-         FT_Matrix matrix;
-         matrix.xx = (hsubpixel ? 3 : 1) << 16;
-         matrix.yy = vfactor << 16;
-         matrix.yx = matrix.xy = 0;
+         FT_Matrix newMatrix;
+         newMatrix.xx = (hsubpixel ? 3 : 1) << 16;
+         newMatrix.yy = vfactor << 16;
+         newMatrix.yx = newMatrix.xy = 0;
 
-         FT_Outline_Transform(&slot->outline, &matrix);
+         FT_Outline_Transform(&slot->outline, &newMatrix);
          FT_Outline_Translate (&slot->outline, (hsubpixel ? -3 * left + (4 << 6) : -left), -bottom * vfactor);
          FT_Outline_Get_Bitmap(slot->library, &slot->outline, &bitmap);
 
          if (hsubpixel) {
             Q_ASSERT (bitmap.pixel_mode == FT_PIXEL_MODE_GRAY);
-            Q_ASSERT(antialias);
+            Q_ASSERT(m_antialias);
+
             uchar *convoluted = new uchar[bitmap_buffer_size];
             bool useLegacyLcdFilter = false;
 
@@ -1368,7 +1373,7 @@ QFontEngine::Properties QFontEngineFT::properties() const
    Properties p = freetype->properties();
 
    if (p.postscriptName.isEmpty()) {
-      p.postscriptName = QFontEngine::convertToPostscriptFontFamilyName(fontDef.family.toUtf8());
+      p.postscriptName = QFontEngine::convertToPostscriptFontFamilyName(m_fontDef.family.toUtf8());
    }
 
    return freetype->properties();
@@ -1376,28 +1381,31 @@ QFontEngine::Properties QFontEngineFT::properties() const
 
 QFixed QFontEngineFT::emSquareSize() const
 {
-   if (FT_IS_SCALABLE(freetype->face)) {
-      return freetype->face->units_per_EM;
+   if (FT_IS_SCALABLE(freetype->m_ft_face)) {
+      return freetype->m_ft_face->units_per_EM;
    } else {
-      return freetype->face->size->metrics.y_ppem;
+      return freetype->m_ft_face->size->metrics.y_ppem;
    }
 }
 
 bool QFontEngineFT::getSfntTableData(uint tag, uchar *buffer, uint *length) const
 {
-   return ft_getSfntTable(freetype->face, tag, buffer, length);
+   return ft_getSfntTable(freetype->m_ft_face, tag, buffer, length);
 }
 
 int QFontEngineFT::synthesized() const
 {
    int s = 0;
-   if ((fontDef.style != QFont::StyleNormal) && !(freetype->face->style_flags & FT_STYLE_FLAG_ITALIC)) {
+
+   if ((m_fontDef.style != QFont::StyleNormal) && ! (freetype->m_ft_face->style_flags & FT_STYLE_FLAG_ITALIC)) {
       s = SynthesizedItalic;
    }
-   if ((fontDef.weight >= QFont::Bold) && !(freetype->face->style_flags & FT_STYLE_FLAG_BOLD)) {
+
+   if ((m_fontDef.weight >= QFont::Bold) && ! (freetype->m_ft_face->style_flags & FT_STYLE_FLAG_BOLD)) {
       s |= SynthesizedBold;
    }
-   if (fontDef.stretch != 100 && FT_IS_SCALABLE(freetype->face)) {
+
+   if (m_fontDef.stretch != 100 && FT_IS_SCALABLE(freetype->m_ft_face)) {
       s |= SynthesizedStretch;
    }
 
@@ -1406,29 +1414,29 @@ int QFontEngineFT::synthesized() const
 
 QFixed QFontEngineFT::ascent() const
 {
-   return QFixed::fromFixed(metrics.ascender);
+   return QFixed::fromFixed(m_fontEngineMetrics.ascender);
 }
 
 QFixed QFontEngineFT::descent() const
 {
-   return QFixed::fromFixed(-metrics.descender);
+   return QFixed::fromFixed(-m_fontEngineMetrics.descender);
 }
 
 QFixed QFontEngineFT::leading() const
 {
-   return QFixed::fromFixed(metrics.height - metrics.ascender + metrics.descender);
+   return QFixed::fromFixed(m_fontEngineMetrics.height - m_fontEngineMetrics.ascender + m_fontEngineMetrics.descender);
 }
 
 QFixed QFontEngineFT::xHeight() const
 {
-   TT_OS2 *os2 = (TT_OS2 *)FT_Get_Sfnt_Table(freetype->face, ft_sfnt_os2);
+   TT_OS2 *os2 = (TT_OS2 *)FT_Get_Sfnt_Table(freetype->m_ft_face, ft_sfnt_os2);
 
    if (os2 && os2->sxHeight) {
       lockFace();
 
-      QFixed answer = QFixed(os2->sxHeight * freetype->face->size->metrics.y_ppem) / emSquareSize();
+      QFixed retval = QFixed(os2->sxHeight * freetype->m_ft_face->size->metrics.y_ppem) / emSquareSize();
       unlockFace();
-      return answer;
+      return retval;
    }
 
    return QFontEngine::xHeight();
@@ -1436,14 +1444,14 @@ QFixed QFontEngineFT::xHeight() const
 
 QFixed QFontEngineFT::averageCharWidth() const
 {
-   TT_OS2 *os2 = (TT_OS2 *)FT_Get_Sfnt_Table(freetype->face, ft_sfnt_os2);
+   TT_OS2 *os2 = (TT_OS2 *)FT_Get_Sfnt_Table(freetype->m_ft_face, ft_sfnt_os2);
 
    if (os2 && os2->xAvgCharWidth) {
       lockFace();
 
-      QFixed answer = QFixed(os2->xAvgCharWidth * freetype->face->size->metrics.x_ppem) / emSquareSize();
+      QFixed retval = QFixed(os2->xAvgCharWidth * freetype->m_ft_face->size->metrics.x_ppem) / emSquareSize();
       unlockFace();
-      return answer;
+      return retval;
    }
 
    return QFontEngine::averageCharWidth();
@@ -1451,7 +1459,7 @@ QFixed QFontEngineFT::averageCharWidth() const
 
 qreal QFontEngineFT::maxCharWidth() const
 {
-   return metrics.max_advance >> 6;
+   return m_fontEngineMetrics.max_advance >> 6;
 }
 
 QFixed QFontEngineFT::lineThickness() const
@@ -1470,16 +1478,17 @@ void QFontEngineFT::doKerning(QGlyphLayout *g, QFontEngine::ShaperFlags flags) c
       kerning_pairs_loaded = true;
       lockFace();
 
-      if (freetype->face->size->metrics.x_ppem != 0) {
-         QFixed scalingFactor = emSquareSize() / QFixed(freetype->face->size->metrics.x_ppem);
+      if (freetype->m_ft_face->size->metrics.x_ppem != 0) {
+         QFixed scalingFactor = emSquareSize() / QFixed(freetype->m_ft_face->size->metrics.x_ppem);
          unlockFace();
          const_cast<QFontEngineFT *>(this)->loadKerningPairs(scalingFactor);
+
       } else {
          unlockFace();
       }
    }
 
-   if (shouldUseDesignMetrics(flags) && !(fontDef.styleStrategy & QFont::ForceIntegerMetrics)) {
+   if (shouldUseDesignMetrics(flags) && ! (m_fontDef.styleStrategy & QFont::ForceIntegerMetrics)) {
       flags |= DesignMetrics;
    } else {
       flags &= ~DesignMetrics;
@@ -1507,7 +1516,7 @@ QFontEngineFT::QGlyphSet *QFontEngineFT::loadGlyphSet(const QTransform &matrix)
    }
 
    // FT_Set_Transform only supports scalable fonts
-   if (!FT_IS_SCALABLE(freetype->face)) {
+   if (! FT_IS_SCALABLE(freetype->m_ft_face)) {
       return matrix.type() <= QTransform::TxTranslate ? &defaultGlyphSet : nullptr;
    }
 
@@ -1541,8 +1550,9 @@ QFontEngineFT::QGlyphSet *QFontEngineFT::loadGlyphSet(const QTransform &matrix)
       gs = &transformedGlyphSets[0];
       gs->clear();
       gs->transformationMatrix = m;
-      gs->outline_drawing = fontDef.pixelSize * fontDef.pixelSize * qAbs(matrix.det()) >= QT_MAX_CACHED_GLYPH_SIZE *
-         QT_MAX_CACHED_GLYPH_SIZE;
+
+      gs->outline_drawing = m_fontDef.pixelSize * m_fontDef.pixelSize * qAbs(matrix.det()) >=
+            QT_MAX_CACHED_GLYPH_SIZE * QT_MAX_CACHED_GLYPH_SIZE;
    }
 
    Q_ASSERT(gs != nullptr);
@@ -1571,13 +1581,13 @@ void QFontEngineFT::getUnscaledGlyph(glyph_t glyph, QPainterPath *path, glyph_me
    metrics->y      = QFixed::fromFixed(-top);
    metrics->xoff   = QFixed::fromFixed(face->glyph->advance.x);
 
-   if (! FT_IS_SCALABLE(freetype->face)) {
+   if (! FT_IS_SCALABLE(freetype->m_ft_face)) {
       QFreetypeFace::addBitmapToPath(face->glyph, p, path);
    } else {
       QFreetypeFace::addGlyphToPath(face, face->glyph, p, path, face->units_per_EM << 6, face->units_per_EM << 6);
    }
 
-   FT_Set_Transform(face, &freetype->matrix, nullptr);
+   FT_Set_Transform(face, &freetype->m_ft_matrix, nullptr);
    unlockFace();
 }
 
@@ -1593,7 +1603,7 @@ void QFontEngineFT::addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyph
       return;
    }
 
-   if (FT_IS_SCALABLE(freetype->face)) {
+   if (FT_IS_SCALABLE(freetype->m_ft_face)) {
       QFontEngine::addOutlineToPath(x, y, glyphs, path, flags);
 
    } else {
@@ -1631,10 +1641,12 @@ void QFontEngineFT::addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int
       if (g->format != FT_GLYPH_FORMAT_OUTLINE) {
          continue;
       }
-      if (embolden) {
+
+      if (m_embolden) {
          FT_GlyphSlot_Embolden(g);
       }
-      if (obliquen) {
+
+      if (m_obliquen) {
          FT_GlyphSlot_Oblique(g);
       }
 
@@ -1650,7 +1662,7 @@ glyph_t QFontEngineFT::glyphIndex(char32_t ch) const
 
    if (glyph == 0) {
 
-      FT_Face face = freetype->face;
+      FT_Face face = freetype->m_ft_face;
       glyph = FT_Get_Char_Index(face, ch);
 
       if (glyph == 0) {
@@ -1696,7 +1708,7 @@ bool QFontEngineFT::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *num
    int glyph_pos = 0;
 
    if (freetype->symbol_map) {
-      FT_Face face = freetype->face;
+      FT_Face face = freetype->m_ft_face;
 
       for (QChar c : str) {
          unsigned int uc = c.unicode();
@@ -1728,7 +1740,7 @@ bool QFontEngineFT::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *num
       }
 
    } else {
-      FT_Face face = freetype->face;
+      FT_Face face = freetype->m_ft_face;
 
       for (QChar c : str) {
          unsigned int uc = c.unicode();
@@ -1770,7 +1782,7 @@ bool QFontEngineFT::stringToCMap(QStringView str, QGlyphLayout *glyphs, int *num
 
 bool QFontEngineFT::shouldUseDesignMetrics(QFontEngine::ShaperFlags flags) const
 {
-   if (!FT_IS_SCALABLE(freetype->face)) {
+   if (! FT_IS_SCALABLE(freetype->m_ft_face)) {
       return false;
    }
 
@@ -1815,7 +1827,7 @@ void QFontEngineFT::recalcAdvances(QGlyphLayout *glyphs, QFontEngine::ShaperFlag
       unlockFace();
    }
 
-   if (fontDef.styleStrategy & QFont::ForceIntegerMetrics) {
+   if (m_fontDef.styleStrategy & QFont::ForceIntegerMetrics) {
       for (int i = 0; i < glyphs->numGlyphs; ++i) {
          glyphs->advances[i] = glyphs->advances[i].round();
       }
@@ -1902,7 +1914,8 @@ glyph_metrics_t QFontEngineFT::boundingBox(glyph_t glyph)
       overall.width = g->width;
       overall.height = g->height;
       overall.xoff = g->advance;
-      if (fontDef.styleStrategy & QFont::ForceIntegerMetrics) {
+
+      if (m_fontDef.styleStrategy & QFont::ForceIntegerMetrics) {
          overall.xoff = overall.xoff.round();
       }
       if (!cacheEnabled && g != &emptyGlyph) {
@@ -2077,10 +2090,11 @@ QFontEngineFT::Glyph *QFontEngineFT::loadGlyphFor(glyph_t g,
       }
 
       lockFace();
-      FT_Matrix m = this->matrix;
+      FT_Matrix m = m_fontEngineMatrix;
       FT_Matrix ftMatrix = glyphSet != nullptr ? glyphSet->transformationMatrix : QTransformToFTMatrix(t);
       FT_Matrix_Multiply(&ftMatrix, &m);
-      freetype->matrix = m;
+
+      freetype->m_ft_matrix = m;
       glyph = loadGlyph(glyphSet, g, subPixelPosition, format, false);
       unlockFace();
    }
@@ -2095,7 +2109,7 @@ QImage QFontEngineFT::alphaMapForGlyph(glyph_t g, QFixed subPixelPosition)
 
 QImage QFontEngineFT::alphaMapForGlyph(glyph_t g, QFixed subPixelPosition, const QTransform &t)
 {
-   const GlyphFormat neededFormat = antialias ? QFontEngine::Format_A8 : QFontEngine::Format_Mono;
+   const GlyphFormat neededFormat = m_antialias ? QFontEngine::Format_A8 : QFontEngine::Format_Mono;
 
    Glyph *glyph = loadGlyphFor(g, subPixelPosition, neededFormat, t);
 
@@ -2156,23 +2170,25 @@ int QFontEngineFT::glyphCount() const
 FT_Face QFontEngineFT::lockFace(Scaling scale) const
 {
    freetype->lock();
-   FT_Face face = freetype->face;
+   FT_Face face = freetype->m_ft_face;
 
    if (scale == Unscaled) {
       FT_Set_Char_Size(face, face->units_per_EM << 6, face->units_per_EM << 6, 0, 0);
-      freetype->xsize = face->units_per_EM << 6;
-      freetype->ysize = face->units_per_EM << 6;
-   } else if (freetype->xsize != xsize || freetype->ysize != ysize) {
+      freetype->m_ft_xSize = face->units_per_EM << 6;
+      freetype->m_ft_ySize = face->units_per_EM << 6;
+
+   } else if (freetype->m_ft_xSize != xsize || freetype->m_ft_ySize != ysize) {
       FT_Set_Char_Size(face, xsize, ysize, 0, 0);
-      freetype->xsize = xsize;
-      freetype->ysize = ysize;
+      freetype->m_ft_xSize = xsize;
+      freetype->m_ft_ySize = ysize;
    }
-   if (freetype->matrix.xx != matrix.xx ||
-      freetype->matrix.yy != matrix.yy ||
-      freetype->matrix.xy != matrix.xy ||
-      freetype->matrix.yx != matrix.yx) {
-      freetype->matrix = matrix;
-      FT_Set_Transform(face, &freetype->matrix, nullptr);
+
+   if (freetype->m_ft_matrix.xx != m_fontEngineMatrix.xx || freetype->m_ft_matrix.yy != m_fontEngineMatrix.yy ||
+         freetype->m_ft_matrix.xy != m_fontEngineMatrix.xy || freetype->m_ft_matrix.yx != m_fontEngineMatrix.yx) {
+
+      freetype->m_ft_matrix = m_fontEngineMatrix;
+
+      FT_Set_Transform(face, &freetype->m_ft_matrix, nullptr);
    }
 
    return face;
@@ -2185,7 +2201,7 @@ void QFontEngineFT::unlockFace() const
 
 FT_Face QFontEngineFT::non_locked_face() const
 {
-   return freetype->face;
+   return freetype->m_ft_face;
 }
 
 QFontEngineFT::QGlyphSet::QGlyphSet()
@@ -2263,7 +2279,7 @@ int QFontEngineFT::getPointInOutline(glyph_t glyph, int flags, quint32 point, QF
 
 bool QFontEngineFT::initFromFontEngine(const QFontEngineFT *fe)
 {
-   if (! init(fe->faceId(), fe->antialias, fe->defaultFormat, fe->freetype)) {
+   if (! init(fe->faceId(), fe->m_antialias, fe->defaultFormat, fe->freetype)) {
       return false;
    }
 
@@ -2273,11 +2289,12 @@ bool QFontEngineFT::initFromFontEngine(const QFontEngineFT *fe)
 
    default_load_flags = fe->default_load_flags;
    default_hint_style = fe->default_hint_style;
-   antialias = fe->antialias;
-   transform = fe->transform;
-   embolden = fe->embolden;
-   obliquen = fe->obliquen;
-   subpixelType = fe->subpixelType;
+
+   m_antialias   = fe->m_antialias;
+   m_transform   = fe->m_transform;
+   m_embolden    = fe->m_embolden;
+   m_obliquen    = fe->m_obliquen;
+   subpixelType  = fe->subpixelType;
    lcdFilterType = fe->lcdFilterType;
 
    embeddedbitmap = fe->embeddedbitmap;
@@ -2287,7 +2304,7 @@ bool QFontEngineFT::initFromFontEngine(const QFontEngineFT *fe)
 
 QFontEngine *QFontEngineFT::cloneWithSize(qreal pixelSize) const
 {
-   QFontDef fontDef(this->fontDef);
+   QFontDef fontDef(m_fontDef);
    fontDef.pixelSize = pixelSize;
 
    QFontEngineFT *fe = new QFontEngineFT(fontDef);

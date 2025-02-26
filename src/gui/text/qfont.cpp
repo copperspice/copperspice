@@ -844,7 +844,7 @@ bool QFont::exactMatch() const
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != nullptr);
 
-   return d->request.exactMatch(engine->fontDef);
+   return d->request.exactMatch(engine->m_fontDef);
 }
 
 bool QFont::operator==(const QFont &f) const
@@ -1344,7 +1344,7 @@ QString QFontInfo::family() const
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != nullptr);
 
-   return engine->fontDef.family;
+   return engine->m_fontDef.family;
 }
 
 QString QFontInfo::styleName() const
@@ -1352,7 +1352,7 @@ QString QFontInfo::styleName() const
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != nullptr);
 
-   return engine->fontDef.styleName;
+   return engine->m_fontDef.styleName;
 }
 
 int QFontInfo::pointSize() const
@@ -1360,7 +1360,7 @@ int QFontInfo::pointSize() const
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != nullptr);
 
-   return qRound(engine->fontDef.pointSize);
+   return qRound(engine->m_fontDef.pointSize);
 }
 
 qreal QFontInfo::pointSizeF() const
@@ -1368,7 +1368,7 @@ qreal QFontInfo::pointSizeF() const
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != nullptr);
 
-   return engine->fontDef.pointSize;
+   return engine->m_fontDef.pointSize;
 }
 
 int QFontInfo::pixelSize() const
@@ -1376,7 +1376,7 @@ int QFontInfo::pixelSize() const
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != nullptr);
 
-   return engine->fontDef.pixelSize;
+   return engine->m_fontDef.pixelSize;
 }
 
 bool QFontInfo::italic() const
@@ -1384,7 +1384,7 @@ bool QFontInfo::italic() const
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != nullptr);
 
-   return engine->fontDef.style != QFont::StyleNormal;
+   return engine->m_fontDef.style != QFont::StyleNormal;
 }
 
 QFont::Style QFontInfo::style() const
@@ -1392,7 +1392,7 @@ QFont::Style QFontInfo::style() const
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != nullptr);
 
-   return (QFont::Style)engine->fontDef.style;
+   return (QFont::Style)engine->m_fontDef.style;
 }
 
 int QFontInfo::weight() const
@@ -1400,8 +1400,7 @@ int QFontInfo::weight() const
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != nullptr);
 
-   return engine->fontDef.weight;
-
+   return engine->m_fontDef.weight;
 }
 
 bool QFontInfo::underline() const
@@ -1425,19 +1424,19 @@ bool QFontInfo::fixedPitch() const
    Q_ASSERT(engine != nullptr);
 
 #ifdef Q_OS_DARWIN
-   if (! engine->fontDef.fixedPitchComputed) {
+   if (! engine->m_fontDef.fixedPitchComputed) {
       QGlyphLayoutArray<2> g;
       int l = 2;
 
       static const QString imStr = QString("im");
       engine->stringToCMap(imStr, &g, &l, nullptr);
 
-      engine->fontDef.fixedPitch = g.advances[0] == g.advances[1];
-      engine->fontDef.fixedPitchComputed = true;
+      engine->m_fontDef.fixedPitch = g.advances[0] == g.advances[1];
+      engine->m_fontDef.fixedPitchComputed = true;
    }
 #endif
 
-   return engine->fontDef.fixedPitch;
+   return engine->m_fontDef.fixedPitch;
 }
 
 QFont::StyleHint QFontInfo::styleHint() const
@@ -1445,7 +1444,7 @@ QFont::StyleHint QFontInfo::styleHint() const
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != nullptr);
 
-   return (QFont::StyleHint) engine->fontDef.styleHint;
+   return (QFont::StyleHint) engine->m_fontDef.styleHint;
 }
 
 bool QFontInfo::exactMatch() const
@@ -1453,7 +1452,7 @@ bool QFontInfo::exactMatch() const
    QFontEngine *engine = d->engineForScript(QChar::Script_Common);
    Q_ASSERT(engine != nullptr);
 
-   return d->request.exactMatch(engine->fontDef);
+   return d->request.exactMatch(engine->m_fontDef);
 }
 
 static QThreadStorage<QFontCache *> *theFontCache()

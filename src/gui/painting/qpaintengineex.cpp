@@ -1094,9 +1094,9 @@ void QPaintEngineEx::drawStaticTextItem(QStaticTextItem *staticTextItem)
       QPainterState *s = state();
       QPainter::RenderHints oldHints = s->renderHints;
       bool changedHints = false;
-      if (bool(oldHints & QPainter::TextAntialiasing)
-         && !bool(fontEngine->fontDef.styleStrategy & QFont::NoAntialias)
-         && !bool(oldHints & QPainter::Antialiasing)) {
+
+      if (bool(oldHints & QPainter::TextAntialiasing) && ! bool(fontEngine->m_fontDef.styleStrategy & QFont::NoAntialias)
+            && ! bool(oldHints & QPainter::Antialiasing)) {
          s->renderHints |= QPainter::Antialiasing;
          renderHintsChanged();
          changedHints = true;
@@ -1122,7 +1122,7 @@ bool QPaintEngineEx::shouldDrawCachedGlyphs(QFontEngine *fontEngine, const QTran
       return true;
    }
 
-   qreal pixelSize = fontEngine->fontDef.pixelSize;
+   qreal pixelSize = fontEngine->m_fontDef.pixelSize;
    return (pixelSize * pixelSize * qAbs(m.determinant())) <
       QT_MAX_CACHED_GLYPH_SIZE * QT_MAX_CACHED_GLYPH_SIZE;
 }

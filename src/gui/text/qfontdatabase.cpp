@@ -2522,7 +2522,7 @@ QFontEngine *QFontDatabase::findFont(const QFontDef &request, int script)
       engine = loadEngine(script, request, desc.family, desc.foundry, desc.style, desc.size);
 
       if (engine != nullptr) {
-         initFontDef(desc, request, &engine->fontDef, multi);
+         initFontDef(desc, request, &engine->m_fontDef, multi);
       } else {
          blackListed.append(fontFamily);
       }
@@ -2572,7 +2572,7 @@ QFontEngine *QFontDatabase::findFont(const QFontDef &request, int script)
                      engine = loadEngine(script, loadDef, desc.family, desc.foundry, desc.style, desc.size);
 
                      if (engine != nullptr) {
-                        initFontDef(desc, loadDef, &engine->fontDef, multi);
+                        initFontDef(desc, loadDef, &engine->m_fontDef, multi);
                      } else {
                         blackListed.append(fontFamily);
                      }
@@ -2681,7 +2681,7 @@ void QFontDatabase::load(const QFontPrivate *font, int script)
 
          } else {
             if (font->dpi > 0) {
-               fontEngine->fontDef.pointSize = qreal(double((fontEngine->fontDef.pixelSize * 72) / font->dpi));
+               fontEngine->m_fontDef.pointSize = qreal(double((fontEngine->m_fontDef.pixelSize * 72) / font->dpi));
             }
          }
       }

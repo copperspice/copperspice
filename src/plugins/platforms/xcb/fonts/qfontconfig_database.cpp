@@ -776,7 +776,7 @@ QFontEngine *QFontconfigDatabase::fontEngine(const QFontDef &f, void *usrPtr)
 
    setupFontEngine(engine, f);
 
-   if (! engine->init(fid, engine->antialias, engine->defaultFormat) || engine->invalid()) {
+   if (! engine->init(fid, engine->m_antialias, engine->defaultFormat) || engine->invalid()) {
       delete engine;
       engine = nullptr;
    }
@@ -791,7 +791,7 @@ QFontEngine *QFontconfigDatabase::fontEngine(const QByteArray &fontData, qreal p
       return engine;
    }
 
-   setupFontEngine(engine, engine->fontDef);
+   setupFontEngine(engine, engine->m_fontDef);
 
    return engine;
 }
@@ -1107,9 +1107,9 @@ void QFontconfigDatabase::setupFontEngine(QFontEngineFT *engine, const QFontDef 
 
    FcPatternDestroy(pattern);
 
-   engine->antialias = antialias;
+   engine->m_antialias   = antialias;
    engine->defaultFormat = format;
-   engine->glyphFormat = format;
+   engine->glyphFormat   = format;
 }
 
 

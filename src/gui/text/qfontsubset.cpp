@@ -1224,7 +1224,7 @@ QByteArray QFontSubset::toTruetype() const
    qttf_font_tables font;
    memset(&font, 0, sizeof(qttf_font_tables));
 
-   qreal ppem = fontEngine->fontDef.pixelSize;
+   qreal ppem = fontEngine->m_fontDef.pixelSize;
 
 #define TO_TTF(x) qRound(x * 2048. / ppem)
 
@@ -1242,8 +1242,8 @@ QByteArray QFontSubset::toTruetype() const
    font.head.xMax = SHRT_MIN;
    font.head.yMin = SHRT_MAX;
    font.head.yMax = SHRT_MIN;
-   font.head.macStyle = (fontEngine->fontDef.weight > QFont::Normal) ? 1 : 0;
-   font.head.macStyle |= (fontEngine->fontDef.styleHint != QFont::StyleNormal) ? 1 : 0;
+   font.head.macStyle = (fontEngine->m_fontDef.weight > QFont::Normal) ? 1 : 0;
+   font.head.macStyle |= (fontEngine->m_fontDef.styleHint != QFont::StyleNormal) ? 1 : 0;
 
    // hhea table
    font.hhea.ascender = qRound(properties.ascent);
@@ -1318,7 +1318,8 @@ QByteArray QFontSubset::toTruetype() const
       } else {
          name.copyright = QLatin1String(properties.copyright);
       }
-      name.family = fontEngine->fontDef.family;
+
+      name.family    = fontEngine->m_fontDef.family;
       name.subfamily = QLatin1String("Regular"); // ######
       name.postscript_name = QLatin1String(properties.postscriptName);
       name_table = generateName(name);

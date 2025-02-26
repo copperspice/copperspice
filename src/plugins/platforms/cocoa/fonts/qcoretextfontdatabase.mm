@@ -437,7 +437,7 @@ QFontEngine *QCoreTextFontDatabase::fontEngine(const QFontDef &f, void *usrPtr)
 
    if (font) {
       QFontEngine *engine = new QCoreTextFontEngine(font, f);
-      engine->fontDef = f;
+      engine->m_fontDef = f;
       CFRelease(font);
       return engine;
    }

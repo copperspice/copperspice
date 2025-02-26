@@ -65,11 +65,6 @@ class QFreetypeFace
       m_lock.unlock();
    }
 
-   FT_Face face;
-
-   int xsize; // 26.6
-   int ysize; // 26.6
-   FT_Matrix matrix;
    FT_CharMap unicode_map;
    FT_CharMap symbol_map;
 
@@ -84,6 +79,12 @@ class QFreetypeFace
 
    static void addBitmapToPath(FT_GlyphSlot slot, const QFixedPoint &point, QPainterPath *path);
 
+   FT_Face m_ft_face;
+
+   int m_ft_xSize;          // 26.6
+   int m_ft_ySize;          // 26.6
+
+   FT_Matrix m_ft_matrix;
  private:
    QFreetypeFace()  = default;
    ~QFreetypeFace() = default;
@@ -262,7 +263,7 @@ class QFontEngineFT : public QFontEngine
    FT_Face non_locked_face() const;
 
    bool drawAntialiased() const {
-      return antialias;
+      return m_antialias;
    }
 
    bool invalid() const {
@@ -314,10 +315,10 @@ class QFontEngineFT : public QFontEngine
 
    HintStyle default_hint_style;
 
-   bool antialias;
-   bool transform;
-   bool embolden;
-   bool obliquen;
+   bool m_antialias;
+   bool m_transform;
+   bool m_embolden;
+   bool m_obliquen;
 
    SubpixelAntialiasingType subpixelType;
    int lcdFilterType;
@@ -331,7 +332,7 @@ class QFontEngineFT : public QFontEngine
    bool shouldUseDesignMetrics(ShaperFlags flags) const;
 
    GlyphFormat defaultFormat;
-   FT_Matrix matrix;
+   FT_Matrix m_fontEngineMatrix;
 
    QList<QGlyphSet> transformedGlyphSets;
    mutable QGlyphSet defaultGlyphSet;
@@ -344,7 +345,7 @@ class QFontEngineFT : public QFontEngine
    QFixed line_thickness;
    QFixed underline_position;
 
-   FT_Size_Metrics metrics;
+   FT_Size_Metrics m_fontEngineMetrics;
    mutable bool kerning_pairs_loaded;
 
    friend class QFontEngineFTRawFont;

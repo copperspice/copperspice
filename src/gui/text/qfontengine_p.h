@@ -278,7 +278,7 @@ class Q_GUI_EXPORT QFontEngine
    } faceData;
 
    QAtomicInt m_refCount;
-   QFontDef fontDef;
+   QFontDef m_fontDef;
 
    uint cache_cost;       // amount of memory used in kb by the font
 

@@ -150,7 +150,7 @@ qreal QRawFont::maxCharWidth() const
 
 qreal QRawFont::pixelSize() const
 {
-   return m_fontPrivate->isValid() ? m_fontPrivate->fontEngine->fontDef.pixelSize : 0.0;
+   return m_fontPrivate->isValid() ? m_fontPrivate->fontEngine->m_fontDef.pixelSize : 0.0;
 }
 
 qreal QRawFont::unitsPerEm() const
@@ -168,22 +168,22 @@ qreal QRawFont::underlinePosition() const
 }
 QString QRawFont::familyName() const
 {
-   return m_fontPrivate->isValid() ? m_fontPrivate->fontEngine->fontDef.family : QString();
+   return m_fontPrivate->isValid() ? m_fontPrivate->fontEngine->m_fontDef.family : QString();
 }
 
 QString QRawFont::styleName() const
 {
-   return m_fontPrivate->isValid() ? m_fontPrivate->fontEngine->fontDef.styleName : QString();
+   return m_fontPrivate->isValid() ? m_fontPrivate->fontEngine->m_fontDef.styleName : QString();
 }
 
 QFont::Style QRawFont::style() const
 {
-   return m_fontPrivate->isValid() ? QFont::Style(m_fontPrivate->fontEngine->fontDef.style) : QFont::StyleNormal;
+   return m_fontPrivate->isValid() ? QFont::Style(m_fontPrivate->fontEngine->m_fontDef.style) : QFont::StyleNormal;
 }
 
 int QRawFont::weight() const
 {
-   return m_fontPrivate->isValid() ? int(m_fontPrivate->fontEngine->fontDef.weight) : -1;
+   return m_fontPrivate->isValid() ? int(m_fontPrivate->fontEngine->m_fontDef.weight) : -1;
 }
 
 QVector<quint32> QRawFont::glyphIndexesForString(const QString &text) const
@@ -351,7 +351,7 @@ QRawFont QRawFont::fromFont(const QFont &font, QFontDatabase::WritingSystem writ
 
 void QRawFont::setPixelSize(qreal pixelSize)
 {
-   if (! m_fontPrivate->isValid() || qFuzzyCompare(m_fontPrivate->fontEngine->fontDef.pixelSize, pixelSize)) {
+   if (! m_fontPrivate->isValid() || qFuzzyCompare(m_fontPrivate->fontEngine->m_fontDef.pixelSize, pixelSize)) {
       return;
    }
 

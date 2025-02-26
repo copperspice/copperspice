@@ -122,7 +122,7 @@ QFontEngine::~QFontEngine()
 QFixed QFontEngine::lineThickness() const
 {
    // ad hoc algorithm
-   int score = fontDef.weight * fontDef.pixelSize;
+   int score = m_fontDef.weight * m_fontDef.pixelSize;
    int lw = score / 700;
 
    // looks better with thicker line for small pointsizes
@@ -415,7 +415,7 @@ qreal QFontEngine::minRightBearing() const
          // of units per em into account. Since pixelSize already has taken DPI into
          // account we can use that directly instead of the point size.
          int unitsPerEm = emSquareSize().toInt();
-         qreal funitToPixelFactor = fontDef.pixelSize / unitsPerEm;
+         qreal funitToPixelFactor = m_fontDef.pixelSize / unitsPerEm;
 
          // Some fonts on OS X (such as Gurmukhi Sangam MN, Khmer MN, Lao Sangam MN, etc.), have
          // invalid values for their NBSPACE left bearing, causing the 'hhea' minimum bearings to
@@ -465,7 +465,7 @@ qreal QFontEngine::minRightBearing() const
       }
 
       if (m_minLeftBearing == kBearingNotInitialized || m_minRightBearing == kBearingNotInitialized) {
-         qWarning() << "QFontEngine::minRightBearing() Failed to compute left/right minimum bearings for " << fontDef.family;
+         qWarning() << "QFontEngine::minRightBearing() Failed to compute left/right minimum bearings for " << m_fontDef.family;
       }
    }
 
@@ -848,12 +848,12 @@ void QFontEngine::removeGlyphFromCache(glyph_t)
 QFontEngine::Properties QFontEngine::properties() const
 {
    Properties p;
-   QString psname = QFontEngine::convertToPostscriptFontFamilyName(fontDef.family);
+   QString psname = QFontEngine::convertToPostscriptFontFamilyName(m_fontDef.family);
 
    psname += '-';
-   psname += QString::number(fontDef.style);
+   psname += QString::number(m_fontDef.style);
    psname += '-';
-   psname += QString::number(fontDef.weight);
+   psname += QString::number(m_fontDef.weight);
 
    p.postscriptName = psname;
    p.ascent      = ascent();
@@ -1706,7 +1706,7 @@ QFontEngineMulti::QFontEngineMulti(QFontEngine *engine, int script, const QStrin
    engine->m_refCount.ref();
    m_engines[0] = engine;
 
-   fontDef = engine->fontDef;
+   m_fontDef  = engine->m_fontDef;
    cache_cost = engine->cache_cost;
 }
 
@@ -1725,14 +1725,13 @@ QStringList qt_fallbacksForFamily(const QString &family, QFont::Style style, QFo
 
 void QFontEngineMulti::ensureFallbackFamiliesQueried()
 {
-   QFont::StyleHint styleHint = QFont::StyleHint(fontDef.styleHint);
+   QFont::StyleHint styleHint = QFont::StyleHint(m_fontDef.styleHint);
 
-   if (styleHint == QFont::AnyStyle && fontDef.fixedPitch) {
+   if (styleHint == QFont::AnyStyle && m_fontDef.fixedPitch) {
       styleHint = QFont::TypeWriter;
    }
 
-   setFallbackFamiliesList(qt_fallbacksForFamily(fontDef.family, QFont::Style(fontDef.style),
-         styleHint, QChar::Script(m_script)));
+   setFallbackFamiliesList(qt_fallbacksForFamily(m_fontDef.family, QFont::Style(m_fontDef.style), styleHint, QChar::Script(m_script)));
 }
 
 void QFontEngineMulti::setFallbackFamiliesList(const QStringList &fallbackFamilies)
@@ -1748,7 +1747,7 @@ void QFontEngineMulti::setFallbackFamiliesList(const QStringList &fallbackFamili
       QFontEngine *engine = m_engines.at(0);
       engine->m_refCount.ref();
       m_engines[1] = engine;
-      m_fallbackFamilies << fontDef.family;
+      m_fallbackFamilies << m_fontDef.family;
 
    } else {
       m_engines.resize(m_fallbackFamilies.size() + 1);
@@ -1769,7 +1768,7 @@ void QFontEngineMulti::ensureEngineAt(int at)
       QFontEngine *engine = loadEngine(at);
 
       if (! engine) {
-         engine = new QFontEngineBox(fontDef.pixelSize);
+         engine = new QFontEngineBox(m_fontDef.pixelSize);
       }
 
       Q_ASSERT(engine && engine->type() != QFontEngine::Multi);
@@ -1781,15 +1780,15 @@ void QFontEngineMulti::ensureEngineAt(int at)
 
 QFontEngine *QFontEngineMulti::loadEngine(int at)
 {
-   QFontDef request(fontDef);
+   QFontDef request(m_fontDef);
    request.styleStrategy |= QFont::NoFontMerging;
    request.family = fallbackFamilyAt(at - 1);
 
    if (QFontEngine *engine = QFontDatabase::findFont(request, m_script)) {
-      engine->fontDef.weight = request.weight;
+      engine->m_fontDef.weight = request.weight;
 
       if (request.style > QFont::StyleNormal) {
-         engine->fontDef.style = request.style;
+         engine->m_fontDef.style = request.style;
       }
 
       return engine;
@@ -2285,7 +2284,7 @@ QImage QFontEngineMulti::alphaRGBMapForGlyph(glyph_t glyph, QFixed subPixelPosit
 QFontEngine *QFontEngineMulti::createMultiFontEngine(QFontEngine *fe, int script)
 {
    QFontEngine *engine = nullptr;
-   QFontCache::Key key(fe->fontDef, script, true);
+   QFontCache::Key key(fe->m_fontDef, script, true);
    QFontCache *fc = QFontCache::instance();
 
    // can not  rely on the fontDef (and hence the cache Key) alone to distinguish webfonts, since these should not be

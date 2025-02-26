@@ -84,7 +84,7 @@ class Q_GUI_EXPORT QPlatformPixmap
    }
 
    PixelType pixelType() const {
-      return type;
+      return m_platformType;
    }
 
    ClassId classId() const {
@@ -147,7 +147,7 @@ class Q_GUI_EXPORT QPlatformPixmap
    QAtomicInt ref;
    int detach_no;
 
-   PixelType type;
+   PixelType m_platformType;
    int id;
    int ser_no;
    uint is_cached;

@@ -180,9 +180,10 @@ CGAffineTransform qt_transform_from_fontdef(const QFontDef &fontDef)
 QCoreTextFontEngine::QCoreTextFontEngine(CTFontRef font, const QFontDef &def)
    : QFontEngine(Mac)
 {
-   fontDef = def;
-   transform = qt_transform_from_fontdef(fontDef);
+   m_fontDef = def;
+   transform = qt_transform_from_fontdef(m_fontDef);
    ctfont = font;
+
    CFRetain(ctfont);
    cgFont = CTFontCopyGraphicsFont(font, nullptr);
    init();
@@ -191,13 +192,13 @@ QCoreTextFontEngine::QCoreTextFontEngine(CTFontRef font, const QFontDef &def)
 QCoreTextFontEngine::QCoreTextFontEngine(CGFontRef font, const QFontDef &def)
    : QFontEngine(Mac)
 {
-   fontDef   = def;
-   transform = qt_transform_from_fontdef(fontDef);
+   m_fontDef   = def;
+   transform = qt_transform_from_fontdef(m_fontDef);
    cgFont    = font;
 
    // Keep reference count balanced
    CFRetain(cgFont);
-   ctfont = CTFontCreateWithGraphicsFont(font, fontDef.pixelSize, &transform, nullptr);
+   ctfont = CTFontCreateWithGraphicsFont(font, m_fontDef.pixelSize, &transform, nullptr);
    init();
 }
 
@@ -217,10 +218,10 @@ void QCoreTextFontEngine::init()
    face_id.filename = name.toQString();
 
    QCFString family = CTFontCopyFamilyName(ctfont);
-   fontDef.family   = family.toQString();
+   m_fontDef.family   = family.toQString();
 
    QCFString styleName = (CFStringRef) CTFontCopyAttribute(ctfont, kCTFontStyleNameAttribute);
-   fontDef.styleName   = styleName.toQString();
+   m_fontDef.styleName   = styleName.toQString();
 
    synthesisFlags = 0;
    CTFontSymbolicTraits traits = CTFontGetSymbolicTraits(ctfont);
@@ -232,24 +233,24 @@ void QCoreTextFontEngine::init()
    }
 
    if (traits & kCTFontItalicTrait) {
-      fontDef.style = QFont::StyleItalic;
+      m_fontDef.style = QFont::StyleItalic;
    }
 
    CFDictionaryRef allTraits = CTFontCopyTraits(ctfont);
-   fontDef.weight = QCoreTextFontEngine::qtWeightFromCFWeight(getTraitValue(allTraits, kCTFontWeightTrait));
+   m_fontDef.weight = QCoreTextFontEngine::qtWeightFromCFWeight(getTraitValue(allTraits, kCTFontWeightTrait));
    int slant = static_cast<int>(getTraitValue(allTraits, kCTFontSlantTrait) * 500 + 500);
 
    if (slant > 500 && !(traits & kCTFontItalicTrait)) {
-      fontDef.style = QFont::StyleOblique;
+      m_fontDef.style = QFont::StyleOblique;
    }
    CFRelease(allTraits);
 
-   if (fontDef.weight >= QFont::Bold && !(traits & kCTFontBoldTrait)) {
+   if (m_fontDef.weight >= QFont::Bold && ! (traits & kCTFontBoldTrait)) {
       synthesisFlags |= SynthesizedBold;
    }
 
    // we probably do not need to synthesis italic for oblique font
-   if (fontDef.style != QFont::StyleNormal && !(traits & kCTFontItalicTrait)) {
+   if (m_fontDef.style != QFont::StyleNormal && ! (traits & kCTFontItalicTrait)) {
       synthesisFlags |= SynthesizedItalic;
    }
 
@@ -262,7 +263,7 @@ void QCoreTextFontEngine::init()
 
       // qAbs is a workaround for weird fonts like Lucida Grande
       qint16 width = qAbs(qFromBigEndian<qint16>(reinterpret_cast<const uchar *>(os2Table.constData() + 2)));
-      avgCharWidth = QFixed::fromReal(width * fontDef.pixelSize / emSize);
+      avgCharWidth = QFixed::fromReal(width * m_fontDef.pixelSize / emSize);
 
    } else {
       avgCharWidth = QFontEngine::averageCharWidth();
@@ -344,7 +345,7 @@ bool QCoreTextFontEngine::stringToCMap(QStringView strView, QGlyphLayout *glyphs
       glyphs->advances[i] = QFixed::fromReal(cg_advances[i].width);
    }
 
-   if (fontDef.styleStrategy & QFont::ForceIntegerMetrics) {
+   if (m_fontDef.styleStrategy & QFont::ForceIntegerMetrics) {
       for (int i = 0; i < glyphs->numGlyphs; ++i) {
          glyphs->advances[i] = glyphs->advances[i].round();
       }
@@ -356,7 +357,7 @@ bool QCoreTextFontEngine::stringToCMap(QStringView strView, QGlyphLayout *glyphs
 glyph_metrics_t QCoreTextFontEngine::boundingBox(const QGlyphLayout &glyphs)
 {
    QFixed w;
-   bool round = fontDef.styleStrategy & QFont::ForceIntegerMetrics;
+   bool round = m_fontDef.styleStrategy & QFont::ForceIntegerMetrics;
 
    for (int i = 0; i < glyphs.numGlyphs; ++i) {
       w += round ? glyphs.effectiveAdvance(i).round() : glyphs.effectiveAdvance(i);
@@ -386,7 +387,7 @@ glyph_metrics_t QCoreTextFontEngine::boundingBox(glyph_t glyph)
    ret.xoff = QFixed::fromReal(advances[0].width);
    ret.yoff = QFixed::fromReal(advances[0].height);
 
-   if (fontDef.styleStrategy & QFont::ForceIntegerMetrics) {
+   if (m_fontDef.styleStrategy & QFont::ForceIntegerMetrics) {
       ret.xoff = ret.xoff.round();
       ret.yoff = ret.yoff.round();
    }
@@ -396,14 +397,15 @@ glyph_metrics_t QCoreTextFontEngine::boundingBox(glyph_t glyph)
 
 QFixed QCoreTextFontEngine::ascent() const
 {
-   return (fontDef.styleStrategy & QFont::ForceIntegerMetrics)
+   return (m_fontDef.styleStrategy & QFont::ForceIntegerMetrics)
       ? QFixed::fromReal(CTFontGetAscent(ctfont)).round()
       : QFixed::fromReal(CTFontGetAscent(ctfont));
 }
+
 QFixed QCoreTextFontEngine::descent() const
 {
    QFixed d = QFixed::fromReal(CTFontGetDescent(ctfont));
-   if (fontDef.styleStrategy & QFont::ForceIntegerMetrics) {
+   if (m_fontDef.styleStrategy & QFont::ForceIntegerMetrics) {
       d = d.round();
    }
 
@@ -412,21 +414,21 @@ QFixed QCoreTextFontEngine::descent() const
 
 QFixed QCoreTextFontEngine::leading() const
 {
-   return (fontDef.styleStrategy & QFont::ForceIntegerMetrics)
+   return (m_fontDef.styleStrategy & QFont::ForceIntegerMetrics)
       ? QFixed::fromReal(CTFontGetLeading(ctfont)).round()
       : QFixed::fromReal(CTFontGetLeading(ctfont));
 }
 
 QFixed QCoreTextFontEngine::xHeight() const
 {
-   return (fontDef.styleStrategy & QFont::ForceIntegerMetrics)
+   return (m_fontDef.styleStrategy & QFont::ForceIntegerMetrics)
       ? QFixed::fromReal(CTFontGetXHeight(ctfont)).round()
       : QFixed::fromReal(CTFontGetXHeight(ctfont));
 }
 
 QFixed QCoreTextFontEngine::averageCharWidth() const
 {
-   return (fontDef.styleStrategy & QFont::ForceIntegerMetrics)
+   return (m_fontDef.styleStrategy & QFont::ForceIntegerMetrics)
       ? avgCharWidth.round() : avgCharWidth;
 }
 
@@ -451,7 +453,7 @@ void QCoreTextFontEngine::draw(CGContextRef ctx, qreal x, qreal y, const QTextIt
       return;
    }
 
-   CGContextSetFontSize(ctx, fontDef.pixelSize);
+   CGContextSetFontSize(ctx, m_fontDef.pixelSize);
 
    CGAffineTransform oldTextMatrix = CGContextGetTextMatrix(ctx);
    CGAffineTransform cgMatrix      = CGAffineTransformMake(1, 0, 0, -1, 0, -paintDeviceHeight);
@@ -657,11 +659,11 @@ QImage QCoreTextFontEngine::imageForGlyph(glyph_t glyph, QFixed subPixelPosition
 
    Q_ASSERT(ctx);
 
-   CGContextSetFontSize(ctx, fontDef.pixelSize);
-   const bool antialias = (aa || fontDef.pointSize > antialiasingThreshold) && !(fontDef.styleStrategy & QFont::NoAntialias);
+   CGContextSetFontSize(ctx, m_fontDef.pixelSize);
+   const bool antialias = (aa || m_fontDef.pointSize > antialiasingThreshold) && ! (m_fontDef.styleStrategy & QFont::NoAntialias);
 
    CGContextSetShouldAntialias(ctx, antialias);
-   const bool smoothing = antialias && !(fontDef.styleStrategy & QFont::NoSubpixelAntialias);
+   const bool smoothing = antialias && ! (m_fontDef.styleStrategy & QFont::NoSubpixelAntialias);
 
    CGContextSetShouldSmoothFonts(ctx, smoothing);
 
@@ -777,7 +779,7 @@ void QCoreTextFontEngine::recalcAdvances(QGlyphLayout *glyphs, QFontEngine::Shap
       }
    }
 
-   loadAdvancesForGlyphs(ctfont, cgGlyphs, glyphs, numGlyphs, flags, fontDef);
+   loadAdvancesForGlyphs(ctfont, cgGlyphs, glyphs, numGlyphs, flags, m_fontDef);
 }
 
 QFontEngine::FaceId QCoreTextFontEngine::faceId() const
@@ -830,7 +832,7 @@ QFixed QCoreTextFontEngine::emSquareSize() const
 
 QFontEngine *QCoreTextFontEngine::cloneWithSize(qreal pixelSize) const
 {
-   QFontDef newFontDef = fontDef;
+   QFontDef newFontDef = m_fontDef;
    newFontDef.pixelSize = pixelSize;
    newFontDef.pointSize = pixelSize * 72.0 / qt_defaultDpi();
 
@@ -879,7 +881,7 @@ QFontEngine::Properties QCoreTextFontEngine::properties() const
    result.capHeight   = QFixed::fromReal(CTFontGetCapHeight(ctfont) * scale);
    result.lineWidth   = QFixed::fromReal(CTFontGetUnderlineThickness(ctfont) * scale);
 
-   if (fontDef.styleStrategy & QFont::ForceIntegerMetrics) {
+   if (m_fontDef.styleStrategy & QFont::ForceIntegerMetrics) {
       result.ascent      = result.ascent.round();
       result.descent     = result.descent.round();
       result.leading     = result.leading.round();

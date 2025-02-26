@@ -1166,14 +1166,16 @@ void QCoreGraphicsPaintEngine::drawTextItem(const QPointF &pos, const QTextItem 
    QFontEngine *fe = ti.m_textItemFontEngine;
 
    const bool textAA = ((m_engineState->renderHints() & QPainter::TextAntialiasing)
-         && (fe->fontDef.pointSize > QCoreTextFontEngine::antialiasingThreshold)
-         && !(fe->fontDef.styleStrategy & QFont::NoAntialias));
+         && (fe->m_fontDef.pointSize > QCoreTextFontEngine::antialiasingThreshold)
+         && ! (fe->m_fontDef.styleStrategy & QFont::NoAntialias));
+
    const bool lineAA = m_engineState->renderHints() & QPainter::Antialiasing;
+
    if (textAA != lineAA) {
       CGContextSetShouldAntialias(d->hd, textAA);
    }
 
-   const bool smoothing = textAA && !(fe->fontDef.styleStrategy & QFont::NoSubpixelAntialias);
+   const bool smoothing = textAA && !(fe->m_fontDef.styleStrategy & QFont::NoSubpixelAntialias);
    if (d->disabledSmoothFonts == smoothing) {
       CGContextSetShouldSmoothFonts(d->hd, smoothing);
    }
