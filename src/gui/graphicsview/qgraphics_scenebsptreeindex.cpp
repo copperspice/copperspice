@@ -163,27 +163,29 @@ void QGraphicsSceneBspTreeIndexPrivate::resetIndex()
    startIndexTimer();
 }
 
-void QGraphicsSceneBspTreeIndexPrivate::climbTree(QGraphicsItem *item, int *stackingOrder)
+void QGraphicsSceneBspTreeIndexPrivate::climbTree(QGraphicsItem *treeItem, int *stackingOrder)
 {
-   if (!item->d_ptr->children.isEmpty()) {
-      QList<QGraphicsItem *> childList = item->d_ptr->children;
+   if (! treeItem->d_ptr->children.isEmpty()) {
+      QList<QGraphicsItem *> childList = treeItem->d_ptr->children;
       std::sort(childList.begin(), childList.end(), qt_closestLeaf);
 
-      for (int i = 0; i < childList.size(); ++i) {
-         QGraphicsItem *item = childList.at(i);
-         if (!(item->flags() & QGraphicsItem::ItemStacksBehindParent)) {
-            climbTree(childList.at(i), stackingOrder);
+      for (auto item : childList) {
+
+         if (! (item->flags() & QGraphicsItem::ItemStacksBehindParent)) {
+            climbTree(item, stackingOrder);
          }
       }
-      item->d_ptr->globalStackingOrder = (*stackingOrder)++;
-      for (int i = 0; i < childList.size(); ++i) {
-         QGraphicsItem *item = childList.at(i);
+
+      treeItem->d_ptr->globalStackingOrder = (*stackingOrder)++;
+
+      for (auto item : childList) {
          if (item->flags() & QGraphicsItem::ItemStacksBehindParent) {
-            climbTree(childList.at(i), stackingOrder);
+            climbTree(item, stackingOrder);
          }
       }
+
    } else {
-      item->d_ptr->globalStackingOrder = (*stackingOrder)++;
+      treeItem->d_ptr->globalStackingOrder = (*stackingOrder)++;
    }
 }
 

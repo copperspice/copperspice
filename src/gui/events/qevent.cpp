@@ -574,8 +574,8 @@ bool QFileOpenEvent::openFile(QFile &file, QIODevice::OpenMode flags) const
 
 #ifndef QT_NO_TOOLBAR
 
-QToolBarChangeEvent::QToolBarChangeEvent(bool t)
-   : QEvent(ToolBarChange), tog(t)
+QToolBarChangeEvent::QToolBarChangeEvent(bool toggle)
+   : QEvent(ToolBarChange), tog(toggle)
 {
 }
 

@@ -246,8 +246,8 @@ class QFormLayoutPrivate : public QLayoutPrivate
    uint sizesDirty : 2; // have we (not) gathered layout item sizes?
    uint expandVertical : 1; // Do we expand vertically?
    uint expandHorizontal : 1; // Do we expand horizonally?
-   Qt::Alignment labelAlignment;
-   Qt::Alignment formAlignment;
+   Qt::Alignment m_labelAlignment;
+   Qt::Alignment m_formAlignment;
 
    ItemMatrix m_matrix;
    QList<QFormLayoutItem *> m_things;
@@ -283,7 +283,7 @@ class QFormLayoutPrivate : public QLayoutPrivate
 QFormLayoutPrivate::QFormLayoutPrivate()
    : fieldGrowthPolicy(DefaultFieldGrowthPolicy),
      rowWrapPolicy(DefaultRowWrapPolicy), has_hfw(false), dirty(true), sizesDirty(true),
-     expandVertical(0), expandHorizontal(0), labelAlignment(Qt::EmptyFlag), formAlignment(Qt::EmptyFlag),
+     expandVertical(0), expandHorizontal(0), m_labelAlignment(Qt::EmptyFlag), m_formAlignment(Qt::EmptyFlag),
      layoutWidth(-1), hfw_width(-1), hfw_sh_height(-1), min_width(-1),
      sh_width(-1), thresh_width(QLAYOUTSIZE_MAX), hSpacing(-1), vSpacing(-1)
 {
@@ -1579,8 +1579,9 @@ QFormLayout::RowWrapPolicy QFormLayout::rowWrapPolicy() const
 void QFormLayout::setLabelAlignment(Qt::Alignment alignment)
 {
    Q_D(QFormLayout);
-   if (d->labelAlignment != alignment) {
-      d->labelAlignment = alignment;
+
+   if (d->m_labelAlignment != alignment) {
+      d->m_labelAlignment = alignment;
       invalidate();
    }
 }
@@ -1588,18 +1589,20 @@ void QFormLayout::setLabelAlignment(Qt::Alignment alignment)
 Qt::Alignment QFormLayout::labelAlignment() const
 {
    Q_D(const QFormLayout);
-   if (!d->labelAlignment) {
+
+   if (! d->m_labelAlignment) {
       return Qt::Alignment(d->getStyle()->styleHint(QStyle::SH_FormLayoutLabelAlignment));
    } else {
-      return d->labelAlignment;
+      return d->m_labelAlignment;
    }
 }
 
 void QFormLayout::setFormAlignment(Qt::Alignment alignment)
 {
    Q_D(QFormLayout);
-   if (d->formAlignment != alignment) {
-      d->formAlignment = alignment;
+
+   if (d->m_formAlignment != alignment) {
+      d->m_formAlignment = alignment;
       invalidate();
    }
 }
@@ -1607,10 +1610,11 @@ void QFormLayout::setFormAlignment(Qt::Alignment alignment)
 Qt::Alignment QFormLayout::formAlignment() const
 {
    Q_D(const QFormLayout);
-   if (!d->formAlignment) {
+
+   if (! d->m_formAlignment) {
       return Qt::Alignment(d->getStyle()->styleHint(QStyle::SH_FormLayoutFormAlignment));
    } else {
-      return d->formAlignment;
+      return d->m_formAlignment;
    }
 }
 
@@ -1782,11 +1786,11 @@ void QFormLayout::resetRowWrapPolicy()
 void QFormLayout::resetFormAlignment()
 {
    Q_D(QFormLayout);
-   d->formAlignment = Qt::EmptyFlag;
+   d->m_formAlignment = Qt::EmptyFlag;
 }
 
 void QFormLayout::resetLabelAlignment()
 {
    Q_D(QFormLayout);
-   d->labelAlignment = Qt::EmptyFlag;
+   d->m_labelAlignment = Qt::EmptyFlag;
 }

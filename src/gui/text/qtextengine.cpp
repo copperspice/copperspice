@@ -3820,9 +3820,9 @@ QTextItemInt::QTextItemInt(const QScriptItem &si, QFont *font, const QTextCharFo
 }
 
 QTextItemInt::QTextItemInt(const QGlyphLayout &g, QFont *font, QString::const_iterator begin,
-      const QString::const_iterator end, QFontEngine *fe, const QTextCharFormat &format)
+      const QString::const_iterator end, QFontEngine *fontEngine, const QTextCharFormat &format)
    : flags(Qt::EmptyFlag), justified(false), underlineStyle(QTextCharFormat::NoUnderline), charFormat(format),
-     m_iter(begin), m_end(end), logClusters(nullptr), f(font),  glyphs(g), m_textItemFontEngine(fe)
+     m_iter(begin), m_end(end), logClusters(nullptr), f(font),  glyphs(g), m_textItemFontEngine(fontEngine)
 {
 }
 

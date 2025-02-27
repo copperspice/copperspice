@@ -284,7 +284,7 @@ class QTextItemInt : public QTextItem
    QTextItemInt(const QScriptItem &si, QFont *font, const QTextCharFormat &format = QTextCharFormat());
 
    QTextItemInt(const QGlyphLayout &g, QFont *font, QString::const_iterator begin, QString::const_iterator end,
-      QFontEngine *fe, const QTextCharFormat &format = QTextCharFormat());
+      QFontEngine *fontEngine, const QTextCharFormat &format = QTextCharFormat());
 
    // copy the structure items, adjusting the glyphs arrays to the right subarrays.
    // the width of the returned QTextItemInt is not adjusted, for speed reasons

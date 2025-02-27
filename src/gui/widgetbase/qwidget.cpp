@@ -6687,8 +6687,8 @@ QSize QWidgetPrivate::adjustedSize() const
       s.setWidth(qMin(s.width(), screen.width() * 2 / 3));
       s.setHeight(qMin(s.height(), screen.height() * 2 / 3));
 
-      if (QTLWExtra *extra = maybeTopData()) {
-         extra->sizeAdjusted = true;
+      if (QTLWExtra *newExtra = maybeTopData()) {
+         newExtra->sizeAdjusted = true;
       }
    }
 
@@ -7374,8 +7374,8 @@ void QWidget::changeEvent(QEvent *event)
 #ifndef QT_NO_ACCESSIBILITY
          QAccessible::State s;
          s.disabled = true;
-         QAccessibleStateChangeEvent event(this, s);
-         QAccessible::updateAccessibility(&event);
+         QAccessibleStateChangeEvent eventState(this, s);
+         QAccessible::updateAccessibility(&eventState);
 #endif
          break;
       }
@@ -7661,20 +7661,20 @@ void QWidget::ensurePolished() const
 
    d->polished = m;
 
-   QEvent e(QEvent::Polish);
-   QCoreApplication::sendEvent(const_cast<QWidget *>(this), &e);
+   QEvent event(QEvent::Polish);
+   QCoreApplication::sendEvent(const_cast<QWidget *>(this), &event);
 
    // polish children after 'this'
    QList<QObject *> childrenList = children();
 
    for (int i = 0; i < childrenList.size(); ++i) {
-      QObject *o = childrenList.at(i);
+      QObject *obj = childrenList.at(i);
 
-      if (! o->isWidgetType()) {
+      if (! obj->isWidgetType()) {
          continue;
       }
 
-      if (QWidget *w = dynamic_cast<QWidget *>(o)) {
+      if (QWidget *w = dynamic_cast<QWidget *>(obj)) {
          w->ensurePolished();
       }
    }
@@ -7682,8 +7682,8 @@ void QWidget::ensurePolished() const
    bool sendChildEvents = CSInternalEvents::get_m_sendChildEvents(this);
 
    if (parent() && sendChildEvents) {
-      QChildEvent e(QEvent::ChildPolished, const_cast<QWidget *>(this));
-      QCoreApplication::sendEvent(parent(), &e);
+      QChildEvent childEvent(QEvent::ChildPolished, const_cast<QWidget *>(this));
+      QCoreApplication::sendEvent(parent(), &childEvent);
    }
 }
 

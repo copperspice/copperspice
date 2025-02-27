@@ -4048,9 +4048,11 @@ void QGraphicsScenePrivate::markDirty(QGraphicsItem *item, const QRectF &rect, b
 
       for (int i = 0; i < views.size(); ++i) {
          QGraphicsViewPrivate *viewPrivate = views.at(i)->d_func();
-         QRect rect = item->d_ptr->paintedViewBoundingRects.value(viewPrivate->viewport);
-         rect.translate(viewPrivate->dirtyScrollOffset);
-         viewPrivate->updateRect(rect);
+
+         QRect newRect = item->d_ptr->paintedViewBoundingRects.value(viewPrivate->viewport);
+         newRect.translate(viewPrivate->dirtyScrollOffset);
+
+         viewPrivate->updateRect(newRect);
       }
 
       return;
@@ -5457,11 +5459,12 @@ void QGraphicsScenePrivate::cancelGesturesForChildren(QGesture *original)
       Q_ASSERT(target);
 
       QList<QGesture *> list = gestures.toList();
-      QGestureEvent ev(list);
-      sendEvent(target, &ev);
+      QGestureEvent event(list);
+
+      sendEvent(target, &event);
 
       for (QGesture *g : list) {
-         if (ev.isAccepted() || ev.isAccepted(g)) {
+         if (event.isAccepted() || event.isAccepted(g)) {
             gestures.remove(g);
          }
       }
@@ -5480,11 +5483,13 @@ void QGraphicsScenePrivate::cancelGesturesForChildren(QGesture *original)
             }
             QGraphicsItemPrivate *d = item->QGraphicsItem::d_func();
             if (d->gestureContext.contains(g->gestureType())) {
-               QList<QGesture *> list;
-               list << g;
-               QGestureEvent ev(list);
-               sendEvent(item, &ev);
-               if (ev.isAccepted() || ev.isAccepted(g)) {
+               QList<QGesture *> newList;
+               newList.append(g);
+
+               QGestureEvent newEvent(newList);
+               sendEvent(item, &newEvent);
+
+               if (newEvent.isAccepted() || newEvent.isAccepted(g)) {
                   break;   // successfully delivered
                }
             }

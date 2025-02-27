@@ -47,7 +47,7 @@ class QGraphicsItemAnimationPrivate
 {
  public:
    QGraphicsItemAnimationPrivate()
-      : q(nullptr), timeLine(nullptr), item(nullptr), step(0)
+      : q(nullptr), timeLine(nullptr), item(nullptr), m_step(0)
    {
    }
 
@@ -59,8 +59,6 @@ class QGraphicsItemAnimationPrivate
    QPointF startPos;
    QMatrix startMatrix;
 
-   qreal step;
-
    struct Pair {
       bool operator <(const Pair &other) const {
          return step < other.step;
@@ -71,6 +69,8 @@ class QGraphicsItemAnimationPrivate
       qreal step;
       qreal value;
    };
+
+   qreal m_step;
 
    QVector<Pair> xPosition;
    QVector<Pair> yPosition;
@@ -359,7 +359,8 @@ void QGraphicsItemAnimation::setStep(qreal step)
 
    beforeAnimationStep(step);
 
-   d->step = step;
+   d->m_step = step;
+
    if (d->item) {
       if (!d->xPosition.isEmpty() || !d->yPosition.isEmpty()) {
          d->item->setPos(posAt(step));

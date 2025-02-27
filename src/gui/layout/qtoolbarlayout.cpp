@@ -502,8 +502,9 @@ bool QToolBarLayout::layoutActions(const QSize &size)
       QVector<QLayoutStruct> a = geomArray;
 
       int start = i;
-      int size  = 0;
       int prev  = -1;
+
+      int totalSize = 0;
 
       int rowHeight = 0;
       int count     = 0;
@@ -516,7 +517,8 @@ bool QToolBarLayout::layoutActions(const QSize &size)
             continue;
          }
 
-         int newSize = size + (count == 0 ? 0 : spacing) + a[i].minimumSize;
+         int newSize = totalSize + (count == 0 ? 0 : spacing) + a[i].minimumSize;
+
          if (prev != -1 && newSize > space) {
             if (rows == 0) {
                ranOutOfSpace = true;
@@ -525,7 +527,7 @@ bool QToolBarLayout::layoutActions(const QSize &size)
             // do we have to move the previous item to the next line to make space for
             // the extension button?
 
-            if (count > 1 && size + spacing + extensionExtent > space) {
+            if (count > 1 && totalSize + spacing + extensionExtent > space) {
                i = prev;
             }
 
@@ -537,7 +539,7 @@ bool QToolBarLayout::layoutActions(const QSize &size)
          }
 
          expansiveRow = expansiveRow || a[i].expansive;
-         size = newSize;
+         totalSize    = newSize;
          maximumSize += spacing + (a[i].expansive ? a[i].maximumSize : a[i].smartSizeHint());
          prev = i;
          ++count;
@@ -573,15 +575,16 @@ bool QToolBarLayout::layoutActions(const QSize &size)
          rpick(o, pos) = margin + handleExtent + a[j].pos;
          rperp(o, pos) = rowPos;
 
-         QSize size;
-         rpick(o, size) = a[j].size;
+         QSize toolBarItemSize;
+         rpick(o, toolBarItemSize) = a[j].size;
 
          if (expanded) {
-            rperp(o, size) = rowHeight;
+            rperp(o, toolBarItemSize) = rowHeight;
          } else {
-            rperp(o, size) = perp(o, rect.size()) - 2 * margin;
+            rperp(o, toolBarItemSize) = perp(o, rect.size()) - 2 * margin;
          }
-         QRect r(pos, size);
+
+         QRect r(pos, toolBarItemSize);
 
          if (o == Qt::Horizontal) {
             r = QStyle::visualRect(parentWidget()->layoutDirection(), rect, r);
@@ -692,7 +695,7 @@ QSize QToolBarLayout::expandedSize(const QSize &size) const
    while (i < items.count()) {
       int countItems = 0;
 
-      int size     = 0;
+      int totalsize = 0;
       int prev     = -1;
       int rowHeight = 0;
 
@@ -701,25 +704,25 @@ QSize QToolBarLayout::expandedSize(const QSize &size) const
             continue;
          }
 
-         int newSize = size + (countItems == 0 ? 0 : spacing) + geomArray[i].minimumSize;
+         int newSize = totalsize + (countItems == 0 ? 0 : spacing) + geomArray[i].minimumSize;
          rowHeight = qMax(rowHeight, perp(o, items.at(i)->sizeHint()));
 
          if (prev != -1 && newSize > space) {
-            if (countItems > 1 && size + spacing + extensionExtent > space) {
-               size -= spacing + geomArray[prev].minimumSize;
+            if (countItems > 1 && totalsize + spacing + extensionExtent > space) {
+               totalsize -= spacing + geomArray[prev].minimumSize;
                i = prev;
             }
 
             break;
          }
 
-         size = newSize;
+         totalsize = newSize;
          prev = i;
 
          ++countItems;
       }
 
-      w = qMax(size, w);
+      w = qMax(totalsize, w);
       h += rowHeight + spacing;
    }
 

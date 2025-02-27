@@ -2401,14 +2401,17 @@ QString QImage::text(const QString &key) const
       return d->text.value(key);
    }
 
-   QString tmp;
-   for (const QString &key : d->text.keys()) {
-      if (! tmp.isEmpty()) {
-         tmp += QLatin1String("\n\n");
+   QString retval;
+
+   for (const QString &item : d->text.keys()) {
+      if (! retval.isEmpty()) {
+         retval += "\n\n";
       }
-      tmp += key + QLatin1String(": ") + d->text.value(key).simplified();
+
+      retval += item + ": " + d->text.value(item).simplified();
    }
-   return tmp;
+
+   return retval;
 }
 
 void QImage::setText(const QString &key, const QString &value)

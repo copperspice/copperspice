@@ -888,14 +888,17 @@ void QSvgPaintEngine::drawPath(const QPainterPath &p)
             *d->stream << 'C' << e.x << ',' << e.y;
             ++i;
             while (i < p.elementCount()) {
-               const QPainterPath::Element &e = p.elementAt(i);
-               if (e.type != QPainterPath::CurveToDataElement) {
+               const QPainterPath::Element &newElement = p.elementAt(i);
+
+               if (newElement.type != QPainterPath::CurveToDataElement) {
                   --i;
                   break;
+
                } else {
                   *d->stream << ' ';
                }
-               *d->stream << e.x << ',' << e.y;
+
+               *d->stream << newElement.x << ',' << newElement.y;
                ++i;
             }
             break;

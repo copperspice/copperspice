@@ -1339,9 +1339,10 @@ void QTreeView::drawRow(QPainter *painter, const QStyleOptionViewItem &option, c
          currentRowHasFocus = (idx == current);
       }
 
-      QModelIndex parent = d->model->parent(index);
-      for (int c = right; c < header->count() && !currentRowHasFocus; ++c) {
-         currentRowHasFocus = (d->model->index(r, c, parent) == current);
+      QModelIndex newParent = d->model->parent(index);
+
+      for (int c = right; c < header->count() && ! currentRowHasFocus; ++c) {
+         currentRowHasFocus = (d->model->index(r, c, newParent) == current);
       }
    }
 
