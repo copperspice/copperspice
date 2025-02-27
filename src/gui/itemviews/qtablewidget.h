@@ -46,31 +46,34 @@ class Q_GUI_EXPORT QTableWidgetSelectionRange
    ~QTableWidgetSelectionRange();
 
    int topRow() const {
-      return top;
+      return m_tableWidgetTop;
    }
 
    int bottomRow() const {
-      return bottom;
+      return m_tableWidgetBottom;
    }
 
    int leftColumn() const {
-      return left;
+      return m_tableWidgetLeft;
    }
 
    int rightColumn() const {
-      return right;
+      return m_tableWidgetRight;
    }
 
    int rowCount() const {
-      return bottom - top + 1;
+      return m_tableWidgetBottom - m_tableWidgetTop + 1;
    }
 
    int columnCount() const {
-      return right - left + 1;
+      return m_tableWidgetRight - m_tableWidgetLeft + 1;
    }
 
  private:
-   int top, left, bottom, right;
+   int m_tableWidgetTop;
+   int m_tableWidgetLeft;
+   int m_tableWidgetBottom;
+   int m_tableWidgetRight;
 };
 
 class Q_GUI_EXPORT QTableWidgetItem

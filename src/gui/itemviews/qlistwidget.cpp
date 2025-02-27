@@ -61,7 +61,7 @@ void QListModel::clear()
    for (int i = 0; i < items.count(); ++i) {
       if (items.at(i)) {
          items.at(i)->d->theid = -1;
-         items.at(i)->view = nullptr;
+         items.at(i)->m_view = nullptr;
          delete items.at(i);
       }
    }
@@ -85,7 +85,7 @@ void QListModel::remove(QListWidgetItem *item)
    Q_ASSERT(row != -1);
    beginRemoveRows(QModelIndex(), row, row);
    items.at(row)->d->theid = -1;
-   items.at(row)->view = nullptr;
+   items.at(row)->m_view = nullptr;
    items.removeAt(row);
    endRemoveRows();
 }
@@ -96,11 +96,12 @@ void QListModel::insert(int row, QListWidgetItem *item)
       return;
    }
 
-   item->view = qobject_cast<QListWidget *>(QObject::parent());
-   if (item->view && item->view->isSortingEnabled()) {
+   item->m_view = qobject_cast<QListWidget *>(QObject::parent());
+
+   if (item->m_view && item->m_view->isSortingEnabled()) {
       // sorted insertion
       QList<QListWidgetItem *>::iterator it;
-      it = sortedInsertionIterator(items.begin(), items.end(), item->view->sortOrder(), item);
+      it  = sortedInsertionIterator(items.begin(), items.end(), item->m_view->sortOrder(), item);
       row = qMax(it - items.begin(), 0);
 
    } else {
@@ -140,7 +141,7 @@ void QListModel::insert(int row, const QStringList &labels)
       for (int i = 0; i < count; ++i) {
          QListWidgetItem *item = new QListWidgetItem(labels.at(i));
          item->d->theid = row;
-         item->view = qobject_cast<QListWidget *>(QObject::parent());
+         item->m_view = qobject_cast<QListWidget *>(QObject::parent());
          items.insert(row++, item);
       }
       endInsertRows();
@@ -155,7 +156,7 @@ QListWidgetItem *QListModel::take(int row)
 
    beginRemoveRows(QModelIndex(), row, row);
    items.at(row)->d->theid = -1;
-   items.at(row)->view     = nullptr;
+   items.at(row)->m_view  = nullptr;
    QListWidgetItem *item   = items.takeAt(row);
    endRemoveRows();
 
@@ -187,8 +188,7 @@ int QListModel::rowCount(const QModelIndex &parent) const
 
 QModelIndex QListModel::index(QListWidgetItem *item) const
 {
-   if (!item || !item->view || static_cast<const QListModel *>(item->view->model()) != this
-      || items.isEmpty()) {
+   if (! item || ! item->m_view || static_cast<const QListModel *>(item->m_view->model()) != this || items.isEmpty()) {
       return QModelIndex();
    }
    int row;
@@ -256,7 +256,7 @@ bool QListModel::insertRows(int row, int count, const QModelIndex &parent)
 
    for (int r = row; r < row + count; ++r) {
       itm = new QListWidgetItem;
-      itm->view = view;
+      itm->m_view = view;
       itm->d->theid = r;
       items.insert(r, itm);
    }
@@ -276,7 +276,7 @@ bool QListModel::removeRows(int row, int count, const QModelIndex &parent)
 
    for (int r = row; r < row + count; ++r) {
       itm = items.takeAt(row);
-      itm->view = nullptr;
+      itm->m_view = nullptr;
       itm->d->theid = -1;
       delete itm;
    }
@@ -474,7 +474,7 @@ Qt::DropActions QListModel::supportedDropActions() const
 #endif // QT_NO_DRAGANDDROP
 
 QListWidgetItem::QListWidgetItem(QListWidget *view, int type)
-   : rtti(type), view(view), d(new QListWidgetItemPrivate(this)),
+   : rtti(type), m_view(view), d(new QListWidgetItemPrivate(this)),
      itemFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled)
 {
    if (QListModel *model = (view ? qobject_cast<QListModel *>(view->model()) : nullptr)) {
@@ -483,11 +483,11 @@ QListWidgetItem::QListWidgetItem(QListWidget *view, int type)
 }
 
 QListWidgetItem::QListWidgetItem(const QString &text, QListWidget *view, int type)
-   : rtti(type), view(nullptr), d(new QListWidgetItemPrivate(this)),
+   : rtti(type), m_view(nullptr), d(new QListWidgetItemPrivate(this)),
      itemFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled)
 {
    setData(Qt::DisplayRole, text);
-   this->view = view;
+   m_view = view;
 
    if (QListModel *model = (view ? qobject_cast<QListModel *>(view->model()) : nullptr)) {
       model->insert(model->rowCount(), this);
@@ -495,12 +495,12 @@ QListWidgetItem::QListWidgetItem(const QString &text, QListWidget *view, int typ
 }
 
 QListWidgetItem::QListWidgetItem(const QIcon &icon, const QString &text, QListWidget *view, int type)
-   : rtti(type), view(nullptr), d(new QListWidgetItemPrivate(this)),
+   : rtti(type), m_view(nullptr), d(new QListWidgetItemPrivate(this)),
      itemFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled)
 {
    setData(Qt::DisplayRole, text);
    setData(Qt::DecorationRole, icon);
-   this->view = view;
+   m_view = view;
 
    if (QListModel *model = (view ? qobject_cast<QListModel *>(view->model()) : nullptr)) {
       model->insert(model->rowCount(), this);
@@ -509,7 +509,7 @@ QListWidgetItem::QListWidgetItem(const QIcon &icon, const QString &text, QListWi
 
 QListWidgetItem::~QListWidgetItem()
 {
-   if (QListModel *model = (view ? qobject_cast<QListModel *>(view->model()) : nullptr)) {
+   if (QListModel *model = (m_view ? qobject_cast<QListModel *>(m_view->model()) : nullptr)) {
       model->remove(this);
    }
    delete d;
@@ -537,7 +537,8 @@ void QListWidgetItem::setData(int role, const QVariant &value)
    if (!found) {
       d->values.append(QWidgetItemData(role, value));
    }
-   if (QListModel *model = (view ? qobject_cast<QListModel *>(view->model()) : nullptr)) {
+
+   if (QListModel *model = (m_view ? qobject_cast<QListModel *>(m_view->model()) : nullptr)) {
       model->itemChanged(this);
    }
 }
@@ -571,7 +572,7 @@ void QListWidgetItem::write(QDataStream &out) const
    out << d->values;
 }
 QListWidgetItem::QListWidgetItem(const QListWidgetItem &other)
-   : rtti(Type), view(nullptr), d(new QListWidgetItemPrivate(this)), itemFlags(other.itemFlags)
+   : rtti(Type), m_view(nullptr), d(new QListWidgetItemPrivate(this)), itemFlags(other.itemFlags)
 {
    d->values = other.d->values;
 }
@@ -599,7 +600,7 @@ void QListWidgetItem::setFlags(Qt::ItemFlags aflags)
 {
    itemFlags = aflags;
 
-   if (QListModel *model = (view ? qobject_cast<QListModel *>(view->model()) : nullptr)) {
+   if (QListModel *model = (m_view ? qobject_cast<QListModel *>(m_view->model()) : nullptr)) {
       model->itemChanged(this);
    }
 }
@@ -725,7 +726,7 @@ void QListWidget::insertItem(int row, QListWidgetItem *item)
 {
    Q_D(QListWidget);
 
-   if (item && !item->view) {
+   if (item && ! item->m_view) {
       d->listModel()->insert(row, item);
    }
 }

@@ -549,7 +549,7 @@ void QHeaderView::resizeSection(int logical, int size)
       return;
    }
 
-   if (d->state == QHeaderViewPrivate::ResizeSection && !d->cascadingResizing && logical != d->section) {
+   if (d->state == QHeaderViewPrivate::ResizeSection && ! d->cascadingResizing && logical != d->m_headerViewSection) {
       d->preventCursorChangeInSetOffset = true;
    }
 
@@ -1754,12 +1754,12 @@ void QHeaderView::mousePressEvent(QMouseEvent *e)
       }
 
       if (acceptMoveSection) {
-         d->section = d->target = d->pressed;
-         if (d->section == -1) {
+         d->m_headerViewSection = d->target = d->pressed;
+         if (d->m_headerViewSection == -1) {
             return;
          }
          d->state = QHeaderViewPrivate::MoveSection;
-         d->setupSectionIndicator(d->section, pos);
+         d->setupSectionIndicator(d->m_headerViewSection, pos);
 
       } else if (d->clickableSections && d->pressed != -1) {
          updateSection(d->pressed);
@@ -1769,7 +1769,7 @@ void QHeaderView::mousePressEvent(QMouseEvent *e)
    } else if (sectionResizeMode(handle) == Interactive) {
       d->originalSize = sectionSize(handle);
       d->state = QHeaderViewPrivate::ResizeSection;
-      d->section = handle;
+      d->m_headerViewSection = handle;
       d->preventCursorChangeInSetOffset = false;
    }
 
@@ -1805,12 +1805,12 @@ void QHeaderView::mouseMoveEvent(QMouseEvent *e)
          Q_ASSERT(d->originalSize != -1);
          if (d->cascadingResizing) {
             int delta = d->reverse() ? d->lastPos - pos : pos - d->lastPos;
-            int visual = visualIndex(d->section);
+            int visual = visualIndex(d->m_headerViewSection);
             d->cascadingResize(visual, d->headerSectionSize(visual) + delta);
          } else {
             int delta = d->reverse() ? d->firstPos - pos : pos - d->firstPos;
             int newsize = qBound(minimumSectionSize(), d->originalSize + delta, maximumSectionSize());
-            resizeSection(d->section, newsize);
+            resizeSection(d->m_headerViewSection, newsize);
          }
          d->lastPos = pos;
          return;
@@ -1821,8 +1821,7 @@ void QHeaderView::mouseMoveEvent(QMouseEvent *e)
             d->startAutoScroll();
          }
 
-         if (qAbs(pos - d->firstPos) >= QApplication::startDragDistance()
-            || !d->sectionIndicator->isHidden()) {
+         if (qAbs(pos - d->firstPos) >= QApplication::startDragDistance() || !d->sectionIndicator->isHidden()) {
             int visual = visualIndexAt(pos);
 
             if (visual == -1) {
@@ -1834,7 +1833,7 @@ void QHeaderView::mouseMoveEvent(QMouseEvent *e)
             }
 
             int posThreshold = d->headerSectionPosition(visual) - d->offset + d->headerSectionSize(visual) / 2;
-            int moving = visualIndex(d->section);
+            int moving = visualIndex(d->m_headerViewSection);
 
             if (visual < moving) {
                if (pos < posThreshold) {
@@ -1850,9 +1849,9 @@ void QHeaderView::mouseMoveEvent(QMouseEvent *e)
                }
 
             } else {
-               d->target = d->section;
+               d->target = d->m_headerViewSection;
             }
-            d->updateSectionIndicator(d->section, pos);
+            d->updateSectionIndicator(d->m_headerViewSection, pos);
          }
          return;
       }
@@ -1908,15 +1907,15 @@ void QHeaderView::mouseReleaseEvent(QMouseEvent *e)
       case QHeaderViewPrivate::MoveSection:
          if (! d->sectionIndicator->isHidden()) {
             // moving
-            int from = visualIndex(d->section);
+            int from = visualIndex(d->m_headerViewSection);
             Q_ASSERT(from != -1);
 
             int to = visualIndex(d->target);
             Q_ASSERT(to != -1);
 
             moveSection(from, to);
-            d->section = d->target = -1;
-            d->updateSectionIndicator(d->section, pos);
+            d->m_headerViewSection = d->target = -1;
+            d->updateSectionIndicator(d->m_headerViewSection, pos);
             break;
          }
 
@@ -2067,8 +2066,10 @@ bool QHeaderView::viewportEvent(QEvent *e)
 
       case QEvent::ContextMenu: {
          d->state = QHeaderViewPrivate::NoState;
-         d->pressed = d->section = d->target = -1;
-         d->updateSectionIndicator(d->section, -1);
+         d->pressed = -1;
+         d->m_headerViewSection = -1;
+         d->target = -1;
+         d->updateSectionIndicator(d->m_headerViewSection, -1);
          break;
       }
 

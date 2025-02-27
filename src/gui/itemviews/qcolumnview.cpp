@@ -186,7 +186,7 @@ void QColumnView::scrollContentsBy(int dx, int dy)
    for (int i = 0; i < d->columns.count(); ++i) {
       d->columns.at(i)->move(d->columns.at(i)->x() + dx, 0);
    }
-   d->offset += dx;
+   d->m_columnViewOffset += dx;
    QAbstractItemView::scrollContentsBy(dx, dy);
 }
 
@@ -390,7 +390,7 @@ void QColumnViewPrivate::updateScrollbars()
 int QColumnView::horizontalOffset() const
 {
    Q_D(const QColumnView);
-   return d->offset;
+   return d->m_columnViewOffset;
 }
 
 int QColumnView::verticalOffset() const
@@ -562,7 +562,7 @@ void QColumnViewPrivate::closeColumns(const QModelIndex &parent, bool build)
    }
 
    if (columns.isEmpty()) {
-      offset = 0;
+      m_columnViewOffset = 0;
       updateScrollbars();
    }
 
@@ -931,7 +931,7 @@ void QColumnView::selectAll()
 }
 
 QColumnViewPrivate::QColumnViewPrivate()
-   :  QAbstractItemViewPrivate(), showResizeGrips(true), offset(), previewWidget(nullptr), previewColumn(nullptr)
+   :  QAbstractItemViewPrivate(), showResizeGrips(true), m_columnViewOffset(), previewWidget(nullptr), previewColumn(nullptr)
 {
 }
 

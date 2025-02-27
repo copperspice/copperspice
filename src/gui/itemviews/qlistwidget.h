@@ -61,7 +61,7 @@ class Q_GUI_EXPORT QListWidgetItem
    virtual QListWidgetItem *clone() const;
 
    QListWidget *listWidget() const {
-      return view;
+      return m_view;
    }
 
    inline void setSelected(bool select);
@@ -182,7 +182,7 @@ class Q_GUI_EXPORT QListWidgetItem
  private:
    int rtti;
    QVector<void *> dummy;
-   QListWidget *view;
+   QListWidget *m_view;
    QListWidgetItemPrivate *d;
    Qt::ItemFlags itemFlags;
 };
@@ -411,26 +411,26 @@ QListWidgetItem *QListWidget::itemAt(int x, int y) const
 
 void QListWidgetItem::setSelected(bool select)
 {
-   if (view != nullptr) {
-      view->setItemSelected(this, select);
+   if (m_view != nullptr) {
+      m_view->setItemSelected(this, select);
    }
 }
 
 bool QListWidgetItem::isSelected() const
 {
-   return (view ? view->isItemSelected(this) : false);
+   return (m_view ? m_view->isItemSelected(this) : false);
 }
 
 void QListWidgetItem::setHidden(bool hide)
 {
-   if (view != nullptr) {
-      view->setItemHidden(this, hide);
+   if (m_view != nullptr) {
+      m_view->setItemHidden(this, hide);
    }
 }
 
 bool QListWidgetItem::isHidden() const
 {
-   return (view ? view->isItemHidden(this) : false);
+   return (m_view ? m_view->isItemHidden(this) : false);
 }
 
 #endif // QT_NO_LISTWIDGET

@@ -73,7 +73,7 @@ class QBspTree
    void destroy();
 
    void init(const QRect &area, NodeType type) {
-      init(area, depth, type, 0);
+      init(area, m_depth, type, 0);
    }
 
    void climbTree(const QRect &rect, callback *function, QBspTreeData data);
@@ -110,7 +110,7 @@ class QBspTree
    static void remove(QVector<int> &leaf, const QRect &area, uint visited, QBspTreeData data);
 
  private:
-   uint depth;
+   uint m_depth;
    mutable uint visited;
    QVector<Node> nodes;
    mutable QVector< QVector<int>> leaves; // the leaves are just indices into the items

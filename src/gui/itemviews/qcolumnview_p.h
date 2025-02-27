@@ -140,7 +140,7 @@ class QColumnViewPrivate : public QAbstractItemViewPrivate
    QList<QAbstractItemView *> columns;
    QVector<int> columnSizes; // used during init and corner moving
    bool showResizeGrips;
-   int offset;
+   int m_columnViewOffset;
 
 #ifndef QT_NO_ANIMATION
    QPropertyAnimation currentAnimation;

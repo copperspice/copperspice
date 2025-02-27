@@ -52,11 +52,10 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
  public:
 
    QTreeViewPrivate()
-      : QAbstractItemViewPrivate(),
-        header(nullptr), indent(20), lastViewedItem(0), defaultItemHeight(-1),
+      : QAbstractItemViewPrivate(), indent(20), defaultItemHeight(-1), lastViewedItem(0),
         uniformRowHeights(false), rootDecoration(true), itemsExpandable(true), sortingEnabled(false),
-        expandsOnDoubleClick(true),allColumnsShowFocus(false), customIndent(false), current(0), spanning(false),
-        animationsEnabled(false), columnResizeTimerID(0), autoExpandDelay(-1), hoverBranch(-1),
+        expandsOnDoubleClick(true),allColumnsShowFocus(false), customIndent(false), m_current(0), m_spanning(false),
+        m_header(nullptr), animationsEnabled(false), columnResizeTimerID(0), autoExpandDelay(-1), hoverBranch(-1),
         geometryRecursionBlock(false), hasRemovedItems(false),treePosition(0)
    {
    }
@@ -168,28 +167,6 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
       int left, int right) const;
 
    int widthHintForIndex(const QModelIndex &index, int hint, const QStyleOptionViewItem &option, int i) const;
-   QHeaderView *header;
-   int indent;
-
-   mutable QVector<QTreeViewItem> viewItems;
-   mutable int lastViewedItem;
-   int defaultItemHeight; // this is just a number; contentsHeight() / numItems
-   bool uniformRowHeights; // used when all rows have the same height
-   bool rootDecoration;
-   bool itemsExpandable;
-   bool sortingEnabled;
-   bool expandsOnDoubleClick;
-   bool allColumnsShowFocus;
-   bool customIndent;
-
-   // used for drawing
-   mutable QPair<int, int> leftAndRight;
-   mutable int current;
-   mutable bool spanning;
-
-   // used when expanding and collapsing items
-   QSet<QPersistentModelIndex> expandedIndexes;
-   bool animationsEnabled;
 
    bool storeExpanded(const QPersistentModelIndex &idx) {
       if (expandedIndexes.contains(idx)) {
@@ -238,11 +215,37 @@ class Q_GUI_EXPORT QTreeViewPrivate : public QAbstractItemViewPrivate
    }
 
    int accessibleTable2Index(const QModelIndex &index) const {
-      return (viewIndex(index) + (header ? 1 : 0)) * model->columnCount() + index.column() + 1;
+      return (viewIndex(index) + (m_header ? 1 : 0)) * model->columnCount() + index.column() + 1;
    }
+
+   int indent;
+   int defaultItemHeight;     // just a number, contentsHeight() / numItems
+
+   mutable QVector<QTreeViewItem> viewItems;
+   mutable int lastViewedItem;
+
+   bool uniformRowHeights;    // used when all rows have the same height
+   bool rootDecoration;
+   bool itemsExpandable;
+   bool sortingEnabled;
+   bool expandsOnDoubleClick;
+   bool allColumnsShowFocus;
+   bool customIndent;
 
    int accessibleTree2Index(const QModelIndex &index) const;
    void updateIndentationFromStyle();
+
+   // used for drawing
+   mutable QPair<int, int> leftAndRight;
+   mutable int m_current;
+   mutable bool m_spanning;
+
+   QHeaderView *m_header;
+
+   // used when expanding and collapsing items
+   QSet<QPersistentModelIndex> expandedIndexes;
+   bool animationsEnabled;
+
    // used for spanning rows
    QVector<QPersistentModelIndex> spanningIndexes;
 

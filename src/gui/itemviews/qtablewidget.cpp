@@ -931,17 +931,18 @@ Qt::DropActions QTableModel::supportedDropActions() const
 }
 
 QTableWidgetSelectionRange::QTableWidgetSelectionRange()
-   : top(-1), left(-1), bottom(-2), right(-2)
+   : m_tableWidgetTop(-1), m_tableWidgetLeft(-1), m_tableWidgetBottom(-2), m_tableWidgetRight(-2)
 {
 }
 
 QTableWidgetSelectionRange::QTableWidgetSelectionRange(int top, int left, int bottom, int right)
-   : top(top), left(left), bottom(bottom), right(right)
+   : m_tableWidgetTop(top), m_tableWidgetLeft(left), m_tableWidgetBottom(bottom), m_tableWidgetRight(right)
 {
 }
 
 QTableWidgetSelectionRange::QTableWidgetSelectionRange(const QTableWidgetSelectionRange &other)
-   : top(other.top), left(other.left), bottom(other.bottom), right(other.right)
+   : m_tableWidgetTop(other.m_tableWidgetTop), m_tableWidgetLeft(other.m_tableWidgetLeft),
+     m_tableWidgetBottom(other.m_tableWidgetBottom), m_tableWidgetRight(other.m_tableWidgetRight)
 {
 }
 

@@ -70,7 +70,7 @@ class Q_GUI_EXPORT QTreeWidgetItem
    virtual QTreeWidgetItem *clone() const;
 
    QTreeWidget *treeWidget() const {
-      return view;
+      return m_view;
    }
 
    inline void setSelected(bool select);
@@ -204,15 +204,15 @@ class Q_GUI_EXPORT QTreeWidgetItem
    }
 
    QTreeWidgetItem *child(int index) const {
-      if (index < 0 || index >= children.size()) {
+      if (index < 0 || index >= m_children.size()) {
          return nullptr;
       }
       executePendingSort();
-      return children.at(index);
+      return m_children.at(index);
    }
 
    int childCount() const {
-      return children.count();
+      return m_children.count();
    }
 
    int columnCount() const {
@@ -250,10 +250,10 @@ class Q_GUI_EXPORT QTreeWidgetItem
 
    // One item has a vector of column entries. Each column has a vector of (role, value) pairs.
    QVector< QVector<QWidgetItemData>> values;
-   QTreeWidget *view;
+   QTreeWidget *m_view;
    QTreeWidgetItemPrivate *d;
    QTreeWidgetItem *par;
-   QList<QTreeWidgetItem *> children;
+   QList<QTreeWidgetItem *> m_children;
    Qt::ItemFlags itemFlags;
 
    friend class QTreeModel;
@@ -302,7 +302,7 @@ inline void QTreeWidgetItem::setFont(int column, const QFont &font)
 inline int QTreeWidgetItem::indexOfChild(QTreeWidgetItem *child) const
 {
    executePendingSort();
-   return children.indexOf(child);
+   return m_children.indexOf(child);
 }
 
 Q_GUI_EXPORT QDataStream &operator<<(QDataStream &out, const QTreeWidgetItem &item);
@@ -503,50 +503,50 @@ inline void QTreeWidget::setHeaderLabel(const QString &label)
 
 inline void QTreeWidgetItem::setSelected(bool select)
 {
-   if (view) {
-      view->setItemSelected(this, select);
+   if (m_view) {
+      m_view->setItemSelected(this, select);
    }
 }
 
 inline bool QTreeWidgetItem::isSelected() const
 {
-   return (view ? view->isItemSelected(this) : false);
+   return (m_view ? m_view->isItemSelected(this) : false);
 }
 
 inline void QTreeWidgetItem::setHidden(bool hide)
 {
-   if (view) {
-      view->setItemHidden(this, hide);
+   if (m_view) {
+      m_view->setItemHidden(this, hide);
    }
 }
 
 inline bool QTreeWidgetItem::isHidden() const
 {
-   return (view ? view->isItemHidden(this) : false);
+   return (m_view ? m_view->isItemHidden(this) : false);
 }
 
 inline void QTreeWidgetItem::setExpanded(bool expand)
 {
-   if (view) {
-      view->setItemExpanded(this, expand);
+   if (m_view) {
+      m_view->setItemExpanded(this, expand);
    }
 }
 
 inline bool QTreeWidgetItem::isExpanded() const
 {
-   return (view ? view->isItemExpanded(this) : false);
+   return (m_view ? m_view->isItemExpanded(this) : false);
 }
 
 inline void QTreeWidgetItem::setFirstColumnSpanned(bool span)
 {
-   if (view) {
-      view->setFirstItemColumnSpanned(this, span);
+   if (m_view) {
+      m_view->setFirstItemColumnSpanned(this, span);
    }
 }
 
 inline bool QTreeWidgetItem::isFirstColumnSpanned() const
 {
-   return (view ? view->isFirstItemColumnSpanned(this) : false);
+   return (m_view ? m_view->isFirstItemColumnSpanned(this) : false);
 }
 
 inline void QTreeWidgetItem::setDisabled(bool disabled)

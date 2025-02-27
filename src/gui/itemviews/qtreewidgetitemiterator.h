@@ -91,7 +91,7 @@ class Q_GUI_EXPORT QTreeWidgetItemIterator
    bool matchesFlags(const QTreeWidgetItem *item) const;
    QScopedPointer<QTreeWidgetItemIteratorPrivate> d_ptr;
    QTreeWidgetItem *current;
-   IteratorFlags flags;
+   IteratorFlags m_treeItemFlags;
 
    friend class QTreeModel;
 };

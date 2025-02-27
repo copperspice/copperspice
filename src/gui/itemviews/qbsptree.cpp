@@ -23,7 +23,9 @@
 
 #include <qbsptree_p.h>
 
-QBspTree::QBspTree() : depth(6), visited(0) {}
+QBspTree::QBspTree()
+   : m_depth(6), visited(0)
+{ }
 
 void QBspTree::create(int n, int d)
 {
@@ -33,14 +35,17 @@ void QBspTree::create(int n, int d)
       for (c = 0; n; ++c) {
          n = n / 10;
       }
-      depth = c << 1;
-   } else {
-      depth = d;
-   }
-   depth = qMax(depth, uint(1));
 
-   nodes.resize((1 << depth) - 1); // resize to number of nodes
-   leaves.resize(1 << depth); // resize to number of leaves
+      m_depth = c << 1;
+
+   } else {
+      m_depth = d;
+   }
+
+   m_depth = qMax(m_depth, uint(1));
+
+   nodes.resize((1 << m_depth) - 1);     // resize to number of nodes
+   leaves.resize(1 << m_depth);          // resize to number of leaves
 }
 
 void QBspTree::destroy()

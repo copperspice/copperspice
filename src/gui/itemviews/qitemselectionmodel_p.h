@@ -32,7 +32,7 @@ class QItemSelectionModelPrivate
 
  public:
    QItemSelectionModelPrivate()
-      : model(nullptr), currentCommand(QItemSelectionModel::NoUpdate),
+      : m_model(nullptr), currentCommand(QItemSelectionModel::NoUpdate),
         tableSelected(false), tableColCount(0), tableRowCount(0)
    { }
 
@@ -71,7 +71,7 @@ class QItemSelectionModelPrivate
       }
    }
 
-   QPointer<QAbstractItemModel> model;
+   QPointer<QAbstractItemModel> m_model;
    QItemSelection ranges;
    QItemSelection currentSelection;
    QPersistentModelIndex currentIndex;

@@ -30,9 +30,8 @@
 
 #ifndef QT_NO_TREEWIDGET
 
-QTreeWidgetItemIterator::QTreeWidgetItemIterator(const QTreeWidgetItemIterator &it)
-   :  d_ptr(new QTreeWidgetItemIteratorPrivate(*(it.d_ptr))),
-      current(it.current), flags(it.flags)
+QTreeWidgetItemIterator::QTreeWidgetItemIterator(const QTreeWidgetItemIterator &iter)
+   :  d_ptr(new QTreeWidgetItemIteratorPrivate(*(iter.d_ptr))), current(iter.current), m_treeItemFlags(iter.m_treeItemFlags)
 {
    Q_D(QTreeWidgetItemIterator);
    Q_ASSERT(d->m_model);
@@ -40,14 +39,15 @@ QTreeWidgetItemIterator::QTreeWidgetItemIterator(const QTreeWidgetItemIterator &
 }
 
 QTreeWidgetItemIterator::QTreeWidgetItemIterator(QTreeWidget *widget, IteratorFlags flags)
-   : current(nullptr), flags(flags)
+   : current(nullptr), m_treeItemFlags(flags)
 {
    Q_ASSERT(widget);
    QTreeModel *model = qobject_cast<QTreeModel *>(widget->model());
    Q_ASSERT(model);
    d_ptr.reset(new QTreeWidgetItemIteratorPrivate(this, model));
    model->iterators.append(this);
-   if (!model->rootItem->children.isEmpty()) {
+
+   if (! model->rootItem->m_children.isEmpty()) {
       current = model->rootItem->child(0);
    }
    if (current && !matchesFlags(current)) {
@@ -56,13 +56,13 @@ QTreeWidgetItemIterator::QTreeWidgetItemIterator(QTreeWidget *widget, IteratorFl
 }
 
 QTreeWidgetItemIterator::QTreeWidgetItemIterator(QTreeWidgetItem *item, IteratorFlags flags)
-   : d_ptr(new QTreeWidgetItemIteratorPrivate(this, qobject_cast<QTreeModel *>(item->view->model()))),
-     current(item), flags(flags)
+   : d_ptr(new QTreeWidgetItemIteratorPrivate(this, qobject_cast<QTreeModel *>(item->m_view->model()))),
+     current(item), m_treeItemFlags(flags)
 {
    Q_D(QTreeWidgetItemIterator);
    Q_ASSERT(item);
 
-   QTreeModel *model = qobject_cast<QTreeModel *>(item->view->model());
+   QTreeModel *model = qobject_cast<QTreeModel *>(item->m_view->model());
    Q_ASSERT(model);
 
    model->iterators.append(this);
@@ -98,7 +98,8 @@ QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator=(const QTreeWidgetIte
       it.d_func()->m_model->iterators.append(this);
    }
    current = it.current;
-   flags = it.flags;
+   m_treeItemFlags = it.m_treeItemFlags;
+
    d->operator=(*it.d_func());
    return *this;
 }
@@ -127,74 +128,74 @@ bool QTreeWidgetItemIterator::matchesFlags(const QTreeWidgetItem *item) const
       return false;
    }
 
-   if (flags == All) {
+   if (m_treeItemFlags == All) {
       return true;
    }
 
    {
       Qt::ItemFlags itemFlags = item->flags();
-      if ((flags & Selectable) && !(itemFlags & Qt::ItemIsSelectable)) {
+      if ((m_treeItemFlags & Selectable) && ! (itemFlags & Qt::ItemIsSelectable)) {
          return false;
       }
-      if ((flags & NotSelectable) && (itemFlags & Qt::ItemIsSelectable)) {
+      if ((m_treeItemFlags & NotSelectable) && (itemFlags & Qt::ItemIsSelectable)) {
          return false;
       }
-      if ((flags & DragEnabled) && !(itemFlags & Qt::ItemIsDragEnabled)) {
+      if ((m_treeItemFlags & DragEnabled) && !(itemFlags & Qt::ItemIsDragEnabled)) {
          return false;
       }
-      if ((flags & DragDisabled) && (itemFlags & Qt::ItemIsDragEnabled)) {
+      if ((m_treeItemFlags & DragDisabled) && (itemFlags & Qt::ItemIsDragEnabled)) {
          return false;
       }
-      if ((flags & DropEnabled) && !(itemFlags & Qt::ItemIsDropEnabled)) {
+      if ((m_treeItemFlags & DropEnabled) && ! (itemFlags & Qt::ItemIsDropEnabled)) {
          return false;
       }
-      if ((flags & DropDisabled) && (itemFlags & Qt::ItemIsDropEnabled)) {
+      if ((m_treeItemFlags & DropDisabled) && (itemFlags & Qt::ItemIsDropEnabled)) {
          return false;
       }
-      if ((flags & Enabled) && !(itemFlags & Qt::ItemIsEnabled)) {
+      if ((m_treeItemFlags & Enabled) && !(itemFlags & Qt::ItemIsEnabled)) {
          return false;
       }
-      if ((flags & Disabled) && (itemFlags & Qt::ItemIsEnabled)) {
+      if ((m_treeItemFlags & Disabled) && (itemFlags & Qt::ItemIsEnabled)) {
          return false;
       }
-      if ((flags & Editable) && !(itemFlags & Qt::ItemIsEditable)) {
+      if ((m_treeItemFlags & Editable) && !(itemFlags & Qt::ItemIsEditable)) {
          return false;
       }
-      if ((flags & NotEditable) && (itemFlags & Qt::ItemIsEditable)) {
+      if ((m_treeItemFlags & NotEditable) && (itemFlags & Qt::ItemIsEditable)) {
          return false;
       }
    }
 
-   if (flags & (Checked | NotChecked)) {
+   if (m_treeItemFlags & (Checked | NotChecked)) {
       // ### We only test the check state for column 0
       Qt::CheckState check = item->checkState(0);
       // PartiallyChecked matches as Checked.
-      if ((flags & Checked) && (check == Qt::Unchecked)) {
+      if ((m_treeItemFlags & Checked) && (check == Qt::Unchecked)) {
          return false;
       }
-      if ((flags & NotChecked) && (check != Qt::Unchecked)) {
+      if ((m_treeItemFlags & NotChecked) && (check != Qt::Unchecked)) {
          return false;
       }
    }
 
-   if ((flags & HasChildren) && !item->childCount()) {
+   if ((m_treeItemFlags & HasChildren) && !item->childCount()) {
       return false;
    }
-   if ((flags & NoChildren) && item->childCount()) {
-      return false;
-   }
-
-   if ((flags & Hidden) && !item->isHidden()) {
-      return false;
-   }
-   if ((flags & NotHidden) && item->isHidden()) {
+   if ((m_treeItemFlags & NoChildren) && item->childCount()) {
       return false;
    }
 
-   if ((flags & Selected) && !item->isSelected()) {
+   if ((m_treeItemFlags & Hidden) && !item->isHidden()) {
       return false;
    }
-   if ((flags & Unselected) && item->isSelected()) {
+   if ((m_treeItemFlags & NotHidden) && item->isHidden()) {
+      return false;
+   }
+
+   if ((m_treeItemFlags & Selected) && !item->isSelected()) {
+      return false;
+   }
+   if ((m_treeItemFlags & Unselected) && item->isSelected()) {
       return false;
    }
 
@@ -300,7 +301,7 @@ void QTreeWidgetItemIteratorPrivate::ensureValidIterator(const QTreeWidgetItem *
       }
       if (nextItem) {
          // Ooooh... Set the iterator to the next valid item
-         *q = QTreeWidgetItemIterator(nextItem, q->flags);
+         *q = QTreeWidgetItemIterator(nextItem, q->m_treeItemFlags);
          if (!(q->matchesFlags(nextItem))) {
             ++(*q);
          }
