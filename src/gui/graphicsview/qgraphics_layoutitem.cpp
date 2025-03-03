@@ -93,8 +93,8 @@ static void normalizeHints(qreal &minimum, qreal &preferred, qreal &maximum, qre
    }
 }
 
-QGraphicsLayoutItemPrivate::QGraphicsLayoutItemPrivate(QGraphicsLayoutItem *par, bool layout)
-   : parent(par), userSizeHints(nullptr), isLayout(layout), ownedByLayout(false), graphicsItem(nullptr)
+QGraphicsLayoutItemPrivate::QGraphicsLayoutItemPrivate(QGraphicsLayoutItem *parent, bool layout)
+   : m_layoutItemParent(parent), userSizeHints(nullptr), isLayout(layout), ownedByLayout(false), graphicsItem(nullptr)
 {
 }
 
@@ -386,13 +386,13 @@ void QGraphicsLayoutItem::setGeometry(const QRectF &rect)
    Q_D(QGraphicsLayoutItem);
    QSizeF effectiveSize = rect.size().expandedTo(effectiveSizeHint(Qt::MinimumSize))
       .boundedTo(effectiveSizeHint(Qt::MaximumSize));
-   d->geom = QRectF(rect.topLeft(), effectiveSize);
+   d->m_layoutItemRect = QRectF(rect.topLeft(), effectiveSize);
 }
 
 QRectF QGraphicsLayoutItem::geometry() const
 {
    Q_D(const QGraphicsLayoutItem);
-   return d->geom;
+   return d->m_layoutItemRect;
 }
 
 void QGraphicsLayoutItem::getContentsMargins(qreal *left, qreal *top, qreal *right, qreal *bottom) const
@@ -439,12 +439,12 @@ void QGraphicsLayoutItem::updateGeometry()
 
 QGraphicsLayoutItem *QGraphicsLayoutItem::parentLayoutItem() const
 {
-   return d_func()->parent;
+   return d_func()->m_layoutItemParent;
 }
 
 void QGraphicsLayoutItem::setParentLayoutItem(QGraphicsLayoutItem *parent)
 {
-   d_func()->parent = parent;
+   d_func()->m_layoutItemParent = parent;
 }
 
 bool QGraphicsLayoutItem::isLayout() const

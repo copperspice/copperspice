@@ -87,7 +87,8 @@ class QGraphicsSceneBspTree
    QVector<Node> nodes;
    QVector<QList<QGraphicsItem *>> leaves;
    int leafCnt;
-   QRectF rect;
+
+   QRectF m_bspTreeRect;
 
    QGraphicsSceneInsertItemBspTreeVisitor *insertVisitor;
    QGraphicsSceneRemoveItemBspTreeVisitor *removeVisitor;

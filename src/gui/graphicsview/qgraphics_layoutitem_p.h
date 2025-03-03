@@ -62,7 +62,7 @@ class QGraphicsLayoutItemPrivate
    bool hasWidthForHeight() const;
 
    QSizePolicy sizePolicy;
-   QGraphicsLayoutItem *parent;
+   QGraphicsLayoutItem *m_layoutItemParent;
 
    QSizeF *userSizeHints;
    mutable QSizeF cachedSizeHints[Qt::NSizeHints];
@@ -75,7 +75,7 @@ class QGraphicsLayoutItemPrivate
    quint32 ownedByLayout : 1;
 
    QGraphicsLayoutItem *q_ptr;
-   QRectF geom;
+   QRectF m_layoutItemRect;
    QGraphicsItem *graphicsItem;
 };
 

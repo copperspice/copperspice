@@ -112,7 +112,7 @@ class QGraphicsLayoutPrivate : public QGraphicsLayoutItemPrivate
 
  public:
    QGraphicsLayoutPrivate()
-      : QGraphicsLayoutItemPrivate(nullptr, true), left(-1.0), top(-1.0), right(-1.0), bottom(-1.0), activated(true)
+      : QGraphicsLayoutItemPrivate(nullptr, true), m_layoutLeft(-1.0), m_layoutTop(-1.0), m_layoutRight(-1.0), m_layoutBottom(-1.0), activated(true)
    { }
 
    void reparentChildItems(QGraphicsItem *newParent);
@@ -122,7 +122,10 @@ class QGraphicsLayoutPrivate : public QGraphicsLayoutItemPrivate
    void addChildLayoutItem(QGraphicsLayoutItem *item);
    void activateRecursive(QGraphicsLayoutItem *item);
 
-   qreal left, top, right, bottom;
+   qreal m_layoutLeft;
+   qreal m_layoutTop;
+   qreal m_layoutRight;
+   qreal m_layoutBottom;
    bool activated;
 };
 

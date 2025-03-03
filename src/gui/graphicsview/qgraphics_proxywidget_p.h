@@ -58,7 +58,6 @@ class QGraphicsProxyWidgetPrivate : public QGraphicsWidgetPrivate
 
    bool isProxyWidget() const override;
 
-   QPointer<QWidget> widget;
    QPointer<QWidget> lastWidgetUnderMouse;
    QPointer<QWidget> embeddedMouseGrabber;
    QWidget *dragDropWidget;
@@ -71,6 +70,7 @@ class QGraphicsProxyWidgetPrivate : public QGraphicsWidgetPrivate
 
    QPointF mapToReceiver(const QPointF &pos, const QWidget *receiver) const;
 
+   QPointer<QWidget> m_proxyWidget;
    enum ChangeMode {
       NoMode,
       ProxyToWidgetMode,

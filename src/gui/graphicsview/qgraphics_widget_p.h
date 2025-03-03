@@ -206,8 +206,8 @@ class QGraphicsWidgetPrivate : public QGraphicsItemPrivate
    mutable qreal *windowFrameMargins;
 
    QGraphicsLayout *layout;
-   QPalette palette;
-   QFont font;
+   QPalette m_graphicsPalette;
+   QFont m_graphicsFont;
 
    uint inheritedPaletteResolveMask;
    uint inheritedFontResolveMask;

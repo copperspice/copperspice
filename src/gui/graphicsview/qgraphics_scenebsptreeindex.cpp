@@ -205,7 +205,7 @@ void QGraphicsSceneBspTreeIndexPrivate::_q_updateSortCache()
    const QList<QGraphicsItem *> items = q->items();
    for (int i = 0; i < items.size(); ++i) {
       QGraphicsItem *item = items.at(i);
-      if (item && !item->d_ptr->parent) {
+      if (item && !item->d_ptr->m_itemParent) {
          topLevels << item;
       }
    }
@@ -324,7 +324,7 @@ QList<QGraphicsItem *> QGraphicsSceneBspTreeIndexPrivate::estimateItems(const QR
    if (onlyTopLevelItems) {
       for (int i = 0; i < untransformableItems.size(); ++i) {
          QGraphicsItem *item = untransformableItems.at(i);
-         if (!item->d_ptr->parent) {
+         if (!item->d_ptr->m_itemParent) {
             rectItems << item;
          } else {
             item = item->topLevelItem();

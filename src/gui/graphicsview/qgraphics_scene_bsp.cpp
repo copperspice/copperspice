@@ -58,7 +58,7 @@ class QGraphicsSceneFindItemBspTreeVisitor : public QGraphicsSceneBspTreeVisitor
    void visit(QList<QGraphicsItem *> *items) override {
       for (int i = 0; i < items->size(); ++i) {
          QGraphicsItem *item = items->at(i);
-         if (onlyTopLevelItems && item->d_ptr->parent) {
+         if (onlyTopLevelItems && item->d_ptr->m_itemParent) {
             item = item->topLevelItem();
          }
          if (!item->d_func()->itemDiscovered && item->d_ptr->visible) {
@@ -86,7 +86,7 @@ QGraphicsSceneBspTree::~QGraphicsSceneBspTree()
 
 void QGraphicsSceneBspTree::initialize(const QRectF &rect, int depth)
 {
-   this->rect = rect;
+   m_bspTreeRect = rect;
    leafCnt = 0;
    nodes.resize((1 << (depth + 1)) - 1);
    nodes.fill(Node());
@@ -258,7 +258,7 @@ void QGraphicsSceneBspTree::climbTree(QGraphicsSceneBspTreeVisitor *visitor, con
 QRectF QGraphicsSceneBspTree::rectForIndex(int index) const
 {
    if (index <= 0) {
-      return rect;
+      return m_bspTreeRect;
    }
 
    int parentIdx = parentIndex(index);

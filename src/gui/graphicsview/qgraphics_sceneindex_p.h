@@ -115,7 +115,7 @@ class QGraphicsSceneIndexPrivate
       QList<QGraphicsItem *> *items, const QTransform &viewTransform,
       Qt::ItemSelectionMode mode, Qt::SortOrder order, const void *intersectData) const;
 
-   QGraphicsScene *scene;
+   QGraphicsScene *m_sceneIndex;
 
  protected:
    QGraphicsSceneIndex *q_ptr;

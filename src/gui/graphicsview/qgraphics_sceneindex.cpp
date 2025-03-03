@@ -180,7 +180,8 @@ static bool intersect_path(const QGraphicsItem *item, const QRectF &exposeRect, 
 
 } // namespace QtPrivate
 
-QGraphicsSceneIndexPrivate::QGraphicsSceneIndexPrivate(QGraphicsScene *scene) : scene(scene)
+QGraphicsSceneIndexPrivate::QGraphicsSceneIndexPrivate(QGraphicsScene *scene)
+   : m_sceneIndex(scene)
 {
 }
 
@@ -316,11 +317,11 @@ void QGraphicsSceneIndexPrivate::recursive_items_helper(QGraphicsItem *item, QRe
 
 void QGraphicsSceneIndexPrivate::init()
 {
-   if (! scene) {
+   if (! m_sceneIndex) {
       return;
    }
 
-   QObject::connect(scene, &QGraphicsScene::sceneRectChanged, q_func(), &QGraphicsSceneIndex::updateSceneRect);
+   QObject::connect(m_sceneIndex, &QGraphicsScene::sceneRectChanged, q_func(), &QGraphicsSceneIndex::updateSceneRect);
 }
 
 QGraphicsSceneIndex::QGraphicsSceneIndex(QGraphicsScene *scene)
@@ -344,7 +345,7 @@ QGraphicsSceneIndex::~QGraphicsSceneIndex()
 QGraphicsScene *QGraphicsSceneIndex::scene() const
 {
    Q_D(const QGraphicsSceneIndex);
-   return d->scene;
+   return d->m_sceneIndex;
 }
 
 QList<QGraphicsItem *> QGraphicsSceneIndex::items(const QPointF &pos, Qt::ItemSelectionMode mode,
@@ -408,7 +409,7 @@ QList<QGraphicsItem *> QGraphicsSceneIndex::estimateTopLevelItems(const QRectF &
 
    Q_D(const QGraphicsSceneIndex);
 
-   QGraphicsScenePrivate *scened = d->scene->d_func();
+   QGraphicsScenePrivate *scened = d->m_sceneIndex->d_func();
    scened->ensureSortedTopLevelItems();
 
    if (order == Qt::DescendingOrder) {

@@ -148,7 +148,7 @@ class QSimplex
 
    void collectResults();
 
-   QList<QSimplexConstraint *> constraints;
+   QList<QSimplexConstraint *> m_simplexConstraints;
    QList<QSimplexVariable *> variables;
    QSimplexConstraint *objective;
 

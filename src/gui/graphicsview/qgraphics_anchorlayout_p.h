@@ -489,7 +489,7 @@ class QGraphicsAnchorLayoutPrivate : public QGraphicsLayoutPrivate
 
    // Graph paths and constraints, for both orientations
    QMultiHash<AnchorVertex *, GraphPath> graphPaths[2];
-   QList<QSimplexConstraint *> constraints[2];
+   QList<QSimplexConstraint *> m_constraints[2];
    QList<QSimplexConstraint *> itemCenterConstraints[2];
 
    // The interpolation interval and progress based on the current size

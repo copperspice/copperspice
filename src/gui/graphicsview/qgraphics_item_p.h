@@ -90,7 +90,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    };
 
    QGraphicsItemPrivate()
-      : z(0), opacity(1.), scene(nullptr), parent(nullptr), transformData(nullptr), graphicsEffect(nullptr),
+      : z(0), opacity(1.), m_itemScene(nullptr), m_itemParent(nullptr), transformData(nullptr), graphicsEffect(nullptr),
         index(-1), siblingIndex(-1), itemDepth(-1), focusProxy(nullptr), subFocusItem(nullptr),
         focusScopeItem(nullptr), imHints(Qt::ImhNone), panelModality(QGraphicsItem::NonModal),
         acceptedMouseButtons(0x1f), visible(1), explicitlyHidden(0), enabled(1), explicitlyDisabled(0), selected(0),
@@ -270,7 +270,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
       qreal retval = opacity;
       int myFlags  = itemFlags;
 
-      QGraphicsItem *p = parent;
+      QGraphicsItem *p = m_itemParent;
 
       while (p) {
          int parentFlags = p->d_ptr->itemFlags;
@@ -285,7 +285,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
          }
 
          retval *= p->d_ptr->opacity;
-         p       = p->d_ptr->parent;
+         p       = p->d_ptr->m_itemParent;
 
          myFlags = parentFlags;
       }
@@ -305,7 +305,8 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
       if (isOpacityNull()) {
          return true;
       }
-      if (!parent) {
+
+      if (! m_itemParent) {
          return false;
       }
 
@@ -313,7 +314,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    }
 
    qreal effectiveOpacity() const {
-      if (! parent || ! opacity) {
+      if (! m_itemParent || ! opacity) {
          return opacity;
       }
 
@@ -321,8 +322,8 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    }
 
    qreal combineOpacityFromParent(qreal parentOpacity) const {
-      if (parent && ! (itemFlags & QGraphicsItem::ItemIgnoresParentOpacity)
-            && ! (parent->d_ptr->itemFlags & QGraphicsItem::ItemDoesntPropagateOpacityToChildren)) {
+      if (m_itemParent && ! (itemFlags & QGraphicsItem::ItemIgnoresParentOpacity)
+            && ! (m_itemParent->d_ptr->itemFlags & QGraphicsItem::ItemDoesntPropagateOpacityToChildren)) {
          return parentOpacity * opacity;
       }
       return opacity;
@@ -387,12 +388,12 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
    QRectF childrenBoundingRect;
    QRectF needsRepaint;
    QHash<QWidget *, QRect> paintedViewBoundingRects;
-   QPointF pos;
+   QPointF m_itemPos;
    qreal z;
    qreal opacity;
 
-   QGraphicsScene *scene;
-   QGraphicsItem *parent;
+   QGraphicsScene *m_itemScene;
+   QGraphicsItem *m_itemParent;
    QList<QGraphicsItem *> children;
 
    struct TransformData;
@@ -606,7 +607,7 @@ inline bool qt_closestItemFirst(const QGraphicsItem *item1, const QGraphicsItem 
    // Siblings? Just check their z-values.
    const QGraphicsItemPrivate *d1 = item1->d_ptr.data();
    const QGraphicsItemPrivate *d2 = item2->d_ptr.data();
-   if (d1->parent == d2->parent) {
+   if (d1->m_itemParent == d2->m_itemParent) {
       return qt_closestLeaf(item1, item2);
    }
 
@@ -616,7 +617,7 @@ inline bool qt_closestItemFirst(const QGraphicsItem *item1, const QGraphicsItem 
    const QGraphicsItem *p = item1;
    const QGraphicsItem *t1 = item1;
 
-   while (item1Depth > item2Depth && (p = p->d_ptr->parent)) {
+   while (item1Depth > item2Depth && (p = p->d_ptr->m_itemParent)) {
       if (p == item2) {
          // item2 is one of item1's ancestors; item1 is on top
          return !(t1->d_ptr->itemFlags & QGraphicsItem::ItemStacksBehindParent);
@@ -628,7 +629,7 @@ inline bool qt_closestItemFirst(const QGraphicsItem *item1, const QGraphicsItem 
    p = item2;
    const QGraphicsItem *t2 = item2;
 
-   while (item2Depth > item1Depth && (p = p->d_ptr->parent)) {
+   while (item2Depth > item1Depth && (p = p->d_ptr->m_itemParent)) {
       if (p == item1) {
          // item1 is one of item2's ancestors; item1 is not on top
          return (t2->d_ptr->itemFlags & QGraphicsItem::ItemStacksBehindParent);
@@ -643,8 +644,8 @@ inline bool qt_closestItemFirst(const QGraphicsItem *item1, const QGraphicsItem 
    while (t1 && t1 != t2) {
       p1 = t1;
       p2 = t2;
-      t1 = t1->d_ptr->parent;
-      t2 = t2->d_ptr->parent;
+      t1 = t1->d_ptr->m_itemParent;
+      t2 = t2->d_ptr->m_itemParent;
    }
 
    // in case we have a common ancestor, we compare the immediate children in the ancestor's path.
@@ -725,8 +726,8 @@ inline void QGraphicsItemPrivate::markParentDirty(bool updateBoundingRect)
    }
 #endif
 
-   while (parentp->parent) {
-      parentp = parentp->parent->d_ptr.data();
+   while (parentp->m_itemParent) {
+      parentp = parentp->m_itemParent->d_ptr.data();
       parentp->dirtyChildren = 1;
 
       if (updateBoundingRect) {
@@ -741,7 +742,7 @@ inline void QGraphicsItemPrivate::markParentDirty(bool updateBoundingRect)
                ->source->d_func())->invalidateCache();
             parentp->notifyInvalidated = 1;
          }
-         if (parentp->scene && parentp->graphicsEffect->isEnabled()) {
+         if (parentp->m_itemScene && parentp->graphicsEffect->isEnabled()) {
             parentp->dirty = 1;
             parentp->fullUpdatePending = 1;
          }

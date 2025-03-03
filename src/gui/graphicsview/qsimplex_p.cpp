@@ -52,12 +52,12 @@ void QSimplex::clearDataStructures()
    matrix = nullptr;
 
    // Constraints
-   for (int i = 0; i < constraints.size(); ++i) {
-      delete constraints[i]->helper.first;
-      delete constraints[i]->artificial;
-      delete constraints[i];
+   for (int i = 0; i < m_simplexConstraints.size(); ++i) {
+      delete m_simplexConstraints[i]->helper.first;
+      delete m_simplexConstraints[i]->artificial;
+      delete m_simplexConstraints[i];
    }
-   constraints.clear();
+   m_simplexConstraints.clear();
 
    // Other
    variables.clear();
@@ -80,11 +80,11 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> &newConstraints)
       c->constant = newConstraints[i]->constant;
       c->ratio = newConstraints[i]->ratio;
       c->variables = newConstraints[i]->variables;
-      constraints << c;
+      m_simplexConstraints << c;
    }
 
    // Remove constraints of type Var == K and replace them for their value.
-   if (!simplifyConstraints(&constraints)) {
+   if (! simplifyConstraints(&m_simplexConstraints)) {
       qWarning("QSimplex::setConstraints() No feasible solution");
       clearDataStructures();
       return false;
@@ -95,9 +95,9 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> &newConstraints)
    // used in this problem.
    QSet<QSimplexVariable *> variablesSet;
 
-   for (int i = 0; i < constraints.size(); ++i)
-      variablesSet += \
-         QSet<QSimplexVariable *>::fromList(constraints[i]->variables.keys());
+   for (int i = 0; i < m_simplexConstraints.size(); ++i) {
+      variablesSet += QSet<QSimplexVariable *>::fromList(m_simplexConstraints[i]->variables.keys());
+   }
    variables = variablesSet.toList();
 
    // Set Variables reverse mapping
@@ -123,33 +123,33 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> &newConstraints)
    int variableIndex = variables.size();
    QList <QSimplexVariable *> artificialList;
 
-   for (int i = 0; i < constraints.size(); ++i) {
+   for (int i = 0; i < m_simplexConstraints.size(); ++i) {
       QSimplexVariable *slack;
       QSimplexVariable *surplus;
       QSimplexVariable *artificial;
 
-      Q_ASSERT(constraints[i]->helper.first == nullptr);
-      Q_ASSERT(constraints[i]->artificial == nullptr);
+      Q_ASSERT(m_simplexConstraints[i]->helper.first == nullptr);
+      Q_ASSERT(m_simplexConstraints[i]->artificial == nullptr);
 
-      switch (constraints[i]->ratio) {
+      switch (m_simplexConstraints[i]->ratio) {
          case QSimplexConstraint::LessOrEqual:
             slack = new QSimplexVariable;
             slack->index = ++variableIndex;
-            constraints[i]->helper.first = slack;
-            constraints[i]->helper.second = 1.0;
+            m_simplexConstraints[i]->helper.first = slack;
+            m_simplexConstraints[i]->helper.second = 1.0;
             break;
 
          case QSimplexConstraint::MoreOrEqual:
             surplus = new QSimplexVariable;
             surplus->index = ++variableIndex;
-            constraints[i]->helper.first = surplus;
-            constraints[i]->helper.second = -1.0;
+            m_simplexConstraints[i]->helper.first = surplus;
+            m_simplexConstraints[i]->helper.second = -1.0;
             [[fallthrough]];
 
          case QSimplexConstraint::Equal:
             artificial = new QSimplexVariable;
-            constraints[i]->artificial = artificial;
-            artificialList += constraints[i]->artificial;
+            m_simplexConstraints[i]->artificial = artificial;
+            artificialList += m_simplexConstraints[i]->artificial;
             break;
       }
    }
@@ -169,7 +169,7 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> &newConstraints)
    // One for each variable plus the Basic and BFS columns (first and last)
    columns = variableIndex + 2;
    // One for each constraint plus the objective function
-   rows = constraints.size() + 1;
+   rows = m_simplexConstraints.size() + 1;
 
    matrix = (qreal *)malloc(sizeof(qreal) * columns * rows);
    if (!matrix) {
@@ -181,8 +181,8 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> &newConstraints)
    }
 
    // Fill Matrix
-   for (int i = 1; i <= constraints.size(); ++i) {
-      QSimplexConstraint *c = constraints[i - 1];
+   for (int i = 1; i <= m_simplexConstraints.size(); ++i) {
+      QSimplexConstraint *c = m_simplexConstraints[i - 1];
 
       if (c->artificial) {
          // Will use artificial basic variable

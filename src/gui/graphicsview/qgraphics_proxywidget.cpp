@@ -68,7 +68,7 @@ void QGraphicsProxyWidgetPrivate::sendWidgetMouseEvent(QGraphicsSceneHoverEvent 
 
 void QGraphicsProxyWidgetPrivate::sendWidgetMouseEvent(QGraphicsSceneMouseEvent *event)
 {
-   if (! event || ! widget || ! widget->isVisible()) {
+   if (! event || ! m_proxyWidget || ! m_proxyWidget->isVisible()) {
       return;
    }
 
@@ -77,11 +77,11 @@ void QGraphicsProxyWidgetPrivate::sendWidgetMouseEvent(QGraphicsSceneMouseEvent 
    // Find widget position and receiver
    QPointF pos = event->pos();
 
-   QPointer<QWidget> alienWidget = QPointer<QWidget>(widget->childAt(pos.toPoint()));
+   QPointer<QWidget> alienWidget = QPointer<QWidget>(m_proxyWidget->childAt(pos.toPoint()));
    QPointer<QWidget> receiver;
 
    if (alienWidget == nullptr) {
-      receiver = widget;
+      receiver = m_proxyWidget;
    } else {
       receiver = alienWidget;
    }
@@ -147,7 +147,7 @@ void QGraphicsProxyWidgetPrivate::sendWidgetMouseEvent(QGraphicsSceneMouseEvent 
 
    QWidget *embeddedMouseGrabberPtr = (QWidget *)embeddedMouseGrabber;
 
-   QApplicationPrivate::sendMouseEvent(receiver, &mouseEvent, alienWidget, widget,
+   QApplicationPrivate::sendMouseEvent(receiver, &mouseEvent, alienWidget, m_proxyWidget,
       &embeddedMouseGrabberPtr, lastWidgetUnderMouse, event->spontaneous());
    embeddedMouseGrabber = embeddedMouseGrabberPtr;
 
@@ -157,7 +157,7 @@ void QGraphicsProxyWidgetPrivate::sendWidgetMouseEvent(QGraphicsSceneMouseEvent 
       Q_Q(QGraphicsProxyWidget);
 
       if (q->rect().contains(event->pos()) && q->acceptHoverEvents()) {
-         lastWidgetUnderMouse = alienWidget ? alienWidget : widget;
+         lastWidgetUnderMouse = alienWidget ? alienWidget : m_proxyWidget;
       } else { // released on the frame our outside the item, or doesn't accept hover events.
          lastWidgetUnderMouse = nullptr;
       }
@@ -179,19 +179,19 @@ void QGraphicsProxyWidgetPrivate::sendWidgetMouseEvent(QGraphicsSceneMouseEvent 
 void QGraphicsProxyWidgetPrivate::sendWidgetKeyEvent(QKeyEvent *event)
 {
    Q_Q(QGraphicsProxyWidget);
-   if (! event || ! widget || ! widget->isVisible()) {
+   if (! event || ! m_proxyWidget || ! m_proxyWidget->isVisible()) {
       return;
    }
 
-   QPointer<QWidget> receiver = QPointer<QWidget>(widget->focusWidget());
+   QPointer<QWidget> receiver = QPointer<QWidget>(m_proxyWidget->focusWidget());
    if (receiver == nullptr) {
-      receiver = widget;
+      receiver = m_proxyWidget;
    }
    Q_ASSERT(receiver);
 
    do {
       bool res = QApplication::sendEvent(receiver, event);
-      if ((res && event->isAccepted()) || (q->isWindow() && receiver == widget)) {
+      if ((res && event->isAccepted()) || (q->isWindow() && receiver == m_proxyWidget)) {
          break;
       }
       receiver = receiver->parentWidget();
@@ -211,16 +211,16 @@ void QGraphicsProxyWidgetPrivate::removeSubFocusHelper(QWidget *widget, Qt::Focu
 
 QWidget *QGraphicsProxyWidgetPrivate::findFocusChild(QWidget *child, bool next) const
 {
-   if (! widget) {
+   if (! m_proxyWidget) {
       return nullptr;
    }
 
    // Run around the focus chain until we find a widget that can take tab focus.
    if (! child) {
-      child = next ? (QWidget *)widget : widget->d_func()->focus_prev;
+      child = next ? m_proxyWidget.data() : m_proxyWidget->d_func()->focus_prev;
    } else {
       child = next ? child->d_func()->focus_next : child->d_func()->focus_prev;
-      if ((next && child == widget) || (!next && child == widget->d_func()->focus_prev)) {
+      if ((next && child == m_proxyWidget) || (! next && child == m_proxyWidget->d_func()->focus_prev)) {
          return nullptr;
       }
    }
@@ -233,15 +233,14 @@ QWidget *QGraphicsProxyWidgetPrivate::findFocusChild(QWidget *child, bool next) 
    uint focus_flag = qt_tab_all_widgets() ? Qt::TabFocus : Qt::StrongFocus;
 
    do {
-      if (child->isEnabled() && child->isVisibleTo(widget)
-            && ((child->focusPolicy() & focus_flag) == focus_flag)
-            && !(child->d_func()->extra && child->d_func()->extra->focus_proxy)) {
+      if (child->isEnabled() && child->isVisibleTo(m_proxyWidget) && ((child->focusPolicy() & focus_flag) == focus_flag)
+            && ! (child->d_func()->extra && child->d_func()->extra->focus_proxy)) {
          return child;
       }
 
       child = next ? child->d_func()->focus_next : child->d_func()->focus_prev;
 
-   } while (child != oldChild && !(next && child == widget) && !(!next && child == widget->d_func()->focus_prev));
+   } while (child != oldChild && ! (next && child == m_proxyWidget) && ! (! next && child == m_proxyWidget->d_func()->focus_prev));
 
    return nullptr;
 }
@@ -250,13 +249,13 @@ void QGraphicsProxyWidgetPrivate::_q_removeWidgetSlot()
 {
    Q_Q(QGraphicsProxyWidget);
 
-   if (! widget.isNull()) {
-      if (QWExtra *extra = widget->d_func()->extra) {
+   if (! m_proxyWidget.isNull()) {
+      if (QWExtra *extra = m_proxyWidget->d_func()->extra) {
          extra->proxyWidget = nullptr;
       }
    }
 
-   widget = nullptr;
+   m_proxyWidget = nullptr;
    delete q;
 }
 
@@ -268,14 +267,14 @@ void QGraphicsProxyWidgetPrivate::updateProxyGeometryFromWidget()
 {
    Q_Q(QGraphicsProxyWidget);
 
-   if (! widget) {
+   if (! m_proxyWidget) {
       return;
    }
 
-   QRectF widgetGeometry = widget->geometry();
-   QWidget *parentWidget = widget->parentWidget();
+   QRectF widgetGeometry = m_proxyWidget->geometry();
+   QWidget *parentWidget = m_proxyWidget->parentWidget();
 
-   if (widget->isWindow()) {
+   if (m_proxyWidget->isWindow()) {
       QGraphicsProxyWidget *proxyParent = nullptr;
 
       if (parentWidget && (proxyParent = qobject_cast<QGraphicsProxyWidget *>(q->parentWidget()))) {
@@ -283,13 +282,13 @@ void QGraphicsProxyWidgetPrivate::updateProxyGeometryFromWidget()
          // parent widget's global coordinates, and map that to the parent
          // proxy's child coordinates.
          widgetGeometry.moveTo(proxyParent->subWidgetRect(parentWidget).topLeft()
-            + parentWidget->mapFromGlobal(widget->pos()));
+            + parentWidget->mapFromGlobal(m_proxyWidget->pos()));
       }
    }
 
    // Adjust to size hint if the widget has never been resized.
-   if (! widget->size().isValid()) {
-      widgetGeometry.setSize(widget->sizeHint());
+   if (! m_proxyWidget->size().isValid()) {
+      widgetGeometry.setSize(m_proxyWidget->sizeHint());
    }
 
    // Assign new geometry.
@@ -303,13 +302,13 @@ void QGraphicsProxyWidgetPrivate::updateProxyGeometryFromWidget()
 void QGraphicsProxyWidgetPrivate::updateProxyInputMethodAcceptanceFromWidget()
 {
    Q_Q(QGraphicsProxyWidget);
-   if (!widget) {
+   if (! m_proxyWidget) {
       return;
    }
 
-   QWidget *focusWidget = widget->focusWidget();
+   QWidget *focusWidget = m_proxyWidget->focusWidget();
    if (!focusWidget) {
-      focusWidget = widget;
+      focusWidget = m_proxyWidget;
    }
    q->setFlag(QGraphicsItem::ItemAcceptsInputMethod,
       focusWidget->testAttribute(Qt::WA_InputMethodEnabled));
@@ -331,7 +330,7 @@ void QGraphicsProxyWidgetPrivate::unembedSubWindow(QWidget *subWin)
          if (QGraphicsProxyWidget *proxy = qobject_cast<QGraphicsProxyWidget *>(static_cast<QGraphicsWidget *>(child))) {
             if (proxy->widget() == subWin) {
                proxy->setWidget(nullptr);
-               scene->removeItem(proxy);
+               m_itemScene->removeItem(proxy);
                delete proxy;
 
                return;
@@ -352,7 +351,7 @@ QPointF QGraphicsProxyWidgetPrivate::mapToReceiver(const QPointF &pos, const QWi
 
    // Map event position from us to the receiver, preserving its
    // precision (don't use QWidget::mapFrom here).
-   while (receiver && receiver != widget) {
+   while (receiver && receiver != m_proxyWidget) {
       p -= QPointF(receiver->pos());
       receiver = receiver->parentWidget();
    }
@@ -371,10 +370,10 @@ QGraphicsProxyWidget::~QGraphicsProxyWidget()
 {
    Q_D(QGraphicsProxyWidget);
 
-   if (d->widget) {
-      d->widget->removeEventFilter(this);
-      QObject::disconnect(d->widget.data(), &QObject::destroyed, this, &QGraphicsProxyWidget::_q_removeWidgetSlot);
-      delete d->widget;
+   if (d->m_proxyWidget) {
+      d->m_proxyWidget->removeEventFilter(this);
+      QObject::disconnect(d->m_proxyWidget.data(), &QObject::destroyed, this, &QGraphicsProxyWidget::_q_removeWidgetSlot);
+      delete d->m_proxyWidget;
    }
 }
 
@@ -388,20 +387,20 @@ void QGraphicsProxyWidgetPrivate::setWidget_helper(QWidget *newWidget, bool auto
 {
    Q_Q(QGraphicsProxyWidget);
 
-   if (newWidget == widget) {
+   if (newWidget == m_proxyWidget) {
       return;
    }
 
-   if (widget) {
-      QObject::disconnect(widget.data(), &QObject::destroyed, q, &QGraphicsProxyWidget::_q_removeWidgetSlot);
+   if (m_proxyWidget) {
+      QObject::disconnect(m_proxyWidget.data(), &QObject::destroyed, q, &QGraphicsProxyWidget::_q_removeWidgetSlot);
 
-      widget->removeEventFilter(q);
-      widget->setAttribute(Qt::WA_DontShowOnScreen, false);
-      widget->d_func()->extra->proxyWidget = nullptr;
+      m_proxyWidget->removeEventFilter(q);
+      m_proxyWidget->setAttribute(Qt::WA_DontShowOnScreen, false);
+      m_proxyWidget->d_func()->extra->proxyWidget = nullptr;
 
       resolveFont(inheritedFontResolveMask);
       resolvePalette(inheritedPaletteResolveMask);
-      widget->update();
+      m_proxyWidget->update();
 
       for (QGraphicsItem *child : q->childItems()) {
          if (child->d_ptr->isProxyWidget()) {
@@ -409,13 +408,13 @@ void QGraphicsProxyWidgetPrivate::setWidget_helper(QWidget *newWidget, bool auto
             QWidget *parent = childProxy->widget();
 
             while (parent->parentWidget() != nullptr) {
-               if (parent == widget) {
+               if (parent == m_proxyWidget) {
                   break;
                }
                parent = parent->parentWidget();
             }
 
-            if (!childProxy->widget() || parent != widget) {
+            if (! childProxy->widget() || parent != m_proxyWidget) {
                continue;
             }
 
@@ -424,7 +423,7 @@ void QGraphicsProxyWidgetPrivate::setWidget_helper(QWidget *newWidget, bool auto
          }
       }
 
-      widget = nullptr;
+      m_proxyWidget = nullptr;
 
 #ifndef QT_NO_CURSOR
       q->unsetCursor();
@@ -482,7 +481,7 @@ void QGraphicsProxyWidgetPrivate::setWidget_helper(QWidget *newWidget, bool auto
       q->setAttribute(Qt::WA_OpaquePaintEvent);
    }
 
-   widget = newWidget;
+   m_proxyWidget = newWidget;
 
    // Changes only go from the widget to the proxy.
    enabledChangeMode = QGraphicsProxyWidgetPrivate::WidgetToProxyMode;
@@ -498,7 +497,7 @@ void QGraphicsProxyWidgetPrivate::setWidget_helper(QWidget *newWidget, bool auto
    // Copy the state from the widget onto the proxy.
 #ifndef QT_NO_CURSOR
    if (newWidget->testAttribute(Qt::WA_SetCursor)) {
-      q->setCursor(widget->cursor());
+      q->setCursor(m_proxyWidget->cursor());
    }
 #endif
 
@@ -506,7 +505,7 @@ void QGraphicsProxyWidgetPrivate::setWidget_helper(QWidget *newWidget, bool auto
    q->setVisible(newWidget->isVisible());
    q->setLayoutDirection(newWidget->layoutDirection());
    if (newWidget->testAttribute(Qt::WA_SetStyle)) {
-      q->setStyle(widget->style());
+      q->setStyle(m_proxyWidget->style());
    }
 
    resolveFont(inheritedFontResolveMask);
@@ -546,17 +545,17 @@ void QGraphicsProxyWidgetPrivate::setWidget_helper(QWidget *newWidget, bool auto
 QWidget *QGraphicsProxyWidget::widget() const
 {
    Q_D(const QGraphicsProxyWidget);
-   return d->widget;
+   return d->m_proxyWidget;
 }
 
 QRectF QGraphicsProxyWidget::subWidgetRect(const QWidget *widget) const
 {
    Q_D(const QGraphicsProxyWidget);
-   if (!widget || !d->widget) {
+   if (! widget || ! d->m_proxyWidget) {
       return QRectF();
    }
-   if (d->widget == widget || d->widget->isAncestorOf(widget)) {
-      return QRectF(widget->mapTo(d->widget, QPoint(0, 0)), widget->size());
+   if (d->m_proxyWidget == widget || d->m_proxyWidget->isAncestorOf(widget)) {
+      return QRectF(widget->mapTo(d->m_proxyWidget, QPoint(0, 0)), widget->size());
    }
    return QRectF();
 }
@@ -593,8 +592,8 @@ QVariant QGraphicsProxyWidget::itemChange(GraphicsItemChange change,
 
       case ItemPositionHasChanged:
          // Move the CS widget if we are in widget-to-proxy mode, otherwise the widget has already moved.
-         if (d->widget && d->posChangeMode != QGraphicsProxyWidgetPrivate::WidgetToProxyMode) {
-            d->widget->move(value.toPoint());
+         if (d->m_proxyWidget && d->posChangeMode != QGraphicsProxyWidgetPrivate::WidgetToProxyMode) {
+            d->m_proxyWidget->move(value.toPoint());
          }
          if (d->posChangeMode == QGraphicsProxyWidgetPrivate::ProxyToWidgetMode) {
             d->posChangeMode = QGraphicsProxyWidgetPrivate::NoMode;
@@ -606,8 +605,8 @@ QVariant QGraphicsProxyWidget::itemChange(GraphicsItemChange change,
          }
          break;
       case ItemVisibleHasChanged:
-         if (d->widget && d->visibleChangeMode != QGraphicsProxyWidgetPrivate::WidgetToProxyMode) {
-            d->widget->setVisible(isVisible());
+         if (d->m_proxyWidget && d->visibleChangeMode != QGraphicsProxyWidgetPrivate::WidgetToProxyMode) {
+            d->m_proxyWidget->setVisible(isVisible());
          }
          if (d->visibleChangeMode == QGraphicsProxyWidgetPrivate::ProxyToWidgetMode) {
             d->visibleChangeMode = QGraphicsProxyWidgetPrivate::NoMode;
@@ -619,8 +618,8 @@ QVariant QGraphicsProxyWidget::itemChange(GraphicsItemChange change,
          }
          break;
       case ItemEnabledHasChanged:
-         if (d->widget && d->enabledChangeMode != QGraphicsProxyWidgetPrivate::WidgetToProxyMode) {
-            d->widget->setEnabled(isEnabled());
+         if (d->m_proxyWidget && d->enabledChangeMode != QGraphicsProxyWidgetPrivate::WidgetToProxyMode) {
+            d->m_proxyWidget->setEnabled(isEnabled());
          }
          if (d->enabledChangeMode == QGraphicsProxyWidgetPrivate::ProxyToWidgetMode) {
             d->enabledChangeMode = QGraphicsProxyWidgetPrivate::NoMode;
@@ -635,7 +634,7 @@ QVariant QGraphicsProxyWidget::itemChange(GraphicsItemChange change,
 bool QGraphicsProxyWidget::event(QEvent *event)
 {
    Q_D(QGraphicsProxyWidget);
-   if (!d->widget) {
+   if (! d->m_proxyWidget) {
       return QGraphicsWidget::event(event);
    }
 
@@ -644,22 +643,22 @@ bool QGraphicsProxyWidget::event(QEvent *event)
          // Propagate style changes to the embedded widget.
          if (!d->styleChangeMode) {
             d->styleChangeMode = QGraphicsProxyWidgetPrivate::ProxyToWidgetMode;
-            d->widget->setStyle(style());
+            d->m_proxyWidget->setStyle(style());
             d->styleChangeMode = QGraphicsProxyWidgetPrivate::NoMode;
          }
          break;
       case QEvent::FontChange: {
          // Propagate to widget.
-         QWidgetPrivate *wd = d->widget->d_func();
-         int mask = d->font.resolve() | d->inheritedFontResolveMask;
+         QWidgetPrivate *wd = d->m_proxyWidget->d_func();
+         int mask = d->m_graphicsFont.resolve() | d->inheritedFontResolveMask;
          wd->inheritedFontResolveMask = mask;
          wd->resolveFont();
          break;
       }
       case QEvent::PaletteChange: {
          // Propagate to widget.
-         QWidgetPrivate *wd = d->widget->d_func();
-         int mask = d->palette.resolve() | d->inheritedPaletteResolveMask;
+         QWidgetPrivate *wd = d->m_proxyWidget->d_func();
+         int mask = d->m_graphicsPalette.resolve() | d->inheritedPaletteResolveMask;
          wd->inheritedPaletteResolveMask = mask;
          wd->resolvePalette();
          break;
@@ -676,7 +675,7 @@ bool QGraphicsProxyWidget::event(QEvent *event)
       }
 
       case QEvent::ShortcutOverride: {
-         QWidget *focusWidget = d->widget->focusWidget();
+         QWidget *focusWidget = d->m_proxyWidget->focusWidget();
 
          while (focusWidget) {
             QApplication::sendEvent(focusWidget, event);
@@ -693,22 +692,29 @@ bool QGraphicsProxyWidget::event(QEvent *event)
 
       case QEvent::KeyPress: {
          QKeyEvent *k = static_cast<QKeyEvent *>(event);
+
          if (k->key() == Qt::Key_Tab || k->key() == Qt::Key_Backtab) {
-            if (!(k->modifiers() & (Qt::ControlModifier | Qt::AltModifier))) {  //### Add MetaModifier?
-               QWidget *focusWidget = d->widget->focusWidget();
+            if (!(k->modifiers() & (Qt::ControlModifier | Qt::AltModifier))) {
+               // Add MetaModifier?
+               QWidget *focusWidget = d->m_proxyWidget->focusWidget();
+
                while (focusWidget) {
                   bool res = QApplication::sendEvent(focusWidget, event);
-                  if ((res && event->isAccepted()) || (isWindow() && focusWidget == d->widget)) {
+
+                  if ((res && event->isAccepted()) || (isWindow() && focusWidget == d->m_proxyWidget)) {
                      event->accept();
                      break;
                   }
+
                   focusWidget = focusWidget->parentWidget();
                }
+
                return true;
             }
          }
          break;
       }
+
 #ifndef QT_NO_TOOLTIP
       case QEvent::GraphicsSceneHelp: {
          // Propagate the help event (for tooltip) to the widget under mouse
@@ -726,7 +732,7 @@ bool QGraphicsProxyWidget::event(QEvent *event)
          // Propagate tooltip change to the widget
          if (!d->tooltipChangeMode) {
             d->tooltipChangeMode = QGraphicsProxyWidgetPrivate::ProxyToWidgetMode;
-            d->widget->setToolTip(toolTip());
+            d->m_proxyWidget->setToolTip(toolTip());
             d->tooltipChangeMode = QGraphicsProxyWidgetPrivate::NoMode;
          }
          break;
@@ -737,9 +743,9 @@ bool QGraphicsProxyWidget::event(QEvent *event)
       case QEvent::TouchUpdate:
       case QEvent::TouchEnd: {
          if (event->spontaneous()) {
-            qt_sendSpontaneousEvent(d->widget, event);
+            qt_sendSpontaneousEvent(d->m_proxyWidget, event);
          } else {
-            QApplication::sendEvent(d->widget, event);
+            QApplication::sendEvent(d->m_proxyWidget, event);
          }
 
          if (event->isAccepted()) {
@@ -758,7 +764,7 @@ bool QGraphicsProxyWidget::eventFilter(QObject *object, QEvent *event)
 {
    Q_D(QGraphicsProxyWidget);
 
-   if (object == d->widget) {
+   if (object == d->m_proxyWidget) {
       switch (event->type()) {
          case QEvent::LayoutRequest:
             updateGeometry();
@@ -790,7 +796,7 @@ bool QGraphicsProxyWidget::eventFilter(QObject *object, QEvent *event)
             // If the widget toggles its enabled state, the proxy will follow.
             if (!d->enabledChangeMode) {
                d->enabledChangeMode = QGraphicsProxyWidgetPrivate::WidgetToProxyMode;
-               setEnabled(d->widget->isEnabled());
+               setEnabled(d->m_proxyWidget->isEnabled());
                d->enabledChangeMode = QGraphicsProxyWidgetPrivate::NoMode;
             }
             break;
@@ -798,7 +804,7 @@ bool QGraphicsProxyWidget::eventFilter(QObject *object, QEvent *event)
             // Propagate style changes to the proxy.
             if (!d->styleChangeMode) {
                d->styleChangeMode = QGraphicsProxyWidgetPrivate::WidgetToProxyMode;
-               setStyle(d->widget->style());
+               setStyle(d->m_proxyWidget->style());
                d->styleChangeMode = QGraphicsProxyWidgetPrivate::NoMode;
             }
             break;
@@ -807,7 +813,7 @@ bool QGraphicsProxyWidget::eventFilter(QObject *object, QEvent *event)
             // Propagate tooltip change to the proxy.
             if (!d->tooltipChangeMode) {
                d->tooltipChangeMode = QGraphicsProxyWidgetPrivate::WidgetToProxyMode;
-               setToolTip(d->widget->toolTip());
+               setToolTip(d->m_proxyWidget->toolTip());
                d->tooltipChangeMode = QGraphicsProxyWidgetPrivate::NoMode;
             }
             break;
@@ -835,18 +841,18 @@ void QGraphicsProxyWidget::contextMenuEvent(QGraphicsSceneContextMenuEvent *even
 {
    Q_D(QGraphicsProxyWidget);
 
-   if (! event || ! d->widget || ! d->widget->isVisible() || ! hasFocus()) {
+   if (! event || ! d->m_proxyWidget || ! d->m_proxyWidget->isVisible() || ! hasFocus()) {
       return;
    }
 
    // Find widget position and receiver.
    QPointF pos = event->pos();
-   QPointer<QWidget> alienWidget = QPointer<QWidget>(d->widget->childAt(pos.toPoint()));
+   QPointer<QWidget> alienWidget = QPointer<QWidget>(d->m_proxyWidget->childAt(pos.toPoint()));
 
    QPointer<QWidget> receiver;
 
    if (alienWidget == nullptr) {
-      receiver = d->widget;
+      receiver = d->m_proxyWidget;
    } else {
       receiver = alienWidget;
    }
@@ -881,14 +887,14 @@ void QGraphicsProxyWidget::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
    Q_D(QGraphicsProxyWidget);
 
-   if (! d->widget) {
+   if (! d->m_proxyWidget) {
       return;
    }
 
    QDragEnterEvent proxyDragEnter(event->pos().toPoint(), event->dropAction(), event->mimeData(), event->buttons(),
       event->modifiers());
    proxyDragEnter.setAccepted(event->isAccepted());
-   QApplication::sendEvent(d->widget, &proxyDragEnter);
+   QApplication::sendEvent(d->m_proxyWidget, &proxyDragEnter);
    event->setAccepted(proxyDragEnter.isAccepted());
 
    if (proxyDragEnter.isAccepted()) {  // we discard answerRect
@@ -902,7 +908,7 @@ void QGraphicsProxyWidget::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 
    Q_D(QGraphicsProxyWidget);
 
-   if (!d->widget || !d->dragDropWidget) {
+   if (! d->m_proxyWidget || ! d->dragDropWidget) {
       return;
    }
 
@@ -915,18 +921,18 @@ void QGraphicsProxyWidget::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
    Q_D(QGraphicsProxyWidget);
 
-   if (! d->widget) {
+   if (! d->m_proxyWidget) {
       return;
    }
 
    QPointF p = event->pos();
    event->ignore();
 
-   QPointer<QWidget> subWidget = QPointer<QWidget>(d->widget->childAt(p.toPoint()));
+   QPointer<QWidget> subWidget = QPointer<QWidget>(d->m_proxyWidget->childAt(p.toPoint()));
    QPointer<QWidget> receiver;
 
    if (subWidget == nullptr) {
-      receiver = d->widget;
+      receiver = d->m_proxyWidget;
    } else {
       receiver = subWidget;
    }
@@ -996,7 +1002,7 @@ void QGraphicsProxyWidget::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
    Q_D(QGraphicsProxyWidget);
 
-   if (d->widget && d->dragDropWidget) {
+   if (d->m_proxyWidget && d->dragDropWidget) {
       QPoint widgetPos = d->mapToReceiver(event->pos(), d->dragDropWidget).toPoint();
       QDropEvent dropEvent(widgetPos, event->possibleActions(), event->mimeData(), event->buttons(), event->modifiers());
       QApplication::sendEvent(d->dragDropWidget, &dropEvent);
@@ -1032,7 +1038,7 @@ void QGraphicsProxyWidget::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 #endif
 
    // Ignore events on the window frame.
-   if (! d->widget || !rect().contains(event->pos())) {
+   if (! d->m_proxyWidget || !rect().contains(event->pos())) {
       if (d->lastWidgetUnderMouse) {
          QApplicationPrivate::dispatchEnterLeave(nullptr, d->lastWidgetUnderMouse, event->screenPos());
          d->lastWidgetUnderMouse = nullptr;
@@ -1100,15 +1106,15 @@ void QGraphicsProxyWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
    qDebug("QGraphicsProxyWidget::wheelEvent");
 #endif
 
-   if (! d->widget) {
+   if (! d->m_proxyWidget) {
       return;
    }
 
    QPointF pos = event->pos();
-   QPointer<QWidget> receiver = QPointer<QWidget>(d->widget->childAt(pos.toPoint()));
+   QPointer<QWidget> receiver = QPointer<QWidget>(d->m_proxyWidget->childAt(pos.toPoint()));
 
    if (receiver == nullptr) {
-      receiver = d->widget;
+      receiver = d->m_proxyWidget;
    }
 
    // Map event position from us to the receiver
@@ -1118,7 +1124,7 @@ void QGraphicsProxyWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
    QWheelEvent wheelEvent(pos.toPoint(), event->screenPos(), event->delta(),
          event->buttons(), event->modifiers(), event->orientation());
 
-   QPointer<QWidget> focusWidget = QPointer<QWidget>(d->widget->focusWidget());
+   QPointer<QWidget> focusWidget = QPointer<QWidget>(d->m_proxyWidget->focusWidget());
 
    extern bool qt_sendSpontaneousEvent(QObject *, QEvent *);
    qt_sendSpontaneousEvent(receiver, &wheelEvent);
@@ -1127,7 +1133,7 @@ void QGraphicsProxyWidget::wheelEvent(QGraphicsSceneWheelEvent *event)
    // ### Remove, this should be done by proper focusIn/focusOut events.
    if (focusWidget && !focusWidget->hasFocus()) {
       focusWidget->update();
-      focusWidget = d->widget->focusWidget();
+      focusWidget = d->m_proxyWidget->focusWidget();
 
       if (focusWidget && focusWidget->hasFocus()) {
          focusWidget->update();
@@ -1203,8 +1209,8 @@ void QGraphicsProxyWidget::focusInEvent(QFocusEvent *event)
          break;
 
       default:
-         if (d->widget && d->widget->focusWidget()) {
-            d->widget->focusWidget()->setFocus(event->reason());
+         if (d->m_proxyWidget && d->m_proxyWidget->focusWidget()) {
+            d->m_proxyWidget->focusWidget()->setFocus(event->reason());
          }
          break;
    }
@@ -1220,10 +1226,10 @@ void QGraphicsProxyWidget::focusOutEvent(QFocusEvent *event)
 
    Q_D(QGraphicsProxyWidget);
 
-   if (d->widget) {
+   if (d->m_proxyWidget) {
       // We need to explicitly remove subfocus from the embedded widget's
       // focus widget.
-      if (QWidget *focusWidget = d->widget->focusWidget()) {
+      if (QWidget *focusWidget = d->m_proxyWidget->focusWidget()) {
          d->removeSubFocusHelper(focusWidget, event->reason());
       }
    }
@@ -1233,12 +1239,12 @@ bool QGraphicsProxyWidget::focusNextPrevChild(bool next)
 {
    Q_D(QGraphicsProxyWidget);
 
-   if (! d->widget || ! d->scene) {
+   if (! d->m_proxyWidget || ! d->m_itemScene) {
       return QGraphicsWidget::focusNextPrevChild(next);
    }
 
    Qt::FocusReason reason = next ? Qt::TabFocusReason : Qt::BacktabFocusReason;
-   QWidget *lastFocusChild = d->widget->focusWidget();
+   QWidget *lastFocusChild = d->m_proxyWidget->focusWidget();
 
    if (QWidget *newFocusChild = d->findFocusChild(lastFocusChild, next)) {
       newFocusChild->setFocus(reason);
@@ -1252,13 +1258,13 @@ QVariant QGraphicsProxyWidget::inputMethodQuery(Qt::InputMethodQuery query) cons
 {
    Q_D(const QGraphicsProxyWidget);
 
-   if (!d->widget || !hasFocus()) {
+   if (! d->m_proxyWidget || !hasFocus()) {
       return QVariant();
    }
 
    QWidget *focusWidget = widget()->focusWidget();
    if (! focusWidget) {
-      focusWidget = d->widget;
+      focusWidget = d->m_proxyWidget;
    }
 
    QVariant v = focusWidget->inputMethodQuery(query);
@@ -1287,7 +1293,7 @@ void QGraphicsProxyWidget::inputMethodEvent(QInputMethodEvent *event)
 {
    // Forward input method events if the focus widget enables input methods.
    Q_D(const QGraphicsProxyWidget);
-   QWidget *focusWidget = d->widget->focusWidget();
+   QWidget *focusWidget = d->m_proxyWidget->focusWidget();
    if (focusWidget && focusWidget->testAttribute(Qt::WA_InputMethodEnabled)) {
       QApplication::sendEvent(focusWidget, event);
    }
@@ -1297,28 +1303,28 @@ QSizeF QGraphicsProxyWidget::sizeHint(Qt::SizeHint which, const QSizeF &constrai
 {
    Q_D(const QGraphicsProxyWidget);
 
-   if (!d->widget) {
+   if (! d->m_proxyWidget) {
       return QGraphicsWidget::sizeHint(which, constraint);
    }
 
    QSizeF sh;
    switch (which) {
       case Qt::PreferredSize:
-         if (QLayout *l = d->widget->layout()) {
+         if (QLayout *l = d->m_proxyWidget->layout()) {
             sh = l->sizeHint();
          } else {
-            sh = d->widget->sizeHint();
+            sh = d->m_proxyWidget->sizeHint();
          }
          break;
       case Qt::MinimumSize:
-         if (QLayout *l = d->widget->layout()) {
+         if (QLayout *l = d->m_proxyWidget->layout()) {
             sh = l->minimumSize();
          } else {
-            sh = d->widget->minimumSizeHint();
+            sh = d->m_proxyWidget->minimumSizeHint();
          }
          break;
       case Qt::MaximumSize:
-         if (QLayout *l = d->widget->layout()) {
+         if (QLayout *l = d->m_proxyWidget->layout()) {
             sh = l->maximumSize();
          } else {
             sh = QSizeF(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
@@ -1337,9 +1343,9 @@ void QGraphicsProxyWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
    Q_D(QGraphicsProxyWidget);
 
-   if (d->widget) {
+   if (d->m_proxyWidget) {
       if (d->sizeChangeMode != QGraphicsProxyWidgetPrivate::WidgetToProxyMode) {
-         d->widget->resize(event->newSize().toSize());
+         d->m_proxyWidget->resize(event->newSize().toSize());
       }
    }
    QGraphicsWidget::resizeEvent(event);
@@ -1351,7 +1357,7 @@ void QGraphicsProxyWidget::paint(QPainter *painter, const QStyleOptionGraphicsIt
 
    Q_D(QGraphicsProxyWidget);
 
-   if (! d->widget || ! d->widget->isVisible()) {
+   if (! d->m_proxyWidget || ! d->m_proxyWidget->isVisible()) {
       return;
    }
 
@@ -1361,7 +1367,7 @@ void QGraphicsProxyWidget::paint(QPainter *painter, const QStyleOptionGraphicsIt
       return;
    }
 
-   d->widget->render(painter, exposedWidgetRect.topLeft(), exposedWidgetRect);
+   d->m_proxyWidget->render(painter, exposedWidgetRect.topLeft(), exposedWidgetRect);
 
 }
 

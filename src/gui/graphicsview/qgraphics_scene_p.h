@@ -63,7 +63,6 @@ class QGraphicsScenePrivate
    QMetaMethod polishItemsMethod;
 
    QGraphicsScene::ItemIndexMethod indexMethod;
-   QGraphicsSceneIndex *index;
    QRectF sceneRect;
 
    int lastItemCount;
@@ -253,16 +252,13 @@ class QGraphicsScenePrivate
    void ensureSequentialTopLevelSiblingIndexes();
 
    QStyle *style;
-   QFont font;
    void setFont_helper(const QFont &font);
    void resolveFont();
    void updateFont(const QFont &font);
-   QPalette palette;
    void setPalette_helper(const QPalette &palette);
    void resolvePalette();
    void updatePalette(const QPalette &palette);
 
-   QStyleOptionGraphicsItem styleOptionTmp;
 
    QMap<int, QTouchEvent::TouchPoint> sceneCurrentTouchPoints;
    QMap<int, QGraphicsItem *> itemForTouchPointId;
@@ -272,6 +268,10 @@ class QGraphicsScenePrivate
    bool sendTouchBeginEvent(QGraphicsItem *item, QTouchEvent *touchEvent);
    void enableTouchEventsOnViews();
 
+   QFont m_sceneFont;
+   QPalette m_scenePalette;
+   QStyleOptionGraphicsItem m_sceneStyleOption;
+   QGraphicsSceneIndex *m_graphicsSceneIndex;
    QList<QGraphicsObject *> cachedTargetItems;
 
 #ifndef QT_NO_GESTURES

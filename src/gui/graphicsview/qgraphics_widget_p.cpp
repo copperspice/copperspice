@@ -117,7 +117,7 @@ void QGraphicsWidgetPrivate::ensureWindowData()
 
 void QGraphicsWidgetPrivate::setPalette_helper(const QPalette &palette)
 {
-   if (this->palette == palette && this->palette.resolve() == palette.resolve()) {
+   if (m_graphicsPalette == palette && m_graphicsPalette.resolve() == palette.resolve()) {
       return;
    }
    updatePalette(palette);
@@ -127,7 +127,7 @@ void QGraphicsWidgetPrivate::resolvePalette(uint inheritedMask)
 {
    inheritedPaletteResolveMask = inheritedMask;
    QPalette naturalPalette = naturalWidgetPalette();
-   QPalette resolvedPalette = palette.resolve(naturalPalette);
+   QPalette resolvedPalette = m_graphicsPalette.resolve(naturalPalette);
    updatePalette(resolvedPalette);
 }
 
@@ -135,7 +135,7 @@ void QGraphicsWidgetPrivate::updatePalette(const QPalette &palette)
 {
    Q_Q(QGraphicsWidget);
    // Update local palette setting.
-   this->palette = palette;
+   m_graphicsPalette = palette;
 
    // Calculate new mask.
    if (q->isWindow() && !q->testAttribute(Qt::WA_WindowPropagation)) {
@@ -193,7 +193,7 @@ void QGraphicsWidgetPrivate::resolveLayoutDirection()
    }
    if (QGraphicsWidget *parentWidget = q->parentWidget()) {
       setLayoutDirection_helper(parentWidget->layoutDirection());
-   } else if (scene) {
+   } else if (m_itemScene) {
       // ### shouldn't the scene have a layoutdirection really? how does
       // ### QGraphicsWidget get changes from QApplication::layoutDirection?
       setLayoutDirection_helper(QApplication::layoutDirection());
@@ -208,8 +208,8 @@ QPalette QGraphicsWidgetPrivate::naturalWidgetPalette() const
    QPalette palette;
    if (QGraphicsWidget *parent = q->parentWidget()) {
       palette = parent->palette();
-   } else if (scene) {
-      palette = scene->palette();
+   } else if (m_itemScene) {
+      palette = m_itemScene->palette();
    }
    palette.resolve(0);
    return palette;
@@ -217,7 +217,7 @@ QPalette QGraphicsWidgetPrivate::naturalWidgetPalette() const
 
 void QGraphicsWidgetPrivate::setFont_helper(const QFont &font)
 {
-   if (this->font == font && this->font.resolve() == font.resolve()) {
+   if (m_graphicsFont == font && m_graphicsFont.resolve() == font.resolve()) {
       return;
    }
    updateFont(font);
@@ -231,7 +231,7 @@ void QGraphicsWidgetPrivate::resolveFont(uint inheritedMask)
       inheritedFontResolveMask |= p->d_func()->inheritedFontResolveMask;
    }
    QFont naturalFont = naturalWidgetFont();
-   QFont resolvedFont = font.resolve(naturalFont);
+   QFont resolvedFont = m_graphicsFont.resolve(naturalFont);
    updateFont(resolvedFont);
 }
 
@@ -239,7 +239,7 @@ void QGraphicsWidgetPrivate::updateFont(const QFont &font)
 {
    Q_Q(QGraphicsWidget);
    // Update the local font setting.
-   this->font = font;
+   m_graphicsFont = font;
 
    // Calculate new mask.
    if (q->isWindow() && !q->testAttribute(Qt::WA_WindowPropagation)) {
@@ -274,8 +274,8 @@ QFont QGraphicsWidgetPrivate::naturalWidgetFont() const
    QFont naturalFont; // ### no application font support
    if (QGraphicsWidget *parent = q->parentWidget()) {
       naturalFont = parent->font();
-   } else if (scene) {
-      naturalFont = scene->font();
+   } else if (m_itemScene) {
+      naturalFont = m_itemScene->font();
    }
    naturalFont.resolve(0);
    return naturalFont;
@@ -771,7 +771,7 @@ void QGraphicsWidgetPrivate::fixFocusChainBeforeReparenting(QGraphicsWidget *new
       focusLast = focusAfter;
    } while ((focusAfter = focusAfter->d_func()->focusNext));
 
-   if (!parent && oldScene && oldScene != newScene && oldScene->d_func()->tabFocusFirst == q) {
+   if (! m_itemParent && oldScene && oldScene != newScene && oldScene->d_func()->tabFocusFirst == q) {
       // detach from old scene's top level focus chain.
       oldScene->d_func()->tabFocusFirst = (focusAfter != q) ? focusAfter : nullptr;
    }
@@ -875,7 +875,7 @@ void QGraphicsWidgetPrivate::setGeometryFromSetPos()
    // Ensure setGeometry is called (avoid recursion when setPos is
    // called from within setGeometry).
 
-   q->setGeometry(QRectF(pos, q->size()));
+   q->setGeometry(QRectF(m_itemPos, q->size()));
    inSetPos = 0 ;
 }
 
