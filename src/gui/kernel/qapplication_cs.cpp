@@ -2775,7 +2775,7 @@ bool QApplicationPrivate::notify_helper(QObject *receiver, QEvent *e)
          widget->setAttribute(Qt::WA_UnderMouse, false);
       }
 
-      if (QLayout *layout = widget->d_func()->layout) {
+      if (QLayout *layout = widget->d_func()->m_widgetLayout) {
          layout->widgetEvent(e);
       }
    }

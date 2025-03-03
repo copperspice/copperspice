@@ -670,7 +670,7 @@ void QDockWidgetPrivate::_q_toggleView(bool b)
 void QDockWidgetPrivate::updateButtons()
 {
    Q_Q(QDockWidget);
-   QDockWidgetLayout *dwLayout = qobject_cast<QDockWidgetLayout *>(layout);
+   QDockWidgetLayout *dwLayout = qobject_cast<QDockWidgetLayout *>(m_widgetLayout);
 
    QStyleOptionDockWidget opt;
    q->initStyleOption(&opt);
@@ -704,7 +704,7 @@ void QDockWidgetPrivate::updateButtons()
 #endif
 
    q->setAttribute(Qt::WA_ContentsPropagated, (canFloat || canClose) && !hideButtons);
-   layout->invalidate();
+   m_widgetLayout->invalidate();
 }
 
 void QDockWidgetPrivate::_q_toggleTopLevel()
@@ -791,7 +791,7 @@ void QDockWidgetPrivate::endDrag(bool abort)
 
             mwLayout->restore();
 
-            QDockWidgetLayout *dwLayout = qobject_cast<QDockWidgetLayout *>(layout);
+            QDockWidgetLayout *dwLayout = qobject_cast<QDockWidgetLayout *>(m_widgetLayout);
 
             if (!dwLayout->nativeWindowDeco()) {
                // get rid of the X11BypassWindowManager window flag and activate the resizer
@@ -847,7 +847,7 @@ bool QDockWidgetPrivate::mousePressEvent(QMouseEvent *event)
 #if !defined(QT_NO_MAINWINDOW)
    Q_Q(QDockWidget);
 
-   QDockWidgetLayout *dwLayout = qobject_cast<QDockWidgetLayout *>(layout);
+   QDockWidgetLayout *dwLayout = qobject_cast<QDockWidgetLayout *>(m_widgetLayout);
 
    if (!dwLayout->nativeWindowDeco()) {
       QRect titleArea = dwLayout->titleArea();
@@ -878,7 +878,7 @@ bool QDockWidgetPrivate::mousePressEvent(QMouseEvent *event)
 
 bool QDockWidgetPrivate::mouseDoubleClickEvent(QMouseEvent *event)
 {
-   QDockWidgetLayout *dwLayout = qobject_cast<QDockWidgetLayout *>(layout);
+   QDockWidgetLayout *dwLayout = qobject_cast<QDockWidgetLayout *>(m_widgetLayout);
 
    if (!dwLayout->nativeWindowDeco()) {
       QRect titleArea = dwLayout->titleArea();
@@ -903,7 +903,7 @@ bool QDockWidgetPrivate::mouseMoveEvent(QMouseEvent *event)
       return ret;
    }
 
-   QDockWidgetLayout *dwlayout = qobject_cast<QDockWidgetLayout *>(layout);
+   QDockWidgetLayout *dwlayout = qobject_cast<QDockWidgetLayout *>(m_widgetLayout);
    QMainWindowLayout *mwlayout = qt_mainwindow_layout_from_dock(q);
 
    if (! dwlayout->nativeWindowDeco()) {
@@ -1055,7 +1055,7 @@ void QDockWidgetPrivate::unplug(const QRect &rect)
    QRect r = rect;
 
    r.moveTopLeft(q->mapToGlobal(QPoint(0, 0)));
-   QDockWidgetLayout *dwLayout = qobject_cast<QDockWidgetLayout *>(layout);
+   QDockWidgetLayout *dwLayout = qobject_cast<QDockWidgetLayout *>(m_widgetLayout);
 
    if (dwLayout->nativeWindowDeco(true)) {
       r.adjust(0, dwLayout->titleHeight(), 0, 0);
@@ -1096,7 +1096,7 @@ void QDockWidgetPrivate::setWindowState(bool floating, bool unplug, const QRect 
 
    Qt::WindowFlags flags = floating ? Qt::Tool : Qt::Widget;
 
-   QDockWidgetLayout *dwLayout = qobject_cast<QDockWidgetLayout *>(layout);
+   QDockWidgetLayout *dwLayout = qobject_cast<QDockWidgetLayout *>(m_widgetLayout);
    const bool nativeDeco = dwLayout->nativeWindowDeco(floating);
 
    if (nativeDeco) {

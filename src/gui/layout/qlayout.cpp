@@ -90,13 +90,13 @@ QLayout::QLayout(QLayoutPrivate &dd, QLayout *lay, QWidget *w)
 
       } else {
          d->topLevel = true;
-         w->d_func()->layout = this;
+         w->d_func()->m_widgetLayout = this;
 
          try {
             invalidate();
 
          } catch (...) {
-            w->d_func()->layout = nullptr;
+            w->d_func()->m_widgetLayout = nullptr;
             throw;
          }
       }
@@ -609,7 +609,7 @@ QLayout::~QLayout()
 
    if (d->topLevel && parent() && parent()->isWidgetType() &&
       ((QWidget *)parent())->layout() == this) {
-      ((QWidget *)parent())->d_func()->layout = nullptr;
+      ((QWidget *)parent())->d_func()->m_widgetLayout = nullptr;
    }
 }
 

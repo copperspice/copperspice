@@ -401,8 +401,8 @@ void QMessageBoxPrivate::setupLayout()
 
 int QMessageBoxPrivate::layoutMinimumWidth()
 {
-   layout->activate();
-   return layout->totalMinimumSize().width();
+   m_widgetLayout->activate();
+   return m_widgetLayout->totalMinimumSize().width();
 }
 
 void QMessageBoxPrivate::updateSize()
@@ -480,9 +480,9 @@ void QMessageBoxPrivate::updateSize()
       width = windowTitleWidth;
    }
 
-   layout->activate();
-   int height = (layout->hasHeightForWidth()) ? layout->totalHeightForWidth(width)
-      : layout->totalMinimumSize().height();
+   m_widgetLayout->activate();
+   int height = (m_widgetLayout->hasHeightForWidth()) ? m_widgetLayout->totalHeightForWidth(width)
+      : m_widgetLayout->totalMinimumSize().height();
 
    q->setFixedSize(width, height);
    QCoreApplication::removePostedEvents(q, QEvent::LayoutRequest);

@@ -633,10 +633,10 @@ class Q_GUI_EXPORT QWidgetPrivate
    QWidget *focus_next;
    QWidget *focus_prev;
    QWidget *focus_child;
-   QLayout *layout;
+   QLayout *m_widgetLayout;
    QRegion *needsFlush;
    QPaintDevice *redirectDev;
-   QWidgetItemV2 *widgetItem;
+   QWidgetItemV2 *m_widgetItem2;
    QPaintEngine *extraPaintEngine;
    mutable const QMetaObject *polished;
    QGraphicsEffect *graphicsEffect;

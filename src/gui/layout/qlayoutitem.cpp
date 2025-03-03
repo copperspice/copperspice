@@ -380,8 +380,8 @@ QWidgetItemV2::QWidgetItemV2(QWidget *widget)
 {
    QWidgetPrivate *wd = wid->d_func();
 
-   if (! wd->widgetItem) {
-      wd->widgetItem = this;
+   if (! wd->m_widgetItem2) {
+      wd->m_widgetItem2 = this;
    }
 }
 
@@ -389,15 +389,15 @@ QWidgetItemV2::~QWidgetItemV2()
 {
    if (wid) {
       QWidgetPrivate *wd = wid->d_func();
-      if (wd->widgetItem == this) {
-         wd->widgetItem = nullptr;
+      if (wd->m_widgetItem2 == this) {
+         wd->m_widgetItem2 = nullptr;
       }
    }
 }
 
 inline bool QWidgetItemV2::useSizeCache() const
 {
-   return wid->d_func()->widgetItem == this;
+   return wid->d_func()->m_widgetItem2 == this;
 }
 
 void QWidgetItemV2::updateCacheIfNecessary() const

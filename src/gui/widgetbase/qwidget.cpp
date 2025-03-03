@@ -147,7 +147,7 @@ void QWidgetBackingStoreTracker::unregisterWidgetSubtree(QWidget *widget)
 
 QWidgetPrivate::QWidgetPrivate()
    : extra(nullptr), focus_next(nullptr), focus_prev(nullptr), focus_child(nullptr),
-     layout(nullptr), needsFlush(nullptr), redirectDev(nullptr), widgetItem(nullptr),
+     m_widgetLayout(nullptr), needsFlush(nullptr), redirectDev(nullptr), m_widgetItem2(nullptr),
      extraPaintEngine(nullptr), polished(nullptr), graphicsEffect(nullptr),
 
 #if ! defined(QT_NO_IM)
@@ -190,8 +190,8 @@ QWidgetPrivate::QWidgetPrivate()
 
 QWidgetPrivate::~QWidgetPrivate()
 {
-   if (widgetItem != nullptr) {
-      widgetItem->wid = nullptr;
+   if (m_widgetItem2 != nullptr) {
+      m_widgetItem2->wid = nullptr;
    }
 
    if (extra) {
@@ -960,8 +960,8 @@ QWidget::~QWidget()
    QObject::cs_forceRemoveChild();
 
    // delete layout while we still are a valid widget
-   delete d->layout;
-   d->layout = nullptr;
+   delete d->m_widgetLayout;
+   d->m_widgetLayout = nullptr;
 
    // remove myself from focus list
    Q_ASSERT(d->focus_next->d_func()->focus_prev == this);
@@ -3829,7 +3829,7 @@ QRegion QWidgetPrivate::prepareToRender(const QRegion &region, QWidget::RenderFl
             widget->setAttribute(Qt::WA_WState_Hidden, false);
             hiddenWidgets.append(widget);
 
-            if (! widget->isWindow() && widget->parentWidget()->d_func()->layout) {
+            if (! widget->isWindow() && widget->parentWidget()->d_func()->m_widgetLayout) {
                widget->d_func()->updateGeometry_helper(true);
             }
          }
@@ -3838,8 +3838,8 @@ QRegion QWidgetPrivate::prepareToRender(const QRegion &region, QWidget::RenderFl
       }
 
       // Activate top-level layout
-      if (topLevel->d_func()->layout) {
-         topLevel->d_func()->layout->activate();
+      if (topLevel->d_func()->m_widgetLayout) {
+         topLevel->d_func()->m_widgetLayout->activate();
       }
 
       // Adjust size if necessary
@@ -3856,11 +3856,11 @@ QRegion QWidgetPrivate::prepareToRender(const QRegion &region, QWidget::RenderFl
 
       // we not cheating with WA_WState_Hidden anymore
       for (auto item : hiddenWidgets) {
-         QWidget *widget = item;
-         widget->setAttribute(Qt::WA_WState_Hidden);
+         QWidget *widgetItem = item;
+         widgetItem->setAttribute(Qt::WA_WState_Hidden);
 
-         if (! widget->isWindow() && widget->parentWidget()->d_func()->layout) {
-            widget->parentWidget()->d_func()->layout->invalidate();
+         if (! widgetItem->isWindow() && widgetItem->parentWidget()->d_func()->m_widgetLayout) {
+            widgetItem->parentWidget()->d_func()->m_widgetLayout->invalidate();
          }
       }
 
@@ -4960,9 +4960,9 @@ void QWidget::setFocus(Qt::FocusReason reason)
 
             if (! isHidden()) {
                // Update proxy state
-               if (QWExtra *topData = window()->d_func()->extra) {
-                  if (topData->proxyWidget && topData->proxyWidget->hasFocus()) {
-                     topData->proxyWidget->d_func()->updateProxyInputMethodAcceptanceFromWidget();
+               if (QWExtra *newTopData = window()->d_func()->extra) {
+                  if (newTopData->proxyWidget && topData->proxyWidget->hasFocus()) {
+                     newTopData->proxyWidget->d_func()->updateProxyInputMethodAcceptanceFromWidget();
                   }
                }
 
@@ -5823,7 +5823,7 @@ void QWidget::setContentsMargins(int left, int top, int right, int bottom)
    d->rightmargin  = right;
    d->bottommargin = bottom;
 
-   if (QLayout *l = d->layout) {
+   if (QLayout *l = d->m_widgetLayout) {
       l->update();   //force activate; will do updateGeometry
    } else {
       updateGeometry();
@@ -5940,13 +5940,13 @@ void QWidgetPrivate::show_recursive()
 
    q->ensurePolished();
 
-   if (! q->isWindow() && q->parentWidget()->d_func()->layout && ! q->parentWidget()->m_widgetData->in_show) {
-      q->parentWidget()->d_func()->layout->activate();
+   if (! q->isWindow() && q->parentWidget()->d_func()->m_widgetLayout && ! q->parentWidget()->m_widgetData->in_show) {
+      q->parentWidget()->d_func()->m_widgetLayout->activate();
    }
 
    // activate our layout before we and our children become visible
-   if (layout) {
-      layout->activate();
+   if (m_widgetLayout != nullptr) {
+      m_widgetLayout->activate();
    }
 
    show_helper();
@@ -6007,8 +6007,8 @@ void QWidgetPrivate::activateChildLayoutsRecursively()
       // Activate child's layout
       QWidgetPrivate *childPrivate = child->d_func();
 
-      if (childPrivate->layout) {
-         childPrivate->layout->activate();
+      if (childPrivate->m_widgetLayout) {
+         childPrivate->m_widgetLayout->activate();
       }
 
       // Pretend we're visible.
@@ -6358,15 +6358,15 @@ void QWidget::setVisible(bool visible)
       }
 
       // activate our layout before we and our children become visible
-      if (d->layout) {
-         d->layout->activate();
+      if (d->m_widgetLayout) {
+         d->m_widgetLayout->activate();
       }
 
       if (! isWindow()) {
          QWidget *parent = parentWidget();
 
-         while (parent && parent->isVisible() && parent->d_func()->layout && ! parent->m_widgetData->in_show) {
-            parent->d_func()->layout->activate();
+         while (parent && parent->isVisible() && parent->d_func()->m_widgetLayout && ! parent->m_widgetData->in_show) {
+            parent->d_func()->m_widgetLayout->activate();
 
             if (parent->isWindow()) {
                break;
@@ -6381,7 +6381,7 @@ void QWidget::setVisible(bool visible)
       }
 
       // adjust size if necessary
-      if (! wasResized && (isWindow() || !parentWidget()->d_func()->layout))  {
+      if (! wasResized && (isWindow() || ! parentWidget()->d_func()->m_widgetLayout))  {
          if (isWindow()) {
             adjustSize();
 
@@ -6436,8 +6436,8 @@ void QWidget::setVisible(bool visible)
 
       // invalidate layout similar to updateGeometry()
       if (! isWindow() && parentWidget()) {
-         if (parentWidget()->d_func()->layout) {
-            parentWidget()->d_func()->layout->invalidate();
+         if (parentWidget()->d_func()->m_widgetLayout) {
+            parentWidget()->d_func()->m_widgetLayout->invalidate();
          } else if (parentWidget()->isVisible()) {
             QApplication::postEvent(parentWidget(), new QEvent(QEvent::LayoutRequest));
          }
@@ -6659,12 +6659,12 @@ QSize QWidgetPrivate::adjustedSize() const
    if (q->isWindow()) {
       Qt::Orientations exp;
 
-      if (layout) {
-         if (layout->hasHeightForWidth()) {
-            s.setHeight(layout->totalHeightForWidth(s.width()));
+      if (m_widgetLayout != nullptr) {
+         if (m_widgetLayout->hasHeightForWidth()) {
+            s.setHeight(m_widgetLayout->totalHeightForWidth(s.width()));
          }
 
-         exp = layout->expandingDirections();
+         exp = m_widgetLayout->expandingDirections();
 
       } else {
          if (q->sizePolicy().hasHeightForWidth()) {
@@ -6708,11 +6708,12 @@ QSize QWidgetPrivate::adjustedSize() const
 void QWidget::adjustSize()
 {
    Q_D(QWidget);
+
    ensurePolished();
    QSize s = d->adjustedSize();
 
-   if (d->layout) {
-      d->layout->activate();
+   if (d->m_widgetLayout != nullptr) {
+      d->m_widgetLayout->activate();
    }
 
    if (s.isValid()) {
@@ -6724,8 +6725,8 @@ QSize QWidget::sizeHint() const
 {
    Q_D(const QWidget);
 
-   if (d->layout) {
-      return d->layout->totalSizeHint();
+   if (d->m_widgetLayout != nullptr) {
+      return d->m_widgetLayout->totalSizeHint();
    }
 
    return QSize(-1, -1);
@@ -6735,8 +6736,8 @@ QSize QWidget::minimumSizeHint() const
 {
    Q_D(const QWidget);
 
-   if (d->layout) {
-      return d->layout->totalMinimumSize();
+   if (d->m_widgetLayout != nullptr) {
+      return d->m_widgetLayout->totalMinimumSize();
    }
 
    return QSize(-1, -1);
@@ -7185,8 +7186,8 @@ bool QWidget::event(QEvent *event)
          break;
 
       case QEvent::LayoutDirectionChange:
-         if (d->layout) {
-            d->layout->invalidate();
+         if (d->m_widgetLayout) {
+            d->m_widgetLayout->invalidate();
          }
 
          update();
@@ -7386,8 +7387,8 @@ void QWidget::changeEvent(QEvent *event)
          update();
          updateGeometry();
 
-         if (d->layout) {
-            d->layout->invalidate();
+         if (d->m_widgetLayout) {
+            d->m_widgetLayout->invalidate();
          }
 
          break;
@@ -7695,7 +7696,7 @@ QRegion QWidget::mask() const
 
 QLayout *QWidget::layout() const
 {
-   return d_func()->layout;
+   return d_func()->m_widgetLayout;
 }
 
 void QWidget::setLayout(QLayout *l)
@@ -7732,7 +7733,7 @@ void QWidget::setLayout(QLayout *l)
    Q_D(QWidget);
 
    l->d_func()->topLevel = true;
-   d->layout = l;
+   d->m_widgetLayout = l;
 
    if (oldParent != this) {
       l->setParent(this);
@@ -7752,7 +7753,7 @@ QLayout *QWidget::takeLayout()
    QLayout *tmp = layout();
 
    if (tmp != nullptr) {
-      d->layout = nullptr;
+      d->m_widgetLayout = nullptr;
       tmp->setParent(nullptr);
    }
 
@@ -7809,7 +7810,7 @@ int QWidget::heightForWidth(int w) const
 bool QWidget::hasHeightForWidth() const
 {
    Q_D(const QWidget);
-   return d->layout ? d->layout->hasHeightForWidth() : d->size_policy.hasHeightForWidth();
+   return d->m_widgetLayout? d->m_widgetLayout->hasHeightForWidth() : d->size_policy.hasHeightForWidth();
 }
 
 QWidget *QWidget::childAt(const QPoint &p) const
@@ -7871,8 +7872,8 @@ void QWidgetPrivate::updateGeometry_helper(bool forceUpdate)
 {
    Q_Q(QWidget);
 
-   if (widgetItem != nullptr) {
-      widgetItem->invalidateSizeCache();
+   if (m_widgetItem2 != nullptr) {
+      m_widgetItem2->invalidateSizeCache();
    }
 
    QWidget *parent;
@@ -7882,8 +7883,8 @@ void QWidgetPrivate::updateGeometry_helper(bool forceUpdate)
 
       if (! q->isWindow() && ! isHidden && (parent = q->parentWidget())) {
 
-         if (parent->d_func()->layout) {
-            parent->d_func()->layout->invalidate();
+         if (parent->d_func()->m_widgetLayout) {
+            parent->d_func()->m_widgetLayout->invalidate();
          } else if (parent->isVisible()) {
             QApplication::postEvent(parent, new QEvent(QEvent::LayoutRequest));
          }

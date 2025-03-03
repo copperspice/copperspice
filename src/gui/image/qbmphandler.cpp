@@ -684,15 +684,20 @@ bool qt_write_dib(QDataStream &s, QImage image)
             *b = *p << 4;
          }
 
-      } else {                                // 32 bits
-         const QRgb *p   = (const QRgb *)image.constScanLine(y);
-         const QRgb *end = p + image.width();
+      } else {
+         // 32 bits
+
+         const QRgb *ptr_32 = (const QRgb *)image.constScanLine(y);
+         const QRgb *end_32 = ptr_32 + image.width();
+
          b = buf;
-         while (p < end) {
-            *b++ = qBlue(*p);
-            *b++ = qGreen(*p);
-            *b++ = qRed(*p);
-            p++;
+
+         while (ptr_32 < end_32) {
+            *b++ = qBlue(*ptr_32);
+            *b++ = qGreen(*ptr_32);
+            *b++ = qRed(*ptr_32);
+
+            ptr_32++;
          }
       }
       if (bpl_bmp != d->write((char *)buf, bpl_bmp)) {
