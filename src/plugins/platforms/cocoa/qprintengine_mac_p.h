@@ -57,7 +57,7 @@ class QMacPrintEngine : public QPaintEngine, public QPrintEngine
    bool begin(QPaintDevice *dev) override;
    bool end() override;
 
-   virtual QPaintEngine::Type type() const {
+   virtual QPaintEngine::Type type() const override {
       return QPaintEngine::MacPrinter;
    }
 

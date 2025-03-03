@@ -51,9 +51,9 @@
 #if defined(Q_OS_DARWIN)
 #define kSecTrustSettingsDomainSystem 2 // so we do not need to include the header file
 
-PtrSecCertificateCopyData QSslSocketPrivate::ptrSecCertificateCopyData = 0;
-PtrSecTrustSettingsCopyCertificates QSslSocketPrivate::ptrSecTrustSettingsCopyCertificates = 0;
-PtrSecTrustCopyAnchorCertificates QSslSocketPrivate::ptrSecTrustCopyAnchorCertificates = 0;
+PtrSecCertificateCopyData QSslSocketPrivate::ptrSecCertificateCopyData = nullptr;
+PtrSecTrustSettingsCopyCertificates QSslSocketPrivate::ptrSecTrustSettingsCopyCertificates = nullptr;
+PtrSecTrustCopyAnchorCertificates QSslSocketPrivate::ptrSecTrustCopyAnchorCertificates = nullptr;
 
 #endif
 

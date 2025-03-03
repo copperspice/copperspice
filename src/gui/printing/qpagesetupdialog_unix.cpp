@@ -146,7 +146,7 @@ class QPagePreview : public QWidget
                QRect textRect(marginRect.left() + x * (textWidth + spacing),
                   marginRect.top() + y * (textHeight + spacing),
                   textWidth, textHeight);
-               p.drawText(textRect, Qt::TextWordWrap | Qt::AlignVCenter, text);
+               p.drawText(textRect, cs_enum_cast(Qt::TextWordWrap) | cs_enum_cast(Qt::AlignVCenter), text);
             }
          }
       }

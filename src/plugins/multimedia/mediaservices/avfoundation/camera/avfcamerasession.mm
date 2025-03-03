@@ -273,8 +273,7 @@ void AVFCameraSession::setState(QCamera::State newState)
         m_defaultCodec = 0;
         defaultCodec();
 
-        bool activeFormatSet = applyImageEncoderSettings()
-                             | applyViewfinderSettings();
+        bool activeFormatSet = applyImageEncoderSettings() || applyViewfinderSettings();
 
         [m_captureSession commitConfiguration];
 

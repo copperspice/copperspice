@@ -81,16 +81,16 @@ CGImageRef qt_mac_toCGImage(const QImage &inImage)
          cgflags = kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Host;
          break;
       case QImage::Format_RGB888:
-         cgflags = kCGImageAlphaNone | kCGBitmapByteOrder32Big;
+         cgflags = cs_enum_cast(kCGImageAlphaNone) | cs_enum_cast(kCGBitmapByteOrder32Big);
          break;
       case QImage::Format_RGBA8888_Premultiplied:
-         cgflags = kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big;
+         cgflags = cs_enum_cast(kCGImageAlphaPremultipliedLast) | cs_enum_cast(kCGBitmapByteOrder32Big);
          break;
       case QImage::Format_RGBA8888:
-         cgflags = kCGImageAlphaLast | kCGBitmapByteOrder32Big;
+         cgflags = cs_enum_cast(kCGImageAlphaLast) | cs_enum_cast(kCGBitmapByteOrder32Big);
          break;
       case QImage::Format_RGBX8888:
-         cgflags = kCGImageAlphaNoneSkipLast | kCGBitmapByteOrder32Big;
+         cgflags = cs_enum_cast(kCGImageAlphaNoneSkipLast) | cs_enum_cast(kCGBitmapByteOrder32Big);
          break;
       default:
          // Everything not recognized explicitly is converted to ARGB32_Premultiplied.

@@ -36,6 +36,7 @@ class Q_MULTIMEDIA_EXPORT QMediaTimeInterval
    QMediaTimeInterval(qint64 start, qint64 end);
 
    QMediaTimeInterval(const QMediaTimeInterval &other) = default;
+   QMediaTimeInterval &operator=(const QMediaTimeInterval &other) = default;
 
    qint64 start() const;
    qint64 end() const;
