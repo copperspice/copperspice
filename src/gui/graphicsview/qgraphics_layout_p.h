@@ -126,6 +126,7 @@ class QGraphicsLayoutPrivate : public QGraphicsLayoutItemPrivate
    qreal m_layoutTop;
    qreal m_layoutRight;
    qreal m_layoutBottom;
+
    bool activated;
 };
 

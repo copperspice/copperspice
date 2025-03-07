@@ -1917,8 +1917,8 @@ void QGraphicsAnchorLayoutPrivate::calculateGraphs(QGraphicsAnchorLayoutPrivate:
    // Clean up our data structures. They are not needed anymore since
    // distribution uses just interpolation.
    qDeleteAll(m_constraints[orientation]);
-   graphPaths[orientation].clear(); // ###
    m_constraints[orientation].clear();
+   graphPaths[orientation].clear();
 
    if (simplificationEnabled) {
       restoreSimplifiedGraph(orientation);
@@ -2218,9 +2218,11 @@ QList< QList<QSimplexConstraint *>> QGraphicsAnchorLayoutPrivate::getGraphParts(
    }
 
    QLinkedList<QSimplexConstraint *> remainingConstraints;
+
    for (int i = 0; i < m_constraints[orientation].count(); ++i) {
       remainingConstraints += m_constraints[orientation].at(i);
    }
+
    for (int i = 0; i < itemCenterConstraints[orientation].count(); ++i) {
       remainingConstraints += itemCenterConstraints[orientation].at(i);
    }

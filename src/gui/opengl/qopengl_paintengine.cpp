@@ -1625,7 +1625,7 @@ void QOpenGL2PaintEngineEx::drawTextItem(const QPointF &p, const QTextItem &text
    if (glyphFormat == QFontEngine::Format_A32) {
       if (d->device->context()->format().alphaBufferSize() > 0 || txtype > QTransform::TxTranslate
             || (state()->composition_mode != QPainter::CompositionMode_Source
-                && state()->composition_mode != QPainter::CompositionMode_SourceOver)) {
+            && state()->composition_mode != QPainter::CompositionMode_SourceOver)) {
          glyphFormat = QFontEngine::Format_A8;
       }
    }

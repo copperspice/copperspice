@@ -458,7 +458,7 @@ bool QMetaMethod::invoke(QObject *object, Qt::ConnectionType type, CSReturnArgum
 
       QSemaphore semaphore;
 
-      // broom - ok to have on hold
+      // BROOM - ok to have on hold
       // add &retval to QMetaCallEvent so we can return a value
 
       // store the signal data, false indicates the data will not be copied

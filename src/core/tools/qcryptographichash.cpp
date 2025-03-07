@@ -46,6 +46,10 @@ using DataLength  = unsigned long long;
 using hashState   = spongeState;
 using SHA3Context = spongeState;
 
+//   using SHA3Init    = HashReturn ()(hashState *state, int hashbitlen);
+//   using SHA3Update  = HashReturn ()(hashState *state, const BitSequence *data, DataLength databitlen);
+//   using SHA3Final   = HashReturn ()(hashState *state, BitSequence *hashval);
+
 typedef HashReturn (SHA3Init)(hashState *state, int hashbitlen);
 typedef HashReturn (SHA3Update)(hashState *state, const BitSequence *data, DataLength databitlen);
 typedef HashReturn (SHA3Final)(hashState *state, BitSequence *hashval);

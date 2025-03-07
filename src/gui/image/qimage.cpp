@@ -2393,11 +2393,11 @@ QStringList QImage::textKeys() const
 
 QString QImage::text(const QString &key) const
 {
-   if (!d) {
+   if (! d) {
       return QString();
    }
 
-   if (!key.isEmpty()) {
+   if (! key.isEmpty()) {
       return d->text.value(key);
    }
 

@@ -384,8 +384,10 @@ void QGraphicsLayoutItem::setMaximumHeight(qreal height)
 void QGraphicsLayoutItem::setGeometry(const QRectF &rect)
 {
    Q_D(QGraphicsLayoutItem);
+
    QSizeF effectiveSize = rect.size().expandedTo(effectiveSizeHint(Qt::MinimumSize))
       .boundedTo(effectiveSizeHint(Qt::MaximumSize));
+
    d->m_layoutItemRect = QRectF(rect.topLeft(), effectiveSize);
 }
 
@@ -400,12 +402,15 @@ void QGraphicsLayoutItem::getContentsMargins(qreal *left, qreal *top, qreal *rig
    if (left) {
       *left = 0;
    }
+
    if (top) {
       *top = 0;
    }
+
    if (right) {
       *right = 0;
    }
+
    if (bottom) {
       *bottom = 0;
    }
@@ -413,8 +418,13 @@ void QGraphicsLayoutItem::getContentsMargins(qreal *left, qreal *top, qreal *rig
 
 QRectF QGraphicsLayoutItem::contentsRect() const
 {
-   qreal left, top, right, bottom;
+   qreal left;
+   qreal top;
+   qreal right;
+   qreal bottom;
+
    getContentsMargins(&left, &top, &right, &bottom);
+
    return QRectF(QPointF(), geometry().size()).adjusted(+left, +top, -right, -bottom);
 }
 

@@ -51,6 +51,22 @@ class QGraphicsItemAnimationPrivate
    {
    }
 
+   struct Pair {
+      bool operator <(const Pair &other) const {
+         return step < other.step;
+      }
+
+      bool operator==(const Pair &other) const {
+         return step == other.step;
+      }
+
+      qreal step;
+      qreal value;
+   };
+
+   qreal linearValueForStep(qreal step, QVector<Pair> *source, qreal defaultValue = 0);
+   void insertUniquePair(qreal step, qreal value, QVector<Pair> *binList, const char *method);
+
    QGraphicsItemAnimation *q;
 
    QPointer<QTimeLine> timeLine;
@@ -58,17 +74,6 @@ class QGraphicsItemAnimationPrivate
 
    QPointF startPos;
    QMatrix startMatrix;
-
-   struct Pair {
-      bool operator <(const Pair &other) const {
-         return step < other.step;
-      }
-      bool operator==(const Pair &other) const {
-         return step == other.step;
-      }
-      qreal step;
-      qreal value;
-   };
 
    qreal m_step;
 
@@ -81,9 +86,6 @@ class QGraphicsItemAnimationPrivate
    QVector<Pair> horizontalShear;
    QVector<Pair> xTranslation;
    QVector<Pair> yTranslation;
-
-   qreal linearValueForStep(qreal step, QVector<Pair> *source, qreal defaultValue = 0);
-   void insertUniquePair(qreal step, qreal value, QVector<Pair> *binList, const char *method);
 };
 
 qreal QGraphicsItemAnimationPrivate::linearValueForStep(qreal step, QVector<Pair> *source, qreal defaultValue)
@@ -366,13 +368,8 @@ void QGraphicsItemAnimation::setStep(qreal step)
          d->item->setPos(posAt(step));
       }
 
-      if (!d->rotation.isEmpty()
-         || !d->verticalScale.isEmpty()
-         || !d->horizontalScale.isEmpty()
-         || !d->verticalShear.isEmpty()
-         || !d->horizontalShear.isEmpty()
-         || !d->xTranslation.isEmpty()
-         || !d->yTranslation.isEmpty()) {
+      if (! d->rotation.isEmpty() || ! d->verticalScale.isEmpty() || ! d->horizontalScale.isEmpty() || ! d->verticalShear.isEmpty()
+            || ! d->horizontalShear.isEmpty() || ! d->xTranslation.isEmpty() || ! d->yTranslation.isEmpty()) {
          d->item->setMatrix(d->startMatrix * matrixAt(step));
       }
    }

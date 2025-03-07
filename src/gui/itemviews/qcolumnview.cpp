@@ -164,6 +164,7 @@ QRect QColumnView::visualRect(const QModelIndex &index) const
    }
 
    Q_D(const QColumnView);
+
    for (int i = 0; i < d->columns.size(); ++i) {
       QRect rect = d->columns.at(i)->visualRect(index);
       if (!rect.isNull()) {
@@ -171,6 +172,7 @@ QRect QColumnView::visualRect(const QModelIndex &index) const
          return rect;
       }
    }
+
    return QRect();
 }
 
@@ -186,6 +188,7 @@ void QColumnView::scrollContentsBy(int dx, int dy)
    for (int i = 0; i < d->columns.count(); ++i) {
       d->columns.at(i)->move(d->columns.at(i)->x() + dx, 0);
    }
+
    d->m_columnViewOffset += dx;
    QAbstractItemView::scrollContentsBy(dx, dy);
 }
@@ -531,7 +534,7 @@ void QColumnViewPrivate::closeColumns(const QModelIndex &parent, bool build)
 
    // Someone wants to go to an index that can be reached without changing
    // the root index, don't allow them
-   if (!clearAll && !passThroughRoot && currentColumn == -1) {
+   if (! clearAll && !passThroughRoot && currentColumn == -1) {
       return;
    }
 
@@ -541,10 +544,11 @@ void QColumnViewPrivate::closeColumns(const QModelIndex &parent, bool build)
 
    // Optimization so we don't go deleting and then creating the same thing
    bool alreadyExists = false;
+
    if (build && columns.size() > currentColumn + 1) {
       bool viewingParent = (columns.at(currentColumn + 1)->rootIndex() == parent);
-      bool viewingChild = (!model->hasChildren(parent)
-            && !columns.at(currentColumn + 1)->rootIndex().isValid());
+      bool viewingChild  = (! model->hasChildren(parent) && ! columns.at(currentColumn + 1)->rootIndex().isValid());
+
       if (viewingParent || viewingChild) {
          currentColumn++;
          alreadyExists = true;
@@ -913,8 +917,10 @@ void QColumnView::selectAll()
    if (indexList.count() >= 1) {
       parent = indexList.at(0).parent();
    }
+
    if (indexList.count() == 1) {
       parent = indexList.at(0);
+
       if (!model()->hasChildren(parent)) {
          parent = parent.parent();
       } else {
@@ -923,9 +929,8 @@ void QColumnView::selectAll()
    }
 
    QModelIndex tl = model()->index(0, 0, parent);
-   QModelIndex br = model()->index(model()->rowCount(parent) - 1,
-         model()->columnCount(parent) - 1,
-         parent);
+   QModelIndex br = model()->index(model()->rowCount(parent) - 1, model()->columnCount(parent) - 1, parent);
+
    selection.append(QItemSelectionRange(tl, br));
    selectionModel()->select(selection, QItemSelectionModel::ClearAndSelect);
 }
@@ -948,16 +953,17 @@ void QColumnViewPrivate::_q_columnsInserted(const QModelIndex &parent, int start
 void QColumnViewPrivate::checkColumnCreation(const QModelIndex &parent)
 {
    if (parent == q_func()->currentIndex() && model->hasChildren(parent)) {
-      //the parent has children and is the current
-      //let's try to find out if there is already a mapping that is good
+      // parent has children and is the current
+      // try to find out if there is already a mapping that is good
+
       for (int i = 0; i < columns.count(); ++i) {
          QAbstractItemView *view = columns.at(i);
 
          if (view->rootIndex() == parent) {
             if (view == previewColumn) {
-               //let's recreate the parent
+               // recreate the parent
                closeColumns(parent, false);
-               createColumn(parent, true /*show*/);
+               createColumn(parent, true);
             }
             break;
          }
@@ -968,6 +974,7 @@ void QColumnViewPrivate::checkColumnCreation(const QModelIndex &parent)
 void QColumnViewPrivate::doLayout()
 {
    Q_Q(QColumnView);
+
    if (!model || columns.isEmpty()) {
       return;
    }
@@ -977,6 +984,7 @@ void QColumnViewPrivate::doLayout()
 
    if (q->isRightToLeft()) {
       x = viewport->width() + q->horizontalOffset();
+
       for (int i = 0; i < columns.size(); ++i) {
          QAbstractItemView *view = columns.at(i);
          x -= view->width();
@@ -989,9 +997,11 @@ void QColumnViewPrivate::doLayout()
       for (int i = 0; i < columns.size(); ++i) {
          QAbstractItemView *view = columns.at(i);
          int currentColumnWidth = view->width();
+
          if (x != view->x() || viewportHeight != view->height()) {
             view->setGeometry(x, 0, currentColumnWidth, viewportHeight);
          }
+
          x += currentColumnWidth;
       }
    }

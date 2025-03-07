@@ -133,7 +133,7 @@ class QRegexTraits
 
       template <typename C = QChar32>
       QChar32 translate_nocase(QChar32 c) const {
-         // broom - modify for case insensitive when multiple chars are returned
+         // BROOM - modify for case insensitive when multiple chars are returned
          return C(c).toCaseFolded()[0];
       }
 

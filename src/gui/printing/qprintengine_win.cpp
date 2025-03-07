@@ -379,8 +379,8 @@ void QWin32PrintEngine::updateState(const QPaintEngineState &state)
    }
 
    if (state.state() & DirtyBrush) {
-      QBrush brush = state.brush();
-      d->has_brush = brush.style() == Qt::SolidPattern;
+      QBrush brush   = state.brush();
+      d->has_brush   = brush.style() == Qt::SolidPattern;
       d->brush_color = brush.color();
    }
 

@@ -42,6 +42,7 @@ QTreeWidgetItemIterator::QTreeWidgetItemIterator(QTreeWidget *widget, IteratorFl
    : current(nullptr), m_treeItemFlags(flags)
 {
    Q_ASSERT(widget);
+
    QTreeModel *model = qobject_cast<QTreeModel *>(widget->model());
    Q_ASSERT(model);
    d_ptr.reset(new QTreeWidgetItemIteratorPrivate(this, model));
@@ -50,7 +51,8 @@ QTreeWidgetItemIterator::QTreeWidgetItemIterator(QTreeWidget *widget, IteratorFl
    if (! model->rootItem->m_children.isEmpty()) {
       current = model->rootItem->child(0);
    }
-   if (current && !matchesFlags(current)) {
+
+   if (current && ! matchesFlags(current)) {
       ++(*this);
    }
 }
@@ -93,38 +95,45 @@ QTreeWidgetItemIterator::~QTreeWidgetItemIterator()
 QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator=(const QTreeWidgetItemIterator &it)
 {
    Q_D(QTreeWidgetItemIterator);
+
    if (d_func()->m_model != it.d_func()->m_model) {
       d_func()->m_model->iterators.removeAll(this);
       it.d_func()->m_model->iterators.append(this);
    }
+
    current = it.current;
    m_treeItemFlags = it.m_treeItemFlags;
 
    d->operator=(*it.d_func());
+
    return *this;
 }
 
 QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator++()
 {
-   if (current)
+   if (current) {
       do {
          current = d_func()->next(current);
       } while (current && !matchesFlags(current));
+   }
+
    return *this;
 }
 
 QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator--()
 {
-   if (current)
+   if (current) {
       do {
          current = d_func()->previous(current);
       } while (current && !matchesFlags(current));
+   }
+
    return *this;
 }
 
 bool QTreeWidgetItemIterator::matchesFlags(const QTreeWidgetItem *item) const
 {
-   if (!item) {
+   if (! item) {
       return false;
    }
 
@@ -137,30 +146,39 @@ bool QTreeWidgetItemIterator::matchesFlags(const QTreeWidgetItem *item) const
       if ((m_treeItemFlags & Selectable) && ! (itemFlags & Qt::ItemIsSelectable)) {
          return false;
       }
+
       if ((m_treeItemFlags & NotSelectable) && (itemFlags & Qt::ItemIsSelectable)) {
          return false;
       }
+
       if ((m_treeItemFlags & DragEnabled) && !(itemFlags & Qt::ItemIsDragEnabled)) {
          return false;
       }
+
       if ((m_treeItemFlags & DragDisabled) && (itemFlags & Qt::ItemIsDragEnabled)) {
          return false;
       }
+
       if ((m_treeItemFlags & DropEnabled) && ! (itemFlags & Qt::ItemIsDropEnabled)) {
          return false;
       }
+
       if ((m_treeItemFlags & DropDisabled) && (itemFlags & Qt::ItemIsDropEnabled)) {
          return false;
       }
+
       if ((m_treeItemFlags & Enabled) && !(itemFlags & Qt::ItemIsEnabled)) {
          return false;
       }
+
       if ((m_treeItemFlags & Disabled) && (itemFlags & Qt::ItemIsEnabled)) {
          return false;
       }
+
       if ((m_treeItemFlags & Editable) && !(itemFlags & Qt::ItemIsEditable)) {
          return false;
       }
+
       if ((m_treeItemFlags & NotEditable) && (itemFlags & Qt::ItemIsEditable)) {
          return false;
       }
@@ -169,10 +187,12 @@ bool QTreeWidgetItemIterator::matchesFlags(const QTreeWidgetItem *item) const
    if (m_treeItemFlags & (Checked | NotChecked)) {
       // ### We only test the check state for column 0
       Qt::CheckState check = item->checkState(0);
+
       // PartiallyChecked matches as Checked.
       if ((m_treeItemFlags & Checked) && (check == Qt::Unchecked)) {
          return false;
       }
+
       if ((m_treeItemFlags & NotChecked) && (check != Qt::Unchecked)) {
          return false;
       }
@@ -181,6 +201,7 @@ bool QTreeWidgetItemIterator::matchesFlags(const QTreeWidgetItem *item) const
    if ((m_treeItemFlags & HasChildren) && !item->childCount()) {
       return false;
    }
+
    if ((m_treeItemFlags & NoChildren) && item->childCount()) {
       return false;
    }
@@ -188,6 +209,7 @@ bool QTreeWidgetItemIterator::matchesFlags(const QTreeWidgetItem *item) const
    if ((m_treeItemFlags & Hidden) && !item->isHidden()) {
       return false;
    }
+
    if ((m_treeItemFlags & NotHidden) && item->isHidden()) {
       return false;
    }
@@ -195,6 +217,7 @@ bool QTreeWidgetItemIterator::matchesFlags(const QTreeWidgetItem *item) const
    if ((m_treeItemFlags & Selected) && !item->isSelected()) {
       return false;
    }
+
    if ((m_treeItemFlags & Unselected) && item->isSelected()) {
       return false;
    }
@@ -205,7 +228,9 @@ bool QTreeWidgetItemIterator::matchesFlags(const QTreeWidgetItem *item) const
 QTreeWidgetItem *QTreeWidgetItemIteratorPrivate::nextSibling(const QTreeWidgetItem *item) const
 {
    Q_ASSERT(item);
+
    QTreeWidgetItem *next = nullptr;
+
    if (QTreeWidgetItem *par = item->parent()) {
       int i = par->indexOfChild(const_cast<QTreeWidgetItem *>(item));
       next = par->child(i + 1);
@@ -214,6 +239,7 @@ QTreeWidgetItem *QTreeWidgetItemIteratorPrivate::nextSibling(const QTreeWidgetIt
       int i = tw->indexOfTopLevelItem(const_cast<QTreeWidgetItem *>(item));
       next = tw->topLevelItem(i + 1);
    }
+
    return next;
 }
 
@@ -229,11 +255,14 @@ QTreeWidgetItem *QTreeWidgetItemIteratorPrivate::next(const QTreeWidgetItem *cur
       m_parentIndex.push(m_currentIndex);
       m_currentIndex = 0;
       next = current->child(0);
+
    } else {
       // walk the sibling
       QTreeWidgetItem *parent = current->parent();
+
       next = parent ? parent->child(m_currentIndex + 1)
          : m_model->rootItem->child(m_currentIndex + 1);
+
       while (!next && parent) {
          // if we had no sibling walk up the parent and try the sibling of that
          parent = parent->parent();
@@ -241,10 +270,12 @@ QTreeWidgetItem *QTreeWidgetItemIteratorPrivate::next(const QTreeWidgetItem *cur
          next = parent ? parent->child(m_currentIndex + 1)
             : m_model->rootItem->child(m_currentIndex + 1);
       }
+
       if (next) {
          ++(m_currentIndex);
       }
    }
+
    return next;
 }
 
@@ -259,18 +290,22 @@ QTreeWidgetItem *QTreeWidgetItemIteratorPrivate::previous(const QTreeWidgetItem 
    QTreeWidgetItem *parent = current->parent();
    prev = parent ? parent->child(m_currentIndex - 1)
       : m_model->rootItem->child(m_currentIndex - 1);
+
    if (prev) {
       // Yes, we had a previous sibling but we need go down to the last leafnode.
       --m_currentIndex;
+
       while (prev && prev->childCount()) {
          m_parentIndex.push(m_currentIndex);
          m_currentIndex = prev->childCount() - 1;
          prev = prev->child(m_currentIndex);
       }
+
    } else if (parent) {
       m_currentIndex = m_parentIndex.pop();
       prev = parent;
    }
+
    return prev;
 }
 
@@ -290,6 +325,7 @@ void QTreeWidgetItemIteratorPrivate::ensureValidIterator(const QTreeWidgetItem *
          nextItem = nextItem->parent();
       }
    }
+
    // If the item to be removed is an ancestor of the current iterator item,
    // we need to adjust the iterator.
    if (nextItem == itemToBeRemoved) {
@@ -299,12 +335,15 @@ void QTreeWidgetItemIteratorPrivate::ensureValidIterator(const QTreeWidgetItem *
          nextItem = nextSibling(parent);
          parent = parent->parent();
       }
+
       if (nextItem) {
-         // Ooooh... Set the iterator to the next valid item
+         // Set the iterator to the next valid item
          *q = QTreeWidgetItemIterator(nextItem, q->m_treeItemFlags);
+
          if (!(q->matchesFlags(nextItem))) {
             ++(*q);
          }
+
       } else {
          // set it to null.
          q->current = nullptr;
@@ -312,6 +351,7 @@ void QTreeWidgetItemIteratorPrivate::ensureValidIterator(const QTreeWidgetItem *
          return;
       }
    }
+
    if (nextItem->parent() == itemToBeRemoved->parent()) {
       // They have the same parent, i.e. we have to adjust the m_currentIndex member of the iterator
       // if the deleted item is to the left of the nextItem.
@@ -329,8 +369,5 @@ void QTreeWidgetItemIteratorPrivate::ensureValidIterator(const QTreeWidgetItem *
       }
    }
 }
-
-
-
 
 #endif

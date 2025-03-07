@@ -35,6 +35,12 @@ class QGraphicsProxyWidgetPrivate : public QGraphicsWidgetPrivate
    Q_DECLARE_PUBLIC(QGraphicsProxyWidget)
 
  public:
+   enum ChangeMode {
+      NoMode,
+      ProxyToWidgetMode,
+      WidgetToProxyMode
+   };
+
    QGraphicsProxyWidgetPrivate()
       : dragDropWidget(nullptr), posChangeMode(NoMode), sizeChangeMode(NoMode), visibleChangeMode(NoMode),
         enabledChangeMode(NoMode), styleChangeMode(NoMode), paletteChangeMode(NoMode),
@@ -58,11 +64,6 @@ class QGraphicsProxyWidgetPrivate : public QGraphicsWidgetPrivate
 
    bool isProxyWidget() const override;
 
-   QPointer<QWidget> lastWidgetUnderMouse;
-   QPointer<QWidget> embeddedMouseGrabber;
-   QWidget *dragDropWidget;
-   Qt::DropAction lastDropAction;
-
    void updateWidgetGeometryFromProxy();
    void updateProxyGeometryFromWidget();
 
@@ -71,11 +72,10 @@ class QGraphicsProxyWidgetPrivate : public QGraphicsWidgetPrivate
    QPointF mapToReceiver(const QPointF &pos, const QWidget *receiver) const;
 
    QPointer<QWidget> m_proxyWidget;
-   enum ChangeMode {
-      NoMode,
-      ProxyToWidgetMode,
-      WidgetToProxyMode
-   };
+   QPointer<QWidget> lastWidgetUnderMouse;
+   QPointer<QWidget> embeddedMouseGrabber;
+   QWidget *dragDropWidget;
+   Qt::DropAction lastDropAction;
 
    quint32 posChangeMode : 2;
    quint32 sizeChangeMode : 2;

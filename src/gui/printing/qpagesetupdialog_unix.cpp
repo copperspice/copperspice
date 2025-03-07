@@ -141,11 +141,12 @@ class QPagePreview : public QWidget
          const int spacing = pageRect.width() * 0.1;
          const int textWidth = (marginRect.width() - (spacing * (m_pagePreviewColumns - 1))) / m_pagePreviewColumns;
          const int textHeight = (marginRect.height() - (spacing * (m_pagePreviewRows - 1))) / m_pagePreviewRows;
+
          for (int x = 0 ; x < m_pagePreviewColumns; ++x) {
             for (int y = 0 ; y < m_pagePreviewRows; ++y) {
                QRect textRect(marginRect.left() + x * (textWidth + spacing),
-                  marginRect.top() + y * (textHeight + spacing),
-                  textWidth, textHeight);
+                  marginRect.top() + y * (textHeight + spacing), textWidth, textHeight);
+
                p.drawText(textRect, cs_enum_cast(Qt::TextWordWrap) | cs_enum_cast(Qt::AlignVCenter), text);
             }
          }

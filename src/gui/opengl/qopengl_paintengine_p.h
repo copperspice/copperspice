@@ -154,6 +154,10 @@ class QOpenGL2PaintEngineExPrivate : public QPaintEngineExPrivate
         TriStripStrokeFillMode
     };
 
+    enum TextureUpdateMode {
+       UpdateIfNeeded, ForceUpdate
+    };
+
     QOpenGL2PaintEngineExPrivate(QOpenGL2PaintEngineEx *newPtr)
       : q(newPtr), shaderManager(nullptr), width(0), height(0), ctx(nullptr), useSystemClip(true), elementIndicesVBOId(0),
         snapToPixelGrid(false), nativePaintingActive(false), inverseScale(1),
@@ -167,8 +171,6 @@ class QOpenGL2PaintEngineExPrivate : public QPaintEngineExPrivate
     void updateBrushUniforms();
     void updateMatrix();
     void updateCompositionMode();
-
-    enum TextureUpdateMode { UpdateIfNeeded, ForceUpdate };
 
     template <typename T>
     void updateTexture(GLenum textureUnit, const T &texture, GLenum wrapMode, GLenum filterMode,
@@ -205,12 +207,12 @@ class QOpenGL2PaintEngineExPrivate : public QPaintEngineExPrivate
     void composite(const QOpenGLRect& boundingRect);
 
     // Calls drawVertexArrays to render into stencil buffer:
-    void fillStencilWithVertexArray(const float *data, int count, const int *stops, int stopCount, const QOpenGLRect &bounds,
-                  StencilFillMode mode);
+    void fillStencilWithVertexArray(const float *data, int count, const int *stops, int stopCount,
+          const QOpenGLRect &bounds, StencilFillMode mode);
 
     void fillStencilWithVertexArray(QOpenGL2PEXVertexArray& vertexArray, bool useWindingFill) {
-        fillStencilWithVertexArray((const float *) vertexArray.data(), 0, vertexArray.stops(), vertexArray.stopCount(),
-                  vertexArray.boundingRect(), useWindingFill ? WindingFillMode : OddEvenFillMode);
+          fillStencilWithVertexArray((const float *) vertexArray.data(), 0, vertexArray.stops(), vertexArray.stopCount(),
+          vertexArray.boundingRect(), useWindingFill ? WindingFillMode : OddEvenFillMode);
     }
 
     void setBrush(const QBrush& brush);
@@ -236,16 +238,25 @@ class QOpenGL2PaintEngineExPrivate : public QPaintEngineExPrivate
     void setVertexAttribArrayEnabled(int arrayIndex, bool enabled = true);
     void syncGlState();
 
-    static QOpenGLEngineShaderManager* shaderManagerForEngine(QOpenGL2PaintEngineEx *engine) { return engine->d_func()->shaderManager; }
-    static QOpenGL2PaintEngineExPrivate *getData(QOpenGL2PaintEngineEx *engine) { return engine->d_func(); }
+    static QOpenGLEngineShaderManager* shaderManagerForEngine(QOpenGL2PaintEngineEx *engine) {
+      return engine->d_func()->shaderManager;
+    }
+
+    static QOpenGL2PaintEngineExPrivate *getData(QOpenGL2PaintEngineEx *engine) {
+       return engine->d_func();
+    }
+
     static void cleanupVectorPath(QPaintEngineEx *engine, void *data);
 
     QOpenGLExtensions funcs;
 
-    QOpenGL2PaintEngineEx* q;
-    QOpenGLEngineShaderManager* shaderManager;
+    QOpenGL2PaintEngineEx *q;
+    QOpenGLEngineShaderManager *shaderManager;
     QOpenGLPaintDevice* device;
-    int width, height;
+
+    int width;
+    int height;
+
     QOpenGLContext *ctx;
     EngineMode mode;
     QFontEngine::GlyphFormat glyphCacheFormat;
@@ -311,10 +322,11 @@ void QOpenGL2PaintEngineExPrivate::setVertexAttributePointer(unsigned int arrayI
 
     vertexAttribPointers[arrayIndex] = pointer;
 
-    if (arrayIndex == QT_OPACITY_ATTR)
+    if (arrayIndex == QT_OPACITY_ATTR) {
         funcs.glVertexAttribPointer(arrayIndex, 1, GL_FLOAT, GL_FALSE, 0, pointer);
-    else
+    } else {
         funcs.glVertexAttribPointer(arrayIndex, 2, GL_FLOAT, GL_FALSE, 0, pointer);
+    }
 }
 
 #endif

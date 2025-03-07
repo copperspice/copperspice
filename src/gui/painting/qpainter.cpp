@@ -66,19 +66,16 @@
 
 extern QPixmap qt_pixmapForBrush(int style, bool invert);
 
-void qt_format_text(const QFont &font,
-   const QRectF &_r, int tf, const QTextOption *option, const QString &str, QRectF *brect,
-   int tabstops, int *tabarray, int tabarraylen, QPainter *painter);
+void qt_format_text(const QFont &font, const QRectF &_r, int tf, const QTextOption *option, const QString &str,
+      QRectF *brect, int tabstops, int *tabarray, int tabarraylen, QPainter *painter);
 
-static void drawTextItemDecoration(QPainter *painter, const QPointF &pos, const QFontEngine *fe, QTextEngine *textEngine,
-   QTextCharFormat::UnderlineStyle underlineStyle,
-   QTextItem::RenderFlags flags, qreal width, const QTextCharFormat &charFormat);
+static void drawTextItemDecoration(QPainter *painter, const QPointF &pos, const QFontEngine *fe,
+      QTextEngine *textEngine, QTextCharFormat::UnderlineStyle underlineStyle,
+      QTextItem::RenderFlags flags, qreal width, const QTextCharFormat &charFormat);
 
-// Helper function to calculate left most position, width and flags for decoration drawing
+// calculate left most position, width, and flags for decoration drawing
 Q_GUI_EXPORT void qt_draw_decoration_for_glyphs(QPainter *painter, const glyph_t *glyphArray,
-   const QFixedPoint *positions, int glyphCount,
-   QFontEngine *fontEngine, const QFont &font,
-   const QTextCharFormat &charFormat);
+      const QFixedPoint *positions, int glyphCount, QFontEngine *fontEngine, const QFont &font, const QTextCharFormat &charFormat);
 
 static inline QGradient::CoordinateMode coordinateMode(const QBrush &brush)
 {
@@ -3538,7 +3535,7 @@ void QPainter::drawGlyphRun(const QPointF &position, const QGlyphRun &glyphRun)
 }
 
 void QPainterPrivate::drawGlyphs(const quint32 *glyphArray, QFixedPoint *positions,
-   int glyphCount, QFontEngine *fontEngine, bool overline, bool underline, bool strikeOut)
+      int glyphCount, QFontEngine *fontEngine, bool overline, bool underline, bool strikeOut)
 {
    Q_Q(QPainter);
 
@@ -3964,13 +3961,11 @@ static QPixmap generateWavyPixmap(qreal maxRadius, const QPen &pen)
    return pixmap;
 }
 
-static void drawTextItemDecoration(QPainter *painter, const QPointF &pos, const QFontEngine *fe, QTextEngine *textEngine,
-   QTextCharFormat::UnderlineStyle underlineStyle,
-   QTextItem::RenderFlags flags, qreal width,
-   const QTextCharFormat &charFormat)
+static void drawTextItemDecoration(QPainter *painter, const QPointF &pos, const QFontEngine *fe,
+      QTextEngine *textEngine, QTextCharFormat::UnderlineStyle underlineStyle, QTextItem::RenderFlags flags,
+      qreal width, const QTextCharFormat &charFormat)
 {
-   if (underlineStyle == QTextCharFormat::NoUnderline
-      && !( flags & (QTextItem::StrikeOut | QTextItem::Overline))) {
+   if (underlineStyle == QTextCharFormat::NoUnderline && ! (flags & (QTextItem::StrikeOut | QTextItem::Overline))) {
       return;
    }
 
@@ -4074,15 +4069,17 @@ Q_GUI_EXPORT void qt_draw_decoration_for_glyphs(QPainter *painter, const glyph_t
       const QFixedPoint *positions, int glyphCount, QFontEngine *fontEngine, const QFont &font,
       const QTextCharFormat &charFormat)
 {
-   if (!(font.underline() || font.strikeOut() || font.overline())) {
+   if (! (font.underline() || font.strikeOut() || font.overline())) {
       return;
    }
 
    QFixed leftMost;
    QFixed rightMost;
    QFixed baseLine;
+
    for (int i = 0; i < glyphCount; ++i) {
       glyph_metrics_t gm = fontEngine->boundingBox(glyphArray[i]);
+
       if (i == 0 || leftMost > positions[i].x) {
          leftMost = positions[i].x;
       }
@@ -4154,25 +4151,23 @@ void QPainterPrivate::drawTextItem(const QPointF &p, const QTextItem &_ti, QText
       const QTransform &m = state->matrix;
 
       if (state->matrix.type() < QTransform::TxShear) {
+
          bool isPlain90DegreeRotation =
             (qFuzzyIsNull(m.m11())
                && qFuzzyIsNull(m.m12() - qreal(1))
                && qFuzzyIsNull(m.m21() + qreal(1))
-               && qFuzzyIsNull(m.m22())
-            )
-            ||
+               && qFuzzyIsNull(m.m22()) )            ||
+
             (qFuzzyIsNull(m.m11() + qreal(1))
                && qFuzzyIsNull(m.m12())
                && qFuzzyIsNull(m.m21())
-               && qFuzzyIsNull(m.m22() + qreal(1))
-            )
-            ||
+               && qFuzzyIsNull(m.m22() + qreal(1)) ) ||
+
             (qFuzzyIsNull(m.m11())
                && qFuzzyIsNull(m.m12() + qreal(1))
                && qFuzzyIsNull(m.m21() - qreal(1))
-               && qFuzzyIsNull(m.m22())
-            )
-            ;
+               && qFuzzyIsNull(m.m22()) );
+
          aa = ! isPlain90DegreeRotation;
       }
 
@@ -4288,7 +4283,7 @@ void QPainterPrivate::drawTextItem(const QPointF &p, const QTextItem &_ti, QText
    }
 
    drawTextItemDecoration(q, p, ti.m_textItemFontEngine, textEngine, ti.underlineStyle,
-      ti.flags, ti.width.toReal(), ti.charFormat);
+         ti.flags, ti.width.toReal(), ti.charFormat);
 
    if (state->renderHints != oldRenderHints) {
       state->renderHints = oldRenderHints;
@@ -4309,6 +4304,7 @@ QRect QPainter::boundingRect(const QRect &rect, int flags, const QString &str)
 
    QRect brect;
    drawText(rect, flags | Qt::TextDontPrint, str, &brect);
+
    return brect;
 }
 
@@ -4317,8 +4313,10 @@ QRectF QPainter::boundingRect(const QRectF &rect, int flags, const QString &str)
    if (str.isEmpty()) {
       return QRectF(rect.x(), rect.y(), 0, 0);
    }
+
    QRectF brect;
    drawText(rect, flags | Qt::TextDontPrint, str, &brect);
+
    return brect;
 }
 
@@ -4326,7 +4324,7 @@ QRectF QPainter::boundingRect(const QRectF &r, const QString &text, const QTextO
 {
    Q_D(QPainter);
 
-   if (!d->engine || text.length() == 0) {
+   if (! d->engine || text.length() == 0) {
       return QRectF(r.x(), r.y(), 0, 0);
    }
 
@@ -4345,7 +4343,7 @@ void QPainter::drawTiledPixmap(const QRectF &r, const QPixmap &pixmap, const QPo
 
    Q_D(QPainter);
 
-   if (!d->engine || pixmap.isNull() || r.isEmpty()) {
+   if (! d->engine || pixmap.isNull() || r.isEmpty()) {
       return;
    }
 

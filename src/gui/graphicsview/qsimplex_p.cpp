@@ -57,6 +57,7 @@ void QSimplex::clearDataStructures()
       delete m_simplexConstraints[i]->artificial;
       delete m_simplexConstraints[i];
    }
+
    m_simplexConstraints.clear();
 
    // Other
@@ -98,6 +99,7 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> &newConstraints)
    for (int i = 0; i < m_simplexConstraints.size(); ++i) {
       variablesSet += QSet<QSimplexVariable *>::fromList(m_simplexConstraints[i]->variables.keys());
    }
+
    variables = variablesSet.toList();
 
    // Set Variables reverse mapping
@@ -193,6 +195,7 @@ bool QSimplex::setConstraints(const QList<QSimplexConstraint *> &newConstraints)
             // Surplus variable
             setValueAt(i, c->helper.first->index, c->helper.second);
          }
+
       } else {
          // Slack is used as the basic variable
          Q_ASSERT(c->helper.second == 1.0);

@@ -65,9 +65,6 @@ class QFreetypeFace
       m_lock.unlock();
    }
 
-   FT_CharMap unicode_map;
-   FT_CharMap symbol_map;
-
    glyph_t cmapCache[CmapCacheSize];
 
    int fsType() const;
@@ -75,7 +72,7 @@ class QFreetypeFace
    int getPointInOutline(glyph_t glyph, int flags, quint32 point, QFixed *xpos, QFixed *ypos, quint32 *nPoints);
 
    static void addGlyphToPath(FT_Face face, FT_GlyphSlot g, const QFixedPoint &point, QPainterPath *path,
-                  FT_Fixed x_scale, FT_Fixed y_scale);
+         FT_Fixed x_scale, FT_Fixed y_scale);
 
    static void addBitmapToPath(FT_GlyphSlot slot, const QFixedPoint &point, QPainterPath *path);
 
@@ -85,6 +82,9 @@ class QFreetypeFace
    int m_ft_ySize;          // 26.6
 
    FT_Matrix m_ft_matrix;
+   FT_CharMap unicode_map;
+   FT_CharMap symbol_map;
+
  private:
    QFreetypeFace()  = default;
    ~QFreetypeFace() = default;
@@ -105,7 +105,12 @@ class QFreetypeFace
 class QFontEngineFT : public QFontEngine
 {
  public:
-   /* we do not cache glyphs that are too large anyway, so we can make this struct rather small */
+   enum Scaling {
+      Scaled,
+      Unscaled
+   };
+
+   // do not cache glyphs that are too large anyway, so we can make this struct rather small
    struct Glyph {
       ~Glyph();
 
@@ -209,10 +214,10 @@ class QFontEngineFT : public QFontEngine
    bool supportsTransformation(const QTransform &transform) const override;
 
    void addGlyphsToPath(glyph_t *glyphs, QFixedPoint *positions, int nglyphs,
-      QPainterPath *path, QTextItem::RenderFlags flags) override;
+         QPainterPath *path, QTextItem::RenderFlags flags) override;
 
    void addOutlineToPath(qreal x, qreal y, const QGlyphLayout &glyphs,
-      QPainterPath *path, QTextItem::RenderFlags flags) override;
+         QPainterPath *path, QTextItem::RenderFlags flags) override;
 
    bool stringToCMap(QStringView str, QGlyphLayout *glyphs, int *nglyphs, QFontEngine::ShaperFlags flags) const override;
 
@@ -233,17 +238,18 @@ class QFontEngineFT : public QFontEngine
    QImage alphaRGBMapForGlyph(glyph_t, QFixed subPixelPosition, const QTransform &t) override;
 
    glyph_metrics_t alphaMapBoundingBox(glyph_t glyph, QFixed subPixelPosition, const QTransform &matrix,
-      QFontEngine::GlyphFormat format) override;
+         QFontEngine::GlyphFormat format) override;
 
    QImage *lockedAlphaMapForGlyph(glyph_t glyph, QFixed subPixelPosition, GlyphFormat neededFormat, const QTransform &t,
-      QPoint *offset) override;
+         QPoint *offset) override;
 
    bool hasInternalCaching() const override {
       return cacheEnabled;
    }
-   void unlockAlphaMapForGlyph() override;
 
+   void unlockAlphaMapForGlyph() override;
    void removeGlyphFromCache(glyph_t glyph) override;
+
    int glyphMargin(QFontEngine::GlyphFormat format) override {
       (void) format;
 
@@ -251,11 +257,6 @@ class QFontEngineFT : public QFontEngine
    }
 
    int glyphCount() const override;
-
-   enum Scaling {
-      Scaled,
-      Unscaled
-   };
 
    FT_Face lockFace(Scaling scale = Scaled) const;
    void unlockFace() const;
@@ -275,15 +276,15 @@ class QFontEngineFT : public QFontEngine
    }
 
    Glyph *loadGlyph(uint glyph, QFixed subPixelPosition, GlyphFormat format = Format_None,
-                  bool fetchMetricsOnly = false) const {
+         bool fetchMetricsOnly = false) const {
       return loadGlyph(cacheEnabled ? &defaultGlyphSet : nullptr, glyph, subPixelPosition, format, fetchMetricsOnly);
    }
 
    Glyph *loadGlyph(QGlyphSet *set, uint glyph, QFixed subPixelPosition, GlyphFormat = Format_None,
-                  bool fetchMetricsOnly = false) const;
+         bool fetchMetricsOnly = false) const;
 
    Glyph *loadGlyphFor(glyph_t g, QFixed subPixelPosition, GlyphFormat format, const QTransform &t,
-                  bool fetchBoundingBox = false);
+         bool fetchBoundingBox = false);
 
    QGlyphSet *loadGlyphSet(const QTransform &matrix);
 
@@ -291,7 +292,7 @@ class QFontEngineFT : public QFontEngine
    virtual ~QFontEngineFT();
 
    bool init(FaceId faceId, bool antiaalias, GlyphFormat defaultFormat = Format_None,
-      const QByteArray &fontData = QByteArray());
+         const QByteArray &fontData = QByteArray());
 
    bool init(FaceId faceId, bool antialias, GlyphFormat format, QFreetypeFace *freetypeFace);
 

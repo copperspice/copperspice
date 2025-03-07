@@ -54,9 +54,9 @@ class Q_GUI_EXPORT QListWidgetItem
    explicit QListWidgetItem(const QString &text, QListWidget *view = nullptr, int type = Type);
    explicit QListWidgetItem(const QIcon &icon, const QString &text, QListWidget *view = nullptr, int type = Type);
 
-   QListWidgetItem(const QListWidgetItem &other);
-
    virtual ~QListWidgetItem();
+
+   QListWidgetItem(const QListWidgetItem &other);
 
    virtual QListWidgetItem *clone() const;
 

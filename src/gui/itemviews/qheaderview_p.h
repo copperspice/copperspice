@@ -34,8 +34,6 @@
 
 class QHeaderViewPrivate: public QAbstractItemViewPrivate
 {
-   Q_DECLARE_PUBLIC(QHeaderView)
-
  public:
    enum StateVersion {
       VersionMarker = 0xff
@@ -366,6 +364,9 @@ class QHeaderViewPrivate: public QAbstractItemViewPrivate
    QLabel *sectionIndicator;
    QHeaderView::ResizeMode globalResizeMode;
    QList<QPersistentModelIndex> persistentHiddenSections;
+
+ private:
+   Q_DECLARE_PUBLIC(QHeaderView)
 };
 
 #endif // QT_NO_ITEMVIEWS

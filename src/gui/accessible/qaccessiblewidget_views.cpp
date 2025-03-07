@@ -91,7 +91,9 @@ QAccessibleTable::~QAccessibleTable()
 QHeaderView *QAccessibleTable::horizontalHeader() const
 {
    QHeaderView *header = nullptr;
+
    if (false) {
+
 #ifndef QT_NO_TABLEVIEW
    } else if (const QTableView *tableV = qobject_cast<const QTableView *>(view())) {
       header = tableV->horizontalHeader();
@@ -101,19 +103,25 @@ QHeaderView *QAccessibleTable::horizontalHeader() const
    } else if (const QTreeView *treeV = qobject_cast<const QTreeView *>(view())) {
       header = treeV->header();
 #endif
+
    }
+
    return header;
 }
 
 QHeaderView *QAccessibleTable::verticalHeader() const
 {
    QHeaderView *header = nullptr;
+
    if (false) {
+
 #ifndef QT_NO_TABLEVIEW
    } else if (const QTableView *tableV = qobject_cast<const QTableView *>(view())) {
       header = tableV->verticalHeader();
 #endif
+
    }
+
    return header;
 }
 
@@ -122,12 +130,16 @@ QAccessibleInterface *QAccessibleTable::cellAt(int row, int column) const
    if (!view()->model()) {
       return nullptr;
    }
+
    Q_ASSERT(role() != QAccessible::Tree);
+
    QModelIndex index = view()->model()->index(row, column, view()->rootIndex());
+
    if (!index.isValid()) {
       qWarning() << "QAccessibleTable::cellAt() Invalid index: " << index << " for " << view();
       return nullptr;
    }
+
    return child(logicalIndex(index));
 }
 
@@ -895,20 +907,24 @@ int QAccessibleTableCell::rowExtent() const
 QList<QAccessibleInterface *> QAccessibleTableCell::rowHeaderCells() const
 {
    QList<QAccessibleInterface *> headerCell;
+
    if (verticalHeader()) {
       // FIXME
       headerCell.append(new QAccessibleTableHeaderCell(view, m_index.row(), Qt::Vertical));
    }
+
    return headerCell;
 }
 
 QList<QAccessibleInterface *> QAccessibleTableCell::columnHeaderCells() const
 {
    QList<QAccessibleInterface *> headerCell;
+
    if (horizontalHeader()) {
       // FIXME
       headerCell.append(new QAccessibleTableHeaderCell(view, m_index.column(), Qt::Horizontal));
    }
+
    return headerCell;
 }
 
@@ -917,6 +933,7 @@ QHeaderView *QAccessibleTableCell::horizontalHeader() const
    QHeaderView *header = nullptr;
 
    if (false) {
+
 #ifndef QT_NO_TABLEVIEW
    } else if (const QTableView *tableV = qobject_cast<const QTableView *>(view)) {
       header = tableV->horizontalHeader();
@@ -926,6 +943,7 @@ QHeaderView *QAccessibleTableCell::horizontalHeader() const
    } else if (const QTreeView *treeV = qobject_cast<const QTreeView *>(view)) {
       header = treeV->header();
 #endif
+
    }
 
    return header;
@@ -1200,7 +1218,9 @@ QAccessible::State QAccessibleTableHeaderCell::state() const
 QRect QAccessibleTableHeaderCell::rect() const
 {
    QHeaderView *header = nullptr;
+
    if (false) {
+
 #ifndef QT_NO_TABLEVIEW
    } else if (const QTableView *tableV = qobject_cast<const QTableView *>(view)) {
       if (orientation == Qt::Horizontal) {
@@ -1209,17 +1229,21 @@ QRect QAccessibleTableHeaderCell::rect() const
          header = tableV->verticalHeader();
       }
 #endif
+
 #ifndef QT_NO_TREEVIEW
    } else if (const QTreeView *treeV = qobject_cast<const QTreeView *>(view)) {
       header = treeV->header();
 #endif
    }
+
    if (!header) {
       return QRect();
    }
+
    QPoint zero = header->mapToGlobal(QPoint(0, 0));
    int sectionSize = header->sectionSize(index);
    int sectionPos = header->sectionPosition(index);
+
    return orientation == Qt::Horizontal
       ? QRect(zero.x() + sectionPos, zero.y(), sectionSize, header->height())
       : QRect(zero.x(), zero.y() + sectionPos, header->width(), sectionSize);
@@ -1229,6 +1253,7 @@ QString QAccessibleTableHeaderCell::text(QAccessible::Text t) const
 {
    QAbstractItemModel *model = view->model();
    QString value;
+
    switch (t) {
       case QAccessible::Name:
          value = model->headerData(index, orientation, Qt::AccessibleTextRole).toString();
@@ -1236,9 +1261,11 @@ QString QAccessibleTableHeaderCell::text(QAccessible::Text t) const
             value = model->headerData(index, orientation, Qt::DisplayRole).toString();
          }
          break;
+
       case QAccessible::Description:
          value = model->headerData(index, orientation, Qt::AccessibleDescriptionRole).toString();
          break;
+
       default:
          break;
    }

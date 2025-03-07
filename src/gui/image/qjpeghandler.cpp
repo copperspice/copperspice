@@ -83,7 +83,6 @@ extern "C" {
       (*cinfo->err->format_message)(cinfo, buffer);
       qWarning("%s", buffer);
    }
-
 }
 
 static constexpr const int max_buf = 4096;
@@ -160,7 +159,6 @@ extern "C" {
    }
 }
 
-
 inline my_jpeg_source_mgr::my_jpeg_source_mgr(QIODevice *device)
 {
    jpeg_source_mgr::init_source = qt_init_source;
@@ -216,10 +214,12 @@ static bool ensureValidImage(QImage *dest, struct jpeg_decompress_struct *info, 
       case 1:
          format = QImage::Format_Grayscale8;
          break;
+
       case 3:
       case 4:
          format = QImage::Format_RGB32;
          break;
+
       default:
          return false; // unsupported format
    }
@@ -231,13 +231,10 @@ static bool ensureValidImage(QImage *dest, struct jpeg_decompress_struct *info, 
    return ! dest->isNull();
 }
 
-static bool read_jpeg_image(QImage *outImage,
-   QSize scaledSize, QRect scaledClipRect,
-   QRect clipRect, volatile int inQuality,
-   Rgb888ToRgb32Converter converter,
-   j_decompress_ptr info, struct my_error_mgr *err  )
+static bool read_jpeg_image(QImage *outImage, QSize scaledSize, QRect scaledClipRect, QRect clipRect,
+      int inQuality, Rgb888ToRgb32Converter converter, j_decompress_ptr info, struct my_error_mgr *err)
 {
-   if (!setjmp(err->setjmp_buffer)) {
+   if (! setjmp(err->setjmp_buffer)) {
       // -1 means default quality.
       int quality = inQuality;
 
@@ -253,28 +250,29 @@ static bool read_jpeg_image(QImage *outImage,
             // No clipping or scaling before final clip.
             clipRect = scaledClipRect;
             scaledClipRect = QRect();
+
          } else if (scaledSize.isEmpty()) {
             // Clipping, but no scaling: combine the clip regions.
             scaledClipRect.translate(clipRect.topLeft());
             clipRect = scaledClipRect.intersected(clipRect);
             scaledClipRect = QRect();
+
          } else if (clipRect.isEmpty()) {
             // No clipping, but scaling: if we can map back to an
             // integer pixel boundary, then clip before scaling.
-            if ((info->image_width % scaledSize.width()) == 0 &&
-               (info->image_height % scaledSize.height()) == 0) {
-               int x = scaledClipRect.x() * info->image_width /
-                  scaledSize.width();
-               int y = scaledClipRect.y() * info->image_height /
-                  scaledSize.height();
-               int width = (scaledClipRect.right() + 1) *
-                  info->image_width / scaledSize.width() - x;
-               int height = (scaledClipRect.bottom() + 1) *
-                  info->image_height / scaledSize.height() - y;
+            if ((info->image_width % scaledSize.width()) == 0 && (info->image_height % scaledSize.height()) == 0) {
+
+               int x = scaledClipRect.x() * info->image_width / scaledSize.width();
+               int y = scaledClipRect.y() * info->image_height / scaledSize.height();
+
+               int width  = (scaledClipRect.right() + 1) * info->image_width / scaledSize.width() - x;
+               int height = (scaledClipRect.bottom() + 1) * info->image_height / scaledSize.height() - y;
+
                clipRect = QRect(x, y, width, height);
                scaledSize = scaledClipRect.size();
                scaledClipRect = QRect();
             }
+
          } else {
             // Clipping and scaling: too difficult to figure out,
             // and not a likely use case, so do it the long way.
@@ -293,9 +291,7 @@ static bool read_jpeg_image(QImage *outImage,
             info->scale_denom = 8;
 
          } else {
-            info->scale_denom =
-               qMin(clipRect.width() / scaledSize.width(),
-                  clipRect.height() / scaledSize.height());
+            info->scale_denom = qMin(clipRect.width() / scaledSize.width(), clipRect.height() / scaledSize.height());
 
             if (info->scale_denom < 2) {
                info->scale_denom = 1;
@@ -323,7 +319,7 @@ static bool read_jpeg_image(QImage *outImage,
       }
 
       // If high quality not required, use fast decompression
-      if ( quality < HIGH_QUALITY_THRESHOLD ) {
+      if (quality < HIGH_QUALITY_THRESHOLD) {
          info->dct_method = JDCT_IFAST;
          info->do_fancy_upsampling = FALSE;
       }
@@ -333,10 +329,13 @@ static bool read_jpeg_image(QImage *outImage,
       // Determine the clip region to extract.
       QRect imageRect(0, 0, info->output_width, info->output_height);
       QRect clip;
+
       if (clipRect.isEmpty()) {
          clip = imageRect;
+
       } else if (info->scale_denom == info->scale_num) {
          clip = clipRect.intersected(imageRect);
+
       } else {
          // The scale factor was corrected above to ensure that
          // we don't miss pixels when we scale the clip rectangle.
@@ -344,27 +343,28 @@ static bool read_jpeg_image(QImage *outImage,
                clipRect.y() / int(info->scale_denom),
                clipRect.width() / int(info->scale_denom),
                clipRect.height() / int(info->scale_denom));
+
          clip = clip.intersected(imageRect);
       }
 
       // Allocate memory for the clipped QImage.
-      if (!ensureValidImage(outImage, info, clip.size())) {
+      if (! ensureValidImage(outImage, info, clip.size())) {
          longjmp(err->setjmp_buffer, 1);
       }
 
       // Avoid memcpy() overhead if grayscale with no clipping.
-      bool quickGray = (info->output_components == 1 &&
-            clip == imageRect);
-      if (!quickGray) {
+      bool quickGray = (info->output_components == 1 && clip == imageRect);
+
+      if (! quickGray) {
          // Ask the jpeg library to allocate a temporary row.
          // The library will automatically delete it for us later.
          // The libjpeg docs say we should do this before calling
          // jpeg_start_decompress().  We can't use "new" here
          // because we are inside the setjmp() block and an error
          // in the jpeg input stream would cause a memory leak.
+
          JSAMPARRAY rows = (info->mem->alloc_sarray)
-            ((j_common_ptr)info, JPOOL_IMAGE,
-               info->output_width * info->output_components, 1);
+            ((j_common_ptr)info, JPOOL_IMAGE, info->output_width * info->output_components, 1);
 
          (void) jpeg_start_decompress(info);
 
@@ -445,7 +445,6 @@ struct my_jpeg_destination_mgr : public jpeg_destination_mgr {
    my_jpeg_destination_mgr(QIODevice *);
 };
 
-
 extern "C" {
    static void qt_init_destination(j_compress_ptr)
    {
@@ -512,6 +511,7 @@ static inline void set_text(const QImage &image, j_compress_ptr cinfo, const QSt
          }
       }
    }
+
    if (text.isEmpty()) {
       return;
    }
@@ -872,6 +872,7 @@ static int getExifOrientation(QByteArray &exifData)
       if (stream.status() != QDataStream::Ok) {
          return -1;
       }
+
       if (offset == 0) { // this is the last IFD
          return 0;   // No Exif orientation was found
       }
@@ -886,18 +887,25 @@ static QImageIOHandler::Transformations exif2Qt(int exifOrientation)
    switch (exifOrientation) {
       case 1: // normal
          return QImageIOHandler::TransformationNone;
+
       case 2: // mirror horizontal
          return QImageIOHandler::TransformationMirror;
+
       case 3: // rotate 180
          return QImageIOHandler::TransformationRotate180;
+
       case 4: // mirror vertical
          return QImageIOHandler::TransformationFlip;
+
       case 5: // mirror horizontal and rotate 270 CW
          return QImageIOHandler::TransformationFlipAndRotate90;
+
       case 6: // rotate 90 CW
          return QImageIOHandler::TransformationRotate90;
+
       case 7: // mirror horizontal and rotate 90 CW
          return QImageIOHandler::TransformationMirrorAndRotate90;
+
       case 8: // rotate 270 CW
          return QImageIOHandler::TransformationRotate270;
    }
@@ -934,11 +942,13 @@ bool QJpegHandlerPrivate::readJpegHeader(QIODevice *device)
          format = QImage::Format_Invalid;
          read_jpeg_format(format, &info);
          QByteArray exifData;
+
          for (jpeg_saved_marker_ptr marker = info.marker_list; marker != nullptr; marker = marker->next) {
             if (marker->marker == JPEG_COM) {
                QString key, value;
                QString s = QString::fromLatin1((const char *)marker->data, marker->data_length);
                int index = s.indexOf(QLatin1String(": "));
+
                if (index == -1 || s.indexOf(QLatin1Char(' ')) < index) {
                   key = QLatin1String("Description");
                   value = s;
@@ -946,16 +956,20 @@ bool QJpegHandlerPrivate::readJpegHeader(QIODevice *device)
                   key = s.left(index);
                   value = s.mid(index + 2);
                }
+
                if (!description.isEmpty()) {
                   description += QLatin1String("\n\n");
                }
+
                description += key + QLatin1String(": ") + value.simplified();
                readTexts.append(key);
                readTexts.append(value);
+
             } else if (marker->marker == JPEG_APP0 + 1) {
                exifData.append((const char *)marker->data, marker->data_length);
             }
          }
+
          if (!exifData.isEmpty()) {
             int exifOrientation = getExifOrientation(exifData);
             if (exifOrientation > 0) {
@@ -967,6 +981,7 @@ bool QJpegHandlerPrivate::readJpegHeader(QIODevice *device)
       } else {
          return false;
       }
+
    } else if (state == Error) {
       return false;
    }
@@ -1000,6 +1015,7 @@ bool QJpegHandlerPrivate::read(QImage *image)
 Q_GUI_EXPORT void qt_convert_rgb888_to_rgb32_neon(quint32 *dst, const uchar *src, int len);
 Q_GUI_EXPORT void qt_convert_rgb888_to_rgb32_ssse3(quint32 *dst, const uchar *src, int len);
 extern "C" void qt_convert_rgb888_to_rgb32_mips_dspr2_asm(quint32 *dst, const uchar *src, int len);
+
 QJpegHandler::QJpegHandler()
    : d(new QJpegHandlerPrivate(this))
 {
@@ -1055,6 +1071,7 @@ bool QJpegHandler::canRead(QIODevice *device)
    if (device->peek(buffer, 2) != 2) {
       return false;
    }
+
    return uchar(buffer[0]) == 0xff && uchar(buffer[1]) == 0xd8;
 }
 
@@ -1063,18 +1080,21 @@ bool QJpegHandler::read(QImage *image)
    if (! canRead()) {
       return false;
    }
+
    return d->read(image);
 }
 
 extern void qt_imageTransform(QImage &src, QImageIOHandler::Transformations orient);
+
 bool QJpegHandler::write(const QImage &image)
 {
    if (d->transformation != QImageIOHandler::TransformationNone) {
-      // We don't support writing EXIF headers so apply the transform to the data.
+      // do not support writing EXIF headers so apply the transform to the data.
       QImage img = image;
       qt_imageTransform(img, d->transformation);
       return write_jpeg_image(img, device(), d->quality, d->description, d->optimize, d->progressive);
    }
+
    return write_jpeg_image(image, device(), d->quality, d->description, d->optimize, d->progressive);
 }
 
@@ -1097,28 +1117,38 @@ QVariant QJpegHandler::option(ImageOption option)
    switch (option) {
       case Quality:
          return d->quality;
+
       case ScaledSize:
          return d->scaledSize;
+
       case ScaledClipRect:
          return d->scaledClipRect;
+
       case ClipRect:
          return d->clipRect;
+
       case Description:
          d->readJpegHeader(device());
          return d->description;
+
       case Size:
          d->readJpegHeader(device());
          return d->size;
+
       case ImageFormat:
          d->readJpegHeader(device());
          return d->format;
+
       case OptimizedWrite:
          return d->optimize;
+
       case ProgressiveScanWrite:
          return d->progressive;
+
       case ImageTransformation:
          d->readJpegHeader(device());
          return int(d->transformation);
+
       default:
          break;
    }
@@ -1131,30 +1161,41 @@ void QJpegHandler::setOption(ImageOption option, const QVariant &value)
       case Quality:
          d->quality = value.toInt();
          break;
+
       case ScaledSize:
          d->scaledSize = value.toSize();
          break;
+
       case ScaledClipRect:
          d->scaledClipRect = value.toRect();
          break;
+
       case ClipRect:
          d->clipRect = value.toRect();
          break;
+
       case Description:
          d->description = value.toString();
          break;
+
       case OptimizedWrite:
          d->optimize = value.toBool();
          break;
+
       case ProgressiveScanWrite:
          d->progressive = value.toBool();
          break;
+
       case ImageTransformation: {
          int transformation = value.toInt();
+
          if (transformation > 0 && transformation < 8) {
             d->transformation = QImageIOHandler::Transformations(transformation);
          }
+
+         break;
       }
+
       default:
          break;
    }
@@ -1164,5 +1205,3 @@ QString QJpegHandler::name() const
 {
    return "jpeg";
 }
-
-

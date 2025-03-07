@@ -121,23 +121,29 @@ void QListModel::insert(int row, QListWidgetItem *item)
 void QListModel::insert(int row, const QStringList &labels)
 {
    const int count = labels.count();
+
    if (count <= 0) {
       return;
    }
+
    QListWidget *view = qobject_cast<QListWidget *>(QObject::parent());
+
    if (view && view->isSortingEnabled()) {
       // sorted insertion
       for (int i = 0; i < count; ++i) {
          QListWidgetItem *item = new QListWidgetItem(labels.at(i));
          insert(row, item);
       }
+
    } else {
       if (row < 0) {
          row = 0;
       } else if (row > items.count()) {
          row = items.count();
       }
+
       beginInsertRows(QModelIndex(), row, row + count - 1);
+
       for (int i = 0; i < count; ++i) {
          QListWidgetItem *item = new QListWidgetItem(labels.at(i));
          item->d->theid = row;
@@ -165,18 +171,18 @@ QListWidgetItem *QListModel::take(int row)
 
 void QListModel::move(int srcRow, int dstRow)
 {
-   if (srcRow == dstRow
-      || srcRow < 0 || srcRow >= items.count()
-      || dstRow < 0 || dstRow > items.count()) {
+   if (srcRow == dstRow || srcRow < 0 || srcRow >= items.count() || dstRow < 0 || dstRow > items.count()) {
       return;
    }
 
    if (!beginMoveRows(QModelIndex(), srcRow, srcRow, QModelIndex(), dstRow)) {
       return;
    }
+
    if (srcRow < dstRow) {
       --dstRow;
    }
+
    items.move(srcRow, dstRow);
    endMoveRows();
 }
@@ -191,17 +197,23 @@ QModelIndex QListModel::index(QListWidgetItem *item) const
    if (! item || ! item->m_view || static_cast<const QListModel *>(item->m_view->model()) != this || items.isEmpty()) {
       return QModelIndex();
    }
+
    int row;
    const int theid = item->d->theid;
+
    if (theid >= 0 && theid < items.count() && items.at(theid) == item) {
       row = theid;
-   } else { // we need to search for the item
+   } else {
+      // we need to search for the item
       row = items.lastIndexOf(item);  // lastIndexOf is an optimization in favor of indexOf
+
       if (row == -1) { // not found
          return QModelIndex();
       }
+
       item->d->theid = row;
    }
+
    return createIndex(row, 0, item);
 }
 
@@ -210,6 +222,7 @@ QModelIndex QListModel::index(int row, int column, const QModelIndex &parent) co
    if (hasIndex(row, column, parent)) {
       return createIndex(row, column, items.at(row));
    }
+
    return QModelIndex();
 }
 
@@ -218,6 +231,7 @@ QVariant QListModel::data(const QModelIndex &index, int role) const
    if (!index.isValid() || index.row() >= items.count()) {
       return QVariant();
    }
+
    return items.at(index.row())->data(role);
 }
 
@@ -226,7 +240,9 @@ bool QListModel::setData(const QModelIndex &index, const QVariant &value, int ro
    if (!index.isValid() || index.row() >= items.count()) {
       return false;
    }
+
    items.at(index.row())->setData(role, value);
+
    return true;
 }
 
@@ -236,11 +252,12 @@ QMap<int, QVariant> QListModel::itemData(const QModelIndex &index) const
    if (!index.isValid() || index.row() >= items.count()) {
       return roles;
    }
+
    QListWidgetItem *itm = items.at(index.row());
    for (int i = 0; i < itm->d->values.count(); ++i) {
-      roles.insert(itm->d->values.at(i).role,
-         itm->d->values.at(i).value);
+      roles.insert(itm->d->values.at(i).role, itm->d->values.at(i).value);
    }
+
    return roles;
 }
 
@@ -262,6 +279,7 @@ bool QListModel::insertRows(int row, int count, const QModelIndex &parent)
    }
 
    endInsertRows();
+
    return true;
 }
 
@@ -512,6 +530,7 @@ QListWidgetItem::~QListWidgetItem()
    if (QListModel *model = (m_view ? qobject_cast<QListModel *>(m_view->model()) : nullptr)) {
       model->remove(this);
    }
+
    delete d;
 }
 
@@ -524,16 +543,19 @@ void QListWidgetItem::setData(int role, const QVariant &value)
 {
    bool found = false;
    role = (role == Qt::EditRole ? Qt::DisplayRole : role);
+
    for (int i = 0; i < d->values.count(); ++i) {
       if (d->values.at(i).role == role) {
          if (d->values.at(i).value == value) {
             return;
          }
+
          d->values[i].value = value;
          found = true;
          break;
       }
    }
+
    if (!found) {
       d->values.append(QWidgetItemData(role, value));
    }

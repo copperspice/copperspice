@@ -218,6 +218,7 @@ class Q_GUI_EXPORT QTreeWidgetItem
    int columnCount() const {
       return values.count();
    }
+
    inline int indexOfChild(QTreeWidgetItem *child) const;
 
    void addChild(QTreeWidgetItem *child);
@@ -250,9 +251,11 @@ class Q_GUI_EXPORT QTreeWidgetItem
 
    // One item has a vector of column entries. Each column has a vector of (role, value) pairs.
    QVector< QVector<QWidgetItemData>> values;
+
    QTreeWidget *m_view;
    QTreeWidgetItemPrivate *d;
    QTreeWidgetItem *par;
+
    QList<QTreeWidgetItem *> m_children;
    Qt::ItemFlags itemFlags;
 

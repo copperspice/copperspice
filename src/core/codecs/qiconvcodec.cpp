@@ -404,7 +404,7 @@ QByteArray QIconvCodec::convertFromUnicode(QStringView str, ConverterState *conv
 
    QByteArray ba;
 
-   // broom - resolve this code as soon as possible
+   // BROOM - resolve code as soon as possible
 
    /*
       size_t outBytesLeft = len;

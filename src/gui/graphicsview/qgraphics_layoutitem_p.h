@@ -39,9 +39,10 @@ class QGraphicsLayoutItemPrivate
       Height
    };
 
+   QGraphicsLayoutItemPrivate(QGraphicsLayoutItem *parent, bool isLayout);
+
    virtual ~QGraphicsLayoutItemPrivate();
 
-   QGraphicsLayoutItemPrivate(QGraphicsLayoutItem *parent, bool isLayout);
    static QGraphicsLayoutItemPrivate *get(QGraphicsLayoutItem *q) {
       return q->d_func();
    }

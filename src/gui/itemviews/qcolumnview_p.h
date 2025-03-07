@@ -116,8 +116,6 @@ class QColumnViewPreviewColumn : public QAbstractItemView
 
 class QColumnViewPrivate : public QAbstractItemViewPrivate
 {
-   Q_DECLARE_PUBLIC(QColumnView)
-
  public:
    QColumnViewPrivate();
    ~QColumnViewPrivate();
@@ -137,8 +135,6 @@ class QColumnViewPrivate : public QAbstractItemViewPrivate
    void _q_clicked(const QModelIndex &index);
    void _q_columnsInserted(const QModelIndex &parent, int start, int end) override;
 
-   QList<QAbstractItemView *> columns;
-   QVector<int> columnSizes; // used during init and corner moving
    bool showResizeGrips;
    int m_columnViewOffset;
 
@@ -146,8 +142,14 @@ class QColumnViewPrivate : public QAbstractItemViewPrivate
    QPropertyAnimation currentAnimation;
 #endif
 
+   QList<QAbstractItemView *> columns;
+   QVector<int> columnSizes;                // used during init and corner moving
+
    QWidget *previewWidget;
    QAbstractItemView *previewColumn;
+
+ private:
+   Q_DECLARE_PUBLIC(QColumnView)
 };
 
 class QColumnViewDelegate : public QItemDelegate

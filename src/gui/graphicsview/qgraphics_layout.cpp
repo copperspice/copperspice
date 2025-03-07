@@ -81,19 +81,23 @@ QGraphicsLayout::~QGraphicsLayout()
 void QGraphicsLayout::setContentsMargins(qreal left, qreal top, qreal right, qreal bottom)
 {
    Q_D(QGraphicsLayout);
+
    if (d->m_layoutLeft == left && d->m_layoutTop == top && d->m_layoutRight == right && d->m_layoutBottom == bottom) {
       return;
    }
+
    d->m_layoutLeft   = left;
    d->m_layoutRight  = right;
    d->m_layoutTop    = top;
    d->m_layoutBottom = bottom;
+
    invalidate();
 }
 
 void QGraphicsLayout::getContentsMargins(qreal *left, qreal *top, qreal *right, qreal *bottom) const
 {
    Q_D(const QGraphicsLayout);
+
    d->getMargin(left,   d->m_layoutLeft,   QStyle::PM_LayoutLeftMargin);
    d->getMargin(top,    d->m_layoutTop,    QStyle::PM_LayoutTopMargin);
    d->getMargin(right,  d->m_layoutRight,  QStyle::PM_LayoutRightMargin);

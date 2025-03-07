@@ -82,7 +82,6 @@ class Q_GUI_EXPORT QLayoutPrivate
 
  protected:
    QLayout *q_ptr;
-
 };
 
 #endif

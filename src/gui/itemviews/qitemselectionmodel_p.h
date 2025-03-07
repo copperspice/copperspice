@@ -28,8 +28,6 @@
 
 class QItemSelectionModelPrivate
 {
-   Q_DECLARE_PUBLIC(QItemSelectionModel)
-
  public:
    QItemSelectionModelPrivate()
       : m_model(nullptr), currentCommand(QItemSelectionModel::NoUpdate),
@@ -89,6 +87,8 @@ class QItemSelectionModelPrivate
  protected:
    QItemSelectionModel *q_ptr;
 
+ private:
+   Q_DECLARE_PUBLIC(QItemSelectionModel)
 };
 
 #endif // QT_NO_ITEMVIEWS

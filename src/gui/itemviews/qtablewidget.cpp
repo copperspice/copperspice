@@ -953,6 +953,7 @@ QTableWidgetSelectionRange::~QTableWidgetSelectionRange()
 void QTableWidgetItem::setFlags(Qt::ItemFlags aflags)
 {
    itemFlags = aflags;
+
    if (QTableModel *model = (view ? qobject_cast<QTableModel *>(view->model()) : nullptr)) {
       model->itemChanged(this);
    }
@@ -1001,6 +1002,7 @@ void QTableWidgetItem::setData(int role, const QVariant &value)
 {
    bool found = false;
    role = (role == Qt::EditRole ? Qt::DisplayRole : role);
+
    for (int i = 0; i < values.count(); ++i) {
       if (values.at(i).role == role) {
          if (values[i].value == value) {
@@ -1012,9 +1014,11 @@ void QTableWidgetItem::setData(int role, const QVariant &value)
          break;
       }
    }
+
    if (!found) {
       values.append(QWidgetItemData(role, value));
    }
+
    if (QTableModel *model = (view ? qobject_cast<QTableModel *>(view->model()) : nullptr)) {
       model->itemChanged(this);
    }
@@ -1023,10 +1027,13 @@ void QTableWidgetItem::setData(int role, const QVariant &value)
 QVariant QTableWidgetItem::data(int role) const
 {
    role = (role == Qt::EditRole ? Qt::DisplayRole : role);
-   for (int i = 0; i < values.count(); ++i)
+
+   for (int i = 0; i < values.count(); ++i) {
       if (values.at(i).role == role) {
          return values.at(i).value;
       }
+   }
+
    return QVariant();
 }
 
@@ -1161,16 +1168,17 @@ void QTableWidgetPrivate::_q_emitItemChanged(const QModelIndex &index)
    emit q->cellChanged(index.row(), index.column());
 }
 
-void QTableWidgetPrivate::_q_emitCurrentItemChanged(const QModelIndex &current,
-   const QModelIndex &previous)
+void QTableWidgetPrivate::_q_emitCurrentItemChanged(const QModelIndex &current, const QModelIndex &previous)
 {
    Q_Q(QTableWidget);
+
    QTableWidgetItem *currentItem  = tableModel()->item(current);
    QTableWidgetItem *previousItem = tableModel()->item(previous);
 
    if (currentItem || previousItem) {
       emit q->currentItemChanged(currentItem, previousItem);
    }
+
    emit q->currentCellChanged(current.row(), current.column(), previous.row(), previous.column());
 }
 
@@ -1188,6 +1196,7 @@ void QTableWidgetPrivate::_q_dataChanged(const QModelIndex &topLeft,
 {
    if (sortingEnabled && topLeft.isValid() && bottomRight.isValid()) {
       int column = horizontalHeader->sortIndicatorSection();
+
       if (column >= topLeft.column() && column <= bottomRight.column()) {
          Qt::SortOrder order = horizontalHeader->sortIndicatorOrder();
          tableModel()->ensureSorted(column, order, topLeft.row(), bottomRight.row());

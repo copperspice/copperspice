@@ -121,7 +121,7 @@ namespace {
         bool initFromData(const QByteArray &fontData)
         {
             FaceId faceId;
-            faceId.filename = "";
+            faceId.filename = QString();
             faceId.index = 0;
             faceId.uuid = QUuid::createUuid().toByteArray();
 

@@ -38,12 +38,13 @@ class QTableWidgetItemPrivate;
 
 class Q_GUI_EXPORT QTableWidgetSelectionRange
 {
-
  public:
    QTableWidgetSelectionRange();
    QTableWidgetSelectionRange(int top, int left, int bottom, int right);
-   QTableWidgetSelectionRange(const QTableWidgetSelectionRange &other);
+
    ~QTableWidgetSelectionRange();
+
+   QTableWidgetSelectionRange(const QTableWidgetSelectionRange &other);
 
    int topRow() const {
       return m_tableWidgetTop;
@@ -78,9 +79,6 @@ class Q_GUI_EXPORT QTableWidgetSelectionRange
 
 class Q_GUI_EXPORT QTableWidgetItem
 {
-   friend class QTableWidget;
-   friend class QTableModel;
-
  public:
    enum ItemType {
       Type = 0,
@@ -90,8 +88,10 @@ class Q_GUI_EXPORT QTableWidgetItem
    explicit QTableWidgetItem(int type = Type);
    explicit QTableWidgetItem(const QString &text, int type = Type);
    explicit QTableWidgetItem(const QIcon &icon, const QString &text, int type = Type);
-   QTableWidgetItem(const QTableWidgetItem &other);
+
    virtual ~QTableWidgetItem();
+
+   QTableWidgetItem(const QTableWidgetItem &other);
 
    virtual QTableWidgetItem *clone() const;
 
@@ -212,6 +212,7 @@ class Q_GUI_EXPORT QTableWidgetItem
    virtual void read(QDataStream &in);
    virtual void write(QDataStream &out) const;
 #endif
+
    QTableWidgetItem &operator=(const QTableWidgetItem &other);
 
    int type() const {
@@ -224,6 +225,9 @@ class Q_GUI_EXPORT QTableWidgetItem
    QTableWidget *view;
    QTableWidgetItemPrivate *d;
    Qt::ItemFlags itemFlags;
+
+   friend class QTableWidget;
+   friend class QTableModel;
 };
 
 inline void QTableWidgetItem::setText(const QString &text)

@@ -1758,6 +1758,7 @@ void QHeaderView::mousePressEvent(QMouseEvent *e)
          if (d->m_headerViewSection == -1) {
             return;
          }
+
          d->state = QHeaderViewPrivate::MoveSection;
          d->setupSectionIndicator(d->m_headerViewSection, pos);
 
@@ -1803,16 +1804,20 @@ void QHeaderView::mouseMoveEvent(QMouseEvent *e)
    switch (d->state) {
       case QHeaderViewPrivate::ResizeSection: {
          Q_ASSERT(d->originalSize != -1);
+
          if (d->cascadingResizing) {
             int delta = d->reverse() ? d->lastPos - pos : pos - d->lastPos;
             int visual = visualIndex(d->m_headerViewSection);
             d->cascadingResize(visual, d->headerSectionSize(visual) + delta);
+
          } else {
             int delta = d->reverse() ? d->firstPos - pos : pos - d->firstPos;
             int newsize = qBound(minimumSectionSize(), d->originalSize + delta, maximumSectionSize());
             resizeSection(d->m_headerViewSection, newsize);
          }
+
          d->lastPos = pos;
+
          return;
       }
 
@@ -1841,6 +1846,7 @@ void QHeaderView::mouseMoveEvent(QMouseEvent *e)
                } else {
                   d->target = d->logicalIndex(visual + 1);
                }
+
             } else if (visual > moving) {
                if (pos > posThreshold) {
                   d->target = d->logicalIndex(visual);
@@ -1851,6 +1857,7 @@ void QHeaderView::mouseMoveEvent(QMouseEvent *e)
             } else {
                d->target = d->m_headerViewSection;
             }
+
             d->updateSectionIndicator(d->m_headerViewSection, pos);
          }
          return;
@@ -1858,6 +1865,7 @@ void QHeaderView::mouseMoveEvent(QMouseEvent *e)
 
       case QHeaderViewPrivate::SelectSections: {
          int logical = logicalIndexAt(qMax(-d->offset, pos));
+
          if (logical == -1 && pos > 0) {
             logical = logicalIndex(d->lastVisibleVisualIndex());
          }
@@ -1881,10 +1889,12 @@ void QHeaderView::mouseMoveEvent(QMouseEvent *e)
 #ifndef QT_NO_CURSOR
          int handle = d->sectionHandleAt(pos);
          bool hasCursor = testAttribute(Qt::WA_SetCursor);
+
          if (handle != -1 && (sectionResizeMode(handle) == Interactive)) {
             if (!hasCursor) {
                setCursor(d->orientation == Qt::Horizontal ? Qt::SplitHCursor : Qt::SplitVCursor);
             }
+
          } else if (hasCursor) {
             unsetCursor();
          }
@@ -1922,7 +1932,7 @@ void QHeaderView::mouseReleaseEvent(QMouseEvent *e)
          [[fallthrough]];
 
       case QHeaderViewPrivate::SelectSections:
-         if (!d->clickableSections) {
+         if (! d->clickableSections) {
             int section = logicalIndexAt(pos);
             updateSection(section);
          }
@@ -2060,6 +2070,7 @@ bool QHeaderView::viewportEvent(QEvent *e)
          if (parent && parent->isVisible()) { // Only resize if we have a visible parent
             resizeSections();
          }
+
          emit geometriesChanged();
          break;
       }
@@ -2075,6 +2086,7 @@ bool QHeaderView::viewportEvent(QEvent *e)
 
       case QEvent::Wheel: {
          QAbstractScrollArea *asa = qobject_cast<QAbstractScrollArea *>(parentWidget());
+
          if (asa) {
             return QApplication::sendEvent(asa->viewport(), e);
          }
@@ -2084,6 +2096,7 @@ bool QHeaderView::viewportEvent(QEvent *e)
       default:
          break;
    }
+
    return QAbstractItemView::viewportEvent(e);
 }
 
@@ -2113,12 +2126,15 @@ void QHeaderView::paintSection(QPainter *painter, const QRect &rect, int logical
       if (logicalIndex == d->hover) {
          state |= QStyle::State_MouseOver;
       }
+
       if (logicalIndex == d->pressed) {
          state |= QStyle::State_Sunken;
+
       } else if (d->highlightSelected) {
          if (d->sectionIntersectsSelection(logicalIndex)) {
             state |= QStyle::State_On;
          }
+
          if (d->isSectionSelected(logicalIndex)) {
             state |= QStyle::State_Sunken;
          }
@@ -2149,6 +2165,7 @@ void QHeaderView::paintSection(QPainter *painter, const QRect &rect, int logical
    if (isSortIndicatorShown() && sortIndicatorSection() == logicalIndex && isHeaderArrowOnTheSide) {
       margin += style()->pixelMetric(QStyle::PM_HeaderMarkSize, nullptr, this);
    }
+
    if (d->textElideMode != Qt::ElideNone) {
       opt.text = opt.fontMetrics.elidedText(opt.text, d->textElideMode, rect.width() - margin);
    }
@@ -2159,8 +2176,9 @@ void QHeaderView::paintSection(QPainter *painter, const QRect &rect, int logical
    if (opt.icon.isNull()) {
       opt.icon = variant.value<QPixmap>();
    }
-   QVariant foregroundBrush = d->model->headerData(logicalIndex, d->orientation,
-         Qt::ForegroundRole);
+
+   QVariant foregroundBrush = d->model->headerData(logicalIndex, d->orientation, Qt::ForegroundRole);
+
    if (foregroundBrush.canConvert<QBrush>()) {
       opt.palette.setBrush(QPalette::ButtonText, foregroundBrush.value<QBrush>());
    }
@@ -2177,8 +2195,10 @@ void QHeaderView::paintSection(QPainter *painter, const QRect &rect, int logical
    // the section position
    int visual = visualIndex(logicalIndex);
    Q_ASSERT(visual != -1);
+
    bool first = d->isFirstVisibleSection(visual);
    bool last = d->isLastVisibleSection(visual);
+
    if (first && last) {
       opt.position = QStyleOptionHeader::OnlyOneSection;
    } else if (first) {
@@ -2262,6 +2282,7 @@ QSize QHeaderView::sectionSizeFromContents(int logicalIndex) const
 int QHeaderView::horizontalOffset() const
 {
    Q_D(const QHeaderView);
+
    if (d->orientation == Qt::Horizontal) {
       return d->offset;
    }
@@ -2358,7 +2379,7 @@ QRegion QHeaderView::visualRegionForSelection(const QItemSelection &selection) c
    const int max = d->modelSectionCount();
 
    if (d->orientation == Qt::Horizontal) {
-      int logicalLeft = max;
+      int logicalLeft  = max;
       int logicalRight = 0;
 
       if (d->visualIndices.empty()) {

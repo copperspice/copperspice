@@ -39,9 +39,6 @@ class QTreeWidgetItemIteratorPrivate;
 
 class Q_GUI_EXPORT QTreeWidgetItemIterator
 {
-
-   Q_DECLARE_PRIVATE(QTreeWidgetItemIterator)
-
  public:
    enum IteratorFlag {
       All           = 0x00000000,
@@ -88,7 +85,10 @@ class Q_GUI_EXPORT QTreeWidgetItemIterator
    inline QTreeWidgetItem *operator*() const;
 
  private:
+   Q_DECLARE_PRIVATE(QTreeWidgetItemIterator)
+
    bool matchesFlags(const QTreeWidgetItem *item) const;
+
    QScopedPointer<QTreeWidgetItemIteratorPrivate> d_ptr;
    QTreeWidgetItem *current;
    IteratorFlags m_treeItemFlags;
@@ -100,6 +100,7 @@ inline const QTreeWidgetItemIterator QTreeWidgetItemIterator::operator++(int)
 {
    QTreeWidgetItemIterator it = *this;
    ++(*this);
+
    return it;
 }
 
@@ -107,6 +108,7 @@ inline const QTreeWidgetItemIterator QTreeWidgetItemIterator::operator--(int)
 {
    QTreeWidgetItemIterator it = *this;
    --(*this);
+
    return it;
 }
 
@@ -115,9 +117,11 @@ inline QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator+=(size_type n)
    if (n < 0) {
       return (*this) -= (-n);
    }
+
    while (current && n--) {
       ++(*this);
    }
+
    return *this;
 }
 
@@ -126,9 +130,11 @@ inline QTreeWidgetItemIterator &QTreeWidgetItemIterator::operator-=(size_type n)
    if (n < 0) {
       return (*this) += (-n);
    }
+
    while (current && n--) {
       --(*this);
    }
+
    return *this;
 }
 

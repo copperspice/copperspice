@@ -474,16 +474,20 @@ bool QToolBarLayout::layoutActions(const QSize &size)
 
    QStyle *style = tb->style();
    QStyleOptionToolBar opt;
+
    tb->initStyleOption(&opt);
    const int handleExtent = movable()
       ? style->pixelMetric(QStyle::PM_ToolBarHandleExtent, &opt, tb) : 0;
+
    const int margin = this->margin();
    const int spacing = this->spacing();
    const int extensionExtent = style->pixelMetric(QStyle::PM_ToolBarExtensionExtent, &opt, tb);
+
    Qt::Orientation o = tb->orientation();
    bool extensionMenuContainsOnlyWidgetActions = true;
 
    int space = pick(o, rect.size()) - 2 * margin - handleExtent;
+
    if (space <= 0) {
       return false;   // nothing to do.
    }
@@ -493,6 +497,7 @@ bool QToolBarLayout::layoutActions(const QSize &size)
    }
 
    bool ranOutOfSpace = false;
+
    int rows   = 0;
    int rowPos = perp(o, rect.topLeft()) + margin;
 
@@ -542,6 +547,7 @@ bool QToolBarLayout::layoutActions(const QSize &size)
          totalSize    = newSize;
          maximumSize += spacing + (a[i].expansive ? a[i].maximumSize : a[i].smartSizeHint());
          prev = i;
+
          ++count;
       }
 
@@ -559,7 +565,7 @@ bool QToolBarLayout::layoutActions(const QSize &size)
       }
 
       qGeomCalc(a, start, i - start + (expansiveRow ? 0 : 1), 0,
-         space - (ranOutOfSpace ? (extensionExtent + spacing) : 0), spacing);
+            space - (ranOutOfSpace ? (extensionExtent + spacing) : 0), spacing);
 
       for (int j = start; j < i; ++j) {
          QToolBarItem *item = items.at(j);
@@ -696,7 +702,7 @@ QSize QToolBarLayout::expandedSize(const QSize &size) const
       int countItems = 0;
 
       int totalsize = 0;
-      int prev     = -1;
+      int prev      = -1;
       int rowHeight = 0;
 
       for (; i < items.count(); ++i) {

@@ -1091,6 +1091,7 @@ void QGridLayoutPrivate::distribute(QRect r, int hSpacing, int vSpacing)
 
    qGeomCalc(colData, 0, cc, r.x(), r.width());
    QVector<QLayoutStruct> *rDataPtr;
+
    if (has_hfw) {
       recalcHFW(r.width());
       qGeomCalc(*hfwData, 0, rr, r.y(), r.height());
@@ -1099,12 +1100,15 @@ void QGridLayoutPrivate::distribute(QRect r, int hSpacing, int vSpacing)
       qGeomCalc(rowData, 0, rr, r.y(), r.height());
       rDataPtr = &rowData;
    }
+
    QVector<QLayoutStruct> &rData = *rDataPtr;
    int i;
 
    bool reverse = ((r.bottom() > rect.bottom()) || (r.bottom() == rect.bottom()
             && ((r.right() > rect.right()) != visualHReversed)));
+
    int n = things.size();
+
    for (i = 0; i < n; ++i) {
       QGridBox *box = things.at(reverse ? n - i - 1 : i);
       int r2 = box->toRow(rr);

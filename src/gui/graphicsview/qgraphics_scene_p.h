@@ -88,7 +88,6 @@ class QGraphicsScenePrivate
    qreal minimumRenderSize;
    QRectF growingItemsBoundingRect;
 
-   void _q_emitUpdated();
    QList<QRectF> updatedRects;
 
    QPainterPath selectionArea;
@@ -100,16 +99,17 @@ class QGraphicsScenePrivate
    QHash<QGraphicsItem *, QPointF> movingItemsInitialPositions;
    void registerTopLevelItem(QGraphicsItem *item);
    void unregisterTopLevelItem(QGraphicsItem *item);
+
+   void _q_emitUpdated();
    void _q_updateLater();
    void _q_polishItems();
-
    void _q_processDirtyItems();
+   void _q_updateScenePosDescendants();
 
    QSet<QGraphicsItem *> scenePosItems;
    void setScenePosItemEnabled(QGraphicsItem *item, bool enabled);
    void registerScenePosItem(QGraphicsItem *item);
    void unregisterScenePosItem(QGraphicsItem *item);
-   void _q_updateScenePosDescendants();
 
    void removeItemHelper(QGraphicsItem *item);
 
@@ -181,21 +181,21 @@ class QGraphicsScenePrivate
    QGraphicsWidget *windowForItem(const QGraphicsItem *item) const;
 
    void drawItemHelper(QGraphicsItem *item, QPainter *painter, const QStyleOptionGraphicsItem *option,
-      QWidget *widget, bool painterStateProtection);
+         QWidget *widget, bool painterStateProtection);
 
    void drawItems(QPainter *painter, const QTransform *const viewTransform,
-      QRegion *exposedRegion, QWidget *widget);
+         QRegion *exposedRegion, QWidget *widget);
 
    void drawSubtreeRecursive(QGraphicsItem *item, QPainter *painter, const QTransform *const,
-      QRegion *exposedRegion, QWidget *widget, qreal parentOpacity = qreal(1.0),
-      const QTransform *const effectTransform = nullptr);
+         QRegion *exposedRegion, QWidget *widget, qreal parentOpacity = qreal(1.0),
+         const QTransform *const effectTransform = nullptr);
 
    void draw(QGraphicsItem *, QPainter *, const QTransform *const, const QTransform *const,
-      QRegion *, QWidget *, qreal, const QTransform *const, bool, bool);
+         QRegion *, QWidget *, qreal, const QTransform *const, bool, bool);
 
    void markDirty(QGraphicsItem *item, const QRectF &rect = QRectF(), bool invalidateChildren = false,
-      bool force = false, bool ignoreOpacity = false, bool removingItemFromScene = false,
-      bool updateBoundingRect = false);
+         bool force = false, bool ignoreOpacity = false, bool removingItemFromScene = false,
+         bool updateBoundingRect = false);
 
    void processDirtyItemsRecursive(QGraphicsItem *item, bool dirtyAncestorContainsChildren = false,
       qreal parentOpacity = qreal(1.0));
@@ -205,9 +205,11 @@ class QGraphicsScenePrivate
       item->d_ptr->dirty = 0;
       item->d_ptr->paintedViewBoundingRectsNeedRepaint = 0;
       item->d_ptr->geometryChanged = 0;
+
       if (!item->d_ptr->dirtyChildren) {
          recursive = false;
       }
+
       item->d_ptr->dirtyChildren = 0;
       item->d_ptr->needsRepaint = QRectF();
       item->d_ptr->allChildrenDirty = 0;
@@ -217,10 +219,12 @@ class QGraphicsScenePrivate
 
 #ifndef QT_NO_GRAPHICSEFFECT
       QGraphicsEffect::ChangeFlags flags;
+
       if (item->d_ptr->notifyBoundingRectChanged) {
          flags |= QGraphicsEffect::SourceBoundingRectChanged;
          item->d_ptr->notifyBoundingRectChanged = 0;
       }
+
       if (item->d_ptr->notifyInvalidated) {
          flags |= QGraphicsEffect::SourceInvalidated;
          item->d_ptr->notifyInvalidated = 0;
@@ -268,35 +272,34 @@ class QGraphicsScenePrivate
    bool sendTouchBeginEvent(QGraphicsItem *item, QTouchEvent *touchEvent);
    void enableTouchEventsOnViews();
 
+   void updateInputMethodSensitivityInViews();
+
+   void enterModal(QGraphicsItem *item, QGraphicsItem::PanelModality panelModality = QGraphicsItem::NonModal);
+   void leaveModal(QGraphicsItem *item);
    QFont m_sceneFont;
    QPalette m_scenePalette;
    QStyleOptionGraphicsItem m_sceneStyleOption;
    QGraphicsSceneIndex *m_graphicsSceneIndex;
+   QList<QGraphicsItem *> modalPanels;
    QList<QGraphicsObject *> cachedTargetItems;
 
 #ifndef QT_NO_GESTURES
-   QHash<QGraphicsObject *, QSet<QGesture *>> cachedItemGestures;
-   QHash<QGraphicsObject *, QSet<QGesture *>> cachedAlreadyDeliveredGestures;
-   QHash<QGesture *, QGraphicsObject *> gestureTargets;
-   QHash<Qt::GestureType, int>  grabbedGestures;
    void gestureEventHandler(QGestureEvent *event);
 
    void gestureTargetsAtHotSpots(const QSet<QGesture *> &gestures, Qt::GestureFlag flag,
-      QHash<QGraphicsObject *, QSet<QGesture *>> *targets, QSet<QGraphicsObject *> *itemsSet = nullptr,
-      QSet<QGesture *> *normal = nullptr, QSet<QGesture *> *conflicts = nullptr);
+         QHash<QGraphicsObject *, QSet<QGesture *>> *targets, QSet<QGraphicsObject *> *itemsSet = nullptr,
+         QSet<QGesture *> *normal = nullptr, QSet<QGesture *> *conflicts = nullptr);
 
    void cancelGesturesForChildren(QGesture *original);
    void grabGesture(QGraphicsItem *, Qt::GestureType gesture);
    void ungrabGesture(QGraphicsItem *, Qt::GestureType gesture);
 
+   QHash<QGraphicsObject *, QSet<QGesture *>> cachedItemGestures;
+   QHash<QGraphicsObject *, QSet<QGesture *>> cachedAlreadyDeliveredGestures;
+
+   QHash<QGesture *, QGraphicsObject *> gestureTargets;
+   QHash<Qt::GestureType, int>  grabbedGestures;
 #endif
-
-   void updateInputMethodSensitivityInViews();
-
-   QList<QGraphicsItem *> modalPanels;
-
-   void enterModal(QGraphicsItem *item, QGraphicsItem::PanelModality panelModality = QGraphicsItem::NonModal);
-   void leaveModal(QGraphicsItem *item);
 
  protected:
    QGraphicsScene *q_ptr;
@@ -308,6 +311,7 @@ class QGraphicsScenePrivate
 static inline void _q_adjustRect(QRectF *rect)
 {
    Q_ASSERT(rect);
+
    if (! rect->width()) {
       rect->adjust(qreal(-0.00001), 0, qreal(0.00001), 0);
    }

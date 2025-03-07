@@ -56,7 +56,7 @@ class QPixmapCache::KeyData
    int ref;
 };
 
-// XXX: hw: is this a general concept we need to abstract?
+// is this a general concept we need to abstract?
 class QPixmapCacheEntry : public QPixmap
 {
  public:
@@ -80,6 +80,5 @@ class QPixmapCacheEntry : public QPixmap
    ~QPixmapCacheEntry();
    QPixmapCache::Key key;
 };
-
 
 #endif

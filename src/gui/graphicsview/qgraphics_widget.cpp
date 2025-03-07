@@ -158,9 +158,10 @@ void QGraphicsWidget::resize(const QSizeF &size)
 
 void QGraphicsWidget::setGeometry(const QRectF &rect)
 {
-   QGraphicsWidgetPrivate *wd = QGraphicsWidget::d_func();
+   QGraphicsWidgetPrivate *wd    = QGraphicsWidget::d_func();
    QGraphicsLayoutItemPrivate *d = QGraphicsLayoutItem::d_ptr.data();
    QRectF newGeom;
+
    QPointF oldPos = d->m_layoutItemRect.topLeft();
 
    if (!wd->inSetPos) {
@@ -176,6 +177,7 @@ void QGraphicsWidget::setGeometry(const QRectF &rect)
       // setPos triggers ItemPositionChange, which can adjust position
       wd->inSetGeometry = 1;
       setPos(newGeom.topLeft());
+
       wd->inSetGeometry = 0;
       newGeom.moveTopLeft(pos());
 
@@ -194,19 +196,23 @@ void QGraphicsWidget::setGeometry(const QRectF &rect)
    // Update the layout item geometry
    {
       bool moved = oldPos != pos();
+
       if (moved) {
          // Send move event.
          QGraphicsSceneMoveEvent event;
          event.setOldPos(oldPos);
          event.setNewPos(pos());
          QApplication::sendEvent(this, &event);
+
          if (wd->inSetPos) {
             //set the new pos
             d->m_layoutItemRect.moveTopLeft(pos());
+
             emit geometryChanged();
             goto relayoutChildrenAndReturn;
          }
       }
+
       QSizeF oldSize = size();
       QGraphicsLayoutItem::setGeometry(newGeom);
 
@@ -577,10 +583,13 @@ void QGraphicsWidget::setStyle(QStyle *style)
 QFont QGraphicsWidget::font() const
 {
    Q_D(const QGraphicsWidget);
+
    QFont fnt = d->m_graphicsFont;
    fnt.resolve(fnt.resolve() | d->inheritedFontResolveMask);
+
    return fnt;
 }
+
 void QGraphicsWidget::setFont(const QFont &font)
 {
    Q_D(QGraphicsWidget);
@@ -596,6 +605,7 @@ QPalette QGraphicsWidget::palette() const
    Q_D(const QGraphicsWidget);
    return d->m_graphicsPalette;
 }
+
 void QGraphicsWidget::setPalette(const QPalette &palette)
 {
    Q_D(QGraphicsWidget);
@@ -831,6 +841,7 @@ Qt::WindowFrameSection QGraphicsWidget::windowFrameSectionAt(const QPointF &pos)
 bool QGraphicsWidget::event(QEvent *event)
 {
    Q_D(QGraphicsWidget);
+
    // Forward the event to the layout first.
    if (d->layout) {
       d->layout->widgetEvent(event);
@@ -841,32 +852,40 @@ bool QGraphicsWidget::event(QEvent *event)
       case QEvent::GraphicsSceneMove:
          moveEvent(static_cast<QGraphicsSceneMoveEvent *>(event));
          break;
+
       case QEvent::GraphicsSceneResize:
          resizeEvent(static_cast<QGraphicsSceneResizeEvent *>(event));
          break;
+
       case QEvent::Show:
          showEvent(static_cast<QShowEvent *>(event));
          break;
+
       case QEvent::Hide:
          hideEvent(static_cast<QHideEvent *>(event));
          break;
+
       case QEvent::Polish:
          polishEvent();
          d->polished = true;
+
          if (! d->m_graphicsFont.isCopyOf(QApplication::font())) {
             d->updateFont(d->m_graphicsFont);
          }
          break;
+
       case QEvent::WindowActivate:
       case QEvent::WindowDeactivate:
          update();
          break;
+
       case QEvent::StyleAnimationUpdate:
          if (isVisible()) {
             event->accept();
             update();
          }
          break;
+
       // Taken from QWidget::event
       case QEvent::ActivationChange:
       case QEvent::EnabledChange:
@@ -982,29 +1001,37 @@ void QGraphicsWidget::focusInEvent(QFocusEvent *event)
 bool QGraphicsWidget::focusNextPrevChild(bool next)
 {
    Q_D(QGraphicsWidget);
+
    // Let the parent's focusNextPrevChild implementation decide what to do.
    QGraphicsWidget *parent = nullptr;
-   if (!isWindow() && (parent = parentWidget())) {
+
+   if (! isWindow() && (parent = parentWidget())) {
       return parent->focusNextPrevChild(next);
    }
+
    if (! d->m_itemScene) {
       return false;
    }
+
    if (d->m_itemScene->focusNextPrevChild(next)) {
       return true;
    }
+
    if (isWindow()) {
       setFocus(next ? Qt::TabFocusReason : Qt::BacktabFocusReason);
+
       if (hasFocus()) {
          return true;
       }
    }
+
    return false;
 }
 
 void QGraphicsWidget::focusOutEvent(QFocusEvent *event)
 {
    (void) event;
+
    if (focusPolicy() != Qt::NoFocus) {
       update();
    }
@@ -1084,6 +1111,7 @@ void QGraphicsWidget::setWindowFlags(Qt::WindowFlags flags)
    if (d->m_flags == flags) {
       return;
    }
+
    bool wasPopup = (d->m_flags & Qt::WindowType_Mask) == Qt::Popup;
 
    d->adjustWindowFlags(&flags);

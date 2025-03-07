@@ -47,8 +47,6 @@ class QBspTree
       Type type;
    };
 
-   typedef Node::Type NodeType;
-
    struct Data {
       Data(void *p)
          : ptr(p)
@@ -64,7 +62,9 @@ class QBspTree
       };
    };
 
-   typedef QBspTree::Data QBspTreeData;
+   using NodeType = Node::Type;
+   using QBspTreeData = QBspTree::Data;
+
    typedef void callback(QVector<int> &leaf, const QRect &area, uint visited, QBspTreeData data);
 
    QBspTree();
