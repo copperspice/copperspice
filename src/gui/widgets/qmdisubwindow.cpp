@@ -655,10 +655,12 @@ void ControlContainer::showButtonsInMenuBar(QMenuBar *menuBar)
    if (!menuBar || !mdiChild || mdiChild->windowFlags() & Qt::FramelessWindowHint) {
       return;
    }
+
    m_menuBar = menuBar;
 
    if (m_menuLabel && mdiChild->windowFlags() & Qt::WindowSystemMenuHint) {
       QWidget *currentLeft = menuBar->cornerWidget(Qt::TopLeftCorner);
+
       if (currentLeft) {
          currentLeft->hide();
       }

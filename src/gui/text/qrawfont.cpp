@@ -162,10 +162,12 @@ qreal QRawFont::lineThickness() const
 {
    return m_fontPrivate->isValid() ? m_fontPrivate->fontEngine->lineThickness().toReal() : 0.0;
 }
+
 qreal QRawFont::underlinePosition() const
 {
    return m_fontPrivate->isValid() ? m_fontPrivate->fontEngine->underlinePosition().toReal() : 0.0;
 }
+
 QString QRawFont::familyName() const
 {
    return m_fontPrivate->isValid() ? m_fontPrivate->fontEngine->m_fontDef.family : QString();

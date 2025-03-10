@@ -1221,7 +1221,7 @@ void QTextEngine::shapeText(int item) const
 }
 
 int QTextEngine::shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, QFontEngine *fontEngine,
-            const QVector<uint> &itemBoundaries, bool kerningEnabled, bool hasLetterSpacing) const
+      const QVector<uint> &itemBoundaries, bool kerningEnabled, bool hasLetterSpacing) const
 {
    // harfbuzz
 
@@ -1565,7 +1565,6 @@ void QTextEngine::shape(int item) const
       ensureSpace(1);
 
       if (block.docHandle()) {
-
          docLayout()->resizeInlineObject(QTextInlineObject(item, const_cast<QTextEngine *>(this)),
             layoutData->items[item].position + block.position(),
             format(&layoutData->items[item]));
@@ -1573,10 +1572,9 @@ void QTextEngine::shape(int item) const
 
    } else if (layoutData->items[item].analysis.flags == QScriptAnalysis::Tab) {
       // set up at least the ascent/descent/leading of the script item for the tab
-      fontEngine(layoutData->items[item],
-         &layoutData->items[item].ascent,
-         &layoutData->items[item].descent,
-         &layoutData->items[item].leading);
+
+      fontEngine(layoutData->items[item], &layoutData->items[item].ascent,
+            &layoutData->items[item].descent, &layoutData->items[item].leading);
 
    } else {
       shapeText(item);
@@ -2033,7 +2031,9 @@ glyph_metrics_t QTextEngine::boundingBox(int from,  int len) const
          if (charFrom < ilen) {
             QFontEngine *fe = fontEngine(*si);
             glyphStart = logClusters[charFrom];
+
             int charEnd = from + len - 1 - pos;
+
             if (charEnd >= ilen) {
                charEnd = ilen - 1;
             }
@@ -2044,18 +2044,22 @@ glyph_metrics_t QTextEngine::boundingBox(int from,  int len) const
             }
 
             glyphEnd = (charEnd == ilen) ? si->num_glyphs : logClusters[charEnd];
+
             if (glyphStart <= glyphEnd ) {
                glyph_metrics_t m = fe->boundingBox(glyphs.mid(glyphStart, glyphEnd - glyphStart));
                gm.x = qMin(gm.x, m.x + gm.xoff);
                gm.y = qMin(gm.y, m.y + gm.yoff);
-               gm.width = qMax(gm.width, m.width + gm.xoff);
+
+               gm.width  = qMax(gm.width, m.width + gm.xoff);
                gm.height = qMax(gm.height, m.height + gm.yoff);
+
                gm.xoff += m.xoff;
                gm.yoff += m.yoff;
             }
          }
       }
    }
+
    return gm;
 }
 
@@ -2112,8 +2116,10 @@ glyph_metrics_t QTextEngine::tightBoundingBox(int from,  int len) const
                glyph_metrics_t m = fe->tightBoundingBox(glyphs.mid(glyphStart, glyphEnd - glyphStart));
                gm.x = qMin(gm.x, m.x + gm.xoff);
                gm.y = qMin(gm.y, m.y + gm.yoff);
+
                gm.width = qMax(gm.width, m.width + gm.xoff);
                gm.height = qMax(gm.height, m.height + gm.yoff);
+
                gm.xoff += m.xoff;
                gm.yoff += m.yoff;
             }
@@ -2126,6 +2132,7 @@ glyph_metrics_t QTextEngine::tightBoundingBox(int from,  int len) const
 QFont QTextEngine::font(const QScriptItem &si) const
 {
    QFont font = fnt;
+
    if (hasFormats()) {
       QTextCharFormat f = format(&si);
       font = f.font();
@@ -2133,6 +2140,7 @@ QFont QTextEngine::font(const QScriptItem &si) const
       if (block.docHandle() && block.docHandle()->layout()) {
          // Make sure we get the right dpi on printers
          QPaintDevice *pdev = block.docHandle()->layout()->paintDevice();
+
          if (pdev) {
             font = QFont(font, pdev);
          }
@@ -2163,8 +2171,8 @@ QTextEngine::FontEngineCache::FontEngineCache()
    reset();
 }
 
-//we cache the previous results of this function, as calling it numerous times with the same effective
-//input is common (and hard to cache at a higher level)
+// cache the previous results of this method, as calling it numerous times with the same effective
+// input is common (and hard to cache at a higher level)
 QFontEngine *QTextEngine::fontEngine(const QScriptItem &si, QFixed *ascent, QFixed *descent, QFixed *leading) const
 {
    QFontEngine *engine = nullptr;
@@ -3867,7 +3875,7 @@ QTextItemInt QTextItemInt::midItem(QFontEngine *fontEngine, int firstGlyphIndex,
    QTextItemInt ti = *this;
    const int end   = firstGlyphIndex + len;
 
-   ti.glyphs     = glyphs.mid(firstGlyphIndex, len);
+   ti.glyphs = glyphs.mid(firstGlyphIndex, len);
    ti.m_textItemFontEngine = fontEngine;
 
    if (logClusters && (m_iter != m_end)) {

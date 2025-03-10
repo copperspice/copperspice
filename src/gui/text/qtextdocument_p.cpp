@@ -1226,10 +1226,10 @@ void QTextDocumentPrivate::clearUndoRedoStacks(QTextDocument::Stacks stacksToCle
          emitUndoAvailable(false);
       }
 
-   } else if (stacksToClear == QTextDocument::RedoStack
-      && redoCommandsAvailable) {
+   } else if (stacksToClear == QTextDocument::RedoStack && redoCommandsAvailable) {
       for (int i = m_undoState; i < undoStack.size(); ++i) {
          QTextUndoCommand c = undoStack[i];
+
          if (c.command & QTextUndoCommand::Custom) {
             delete c.custom;
          }
@@ -1239,8 +1239,7 @@ void QTextDocumentPrivate::clearUndoRedoStacks(QTextDocument::Stacks stacksToCle
          emitRedoAvailable(false);
       }
 
-   } else if (stacksToClear == QTextDocument::UndoAndRedoStacks
-      && !undoStack.isEmpty()) {
+   } else if (stacksToClear == QTextDocument::UndoAndRedoStacks && ! undoStack.isEmpty()) {
       for (int i = 0; i < undoStack.size(); ++i) {
          QTextUndoCommand c = undoStack[i];
 

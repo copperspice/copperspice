@@ -33,9 +33,11 @@
 
 #include <qcssparser_p.h>
 
-struct QStyleSheetBorderImageData : public QSharedData {
+struct QStyleSheetBorderImageData : public QSharedData
+{
    QStyleSheetBorderImageData()
-      : horizStretch(QCss::TileMode_Unknown), vertStretch(QCss::TileMode_Unknown) {
+      : horizStretch(QCss::TileMode_Unknown), vertStretch(QCss::TileMode_Unknown)
+   {
       for (int i = 0; i < 4; i++) {
          cuts[i] = -1;
       }
@@ -49,7 +51,7 @@ struct QStyleSheetBorderImageData : public QSharedData {
 
 struct QStyleSheetBackgroundData : public QSharedData {
    QStyleSheetBackgroundData(const QBrush &b, const QPixmap &p, QCss::Repeat r,
-      Qt::Alignment a, QCss::Origin o, QCss::Attachment t, QCss::Origin c)
+         Qt::Alignment a, QCss::Origin o, QCss::Attachment t, QCss::Origin c)
       : brush(b), pixmap(p), repeat(r), position(a), origin(o), attachment(t), clip(c) { }
 
    bool isTransparent() const {
@@ -301,6 +303,7 @@ class QRenderRule
       if (hasGradientBackground()) {
          return features & QCss::StyleFeature_BackgroundGradient;
       }
+
       return features & QCss::StyleFeature_BackgroundColor;
    }
 
@@ -323,7 +326,7 @@ class QRenderRule
    }
 
    bool hasDrawable() const {
-      return !hasNativeBorder() || hasBackground() || hasImage();
+      return ! hasNativeBorder() || hasBackground() || hasImage();
    }
 
    bool hasImage() const {
@@ -344,12 +347,15 @@ class QRenderRule
 
    QSize contentsSize(const QSize &sz) const {
       QSize csz = contentsSize();
+
       if (csz.width() == -1) {
          csz.setWidth(sz.width());
       }
+
       if (csz.height() == -1) {
          csz.setHeight(sz.height());
       }
+
       return csz;
    }
 
@@ -369,10 +375,13 @@ class QRenderRule
       if (!geo) {
          return sz;
       }
+
       QSize csz = contentsSize();
+
       if (csz.width() == -1) {
          csz.setWidth(sz.width());
       }
+
       if (csz.height() == -1) {
          csz.setHeight(sz.height());
       }
@@ -399,6 +408,8 @@ class QRenderRule
    void unsetClip(QPainter *);
 
    int features;
+
+
    QBrush defaultBackground;
    QFont font;
    bool hasFont;

@@ -406,7 +406,6 @@ struct qttf_head_table {
    qint16 indexToLocFormat;
 };
 
-
 struct qttf_hhea_table {
    qint16 ascender;
    qint16 descender;
@@ -417,7 +416,6 @@ struct qttf_hhea_table {
    qint16 xMaxExtent;
    quint16 numberOfHMetrics;
 };
-
 
 struct qttf_maxp_table {
    quint16 numGlyphs;
@@ -558,7 +556,6 @@ static QTtfTable generateHead(const qttf_head_table &head)
    return t;
 }
 
-
 static QTtfTable generateHhea(const qttf_hhea_table &hhea)
 {
    const int hhea_size = 36;
@@ -608,7 +605,6 @@ static QTtfTable generateHhea(const qttf_hhea_table &hhea)
    Q_ASSERT(s.offset() == hhea_size);
    return t;
 }
-
 
 static QTtfTable generateMaxp(const qttf_maxp_table &maxp)
 {
@@ -1209,16 +1205,6 @@ static QByteArray bindFont(const QVector<QTtfTable> &_tables)
    return font;
 }
 
-
-/*
-  PDF requires the following tables:
-
-  head, hhea, loca, maxp, cvt , prep, glyf, hmtx, fpgm
-
-  This means we don't have to add a os/2, post or name table. cvt , prep and fpgm could be empty
-  if really required.
-*/
-
 QByteArray QFontSubset::toTruetype() const
 {
    qttf_font_tables font;
@@ -1305,14 +1291,18 @@ QByteArray QFontSubset::toTruetype() const
    tables.append(generateHead(font.head));
    tables.append(generateHhea(font.hhea));
    tables.append(generateMaxp(font.maxp));
+
    // name
    QTtfTable name_table;
    name_table.tag = MAKE_TAG('n', 'a', 'm', 'e');
+
    if (!noEmbed) {
       name_table.data = fontEngine->getSfntTable(name_table.tag);
    }
+
    if (name_table.data.isEmpty()) {
       qttf_name_table name;
+
       if (noEmbed) {
          name.copyright = QLatin1String("Fake font");
       } else {
@@ -1337,5 +1327,3 @@ QByteArray QFontSubset::toTruetype() const
 
    return bindFont(tables);
 }
-
-

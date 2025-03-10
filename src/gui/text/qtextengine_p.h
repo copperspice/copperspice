@@ -480,7 +480,7 @@ class Q_GUI_EXPORT QTextEngine
    }
 
    QFontEngine *fontEngine(const QScriptItem &si, QFixed *ascent = nullptr, QFixed *descent = nullptr,
-                  QFixed *leading = nullptr) const;
+         QFixed *leading = nullptr) const;
 
    QFont font(const QScriptItem &si) const;
    QFont font() const {
@@ -612,6 +612,7 @@ class Q_GUI_EXPORT QTextEngine
  private:
    struct FontEngineCache {
       FontEngineCache();
+
       mutable QFontEngine *prevFontEngine;
       mutable QFontEngine *prevScaledFontEngine;
       mutable int prevScript;
@@ -655,7 +656,7 @@ class Q_GUI_EXPORT QTextEngine
 
 #if ! defined(CS_BUILDING_CUPS)
    int shapeTextWithHarfbuzz(const QScriptItem &si, QStringView str, QFontEngine *fontEngine,
-            const QVector<uint> &itemBoundaries, bool kerningEnabled, bool hasLetterSpacing) const;
+         const QVector<uint> &itemBoundaries, bool kerningEnabled, bool hasLetterSpacing) const;
 #endif
 
    int endOfLine(int lineNum);

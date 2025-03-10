@@ -5930,6 +5930,7 @@ void QWidget::show()
       setVisible(true);   // FIXME: Why not showNormal(), like QWindow::show()?
    }
 }
+
 void QWidgetPrivate::show_recursive()
 {
    Q_Q(QWidget);
@@ -6011,7 +6012,7 @@ void QWidgetPrivate::activateChildLayoutsRecursively()
          childPrivate->m_widgetLayout->activate();
       }
 
-      // Pretend we're visible.
+      // Pretend we are visible.
       const bool wasVisible = child->isVisible();
 
       if (!wasVisible) {

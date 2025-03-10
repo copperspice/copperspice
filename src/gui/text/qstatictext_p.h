@@ -124,7 +124,6 @@ class Q_GUI_EXPORT QStaticTextItem
    // Needs special handling in setters, so private to avoid abuse
    QFontEngine *m_fontEngine;                     // 4 bytes per item
    QStaticTextUserData *m_userData;               // 8 bytes per item
-
 };
 
 class QStaticTextPrivate

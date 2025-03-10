@@ -107,12 +107,13 @@ QStyleOption::QStyleOption(const QStyleOption &other)
 
 QStyleOption &QStyleOption::operator=(const QStyleOption &other)
 {
-   state = other.state;
-   direction = other.direction;
-   rect = other.rect;
+   state       = other.state;
+   direction   = other.direction;
+   rect        = other.rect;
    fontMetrics = other.fontMetrics;
-   palette = other.palette;
+   palette     = other.palette;
    styleObject = other.styleObject;
+
    return *this;
 }
 

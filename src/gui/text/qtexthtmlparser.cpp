@@ -1078,24 +1078,27 @@ void QTextHtmlParserNode::initializeProperties(const QTextHtmlParserNode *parent
          blockFormat.clearProperty(QTextFormat::BlockAlignment);
       }
    }
-   // we don't paint per-row background colors, yet. so as an
-   // exception inherit the background color here
+
+   // we do not paint per-row background colors as if yet
+   // as an exception inherit the background color here
    // we also inherit the background between inline elements
-   if ((parent->id != Html_tr || !isTableCell())
-      && (displayMode != QTextHtmlElement::DisplayInline || parent->displayMode != QTextHtmlElement::DisplayInline)) {
+
+   if ((parent->id != Html_tr || ! isTableCell())
+         && (displayMode != QTextHtmlElement::DisplayInline || parent->displayMode != QTextHtmlElement::DisplayInline)) {
       charFormat.clearProperty(QTextFormat::BackgroundBrush);
    }
 
    listStyle = parent->listStyle;
+
    // makes no sense to inherit that property, a named anchor is a single point
    // in the document, which is set by the DocumentFragment
    charFormat.clearProperty(QTextFormat::AnchorName);
    wsm = parent->wsm;
 
    // initialize remaining properties
-   margin[QTextHtmlParser::MarginLeft] = 0;
-   margin[QTextHtmlParser::MarginRight] = 0;
-   margin[QTextHtmlParser::MarginTop] = 0;
+   margin[QTextHtmlParser::MarginLeft]   = 0;
+   margin[QTextHtmlParser::MarginRight]  = 0;
+   margin[QTextHtmlParser::MarginTop]    = 0;
    margin[QTextHtmlParser::MarginBottom] = 0;
    cssFloat = QTextFrameFormat::InFlow;
 
@@ -1126,7 +1129,6 @@ void QTextHtmlParserNode::initializeProperties(const QTextHtmlParserNode *parent
          break;
 
       case Html_h1:
-
          charFormat.setProperty(QTextFormat::FontSizeAdjustment, int(3));
          margin[QTextHtmlParser::MarginTop] = 18;
          margin[QTextHtmlParser::MarginBottom] = 12;
@@ -1175,6 +1177,7 @@ void QTextHtmlParserNode::initializeProperties(const QTextHtmlParserNode *parent
             margin[QTextHtmlParser::MarginTop] = 12;
             margin[QTextHtmlParser::MarginBottom] = 12;
          }
+
          // no left margin as we use indenting instead
          break;
 
@@ -1193,10 +1196,12 @@ void QTextHtmlParserNode::initializeProperties(const QTextHtmlParserNode *parent
          margin[QTextHtmlParser::MarginLeft] = 40;
          margin[QTextHtmlParser::MarginRight] = 40;
          break;
+
       case Html_dl:
          margin[QTextHtmlParser::MarginTop] = 8;
          margin[QTextHtmlParser::MarginBottom] = 8;
          break;
+
       case Html_dd:
          margin[QTextHtmlParser::MarginLeft] = 30;
          break;

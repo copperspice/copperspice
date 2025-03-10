@@ -635,6 +635,7 @@ class Q_GUI_EXPORT QWidgetPrivate
    QWidget *focus_child;
    QLayout *m_widgetLayout;
    QRegion *needsFlush;
+
    QPaintDevice *redirectDev;
    QWidgetItemV2 *m_widgetItem2;
    QPaintEngine *extraPaintEngine;

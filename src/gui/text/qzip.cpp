@@ -601,7 +601,7 @@ void QZipReaderPrivate::scanFiles()
 
    // have the eod
    start_of_directory = readUInt(eod.dir_start_offset);
-   num_dir_entries = readUShort(eod.num_dir_entries);
+   num_dir_entries    = readUShort(eod.num_dir_entries);
 
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
    qDebug("start_of_directory at %d, num_dir_entries=%d", start_of_directory, num_dir_entries);
@@ -821,7 +821,7 @@ QZipReader::QZipReader(const QString &archive, QIODevice::OpenMode mode)
 }
 
 QZipReader::QZipReader(QIODevice *device)
-   : d(new QZipReaderPrivate(device, /*ownDevice=*/false))
+   : d(new QZipReaderPrivate(device, false))
 {
    Q_ASSERT(device);
 }

@@ -627,6 +627,7 @@ void QTextLayout::draw(QPainter *p, const QPointF &pos, const QVector<FormatRang
 
    QFixed clipy = (INT_MIN / 256);
    QFixed clipe = (INT_MAX / 256);
+
    if (clip.isValid()) {
       clipy = QFixed::fromReal(clip.y() - position.y());
       clipe = clipy + QFixed::fromReal(clip.height());
@@ -811,6 +812,7 @@ void QTextLayout::drawCursor(QPainter *painter, const QPointF &pos, int cursorPo
 
    cursorPosition = qBound(0, cursorPosition, d->layoutData->string.length());
    int line = d->lineNumberForTextPosition(cursorPosition);
+
    if (line < 0) {
       line = 0;
    }
@@ -1967,7 +1969,7 @@ void QTextLine::draw(QPainter *p, const QPointF &pos, const QTextLayout::FormatR
       QStringView tmp = m_textEngine->layoutData->string.midView(iterator.itemStart, iterator.itemEnd - iterator.itemStart);
 
       QTextItemInt gf(glyphs.mid(iterator.glyphsStart, iterator.glyphsEnd - iterator.glyphsStart),
-         &f, tmp.begin(), tmp.end(), m_textEngine->fontEngine(si), format);
+            &f, tmp.begin(), tmp.end(), m_textEngine->fontEngine(si), format);
 
       gf.logClusters = logClusters + iterator.itemStart - si.position;
       gf.width       = iterator.itemWidth;

@@ -543,6 +543,7 @@ void QDockWidgetLayout::setGeometry(const QRect &geometry)
 
       if (QLayoutItem *item = item_list[Content]) {
          QRect r = geometry;
+
          if (verticalTitleBar) {
             r.setLeft(_titleArea.right() + 1);
             r.adjust(0, fw, -fw, -fw);

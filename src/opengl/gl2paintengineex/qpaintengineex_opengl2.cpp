@@ -1598,8 +1598,8 @@ void QGL2PaintEngineEx::drawTextItem(const QPointF &p, const QTextItem &textItem
             || d->device->alphaRequested() || txtype > QTransform::TxTranslate
             || (state()->composition_mode != QPainter::CompositionMode_Source
             && state()->composition_mode != QPainter::CompositionMode_SourceOver))
-        {
-            glyphFormat = QFontEngine::Format_A8;
+      {
+         glyphFormat = QFontEngine::Format_A8;
       }
    }
 
@@ -1618,8 +1618,9 @@ void QGL2PaintEngineEx::drawTextItem(const QPointF &p, const QTextItem &textItem
          staticTextItem.numGlyphs      = glyphs.size();
          staticTextItem.glyphPositions = positions.data();
 
-            d->drawCachedGlyphs(glyphFormat, &staticTextItem);
+         d->drawCachedGlyphs(glyphFormat, &staticTextItem);
       }
+
       return;
    }
 

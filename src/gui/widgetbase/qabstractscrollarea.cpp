@@ -58,8 +58,7 @@ QAbstractScrollAreaPrivate::~QAbstractScrollAreaPrivate()
 {
 }
 
-QAbstractScrollAreaScrollBarContainer::QAbstractScrollAreaScrollBarContainer(Qt::Orientation orientation,
-      QWidget *parent)
+QAbstractScrollAreaScrollBarContainer::QAbstractScrollAreaScrollBarContainer(Qt::Orientation orientation, QWidget *parent)
    : QWidget(parent), scrollBar(new QScrollBar(orientation, this)),
      layout(new QBoxLayout(orientation == Qt::Horizontal ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom)),
      orientation(orientation)
@@ -436,6 +435,7 @@ QWidget *QAbstractScrollArea::viewport() const
 QSize QAbstractScrollArea::maximumViewportSize() const
 {
    Q_D(const QAbstractScrollArea);
+
    int hsbExt = d->hbar->sizeHint().height();
    int vsbExt = d->vbar->sizeHint().width();
 

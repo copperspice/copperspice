@@ -335,12 +335,16 @@ void QBalloonTip::resizeEvent(QResizeEvent *ev)
 void QBalloonTip::balloon(const QPoint &pos, int msecs, bool showArrow)
 {
    this->showArrow = showArrow;
+
    QRect scr = QApplication::desktop()->screenGeometry(pos);
-   QSize sh = sizeHint();
+   QSize sh  = sizeHint();
+
    const int border = 1;
    const int ah = 18, ao = 18, aw = 18, rc = 7;
-   bool arrowAtTop = (pos.y() + sh.height() + ah < scr.height());
+
+   bool arrowAtTop  = (pos.y() + sh.height() + ah < scr.height());
    bool arrowAtLeft = (pos.x() + sh.width() - ao < scr.width());
+
    setContentsMargins(border + 3,  border + (arrowAtTop ? ah : 0) + 2, border + 3, border + (arrowAtTop ? 0 : ah) + 2);
    updateGeometry();
    sh  = sizeHint();

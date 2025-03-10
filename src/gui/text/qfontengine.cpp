@@ -42,6 +42,8 @@
 #define GRID(x, y) grid[(y)*(w+1) + (x)]
 #define SET(x, y) (*(image_data + (y)*bpl + ((x) >> 3)) & (0x80 >> ((x) & 7)))
 
+QStringList qt_fallbacksForFamily(const QString &family, QFont::Style style, QFont::StyleHint styleHint, QChar::Script script);
+
 enum FontEdges {
    EdgeRight = 0x1,
    EdgeDown  = 0x2,
@@ -1034,7 +1036,7 @@ void QFontEngine::loadKerningPairs(QFixed scalingFactor)
          }
 
          quint16 length;
-         if (!qSafeFromBigEndian(header + 2, end, &length)) {
+         if (! qSafeFromBigEndian(header + 2, end, &length)) {
             goto end;
          }
 
@@ -1720,8 +1722,6 @@ QFontEngineMulti::~QFontEngineMulti()
       }
    }
 }
-
-QStringList qt_fallbacksForFamily(const QString &family, QFont::Style style, QFont::StyleHint styleHint, QChar::Script script);
 
 void QFontEngineMulti::ensureFallbackFamiliesQueried()
 {

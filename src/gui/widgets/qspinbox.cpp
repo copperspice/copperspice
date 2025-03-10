@@ -286,6 +286,7 @@ double QDoubleSpinBox::value() const
 void QDoubleSpinBox::setValue(double value)
 {
    Q_D(QDoubleSpinBox);
+
    QVariant v(d->round(value));
    d->setValue(v, EmitIfChanged);
 }
@@ -441,6 +442,7 @@ QSpinBoxPrivate::QSpinBoxPrivate()
 {
    minimum = QVariant((int)0);
    maximum = QVariant((int)99);
+
    value = minimum;
    displayIntegerBase = 10;
    singleStep = QVariant((int)1);
@@ -550,8 +552,10 @@ QDoubleSpinBoxPrivate::QDoubleSpinBoxPrivate()
 {
    actualMin = 0.0;
    actualMax = 99.99;
+
    minimum = QVariant(actualMin);
    maximum = QVariant(actualMax);
+
    value = minimum;
    singleStep = QVariant(1.0);
    decimals = 2;

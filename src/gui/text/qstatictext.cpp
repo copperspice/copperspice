@@ -220,6 +220,7 @@ class DrawTextItemRecorder: public QPaintEngine
 
       QVarLengthArray<glyph_t> glyphs;
       QVarLengthArray<QFixedPoint> positions;
+
       ti.m_textItemFontEngine->getGlyphPositions(ti.glyphs, matrix, ti.flags, glyphs, positions);
 
       int size = glyphs.size();
@@ -487,4 +488,3 @@ void QStaticTextItem::setFontEngine(QFontEngine *fe)
       m_fontEngine->m_refCount.ref();
    }
 }
-

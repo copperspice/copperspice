@@ -264,8 +264,8 @@ bool QTextControlPrivate::cursorMoveKeyEvent(QKeyEvent *e)
 
 #ifdef QT_KEYPAD_NAVIGATION
    ignoreNavigationEvents = ignoreNavigationEvents || QApplication::keypadNavigationEnabled();
-   isNavigationEvent = isNavigationEvent ||
-      (QApplication::navigationMode() == Qt::NavigationModeKeypadDirectional
+
+   isNavigationEvent = isNavigationEvent || (QApplication::navigationMode() == Qt::NavigationModeKeypadDirectional
          && (e->key() == Qt::Key_Left || e->key() == Qt::Key_Right));
 #else
    isNavigationEvent = isNavigationEvent || e->key() == Qt::Key_Left || e->key() == Qt::Key_Right;
@@ -309,10 +309,12 @@ void QTextControlPrivate::indent()
    QTextBlockFormat blockFmt = m_textControlCursor.blockFormat();
 
    QTextList *list = m_textControlCursor.currentList();
+
    if (! list) {
       QTextBlockFormat modifier;
       modifier.setIndent(blockFmt.indent() + 1);
       m_textControlCursor.mergeBlockFormat(modifier);
+
    } else {
       QTextListFormat format = list->format();
       format.setIndent(format.indent() + 1);
@@ -728,7 +730,7 @@ void QTextControlPrivate::extendWordwiseSelection(int suggestedNewPosition, qrea
 
    // if inside the initial selected word keep that
    if (suggestedNewPosition >= selectedWordOnDoubleClick.selectionStart()
-      && suggestedNewPosition <= selectedWordOnDoubleClick.selectionEnd()) {
+         && suggestedNewPosition <= selectedWordOnDoubleClick.selectionEnd()) {
       q->setTextCursor(selectedWordOnDoubleClick);
       return;
    }
@@ -787,7 +789,7 @@ void QTextControlPrivate::extendWordwiseSelection(int suggestedNewPosition, qrea
       }
 
       const qreal differenceToStart = mouseXPosition - wordStartX;
-      const qreal differenceToEnd = wordEndX - mouseXPosition;
+      const qreal differenceToEnd   = wordEndX - mouseXPosition;
 
       if (differenceToStart < differenceToEnd) {
          setCursorPosition(wordStartPos, QTextCursor::KeepAnchor);
@@ -810,7 +812,7 @@ void QTextControlPrivate::extendBlockwiseSelection(int suggestedNewPosition)
 
    // if inside the initial selected line keep that
    if (suggestedNewPosition >= selectedBlockOnTrippleClick.selectionStart()
-      && suggestedNewPosition <= selectedBlockOnTrippleClick.selectionEnd()) {
+         && suggestedNewPosition <= selectedBlockOnTrippleClick.selectionEnd()) {
       q->setTextCursor(selectedBlockOnTrippleClick);
 
       return;
@@ -3117,8 +3119,8 @@ void QTextControlPrivate::activateLinkUnderCursor(QString href)
       for (; !it.atEnd(); ++it) {
          QTextFragment fragment = it.fragment();
          const int fragmentPos = fragment.position();
-         if (fragmentPos <= cursorPos &&
-            fragmentPos + fragment.length() > cursorPos) {
+
+         if (fragmentPos <= cursorPos && fragmentPos + fragment.length() > cursorPos) {
             linkFragment = it;
             break;
          }

@@ -134,8 +134,8 @@ static inline QPaintEngine::PaintEngineFeatures svgEngineFeatures()
 class QSvgPaintEngine : public QPaintEngine
 {
    Q_DECLARE_PRIVATE(QSvgPaintEngine)
- public:
 
+ public:
    QSvgPaintEngine()
       : QPaintEngine(*new QSvgPaintEnginePrivate, svgEngineFeatures()) { }
 
@@ -844,6 +844,7 @@ void QSvgPaintEngine::updateState(const QPaintEngineState &state)
 
    d->afterFirstUpdate = true;
 }
+
 void QSvgPaintEngine::drawEllipse(const QRectF &r)
 {
     Q_D(QSvgPaintEngine);
@@ -858,10 +859,12 @@ void QSvgPaintEngine::drawEllipse(const QRectF &r)
     const QPointF c = r.center();
     *d->stream << " cx=\"" << c.x() << "\" cy=\"" << c.y();
 
-    if (isCircle)
+    if (isCircle) {
         *d->stream << "\" r=\"" << r.width() / qreal(2.0);
-    else
+    } else {
         *d->stream << "\" rx=\"" << r.width() / qreal(2.0) << "\" ry=\"" << r.height() / qreal(2.0);
+    }
+
     *d->stream << "\"/>" << endl;
 }
 
@@ -877,16 +880,20 @@ void QSvgPaintEngine::drawPath(const QPainterPath &p)
 
    for (int i = 0; i < p.elementCount(); ++i) {
       const QPainterPath::Element &e = p.elementAt(i);
+
       switch (e.type) {
          case QPainterPath::MoveToElement:
             *d->stream << 'M' << e.x << ',' << e.y;
             break;
+
          case QPainterPath::LineToElement:
             *d->stream << 'L' << e.x << ',' << e.y;
             break;
+
          case QPainterPath::CurveToElement:
             *d->stream << 'C' << e.x << ',' << e.y;
             ++i;
+
             while (i < p.elementCount()) {
                const QPainterPath::Element &newElement = p.elementAt(i);
 
@@ -901,10 +908,13 @@ void QSvgPaintEngine::drawPath(const QPainterPath &p)
                *d->stream << newElement.x << ',' << newElement.y;
                ++i;
             }
+
             break;
+
          default:
             break;
       }
+
       if (i != p.elementCount() - 1) {
          *d->stream << ' ';
       }
@@ -929,11 +939,14 @@ void QSvgPaintEngine::drawPolygon(const QPointF *points, int pointCount,
       stream() << "<polyline fill=\"none\" vector-effect=\""
                << (m_engineState->pen().isCosmetic() ? "non-scaling-stroke" : "none")
                << "\" points=\"";
+
       for (int i = 0; i < pointCount; ++i) {
          const QPointF &pt = points[i];
          stream() << pt.x() << ',' << pt.y() << ' ';
       }
+
       stream() << "\" />" << endl;
+
    } else {
       path.closeSubpath();
       drawPath(path);
@@ -945,6 +958,7 @@ void QSvgPaintEngine::drawRects(const QRectF *rects, int rectCount)
     Q_D(QSvgPaintEngine);
     for (int i=0; i < rectCount; ++i) {
         const QRectF &rect = rects[i].normalized();
+
         *d->stream << "<rect";
 
         if (m_engineState->pen().isCosmetic()) {

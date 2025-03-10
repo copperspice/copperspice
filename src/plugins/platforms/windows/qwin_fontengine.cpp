@@ -1207,23 +1207,25 @@ QFontEngine *QWindowsFontEngine::cloneWithSize(qreal pixelSize) const
 {
    QFontDef request = m_fontDef;
    QString actualFontName = request.family;
-   if (!uniqueFamilyName.isEmpty()) {
+
+   if (! uniqueFamilyName.isEmpty()) {
       request.family = uniqueFamilyName;
    }
+
    request.pixelSize = pixelSize;
 
-   QFontEngine *fontEngine =
-      QWindowsFontDatabase::createEngine(request,
-         QWindowsContext::instance()->defaultDPI(),
-         m_fontEngineData);
+   QFontEngine *fontEngine = QWindowsFontDatabase::createEngine(request, QWindowsContext::instance()->defaultDPI(), m_fontEngineData);
+
    if (fontEngine) {
       fontEngine->m_fontDef.family = actualFontName;
-      if (!uniqueFamilyName.isEmpty()) {
+
+      if (! uniqueFamilyName.isEmpty()) {
          static_cast<QWindowsFontEngine *>(fontEngine)->setUniqueFamilyName(uniqueFamilyName);
          QPlatformFontDatabase *pfdb = QWindowsIntegration::instance()->fontDatabase();
          static_cast<QWindowsFontDatabase *>(pfdb)->refUniqueFont(uniqueFamilyName);
       }
    }
+
    return fontEngine;
 }
 
@@ -1232,8 +1234,7 @@ Qt::HANDLE QWindowsFontEngine::handle() const
    return hfont;
 }
 
-void QWindowsFontEngine::initFontInfo(const QFontDef &request,
-   int dpi)
+void QWindowsFontEngine::initFontInfo(const QFontDef &request, int dpi)
 {
    m_fontDef = request; // most settings are equal
    HDC dc = m_fontEngineData->hdc;
@@ -1278,7 +1279,7 @@ QFontEngine *QWindowsMultiFontEngine::loadEngine(int at)
 
    lf.lfFaceName[faceNameLength] = 0;
 
-   QFontEngine *fe    = new QWindowsFontEngine(fam, lf, data);
+   QFontEngine *fe      = new QWindowsFontEngine(fam, lf, data);
    fe->m_fontDef.weight = fontEngine->m_fontDef.weight;
 
    if (fontEngine->m_fontDef.style > QFont::StyleNormal) {
