@@ -59,8 +59,9 @@ class QSystemTrayIconPrivate
    static bool supportsMessages_sys();
 
    void _q_emitActivated(QPlatformSystemTrayIcon::ActivationReason reason);
-   QPointer<QMenu> menu;
-   QIcon icon;
+
+   QPointer<QMenu> m_trayIconMenu;
+   QIcon m_trayIcon;
    QString toolTip;
    QSystemTrayIconSys *sys;
    QPlatformSystemTrayIcon *qpa_sys;
@@ -112,7 +113,7 @@ class QBalloonTip : public QWidget
    QPixmap pixmap;
    int timerId;
 
-   bool showArrow;
+   bool m_showArrow;
 };
 
 #endif // QT_NO_SYSTEMTRAYICON

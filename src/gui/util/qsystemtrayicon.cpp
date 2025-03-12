@@ -64,28 +64,28 @@ QSystemTrayIcon::~QSystemTrayIcon()
 void QSystemTrayIcon::setContextMenu(QMenu *menu)
 {
    Q_D(QSystemTrayIcon);
-   d->menu = menu;
+   d->m_trayIconMenu = menu;
    d->updateMenu_sys();
 }
 
 QMenu *QSystemTrayIcon::contextMenu() const
 {
    Q_D(const QSystemTrayIcon);
-   return d->menu;
+   return d->m_trayIconMenu;
 }
 #endif
 
 void QSystemTrayIcon::setIcon(const QIcon &icon)
 {
    Q_D(QSystemTrayIcon);
-   d->icon = icon;
+   d->m_trayIcon = icon;
    d->updateIcon_sys();
 }
 
 QIcon QSystemTrayIcon::icon() const
 {
    Q_D(const QSystemTrayIcon);
-   return d->icon;
+   return d->m_trayIcon;
 }
 
 void QSystemTrayIcon::setToolTip(const QString &tooltip)
@@ -120,7 +120,7 @@ void QSystemTrayIcon::setVisible(bool visible)
       return;
    }
 
-   if (d->icon.isNull() && visible) {
+   if (d->m_trayIcon.isNull() && visible) {
       qWarning("QSystemTrayIcon::setVisible() No Icon was set");
    }
 
@@ -208,7 +208,7 @@ void QBalloonTip::updateBalloonPosition(const QPoint &pos)
    }
 
    theSolitaryBalloonTip->hide();
-   theSolitaryBalloonTip->balloon(pos, 0, theSolitaryBalloonTip->showArrow);
+   theSolitaryBalloonTip->balloon(pos, 0, theSolitaryBalloonTip->m_showArrow);
 }
 
 bool QBalloonTip::isBalloonVisible()
@@ -218,7 +218,7 @@ bool QBalloonTip::isBalloonVisible()
 
 QBalloonTip::QBalloonTip(QSystemTrayIcon::MessageIcon icon, const QString &title,
       const QString &message, QSystemTrayIcon *ti)
-   : QWidget(nullptr, Qt::ToolTip), trayIcon(ti), timerId(-1), showArrow(true)
+   : QWidget(nullptr, Qt::ToolTip), trayIcon(ti), timerId(-1), m_showArrow(true)
 {
    setAttribute(Qt::WA_DeleteOnClose);
    QObject::connect(ti, &QSystemTrayIcon::destroyed, this, &QBalloonTip::close);
@@ -334,7 +334,7 @@ void QBalloonTip::resizeEvent(QResizeEvent *ev)
 
 void QBalloonTip::balloon(const QPoint &pos, int msecs, bool showArrow)
 {
-   this->showArrow = showArrow;
+   m_showArrow = showArrow;
 
    QRect scr = QApplication::desktop()->screenGeometry(pos);
    QSize sh  = sizeHint();
@@ -488,14 +488,14 @@ QRect QSystemTrayIconPrivate::geometry_sys_qpa() const
 
 void QSystemTrayIconPrivate::updateIcon_sys_qpa()
 {
-   qpa_sys->updateIcon(icon);
+   qpa_sys->updateIcon(m_trayIcon);
 }
 
 void QSystemTrayIconPrivate::updateMenu_sys_qpa()
 {
-   if (menu) {
-      addPlatformMenu(menu);
-      qpa_sys->updateMenu(menu->platformMenu());
+   if (m_trayIconMenu) {
+      addPlatformMenu(m_trayIconMenu);
+      qpa_sys->updateMenu(m_trayIconMenu->platformMenu());
    }
 }
 
