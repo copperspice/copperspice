@@ -1104,8 +1104,8 @@ void QGridLayoutPrivate::distribute(QRect r, int hSpacing, int vSpacing)
    QVector<QLayoutStruct> &rData = *rDataPtr;
    int i;
 
-   bool reverse = ((r.bottom() > rect.bottom()) || (r.bottom() == rect.bottom()
-            && ((r.right() > rect.right()) != visualHReversed)));
+   bool reverse = ((r.bottom() > m_layoutRect.bottom()) || (r.bottom() == m_layoutRect.bottom()
+            && ((r.right() > m_layoutRect.right()) != visualHReversed)));
 
    int n = things.size();
 

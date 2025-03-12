@@ -85,7 +85,7 @@ bool QToolBarAreaLayoutItem::skip() const
 }
 
 QToolBarAreaLayoutLine::QToolBarAreaLayoutLine(Qt::Orientation orientation)
-   : o(orientation)
+   : m_lineDirection(orientation)
 {
 }
 
@@ -99,13 +99,13 @@ QSize QToolBarAreaLayoutLine::sizeHint() const
       }
 
       QSize sh = item.sizeHint();
-      a += item.preferredSize > 0 ? item.preferredSize : pick(o, sh);
-      b = qMax(b, perp(o, sh));
+      a += item.preferredSize > 0 ? item.preferredSize : pick(m_lineDirection, sh);
+      b = qMax(b, perp(m_lineDirection, sh));
    }
 
    QSize result;
-   rpick(o, result) = a;
-   rperp(o, result) = b;
+   rpick(m_lineDirection, result) = a;
+   rperp(m_lineDirection, result) = b;
 
    return result;
 }
@@ -123,13 +123,13 @@ QSize QToolBarAreaLayoutLine::minimumSize() const
       }
 
       QSize ms = item.minimumSize();
-      a += pick(o, ms);
-      b = qMax(b, perp(o, ms));
+      a += pick(m_lineDirection, ms);
+      b = qMax(b, perp(m_lineDirection, ms));
    }
 
    QSize result;
-   rpick(o, result) = a;
-   rperp(o, result) = b;
+   rpick(m_lineDirection, result) = a;
+   rperp(m_lineDirection, result) = b;
 
    return result;
 }
@@ -137,8 +137,8 @@ QSize QToolBarAreaLayoutLine::minimumSize() const
 void QToolBarAreaLayoutLine::fitLayout()
 {
    int last  = -1;
-   int min = pick(o, minimumSize());
-   int space = pick(o, rect.size());
+   int min   = pick(m_lineDirection, minimumSize());
+   int space = pick(m_lineDirection, rect.size());
    int extra = qMax(0, space - min);
 
    for (int i = 0; i < toolBarItems.count(); ++i) {
@@ -152,9 +152,10 @@ void QToolBarAreaLayoutLine::fitLayout()
          tblayout->checkUsePopupMenu();
       }
 
-      const int itemMin = pick(o, item.minimumSize());
+      const int itemMin = pick(m_lineDirection, item.minimumSize());
+
       //preferredSize is the default if it is set, otherwise, we take the sizehint
-      item.size = item.preferredSize > 0 ? item.preferredSize : pick(o, item.sizeHint());
+      item.size = item.preferredSize > 0 ? item.preferredSize : pick(m_lineDirection, item.sizeHint());
 
       //the extraspace is the space above the item minimum sizehint
       const int extraSpace = qMin(item.size - itemMin, extra);
@@ -179,7 +180,7 @@ void QToolBarAreaLayoutLine::fitLayout()
 
       if (i == last) {
          // stretch the last item to the end of the line
-         item.size = qMax(0, pick(o, rect.size()) - item.pos);
+         item.size = qMax(0, pick(m_lineDirection, rect.size()) - item.pos);
       }
 
       pos += item.size;
@@ -453,10 +454,10 @@ void QToolBarAreaLayoutInfo::moveToolBar(QToolBar *toolbar, int pos)
                }
 
                // update for the current item
-               current.extendSize(line.o, -extra);
+               current.extendSize(line.m_lineDirection, -extra);
 
                if (extra >= 0) {
-                  previous.extendSize(line.o, extra);
+                  previous.extendSize(line.m_lineDirection, extra);
 
                } else {
                   // need to push the toolbars on the left starting with previous
@@ -471,10 +472,10 @@ void QToolBarAreaLayoutInfo::moveToolBar(QToolBar *toolbar, int pos)
                         const int margin = item.size - minPreferredSize;
 
                         if (margin < extra) {
-                           item.resize(line.o, minPreferredSize);
+                           item.resize(line.m_lineDirection, minPreferredSize);
                            extra -= margin;
                         } else {
-                           item.extendSize(line.o, -extra);
+                           item.extendSize(line.m_lineDirection, -extra);
                            extra = 0;
                         }
                      }
@@ -577,7 +578,7 @@ bool QToolBarAreaLayoutInfo::insertGap(const QList<int> &path, QLayoutItem *item
 
       if (! previous.skip()) {
          // found the previous one
-         int previousSizeHint = pick(line.o, previous.sizeHint());
+         int previousSizeHint   = pick(line.m_lineDirection, previous.sizeHint());
          int previousExtraSpace = previous.size - previousSizeHint;
 
          if (previousExtraSpace > 0) {
@@ -942,7 +943,7 @@ void QToolBarAreaLayout::apply(bool animate)
 
             QRect geo;
             if (visible) {
-               if (line.o == Qt::Horizontal) {
+               if (line.m_lineDirection == Qt::Horizontal) {
                   geo.setTop(line.rect.top());
                   geo.setBottom(line.rect.bottom());
                   geo.setLeft(line.rect.left() + item.pos);
@@ -1230,11 +1231,11 @@ QLayoutItem *QToolBarAreaLayout::unplug(const QList<int> &path, QToolBarAreaLayo
    QToolBarAreaLayoutItem *item = this->item(path);
    Q_ASSERT(item);
 
-   QToolBarAreaLayoutInfo &info = docks[path.at(0)];
-   QToolBarAreaLayoutLine &line = info.lines[path.at(1)];
-   if (item->size != pick(line.o, item->realSizeHint())) {
    // update the leading space
+   QToolBarAreaLayoutInfo &info_a = docks[path.at(0)];
+   QToolBarAreaLayoutLine &line_a = info_a.lines[path.at(1)];
 
+   if (item->size != pick(line_a.m_lineDirection, item->realSizeHint())) {
       // item does not have its default size, give this to the next item
       int newExtraSpace = 0;
 
@@ -1242,16 +1243,18 @@ QLayoutItem *QToolBarAreaLayout::unplug(const QList<int> &path, QToolBarAreaLayo
       // need to find just the one before
 
       for (int i = path.at(2) - 1; i >= 0; --i) {
-         QToolBarAreaLayoutItem &previous = line.toolBarItems[i];
-         if (!previous.skip()) {
-            for (int j = path.at(2) + 1; j < line.toolBarItems.count(); ++j) {
-               const QToolBarAreaLayoutItem &next = line.toolBarItems.at(j);
-               if (!next.skip()) {
-                  newExtraSpace = next.pos - previous.pos - pick(line.o, previous.sizeHint());
-                  previous.resize(line.o, next.pos - previous.pos);
+         QToolBarAreaLayoutItem &previous = line_a.toolBarItems[i];
 
+         if (! previous.skip()) {
             // need to check if it has a previous element and a next one
             // the previous will get its size changed
+
+            for (int j = path.at(2) + 1; j < line_a.toolBarItems.count(); ++j) {
+               const QToolBarAreaLayoutItem &next = line_a.toolBarItems.at(j);
+
+               if (! next.skip()) {
+                  newExtraSpace = next.pos - previous.pos - pick(line_a.m_lineDirection, previous.sizeHint());
+                  previous.resize(line_a.m_lineDirection, next.pos - previous.pos);
                   break;
                }
             }
@@ -1261,13 +1264,14 @@ QLayoutItem *QToolBarAreaLayout::unplug(const QList<int> &path, QToolBarAreaLayo
       }
 
       if (other) {
-         QToolBarAreaLayoutInfo &info = other->docks[path.at(0)];
-         QToolBarAreaLayoutLine &line = info.lines[path.at(1)];
-         for (int i = path.at(2) - 1; i >= 0; --i) {
-            QToolBarAreaLayoutItem &previous = line.toolBarItems[i];
-            if (!previous.skip()) {
-               previous.resize(line.o, pick(line.o, previous.sizeHint()) + newExtraSpace);
+         QToolBarAreaLayoutInfo &info_b = other->docks[path.at(0)];
+         QToolBarAreaLayoutLine &line_b = info_b.lines[path.at(1)];
 
+         for (int i = path.at(2) - 1; i >= 0; --i) {
+            QToolBarAreaLayoutItem &previous = line_b.toolBarItems[i];
+
+            if (! previous.skip()) {
+               previous.resize(line_b.m_lineDirection, pick(line_b.m_lineDirection, previous.sizeHint()) + newExtraSpace);
                break;
             }
          }

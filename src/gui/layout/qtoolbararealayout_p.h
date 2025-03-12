@@ -135,7 +135,7 @@ class QToolBarAreaLayoutLine
    bool skip() const;
 
    QRect rect;
-   Qt::Orientation o;
+   Qt::Orientation m_lineDirection;
 
    QList<QToolBarAreaLayoutItem> toolBarItems;
 };

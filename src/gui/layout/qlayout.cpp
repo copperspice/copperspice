@@ -313,7 +313,7 @@ QRect QLayout::contentsRect() const
    int left, top, right, bottom;
    getContentsMargins(&left, &top, &right, &bottom);
 
-   return d->rect.adjusted(+left, +top, -right, -bottom);
+   return d->m_layoutRect.adjusted(+left, +top, -right, -bottom);
 }
 
 QWidget *QLayout::parentWidget() const
@@ -372,19 +372,19 @@ QSizePolicy::ControlTypes QLayout::controlTypes() const
 void QLayout::setGeometry(const QRect &r)
 {
    Q_D(QLayout);
-   d->rect = r;
+   d->m_layoutRect = r;
 }
 
 QRect QLayout::geometry() const
 {
    Q_D(const QLayout);
-   return d->rect;
+   return d->m_layoutRect;
 }
 
 void QLayout::invalidate()
 {
    Q_D(QLayout);
-   d->rect = QRect();
+   d->m_layoutRect = QRect();
    update();
 }
 
