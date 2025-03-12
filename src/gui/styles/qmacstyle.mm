@@ -2123,13 +2123,13 @@ void QMacStylePrivate::drawColorlessButton(const HIRect &macRect, HIThemeButtonD
          extraHeight = 0,
          finalyoff = 0;
 
-   const bool combo = opt->type == QStyleOption::SO_ComboBox;
+   const bool combo = opt->m_styleType == QStyleOption::SO_ComboBox;
    const bool editableCombo = bdi->kind == kThemeComboBox
          || bdi->kind == kThemeComboBoxSmall
          || bdi->kind == kThemeComboBoxMini;
 
-   const bool button = opt->type == QStyleOption::SO_Button;
-   const bool viewItem = opt->type == QStyleOption::SO_ViewItem;
+   const bool button   = opt->m_styleType == QStyleOption::SO_Button;
+   const bool viewItem = opt->m_styleType == QStyleOption::SO_ViewItem;
    const bool pressed = bdi->state == kThemeStatePressed;
 
    if (button && pressed) {

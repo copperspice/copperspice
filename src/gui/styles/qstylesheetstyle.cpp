@@ -528,7 +528,7 @@ QHash<QStyle::SubControl, QRect> QStyleSheetStyle::titleBarLayout(const QWidget 
 
          if (info.element == PseudoElement_TitleBar) {
             info.width = tb->fontMetrics.width(tb->text) + 6;
-            subRule.geo = new QStyleSheetGeometryData(info.width, tb->fontMetrics.height(), -1, -1, -1, -1);
+            subRule.m_renderGeometry = new QStyleSheetGeometryData(info.width, tb->fontMetrics.height(), -1, -1, -1, -1);
          } else {
             subRule = renderRule(w, tb, info.element);
             info.width = subRule.size().width();
@@ -611,8 +611,9 @@ static QStyle::StandardPixmap subControlIcon(int pe)
 }
 
 QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const QObject *object)
-   : features(0), hasFont(false), pal(nullptr), b(nullptr), bg(nullptr), bd(nullptr), ou(nullptr),
-     geo(nullptr), p(nullptr), img(nullptr), clipset(0)
+   : clipset(0), features(0), hasFont(false),
+     m_renderPalette(nullptr), m_renderBox(nullptr), m_renderBg(nullptr), m_renderBorder(nullptr),
+     m_renderOutline(nullptr), m_renderGeometry(nullptr), m_renderPos(nullptr), m_renderImage(nullptr)
 {
    QPalette palette = QApplication::palette();       // ideally widget's palette
    QCss::ValueExtractor v(declarations, palette);
@@ -627,7 +628,7 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
    int maxh = -1;
 
    if (v.extractGeometry(&w, &h, &minw, &minh, &maxw, &maxh)) {
-      geo = new QStyleSheetGeometryData(w, h, minw, minh, maxw, maxh);
+      m_renderGeometry = new QStyleSheetGeometryData(w, h, minw, minh, maxw, maxh);
    }
 
    int left   = 0;
@@ -642,7 +643,7 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
    Qt::Alignment textAlignment = Qt::EmptyFlag;
 
    if (v.extractPosition(&left, &top, &right, &bottom, &origin, &position, &mode, &textAlignment)) {
-      p = new QStyleSheetPositionData(left, top, right, bottom, origin, position, mode, textAlignment);
+      m_renderPos = new QStyleSheetPositionData(left, top, right, bottom, origin, position, mode, textAlignment);
    }
 
    int margins[4];
@@ -654,7 +655,7 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
    }
 
    if (v.extractBox(margins, paddings, &spacing)) {
-      b = new QStyleSheetBoxData(margins, paddings, spacing);
+      m_renderBox = new QStyleSheetBoxData(margins, paddings, spacing);
    }
 
    int borders[4];
@@ -668,7 +669,7 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
    }
 
    if (v.extractBorder(borders, colors, styles, radii)) {
-      bd = new QStyleSheetBorderData(borders, colors, styles, radii);
+      m_renderBorder = new QStyleSheetBorderData(borders, colors, styles, radii);
    }
 
    int offsets[4];
@@ -678,7 +679,7 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
    }
 
    if (v.extractOutline(borders, colors, styles, radii, offsets)) {
-      ou = new QStyleSheetOutlineData(borders, colors, styles, radii, offsets);
+      m_renderOutline = new QStyleSheetOutlineData(borders, colors, styles, radii, offsets);
    }
 
    QBrush brush;
@@ -692,7 +693,7 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
    QCss::Origin clip = QCss::Origin_Border;
 
    if (v.extractBackground(&brush, &uri, &repeat, &alignment, &origin, &attachment, &clip)) {
-      bg = new QStyleSheetBackgroundData(brush, QPixmap(uri), repeat, alignment, origin, attachment, clip);
+      m_renderBg = new QStyleSheetBackgroundData(brush, QPixmap(uri), repeat, alignment, origin, attachment, clip);
    }
 
    QBrush sfg;
@@ -701,7 +702,7 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
    QBrush abg;
 
    if (v.extractPalette(&fg, &sfg, &sbg, &abg)) {
-      pal = new QStyleSheetPaletteData(fg, sfg, sbg, abg);
+      m_renderPalette = new QStyleSheetPaletteData(fg, sfg, sbg, abg);
    }
 
    QIcon icon;
@@ -709,7 +710,7 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
 
    QSize size;
    if (v.extractImage(&icon, &alignment, &size)) {
-      img = new QStyleSheetImageData(icon, alignment, size);
+      m_renderImage = new QStyleSheetImageData(icon, alignment, size);
    }
 
    int adj = -255;
@@ -725,31 +726,31 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
       const QCss::Declaration &decl = declarations.at(i);
 
       if (decl.d->propertyId == QCss::BorderImage) {
-         QString uri;
+         QString borderUri;
 
          QCss::TileMode horizStretch;
          QCss::TileMode vertStretch;
 
          int cuts[4];
 
-         decl.borderImageValue(&uri, cuts, &horizStretch, &vertStretch);
+         decl.borderImageValue(&borderUri, cuts, &horizStretch, &vertStretch);
 
-         if (uri.isEmpty() || uri == "none") {
-            if (bd && bd->bi) {
-               bd->bi->pixmap = QPixmap();
+         if (borderUri.isEmpty() || borderUri == "none") {
+            if (m_renderBorder && m_renderBorder->bi) {
+               m_renderBorder->bi->pixmap = QPixmap();
             }
 
          } else {
-            if (!bd) {
-               bd = new QStyleSheetBorderData;
+            if (! m_renderBorder) {
+               m_renderBorder = new QStyleSheetBorderData;
             }
 
-            if (!bd->bi) {
-               bd->bi = new QStyleSheetBorderImageData;
+            if (! m_renderBorder->bi) {
+               m_renderBorder->bi = new QStyleSheetBorderImageData;
             }
 
-            QStyleSheetBorderImageData *bi = bd->bi;
-            bi->pixmap = QPixmap(uri);
+            QStyleSheetBorderImageData *bi = m_renderBorder->bi;
+            bi->pixmap = QPixmap(borderUri);
 
             for (int i = 0; i < 4; i++) {
                bi->cuts[i] = cuts[i];
@@ -760,7 +761,7 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
          }
 
       } else if (decl.d->propertyId == QCss::QtBackgroundRole) {
-         if (bg && bg->brush.style() != Qt::NoBrush) {
+         if (m_renderBg && m_renderBg->brush.style() != Qt::NoBrush) {
             continue;
          }
 
@@ -905,39 +906,41 @@ QSize QRenderRule::boxSize(const QSize &cs, int flags) const
 
 void QRenderRule::fixupBorder(int nativeWidth)
 {
-   if (bd == nullptr) {
+   if (m_renderBorder == nullptr) {
       return;
    }
 
-   if (! bd->hasBorderImage() || bd->bi->pixmap.isNull()) {
-      bd->bi = nullptr;
+   if (! m_renderBorder->hasBorderImage() || m_renderBorder->bi->pixmap.isNull()) {
+      m_renderBorder->bi = nullptr;
+
       // ignore the color, border of edges that have none border-style
-      QBrush color = pal ? pal->foreground : QBrush();
-      const bool hasRadius = bd->radii[0].isValid() || bd->radii[1].isValid()
-         || bd->radii[2].isValid() || bd->radii[3].isValid();
+      QBrush color = m_renderPalette ? m_renderPalette->foreground : QBrush();
+
+      const bool hasRadius = m_renderBorder->radii[0].isValid() || m_renderBorder->radii[1].isValid()
+            || m_renderBorder->radii[2].isValid() || m_renderBorder->radii[3].isValid();
 
       for (int i = 0; i < 4; i++) {
-         if ((bd->styles[i] == QCss::BorderStyle_Native) && hasRadius) {
-            bd->styles[i] = QCss::BorderStyle_None;
+         if ((m_renderBorder->styles[i] == QCss::BorderStyle_Native) && hasRadius) {
+            m_renderBorder->styles[i] = QCss::BorderStyle_None;
          }
 
-         switch (bd->styles[i]) {
+         switch (m_renderBorder->styles[i]) {
             case QCss::BorderStyle_None:
                // border-style: none forces width to be 0
-               bd->colors[i] = QBrush();
-               bd->borders[i] = 0;
+               m_renderBorder->colors[i]  = QBrush();
+               m_renderBorder->borders[i] = 0;
                break;
 
             case QCss::BorderStyle_Native:
-               if (bd->borders[i] == 0) {
-                  bd->borders[i] = nativeWidth;
+               if (m_renderBorder->borders[i] == 0) {
+                  m_renderBorder->borders[i] = nativeWidth;
                }
                [[fallthrough]];
 
             default:
-               if (bd->colors[i].style() == Qt::NoBrush) {
+               if (m_renderBorder->colors[i].style() == Qt::NoBrush) {
                   // auto-acquire 'color'
-                  bd->colors[i] = color;
+                  m_renderBorder->colors[i] = color;
                }
                break;
          }
@@ -947,7 +950,7 @@ void QRenderRule::fixupBorder(int nativeWidth)
    }
 
    // inspect the border image
-   QStyleSheetBorderImageData *bi = bd->bi;
+   QStyleSheetBorderImageData *bi = m_renderBorder->bi;
 
    if (bi->cuts[0] == -1) {
       for (int i = 0; i < 4; i++) {
@@ -1073,7 +1076,7 @@ void QRenderRule::drawOutline(QPainter *p, const QRect &rect)
    bool wasAntialiased = p->renderHints() & QPainter::Antialiasing;
    p->setRenderHint(QPainter::Antialiasing);
 
-   qDrawBorder(p, rect, ou->styles, ou->borders, ou->colors, ou->radii);
+   qDrawBorder(p, rect, m_renderOutline->styles, m_renderOutline->borders, m_renderOutline->colors, m_renderOutline->radii);
 
    p->setRenderHint(QPainter::Antialiasing, wasAntialiased);
 }
@@ -1091,7 +1094,7 @@ void QRenderRule::drawBorder(QPainter *p, const QRect &rect)
 
    bool wasAntialiased = p->renderHints() & QPainter::Antialiasing;
    p->setRenderHint(QPainter::Antialiasing);
-   qDrawBorder(p, rect, bd->styles, bd->borders, bd->colors, bd->radii);
+   qDrawBorder(p, rect, m_renderBorder->styles, m_renderBorder->borders, m_renderBorder->colors, m_renderBorder->radii);
    p->setRenderHint(QPainter::Antialiasing, wasAntialiased);
 }
 
@@ -1102,7 +1105,7 @@ QPainterPath QRenderRule::borderClip(QRect r)
    }
 
    QSize tlr, trr, blr, brr;
-   qNormalizeRadii(r, bd->radii, &tlr, &trr, &blr, &brr);
+   qNormalizeRadii(r, m_renderBorder->radii, &tlr, &trr, &blr, &brr);
 
    if (tlr.isNull() && trr.isNull() && blr.isNull() && brr.isNull()) {
       return QPainterPath();
@@ -1205,7 +1208,7 @@ void QRenderRule::drawImage(QPainter *p, const QRect &rect)
       return;
    }
 
-   img->icon.paint(p, rect, img->alignment);
+   m_renderImage->icon.paint(p, rect, m_renderImage->alignment);
 }
 
 void QRenderRule::drawRule(QPainter *p, const QRect &rect)
@@ -1216,19 +1219,19 @@ void QRenderRule::drawRule(QPainter *p, const QRect &rect)
 
 void QRenderRule::configurePalette(QPalette *p, QPalette::ColorRole fr, QPalette::ColorRole br)
 {
-   if (bg && bg->brush.style() != Qt::NoBrush) {
+   if (m_renderBg && m_renderBg->brush.style() != Qt::NoBrush) {
 
       if (br != QPalette::NoRole) {
-         p->setBrush(br, bg->brush);
+         p->setBrush(br, m_renderBg->brush);
       }
 
-      p->setBrush(QPalette::Window, bg->brush);
-      if (bg->brush.style() == Qt::SolidPattern) {
-         p->setBrush(QPalette::Light, bg->brush.color().lighter(115));
-         p->setBrush(QPalette::Midlight, bg->brush.color().lighter(107));
-         p->setBrush(QPalette::Dark, bg->brush.color().darker(150));
-         p->setBrush(QPalette::Shadow, bg->brush.color().darker(300));
+      p->setBrush(QPalette::Window, m_renderBg->brush);
 
+      if (m_renderBg->brush.style() == Qt::SolidPattern) {
+         p->setBrush(QPalette::Light,    m_renderBg->brush.color().lighter(115));
+         p->setBrush(QPalette::Midlight, m_renderBg->brush.color().lighter(107));
+         p->setBrush(QPalette::Dark,     m_renderBg->brush.color().darker(150));
+         p->setBrush(QPalette::Shadow,   m_renderBg->brush.color().darker(300));
       }
    }
 
@@ -1236,35 +1239,35 @@ void QRenderRule::configurePalette(QPalette *p, QPalette::ColorRole fr, QPalette
       return;
    }
 
-   if (pal->foreground.style() != Qt::NoBrush) {
+   if (m_renderPalette->foreground.style() != Qt::NoBrush) {
       if (fr != QPalette::NoRole) {
-         p->setBrush(fr, pal->foreground);
+         p->setBrush(fr, m_renderPalette->foreground);
       }
 
-      p->setBrush(QPalette::WindowText, pal->foreground);
-      p->setBrush(QPalette::Text, pal->foreground);
+      p->setBrush(QPalette::WindowText, m_renderPalette->foreground);
+      p->setBrush(QPalette::Text, m_renderPalette->foreground);
    }
 
-   if (pal->selectionBackground.style() != Qt::NoBrush) {
-      p->setBrush(QPalette::Highlight, pal->selectionBackground);
+   if (m_renderPalette->selectionBackground.style() != Qt::NoBrush) {
+      p->setBrush(QPalette::Highlight, m_renderPalette->selectionBackground);
    }
 
-   if (pal->selectionForeground.style() != Qt::NoBrush) {
-      p->setBrush(QPalette::HighlightedText, pal->selectionForeground);
+   if (m_renderPalette->selectionForeground.style() != Qt::NoBrush) {
+      p->setBrush(QPalette::HighlightedText, m_renderPalette->selectionForeground);
    }
 
-   if (pal->alternateBackground.style() != Qt::NoBrush) {
-      p->setBrush(QPalette::AlternateBase, pal->alternateBackground);
+   if (m_renderPalette->alternateBackground.style() != Qt::NoBrush) {
+      p->setBrush(QPalette::AlternateBase, m_renderPalette->alternateBackground);
    }
 }
 
 void QRenderRule::configurePalette(QPalette *p, QPalette::ColorGroup cg, const QWidget *w, bool embedded)
 {
-   if (bg && bg->brush.style() != Qt::NoBrush) {
-      p->setBrush(cg, QPalette::Base, bg->brush);       // for windows, windowxp
-      p->setBrush(cg, QPalette::Button, bg->brush);     // for plastique
-      p->setBrush(cg, w->backgroundRole(), bg->brush);
-      p->setBrush(cg, QPalette::Window, bg->brush);
+   if (m_renderBg && m_renderBg->brush.style() != Qt::NoBrush) {
+      p->setBrush(cg, QPalette::Base,      m_renderBg->brush);     // for windows, windowxp
+      p->setBrush(cg, QPalette::Button,    m_renderBg->brush);     // for plastique
+      p->setBrush(cg, w->backgroundRole(), m_renderBg->brush);
+      p->setBrush(cg, QPalette::Window,    m_renderBg->brush);
    }
 
    if (embedded) {
@@ -1281,23 +1284,23 @@ void QRenderRule::configurePalette(QPalette *p, QPalette::ColorGroup cg, const Q
       return;
    }
 
-   if (pal->foreground.style() != Qt::NoBrush) {
-      p->setBrush(cg, QPalette::ButtonText, pal->foreground);
-      p->setBrush(cg, w->foregroundRole(), pal->foreground);
-      p->setBrush(cg, QPalette::WindowText, pal->foreground);
-      p->setBrush(cg, QPalette::Text, pal->foreground);
+   if (m_renderPalette->foreground.style() != Qt::NoBrush) {
+      p->setBrush(cg, QPalette::ButtonText, m_renderPalette->foreground);
+      p->setBrush(cg, w->foregroundRole(),  m_renderPalette->foreground);
+      p->setBrush(cg, QPalette::WindowText, m_renderPalette->foreground);
+      p->setBrush(cg, QPalette::Text, m_renderPalette->foreground);
    }
 
-   if (pal->selectionBackground.style() != Qt::NoBrush) {
-      p->setBrush(cg, QPalette::Highlight, pal->selectionBackground);
+   if (m_renderPalette->selectionBackground.style() != Qt::NoBrush) {
+      p->setBrush(cg, QPalette::Highlight, m_renderPalette->selectionBackground);
    }
 
-   if (pal->selectionForeground.style() != Qt::NoBrush) {
-      p->setBrush(cg, QPalette::HighlightedText, pal->selectionForeground);
+   if (m_renderPalette->selectionForeground.style() != Qt::NoBrush) {
+      p->setBrush(cg, QPalette::HighlightedText, m_renderPalette->selectionForeground);
    }
 
-   if (pal->alternateBackground.style() != Qt::NoBrush) {
-      p->setBrush(cg, QPalette::AlternateBase, pal->alternateBackground);
+   if (m_renderPalette->alternateBackground.style() != Qt::NoBrush) {
+      p->setBrush(cg, QPalette::AlternateBase, m_renderPalette->alternateBackground);
    }
 }
 
@@ -3872,10 +3875,10 @@ void QStyleSheetStyle::drawControl(ControlElement ce, const QStyleOption *opt, Q
                   QRenderRule iconRule = renderRule(w, opt, PseudoElement_MenuIcon);
 
                   if (! iconRule.hasGeometry()) {
-                     iconRule.geo = new QStyleSheetGeometryData(pixw, pixh, pixw, pixh, -1, -1);
+                     iconRule.m_renderGeometry = new QStyleSheetGeometryData(pixw, pixh, pixw, pixh, -1, -1);
                   } else {
-                     iconRule.geo->width = pixw;
-                     iconRule.geo->height = pixh;
+                     iconRule.m_renderGeometry->width = pixw;
+                     iconRule.m_renderGeometry->height = pixh;
                   }
 
                   QRect iconRect = positionRect(w, subRule, iconRule, PseudoElement_MenuIcon, opt->rect, opt->direction);
@@ -4460,7 +4463,7 @@ void QStyleSheetStyle::drawControl(ControlElement ce, const QStyleOption *opt, Q
    if (pe1 != PseudoElement_None) {
       QRenderRule subRule = renderRule(w, opt, pe1);
 
-      if (subRule.bg != nullptr || subRule.hasDrawable()) {
+      if (subRule.m_renderBg != nullptr || subRule.hasDrawable()) {
          //We test subRule.bg directly because hasBackground() would return false for background:none.
          //But we still don't want the default drawning in that case (example for QScrollBar::add-page) (task 198926)
          subRule.drawRule(p, opt->rect);
@@ -5439,9 +5442,9 @@ QSize QStyleSheetStyle::sizeFromContents(ContentsType ct, const QStyleOption *op
 
                QRenderRule subRule = renderRule(w, opt, layoutButton);
 
-               QSize sz = subRule.size();
-               width += sz.width();
-               height = qMax(height, sz.height());
+               QSize subRuleSize = subRule.size();
+               width += subRuleSize.width();
+               height = qMax(height, subRuleSize.height());
             }
 
             return QSize(width, height);
@@ -6054,14 +6057,14 @@ QRect QStyleSheetStyle::subControlRect(ComplexControl cc, const QStyleOptionComp
                   }
 
                   if (! labelRule.hasGeometry()) {
-                     labelRule.geo = new QStyleSheetGeometryData(tw, th, tw, th, -1, -1);
+                     labelRule.m_renderGeometry = new QStyleSheetGeometryData(tw, th, tw, th, -1, -1);
                   } else {
-                     labelRule.geo->width = tw;
-                     labelRule.geo->height = th;
+                     labelRule.m_renderGeometry->width = tw;
+                     labelRule.m_renderGeometry->height = th;
                   }
 
                   if (! labelRule.hasPosition()) {
-                     labelRule.p = new QStyleSheetPositionData(0, 0, 0, 0,
+                     labelRule.m_renderPos = new QStyleSheetPositionData(0, 0, 0, 0,
                         defaultOrigin(PseudoElement_GroupBoxTitle),
                         gb->textAlignment, QCss::PositionMode_Static);
                   }
@@ -6249,7 +6252,7 @@ QRect QStyleSheetStyle::subControlRect(ComplexControl cc, const QStyleOptionComp
                break;
             }
 
-            subRule.img = nullptr;
+            subRule.m_renderImage = nullptr;
             QRect gr = positionRect(w, rule, subRule, PseudoElement_SliderGroove, opt->rect, opt->direction);
 
             switch (sc) {
@@ -6262,8 +6265,8 @@ QRect QStyleSheetStyle::subControlRect(ComplexControl cc, const QStyleOptionComp
                   QRenderRule subRule2 = renderRule(w, opt, PseudoElement_SliderHandle);
                   int len = horizontal ? subRule2.size().width() : subRule2.size().height();
 
-                  subRule2.img = nullptr;
-                  subRule2.geo = nullptr;
+                  subRule2.m_renderImage    = nullptr;
+                  subRule2.m_renderGeometry = nullptr;
                   cr = positionRect(w, subRule2, PseudoElement_SliderHandle, cr, opt->direction);
 
                   int thickness = horizontal ? cr.height() : cr.width();
