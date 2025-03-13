@@ -84,7 +84,7 @@ QDateTimeEdit::~QDateTimeEdit()
 QDateTime QDateTimeEdit::dateTime() const
 {
    Q_D(const QDateTimeEdit);
-   return d->value.toDateTime();
+   return d->m_spinBoxValue.toDateTime();
 }
 
 void QDateTimeEdit::setDateTime(const QDateTime &datetime)
@@ -105,7 +105,7 @@ void QDateTimeEdit::setDateTime(const QDateTime &datetime)
 QDate QDateTimeEdit::date() const
 {
    Q_D(const QDateTimeEdit);
-   return d->value.toDate();
+   return d->m_spinBoxValue.toDate();
 }
 
 void QDateTimeEdit::setDate(const QDate &date)
@@ -118,7 +118,7 @@ void QDateTimeEdit::setDate(const QDate &date)
       }
 
       d->clearCache();
-      d->setValue(QDateTime(date, d->value.toTime(), d->m_timeZone), EmitIfChanged);
+      d->setValue(QDateTime(date, d->m_spinBoxValue.toTime(), d->m_timeZone), EmitIfChanged);
       d->updateTimeZone();
    }
 }
@@ -126,7 +126,7 @@ void QDateTimeEdit::setDate(const QDate &date)
 QTime QDateTimeEdit::time() const
 {
    Q_D(const QDateTimeEdit);
-   return d->value.toTime();
+   return d->m_spinBoxValue.toTime();
 }
 
 void QDateTimeEdit::setTime(const QTime &time)
@@ -135,7 +135,7 @@ void QDateTimeEdit::setTime(const QTime &time)
 
    if (time.isValid()) {
       d->clearCache();
-      d->setValue(QDateTime(d->value.toDate(), time, d->m_timeZone), EmitIfChanged);
+      d->setValue(QDateTime(d->m_spinBoxValue.toDate(), time, d->m_timeZone), EmitIfChanged);
    }
 }
 
@@ -328,7 +328,7 @@ void QDateTimeEdit::setCurrentSection(Section section)
       return;
    }
 
-   d->updateCache(d->value, d->displayText());
+   d->updateCache(d->m_spinBoxValue, d->displayText());
    const int size = d->sectionNodes.size();
    int index      = d->currentSectionIndex + 1;
 
@@ -435,7 +435,7 @@ QString QDateTimeEdit::sectionText(Section section) const
       return QString();
    }
 
-   d->updateCache(d->value, d->displayText());
+   d->updateCache(d->m_spinBoxValue, d->displayText());
    const int sectionIndex = d->absoluteIndex(section, 0);
    return d->sectionText(sectionIndex);
 }
@@ -489,8 +489,8 @@ void QDateTimeEdit::setDisplayFormat(const QString &format)
       Q_ASSERT(dateShown || timeShown);
 
       if (timeShown && !dateShown) {
-         QTime time = d->value.toTime();
-         setDateRange(d->value.toDate(), d->value.toDate());
+         QTime time = d->m_spinBoxValue.toTime();
+         setDateRange(d->m_spinBoxValue.toDate(), d->m_spinBoxValue.toDate());
 
          if (d->minimum.toTime() >= d->maximum.toTime()) {
             setTimeRange(QDATETIME_TIME_MIN, QDATETIME_TIME_MAX);
@@ -501,7 +501,7 @@ void QDateTimeEdit::setDisplayFormat(const QString &format)
 
       } else if (dateShown && !timeShown) {
          setTimeRange(QDATETIME_TIME_MIN, QDATETIME_TIME_MAX);
-         d->value = QDateTime(d->value.toDate(), QTime(), d->m_timeZone);
+         d->m_spinBoxValue= QDateTime(d->m_spinBoxValue.toDate(), QTime(), d->m_timeZone);
       }
 
       d->updateEdit();
@@ -775,7 +775,7 @@ void QDateTimeEdit::keyPressEvent(QKeyEvent *event)
 
          if (validate(str, pos) == QValidator::Acceptable && (d->sectionNodes.at(oldCurrent).count != 1
                || d->sectionMaxSize(oldCurrent) == d->sectionSize(oldCurrent)
-               || d->skipToNextSection(oldCurrent, d->value.toDateTime(), d->sectionText(oldCurrent)))) {
+               || d->skipToNextSection(oldCurrent, d->m_spinBoxValue.toDateTime(), d->sectionText(oldCurrent)))) {
 
             const int tmp = d->closestSection(d->edit->cursorPosition(), true);
 
@@ -937,7 +937,7 @@ void QDateTimeEdit::stepBy(int steps)
    }
 
    d->setValue(d->stepBy(d->currentSectionIndex, steps, false), EmitIfChanged);
-   d->updateCache(d->value, d->displayText());
+   d->updateCache(d->m_spinBoxValue, d->displayText());
 
    d->setSelected(d->currentSectionIndex);
    d->updateTimeZone();
@@ -1049,13 +1049,13 @@ QDateTimeEdit::StepEnabled QDateTimeEdit::stepEnabled() const
    }
 
    QVariant v = d->stepBy(d->currentSectionIndex, 1, true);
-   if (v != d->value) {
+   if (v != d->m_spinBoxValue) {
       ret |= QAbstractSpinBox::StepUpEnabled;
    }
 
    v = d->stepBy(d->currentSectionIndex, -1, true);
 
-   if (v != d->value) {
+   if (v != d->m_spinBoxValue) {
       ret |= QAbstractSpinBox::StepDownEnabled;
    }
 
@@ -1155,22 +1155,23 @@ void QDateTimeEditPrivate::updateTimeZone()
 {
    minimum = minimum.toDateTime().toTimeZone(m_timeZone);
    maximum = maximum.toDateTime().toTimeZone(m_timeZone);
-   value   = value.toDateTime().toTimeZone(m_timeZone);
+
+   m_spinBoxValue = m_spinBoxValue.toDateTime().toTimeZone(m_timeZone);
 
    // time zone changes can lead to 00:00:00 becomes 01:00:00 and 23:59:59 becomes 00:59:59 (invalid range)
    const bool dateShown = (sections & QDateTimeEdit::DateSections_Mask);
 
    if (! dateShown) {
       if (minimum.toTime() >= maximum.toTime()) {
-         minimum = QDateTime(value.toDate(), QDATETIME_TIME_MIN, m_timeZone);
-         maximum = QDateTime(value.toDate(), QDATETIME_TIME_MAX, m_timeZone);
+         minimum = QDateTime(m_spinBoxValue.toDate(), QDATETIME_TIME_MIN, m_timeZone);
+         maximum = QDateTime(m_spinBoxValue.toDate(), QDATETIME_TIME_MAX, m_timeZone);
       }
    }
 }
 
 void QDateTimeEditPrivate::updateEdit()
 {
-   const QString newText = (specialValue() ? specialValueText : textFromValue(value));
+   const QString newText = (specialValue() ? specialValueText : textFromValue(m_spinBoxValue));
 
    if (newText == displayText()) {
       return;
@@ -1219,7 +1220,7 @@ void QDateTimeEditPrivate::setSelected(int sectionIndex, bool forward)
          return;
       }
 
-      updateCache(value, displayText());
+      updateCache(m_spinBoxValue, displayText());
       const int size = sectionSize(sectionIndex);
 
       if (forward) {
@@ -1243,7 +1244,7 @@ int QDateTimeEditPrivate::sectionAt(int pos) const
       return (pos == displayText().size() ? LastSectionIndex : NoSectionIndex);
    }
 
-   updateCache(value, displayText());
+   updateCache(m_spinBoxValue, displayText());
 
    for (int i = 0; i < sectionNodes.size(); ++i) {
       const int tmp = sectionPos(i);
@@ -1274,7 +1275,7 @@ int QDateTimeEditPrivate::closestSection(int pos, bool forward) const
       }
    }
 
-   updateCache(value, displayText());
+   updateCache(m_spinBoxValue, displayText());
 
    for (int i = 0; i < sectionNodes.size(); ++i) {
       const int tmp = sectionPos(sectionNodes.at(i));
@@ -1419,7 +1420,7 @@ QDateTime QDateTimeEditPrivate::validateAndInterpret(QString &input, int &positi
       }
    }
 
-   StateNode tmp = parse(input, position, value.toDateTime(), fixup);
+   StateNode tmp = parse(input, position, m_spinBoxValue.toDateTime(), fixup);
    input = tmp.input;
    state = QValidator::State(int(tmp.state));
 
@@ -1459,7 +1460,7 @@ QDateTime QDateTimeEditPrivate::stepBy(int sectionIndex, int steps, bool test) c
 {
    Q_Q(const QDateTimeEdit);
 
-   QDateTime v = value.toDateTime();
+   QDateTime v = m_spinBoxValue.toDateTime();
    QString str = displayText();
    int pos = edit->cursorPosition();
    const SectionNode sn = sectionNode(sectionIndex);
@@ -1469,7 +1470,7 @@ QDateTime QDateTimeEditPrivate::stepBy(int sectionIndex, int steps, bool test) c
    // to make sure it behaves reasonably when typing something and then stepping in non-tracking mode
    if (!test && pendingEmit) {
       if (q->validate(str, pos) != QValidator::Acceptable) {
-         v = value.toDateTime();
+         v = m_spinBoxValue.toDateTime();
       } else {
          v = q->dateTimeFromText(str);
       }
@@ -1482,7 +1483,7 @@ QDateTime QDateTimeEditPrivate::stepBy(int sectionIndex, int steps, bool test) c
    val += steps;
 
    const int min = absoluteMin(sectionIndex);
-   const int max = absoluteMax(sectionIndex, value.toDateTime());
+   const int max = absoluteMax(sectionIndex, m_spinBoxValue.toDateTime());
 
    if (val < min) {
       val = (wrapping ? max - (min - val) + 1 : min);
@@ -1567,7 +1568,7 @@ QDateTime QDateTimeEditPrivate::stepBy(int sectionIndex, int steps, bool test) c
             v = t;
          }
       } else {
-         v = value.toDateTime();
+         v = m_spinBoxValue.toDateTime();
       }
 
    } else if (v > maximumDateTime) {
@@ -1590,11 +1591,11 @@ QDateTime QDateTimeEditPrivate::stepBy(int sectionIndex, int steps, bool test) c
          }
 
       } else {
-         v = value.toDateTime();
+         v = m_spinBoxValue.toDateTime();
       }
    }
 
-   const QDateTime retval = bound(v, value, steps).toDateTime().toTimeZone(m_timeZone);
+   const QDateTime retval = bound(v, m_spinBoxValue, steps).toDateTime().toTimeZone(m_timeZone);
 
    return retval;
 }
@@ -1609,24 +1610,24 @@ void QDateTimeEditPrivate::emitSignals(EmitPolicy ep, const QVariant &old)
 
    pendingEmit = false;
 
-   const bool dodate = value.toDate().isValid() && (sections & DateSectionMask);
-   const bool datechanged = (ep == AlwaysEmit || old.toDate() != value.toDate());
-   const bool dotime = value.toTime().isValid() && (sections & TimeSectionMask);
-   const bool timechanged = (ep == AlwaysEmit || old.toTime() != value.toTime());
+   const bool dodate      = m_spinBoxValue.toDate().isValid() && (sections & DateSectionMask);
+   const bool datechanged = (ep == AlwaysEmit || old.toDate() != m_spinBoxValue.toDate());
+   const bool dotime      = m_spinBoxValue.toTime().isValid() && (sections & TimeSectionMask);
+   const bool timechanged = (ep == AlwaysEmit || old.toTime() != m_spinBoxValue.toTime());
 
-   updateCache(value, displayText());
+   updateCache(m_spinBoxValue, displayText());
 
    syncCalendarWidget();
    if (datechanged || timechanged) {
-      emit q->dateTimeChanged(value.toDateTime());
+      emit q->dateTimeChanged(m_spinBoxValue.toDateTime());
    }
 
    if (dodate && datechanged) {
-      emit q->dateChanged(value.toDate());
+      emit q->dateChanged(m_spinBoxValue.toDate());
    }
 
    if (dotime && timechanged) {
-      emit q->timeChanged(value.toTime());
+      emit q->timeChanged(m_spinBoxValue.toTime());
    }
 }
 
@@ -1637,7 +1638,7 @@ void QDateTimeEditPrivate::_q_editorCursorPositionChanged(int oldpos, int newpos
    }
 
    const QString oldText = displayText();
-   updateCache(value, oldText);
+   updateCache(m_spinBoxValue, oldText);
 
    const bool allowChange = !edit->hasSelectedText();
    const bool forward = oldpos <= newpos;
@@ -1847,7 +1848,7 @@ void QDateTimeEditPrivate::interpret(EmitPolicy ep)
    if (state != QValidator::Acceptable && correctionMode == QAbstractSpinBox::CorrectToPreviousValue
          && (state == QValidator::Invalid || currentSectionIndex < 0  || ! (fieldInfo(currentSectionIndex) & AllowPartial))) {
 
-      setValue(value, ep);
+      setValue(m_spinBoxValue, ep);
       updateTimeZone();
 
    } else {
@@ -1887,7 +1888,7 @@ void QDateTimeEditPrivate::init(const QVariant &var)
 
    switch (var.type()) {
       case QVariant::Date:
-         value = QDateTime(var.toDate(), QDATETIME_TIME_MIN);
+         m_spinBoxValue = QDateTime(var.toDate(), QDATETIME_TIME_MIN);
          updateTimeZone();
 
          q->setDisplayFormat(defaultDateFormat);
@@ -1899,7 +1900,7 @@ void QDateTimeEditPrivate::init(const QVariant &var)
          break;
 
       case QVariant::DateTime:
-         value = var;
+         m_spinBoxValue = var;
          updateTimeZone();
 
          q->setDisplayFormat(defaultDateTimeFormat);
@@ -1911,7 +1912,7 @@ void QDateTimeEditPrivate::init(const QVariant &var)
          break;
 
       case QVariant::Time:
-         value = QDateTime(QDATETIME_DATE_DEFAULT, var.toTime());
+         m_spinBoxValue = QDateTime(QDATETIME_DATE_DEFAULT, var.toTime());
          updateTimeZone();
 
          q->setDisplayFormat(defaultTimeFormat);

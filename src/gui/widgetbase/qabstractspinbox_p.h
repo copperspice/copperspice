@@ -103,7 +103,12 @@ class QAbstractSpinBoxPrivate : public QWidgetPrivate
    QString prefix;
    QString suffix;
    QString specialValueText;
-   QVariant value, minimum, maximum, singleStep;
+
+   QVariant m_spinBoxValue;
+   QVariant minimum;
+   QVariant maximum;
+   QVariant singleStep;
+
    QVariant::Type type;
 
    int spinClickTimerId, spinClickTimerInterval, spinClickThresholdTimerId, spinClickThresholdTimerInterval;

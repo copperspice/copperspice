@@ -93,7 +93,7 @@ QSpinBox::~QSpinBox() {}
 int QSpinBox::value() const
 {
    Q_D(const QSpinBox);
-   return d->value.toInt();
+   return d->m_spinBoxValue.toInt();
 }
 
 void QSpinBox::setValue(int value)
@@ -280,7 +280,7 @@ double QDoubleSpinBox::value() const
 {
    Q_D(const QDoubleSpinBox);
 
-   return d->value.toDouble();
+   return d->m_spinBoxValue.toDouble();
 }
 
 void QDoubleSpinBox::setValue(double value)
@@ -443,7 +443,7 @@ QSpinBoxPrivate::QSpinBoxPrivate()
    minimum = QVariant((int)0);
    maximum = QVariant((int)99);
 
-   value = minimum;
+   m_spinBoxValue = minimum;
    displayIntegerBase = 10;
    singleStep = QVariant((int)1);
    type = QVariant::Int;
@@ -456,11 +456,11 @@ void QSpinBoxPrivate::emitSignals(EmitPolicy ep, const QVariant &old)
    if (ep != NeverEmit) {
       pendingEmit = false;
 
-      if (ep == AlwaysEmit || value != old) {
+      if (ep == AlwaysEmit || m_spinBoxValue != old) {
          emit q->valueChanged(edit->displayText());
 
-         emit q->cs_valueChanged(value.toInt());
-         emit q->valueChanged(value.toInt());
+         emit q->cs_valueChanged(m_spinBoxValue.toInt());
+         emit q->valueChanged(m_spinBoxValue.toInt());
       }
    }
 }
@@ -556,7 +556,7 @@ QDoubleSpinBoxPrivate::QDoubleSpinBoxPrivate()
    minimum = QVariant(actualMin);
    maximum = QVariant(actualMax);
 
-   value = minimum;
+   m_spinBoxValue = minimum;
    singleStep = QVariant(1.0);
    decimals = 2;
    type = QVariant::Double;
@@ -569,11 +569,11 @@ void QDoubleSpinBoxPrivate::emitSignals(EmitPolicy ep, const QVariant &old)
    if (ep != NeverEmit) {
       pendingEmit = false;
 
-      if (ep == AlwaysEmit || value != old) {
+      if (ep == AlwaysEmit || m_spinBoxValue != old) {
          emit q->valueChanged(edit->displayText());
 
-         emit q->cs_valueChanged(value.toDouble());
-         emit q->valueChanged(value.toDouble());
+         emit q->cs_valueChanged(m_spinBoxValue.toDouble());
+         emit q->valueChanged(m_spinBoxValue.toDouble());
       }
    }
 }

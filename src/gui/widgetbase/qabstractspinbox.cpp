@@ -187,7 +187,7 @@ void QAbstractSpinBox::setGroupSeparatorShown(bool shown)
    }
 
    d->showGroupSeparator = shown;
-   d->setValue(d->value, EmitIfChanged);
+   d->setValue(d->m_spinBoxValue, EmitIfChanged);
    updateGeometry();
 }
 
@@ -258,11 +258,11 @@ QAbstractSpinBox::StepEnabled QAbstractSpinBox::stepEnabled() const
 
    StepEnabled ret = StepNone;
 
-   if (d->variantCompare(d->value, d->maximum) < 0) {
+   if (d->variantCompare(d->m_spinBoxValue, d->maximum) < 0) {
       ret |= StepUpEnabled;
    }
 
-   if (d->variantCompare(d->value, d->minimum) > 0) {
+   if (d->variantCompare(d->m_spinBoxValue, d->minimum) > 0) {
       ret |= StepDownEnabled;
    }
 
@@ -292,7 +292,7 @@ void QAbstractSpinBox::stepBy(int steps)
 {
    Q_D(QAbstractSpinBox);
 
-   const QVariant old = d->value;
+   const QVariant old = d->m_spinBoxValue;
 
    QString tmp   = d->edit->displayText();
    int cursorPos = d->edit->cursorPosition();
@@ -305,13 +305,13 @@ void QAbstractSpinBox::stepBy(int steps)
       d->cleared = false;
       d->interpret(NeverEmit);
 
-      if (d->value != old) {
+      if (d->m_spinBoxValue != old) {
          e = AlwaysEmit;
       }
    }
 
    if (!dontstep) {
-      d->setValue(d->bound(d->value + (d->singleStep * steps), old, steps), e);
+      d->setValue(d->bound(d->m_spinBoxValue + (d->singleStep * steps), old, steps), e);
    } else if (e == AlwaysEmit) {
       d->emitSignals(e, old);
    }
@@ -659,7 +659,7 @@ void QAbstractSpinBox::keyPressEvent(QKeyEvent *event)
          }
 
 #ifndef QT_NO_ACCESSIBILITY
-         QAccessibleValueChangeEvent newEvent(this, d->value);
+         QAccessibleValueChangeEvent newEvent(this, d->m_spinBoxValue);
          QAccessible::updateAccessibility(&newEvent);
 #endif
          return;
@@ -1110,7 +1110,7 @@ void QAbstractSpinBoxPrivate::updateEditFieldGeometry()
 
 bool QAbstractSpinBoxPrivate::specialValue() const
 {
-   return (value == minimum && !specialValueText.isEmpty());
+   return (m_spinBoxValue == minimum && !specialValueText.isEmpty());
 }
 
 void QAbstractSpinBoxPrivate::emitSignals(EmitPolicy, const QVariant &)
@@ -1241,7 +1241,7 @@ void QAbstractSpinBoxPrivate::updateState(bool up, bool fromKeyboard)
       q->stepBy(up ? 1 : -1);
 
 #ifndef QT_NO_ACCESSIBILITY
-      QAccessibleValueChangeEvent event(q, value);
+      QAccessibleValueChangeEvent event(q, m_spinBoxValue);
       QAccessible::updateAccessibility(&event);
 #endif
    }
@@ -1316,12 +1316,13 @@ QVariant QAbstractSpinBoxPrivate::bound(const QVariant &val, const QVariant &old
    return v;
 }
 
-void QAbstractSpinBoxPrivate::setValue(const QVariant &val, EmitPolicy ep, bool doUpdate)
+void QAbstractSpinBoxPrivate::setValue(const QVariant &newValue, EmitPolicy ep, bool doUpdate)
 {
    Q_Q(QAbstractSpinBox);
 
-   const QVariant old = value;
-   value = bound(val);
+   const QVariant oldValue = m_spinBoxValue;
+   m_spinBoxValue = bound(newValue);
+
    pendingEmit = false;
    cleared = false;
 
@@ -1331,8 +1332,8 @@ void QAbstractSpinBoxPrivate::setValue(const QVariant &val, EmitPolicy ep, bool 
 
    q->update();
 
-   if (ep == AlwaysEmit || (ep == EmitIfChanged && old != value)) {
-      emitSignals(ep, old);
+   if (ep == AlwaysEmit || (ep == EmitIfChanged && oldValue != m_spinBoxValue)) {
+      emitSignals(ep, oldValue);
    }
 }
 
@@ -1344,7 +1345,7 @@ void QAbstractSpinBoxPrivate::updateEdit()
       return;
    }
 
-   const QString newText = specialValue() ? specialValueText : prefix + textFromValue(value) + suffix;
+   const QString newText = specialValue() ? specialValueText : prefix + textFromValue(m_spinBoxValue) + suffix;
 
    if (newText == edit->displayText() || cleared) {
       return;
@@ -1383,9 +1384,10 @@ void QAbstractSpinBoxPrivate::setRange(const QVariant &min, const QVariant &max)
 
    reset();
 
-   if (! (bound(value) == value)) {
-      setValue(bound(value), EmitIfChanged);
-   } else if (value == minimum && !specialValueText.isEmpty()) {
+   if (! (bound(m_spinBoxValue) == m_spinBoxValue)) {
+      setValue(bound(m_spinBoxValue), EmitIfChanged);
+
+   } else if (m_spinBoxValue == minimum && ! specialValueText.isEmpty()) {
       updateEdit();
 
    }
@@ -1452,7 +1454,7 @@ void QAbstractSpinBoxPrivate::interpret(EmitPolicy ep)
 
       if (! doInterpret) {
          v = (correctionMode == QAbstractSpinBox::CorrectToNearestValue
-               ? variantBound(minimum, v, maximum) : value);
+               ? variantBound(minimum, v, maximum) : m_spinBoxValue);
       }
    }
 
