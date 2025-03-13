@@ -2324,8 +2324,8 @@ void QComboBox::showPopup()
       //add the frame of the view
       view()->getContentsMargins(nullptr, &marginTop, nullptr, &marginBottom);
 
-      marginTop += static_cast<QAbstractScrollAreaPrivate *>(QAbstractScrollAreaPrivate::get(view()))->top;
-      marginBottom += static_cast<QAbstractScrollAreaPrivate *>(QAbstractScrollAreaPrivate::get(view()))->bottom;
+      marginTop    += static_cast<QAbstractScrollAreaPrivate *>(QAbstractScrollAreaPrivate::get(view()))->m_viewPort_top;
+      marginBottom += static_cast<QAbstractScrollAreaPrivate *>(QAbstractScrollAreaPrivate::get(view()))->m_viewPort_bottom;
 
       heightMargin += marginTop + marginBottom;
       listRect.setHeight(listRect.height() + heightMargin);

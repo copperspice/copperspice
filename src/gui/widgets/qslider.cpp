@@ -132,7 +132,7 @@ void QSlider::initStyleOption(QStyleOptionSlider *option) const
    option->orientation    = d->orientation;
    option->direction      = Qt::LeftToRight; // we use the upsideDown option instead
    option->sliderPosition = d->position;
-   option->sliderValue = d->value;
+   option->sliderValue    = d->m_slideValue;
    option->singleStep     = d->singleStep;
    option->pageStep       = d->pageStep;
 
@@ -297,9 +297,10 @@ void QSlider::mousePressEvent(QMouseEvent *ev)
          const QRect sliderRect = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle, this);
          int pressValue = d->pixelPosToRangeValue(d->pick(ev->pos() - sliderRect.center() + sliderRect.topLeft()));
          d->pressValue = pressValue;
-         if (pressValue > d->value) {
+
+         if (pressValue > d->m_slideValue) {
             action = SliderPageStepAdd;
-         } else if (pressValue < d->value) {
+         } else if (pressValue < d->m_slideValue) {
             action = SliderPageStepSub;
          }
 

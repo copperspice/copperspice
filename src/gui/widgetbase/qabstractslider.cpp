@@ -35,7 +35,7 @@
 #include <limits.h>
 
 QAbstractSliderPrivate::QAbstractSliderPrivate()
-   : minimum(0), maximum(99), pageStep(10), value(0), position(0), pressValue(-1),
+   : minimum(0), maximum(99), pageStep(10), m_slideValue(0), position(0), pressValue(-1),
      singleStep(1), offset_accumulated(0), tracking(true),
      blocktracking(false), pressed(false),
      invertedAppearance(false), invertedControls(false),
@@ -68,7 +68,7 @@ void QAbstractSlider::setRange(int min, int max)
    if (oldMin != d->minimum || oldMax != d->maximum) {
       sliderChange(SliderRangeChange);
       emit rangeChanged(d->minimum, d->maximum);
-      setValue(d->value); // re-bound
+      setValue(d->m_slideValue); // re-bound
    }
 }
 
@@ -202,7 +202,7 @@ void QAbstractSlider::setSliderDown(bool down)
       }
    }
 
-   if (!down && d->position != d->value) {
+   if (!down && d->position != d->m_slideValue) {
       triggerAction(SliderMove);
    }
 }
@@ -246,35 +246,36 @@ int QAbstractSlider::sliderPosition() const
 int QAbstractSlider::value() const
 {
    Q_D(const QAbstractSlider);
-   return d->value;
+   return d->m_slideValue;
 }
 
-void QAbstractSlider::setValue(int value)
+void QAbstractSlider::setValue(int newValue)
 {
    Q_D(QAbstractSlider);
-   value = d->bound(value);
 
-   if (d->value == value && d->position == value) {
+   newValue = d->bound(newValue);
+
+   if (d->m_slideValue == newValue && d->position == newValue) {
       return;
    }
 
-   d->value = value;
+   d->m_slideValue = newValue;
 
-   if (d->position != value) {
-      d->position = value;
+   if (d->position != newValue) {
+      d->position = newValue;
 
       if (d->pressed) {
-         emit sliderMoved((d->position = value));
+         emit sliderMoved((d->position = newValue));
       }
    }
 
 #ifndef QT_NO_ACCESSIBILITY
-   QAccessibleValueChangeEvent event(this, d->value);
+   QAccessibleValueChangeEvent event(this, d->m_slideValue);
    QAccessible::updateAccessibility(&event);
 #endif
 
    sliderChange(SliderValueChange);
-   emit valueChanged(value);
+   emit valueChanged(newValue);
 }
 
 bool QAbstractSlider::invertedAppearance() const
@@ -432,11 +433,11 @@ bool QAbstractSliderPrivate::scrollByDelta(Qt::Orientation newOrientation, Qt::K
          // unless we already are at one of the ends.
          const float effective_offset = invertedControls ? -offset_accumulated : offset_accumulated;
 
-         if (effective_offset > 0.f && value < maximum) {
+         if (effective_offset > 0.f && m_slideValue < maximum) {
             return true;
          }
 
-         if (effective_offset < 0.f && value > minimum) {
+         if (effective_offset < 0.f && m_slideValue > minimum) {
             return true;
          }
 
@@ -449,11 +450,11 @@ bool QAbstractSliderPrivate::scrollByDelta(Qt::Orientation newOrientation, Qt::K
       stepsToScroll = -stepsToScroll;
    }
 
-   int prevValue = value;
+   int prevValue = m_slideValue;
    position = bound(overflowSafeAdd(stepsToScroll)); // value will be updated by triggerAction()
    q->triggerAction(QAbstractSlider::SliderMove);
 
-   if (prevValue == value) {
+   if (prevValue == m_slideValue) {
       offset_accumulated = 0;
       return false;
    }

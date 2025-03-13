@@ -106,7 +106,7 @@ void QDial::initStyleOption(QStyleOptionSlider *option) const
    option->maximum = d->maximum;
 
    option->sliderPosition = d->position;
-   option->sliderValue = d->value;
+   option->sliderValue    = d->m_slideValue;
    option->singleStep     = d->singleStep;
    option->pageStep       = d->pageStep;
    option->upsideDown     = ! d->invertedAppearance;

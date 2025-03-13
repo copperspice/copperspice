@@ -174,7 +174,7 @@ void QScrollBar::initStyleOption(QStyleOptionSlider *option) const
 
    option->orientation    = d->orientation;
    option->sliderPosition = d->position;
-   option->sliderValue = d->value;
+   option->sliderValue    = d->m_slideValue;
    option->singleStep     = d->singleStep;
    option->pageStep       = d->pageStep;
    option->upsideDown     = d->invertedAppearance;

@@ -49,7 +49,8 @@
 QAbstractScrollAreaPrivate::QAbstractScrollAreaPrivate()
    : hbar(nullptr), vbar(nullptr), vbarpolicy(Qt::ScrollBarAsNeeded), hbarpolicy(Qt::ScrollBarAsNeeded),
      shownOnce(false), inResize(false), sizeAdjustPolicy(QAbstractScrollArea::AdjustIgnored),
-     viewport(nullptr), cornerWidget(nullptr), left(0), top(0), right(0), bottom(0),
+     viewport(nullptr), cornerWidget(nullptr),
+     m_viewPort_left(0), m_viewPort_top(0), m_viewPort_right(0), m_viewPort_bottom(0),
      xoffset(0), yoffset(0), viewportFilter(nullptr)
 {
 }
@@ -61,7 +62,7 @@ QAbstractScrollAreaPrivate::~QAbstractScrollAreaPrivate()
 QAbstractScrollAreaScrollBarContainer::QAbstractScrollAreaScrollBarContainer(Qt::Orientation orientation, QWidget *parent)
    : QWidget(parent), scrollBar(new QScrollBar(orientation, this)),
      layout(new QBoxLayout(orientation == Qt::Horizontal ? QBoxLayout::LeftToRight : QBoxLayout::TopToBottom)),
-     orientation(orientation)
+     m_orientation(orientation)
 {
    setLayout(layout);
    layout->setMargin(0);
@@ -74,7 +75,7 @@ void QAbstractScrollAreaScrollBarContainer::addWidget(QWidget *widget, LogicalPo
 {
    QSizePolicy policy = widget->sizePolicy();
 
-   if (orientation == Qt::Vertical) {
+   if (m_orientation == Qt::Vertical) {
       policy.setHorizontalPolicy(QSizePolicy::Ignored);
    } else {
       policy.setVerticalPolicy(QSizePolicy::Ignored);
@@ -348,9 +349,9 @@ void QAbstractScrollAreaPrivate::layoutChildren()
    scrollBarContainers[Qt::Vertical]->setVisible(needv);
 
    if (q->isRightToLeft()) {
-      viewportRect.adjust(right, top, -left, -bottom);
+      viewportRect.adjust(m_viewPort_right, m_viewPort_top, -m_viewPort_left, -m_viewPort_bottom);
    } else {
-      viewportRect.adjust(left, top, -right, -bottom);
+      viewportRect.adjust(m_viewPort_left, m_viewPort_top, -m_viewPort_right, -m_viewPort_bottom);
    }
 
    viewport->setGeometry(QStyle::visualRect(opt.direction, opt.rect, viewportRect)); // resize the viewport last
@@ -440,7 +441,7 @@ QSize QAbstractScrollArea::maximumViewportSize() const
    int vsbExt = d->vbar->sizeHint().width();
 
    int f = 2 * d->frameWidth;
-   QSize max = size() - QSize(f + d->left + d->right, f + d->top + d->bottom);
+   QSize max = size() - QSize(f + d->m_viewPort_left + d->m_viewPort_right, f + d->m_viewPort_top + d->m_viewPort_bottom);
 
    if (d->vbarpolicy == Qt::ScrollBarAlwaysOn) {
       max.rwidth() -= vsbExt;
@@ -618,10 +619,11 @@ QWidgetList QAbstractScrollArea::scrollBarWidgets(Qt::Alignment alignment)
 void QAbstractScrollArea::setViewportMargins(int left, int top, int right, int bottom)
 {
    Q_D(QAbstractScrollArea);
-   d->left = left;
-   d->top = top;
-   d->right = right;
-   d->bottom = bottom;
+
+   d->m_viewPort_left   = left;
+   d->m_viewPort_top    = top;
+   d->m_viewPort_right  = right;
+   d->m_viewPort_bottom = bottom;
    d->layoutChildren();
 }
 
@@ -633,7 +635,7 @@ void QAbstractScrollArea::setViewportMargins(const QMargins &margins)
 QMargins QAbstractScrollArea::viewportMargins() const
 {
    Q_D(const QAbstractScrollArea);
-   return QMargins(d->left, d->top, d->right, d->bottom);
+   return QMargins(d->m_viewPort_left, d->m_viewPort_top, d->m_viewPort_right, d->m_viewPort_bottom);
 }
 
 bool QAbstractScrollArea::eventFilter(QObject *o, QEvent *e)

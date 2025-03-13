@@ -1169,9 +1169,9 @@ QRect QMdiAreaPrivate::resizeToMinimumTileSize(const QSize &minSubWindowSize, in
          topLevel = topLevel->parentWidget();
       }
 
-      int minAreaWidth = minWidth + left + right + 2;
       // do not want sub-subwindows to be placed at the edge, thus add 2 pixels
-      int minAreaHeight = minHeight + top + bottom + 2;
+      int minAreaWidth  = minWidth  + m_viewPort_left + m_viewPort_right  + 2;
+      int minAreaHeight = minHeight + m_viewPort_top  + m_viewPort_bottom + 2;
 
       if (hbar->isVisible()) {
          minAreaHeight += hbar->height();

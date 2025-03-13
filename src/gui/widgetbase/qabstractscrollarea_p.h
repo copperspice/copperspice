@@ -83,7 +83,11 @@ class Q_GUI_EXPORT QAbstractScrollAreaPrivate: public QFramePrivate
    QWidget *cornerWidget;
    QRect cornerPaintingRect;
 
-   int left, top, right, bottom; // viewport margin
+   // viewport margin
+   int m_viewPort_left;
+   int m_viewPort_top;
+   int m_viewPort_right;
+   int m_viewPort_bottom;
 
    int xoffset;
    int yoffset;
@@ -130,7 +134,7 @@ class QAbstractScrollAreaScrollBarContainer : public QWidget
  private:
    int scrollBarLayoutIndex() const;
 
-   Qt::Orientation orientation;
+   Qt::Orientation m_orientation;
 };
 
 #endif // QT_NO_SCROLLAREA

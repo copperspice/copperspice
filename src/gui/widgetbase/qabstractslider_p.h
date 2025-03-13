@@ -43,7 +43,7 @@ class QAbstractSliderPrivate : public QWidgetPrivate
    int minimum;
    int maximum;
    int pageStep;
-   int value;
+   int m_slideValue;
    int position;
    int pressValue;
    int singleStep;
@@ -88,11 +88,12 @@ class QAbstractSliderPrivate : public QWidgetPrivate
    }
 
    int overflowSafeAdd(int add) const {
-      int newValue = value + add;
+      int newValue = m_slideValue + add;
 
-      if (add > 0 && newValue < value) {
+      if (add > 0 && newValue < m_slideValue) {
          newValue = maximum;
-      } else if (add < 0 && newValue > value) {
+
+      } else if (add < 0 && newValue > m_slideValue) {
          newValue = minimum;
       }
 
