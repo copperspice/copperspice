@@ -85,17 +85,18 @@ static void _q_hoverFromMouseEvent(QGraphicsSceneHoverEvent *hover, const QGraph
 }
 
 QGraphicsScenePrivate::QGraphicsScenePrivate()
-   : indexMethod(QGraphicsScene::BspTreeIndex), m_graphicsSceneIndex(nullptr), lastItemCount(0), hasSceneRect(false),
-     dirtyGrowingItemsBoundingRect(true), updateAll(false), calledEmitUpdated(false),
-     processDirtyItemsEmitted(false), needSortTopLevelItems(true), holesInTopLevelSiblingIndex(false),
-     topLevelSequentialOrdering(true), scenePosDescendantsUpdatePending(false), stickyFocus(false),
-     hasFocus(false), lastMouseGrabberItemHasImplicitMouseGrab(false), allItemsIgnoreHoverEvents(true),
-     allItemsUseDefaultCursor(true), painterStateProtection(true),
-     allItemsIgnoreTouchEvents(true), minimumRenderSize(0.0), selectionChanging(0), rectAdjust(2),
-     focusItem(nullptr), lastFocusItem(nullptr), passiveFocusItem(nullptr), tabFocusFirst(nullptr),
-     activePanel(nullptr), lastActivePanel(nullptr), activationRefCount(0), childExplicitActivation(0),
-     lastMouseGrabberItem(nullptr), dragDropItem(nullptr), enterWidget(nullptr), lastDropAction(Qt::IgnoreAction),
-     style(nullptr)
+   : activationRefCount(0), childExplicitActivation(0), lastItemCount(0), selectionChanging(0),
+     minimumRenderSize(0.0), rectAdjust(2),
+     allItemsIgnoreHoverEvents(true), allItemsIgnoreTouchEvents(true), allItemsUseDefaultCursor(true),
+     calledEmitUpdated(false), dirtyGrowingItemsBoundingRect(true),
+     hasFocus(false), hasSceneRect(false), holesInTopLevelSiblingIndex(false),
+     lastMouseGrabberItemHasImplicitMouseGrab(false),
+     needSortTopLevelItems(true), painterStateProtection(true), processDirtyItemsEmitted(false),
+     scenePosDescendantsUpdatePending(false), stickyFocus(false), topLevelSequentialOrdering(true), updateAll(false),
+     style(nullptr), indexMethod(QGraphicsScene::BspTreeIndex), m_graphicsSceneIndex(nullptr),
+     lastDropAction(Qt::IgnoreAction), activePanel(nullptr),  dragDropItem(nullptr), focusItem(nullptr),
+     lastActivePanel(nullptr), lastFocusItem(nullptr), lastMouseGrabberItem(nullptr),
+     passiveFocusItem(nullptr), tabFocusFirst(nullptr), enterWidget(nullptr)
 {
 }
 
