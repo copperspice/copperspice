@@ -42,7 +42,8 @@ namespace QStyleHelper {
 QString uniqueName(const QString &key, const QStyleOption *option, const QSize &size)
 {
    const QStyleOptionComplex *complexOption = qstyleoption_cast<const QStyleOptionComplex *>(option);
-   QString tmp = key + HexString<uint>(option->state)
+
+   QString retval = key + HexString<uint>(option->state)
          + HexString<uint>(option->direction)
          + HexString<uint>(complexOption ? uint(complexOption->activeSubControls) : 0u)
          + HexString<uint>(size.width())
@@ -50,28 +51,28 @@ QString uniqueName(const QString &key, const QStyleOption *option, const QSize &
 
 #ifndef QT_NO_SPINBOX
    if (const QStyleOptionSpinBox *spinBox = qstyleoption_cast<const QStyleOptionSpinBox *>(option)) {
-      tmp = tmp + HexString<uint>(spinBox->buttonSymbols)
-            + HexString<uint>(spinBox->stepEnabled)
-            + QChar(spinBox->frame ? '1' : '0');
+      retval = retval + HexString<uint>(spinBox->buttonSymbols)
+            + HexString<uint>(spinBox->stepEnabled) + QChar(spinBox->frame ? '1' : '0');
    }
 #endif
 
    if (option->palette != QGuiApplication::palette()) {
-      tmp.append('P');
+      retval.append('P');
 
-      QByteArray key;
-      key.reserve(5120); // Observed 5040B for a serialized palette on 64bit
+      QByteArray paletteData;
+      paletteData.reserve(5120); // Observed 5040B for a serialized palette on 64bit
 
       {
-         QDataStream str(&key, QIODevice::WriteOnly);
+         QDataStream str(&paletteData, QIODevice::WriteOnly);
          str << option->palette;
       }
 
-      const QByteArray sha1 = QCryptographicHash::hash(key, QCryptographicHash::Sha1).toHex();
-      tmp.append(QString::fromLatin1(sha1));
+      const QByteArray sha1 = QCryptographicHash::hash(paletteData, QCryptographicHash::Sha1).toHex();
+
+      retval.append(QString::fromLatin1(sha1));
    }
 
-   return tmp;
+   return retval;
 }
 
 qreal dpiScaled(qreal value)

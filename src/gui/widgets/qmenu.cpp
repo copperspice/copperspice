@@ -201,12 +201,12 @@ void QMenuPrivate::syncPlatformMenu()
       return;
    }
 
-   QPlatformMenuItem *beforeItem  = nullptr;
-   const QList<QAction *> actions = q->actions();
+   QPlatformMenuItem *beforeItem = nullptr;
+   const QList<QAction *> actionList = q->actions();
 
-   for (QList<QAction *>::const_reverse_iterator it = actions.rbegin(), end = actions.rend(); it != end; ++it) {
+   for (QList<QAction *>::const_reverse_iterator iter = actionList.rbegin(), end = actionList.rend(); iter != end; ++iter) {
       QPlatformMenuItem *menuItem = platformMenu->createMenuItem();
-      QAction *action = *it;
+      QAction *action = *iter;
 
       menuItem->setTag(reinterpret_cast<quintptr>(action));
 

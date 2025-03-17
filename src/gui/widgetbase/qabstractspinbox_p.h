@@ -77,7 +77,7 @@ class QAbstractSpinBoxPrivate : public QWidgetPrivate
    bool specialValue() const;
    virtual QVariant getZeroVariant() const;
    virtual void setRange(const QVariant &min, const QVariant &max);
-   void setValue(const QVariant &val, EmitPolicy ep, bool updateEdit = true);
+   void setValue(const QVariant &newValue, EmitPolicy ep, bool updateEdit = true);
    virtual QVariant bound(const QVariant &val, const QVariant &old = QVariant(), int steps = 0) const;
    virtual void updateEdit();
 

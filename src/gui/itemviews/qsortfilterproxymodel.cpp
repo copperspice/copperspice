@@ -1169,14 +1169,14 @@ void QSortFilterProxyModelPrivate::_q_sourceDataChanged(const QModelIndex &sourc
    }
 
    QModelIndex sourceParent = source_top_left.parent();
-   IndexMap::const_iterator it = source_index_mapping.find(sourceParent);
+   IndexMap::const_iterator iter = source_index_mapping.find(sourceParent);
 
-   if (it == source_index_mapping.constEnd()) {
+   if (iter == source_index_mapping.constEnd()) {
       // do not care since we do not have mapping for this index
       return;
    }
 
-   Mapping *m = it.value();
+   Mapping *m = iter.value();
 
    // Figure out how the source changes affect us
    QVector<int> source_rows_remove;
@@ -1220,15 +1220,15 @@ void QSortFilterProxyModelPrivate::_q_sourceDataChanged(const QModelIndex &sourc
       remove_source_items(m->proxy_rows, m->source_rows, source_rows_remove, sourceParent, Qt::Vertical);
 
       QSet<int> source_rows_remove_set = qVectorToSet(source_rows_remove);
-      QVector<QModelIndex>::iterator it = m->mapped_children.end();
+      QVector<QModelIndex>::iterator iterChild = m->mapped_children.end();
 
-      while (it != m->mapped_children.begin()) {
-         --it;
+      while (iterChild != m->mapped_children.begin()) {
+         --iterChild;
 
-         const QModelIndex source_child_index = *it;
+         const QModelIndex source_child_index = *iterChild;
 
          if (source_rows_remove_set.contains(source_child_index.row())) {
-            it = m->mapped_children.erase(it);
+            iterChild = m->mapped_children.erase(iterChild);
             remove_from_mapping(source_child_index);
          }
       }
@@ -1272,7 +1272,7 @@ void QSortFilterProxyModelPrivate::_q_sourceDataChanged(const QModelIndex &sourc
          }
 
          const QModelIndex proxy_top_left = create_index(
-               proxy_start_row, m->proxy_columns.at(source_left_column), it);
+               proxy_start_row, m->proxy_columns.at(source_left_column), iter);
 
          int source_right_column = source_bottom_right.column();
 
@@ -1281,8 +1281,8 @@ void QSortFilterProxyModelPrivate::_q_sourceDataChanged(const QModelIndex &sourc
             --source_right_column;
          }
 
-         const QModelIndex proxy_bottom_right = create_index(
-               proxy_end_row, m->proxy_columns.at(source_right_column), it);
+         const QModelIndex proxy_bottom_right = create_index(proxy_end_row,
+               m->proxy_columns.at(source_right_column), iter);
 
          emit q->dataChanged(proxy_top_left, proxy_bottom_right, roles);
       }
