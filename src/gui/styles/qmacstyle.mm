@@ -5700,7 +5700,8 @@ void QMacStyle::drawComplexControl(ComplexControl cc, const QStyleOptionComplex 
                   int oldMin = styleObject->property("_q_stylemin").toInt();
                   int oldMax = styleObject->property("_q_stylemax").toInt();
                   QRect oldRect = styleObject->property("_q_stylerect").toRect();
-                  int oldState = styleObject->property("_q_stylestate").toInt();
+
+                  uint oldState = styleObject->property("_q_stylestate").toUInt();
                   uint oldActiveControls = styleObject->property("_q_stylecontrols").toUInt();
 
                   // a scrollbar is transient when the scrollbar itself and
