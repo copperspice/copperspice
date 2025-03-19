@@ -405,8 +405,8 @@ qreal QSimplex::solver(SolverFactor factor)
    collectResults();
 
 #if defined(CS_SHOW_DEBUG_GUI_GRAPHICSVIEW)
-   for (int i = 0; i < constraints.size(); ++i) {
-      Q_ASSERT(constraints[i]->isSatisfied());
+   for (int i = 0; i < m_simplexConstraints.size(); ++i) {
+      Q_ASSERT(m_simplexConstraints[i]->isSatisfied());
    }
 #endif
 

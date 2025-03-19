@@ -583,7 +583,7 @@ QDebug operator<<(QDebug debug, const QStyleOption &option)
 {
 #if defined(CS_SHOW_DEBUG_GUI_STYLES)
    debug << "QStyleOption(";
-   debug << QStyleOption::OptionType(option.type);
+   debug << QStyleOption::OptionType(option.m_styleType);
    debug << ',' << (option.direction == Qt::RightToLeft ? "RightToLeft" : "LeftToRight");
    debug << ',' << option.state;
    debug << ',' << option.rect;
