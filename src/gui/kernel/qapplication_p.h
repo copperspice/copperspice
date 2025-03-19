@@ -93,7 +93,7 @@ class Q_GUI_EXPORT QApplicationPrivate : public QCoreApplicationPrivate
    Q_DECLARE_PUBLIC(QApplication)
 
  public:
-   QApplicationPrivate(int &argc, char **argv, int flags);
+   QApplicationPrivate(int &argc, char **argv);
    ~QApplicationPrivate();
 
    void createPlatformIntegration();

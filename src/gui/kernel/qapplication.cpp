@@ -437,8 +437,8 @@ void QWindowGeometrySpecification::applyTo(QWindow *window) const
 static QWindowGeometrySpecification windowGeometrySpecification = Q_WINDOW_GEOMETRY_SPECIFICATION_INITIALIZER;
 
 
-QApplication::QApplication(int &argc, char **argv, int flags)
-   : QCoreApplication(*new QGuiApplicationPrivate(argc, argv, flags))
+QApplication::QApplication(int &argc, char **argv)
+   : QCoreApplication(*new QGuiApplicationPrivate(argc, argv))
 {
    Q_D(QApplication);
 

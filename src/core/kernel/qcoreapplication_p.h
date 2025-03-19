@@ -42,7 +42,7 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
       Gui
    };
 
-   QCoreApplicationPrivate(int &aargc,  char **aargv, uint flags);
+   QCoreApplicationPrivate(int &aargc,  char **aargv);
    virtual ~QCoreApplicationPrivate();
 
    void init();

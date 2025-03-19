@@ -369,12 +369,10 @@ static QCoreApplicationData *coreappdata()
 
 static bool quitLockRefEnabled = true;
 
-QCoreApplicationPrivate::QCoreApplicationPrivate(int &aargc, char **aargv, uint flags)
+QCoreApplicationPrivate::QCoreApplicationPrivate(int &aargc, char **aargv)
    : argc(aargc), argv(aargv), application_type(QCoreApplicationPrivate::Tty),
      in_exec(false), aboutToQuitEmitted(false)
 {
-   (void) flags;
-
    static const char *const empty = "";
 
    if (argc == 0 || argv == nullptr) {
@@ -548,8 +546,8 @@ void QCoreApplication::flush()
    }
 }
 
-QCoreApplication::QCoreApplication(int &argc, char **argv, int _internal)
-   : QObject(nullptr), d_ptr(new QCoreApplicationPrivate(argc, argv, _internal) )
+QCoreApplication::QCoreApplication(int &argc, char **argv)
+   : QObject(nullptr), d_ptr(new QCoreApplicationPrivate(argc, argv) )
 {
    d_ptr->q_ptr = this;
    d_ptr->init();

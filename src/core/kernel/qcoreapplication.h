@@ -67,9 +67,7 @@ class Q_CORE_EXPORT QCoreApplication : public QObject
    Q_DECLARE_PRIVATE(QCoreApplication)
 
  public:
-   static constexpr const int ApplicationFlags = CS_VERSION | 0x01000000;
-
-   QCoreApplication(int &argc, char **argv, int = ApplicationFlags);
+   QCoreApplication(int &argc, char **argv);
 
    QCoreApplication(const QCoreApplication &) = delete;
    QCoreApplication &operator=(const QCoreApplication &) = delete;

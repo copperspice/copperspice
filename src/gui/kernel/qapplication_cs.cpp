@@ -101,8 +101,8 @@ int qUnregisterGuiStateMachine();
 
 bool QApplicationPrivate::autoSipEnabled = true;
 
-QApplicationPrivate::QApplicationPrivate(int &argc, char **argv, int flags)
-   : QCoreApplicationPrivate(argc, argv, flags),
+QApplicationPrivate::QApplicationPrivate(int &argc, char **argv)
+   : QCoreApplicationPrivate(argc, argv),
      inputMethod(nullptr), lastTouchType(QEvent::TouchEnd), ownGlobalShareContext(false)
 {
    self = this;

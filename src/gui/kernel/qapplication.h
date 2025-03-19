@@ -118,7 +118,7 @@ class Q_GUI_EXPORT QApplication : public QCoreApplication
 
    using FP_Void = void(*)();
 
-   QApplication(int &argc, char **argv, int flags = ApplicationFlags);
+   QApplication(int &argc, char **argv);
 
    QApplication(const QApplication &) = delete;
    QApplication &operator=(const QApplication &) = delete;
