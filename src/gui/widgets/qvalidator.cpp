@@ -42,7 +42,7 @@ class QValidatorPrivate
 
  public:
    virtual ~QValidatorPrivate() {}
-   QLocale locale;
+   QLocale m_locale;
 
  protected:
    QValidator *q_ptr;
@@ -67,15 +67,15 @@ QValidator::~QValidator()
 QLocale QValidator::locale() const
 {
    Q_D(const QValidator);
-   return d->locale;
+   return d->m_locale;
 }
 
 void QValidator::setLocale(const QLocale &locale)
 {
    Q_D(QValidator);
 
-   if (d->locale != locale) {
-      d->locale = locale;
+   if (d->m_locale != locale) {
+      d->m_locale = locale;
       emit changed();
    }
 }

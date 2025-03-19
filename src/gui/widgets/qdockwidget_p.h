@@ -124,7 +124,7 @@ class Q_GUI_EXPORT QDockWidgetLayout : public QLayout
    QLayoutItem *itemForRole(Role r) const;
 
    QRect titleArea() const {
-      return _titleArea;
+      return m_titleArea;
    }
 
    int minimumTitleWidth() const;
@@ -142,7 +142,7 @@ class Q_GUI_EXPORT QDockWidgetLayout : public QLayout
 
  private:
    QVector<QLayoutItem *> item_list;
-   QRect _titleArea;
+   QRect m_titleArea;
 };
 
 /* The size hints of a QDockWidget will depend on whether it is docked or not.

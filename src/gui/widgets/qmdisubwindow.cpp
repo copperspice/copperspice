@@ -586,7 +586,7 @@ ControlContainer::ControlContainer(QMdiSubWindow *mdiChild)
 #ifndef QT_NO_MENUBAR
      m_menuBar(nullptr),
 #endif
-     mdiChild(mdiChild)
+     m_mdiChild(mdiChild)
 {
    Q_ASSERT(mdiChild);
 
@@ -652,13 +652,13 @@ QMenuBar *QMdiSubWindowPrivate::menuBar() const
 
 void ControlContainer::showButtonsInMenuBar(QMenuBar *menuBar)
 {
-   if (!menuBar || !mdiChild || mdiChild->windowFlags() & Qt::FramelessWindowHint) {
+   if (! menuBar || ! m_mdiChild || m_mdiChild->windowFlags() & Qt::FramelessWindowHint) {
       return;
    }
 
    m_menuBar = menuBar;
 
-   if (m_menuLabel && mdiChild->windowFlags() & Qt::WindowSystemMenuHint) {
+   if (m_menuLabel && m_mdiChild->windowFlags() & Qt::WindowSystemMenuHint) {
       QWidget *currentLeft = menuBar->cornerWidget(Qt::TopLeftCorner);
 
       if (currentLeft) {
@@ -689,7 +689,7 @@ void ControlContainer::showButtonsInMenuBar(QMenuBar *menuBar)
       m_controllerWidget->show();
    }
 
-   mdiChild->d_func()->setNewWindowTitle();
+   m_mdiChild->d_func()->setNewWindowTitle();
 }
 
 void ControlContainer::removeButtonsFromMenuBar(QMenuBar *menuBar)
@@ -701,7 +701,7 @@ void ControlContainer::removeButtonsFromMenuBar(QMenuBar *menuBar)
       m_menuBar     = menuBar;
    }
 
-   if (! m_menuBar || ! mdiChild || qt_widget_private(mdiChild->window())->m_privateData.in_destructor) {
+   if (! m_menuBar || ! m_mdiChild || qt_widget_private(m_mdiChild->window())->m_privateData.in_destructor) {
       return;
    }
 
@@ -738,7 +738,7 @@ void ControlContainer::removeButtonsFromMenuBar(QMenuBar *menuBar)
             if (!ce->mdiChild || !ce->mdiChild->isMaximized()) {
                previousLeft = nullptr;
             } else if (!child) {
-               child = mdiChild;
+               child = m_mdiChild;
             }
          }
 
@@ -756,8 +756,8 @@ void ControlContainer::removeButtonsFromMenuBar(QMenuBar *menuBar)
 
    if (child) {
       child->d_func()->setNewWindowTitle();
-   } else if (mdiChild) {
-      mdiChild->window()->setWindowTitle(mdiChild->d_func()->originalWindowTitle());
+   } else if (m_mdiChild) {
+      m_mdiChild->window()->setWindowTitle(m_mdiChild->d_func()->originalWindowTitle());
    }
 }
 

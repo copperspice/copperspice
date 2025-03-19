@@ -833,19 +833,19 @@ class ResetOnDestroy
 {
  public:
    ResetOnDestroy(QMenuSloppyState *sloppyState, bool *guard)
-      : toReset(sloppyState), guard(guard)
+      : toReset(sloppyState), m_guard(guard)
    {
       *guard = false;
    }
 
    ~ResetOnDestroy() {
-      if (*guard == false) {
+      if (*m_guard == false) {
          toReset->reset();
       }
    }
 
    QMenuSloppyState *toReset;
-   bool *guard;
+   bool *m_guard;
 };
 
 void QMenuSloppyState::timeout()

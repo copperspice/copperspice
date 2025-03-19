@@ -479,7 +479,7 @@ qreal QPlainTextEditPrivate::verticalOffset(int topBlock, int topLine) const
 
 qreal QPlainTextEditPrivate::verticalOffset() const
 {
-   return verticalOffset(control->topBlock, topLine) + topLineFracture;
+   return verticalOffset(control->topBlock, m_topLine) + topLineFracture;
 }
 
 QTextBlock QPlainTextEditControl::firstVisibleBlock() const
@@ -632,7 +632,7 @@ void QPlainTextEditPrivate::setTopBlock(int blockNumber, int lineNumber, int dx)
    vbar->setValue(newTopLine);
    vbar->blockSignals(vbarSignalsBlocked);
 
-   if (! dx && blockNumber == control->topBlock && lineNumber == topLine) {
+   if (! dx && blockNumber == control->topBlock && lineNumber == m_topLine) {
       return;
    }
 
@@ -646,7 +646,7 @@ void QPlainTextEditPrivate::setTopBlock(int blockNumber, int lineNumber, int dx)
       }
 
       control->topBlock = blockNumber;
-      topLine = lineNumber;
+      m_topLine = lineNumber;
 
       vbarSignalsBlocked = vbar->blockSignals(true);
       vbar->setValue(block.firstLineNumber() + lineNumber);
@@ -662,7 +662,7 @@ void QPlainTextEditPrivate::setTopBlock(int blockNumber, int lineNumber, int dx)
 
    } else {
       control->topBlock = blockNumber;
-      topLine = lineNumber;
+      m_topLine = lineNumber;
       topLineFracture = 0;
    }
 }
@@ -734,7 +734,7 @@ void QPlainTextEditPrivate::updateViewport()
 
 QPlainTextEditPrivate::QPlainTextEditPrivate()
    : control(nullptr), tabChangesFocus(false), lineWrap(QPlainTextEdit::WidgetWidth),
-     wordWrap(QTextOption::WrapAtWordBoundaryOrAnywhere), clickCausedFocus(0), topLine(0), topLineFracture(0),
+     wordWrap(QTextOption::WrapAtWordBoundaryOrAnywhere), clickCausedFocus(0), m_topLine(0), topLineFracture(0),
      pageUpDownLastCursorYIsValid(false)
 {
    showCursorOnInitialShow = true;
@@ -887,7 +887,7 @@ void QPlainTextEditPrivate::pageUpDown(QTextCursor::MoveOperation op, QTextCurso
 
       while (h >= visible.top()) {
          if (! block.previous().isValid()) {
-            if (control->topBlock == 0 && topLine == 0) {
+            if (control->topBlock == 0 && m_topLine == 0) {
                lastY = 0; // set cursor to first line
             }
             break;
@@ -1004,7 +1004,7 @@ void QPlainTextEditPrivate::_q_adjustScrollbars()
 
    QTextBlock firstVisibleBlock = q->firstVisibleBlock();
    if (firstVisibleBlock.isValid()) {
-      visualTopLine = firstVisibleBlock.firstLineNumber() + topLine;
+      visualTopLine = firstVisibleBlock.firstLineNumber() + m_topLine;
    }
 
    bool vbarSignalsBlocked = vbar->blockSignals(true);
@@ -1180,7 +1180,7 @@ void QPlainTextEdit::clear()
    Q_D(QPlainTextEdit);
 
    // clears and sets empty content
-   d->control->topBlock = d->topLine = d->topLineFracture = 0;
+   d->control->topBlock = d->m_topLine = d->topLineFracture = 0;
    d->control->clear();
 }
 

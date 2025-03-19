@@ -506,15 +506,14 @@ void QDockWidgetLayout::setGeometry(const QRect &geometry)
       int titleHeight = this->titleHeight();
 
       if (verticalTitleBar) {
-         _titleArea = QRect(QPoint(fw, fw),
-               QSize(titleHeight, geometry.height() - (fw * 2)));
+         m_titleArea = QRect(QPoint(fw, fw), QSize(titleHeight, geometry.height() - (fw * 2)));
+
       } else {
-         _titleArea = QRect(QPoint(fw, fw),
-               QSize(geometry.width() - (fw * 2), titleHeight));
+         m_titleArea = QRect(QPoint(fw, fw), QSize(geometry.width() - (fw * 2), titleHeight));
       }
 
       if (QLayoutItem *item = item_list[TitleBar]) {
-         item->setGeometry(_titleArea);
+         item->setGeometry(m_titleArea);
 
       } else {
          QStyleOptionDockWidget opt;
@@ -545,10 +544,10 @@ void QDockWidgetLayout::setGeometry(const QRect &geometry)
          QRect r = geometry;
 
          if (verticalTitleBar) {
-            r.setLeft(_titleArea.right() + 1);
+            r.setLeft(m_titleArea.right() + 1);
             r.adjust(0, fw, -fw, -fw);
          } else {
-            r.setTop(_titleArea.bottom() + 1);
+            r.setTop(m_titleArea.bottom() + 1);
             r.adjust(fw, 0, -fw, -fw);
          }
          item->setGeometry(r);

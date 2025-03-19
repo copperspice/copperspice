@@ -55,7 +55,7 @@ QLabelPrivate::QLabelPrivate()
 #endif
 
 #ifndef QT_NO_CURSOR
-     cursor(),
+     m_cursor(),
 #endif
 
 #ifndef QT_NO_SHORTCUT
@@ -67,7 +67,7 @@ QLabelPrivate::QLabelPrivate()
      textInteractionFlags(Qt::LinksAccessibleByMouse),
      sizePolicy(),
      margin(0),
-     align(Qt::AlignLeft | Qt::AlignVCenter | Qt::TextExpandTabs),
+     m_align(Qt::AlignLeft | Qt::AlignVCenter | Qt::TextExpandTabs),
      indent(-1),
      valid_hints(false),
      scaledcontents(false),
@@ -237,11 +237,11 @@ void QLabel::setAlignment(Qt::Alignment alignment)
 {
    Q_D(QLabel);
 
-   if (alignment == (d->align & (Qt::AlignVertical_Mask | Qt::AlignHorizontal_Mask))) {
+   if (alignment == (d->m_align & (Qt::AlignVertical_Mask | Qt::AlignHorizontal_Mask))) {
       return;
    }
 
-   d->align = (d->align & ~(Qt::AlignVertical_Mask | Qt::AlignHorizontal_Mask))
+   d->m_align = (d->m_align & ~(Qt::AlignVertical_Mask | Qt::AlignHorizontal_Mask))
       | (alignment & (Qt::AlignVertical_Mask | Qt::AlignHorizontal_Mask));
 
    d->updateLabel();
@@ -250,7 +250,7 @@ void QLabel::setAlignment(Qt::Alignment alignment)
 Qt::Alignment QLabel::alignment() const
 {
    Q_D(const QLabel);
-   return QFlag(d->align & (Qt::AlignVertical_Mask | Qt::AlignHorizontal_Mask));
+   return QFlag(d->m_align & (Qt::AlignVertical_Mask | Qt::AlignHorizontal_Mask));
 }
 
 void QLabel::setWordWrap(bool on)
@@ -258,9 +258,9 @@ void QLabel::setWordWrap(bool on)
    Q_D(QLabel);
 
    if (on) {
-      d->align |= Qt::TextWordWrap;
+      d->m_align |= Qt::TextWordWrap;
    } else {
-      d->align &= ~Qt::TextWordWrap;
+      d->m_align &= ~Qt::TextWordWrap;
    }
 
    d->updateLabel();
@@ -269,7 +269,7 @@ void QLabel::setWordWrap(bool on)
 bool QLabel::wordWrap() const
 {
    Q_D(const QLabel);
-   return d->align & Qt::TextWordWrap;
+   return d->m_align & Qt::TextWordWrap;
 }
 
 void QLabel::setIndent(int indent)
@@ -332,7 +332,8 @@ QSize QLabelPrivate::sizeForWidth(int w) const
 #endif
 
    } else if (isTextLabel) {
-      int align = QStyle::visualAlignment(textDirection(), QFlag(this->align));
+      int align = QStyle::visualAlignment(textDirection(), QFlag(m_align));
+
       // Add indentation
       int m = indent;
 
@@ -695,8 +696,7 @@ void QLabel::paintEvent(QPaintEvent *)
    QRect cr = contentsRect();
    cr.adjust(d->margin, d->margin, -d->margin, -d->margin);
 
-   int align = QStyle::visualAlignment(d->isTextLabel ? d->textDirection()
-         : layoutDirection(), QFlag(d->align));
+   int align = QStyle::visualAlignment(d->isTextLabel ? d->textDirection() : layoutDirection(), QFlag(d->m_align));
 
 #ifndef QT_NO_MOVIE
    if (d->movie) {
@@ -837,7 +837,7 @@ void QLabelPrivate::updateLabel()
 
    if (isTextLabel) {
       QSizePolicy policy = q->sizePolicy();
-      const bool wrap = align & Qt::TextWordWrap;
+      const bool wrap = m_align & Qt::TextWordWrap;
       policy.setHeightForWidth(wrap);
 
       if (policy != q->sizePolicy()) {
@@ -918,7 +918,7 @@ void QLabelPrivate::_q_movieUpdated(const QRect &rect)
             (rect.height() * cr.height()) / pixmapRect.height());
 
       } else {
-         r = q->style()->itemPixmapRect(q->contentsRect(), align, movie->currentPixmap());
+         r = q->style()->itemPixmapRect(q->contentsRect(), m_align, movie->currentPixmap());
          r.translate(rect.x(), rect.y());
          r.setWidth(qMin(r.width(), rect.width()));
          r.setHeight(qMin(r.height(), rect.height()));
@@ -1004,7 +1004,7 @@ void QLabelPrivate::clearContents()
 #ifndef QT_NO_CURSOR
    if (onAnchor) {
       if (validCursor) {
-         q->setCursor(cursor);
+         q->setCursor(m_cursor);
       } else {
          q->unsetCursor();
       }
@@ -1115,7 +1115,7 @@ QRect QLabelPrivate::documentRect() const
 
    cr.adjust(margin, margin, -margin, -margin);
    const int align = QStyle::visualAlignment(isTextLabel ? textDirection()
-         : q->layoutDirection(), QFlag(this->align));
+         : q->layoutDirection(), QFlag(m_align));
 
    int m = indent;
 
@@ -1201,9 +1201,9 @@ void QLabelPrivate::ensureTextLayouted() const
       QTextDocument *doc = control->document();
       QTextOption opt = doc->defaultTextOption();
 
-      opt.setAlignment(QFlag(this->align));
+      opt.setAlignment(QFlag(m_align));
 
-      if (this->align & Qt::TextWordWrap) {
+      if (m_align & Qt::TextWordWrap) {
          opt.setWrapMode(QTextOption::WordWrap);
       } else {
          opt.setWrapMode(QTextOption::ManualWrap);
@@ -1267,7 +1267,7 @@ void QLabelPrivate::_q_linkHovered(const QString &anchor)
       // restore cursor
 
       if (validCursor) {
-         q->setCursor(cursor);
+         q->setCursor(m_cursor);
       } else {
          q->unsetCursor();
       }
@@ -1278,7 +1278,7 @@ void QLabelPrivate::_q_linkHovered(const QString &anchor)
       validCursor = q->testAttribute(Qt::WA_SetCursor);
 
       if (validCursor) {
-         cursor = q->cursor();
+         m_cursor = q->cursor();
       }
 
       q->setCursor(Qt::PointingHandCursor);
@@ -1305,9 +1305,11 @@ QRectF QLabelPrivate::layoutRect() const
    // Caculate y position manually
    qreal rh = control->document()->documentLayout()->documentSize().height();
    qreal yo = 0;
-   if (align & Qt::AlignVCenter) {
+
+   if (m_align & Qt::AlignVCenter) {
       yo = qMax((cr.height() - rh) / 2, qreal(0));
-   } else if (align & Qt::AlignBottom) {
+
+   } else if (m_align & Qt::AlignBottom) {
       yo = qMax(cr.height() - rh, qreal(0));
    }
 

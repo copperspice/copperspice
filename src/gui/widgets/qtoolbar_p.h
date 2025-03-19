@@ -45,7 +45,7 @@ class QToolBarPrivate : public QWidgetPrivate
    QToolBarPrivate()
       : explicitIconSize(false), explicitToolButtonStyle(false), movable(true), floatable(true),
         allowedAreas(Qt::AllToolBarAreas), orientation(Qt::Horizontal),
-        toolButtonStyle(Qt::ToolButtonIconOnly), layout(nullptr), state(nullptr)
+        toolButtonStyle(Qt::ToolButtonIconOnly), m_toolbarLayout(nullptr), state(nullptr)
 #ifdef Q_OS_DARWIN
       , macWindowDragging(false)
 #endif
@@ -69,7 +69,7 @@ class QToolBarPrivate : public QWidgetPrivate
 
    QAction *toggleViewAction;
 
-   QToolBarLayout *layout;
+   QToolBarLayout *m_toolbarLayout;
 
    struct DragState {
       QPoint pressPos;

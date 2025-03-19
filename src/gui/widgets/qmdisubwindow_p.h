@@ -98,7 +98,7 @@ class ControlContainer : public QObject
 
    QPointer<QWidget> m_controllerWidget;
    QPointer<QWidget> m_menuLabel;
-   QPointer<QMdiSubWindow> mdiChild;
+   QPointer<QMdiSubWindow> m_mdiChild;
 };
 
 } // namespace QMdi

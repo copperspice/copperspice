@@ -130,7 +130,7 @@ class QPlainTextEditPrivate : public QAbstractScrollAreaPrivate
    uint inDrag : 1;
    uint clickCausedFocus : 1;
 
-   int topLine;
+   int m_topLine;
    qreal topLineFracture; // for non-int sized fonts
 
    void setTopLine(int visualTopLine, int dx = 0);

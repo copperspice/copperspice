@@ -90,7 +90,7 @@ class QLabelPrivate : public QFramePrivate
 #endif
 
 #ifndef QT_NO_CURSOR
-   QCursor cursor;
+   QCursor m_cursor;
 #endif
 
 #ifndef QT_NO_SHORTCUT
@@ -103,7 +103,7 @@ class QLabelPrivate : public QFramePrivate
    mutable QSizePolicy sizePolicy;
    int margin;
 
-   ushort align;
+   ushort m_align;
    short indent;
    mutable uint valid_hints : 1;
    uint scaledcontents : 1;
