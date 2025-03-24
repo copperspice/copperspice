@@ -141,7 +141,6 @@
 /src/3rdparty/webkit/Source/WebCore/Resources
 /src/3rdparty/webkit/Source/WebCore/WebCore.exp.in
 /src/3rdparty/webkit/Source/WebCore/WebCore.order
-/src/3rdparty/webkit/Source/WebCore/WebCore.qrc
 /src/3rdparty/webkit/Source/WebCore/WebCorePrefix.cpp
 /src/3rdparty/webkit/Source/WebCore/WebCorePrefix.h
 /src/3rdparty/webkit/Source/WebCore/accessibility/AccessibilityAllInOne.cpp
