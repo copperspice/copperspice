@@ -138,7 +138,6 @@
 /src/3rdparty/webkit/Source/WebCore/.*\\.y
 /src/3rdparty/webkit/Source/WebCore/ForwardingHeaders
 /src/3rdparty/webkit/Source/WebCore/Info.plist
-/src/3rdparty/webkit/Source/WebCore/Resources
 /src/3rdparty/webkit/Source/WebCore/WebCore.exp.in
 /src/3rdparty/webkit/Source/WebCore/WebCore.order
 /src/3rdparty/webkit/Source/WebCore/WebCorePrefix.cpp
