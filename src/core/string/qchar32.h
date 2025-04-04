@@ -449,6 +449,11 @@ class Q_CORE_EXPORT QChar32 : public CsString::CsChar
       return category() == Number_DecimalDigit;
    }
 
+   bool isHex() const {
+      char32_t c = this->unicode();
+      return (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F') || (c >= '0' && c <= '9');
+   }
+
    bool isLetter() const;
    bool isLetterOrNumber() const;
 

@@ -51,12 +51,6 @@ int minPositive(int value1, int value2)
    return retval;
 }
 
-static inline bool isHex(char c)
-{
-   c |= 0x20;
-   return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f');
-}
-
 static inline QString ftpScheme()
 {
    return QString("ftp");
@@ -1383,8 +1377,8 @@ bool QUrlPrivate::validateComponent(QUrlPrivate::Section section, const QString 
 
       bool error = false;
 
-      if ((uc == '%' && (iter + 1 != iter_end || iter + 2 != iter_end || ! isHex(iter[1].unicode()) ||
-            ! isHex(iter[2].unicode()))) || uc <= 0x20 || strchr(forbidden, uc)) {
+      if ((uc == '%' && (iter + 1 != iter_end || iter + 2 != iter_end || ! iter[1].isHex() || ! iter[2].isHex())) ||
+            uc <= 0x20 || strchr(forbidden, uc)) {
          // found an error
          error = true;
 

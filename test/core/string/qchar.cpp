@@ -89,6 +89,7 @@ TEST_CASE("QChar is_methods", "[qchar]")
    REQUIRE(! ch.isLower());
    REQUIRE(! ch.isNumber());
 
+   REQUIRE(ch.isHex());
    REQUIRE(ch.isLetter());
    REQUIRE(ch.isLetterOrNumber());
    REQUIRE(ch.isPrint());
@@ -100,9 +101,21 @@ TEST_CASE("QChar is_methods", "[qchar]")
    REQUIRE(! ch.isLower());
    REQUIRE(ch.isNumber());
 
+   REQUIRE(ch.isHex());
    REQUIRE(! ch.isLetter());
    REQUIRE(ch.isLetterOrNumber());
    REQUIRE(ch.isPrint());
    REQUIRE(! ch.isUpper());
-}
 
+   ch = '!';
+
+   REQUIRE(! ch.isDigit());
+   REQUIRE(! ch.isLower());
+   REQUIRE(! ch.isNumber());
+
+   REQUIRE(! ch.isHex());
+   REQUIRE(! ch.isLetter());
+   REQUIRE(! ch.isLetterOrNumber());
+   REQUIRE(ch.isPrint());
+   REQUIRE(! ch.isUpper());
+}
