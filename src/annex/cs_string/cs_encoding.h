@@ -26,6 +26,10 @@
 
 namespace CsString {
 
+template <typename Container, typename Value>
+concept EncodingInsert = requires(Container r_str, Container::const_iterator r_iter, Value r_value)
+      { r_iter = r_str.insert(r_iter, r_value); };
+
 class LIB_CS_STRING_EXPORT utf8
 {
    public:
@@ -75,8 +79,9 @@ class LIB_CS_STRING_EXPORT utf8
       }
 
       template <typename Container>
+      requires EncodingInsert<Container, uint32_t>
       static typename Container::const_iterator insert(Container &str1,
-                  typename Container::const_iterator iter, CsChar c, size_type count = 1)
+            typename Container::const_iterator iter, CsChar c, size_type count = 1)
       {
          uint32_t value = c.unicode();
 

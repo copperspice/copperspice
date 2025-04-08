@@ -922,13 +922,8 @@ QByteArray QStringView<S>::toLatin1() const
 template <typename S>
 QByteArray QStringView<S>::toUtf8() const
 {
-   QByteArray retval;
-
-   for (value_type ch : *this) {
-      CsString::utf8::insert(retval, retval.cend(), ch);
-   }
-
-   return retval;
+   S tmp(this->begin(), this->end());
+   return tmp.toUtf8();
 }
 
 template <typename S>
