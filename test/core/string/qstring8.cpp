@@ -458,8 +458,11 @@ TEST_CASE("QString8 left_right", "[qstring]")
    QString str = "A wacky fox and sizeable pig jumped halfway over a blue moon";
 
    REQUIRE(str.left(11)   == "A wacky fox");
-   REQUIRE(str.mid(16, 8) == "sizeable");
    REQUIRE(str.right(11)  == "a blue moon");
+
+   REQUIRE(str.mid(16, 8) == "sizeable");
+
+   REQUIRE(str.remaining(36)  == "halfway over a blue moon");
 }
 
 TEST_CASE("QString8 length", "[qstring]")
