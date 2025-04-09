@@ -634,6 +634,10 @@ class Q_CORE_EXPORT QString8 : public CsString::CsString
          prepend(other);
       }
 
+      [[nodiscard]] QString8 remaining(size_type indexStart) const {
+         return mid(indexStart);
+      }
+
       [[nodiscard]] QString8 repeated(size_type count) const;
 
       QString8 &remove(size_type indexStart, size_type numOfChars);

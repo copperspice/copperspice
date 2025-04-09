@@ -629,6 +629,10 @@ class Q_CORE_EXPORT QString16 : public CsString::CsString_utf16
          prepend(other);
       }
 
+      [[nodiscard]] QString16 remaining(size_type indexStart) const {
+         return mid(indexStart);
+      }
+
       [[nodiscard]] QString16 repeated(size_type count) const;
 
       QString16 &remove(size_type indexStart, size_type numOfChars);

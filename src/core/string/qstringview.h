@@ -223,6 +223,10 @@ class QStringView : public CsString::CsBasicStringView<S>
       }
 
       QStringView<S> mid(size_type indexStart, size_type numOfChars = -1) const;
+      [[nodiscard]] QStringView<S> remaining(size_type indexStart) const {
+         return midView(indexStart);
+      }
+
       QStringView<S> right(size_type numOfChars) const;
 
       size_type size() const{
