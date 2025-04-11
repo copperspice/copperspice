@@ -121,6 +121,7 @@ TEST_CASE("QVariant constructor_bool", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::Bool);
+   REQUIRE(data.typeName() == "bool");
 
    REQUIRE(data.toBool()              == true);
    REQUIRE(data.toInt()               == 1);
@@ -236,6 +237,7 @@ TEST_CASE("QVariant constructor_int", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::Int);
+   REQUIRE(data.typeName() == "int");
 
    REQUIRE(data.toBool()              == true);
    REQUIRE(data.toInt()               == 17);
@@ -253,6 +255,67 @@ TEST_CASE("QVariant constructor_int", "[qvariant]")
    REQUIRE(data.toChar()              == '\x11');
    REQUIRE(data.toString()            == "17");
    REQUIRE(data.toString16()          == "17");
+   REQUIRE(data.toStringList()        == QStringList());
+   REQUIRE(data.value<QStringView>()  == QStringView());
+
+   REQUIRE(data.toDate()              == QDate());
+   REQUIRE(data.toTime()              == QTime());
+   REQUIRE(data.toDateTime()          == QDateTime());
+   REQUIRE(data.toLocale()            == QLocale());
+
+   REQUIRE(data.toList()              == QList<QVariant>());
+   REQUIRE(data.toHash()              == QHash<QString, QVariant>());
+   REQUIRE(data.toMap()               == QMap<QString, QVariant>());
+   REQUIRE(data.toMultiHash()         == QMultiHash<QString, QVariant>());
+   REQUIRE(data.toMultiMap()          == QMultiMap<QString, QVariant>());
+
+   REQUIRE(data.toJsonArray()         == QJsonArray());
+   REQUIRE(data.toJsonDocument()      == QJsonDocument());
+   REQUIRE(data.toJsonValue()         == QJsonValue());
+   REQUIRE(data.toJsonObject()        == QJsonObject());
+
+   REQUIRE(data.toLine()              == QLine());
+   REQUIRE(data.toLineF()             == QLineF());
+   REQUIRE(data.toPoint()             == QPoint());
+   REQUIRE(data.toPointF()            == QPointF());
+   REQUIRE(data.toRect()              == QRect());
+   REQUIRE(data.toRectF()             == QRectF());
+   REQUIRE(data.toSize()              == QSize());
+   REQUIRE(data.toSizeF()             == QSizeF());
+
+   REQUIRE(data.toEasingCurve()       == QEasingCurve());
+   REQUIRE(data.toModelIndex()        == QModelIndex());
+   REQUIRE(data.toUrl()               == QUrl());
+   REQUIRE(data.toUuid()              == QUuid());
+
+   REQUIRE(data.toRegularExpression().pattern() == QString());
+   REQUIRE(data.toPersistentModelIndex() == QPersistentModelIndex());
+}
+
+TEST_CASE("QVariant constructor_double", "[qvariant]")
+{
+   QVariant data = 3.14159;
+
+   REQUIRE(data.isValid());
+   REQUIRE(data.type() == QVariant::Double);
+   REQUIRE(data.typeName() == "double");
+
+   REQUIRE(data.toBool()              == true);
+   REQUIRE(data.toInt()               == 3);
+   REQUIRE(data.toUInt()              == 3);
+   REQUIRE(data.toLong()              == 3);
+   REQUIRE(data.toULong()             == 3);
+   REQUIRE(data.toLongLong()          == 3);
+   REQUIRE(data.toULongLong()         == 3);
+   REQUIRE(data.toDouble()            == 3.14159);
+   REQUIRE(data.toFloat()             == 3.14159f);
+   REQUIRE(data.toReal()              == 3.14159);
+
+   REQUIRE(data.toBitArray()          == QBitArray());
+   REQUIRE(data.toByteArray()         == "3.14159");
+   REQUIRE(data.toChar()              == '\x03');
+   REQUIRE(data.toString()            == "3.14159");
+   REQUIRE(data.toString16()          == "3.14159");
    REQUIRE(data.toStringList()        == QStringList());
    REQUIRE(data.value<QStringView>()  == QStringView());
 
@@ -311,12 +374,13 @@ TEST_CASE("QVariant constructor_bytearray", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::ByteArray);
+   REQUIRE(data.typeName() == "QByteArray");
 
-   REQUIRE(data.canConvert<bool>());
-   REQUIRE(data.canConvert<int>());
-   REQUIRE(data.canConvert<double>());
-   REQUIRE(data.canConvert<QString>());
-   REQUIRE(data.canConvert<QString16>());
+   REQUIRE(data.canConvert<bool>() == true);
+   REQUIRE(data.canConvert<int>() == true);
+   REQUIRE(data.canConvert<double>() == true);
+   REQUIRE(data.canConvert<QString>() == true);
+   REQUIRE(data.canConvert<QString16>() == true);
 
    REQUIRE(data.toBool()              == true);
    REQUIRE(data.toInt()               == 0);
@@ -382,7 +446,7 @@ TEST_CASE("QVariant constructor_bytearray", "[qvariant]")
    REQUIRE(data.toULongLong()         == 53);
    REQUIRE(data.toDouble()            == 53);
    REQUIRE(data.toFloat()             == 53.0f);
-   REQUIRE(data.toReal()              == 53);
+   REQUIRE(data.toReal()              == 53.0);
 
    REQUIRE(data.toBitArray()          == QBitArray());
    REQUIRE(data.toByteArray()         == QByteArray("53"));
@@ -426,14 +490,79 @@ TEST_CASE("QVariant constructor_bytearray", "[qvariant]")
    REQUIRE(data.toPersistentModelIndex() == QPersistentModelIndex());
 }
 
+TEST_CASE("QVariant constructor_char", "[qvariant]")
+{
+   QVariant data = QChar('B');
+
+   REQUIRE(data.isValid());
+   REQUIRE(data.type() == QVariant::QChar);
+   REQUIRE(data.typeName() == "QChar");
+
+   REQUIRE(data.canConvert<QString8>() == true);
+   REQUIRE(data.canConvert<QString16>() == true);
+
+   REQUIRE(data.toBool()              == true);
+   REQUIRE(data.toInt()               == 66);
+   REQUIRE(data.toUInt()              == 66);
+   REQUIRE(data.toLong()              == 66);
+   REQUIRE(data.toULong()             == 66);
+   REQUIRE(data.toLongLong()          == 66);
+   REQUIRE(data.toULongLong()         == 66);
+   REQUIRE(data.toDouble()            == 0.0);
+   REQUIRE(data.toFloat()             == 0.0f);
+   REQUIRE(data.toReal()              == 0.0);
+
+   REQUIRE(data.toBitArray()          == QBitArray());
+   REQUIRE(data.toByteArray()         == "B");
+   REQUIRE(data.toChar()              == '\U00000042');
+   REQUIRE(data.toString()            == "B");
+   REQUIRE(data.toString16()          == "B");
+   REQUIRE(data.toStringList()        == QStringList());
+   REQUIRE(data.value<QStringView>()  == QStringView());
+
+   REQUIRE(data.toDate()              == QDate());
+   REQUIRE(data.toTime()              == QTime());
+   REQUIRE(data.toDateTime()          == QDateTime());
+   REQUIRE(data.toLocale()            == QLocale());
+
+   REQUIRE(data.toList()              == QList<QVariant>());
+   REQUIRE(data.toHash()              == QHash<QString, QVariant>());
+   REQUIRE(data.toMap()               == QMap<QString, QVariant>());
+   REQUIRE(data.toMultiHash()         == QMultiHash<QString, QVariant>());
+   REQUIRE(data.toMultiMap()          == QMultiMap<QString, QVariant>());
+
+   REQUIRE(data.toJsonArray()         == QJsonArray());
+   REQUIRE(data.toJsonDocument()      == QJsonDocument());
+   REQUIRE(data.toJsonValue()         == QJsonValue());
+   REQUIRE(data.toJsonObject()        == QJsonObject());
+
+   REQUIRE(data.toLine()              == QLine());
+   REQUIRE(data.toLineF()             == QLineF());
+   REQUIRE(data.toPoint()             == QPoint());
+   REQUIRE(data.toPointF()            == QPointF());
+   REQUIRE(data.toRect()              == QRect());
+   REQUIRE(data.toRectF()             == QRectF());
+   REQUIRE(data.toSize()              == QSize());
+   REQUIRE(data.toSizeF()             == QSizeF());
+
+   REQUIRE(data.toEasingCurve()       == QEasingCurve());
+   REQUIRE(data.toModelIndex()        == QModelIndex());
+   REQUIRE(data.toUrl()               == QUrl());
+   REQUIRE(data.toUuid()              == QUuid());
+
+   REQUIRE(data.toRegularExpression().pattern() == QString());
+   REQUIRE(data.toPersistentModelIndex() == QPersistentModelIndex());
+}
+
 TEST_CASE("QVariant constructor_string8", "[qvariant]")
 {
    QVariant data = QString("apple");
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::String);
+   REQUIRE(data.typeName() == "QString");
 
-   REQUIRE(data.canConvert<QString16>());
+   REQUIRE(data.canConvert<QString16>() == true);
 
    REQUIRE(data.toBool()              == true);
    REQUIRE(data.toInt()               == 0);
@@ -545,8 +674,8 @@ TEST_CASE("QVariant constructor_string8", "[qvariant]")
    // test three
    data = QString("2021-04-01");
 
-   REQUIRE(data.canConvert<QDate>());
-   REQUIRE(data.canConvert<QTime>());
+   REQUIRE(data.canConvert<QDate>() == true);
+   REQUIRE(data.canConvert<QTime>() == true);
 
    REQUIRE(data.toBool()              == true);
    REQUIRE(data.toInt()               == 2021);
@@ -607,8 +736,9 @@ TEST_CASE("QVariant constructor_string16", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::String16);
+   REQUIRE(data.typeName() == "QString16");
 
-   REQUIRE(data.canConvert<QString>());
+   REQUIRE(data.canConvert<QString>() == true);
 
    REQUIRE(data.toBool()              == true);
    REQUIRE(data.toInt()               == 0);
@@ -727,6 +857,7 @@ TEST_CASE("QVariant constructor_stringlist", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::StringList);
+   REQUIRE(data.typeName() == "QStringList");
 
    REQUIRE(data.toBool()              == false);
    REQUIRE(data.toInt()               == 0);
@@ -787,10 +918,13 @@ TEST_CASE("QVariant constructor_date", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::Date);
+   REQUIRE(data.typeName() == "QDate");
 
-   REQUIRE(data.canConvert<QDate>());
-   REQUIRE(! data.canConvert<QTime>());
-   REQUIRE(data.canConvert<QDateTime>());
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<QString>() == true);
+   REQUIRE(data.canConvert<QDate>() == true);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == true);
 
    REQUIRE(data.toBool()              == false);
    REQUIRE(data.toInt()               == 0);
@@ -851,10 +985,13 @@ TEST_CASE("QVariant constructor_time", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::Time);
+   REQUIRE(data.typeName() == "QTime");
 
-   REQUIRE(! data.canConvert<QDate>());
-   REQUIRE(data.canConvert<QTime>());
-   REQUIRE(! data.canConvert<QDateTime>());
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<QString>() == true);
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == true);
+   REQUIRE(data.canConvert<QDateTime>() == false);
 
    REQUIRE(data.toBool()              == false);
    REQUIRE(data.toInt()               == 0);
@@ -915,10 +1052,13 @@ TEST_CASE("QVariant constructor_datetime", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::DateTime);
+   REQUIRE(data.typeName() == "QDateTime");
 
-   REQUIRE(data.canConvert<QDate>());
-   REQUIRE(data.canConvert<QTime>());
-   REQUIRE(data.canConvert<QDateTime>());
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<QString>() == true);
+   REQUIRE(data.canConvert<QDate>() == true);
+   REQUIRE(data.canConvert<QTime>() == true);
+   REQUIRE(data.canConvert<QDateTime>() == true);
 
    REQUIRE(data.toBool()              == false);
    REQUIRE(data.toInt()               == 0);
@@ -979,6 +1119,7 @@ TEST_CASE("QVariant constructor_locale", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::Locale);
+   REQUIRE(data.typeName() == "QLocale");
 
    REQUIRE(data.toBool()              == false);
    REQUIRE(data.toInt()               == 0);
@@ -1042,9 +1183,16 @@ TEST_CASE("QVariant constructor_list", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::List);
+   REQUIRE(data.typeName() == "QVariantList");
 
-   REQUIRE(! data.canConvert<QString>());
-   REQUIRE(data.canConvert<QStringList>());
+   REQUIRE(data.canConvert<QString>() == false);
+   REQUIRE(data.canConvert<QStringList>() == true);
+
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+   REQUIRE(data.canConvert<QMap<QString, QVariant>>() == false);
 
    REQUIRE(list1    == list2);
    REQUIRE(list2[0] == QString("orange"));
@@ -1107,14 +1255,19 @@ TEST_CASE("QVariant constructor_hash", "[qvariant]")
 {
    QHash<QString, QVariant> hash1 = { {"orange", 17} };
 
-   QVariant data      = hash1;
-   QVariantHash hash2 = data.value<QVariantHash>();
+   QVariant data = hash1;
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::Hash);
+   REQUIRE(data.typeName() == "QVariantHash");
 
-   REQUIRE(data.canConvert<QVariantMap>());
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == true);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+   REQUIRE(data.canConvert<QMap<QString, QVariant>>() == true);
 
+   QVariantHash hash2 = data.value<QVariantHash>();
    REQUIRE(hash1 == hash2);
    REQUIRE(hash2.value("orange").toInt() == 17);
 
@@ -1175,6 +1328,83 @@ TEST_CASE("QVariant constructor_hash", "[qvariant]")
    REQUIRE(data.toPersistentModelIndex() == QPersistentModelIndex());
 }
 
+TEST_CASE("QVariant constructor_multihash", "[qvariant]")
+{
+   QMultiHash<QString, QVariant> hash1 = { {"orange", 17}, {"orange", 42} };
+
+   QVariant data = hash1;
+
+   REQUIRE(data.isValid());
+   REQUIRE(data.type() == QVariant::MultiHash);
+   REQUIRE(data.typeName() == "QVariantMultiHash");
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantMap>()  == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+   REQUIRE(data.canConvert<QMultiHash<QString, QVariant>>() == true);
+
+   QVariantMultiHash hash2 = data.value<QVariantMultiHash>();
+   REQUIRE(hash1 == hash2);
+
+   REQUIRE( ((hash2.value("orange").toInt() == 17) || (hash2.value("orange").toInt() == 42)) );
+
+   QVariantMultiHash hash3 = data.toMultiHash();
+   REQUIRE(hash1 == hash3);
+   REQUIRE( ((hash3.value("orange").toInt() == 17) || (hash3.value("orange").toInt() == 42)) );
+
+   REQUIRE(data.toBool()              == false);
+   REQUIRE(data.toInt()               == 0);
+   REQUIRE(data.toUInt()              == 0);
+   REQUIRE(data.toLong()              == 0);
+   REQUIRE(data.toULong()             == 0);
+   REQUIRE(data.toLongLong()          == 0);
+   REQUIRE(data.toULongLong()         == 0);
+   REQUIRE(data.toDouble()            == 0);
+   REQUIRE(data.toFloat()             == 0);
+   REQUIRE(data.toReal()              == 0);
+
+   REQUIRE(data.toBitArray()          == QBitArray());
+   REQUIRE(data.toByteArray()         == QByteArray());
+   REQUIRE(data.toChar()              == '\0');
+   REQUIRE(data.toString()            == QString());
+   REQUIRE(data.toString16()          == QString16());
+   REQUIRE(data.toStringList()        == QStringList());
+   REQUIRE(data.value<QStringView>()  == QStringView());
+
+   REQUIRE(data.toDate()              == QDate());
+   REQUIRE(data.toTime()              == QTime());
+   REQUIRE(data.toDateTime()          == QDateTime());
+   REQUIRE(data.toLocale()            == QLocale());
+
+   REQUIRE(data.toList()              == QList<QVariant>());
+   REQUIRE(data.toHash()              == QHash<QString, QVariant>());
+   REQUIRE(data.toMap()               == QMap<QString, QVariant>());
+   REQUIRE(data.toMultiHash()         == QMultiHash<QString, QVariant>( { {"orange", 17}, {"orange", 42} } ));
+   REQUIRE(data.toMultiMap()          == QMultiMap<QString, QVariant>());
+
+   REQUIRE(data.toJsonArray()         == QJsonArray());
+   REQUIRE(data.toJsonDocument()      == QJsonDocument());
+   REQUIRE(data.toJsonValue()         == QJsonValue());
+   REQUIRE(data.toJsonObject()        == QJsonObject());
+
+   REQUIRE(data.toLine()              == QLine());
+   REQUIRE(data.toLineF()             == QLineF());
+   REQUIRE(data.toPoint()             == QPoint());
+   REQUIRE(data.toPointF()            == QPointF());
+   REQUIRE(data.toRect()              == QRect());
+   REQUIRE(data.toRectF()             == QRectF());
+   REQUIRE(data.toSize()              == QSize());
+   REQUIRE(data.toSizeF()             == QSizeF());
+
+   REQUIRE(data.toEasingCurve()       == QEasingCurve());
+   REQUIRE(data.toModelIndex()        == QModelIndex());
+   REQUIRE(data.toUrl()               == QUrl());
+   REQUIRE(data.toUuid()              == QUuid());
+
+   REQUIRE(data.toRegularExpression().pattern() == QString());
+   REQUIRE(data.toPersistentModelIndex() == QPersistentModelIndex());
+}
+
 TEST_CASE("QVariant constructor_map", "[qvariant]")
 {
    QMap<QString, QVariant> map1 = { {"orange", 17} };
@@ -1184,8 +1414,16 @@ TEST_CASE("QVariant constructor_map", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::Map);
+   REQUIRE(data.typeName() == "QVariantMap");
 
-   REQUIRE(data.canConvert<QVariantHash>());
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == true);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+   REQUIRE(data.canConvert<QMap<QString, QVariant>>() == true);
+
+   REQUIRE(map2.contains("orange") == true);
+   REQUIRE(map2.contains("17") == false);
 
    REQUIRE(map1 == map2);
    REQUIRE(map2.value("orange").toInt() == 17);
@@ -1255,10 +1493,15 @@ TEST_CASE("QVariant constructor_multimap", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::MultiMap);
+   REQUIRE(data.typeName() == "QVariantMultiMap");
 
-   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantMap>()  == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QMultiMap<QString, QVariant>>() == true);
 
-   REQUIRE(map.values("orange") == QVariantList( {17, 42} ) );
+   REQUIRE(map.values("orange") == QVariantList( {17, 42} ));
 
    REQUIRE(data.toBool()              == false);
    REQUIRE(data.toInt()               == 0);
@@ -1321,13 +1564,14 @@ TEST_CASE("QVariant constructor_json_value", "[qvariant]")
 
       REQUIRE(data.isValid());
       REQUIRE(data.type() == QVariant::JsonValue);
+      REQUIRE(data.typeName() == "QJsonValue");
 
-      REQUIRE(data.canConvert<bool>());
-      REQUIRE(data.canConvert<double>());
-      REQUIRE(data.canConvert<int>());
+      REQUIRE(data.canConvert<bool>() == true);
+      REQUIRE(data.canConvert<double>() == true);
+      REQUIRE(data.canConvert<int>() == true);
 
-      REQUIRE(data.canConvert<QString>());
-      REQUIRE(data.canConvert<QString16>());
+      REQUIRE(data.canConvert<QString>() == true);
+      REQUIRE(data.canConvert<QString16>() == true);
 
       REQUIRE(data.toBool()              == true);
       REQUIRE(data.toInt()               == 9);
@@ -1389,12 +1633,12 @@ TEST_CASE("QVariant constructor_json_value", "[qvariant]")
       REQUIRE(data.isValid());
       REQUIRE(data.type() == QVariant::JsonValue);
 
-      REQUIRE(data.canConvert<bool>());
-      REQUIRE(data.canConvert<double>());
-      REQUIRE(data.canConvert<int>());
+      REQUIRE(data.canConvert<bool>() == true);
+      REQUIRE(data.canConvert<double>() == true);
+      REQUIRE(data.canConvert<int>() == true);
 
-      REQUIRE(data.canConvert<QString>());
-      REQUIRE(data.canConvert<QString16>());
+      REQUIRE(data.canConvert<QString>() == true);
+      REQUIRE(data.canConvert<QString16>() == true);
 
       REQUIRE(data.toBool()              == true);
       REQUIRE(data.toInt()               == 0);
@@ -1488,8 +1732,9 @@ TEST_CASE("QVariant constructor_line", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::Line);
+   REQUIRE(data.typeName() == "QLine");
 
-   REQUIRE(data.canConvert<QLineF>());
+   REQUIRE(data.canConvert<QLineF>() == true);
 
    REQUIRE(data.value<QLine>()  == QLine(6, 12, 0, 3));
    REQUIRE(data.value<QLineF>() == QLineF(6, 12, 0, 3));
@@ -1553,8 +1798,9 @@ TEST_CASE("QVariant constructor_linef", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::LineF);
+   REQUIRE(data.typeName() == "QLineF");
 
-   REQUIRE(data.canConvert<QLine>());
+   REQUIRE(data.canConvert<QLine>() == true);
 
    REQUIRE(data.value<QLine>()  == QLine(6, 13, 0, 3));
    REQUIRE(data.value<QLineF>() == QLineF(6.4, 12.8, 0, 3.2));
@@ -1618,8 +1864,9 @@ TEST_CASE("QVariant constructor_point", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::Point);
+   REQUIRE(data.typeName() == "QPoint");
 
-   REQUIRE(data.canConvert<QPointF>());
+   REQUIRE(data.canConvert<QPointF>() == true);
 
    REQUIRE(data.value<QPoint>()  == QPoint(17, 42));
    REQUIRE(data.value<QPointF>() == QPointF(17, 42));
@@ -1683,8 +1930,9 @@ TEST_CASE("QVariant constructor_pointf", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::PointF);
+   REQUIRE(data.typeName() == "QPointF");
 
-   REQUIRE(data.canConvert<QPoint>());
+   REQUIRE(data.canConvert<QPoint>() == true);
 
    REQUIRE(data.value<QPoint>()  == QPoint(18, 42));
    REQUIRE(data.value<QPointF>() == QPointF(17.9, 42.0));
@@ -1748,8 +1996,9 @@ TEST_CASE("QVariant constructor_rect", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::Rect);
+   REQUIRE(data.typeName() == "QRect");
 
-   REQUIRE(data.canConvert<QRectF>());
+   REQUIRE(data.canConvert<QRectF>() == true);
 
    REQUIRE(data.value<QRect>()  == QRect(9, 12, 18, 7));
    REQUIRE(data.value<QRectF>() == QRectF(9, 12, 18, 7));
@@ -1813,8 +2062,9 @@ TEST_CASE("QVariant constructor_rectf", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::RectF);
+   REQUIRE(data.typeName() == "QRectF");
 
-   REQUIRE(data.canConvert<QRect>());
+   REQUIRE(data.canConvert<QRect>() == true);
 
    REQUIRE(data.value<QRect>()  == QRect(10, 12, 18, 7));
    REQUIRE(data.value<QRectF>() == QRectF(9.7, 12.1, 18.0, 7.4));
@@ -1878,8 +2128,9 @@ TEST_CASE("QVariant constructor_size", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::Size);
+   REQUIRE(data.typeName() == "QSize");
 
-   REQUIRE(data.canConvert<QSizeF>());
+   REQUIRE(data.canConvert<QSizeF>() == true);
 
    REQUIRE(data.value<QSize>()  == QSize(9, 12));
    REQUIRE(data.value<QSizeF>() == QSizeF(9, 12));
@@ -1943,8 +2194,9 @@ TEST_CASE("QVariant constructor_sizef", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::SizeF);
+   REQUIRE(data.typeName() == "QSizeF");
 
-   REQUIRE(data.canConvert<QSize>());
+   REQUIRE(data.canConvert<QSize>() == true);
 
    REQUIRE(data.value<QSize>()  == QSize(10, 12));
    REQUIRE(data.value<QSizeF>() == QSizeF(9.7, 12.1));
@@ -2011,7 +2263,7 @@ TEST_CASE("QVariant constructor_url", "[qvariant]")
    REQUIRE(tmpStr.isValid());
    REQUIRE(tmpStr.type() == QVariant::String);
 
-   REQUIRE(tmpStr.canConvert<QUrl>());
+   REQUIRE(tmpStr.canConvert<QUrl>() == true);
 
    QUrl url(str);
    QVariant data(url);
@@ -2020,9 +2272,10 @@ TEST_CASE("QVariant constructor_url", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::Url);
+   REQUIRE(data.typeName() == "QUrl");
 
-   REQUIRE(data.canConvert<QString8>());
-   REQUIRE(data.canConvert<QString16>());
+   REQUIRE(data.canConvert<QString8>() == true);
+   REQUIRE(data.canConvert<QString16>() == true);
 
    REQUIRE(data.toBool()              == false);
    REQUIRE(data.toInt()               == 0);
@@ -2084,8 +2337,10 @@ TEST_CASE("QVariant constructor_uuid", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::Uuid);
+   REQUIRE(data.typeName() == "QUuid");
 
-   REQUIRE(data.canConvert<QString>());
+   REQUIRE(data.canConvert<QString>() == true);
+   REQUIRE(data.canConvert<QString16>() == true);
 
    REQUIRE(data.toBool()              == false);
    REQUIRE(data.toInt()               == 0);
@@ -2140,6 +2395,79 @@ TEST_CASE("QVariant constructor_uuid", "[qvariant]")
    REQUIRE(data.toPersistentModelIndex() == QPersistentModelIndex());
 }
 
+TEST_CASE("QVariant constructor_easing_curve", "[qvariant]")
+{
+   QEasingCurve curve(QEasingCurve::OutElastic);
+   curve.setAmplitude(2.0);
+   curve.setPeriod(0.5);
+
+   QVariant data = QVariant::fromValue(curve);
+
+   REQUIRE(data.isValid());
+   REQUIRE(data.type() == QVariant::EasingCurve);
+   REQUIRE(data.typeName() == "QEasingCurve");
+
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<QString>() == false);
+
+   REQUIRE(data.toBool()              == false);
+   REQUIRE(data.toInt()               == 0);
+   REQUIRE(data.toUInt()              == 0);
+   REQUIRE(data.toLong()              == 0);
+   REQUIRE(data.toULong()             == 0);
+   REQUIRE(data.toLongLong()          == 0);
+   REQUIRE(data.toULongLong()         == 0);
+   REQUIRE(data.toDouble()            == 0);
+   REQUIRE(data.toFloat()             == 0);
+   REQUIRE(data.toReal()              == 0);
+
+   REQUIRE(data.toBitArray()          == QBitArray());
+   REQUIRE(data.toByteArray()         == QByteArray());
+   REQUIRE(data.toChar()              == '\0');
+   REQUIRE(data.toString()            == QString());
+   REQUIRE(data.toString16()          == QString16());
+
+   REQUIRE(data.toStringList()        == QStringList());
+   REQUIRE(data.value<QStringView>()  == QStringView());
+
+   REQUIRE(data.toDate()              == QDate());
+   REQUIRE(data.toTime()              == QTime());
+   REQUIRE(data.toDateTime()          == QDateTime());
+   REQUIRE(data.toLocale()            == QLocale());
+
+   REQUIRE(data.toList()              == QList<QVariant>());
+   REQUIRE(data.toHash()              == QHash<QString, QVariant>());
+   REQUIRE(data.toMap()               == QMap<QString, QVariant>());
+   REQUIRE(data.toMultiHash()         == QMultiHash<QString, QVariant>());
+   REQUIRE(data.toMultiMap()          == QMultiMap<QString, QVariant>());
+
+   REQUIRE(data.toJsonArray()         == QJsonArray());
+   REQUIRE(data.toJsonDocument()      == QJsonDocument());
+   REQUIRE(data.toJsonValue()         == QJsonValue());
+   REQUIRE(data.toJsonObject()        == QJsonObject());
+
+   REQUIRE(data.toLine()              == QLine());
+   REQUIRE(data.toLineF()             == QLineF());
+   REQUIRE(data.toPoint()             == QPoint());
+   REQUIRE(data.toPointF()            == QPointF());
+   REQUIRE(data.toRect()              == QRect());
+   REQUIRE(data.toRectF()             == QRectF());
+   REQUIRE(data.toSize()              == QSize());
+   REQUIRE(data.toSizeF()             == QSizeF());
+
+   QEasingCurve result = data.toEasingCurve();
+   REQUIRE(result.type() == QEasingCurve::OutElastic);
+   REQUIRE(result.amplitude() == 2.0);
+   REQUIRE(result.period() == 0.5);
+
+   REQUIRE(data.toModelIndex()        == QModelIndex());
+   REQUIRE(data.toUrl()               == QUrl());
+   REQUIRE(data.toUuid()              == QUuid());
+
+   REQUIRE(data.toRegularExpression().pattern() == QString());
+   REQUIRE(data.toPersistentModelIndex() == QPersistentModelIndex());
+}
+
 TEST_CASE("QVariant constructor_regex", "[qvariant]")
 {
    QRegularExpression regexp = QRegularExpression("[abc]\\w+");
@@ -2148,6 +2476,7 @@ TEST_CASE("QVariant constructor_regex", "[qvariant]")
 
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::RegularExpression);
+   REQUIRE(data.typeName() == "QRegularExpression");
 
    REQUIRE(data.toBool()              == false);
    REQUIRE(data.toInt()               == 0);
@@ -2221,7 +2550,7 @@ TEST_CASE("QVariant constructor_user_type", "[qvariant]")
    REQUIRE(data1.userType() == QVariant::typeToTypeId<MyCustomType>());
    REQUIRE(data2.typeName() == "MyCustomType");
 
-   REQUIRE(! data2.canConvert(QVariant::Date));
+   REQUIRE(data2.canConvert(QVariant::Date) == false);
 
    MyCustomType data3 = data2.value<MyCustomType>();
 
@@ -2284,6 +2613,29 @@ TEST_CASE("QVariant copy_constructor_list", "[qvariant]")
 TEST_CASE("QVariant convert_int", "[qvariant]")
 {
    {
+      QVariant data = 17;
+
+      REQUIRE(data.type() == QVariant::Int);
+      REQUIRE(data.type() != QVariant::UInt);
+      REQUIRE(data.type() != QVariant::LongLong);
+      REQUIRE(data.type() != QVariant::Double);
+      REQUIRE(data.type() != QVariant::Char);
+
+      REQUIRE(data.canConvert(QVariant::Int) == true);
+      REQUIRE(data.canConvert(QVariant::UInt)== true);
+      REQUIRE(data.canConvert(QVariant::LongLong)== true);
+      REQUIRE(data.canConvert(QVariant::Double)== true);
+      REQUIRE(data.canConvert(QVariant::Char)== true);
+
+      REQUIRE(data.toUInt()     == 17);
+      REQUIRE(data.toUInt()     == 17);
+      REQUIRE(data.toLongLong() == 17);
+      REQUIRE(data.toDouble()   == 17);
+
+      REQUIRE(data.toChar().unicode() == 0x11);
+   }
+
+   {
       QVariant data = -65536;
 
       REQUIRE(data.type() == QVariant::Int);
@@ -2291,10 +2643,10 @@ TEST_CASE("QVariant convert_int", "[qvariant]")
       REQUIRE(data.type() != QVariant::LongLong);
       REQUIRE(data.type() != QVariant::Char);
 
-      REQUIRE(data.canConvert(QVariant::Int));
-      REQUIRE(data.canConvert(QVariant::UInt));
-      REQUIRE(data.canConvert(QVariant::LongLong));
-      REQUIRE(data.canConvert(QVariant::Char));
+      REQUIRE(data.canConvert(QVariant::Int)== true);
+      REQUIRE(data.canConvert(QVariant::UInt)== true);
+      REQUIRE(data.canConvert(QVariant::LongLong)== true);
+      REQUIRE(data.canConvert(QVariant::Char)== true);
 
       REQUIRE(data.toUInt()     == 0xFFFF0000);
       REQUIRE(data.toUInt()     == 4294901760);
@@ -2311,10 +2663,10 @@ TEST_CASE("QVariant convert_int", "[qvariant]")
       REQUIRE(data.type() != QVariant::LongLong);
       REQUIRE(data.type() == QVariant::Char);
 
-      REQUIRE(data.canConvert(QVariant::Int));
-      REQUIRE(data.canConvert(QVariant::UInt));
-      REQUIRE(data.canConvert(QVariant::LongLong));
-      REQUIRE(data.canConvert(QVariant::Char));
+      REQUIRE(data.canConvert(QVariant::Int) == true);
+      REQUIRE(data.canConvert(QVariant::UInt) == true);
+      REQUIRE(data.canConvert(QVariant::LongLong) == true);
+      REQUIRE(data.canConvert(QVariant::Char) == true);
 
       REQUIRE(data.toInt()      == 97);
       REQUIRE(data.toUInt()     == 97);
@@ -2330,10 +2682,10 @@ TEST_CASE("QVariant convert_int", "[qvariant]")
       REQUIRE(data.type() != QVariant::LongLong);
       REQUIRE(data.type() == QVariant::Char);
 
-      REQUIRE(data.canConvert(QVariant::Int));
-      REQUIRE(data.canConvert(QVariant::UInt));
-      REQUIRE(data.canConvert(QVariant::LongLong));
-      REQUIRE(data.canConvert(QVariant::Char));
+      REQUIRE(data.canConvert(QVariant::Int) == true);
+      REQUIRE(data.canConvert(QVariant::UInt) == true);
+      REQUIRE(data.canConvert(QVariant::LongLong) == true);
+      REQUIRE(data.canConvert(QVariant::Char) == true);
 
       REQUIRE(data.toInt()      == -16);
       REQUIRE(data.toUInt()     == 240);
@@ -2349,10 +2701,10 @@ TEST_CASE("QVariant convert_int", "[qvariant]")
       REQUIRE(data.type() == QVariant::LongLong);
       REQUIRE(data.type() != QVariant::Char);
 
-      REQUIRE(data.canConvert(QVariant::Int));
-      REQUIRE(data.canConvert(QVariant::UInt));
-      REQUIRE(data.canConvert(QVariant::LongLong));
-      REQUIRE(data.canConvert(QVariant::Char));
+      REQUIRE(data.canConvert(QVariant::Int) == true);
+      REQUIRE(data.canConvert(QVariant::UInt) == true);
+      REQUIRE(data.canConvert(QVariant::LongLong) == true);
+      REQUIRE(data.canConvert(QVariant::Char) == true);
 
       REQUIRE(data.toInt()      == 0);
       REQUIRE(data.toUInt()     == 0);
@@ -2370,9 +2722,9 @@ TEST_CASE("QVariant convert_uint", "[qvariant]")
       REQUIRE(data.type() == QVariant::UInt);
       REQUIRE(data.type() != QVariant::LongLong);
 
-      REQUIRE(data.canConvert(QVariant::Int));
-      REQUIRE(data.canConvert(QVariant::UInt));
-      REQUIRE(data.canConvert(QVariant::LongLong));
+      REQUIRE(data.canConvert(QVariant::Int) == true);
+      REQUIRE(data.canConvert(QVariant::UInt) == true);
+      REQUIRE(data.canConvert(QVariant::LongLong) == true);
 
       REQUIRE(data.toInt()      == -65536);
       REQUIRE(data.toUInt()     == 0xFFFF0000);
@@ -2380,11 +2732,33 @@ TEST_CASE("QVariant convert_uint", "[qvariant]")
    }
 }
 
+TEST_CASE("QVariant convert_double", "[qvariant]")
+{
+   {
+      QVariant data = 3.14159;
+
+      REQUIRE(data.type() != QVariant::Int);
+      REQUIRE(data.type() != QVariant::UInt);
+      REQUIRE(data.type() != QVariant::LongLong);
+      REQUIRE(data.type() == QVariant::Double);
+
+      REQUIRE(data.canConvert(QVariant::Int) == true);
+      REQUIRE(data.canConvert(QVariant::UInt) == true);
+      REQUIRE(data.canConvert(QVariant::LongLong) == true);
+      REQUIRE(data.canConvert(QVariant::Double) == true);
+
+      REQUIRE(data.toInt()      == 3);
+      REQUIRE(data.toUInt()     == 3);
+      REQUIRE(data.toLongLong() == 3);
+      REQUIRE(data.toDouble() == 3.14159);
+   }
+}
+
 TEST_CASE("QVariant can_convert_string8", "[qvariant]")
 {
    QVariant data = QString("apple");
 
-   REQUIRE(! data.canConvert(QVariant::Invalid));
+   REQUIRE(data.canConvert(QVariant::Invalid) == false);
 
    REQUIRE(data.canConvert(QVariant::Bool));
    REQUIRE(data.canConvert(QVariant::Double));
@@ -2402,21 +2776,21 @@ TEST_CASE("QVariant can_convert_string8", "[qvariant]")
    REQUIRE(data.canConvert(QVariant::Char));
    REQUIRE(data.canConvert(QVariant::SChar));
    REQUIRE(data.canConvert(QVariant::UChar));
-   REQUIRE(! data.canConvert(QVariant::Char8_t));
-   REQUIRE(! data.canConvert(QVariant::Char16_t));
-   REQUIRE(! data.canConvert(QVariant::Char32_t));
+   REQUIRE(data.canConvert(QVariant::Char8_t) == false);;
+   REQUIRE(data.canConvert(QVariant::Char16_t) == false);;
+   REQUIRE(data.canConvert(QVariant::Char32_t) == false);
 
    REQUIRE(data.canConvert(QVariant::ByteArray));
-   REQUIRE(! data.canConvert(QVariant::BitArray));
+   REQUIRE(data.canConvert(QVariant::BitArray) == false);
    REQUIRE(data.canConvert(QVariant::String));
    REQUIRE(data.canConvert(QVariant::String16));
    REQUIRE(data.canConvert(QVariant::StringList));
-   REQUIRE(! data.canConvert(QVariant::StringView));
+   REQUIRE(data.canConvert(QVariant::StringView) == false);
 
    REQUIRE(data.canConvert(QVariant::Date));
    REQUIRE(data.canConvert(QVariant::DateTime));
    REQUIRE(data.canConvert(QVariant::Time));
-   REQUIRE(! data.canConvert(QVariant::Locale));
+   REQUIRE(data.canConvert(QVariant::Locale) == false);
 
    REQUIRE(! data.canConvert(QVariant::JsonArray));
    REQUIRE(! data.canConvert(QVariant::JsonDocument));
