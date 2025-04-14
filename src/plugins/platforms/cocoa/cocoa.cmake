@@ -1,56 +1,56 @@
-list(APPEND PLATFORMS_COCOA_PRIVATE_INCLUDES
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/cglconvenience_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/messages.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qmacclipboard.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qmacdefines_mac.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qmultitouch_mac_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qnsview.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qnswindowdelegate.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qpaintengine_mac_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qprintengine_mac_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qt_mac_p.h
-
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaaccessibilityelement.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaaccessibility.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaapplicationdelegate.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaapplication.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoabackingstore.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoacolordialoghelper.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaclipboard.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoacursor.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoadrag.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaeventdispatcher.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoafiledialoghelper.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoafontdialoghelper.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaglcontext.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoahelpers.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoainputcontext.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaintegration.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaintrospection.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoakeymapper.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoamenu.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoamenuitem.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoamenubar.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoamenuloader.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoamimetypes.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoanativeinterface.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaprintersupport.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaprintdevice.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaservices.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoasystemtrayicon.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoasystemsettings.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoatheme.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoawindow.h
-)
-
-list(APPEND PLATFORMS_COCOA_OTHER_PRIVATE_INCLUDES
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/accessible/qaccessiblebridgeutils_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/clipboard/qmacmime_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/fonts/qcoretextfontdatabase_p.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/fonts/qfontengine_coretext_p.h
-)
-
 if(BUILD_PLATFORMS_COCOA_PLUGIN)
+
+   list(APPEND PLATFORMS_COCOA_PRIVATE_INCLUDES
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/cglconvenience_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/messages.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qmacclipboard.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qmacdefines_mac.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qmultitouch_mac_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qnsview.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qnswindowdelegate.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qpaintengine_mac_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qprintengine_mac_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qt_mac_p.h
+
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaaccessibilityelement.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaaccessibility.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaapplicationdelegate.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaapplication.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoabackingstore.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoacolordialoghelper.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaclipboard.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoacursor.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoadrag.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaeventdispatcher.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoafiledialoghelper.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoafontdialoghelper.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaglcontext.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoahelpers.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoainputcontext.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaintegration.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaintrospection.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoakeymapper.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoamenu.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoamenuitem.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoamenubar.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoamenuloader.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoamimetypes.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoanativeinterface.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaprintersupport.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaprintdevice.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoaservices.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoasystemtrayicon.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoasystemsettings.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoatheme.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/qcocoawindow.h
+   )
+
+   list(APPEND PLATFORMS_COCOA_OTHER_PRIVATE_INCLUDES
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/accessible/qaccessiblebridgeutils_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/clipboard/qmacmime_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/fonts/qcoretextfontdatabase_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/cocoa/fonts/qfontengine_coretext_p.h
+   )
 
    add_library(CsGuiCocoa MODULE "")
    add_library(CopperSpice::CsGuiCocoa ALIAS CsGuiCocoa )
