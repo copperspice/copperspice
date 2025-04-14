@@ -1,7 +1,8 @@
-list(APPEND PLATFORMS_XCB_PRIVATE_INCLUDES
-)
-
 if(BUILD_PLATFORMS_XCB_PLUGIN)
+
+   list(APPEND PLATFORMS_XCB_PRIVATE_INCLUDES
+   )
+
    add_library(CsGuiXcb MODULE "")
    add_library(CopperSpice::CsGuiXcb ALIAS CsGuiXcb)
 
