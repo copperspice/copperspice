@@ -42,7 +42,6 @@ TEST_CASE("QDate add_days", "[qdate]")
 {
    {
       QDate date = QDate(2012, 10, 31);
-
       date = date.addDays(5);
 
       REQUIRE(date == QDate(2012, 11, 05));
@@ -50,7 +49,6 @@ TEST_CASE("QDate add_days", "[qdate]")
 
    {
       QDate date;
-
       date = date.addDays(3);
 
       REQUIRE(date == QDate());
@@ -61,7 +59,6 @@ TEST_CASE("QDate add_months", "[qdate]")
 {
    {
       QDate date = QDate(2012, 10, 31);
-
       date = date.addMonths(2);
 
       REQUIRE(date == QDate(2012, 12, 31));
@@ -69,7 +66,6 @@ TEST_CASE("QDate add_months", "[qdate]")
 
    {
       QDate date = QDate(2012, 10, 31);
-
       date = date.addMonths(0);
 
       REQUIRE(date == QDate(2012, 10, 31));
@@ -77,7 +73,6 @@ TEST_CASE("QDate add_months", "[qdate]")
 
    {
       QDate date = QDate(2012, 10, 31);
-
       date = date.addMonths(-4);
 
       REQUIRE(date == QDate(2012, 6, 30));
@@ -85,7 +80,6 @@ TEST_CASE("QDate add_months", "[qdate]")
 
    {
       QDate date = QDate(2014, 6, 1);
-
       date = date.addMonths(14);
 
       REQUIRE(date == QDate(2015, 8, 1));
@@ -93,7 +87,6 @@ TEST_CASE("QDate add_months", "[qdate]")
 
    {
       QDate date = QDate(2014, 6, 1);
-
       date = date.addMonths(-14);
 
       REQUIRE(date == QDate(2013, 4, 1));
@@ -101,7 +94,6 @@ TEST_CASE("QDate add_months", "[qdate]")
 
    {
       QDate date;
-
       date = date.addMonths(2);
 
       REQUIRE(date == QDate());
@@ -112,7 +104,6 @@ TEST_CASE("QDate add_years", "[qdate]")
 {
    {
       QDate date = QDate(2012, 10, 31);
-
       date = date.addYears(5);
 
       REQUIRE(date == QDate(2017, 10, 31));
@@ -120,7 +111,6 @@ TEST_CASE("QDate add_years", "[qdate]")
 
    {
       QDate date;
-
       date = date.addYears(8);
 
       REQUIRE(date == QDate());
@@ -548,7 +538,6 @@ TEST_CASE("QDate std_chrono", "[qdate]")
 
    REQUIRE(result_1 == result_2);
 #endif
-
 
    QDate date2 = QDate::fromStdSysDays(result_1);
 

@@ -45,4 +45,5 @@ TEST_CASE("QThreadStorage local_data", "[qthreadstorage]")
    data.setLocalData(0);
    REQUIRE(data.hasLocalData() == true);
 */
+
 }
