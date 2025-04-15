@@ -147,6 +147,9 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtextboundaryfinder.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qversionnumber.cpp
 
+   ${CMAKE_CURRENT_SOURCE_DIR}/xml/qxmlstreamreader.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/xml/qxmlstreamwriter.cpp
+
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/test_de.ts
 
    ${CMAKE_CURRENT_SOURCE_DIR}/test.qrc
