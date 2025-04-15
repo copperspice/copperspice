@@ -500,7 +500,9 @@ inline void QList<T>::insert(size_type i, const T &value)
 template <typename T>
 QList<T> QList<T>::mid(size_type pos, size_type length) const
 {
-   Q_ASSERT_X(pos < size(), "QList<T>::mid", "pos out of range");
+   if (pos >= size()) {
+      return QList<T>();
+   }
 
    if (length < 0 || pos + length > size()) {
       length = size() - pos;
