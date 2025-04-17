@@ -84,6 +84,18 @@ TEST_CASE("QTime fromString", "[qtime]")
    }
 }
 
+TEST_CASE("QTime comparisons", "[qtime]")
+{
+   QTime time1(10, 0, 0);
+   QTime time2(11, 0, 0);
+
+   REQUIRE(time1 <  time2);
+   REQUIRE(time1 != time2);
+   REQUIRE(time1 <= time2);
+
+   REQUIRE((time1 > time2) == false);
+}
+
 TEST_CASE("QTime msec", "[qtime]")
 {
    QTime time;
@@ -212,6 +224,9 @@ TEST_CASE("QTime valid", "[qtime]")
       REQUIRE(time.isValid() == false);
 
       time = QTime(26, 15, 3);
+      REQUIRE(time.isValid() == false);
+
+      time = QTime(24, 0, 0);
       REQUIRE(time.isValid() == false);
    }
 
