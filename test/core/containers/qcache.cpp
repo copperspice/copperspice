@@ -32,13 +32,79 @@ TEST_CASE("QCache traits", "[qcache]")
    REQUIRE(std::has_virtual_destructor_v<QCache<int, int>> == false);
 }
 
+TEST_CASE("QCache clear", "[qcache]")
+{
+   QCache<QString, int> cache(2);
+
+   cache.insert("key1", new int(100));
+   cache.insert("key2", new int(200));
+
+   REQUIRE(cache.contains("key1") == true);
+
+   REQUIRE(cache.isEmpty() == false);
+   REQUIRE(cache.count() == 2);
+   REQUIRE(cache.size()  == 2);
+
+   cache.clear();
+   REQUIRE(cache.isEmpty() == true);
+   REQUIRE(cache.count() == 0);
+   REQUIRE(cache.size()  == 0);
+}
+
 TEST_CASE("QCache empty", "[qcache]")
 {
    QCache<QString, int> cache;
 
    REQUIRE(cache.isEmpty() == true);
+   REQUIRE(cache.count() == 0);
    REQUIRE(cache.maxCost() == 100);
    REQUIRE(cache.totalCost() == 0);
+}
+
+TEST_CASE("QCache remove", "[qcache]")
+{
+   QCache<QString, int> cache(50);
+
+   REQUIRE(cache.isEmpty());
+   REQUIRE(cache.count() == 0);
+   REQUIRE(cache.totalCost() == 0);
+   REQUIRE(cache.maxCost() == 50);
+
+   //
+   cache.insert("key1", new int(17), 10);
+   cache.insert("key2", new int(35), 70);
+
+   REQUIRE(cache.contains("key1") == true);
+   REQUIRE(cache.contains("key2") == false);
+   REQUIRE(cache.count() == 1);
+
+   //
+   int *retrieved = cache["key1"];
+
+   CHECK(retrieved != nullptr);
+   CHECK(*retrieved == 17);
+
+   cache.remove("key1");
+   REQUIRE(cache.contains("key1") == false);
+}
+
+TEST_CASE("QCache take", "[qcache]")
+{
+   QCache<QString, QString> cache(10);
+
+   cache.insert("key1", new QString("orange"));
+   cache.insert("key2", new QString("berry"));
+
+   REQUIRE(cache.isEmpty() == false);
+   REQUIRE(cache.count() == 2);
+
+   //
+   QString *retrieved = cache.take("key1");
+
+   REQUIRE(retrieved != nullptr);
+   REQUIRE(*retrieved == "orange");
+
+   delete retrieved;
 }
 
 TEST_CASE("QCache various_cost", "[qcache]")
@@ -78,4 +144,3 @@ TEST_CASE("QCache various_cost", "[qcache]")
       REQUIRE(cache3.totalCost() == 0);
    }
 }
-
