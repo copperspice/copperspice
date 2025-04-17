@@ -73,8 +73,8 @@ TEST_CASE("QString8 begin_end", "[qstring]")
    }
 
    {
-      auto iterBegin = str.cbegin();
-      auto iterEnd   = str.cend();
+      auto iterBegin = str.constBegin();
+      auto iterEnd   = str.constEnd();
 
       REQUIRE(*iterBegin == 'O');
       REQUIRE(*(iterEnd - 1) == 'r');

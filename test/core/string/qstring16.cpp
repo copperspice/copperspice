@@ -746,7 +746,7 @@ TEST_CASE("QString16 u8_storage_iterators", "[qstring16]")
    REQUIRE(str.storage_rbegin() == str.storage_rend());
 
    str = u8"grape";
-   REQUIRE(*str.storage_begin()  == u'g');     // BROOM
+   REQUIRE(*str.storage_begin()  == u'g');
    REQUIRE(*str.storage_rbegin() == u'e');
    REQUIRE(str.storage_end() - str.storage_begin() == 5);
 

@@ -33,6 +33,22 @@ TEST_CASE("QStringView8 traits", "[qstringview8]")
    REQUIRE(std::has_virtual_destructor_v<QStringView8> == false);
 }
 
+TEST_CASE("QStringView8 conversion", "[qstringview8]")
+{
+    QString str = "Apple";
+    QStringView view(str);
+
+    SECTION("Convert to QString") {
+        QString copy = view.toString();
+        REQUIRE(copy == str);
+    }
+
+    SECTION("Implicit conversion to QString") {
+        QString copy = QString(view);
+        REQUIRE(copy == str);
+    }
+}
+
 TEST_CASE("QStringView8 begin_end", "[qstringview8]")
 {
    QString str = "On a clear day you can see forever";
@@ -120,6 +136,24 @@ TEST_CASE("QStringView8 compare", "[qstringview8]")
    REQUIRE(view1.compare(view2, Qt::CaseSensitive) == 1);
 }
 
+TEST_CASE("QStringView8 constructor", "[qstringview8]")
+{
+   {
+      QString str = "A wacky fox and sizeable pig";
+      QStringView8 view = str;
+
+      REQUIRE(! view.isEmpty());
+      REQUIRE(view.size() == str.size());
+   }
+
+   {
+      QString str = u8"Apple";
+      QStringView view = str;
+
+      REQUIRE(! view.isEmpty());
+   }
+}
+
 TEST_CASE("QStringView8 count", "[qstringview8]")
 {
    QString8 str      = "A wacky fox and sizeable pig jumped halfway over a blue moon";
@@ -136,6 +170,7 @@ TEST_CASE("QStringView8 empty", "[qstringview8]")
    QStringView8 view;
 
    REQUIRE(view.isEmpty());
+   REQUIRE(view.size() == 0);
 
    REQUIRE(view.constBegin() == view.constEnd());
    REQUIRE(view.cbegin() == view.cend());
@@ -205,6 +240,7 @@ TEST_CASE("QStringView8 left", "[qstringview8]")
    QStringView8 view = str;
 
    REQUIRE(view.left(11) == "A wacky fox");
+   REQUIRE(view.left(0).isEmpty() == true);
 }
 
 TEST_CASE("QStringView8 length", "[qstringview8]")
@@ -220,7 +256,9 @@ TEST_CASE("QStringView8 mid", "[qstringview8]")
    QString8 str      = "On a clear day you can see forever";
    QStringView8 view = str;
 
-   REQUIRE(view.mid(11, 3) == "day");
+   REQUIRE(view.mid(11, 3)  == "day");
+   REQUIRE(view.mid(30, 10) == "ever");
+   REQUIRE(view.mid(40, 8).isEmpty() == true);
 }
 
 TEST_CASE("QStringView8 operator", "[qstringview8]")
@@ -245,6 +283,7 @@ TEST_CASE("QStringView8 right", "[qstringview8]")
    QStringView8 view = str;
 
    REQUIRE(view.right(9) == "blue moon");
+   REQUIRE(view.right(0).isEmpty() == true);
 }
 
 TEST_CASE("QStringView8 starts_with", "[qstringview8]")
