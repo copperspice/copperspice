@@ -159,4 +159,3 @@ bool QGenericUnixServices::openDocument(const QUrl &url)
 
    return launch(m_documentLauncher, url);
 }
-
