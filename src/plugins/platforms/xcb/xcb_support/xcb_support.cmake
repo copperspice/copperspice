@@ -40,17 +40,15 @@ if(BUILD_PLATFORMS_XCB_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/xcb/xcb_support/qxcb_wm_support.h
       ${CMAKE_CURRENT_SOURCE_DIR}/xcb/xcb_support/qxcb_xsettings.h
 
-      ${CMAKE_CURRENT_SOURCE_DIR}/xcb/events/qgenericunix_eventdispatcher_p.h
-      ${CMAKE_CURRENT_SOURCE_DIR}/xcb/events/qunix_eventdispatcher_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_eventdispatcher_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_fontdatabase_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_services_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_theme_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qunix_eventdispatcher_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontconfig_database_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontengine_multifontconfig_p.h
+
       ${CMAKE_CURRENT_SOURCE_DIR}/xcb/events/qxcb_eventdispatcher_glib_p.h
-
-      ${CMAKE_CURRENT_SOURCE_DIR}/xcb/fonts/qfontconfig_database_p.h
-      ${CMAKE_CURRENT_SOURCE_DIR}/xcb/fonts/qfontengine_multifontconfig_p.h
-      ${CMAKE_CURRENT_SOURCE_DIR}/xcb/fonts/qgenericunix_fontdatabase_p.h
-
-      ${CMAKE_CURRENT_SOURCE_DIR}/xcb/services/qgenericunix_services_p.h
-
-      ${CMAKE_CURRENT_SOURCE_DIR}/xcb/themes/qgenericunix_theme_p.h
    )
 
    target_sources(CsXcbSupport
@@ -76,15 +74,12 @@ if(BUILD_PLATFORMS_XCB_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/xcb/xcb_support/qxcb_wm_support.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/xcb/xcb_support/qxcb_xsettings.cpp
 
-      ${CMAKE_CURRENT_SOURCE_DIR}/xcb/events/qgenericunix_eventdispatcher.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/xcb/events/qunix_eventdispatcher.cpp
-
-      ${CMAKE_CURRENT_SOURCE_DIR}/xcb/fonts/qfontconfig_database.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/xcb/fonts/qfontengine_multifontconfig.cpp
-
-      ${CMAKE_CURRENT_SOURCE_DIR}/xcb/services/qgenericunix_services.cpp
-
-      ${CMAKE_CURRENT_SOURCE_DIR}/xcb/themes/qgenericunix_theme.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_eventdispatcher.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_services.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_theme.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qunix_eventdispatcher.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontconfig_database.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontengine_multifontconfig.cpp
    )
 
    macro_generate_misc_private("${XCB_SUPPORT_PRIVATE_INCLUDES}" QtGui/private/platforms)
