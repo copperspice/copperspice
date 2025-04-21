@@ -132,6 +132,7 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qbytearray.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcommandlineoption.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qcommandlineparser.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qeasingcurve.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qelapsedtimer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qline.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qlinef.cpp
