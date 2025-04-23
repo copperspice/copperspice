@@ -33,22 +33,6 @@ TEST_CASE("QStringView8 traits", "[qstringview8]")
    REQUIRE(std::has_virtual_destructor_v<QStringView8> == false);
 }
 
-TEST_CASE("QStringView8 conversion", "[qstringview8]")
-{
-    QString str = "Apple";
-    QStringView view(str);
-
-    SECTION("Convert to QString") {
-        QString copy = view.toString();
-        REQUIRE(copy == str);
-    }
-
-    SECTION("Implicit conversion to QString") {
-        QString copy = QString(view);
-        REQUIRE(copy == str);
-    }
-}
-
 TEST_CASE("QStringView8 begin_end", "[qstringview8]")
 {
    QString str = "On a clear day you can see forever";
@@ -110,20 +94,6 @@ TEST_CASE("QStringView8 chop", "[qstringview8]")
    }
 }
 
-TEST_CASE("QStringView8 contains", "[qstringview8]")
-{
-   QString8 str      = "A wacky fox and sizeable pig jumped halfway over a blue moon";
-   QStringView8 view = str;
-
-   REQUIRE(view.contains("jumped"));
-   REQUIRE(! view.contains("lunch"));
-
-   REQUIRE(view.contains('x'));
-   REQUIRE(! view.contains('q'));
-
-   REQUIRE(view.contains("jUmpeD", Qt::CaseInsensitive));
-}
-
 TEST_CASE("QStringView8 comparison_case", "[qstringview8]")
 {
    QString str1 = "apple";
@@ -152,6 +122,36 @@ TEST_CASE("QStringView8 constructor", "[qstringview8]")
 
       REQUIRE(! view.isEmpty());
    }
+}
+
+TEST_CASE("QStringView8 contains", "[qstringview8]")
+{
+   QString8 str      = "A wacky fox and sizeable pig jumped halfway over a blue moon";
+   QStringView8 view = str;
+
+   REQUIRE(view.contains("jumped"));
+   REQUIRE(! view.contains("lunch"));
+
+   REQUIRE(view.contains('x'));
+   REQUIRE(! view.contains('q'));
+
+   REQUIRE(view.contains("jUmpeD", Qt::CaseInsensitive));
+}
+
+TEST_CASE("QStringView8 conversion", "[qstringview8]")
+{
+    QString str = "Apple";
+    QStringView view(str);
+
+    SECTION("Convert to QString") {
+        QString copy = view.toString();
+        REQUIRE(copy == str);
+    }
+
+    SECTION("Implicit conversion to QString") {
+        QString copy = QString(view);
+        REQUIRE(copy == str);
+    }
 }
 
 TEST_CASE("QStringView8 count", "[qstringview8]")

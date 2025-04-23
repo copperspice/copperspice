@@ -98,6 +98,36 @@ TEST_CASE("QString8 begin_end", "[qstring]")
    }
 }
 
+TEST_CASE("QString8 chop", "[qstring]")
+{
+   QString str = "A wacky fox and sizeable pig";
+
+   SECTION ("chop_a") {
+      str.chop(8);
+      REQUIRE(str == "A wacky fox and size");
+   }
+
+   SECTION ("chop_b") {
+      str.chop(25);
+      REQUIRE(str == "A w");
+   }
+
+   SECTION ("chop_c") {
+      str.chop(27);
+      REQUIRE(str == "A");
+   }
+
+   SECTION ("chop_d") {
+      str.chop(28);
+      REQUIRE(str == "");
+   }
+
+   SECTION ("chop_e") {
+      str.chop(50);
+      REQUIRE(str == "");
+   }
+}
+
 TEST_CASE("QString8 clear", "[qstring]")
 {
    QString str = "On a clear day you can see forever";
@@ -139,40 +169,28 @@ TEST_CASE("QString8 comparison", "[qstring]")
    REQUIRE(str1 >= str2);
 }
 
-TEST_CASE("QString8 chop", "[qstring]")
+TEST_CASE("QString8 comparison_case", "[qstring]")
 {
-   QString str = "A wacky fox and sizeable pig";
+   QString str1 = "apple";
+   QString str2 = "APPLE";
 
-   SECTION ("chop_a") {
-      str.chop(8);
-      REQUIRE(str == "A wacky fox and size");
-   }
-
-   SECTION ("chop_b") {
-      str.chop(25);
-      REQUIRE(str == "A w");
-   }
-
-   SECTION ("chop_c") {
-      str.chop(27);
-      REQUIRE(str == "A");
-   }
-
-   SECTION ("chop_d") {
-      str.chop(28);
-      REQUIRE(str == "");
-   }
-
-   SECTION ("chop_e") {
-      str.chop(50);
-      REQUIRE(str == "");
-   }
+   REQUIRE(str1.compare(str2, Qt::CaseInsensitive) == 0);
+   REQUIRE(str1.compare(str2, Qt::CaseSensitive) == 1);
 }
 
 TEST_CASE("QString8 u8_constructor", "[qstring]")
 {
-   QString str = u8"On a clear day you can see forever";
-   REQUIRE(str == u8"On a clear day you can see forever");
+   {
+      QString str = u8"On a clear day you can see forever";
+      REQUIRE(str == u8"On a clear day you can see forever");
+   }
+
+   {
+      const char8_t *data = u8"A wacky fox and sizeable pig";
+      QString str = data;
+
+      REQUIRE(str == "A wacky fox and sizeable pig");
+   }
 }
 
 TEST_CASE("QString8 u32_constructor", "[qstring]")
@@ -188,15 +206,6 @@ TEST_CASE("QString8 u32_constructor", "[qstring]")
       REQUIRE(str.size() == 10);
       REQUIRE(str == U"On a clear");
    }
-}
-
-TEST_CASE("QString8 char8_t_constructor", "[qstring]")
-{
-   const char8_t *data = u8"A wacky fox and sizeable pig";
-
-   QString str = data;
-
-   REQUIRE(str == "A wacky fox and sizeable pig");
 }
 
 TEST_CASE("QString8 contains", "[qstring]")
@@ -221,15 +230,6 @@ TEST_CASE("QString8 u8_contains", "[qstring]")
 
    REQUIRE(str.contains(u8'x'));
    REQUIRE(! str.contains(u8'q'));
-}
-
-TEST_CASE("QString8 compare", "[qstring]")
-{
-   QString str1 = "apple";
-   QString str2 = "APPLE";
-
-   REQUIRE(str1.compare(str2, Qt::CaseInsensitive) == 0);
-   REQUIRE(str1.compare(str2, Qt::CaseSensitive) == 1);
 }
 
 TEST_CASE("QString8 count", "[qstring]")
