@@ -461,7 +461,7 @@ TEST_CASE("QString16 u8_length", "[qstring16]")
    REQUIRE(str[1].unicode() == char32_t(228));
 }
 
-TEST_CASE("QString16 u_length", "[qstring16]")
+TEST_CASE("QString16 u16_length", "[qstring16]")
 {
    QString16 str = u"!ä";
 
@@ -906,7 +906,7 @@ TEST_CASE("QString16 toLower_german", "[qstring16]")
    }
 }
 
-TEST_CASE("QString16 trim", "[qstring16]")
+TEST_CASE("QString16 trimmed", "[qstring16]")
 {
    QString16 str = "    A wacky fox and sizeable pig \n\t ";
 

@@ -110,7 +110,7 @@ TEST_CASE("QFlatMap erase", "[qflatmap]")
    }
 }
 
-TEST_CASE("QFlatMap equality", "[qflatmap]")
+TEST_CASE("QFlatMap comparison", "[qflatmap]")
 {
    QFlatMap<int, QString> map1 = { { 1, "watermelon"},
                                    { 2, "apple"},

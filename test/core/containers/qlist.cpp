@@ -101,7 +101,7 @@ TEST_CASE("QList empty", "[qlist]")
    REQUIRE(list.size() == 0);
 }
 
-TEST_CASE("QList equality", "[qlist]")
+TEST_CASE("QList comparison", "[qlist]")
 {
    QList<QString> list1 = { "watermelon", "apple", "pear", "grapefruit" };
    QList<QString> list2 = { "watermelon", "apple", "pear", "grapefruit" };

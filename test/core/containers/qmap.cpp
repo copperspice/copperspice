@@ -110,7 +110,7 @@ TEST_CASE("QMap erase", "[qmap]")
    }
 }
 
-TEST_CASE("QMap equality", "[qmap]")
+TEST_CASE("QMap comparison", "[qmap]")
 {
    QMap<int, QString> map1 = { { 1, "watermelon"},
                                { 2, "apple"},

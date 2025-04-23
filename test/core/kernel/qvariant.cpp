@@ -3131,7 +3131,7 @@ TEST_CASE("QVariant type_char8_t", "[qvariant]")
    REQUIRE(QVariant::nameToType("char8_t") == QVariant::Char8_t);
 }
 
-TEST_CASE("QVariant equality_string8", "[qvariant]")
+TEST_CASE("QVariant comparison_string8", "[qvariant]")
 {
    QVariant data1 = 5;
    QVariant data2 = QString("5");
@@ -3139,7 +3139,7 @@ TEST_CASE("QVariant equality_string8", "[qvariant]")
    REQUIRE(data1 == data2);
 }
 
-TEST_CASE("QVariant equality_string16", "[qvariant]")
+TEST_CASE("QVariant comparison_string16", "[qvariant]")
 {
    QVariant data1 = 5;
    QVariant data2 = QString16("5");

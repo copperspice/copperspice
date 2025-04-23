@@ -84,7 +84,7 @@ TEST_CASE("QTime fromString", "[qtime]")
    }
 }
 
-TEST_CASE("QTime comparisons", "[qtime]")
+TEST_CASE("QTime comparison", "[qtime]")
 {
    QTime time1(10, 0, 0);
    QTime time2(11, 0, 0);

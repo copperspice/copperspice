@@ -110,7 +110,7 @@ TEST_CASE("QHash erase", "[qhash]")
    }
 }
 
-TEST_CASE("QHash equality", "[qhash]")
+TEST_CASE("QHash comparison", "[qhash]")
 {
    QHash<int, QString> hash1 = { { 1, "watermelon"},
                                  { 2, "apple"},

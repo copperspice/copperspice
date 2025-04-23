@@ -145,7 +145,7 @@ TEST_CASE("QDir exists", "[qdir]")
    REQUIRE(path.exists());
 }
 
-TEST_CASE("QDir set_path", "[qdir]")
+TEST_CASE("QDir setPath", "[qdir]")
 {
    QString str1(".");
    QString str2("..");
@@ -171,11 +171,10 @@ TEST_CASE("QDir set_path", "[qdir]")
    }
 }
 
-TEST_CASE("QDir temp_path", "[qdir]")
+TEST_CASE("QDir tempPath", "[qdir]")
 {
    QString str = QDir::tempPath();
    QDir path   = QDir::temp();
 
    REQUIRE(str == path.absolutePath());
 }
-

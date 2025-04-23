@@ -113,7 +113,7 @@ TEST_CASE("QMultiHash erase", "[qmultihash]")
    }
 }
 
-TEST_CASE("QMultiHash equality", "[qmultihash]")
+TEST_CASE("QMultiHash comparison", "[qmultihash]")
 {
    QMultiHash<int, QString> hash1 = { { 1, "watermelon"},
                                       { 2, "apple"},

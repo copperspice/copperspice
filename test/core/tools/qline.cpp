@@ -21,7 +21,7 @@
 
 #include <cs_catch2.h>
 
-TEST_CASE("QLine traits", "[QLine]")
+TEST_CASE("QLine traits", "[qline]")
 {
    REQUIRE(std::is_copy_constructible_v<QLine> == true);
    REQUIRE(std::is_move_constructible_v<QLine> == true);

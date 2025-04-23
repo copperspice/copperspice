@@ -21,7 +21,7 @@
 
 #include <cs_catch2.h>
 
-TEST_CASE("QRect traits", "[QRect]")
+TEST_CASE("QRect traits", "[qrect]")
 {
    REQUIRE(std::is_copy_constructible_v<QRect> == true);
    REQUIRE(std::is_move_constructible_v<QRect> == true);

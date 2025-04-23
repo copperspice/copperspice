@@ -72,7 +72,7 @@ TEST_CASE("QFileInfo absolutePath", "[qfileinfo]")
    }
 }
 
-TEST_CASE("QFileInfo base_name", "[qfileinfo]")
+TEST_CASE("QFileInfo file_empty", "[qfileinfo]")
 {
    QTemporaryFile tmpFile(QDir::tempPath() + "/cs_temp.XXXXXX.cfg");
    tmpFile.open();
@@ -83,7 +83,7 @@ TEST_CASE("QFileInfo base_name", "[qfileinfo]")
    REQUIRE(fi.suffix().endsWith("cfg"));
 }
 
-TEST_CASE("QFileInfo file", "[qfileinfo]")
+TEST_CASE("QFileInfo file_exists", "[qfileinfo]")
 {
    QTemporaryFile tmpFile;
    tmpFile.open();
@@ -96,7 +96,7 @@ TEST_CASE("QFileInfo file", "[qfileinfo]")
    REQUIRE(fi.isHidden() == false);
 }
 
-TEST_CASE("QFileInfo is_file", "[qfileinfo]")
+TEST_CASE("QFileInfo file_name", "[qfileinfo]")
 {
    QString str;
    QFileInfo fi;

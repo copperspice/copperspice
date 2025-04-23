@@ -224,7 +224,7 @@ TEST_CASE("QDateTime toEpoch", "[qdatetime]")
    REQUIRE(dt2.timeRepresentation() == dt1.timeRepresentation());
 }
 
-TEST_CASE("QDateTime msecsTo", "[qdatetime]")
+TEST_CASE("QDateTime msecs_to", "[qdatetime]")
 {
    QDateTime dt1 = QDateTime(QDate(2022, 8, 31), QTime(15, 40, 5));
    QDateTime dt2 = QDateTime(QDate(2022, 8, 31), QTime(15, 45, 5));
@@ -411,7 +411,7 @@ TEST_CASE("QDateTime toLocalTime", "[qdatetime]")
    }
 }
 
-TEST_CASE("QDateTime to_utc", "[qdatetime]")
+TEST_CASE("QDateTime toUtc", "[qdatetime]")
 {
    QDateTime dt;
 

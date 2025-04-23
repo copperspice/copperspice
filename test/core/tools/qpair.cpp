@@ -33,7 +33,7 @@ TEST_CASE("QPair traits", "[qpair]")
    REQUIRE(std::has_virtual_destructor_v<QPair<int, int>> == false);
 }
 
-TEST_CASE("QPair construction", "[qpair]")
+TEST_CASE("QPair constructor", "[qpair]")
 {
    QPair<QString, QString> pair;
 
@@ -87,7 +87,7 @@ TEST_CASE("QPair assign", "[qpair]")
    REQUIRE(pair2.second == 42);
 }
 
-TEST_CASE("QPair move assign", "[qpair]")
+TEST_CASE("QPair move_assign", "[qpair]")
 {
    QPair<QString, int> pair1 = {"answer", 42};
 

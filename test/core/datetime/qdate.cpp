@@ -124,7 +124,7 @@ TEST_CASE("QDate currentDate", "[qdate]")
    REQUIRE(date > QDate(2023, 3, 14));
 }
 
-TEST_CASE("QDate days_to", "[qdate]")
+TEST_CASE("QDate daysTo", "[qdate]")
 {
    QDate date1 = QDate(2017, 10, 31);
 
@@ -328,7 +328,7 @@ TEST_CASE("QDate ofDay", "[qdate]")
    }
 }
 
-TEST_CASE("QDate operator", "[qdate]")
+TEST_CASE("QDate comparison", "[qdate]")
 {
    QDate dt1 = QDate(2022, 8, 25);
    QDate dt2 = QDate(2022, 8, 31);
@@ -373,7 +373,7 @@ TEST_CASE("QDate fromString", "[qdate]")
    }
 }
 
-TEST_CASE("QDate to_string", "[qdate]")
+TEST_CASE("QDate toString", "[qdate]")
 {
    {
       QDate date = QDate();

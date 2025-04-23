@@ -60,7 +60,7 @@ TEST_CASE("QChar u_constructor", "[qchar]")
    REQUIRE(u'c' != ch);
 }
 
-TEST_CASE("QChar U_constructor", "[qchar]")
+TEST_CASE("QChar u32_constructor", "[qchar]")
 {
    QChar ch = U'b';
 

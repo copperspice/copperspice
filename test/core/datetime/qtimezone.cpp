@@ -87,7 +87,7 @@ TEST_CASE("QTimeZone daylightTime", "[qtimezone]")
    REQUIRE(QTimeZone::isTimeZoneIdAvailable("America/MyHouse") == false);
 }
 
-TEST_CASE("QTimeZone equality", "[qtimezone]")
+TEST_CASE("QTimeZone comparison", "[qtimezone]")
 {
    QTimeZone timeZone1("America/Denver");
    QTimeZone timeZone2("America/New_York");

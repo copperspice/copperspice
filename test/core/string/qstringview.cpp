@@ -124,7 +124,7 @@ TEST_CASE("QStringView8 contains", "[qstringview8]")
    REQUIRE(view.contains("jUmpeD", Qt::CaseInsensitive));
 }
 
-TEST_CASE("QStringView8 compare", "[qstringview8]")
+TEST_CASE("QStringView8 comparison_case", "[qstringview8]")
 {
    QString str1 = "apple";
    QString str2 = "APPLE";

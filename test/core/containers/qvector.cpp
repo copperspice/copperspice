@@ -60,7 +60,7 @@ TEST_CASE("QVector clear", "[qvector]")
    REQUIRE(v.size() == 0);
 }
 
-TEST_CASE("QVector constructors", "[qvector]")
+TEST_CASE("QVector constructor", "[qvector]")
 {
    {
       QVector<int> v(5);
@@ -178,7 +178,7 @@ TEST_CASE("QVector empty", "[qvector]")
    REQUIRE(v.size() == 0);
 }
 
-TEST_CASE("QVector equality", "[qvector]")
+TEST_CASE("QVector comparison", "[qvector]")
 {
    QVector<QString> v1 = { "watermelon", "apple", "pear", "grapefruit" };
    QVector<QString> v2 = { "watermelon", "apple", "pear", "grapefruit" };

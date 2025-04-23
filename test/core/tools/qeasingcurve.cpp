@@ -44,7 +44,7 @@ TEST_CASE("QEasingCurve assignment_copy", "[qeasingcurve]")
    REQUIRE(dataA.type() == dataC.type());
 }
 
-TEST_CASE("QEasingCurve equals", "[qeasingcurve]")
+TEST_CASE("QEasingCurve comparison", "[qeasingcurve]")
 {
    QEasingCurve dataA(QEasingCurve::InOutSine);
    QEasingCurve dataB(QEasingCurve::InOutSine);

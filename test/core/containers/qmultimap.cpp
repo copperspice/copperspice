@@ -114,7 +114,7 @@ TEST_CASE("QMultiMap erase", "[qmultimap]")
    }
 }
 
-TEST_CASE("QMultiMap equality", "[qmultimap]")
+TEST_CASE("QMultiMap comparison", "[qmultimap]")
 {
    QMultiMap<int, QString> map1 = { { 1, "watermelon"},
                                     { 2, "apple"},
