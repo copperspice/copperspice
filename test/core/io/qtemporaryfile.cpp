@@ -17,6 +17,7 @@
 *
 ***********************************************************************/
 
+#include <qdir.h>
 #include <qtemporaryfile.h>
 #include <qregularexpression.h>
 
@@ -38,8 +39,8 @@ TEST_CASE("QTemporaryFile fname_a", "[qtemporaryfile]")
    QTemporaryFile tmpFile;
    tmpFile.open();
 
-   REQUIRE(tmpFile.fileName().contains("cs_temp."));
-   REQUIRE(! tmpFile.fileName().endsWith(".XXXXXX"));
+   REQUIRE(tmpFile.fileName().contains("cs_temp.") == true);
+   REQUIRE(tmpFile.fileName().endsWith(".XXXXXX") == false);
 }
 
 TEST_CASE("QTemporaryFile fname_b", "[qtemporaryfile]")
@@ -49,8 +50,8 @@ TEST_CASE("QTemporaryFile fname_b", "[qtemporaryfile]")
    QTemporaryFile tmpFile;
    tmpFile.open();
 
-   REQUIRE(tmpFile.fileName().contains("CsCoreTest"));
-   REQUIRE(! tmpFile.fileName().endsWith("XXXXXX"));
+   REQUIRE(tmpFile.fileName().contains("CsCoreTest") == true);
+   REQUIRE(tmpFile.fileName().endsWith("XXXXXX") == false);
 
    QCoreApplication::setApplicationName("");
 }
@@ -83,17 +84,17 @@ TEST_CASE("QTemporaryFile fname_d", "[qtemporaryfile]")
 
 TEST_CASE("QTemporaryFile fname_e", "[qtemporaryfile]")
 {
-   QTemporaryFile tmpFile("MyCsCoreTestXXXXXX.name");
+   QTemporaryFile tmpFile(QDir::tempPath() + "/MyCsCoreTestXXXXXX.name");
    tmpFile.open();
 
-   REQUIRE(tmpFile.fileName().contains("MyCsCoreTest"));
-   REQUIRE(! tmpFile.fileName().contains("XXXXXX"));
-   REQUIRE(tmpFile.fileName().endsWith(".name"));
+   REQUIRE(tmpFile.fileName().contains("MyCsCoreTest") == true);
+   REQUIRE(tmpFile.fileName().contains("XXXXXX") == false);
+   REQUIRE(tmpFile.fileName().endsWith(".name") == true);
 }
 
 TEST_CASE("QTemporaryFile create_fname_a", "[qtemporaryfile]")
 {
-   QTemporaryFile tmpFile("MyCsCoreTestXXXXXX.name");
+   QTemporaryFile tmpFile(QDir::tempPath() + "/MyCsCoreTestXXXXXX.name");
    tmpFile.open();
 
    QRegularExpression regExp("/MyCsCoreTest[A-Za-z]{6}\\.name$");
@@ -104,7 +105,7 @@ TEST_CASE("QTemporaryFile create_fname_a", "[qtemporaryfile]")
 
 TEST_CASE("QTemporaryFile create_fname_b", "[qtemporaryfile]")
 {
-   QTemporaryFile tmpFile("XXXXXX.log");
+   QTemporaryFile tmpFile(QDir::tempPath() + "/XXXXXX.log");
    tmpFile.open();
 
    QRegularExpression regExp("/[A-Za-z]{6}\\.log$");
@@ -115,7 +116,7 @@ TEST_CASE("QTemporaryFile create_fname_b", "[qtemporaryfile]")
 
 TEST_CASE("QTemporaryFile create_fname_c", "[qtemporaryfile]")
 {
-   QTemporaryFile tmpFile("tmpXXXXXX");
+   QTemporaryFile tmpFile(QDir::tempPath() + "/tmpXXXXXX");
    tmpFile.open();
 
    QRegularExpression regExp("/tmp[A-Za-z]{6}$");
@@ -126,7 +127,7 @@ TEST_CASE("QTemporaryFile create_fname_c", "[qtemporaryfile]")
 
 TEST_CASE("QTemporaryFile create_fname_d", "[qtemporaryfile]")
 {
-   QTemporaryFile tmpFile("XXXXXX");
+   QTemporaryFile tmpFile(QDir::tempPath() + "/XXXXXX");
    tmpFile.open();
 
    QRegularExpression regExp("/[A-Za-z]{6}$");
