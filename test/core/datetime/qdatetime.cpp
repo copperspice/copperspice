@@ -116,6 +116,31 @@ TEST_CASE("QDateTime assign", "[qdatetime]")
    REQUIRE(dt1 == dt2);
 }
 
+TEST_CASE("QDateTime comparison", "[qdatetime]")
+{
+   QDateTime dt1 = QDateTime(QDate(2022, 8, 31), QTime(15, 40, 5));
+   QDateTime dt2 = QDateTime(QDate(2022, 8, 31), QTime(15, 45, 5));
+
+   REQUIRE(dt1 <  dt2);
+   REQUIRE(dt1 <= dt2);
+   REQUIRE(dt1 <= dt1);
+   REQUIRE(dt1 != dt2);
+
+   REQUIRE(dt2 >  dt1);
+   REQUIRE(dt2 >= dt1);
+   REQUIRE(dt2 >= dt2);
+
+   {
+      dt1 = QDateTime();
+      REQUIRE(dt1.isValid() == false);
+
+      dt2 = QDate(1970, 1, 1).startOfDay();
+      REQUIRE(dt2.isValid() == true);
+
+      REQUIRE(dt1 != dt2);
+   }
+}
+
 TEST_CASE("QDateTime currentDateTime", "[qdatetime]")
 {
    QDateTime dt;
@@ -176,6 +201,25 @@ TEST_CASE("QDateTime days_to", "[qdatetime]")
    }
 }
 
+TEST_CASE("QDateTime duration", "[qdatetime]")
+{
+   QDateTime dt = QDateTime(QDate(2023, 10, 31), QTime(15, 45, 5), QTimeZone("America/Los_Angeles"));
+
+   SECTION ("secs") {
+      dt = dt.addDuration(std::chrono::seconds(20));
+
+      REQUIRE(dt.date() == QDate(2023, 10, 31));
+      REQUIRE(dt.time() == QTime(15, 45, 25));
+   }
+
+   SECTION ("days") {
+      dt = dt.addDuration(std::chrono::days(5));
+
+      REQUIRE(dt.date() == QDate(2023, 11, 05));
+      REQUIRE(dt.time() == QTime(14, 45, 05));      // dst occured on 11/04/23
+   }
+}
+
 TEST_CASE("QDateTime fromString", "[qdatetime]")
 {
    QDateTime dt;
@@ -193,35 +237,8 @@ TEST_CASE("QDateTime fromString", "[qdatetime]")
 
       QDateTime result = QDateTime::fromString(QString("2015-11-30T18:30:40"), "yyyy-MM-ddThh:mm:ss");
 
-//      REQUIRE(result == dt);
+      REQUIRE(result == dt);
    }
-}
-
-TEST_CASE("QDateTime toEpoch", "[qdatetime]")
-{
-   QDateTime dt1;
-   QDateTime dt2;
-
-   dt1 = QDateTime(QDate(1969, 12, 31), QTime(23, 59, 58), QTimeZone::utc());
-   REQUIRE(dt1.toMSecsSinceEpoch() == -2000);
-   REQUIRE(dt1.toSecsSinceEpoch()  == -2);
-
-   dt1 = QDateTime(QDate(1970, 1, 1), QTime(0, 0, 0), QTimeZone::utc());
-   REQUIRE(dt1.toMSecsSinceEpoch() == 0);
-   REQUIRE(dt1.toSecsSinceEpoch()  == 0);
-
-   dt1 = QDateTime(QDate(2020, 2, 29), QTime(18, 0, 0), QTimeZone::utc());
-   REQUIRE(dt1.toMSecsSinceEpoch() == 1582999200000);
-   REQUIRE(dt1.toSecsSinceEpoch()  == 1582999200);
-
-   //
-   dt1 = QDateTime(QDate(2005, 11, 15), QTime(15, 15, 30), QTimeZone::utc());
-   dt2 = QDateTime::fromSecsSinceEpoch(1132067730, QTimeZone::utc());
-
-   REQUIRE(dt2.date() == dt1.date());
-   REQUIRE(dt2.time() == dt1.time());
-   REQUIRE(dt2.timeZone() == dt1.timeZone());
-   REQUIRE(dt2.timeRepresentation() == dt1.timeRepresentation());
 }
 
 TEST_CASE("QDateTime msecs_to", "[qdatetime]")
@@ -282,38 +299,27 @@ TEST_CASE("QDateTime offset", "[qdatetime]")
    }
 }
 
-TEST_CASE("QDateTime operator", "[qdatetime]")
+TEST_CASE("QDateTime secs_to", "[qdatetime]")
 {
-   QDateTime dt1 = QDateTime(QDate(2022, 8, 31), QTime(15, 40, 5));
-   QDateTime dt2 = QDateTime(QDate(2022, 8, 31), QTime(15, 45, 5));
-
-   REQUIRE(dt1 <  dt2);
-   REQUIRE(dt1 <= dt2);
-   REQUIRE(dt1 <= dt1);
-   REQUIRE(dt1 != dt2);
-
-   REQUIRE(dt2 >  dt1);
-   REQUIRE(dt2 >= dt1);
-   REQUIRE(dt2 >= dt2);
+   QDateTime dt1 = QDateTime(QDate(2017, 10, 31), QTime(9, 15, 0), QTimeZone::utc());
 
    {
-      dt1 = QDateTime();
-      REQUIRE(dt1.isValid() == false);
-
-      dt2 = QDate(1970, 1, 1).startOfDay();
-      REQUIRE(dt2.isValid() == true);
-
-      REQUIRE(dt1 != dt2);
+      QDateTime dt2 = QDateTime(QDate(2017, 11, 23), QTime(13, 0, 0), QTimeZone::utc());
+      REQUIRE(dt1.secsTo(dt2) == 2000700);
    }
-}
 
-TEST_CASE("QDateTime secsTo", "[qdatetime]")
-{
-   QDateTime dt1 = QDateTime(QDate(2022, 8, 31), QTime(15, 40, 5));
-   QDateTime dt2 = QDateTime(QDate(2022, 8, 31), QTime(15, 45, 5));
+   {
+      QDateTime dt2 = QDateTime(QDate(2017, 10, 18), QTime(13, 0, 0), QTimeZone::utc());
+      REQUIRE(dt1.secsTo(dt2) == -1109700);
+   }
 
-   REQUIRE(dt1.secsTo(dt2) == 300);
-   REQUIRE(dt2.secsTo(dt1) == -300);
+   {
+      QDateTime dt3 = QDateTime(QDate(2022, 8, 31), QTime(15, 40, 5));
+      QDateTime dt4 = QDateTime(QDate(2022, 8, 31), QTime(15, 45, 5));
+
+      REQUIRE(dt3.secsTo(dt4) == 300);
+      REQUIRE(dt4.secsTo(dt3) == -300);
+   }
 }
 
 TEST_CASE("QDateTime set", "[qdatetime]")
@@ -357,79 +363,6 @@ TEST_CASE("QDateTime setEpoch", "[qdatetime]")
    }
 }
 
-TEST_CASE("QDateTime time_t", "[qdatetime]")
-{
-   QDateTime dt1;
-   QDateTime dt2;
-
-   dt1.setTime_t(0);
-   dt2 = QDateTime(QDate(1970, 1, 1), QTime(0, 0, 0), QTimeZone::utc() );
-
-   REQUIRE(dt1 == dt2);
-   REQUIRE(dt1.toTime_t() == 0);
-}
-
-TEST_CASE("QDateTime to_string", "[qdatetime]")
-{
-   QDateTime dt = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 5));
-   REQUIRE(dt.toString(Qt::ISODate) == "2017-10-31T15:45:05");
-
-   dt = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 5), QTimeZone("UTC-07:00"));
-   REQUIRE(dt.toString(Qt::ISODate) == "2017-10-31T15:45:05-07:00");
-
-   dt = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 05), QTimeZone::utc());
-   REQUIRE(dt.toString(Qt::ISODate) == "2017-10-31T15:45:05Z");
-
-   dt = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 05), QTimeZone::utc());
-   REQUIRE(dt.toString(Qt::TextDate) == "Tue Oct 31 15:45:05 2017 UTC");
-
-   QString str = dt.toString("yyyy-MM-dd hh:mm:ss t");
-   REQUIRE(str == QString("2017-10-31 15:45:05 UTC"));
-}
-
-TEST_CASE("QDateTime toLocalTime", "[qdatetime]")
-{
-   QDateTime dt_utc;
-   QDateTime dt_local;
-
-   {
-      dt_utc   = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 30), QTimeZone::utc());
-
-      dt_local = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 30), QTimeZone(0));
-      dt_local.toTimeZone(QTimeZone::systemTimeZone());
-
-      REQUIRE(dt_utc.toLocalTime() == dt_local);
-   }
-
-   {
-      dt_utc   = QDateTime(QDate(2017, 12, 15), QTime(15, 45, 30), QTimeZone::utc());
-
-      dt_local = QDateTime(QDate(2017, 12, 15), QTime(15, 45, 30), QTimeZone(0));
-      dt_local.toTimeZone(QTimeZone::systemTimeZone());
-
-      REQUIRE(dt_utc.toLocalTime() == dt_local);
-   }
-}
-
-TEST_CASE("QDateTime toUtc", "[qdatetime]")
-{
-   QDateTime dt;
-
-   {
-      dt = QDateTime(QDate(2021, 10, 31), QTime(15, 45, 5), QTimeZone(-25200));
-
-      REQUIRE(dt.toUTC() == QDateTime(QDate(2021, 10, 31), QTime(22, 45, 5), QTimeZone::utc()));
-      REQUIRE(dt.toUTC().toString(Qt::ISODate) == "2021-10-31T22:45:05Z");
-   }
-
-   {
-      dt = QDateTime(QDate(1969, 12, 31), QTime(23, 59, 59), QTimeZone(0));
-
-      REQUIRE(dt.toUTC() == QDateTime(QDate(1969, 12, 31), QTime(23, 59, 59), QTimeZone::utc()));
-      REQUIRE(dt.toUTC().toString(Qt::ISODate) == "1969-12-31T23:59:59Z");
-   }
-}
-
 TEST_CASE("QDateTime set_timezone", "[qdatetime]")
 {
    QDateTime dt   = QDateTime(QDate(2023, 10, 31), QTime(9, 15, 0), QTimeZone::utc());
@@ -443,103 +376,6 @@ TEST_CASE("QDateTime set_timezone", "[qdatetime]")
    REQUIRE(dt.date() == hold_Date);
    REQUIRE(dt.time() == hold_Time);
    REQUIRE(dt.timeRepresentation() == zone);
-}
-
-TEST_CASE("QDateTime secs_to", "[qdatetime]")
-{
-   QDateTime dt1 = QDateTime(QDate(2017, 10, 31), QTime(9, 15, 0), QTimeZone::utc());
-
-   {
-      QDateTime dt2 = QDateTime(QDate(2017, 11, 23), QTime(13, 0, 0), QTimeZone::utc());
-      REQUIRE(dt1.secsTo(dt2) == 2000700);
-   }
-
-   {
-      QDateTime dt2 = QDateTime(QDate(2017, 10, 18), QTime(13, 0, 0), QTimeZone::utc());
-      REQUIRE(dt1.secsTo(dt2) == -1109700);
-   }
-}
-
-TEST_CASE("QDateTime swap", "[qdatetime]")
-{
-   QDateTime dt1 = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 5));
-   QDateTime dt2 = QDateTime(QDate(2017, 2, 14),  QTime(9, 23, 18));
-
-   dt1.swap(dt2);
-
-   REQUIRE(dt1.date() == QDate(2017, 2, 14));
-   REQUIRE(dt1.time() == QTime(9, 23, 18));
-
-   REQUIRE(dt2.date() == QDate(2017, 10, 31));
-   REQUIRE(dt2.time() == QTime(15, 45, 5));
-}
-
-TEST_CASE("QDateTime toTimeZone", "[qdatetime]")
-{
-   QTimeZone tz_ny = QTimeZone("America/New_York");
-   QTimeZone tz_ca = QTimeZone("America/Los_Angeles");
-
-   {
-      QDateTime dt_ny(QDate(2022, 6, 1), QTime(15, 30, 0), tz_ny);
-
-      QDateTime dt_ca = dt_ny.toTimeZone(tz_ca);
-
-      REQUIRE(dt_ca.date() == QDate(2022, 6, 1));
-      REQUIRE(dt_ca.time() == QTime(12, 30, 0));
-      REQUIRE(dt_ca.timeZone() == tz_ca);
-   }
-
-   {
-      QDateTime dt_ny(QDate(2022, 12, 1), QTime(15, 30, 0), tz_ny);
-
-      QDateTime dt_ca = dt_ny.toTimeZone(tz_ca);
-
-      REQUIRE(dt_ca.date() == QDate(2022, 12, 1));
-      REQUIRE(dt_ca.time() == QTime(12, 30, 0));
-      REQUIRE(dt_ca.timeZone() == tz_ca);
-   }
-}
-
-TEST_CASE("QDateTime timezone_abbr", "[qdatetime]")
-{
-   QDateTime dt = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 05), QTimeZone::utc());
-   REQUIRE(dt.timeZoneAbbreviation() == "UTC");
-
-   dt = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 05), QTimeZone("UTC-07:00"));
-   REQUIRE(dt.timeZoneAbbreviation() == "UTC-07:00");
-
-   dt = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 05), QTimeZone(-25200));
-   REQUIRE(dt.timeZoneAbbreviation() == "UTC-07:00");
-}
-
-TEST_CASE("QDateTime valid", "[qdatetime]")
-{
-   QDateTime dt = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 5));
-
-   REQUIRE(dt.isNull() == false);
-   REQUIRE(dt.isValid() == true);
-
-   REQUIRE(dt.date() == QDate(2017, 10, 31));
-   REQUIRE(dt.time() == QTime(15, 45, 05));
-}
-
-TEST_CASE("QDateTime duration", "[qdatetime]")
-{
-   QDateTime dt = QDateTime(QDate(2023, 10, 31), QTime(15, 45, 5), QTimeZone("America/Los_Angeles"));
-
-   SECTION ("secs") {
-      dt = dt.addDuration(std::chrono::seconds(20));
-
-      REQUIRE(dt.date() == QDate(2023, 10, 31));
-      REQUIRE(dt.time() == QTime(15, 45, 25));
-   }
-
-   SECTION ("days") {
-      dt = dt.addDuration(std::chrono::days(5));
-
-      REQUIRE(dt.date() == QDate(2023, 11, 05));
-      REQUIRE(dt.time() == QTime(14, 45, 05));      // dst occured on 11/04/23
-   }
 }
 
 TEST_CASE("QDateTime std_chrono", "[qdatetime]")
@@ -603,4 +439,167 @@ TEST_CASE("QDateTime std_chrono", "[qdatetime]")
 
       REQUIRE(dt == localTime);
    }
+}
+
+TEST_CASE("QDateTime swap", "[qdatetime]")
+{
+   QDateTime dt1 = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 5));
+   QDateTime dt2 = QDateTime(QDate(2017, 2, 14),  QTime(9, 23, 18));
+
+   dt1.swap(dt2);
+
+   REQUIRE(dt1.date() == QDate(2017, 2, 14));
+   REQUIRE(dt1.time() == QTime(9, 23, 18));
+
+   REQUIRE(dt2.date() == QDate(2017, 10, 31));
+   REQUIRE(dt2.time() == QTime(15, 45, 5));
+}
+
+TEST_CASE("QDateTime timezone_abbr", "[qdatetime]")
+{
+   QDateTime dt = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 05), QTimeZone::utc());
+   REQUIRE(dt.timeZoneAbbreviation() == "UTC");
+
+   dt = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 05), QTimeZone("UTC-07:00"));
+   REQUIRE(dt.timeZoneAbbreviation() == "UTC-07:00");
+
+   dt = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 05), QTimeZone(-25200));
+   REQUIRE(dt.timeZoneAbbreviation() == "UTC-07:00");
+}
+
+TEST_CASE("QDateTime time_t", "[qdatetime]")
+{
+   QDateTime dt1;
+   QDateTime dt2;
+
+   dt1.setTime_t(0);
+   dt2 = QDateTime(QDate(1970, 1, 1), QTime(0, 0, 0), QTimeZone::utc() );
+
+   REQUIRE(dt1 == dt2);
+   REQUIRE(dt1.toTime_t() == 0);
+}
+
+TEST_CASE("QDateTime toEpoch", "[qdatetime]")
+{
+   QDateTime dt1;
+   QDateTime dt2;
+
+   dt1 = QDateTime(QDate(1969, 12, 31), QTime(23, 59, 58), QTimeZone::utc());
+   REQUIRE(dt1.toMSecsSinceEpoch() == -2000);
+   REQUIRE(dt1.toSecsSinceEpoch()  == -2);
+
+   dt1 = QDateTime(QDate(1970, 1, 1), QTime(0, 0, 0), QTimeZone::utc());
+   REQUIRE(dt1.toMSecsSinceEpoch() == 0);
+   REQUIRE(dt1.toSecsSinceEpoch()  == 0);
+
+   dt1 = QDateTime(QDate(2020, 2, 29), QTime(18, 0, 0), QTimeZone::utc());
+   REQUIRE(dt1.toMSecsSinceEpoch() == 1582999200000);
+   REQUIRE(dt1.toSecsSinceEpoch()  == 1582999200);
+
+   //
+   dt1 = QDateTime(QDate(2005, 11, 15), QTime(15, 15, 30), QTimeZone::utc());
+   dt2 = QDateTime::fromSecsSinceEpoch(1132067730, QTimeZone::utc());
+
+   REQUIRE(dt2.date() == dt1.date());
+   REQUIRE(dt2.time() == dt1.time());
+   REQUIRE(dt2.timeZone() == dt1.timeZone());
+   REQUIRE(dt2.timeRepresentation() == dt1.timeRepresentation());
+}
+
+TEST_CASE("QDateTime toString", "[qdatetime]")
+{
+   QDateTime dt = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 5));
+   REQUIRE(dt.toString(Qt::ISODate) == "2017-10-31T15:45:05");
+
+   dt = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 5), QTimeZone("UTC-07:00"));
+   REQUIRE(dt.toString(Qt::ISODate) == "2017-10-31T15:45:05-07:00");
+
+   dt = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 05), QTimeZone::utc());
+   REQUIRE(dt.toString(Qt::ISODate) == "2017-10-31T15:45:05Z");
+
+   dt = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 05), QTimeZone::utc());
+   REQUIRE(dt.toString(Qt::TextDate) == "Tue Oct 31 15:45:05 2017 UTC");
+
+   QString str = dt.toString("yyyy-MM-dd hh:mm:ss t");
+   REQUIRE(str == QString("2017-10-31 15:45:05 UTC"));
+}
+
+TEST_CASE("QDateTime toLocalTime", "[qdatetime]")
+{
+   QDateTime dt_utc;
+   QDateTime dt_local;
+
+   {
+      dt_utc   = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 30), QTimeZone::utc());
+
+      dt_local = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 30), QTimeZone(0));
+      dt_local.toTimeZone(QTimeZone::systemTimeZone());
+
+      REQUIRE(dt_utc.toLocalTime() == dt_local);
+   }
+
+   {
+      dt_utc   = QDateTime(QDate(2017, 12, 15), QTime(15, 45, 30), QTimeZone::utc());
+
+      dt_local = QDateTime(QDate(2017, 12, 15), QTime(15, 45, 30), QTimeZone(0));
+      dt_local.toTimeZone(QTimeZone::systemTimeZone());
+
+      REQUIRE(dt_utc.toLocalTime() == dt_local);
+   }
+}
+
+TEST_CASE("QDateTime toUtc", "[qdatetime]")
+{
+   QDateTime dt;
+
+   {
+      dt = QDateTime(QDate(2021, 10, 31), QTime(15, 45, 5), QTimeZone(-25200));
+
+      REQUIRE(dt.toUTC() == QDateTime(QDate(2021, 10, 31), QTime(22, 45, 5), QTimeZone::utc()));
+      REQUIRE(dt.toUTC().toString(Qt::ISODate) == "2021-10-31T22:45:05Z");
+   }
+
+   {
+      dt = QDateTime(QDate(1969, 12, 31), QTime(23, 59, 59), QTimeZone(0));
+
+      REQUIRE(dt.toUTC() == QDateTime(QDate(1969, 12, 31), QTime(23, 59, 59), QTimeZone::utc()));
+      REQUIRE(dt.toUTC().toString(Qt::ISODate) == "1969-12-31T23:59:59Z");
+   }
+}
+
+TEST_CASE("QDateTime toTimeZone", "[qdatetime]")
+{
+   QTimeZone tz_ny = QTimeZone("America/New_York");
+   QTimeZone tz_ca = QTimeZone("America/Los_Angeles");
+
+   {
+      QDateTime dt_ny(QDate(2022, 6, 1), QTime(15, 30, 0), tz_ny);
+
+      QDateTime dt_ca = dt_ny.toTimeZone(tz_ca);
+
+      REQUIRE(dt_ca.date() == QDate(2022, 6, 1));
+      REQUIRE(dt_ca.time() == QTime(12, 30, 0));
+      REQUIRE(dt_ca.timeZone() == tz_ca);
+   }
+
+   {
+      QDateTime dt_ny(QDate(2022, 12, 1), QTime(15, 30, 0), tz_ny);
+
+      QDateTime dt_ca = dt_ny.toTimeZone(tz_ca);
+
+      REQUIRE(dt_ca.date() == QDate(2022, 12, 1));
+      REQUIRE(dt_ca.time() == QTime(12, 30, 0));
+      REQUIRE(dt_ca.timeZone() == tz_ca);
+   }
+}
+
+TEST_CASE("QDateTime valid", "[qdatetime]")
+{
+   QDateTime dt = QDateTime(QDate(2017, 10, 31), QTime(15, 45, 5));
+
+   REQUIRE(dt.isNull() == false);
+   REQUIRE(dt.isValid() == true);
+
+   REQUIRE(dt.date() == QDate(2017, 10, 31));
+   REQUIRE(dt.time() == QTime(15, 45, 05));
 }

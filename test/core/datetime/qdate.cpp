@@ -144,6 +144,17 @@ TEST_CASE("QDate daysTo", "[qdate]")
    }
 }
 
+TEST_CASE("QDate duration", "[qdate]")
+{
+   QDate date = QDate(2023, 10, 31);
+
+   SECTION ("days") {
+      date = date.addDuration(std::chrono::days(5));
+
+      REQUIRE(date == QDate(2023, 11, 05));
+   }
+}
+
 TEST_CASE("QDate fromJulianDay", "[qdate]")
 {
    QDate date;
@@ -510,17 +521,6 @@ TEST_CASE("QDate various", "[qdate]")
       REQUIRE(date.daysInYear() == 0);
 
       REQUIRE(date.weekNumber() == 0);
-   }
-}
-
-TEST_CASE("QDate duration", "[qdate]")
-{
-   QDate date = QDate(2023, 10, 31);
-
-   SECTION ("days") {
-      date = date.addDuration(std::chrono::days(5));
-
-      REQUIRE(date == QDate(2023, 11, 05));
    }
 }
 
