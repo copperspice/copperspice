@@ -51,13 +51,21 @@ TEST_CASE("QFileInfo absolutePath", "[qfileinfo]")
    {
       str   = "/machine/share/dir1/";
       path  = drivePrefix + "/machine/share/dir1";
-      fname = "";
+      fname = QString();
 
       fi = QFile(str);
 
-
       REQUIRE(fi.absolutePath() == path);
       REQUIRE(fi.fileName() == fname);
+
+#if defined(Q_OS_FREEBSD)
+      REQUIRE(fi.canonicalPath() == "/machine/share");
+      REQUIRE(fi.canonicalFilePath() == "/machine/share/dir1");
+#else
+      REQUIRE(fi.canonicalPath() == "/");
+      REQUIRE(fi.canonicalFilePath() == "");
+#endif
+
    }
 
    {
@@ -69,18 +77,28 @@ TEST_CASE("QFileInfo absolutePath", "[qfileinfo]")
 
       REQUIRE(fi.absolutePath() == path);
       REQUIRE(fi.fileName() == fname);
+
+#if defined(Q_OS_FREEBSD)
+      REQUIRE(fi.canonicalPath() == "/machine/share");
+      REQUIRE(fi.canonicalFilePath() == "/machine/share/dir1");
+#else
+      REQUIRE(fi.canonicalPath() == "/");
+      REQUIRE(fi.canonicalFilePath() == "");
+#endif
+
    }
 }
 
 TEST_CASE("QFileInfo file_empty", "[qfileinfo]")
 {
-   QTemporaryFile tmpFile(QDir::tempPath() + "/cs_temp.XXXXXX.cfg");
-   tmpFile.open();
+   QString str = QDir::currentPath();
 
-   QFileInfo fi(tmpFile.fileName());
+   QFileInfo fi;
+   fi  = QFileInfo(str);
 
-   REQUIRE(fi.baseName().endsWith("cs_temp"));
-   REQUIRE(fi.suffix().endsWith("cfg"));
+   REQUIRE(fi.exists() == true);
+   REQUIRE(fi.isDir()  == true);
+   REQUIRE(fi.isFile() == false);
 }
 
 TEST_CASE("QFileInfo file_exists", "[qfileinfo]")
@@ -94,20 +112,92 @@ TEST_CASE("QFileInfo file_exists", "[qfileinfo]")
    REQUIRE(fi.isDir()    == false);
    REQUIRE(fi.isFile()   == true);
    REQUIRE(fi.isHidden() == false);
+
+   REQUIRE(fi.filePath().isEmpty() == false);
 }
 
 TEST_CASE("QFileInfo file_name", "[qfileinfo]")
 {
-   QString str;
-   QFileInfo fi;
+   QTemporaryFile tmpFile(QDir::tempPath() + "/cs_temp.XXXXXX.cfg");
+   tmpFile.open();
 
-   {
-      str = QDir::currentPath();
-      fi  = QFileInfo(str);
+   QString fName = tmpFile.fileName();
+   QFileInfo fi(fName);
 
-      REQUIRE(fi.exists() == true);
-      REQUIRE(fi.isDir()  == true);
-      REQUIRE(fi.isFile() == false);
-   }
+   REQUIRE(fi.filePath() == fName);
+
+   REQUIRE(fi.baseName() == "cs_temp");
+   REQUIRE(fi.completeBaseName() == "cs_temp." + fName.right(10).left(6));
+
+   REQUIRE(fi.completeSuffix() == fName.right(10));      // XXXXXX.cfg
+   REQUIRE(fi.suffix() == "cfg");
 }
 
+TEST_CASE("QFileInfo file_no_extentsion", "[qfileinfo]")
+{
+   QString fName = QDir::tempPath() + "/no_extension_XXXXXX";
+
+   QTemporaryFile tmpFile(fName);
+   tmpFile.open();
+
+   QFileInfo fi(tmpFile.fileName());
+
+   REQUIRE(fi.exists() == true);
+
+   REQUIRE(fi.suffix().isEmpty() == true);
+   REQUIRE(fi.completeSuffix().isEmpty() == true);
+}
+
+TEST_CASE("QFileInfo file_not_pressent", "[qfileinfo]")
+{
+   QFileInfo fi("nonexistent.txt");
+
+   REQUIRE(fi.exists() == false);
+   REQUIRE(fi.fileName() == "nonexistent.txt");
+}
+
+TEST_CASE("QFileInfo permissions_flags", "[qfileinfo]")
+{
+   QTemporaryFile tmpFile;
+   tmpFile.open();
+
+   QString fName = tmpFile.fileName();
+   QFileInfo fi(fName);
+
+   REQUIRE(fi.permission(QFileDevice::ReadUser)  == true);
+   REQUIRE(fi.permission(QFileDevice::WriteUser) == true);
+
+   REQUIRE(fi.isReadable()   == true);
+   REQUIRE(fi.isWritable()   == true);
+   REQUIRE(fi.isExecutable() == false);
+}
+
+#ifndef Q_OS_WIN
+
+TEST_CASE("QFileInfo symbolic_link", "[qfileinfo]")
+{
+   QTemporaryFile tmpFile;
+   tmpFile.open();
+
+   QString fName = tmpFile.fileName();
+   QFileInfo fi(fName);
+
+   //
+   QString symlink = QDir::tempPath() + "/link.txt";
+
+   // removed for safety
+   QFile::remove(symlink);
+
+   QFile::link(fName, symlink);
+
+   //
+   QFileInfo linkInfo(symlink);
+
+   REQUIRE(linkInfo.exists() == true);
+   REQUIRE(linkInfo.isSymLink() == true);
+   REQUIRE(linkInfo.symLinkTarget() == QFileInfo(fName).absoluteFilePath());
+
+   QFile::remove(symlink);
+}
+
+#endif
