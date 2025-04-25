@@ -295,8 +295,16 @@ bool QFileInfo::operator==(const QFileInfo &fileinfo) const
       return false;
    }
 
-   // Fallback to expensive canonical path computation
-   return canonicalFilePath().compare(fileinfo.canonicalFilePath(), sensitive) == 0;
+   if (fileinfo.exists() && exists()) {
+      // both files must actually be there
+
+      // fallback to expensive canonical path computation
+      return canonicalFilePath().compare(fileinfo.canonicalFilePath(), sensitive) == 0;
+
+   } else {
+      return false;
+
+   }
 }
 
 QFileInfo &QFileInfo::operator=(const QFileInfo &fileinfo)
