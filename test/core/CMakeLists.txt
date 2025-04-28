@@ -82,6 +82,7 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qdebug.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qdir.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qfile.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/io/qfiledevice.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qfileinfo.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qiodevice.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qlockfile.cpp
