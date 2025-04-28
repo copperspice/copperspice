@@ -2549,54 +2549,53 @@ bool QLocaleData::numberToCLocale(const QString &num, GroupSeparatorMode group_s
             break;
 
          }
+      }
 
-         if (group_sep_mode == ParseGroupSeparators) {
+      if (group_sep_mode == ParseGroupSeparators) {
+         if (start_of_digits_iter == end && out >= '0' && out <= '9') {
+            start_of_digits_iter = iter;
 
-            if (start_of_digits_iter == end && out >= '0' && out <= '9') {
-               start_of_digits_iter = iter;
+         } else if (out == ',') {
 
-            } else if (out == ',') {
-               // Don't allow group chars after the decimal point
-               if (decpt_iter != end) {
-                  return false;
-               }
-
-               // check distance from the last separator or from the beginning of the digits
-
-               if (last_separator_iter != end && iter - last_separator_iter != 4) {
-                  return false;
-               }
-
-               if (last_separator_iter == end && (start_of_digits_iter == end || iter - start_of_digits_iter > 3)) {
-                  return false;
-               }
-
-               last_separator_iter = iter;
-               ++group_cnt;
-
-               // don't add the group separator
-               ++iter;
-               continue;
-
-            } else if (out == '.' || out == 'e' || out == 'E') {
-
-               // Fail if more than one decimal point
-               if (out == '.' && decpt_iter != end) {
-                  return false;
-               }
-
-               if (decpt_iter == end) {
-                  decpt_iter = iter;
-               }
-
-               // check distance from the last separator
-               if (last_separator_iter != end && iter - last_separator_iter != 4) {
-                  return false;
-               }
-
-               // stop processing separators
-               last_separator_iter = end;
+            // do not allow group chars after the decimal point
+            if (decpt_iter != end) {
+               return false;
             }
+
+            // check distance from the last separator or from the beginning of the digits
+            if (last_separator_iter != end && iter - last_separator_iter != 4) {
+               return false;
+            }
+
+            if (last_separator_iter == end && (start_of_digits_iter == end || iter - start_of_digits_iter > 3)) {
+               return false;
+            }
+
+            last_separator_iter = iter;
+            ++group_cnt;
+
+            // do not add the group separator
+            ++iter;
+            continue;
+
+         } else if (out == '.' || out == 'e' || out == 'E') {
+
+            // fail if more than one decimal point
+            if (out == '.' && decpt_iter != end) {
+               return false;
+            }
+
+            if (decpt_iter == end) {
+               decpt_iter = iter;
+            }
+
+            // check distance from the last separator
+            if (last_separator_iter != end && iter - last_separator_iter != 4) {
+               return false;
+            }
+
+            // stop processing separators
+            last_separator_iter = end;
          }
       }
 
