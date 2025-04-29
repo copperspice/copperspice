@@ -41,24 +41,7 @@ TEST_CASE("QPair constructor", "[qpair]")
    REQUIRE(pair.second == "");
 }
 
-TEST_CASE("QPair stream", "[qpair]")
-{
-   QPair<int, int> pair1 = {10, 20};
-   QPair<int, int> pair2;
-
-   QByteArray buffer;
-
-   QDataStream out(&buffer, QIODevice::WriteOnly);
-   out << pair1;
-
-   QDataStream in(&buffer, QIODevice::ReadOnly);
-   in >> pair2;
-
-   REQUIRE(pair2.first == 10);
-   REQUIRE(pair2.second == 20);
-}
-
-TEST_CASE("QPair copy", "[qpair]")
+TEST_CASE("QPair copy_constructor", "[qpair]")
 {
    QPair<QString, int> pair1 = {"answer", 42};
    QPair<QString, int> pair2(pair1);
@@ -67,7 +50,7 @@ TEST_CASE("QPair copy", "[qpair]")
    REQUIRE(pair2.second == 42);
 }
 
-TEST_CASE("QPair move", "[qpair]")
+TEST_CASE("QPair move_constructor", "[qpair]")
 {
    QPair<QString, int> pair1 = {"answer", 42};
    QPair<QString, int> pair2(std::move(pair1));
@@ -76,7 +59,7 @@ TEST_CASE("QPair move", "[qpair]")
    REQUIRE(pair2.second == 42);
 }
 
-TEST_CASE("QPair assign", "[qpair]")
+TEST_CASE("QPair copy_assign", "[qpair]")
 {
    QPair<QString, int> pair1 = {"answer", 42};
    QPair<QString, int> pair2;
@@ -98,7 +81,7 @@ TEST_CASE("QPair move_assign", "[qpair]")
    REQUIRE(pair2.second == 42);
 }
 
-TEST_CASE("QPair qMakePair", "[qpair]")
+TEST_CASE("QPair qMakePair_a", "[qpair]")
 {
    QPair<int, int> pair1 = qMakePair(1, 42);
    QPair<int, int> pair2 = pair1;
@@ -107,11 +90,28 @@ TEST_CASE("QPair qMakePair", "[qpair]")
    REQUIRE(pair2.second == 42);
 }
 
-TEST_CASE("QPair qMakePair odd", "[qpair]")
+TEST_CASE("QPair qMakePair_b", "[qpair]")
 {
    QPair<int, int> pair1 = qMakePair(65, 42);
    QPair<QString, int> pair2(pair1);
 
    REQUIRE(pair2.first.at(0) == 'A');
    REQUIRE(pair2.second == 42);
+}
+
+TEST_CASE("QPair stream", "[qpair]")
+{
+   QPair<int, int> pair1 = {10, 20};
+   QPair<int, int> pair2;
+
+   QByteArray buffer;
+
+   QDataStream out(&buffer, QIODevice::WriteOnly);
+   out << pair1;
+
+   QDataStream in(&buffer, QIODevice::ReadOnly);
+   in >> pair2;
+
+   REQUIRE(pair2.first == 10);
+   REQUIRE(pair2.second == 20);
 }
