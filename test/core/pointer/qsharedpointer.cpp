@@ -68,6 +68,79 @@ TEST_CASE("QSharedPointer cast", "[qsharedpointer]")
    }
 }
 
+TEST_CASE("QSharedPointer comparison", "[qsharedpointer]")
+{
+   QSharedPointer<int> ptr1 = nullptr;
+
+   QSharedPointer<int> ptr2 = QMakeShared<int>();
+   QSharedPointer<int> ptr3 = ptr2;
+
+   int *ptr4 = ptr2.get();
+
+   REQUIRE( (ptr1 == ptr2) == false);
+   REQUIRE( (ptr1 != ptr2) == true);
+   REQUIRE( (ptr1 <  ptr2) == true);
+   REQUIRE( (ptr1 >  ptr2) == false);
+   REQUIRE( (ptr1 <= ptr2) == true);
+   REQUIRE( (ptr1 >= ptr2) == false);
+
+   REQUIRE( (ptr2 == ptr1) == false);
+   REQUIRE( (ptr2 != ptr1) == true);
+   REQUIRE( (ptr2 <  ptr1) == false);
+   REQUIRE( (ptr2 >  ptr1) == true);
+   REQUIRE( (ptr2 <= ptr1) == false);
+   REQUIRE( (ptr2 >= ptr1) == true);
+
+   REQUIRE( (ptr2 == ptr3) == true);
+   REQUIRE( (ptr2 != ptr3) == false);
+   REQUIRE( (ptr2 <  ptr3) == false);
+   REQUIRE( (ptr2 >  ptr3) == false);
+   REQUIRE( (ptr2 <= ptr3) == true);
+   REQUIRE( (ptr2 >= ptr3) == true);
+
+   REQUIRE( (ptr1 == ptr4) == false);
+   REQUIRE( (ptr1 != ptr4) == true);
+   REQUIRE( (ptr1 <  ptr4) == true);
+   REQUIRE( (ptr1 >  ptr4) == false);
+   REQUIRE( (ptr1 <= ptr4) == true);
+   REQUIRE( (ptr1 >= ptr4) == false);
+
+   REQUIRE( (ptr2 == ptr4) == true);
+   REQUIRE( (ptr2 != ptr4) == false);
+   REQUIRE( (ptr2 <  ptr4) == false);
+   REQUIRE( (ptr2 >  ptr4) == false);
+   REQUIRE( (ptr2 <= ptr4) == true);
+   REQUIRE( (ptr2 >= ptr4) == true);
+
+   REQUIRE( (ptr1 == nullptr) == true);
+   REQUIRE( (ptr1 != nullptr) == false);
+   REQUIRE( (ptr1 <  nullptr) == false);
+   REQUIRE( (ptr1 >  nullptr) == false);
+   REQUIRE( (ptr1 <= nullptr) == true);
+   REQUIRE( (ptr1 >= nullptr) == true);
+
+   REQUIRE( (ptr2 == nullptr) == false);
+   REQUIRE( (ptr2 != nullptr) == true);
+   REQUIRE( (ptr2 <  nullptr) == false);
+   REQUIRE( (ptr2 >  nullptr) == true);
+   REQUIRE( (ptr2 <= nullptr) == false);
+   REQUIRE( (ptr2 >= nullptr) == true);
+
+   REQUIRE( (ptr1 == ptr1) == true);
+   REQUIRE( (ptr1 != ptr1) == false);
+   REQUIRE( (ptr1 <  ptr1) == false);
+   REQUIRE( (ptr1 >  ptr1) == false);
+   REQUIRE( (ptr1 <= ptr1) == true);
+   REQUIRE( (ptr1 >= ptr1) == true);
+
+   REQUIRE( (ptr2 == ptr2) == true);
+   REQUIRE( (ptr2 != ptr2) == false);
+   REQUIRE( (ptr2 <  ptr2) == false);
+   REQUIRE( (ptr2 >  ptr2) == false);
+   REQUIRE( (ptr2 <= ptr2) == true);
+   REQUIRE( (ptr2 >= ptr2) == true);
+}
+
 TEST_CASE("QSharedPointer convert_a", "[qsharedpointer]")
 {
    QSharedPointer<int> ptr1 = QMakeShared<int>(42);
@@ -190,79 +263,6 @@ TEST_CASE("QSharedPointer is_nullptr", "[qsharedpointer]")
    REQUIRE(nullptr == ptr);
 
    REQUIRE(ptr.isNull() == true);
-}
-
-TEST_CASE("QSharedPointer operators", "[qsharedpointer]")
-{
-   QSharedPointer<int> ptr1 = nullptr;
-
-   QSharedPointer<int> ptr2 = QMakeShared<int>();
-   QSharedPointer<int> ptr3 = ptr2;
-
-   int *ptr4 = ptr2.get();
-
-   REQUIRE( (ptr1 == ptr2) == false);
-   REQUIRE( (ptr1 != ptr2) == true);
-   REQUIRE( (ptr1 <  ptr2) == true);
-   REQUIRE( (ptr1 >  ptr2) == false);
-   REQUIRE( (ptr1 <= ptr2) == true);
-   REQUIRE( (ptr1 >= ptr2) == false);
-
-   REQUIRE( (ptr2 == ptr1) == false);
-   REQUIRE( (ptr2 != ptr1) == true);
-   REQUIRE( (ptr2 <  ptr1) == false);
-   REQUIRE( (ptr2 >  ptr1) == true);
-   REQUIRE( (ptr2 <= ptr1) == false);
-   REQUIRE( (ptr2 >= ptr1) == true);
-
-   REQUIRE( (ptr2 == ptr3) == true);
-   REQUIRE( (ptr2 != ptr3) == false);
-   REQUIRE( (ptr2 <  ptr3) == false);
-   REQUIRE( (ptr2 >  ptr3) == false);
-   REQUIRE( (ptr2 <= ptr3) == true);
-   REQUIRE( (ptr2 >= ptr3) == true);
-
-   REQUIRE( (ptr1 == ptr4) == false);
-   REQUIRE( (ptr1 != ptr4) == true);
-   REQUIRE( (ptr1 <  ptr4) == true);
-   REQUIRE( (ptr1 >  ptr4) == false);
-   REQUIRE( (ptr1 <= ptr4) == true);
-   REQUIRE( (ptr1 >= ptr4) == false);
-
-   REQUIRE( (ptr2 == ptr4) == true);
-   REQUIRE( (ptr2 != ptr4) == false);
-   REQUIRE( (ptr2 <  ptr4) == false);
-   REQUIRE( (ptr2 >  ptr4) == false);
-   REQUIRE( (ptr2 <= ptr4) == true);
-   REQUIRE( (ptr2 >= ptr4) == true);
-
-   REQUIRE( (ptr1 == nullptr) == true);
-   REQUIRE( (ptr1 != nullptr) == false);
-   REQUIRE( (ptr1 <  nullptr) == false);
-   REQUIRE( (ptr1 >  nullptr) == false);
-   REQUIRE( (ptr1 <= nullptr) == true);
-   REQUIRE( (ptr1 >= nullptr) == true);
-
-   REQUIRE( (ptr2 == nullptr) == false);
-   REQUIRE( (ptr2 != nullptr) == true);
-   REQUIRE( (ptr2 <  nullptr) == false);
-   REQUIRE( (ptr2 >  nullptr) == true);
-   REQUIRE( (ptr2 <= nullptr) == false);
-   REQUIRE( (ptr2 >= nullptr) == true);
-
-   REQUIRE( (ptr1 == ptr1) == true);
-   REQUIRE( (ptr1 != ptr1) == false);
-   REQUIRE( (ptr1 <  ptr1) == false);
-   REQUIRE( (ptr1 >  ptr1) == false);
-   REQUIRE( (ptr1 <= ptr1) == true);
-   REQUIRE( (ptr1 >= ptr1) == true);
-
-   REQUIRE( (ptr2 == ptr2) == true);
-   REQUIRE( (ptr2 != ptr2) == false);
-   REQUIRE( (ptr2 <  ptr2) == false);
-   REQUIRE( (ptr2 >  ptr2) == false);
-   REQUIRE( (ptr2 <= ptr2) == true);
-   REQUIRE( (ptr2 >= ptr2) == true);
 }
 
 TEST_CASE("QSharedPointer reset", "[qsharedpointer]")

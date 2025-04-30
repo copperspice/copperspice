@@ -33,48 +33,6 @@ TEST_CASE("QScopedPointer traits", "[qscopedpointer]")
    REQUIRE(std::has_virtual_destructor_v<QScopedPointer<int>> == false);
 }
 
-TEST_CASE("QScopedPointer custom_deleter", "[qscopedpointer]")
-{
-   bool deleterExecuted = false;
-
-   {
-      auto customDeleter = [&deleterExecuted] (int *obj) {
-         deleterExecuted = true;
-         delete obj;
-      };
-
-      QScopedPointer<int, decltype(customDeleter)> ptr(new int, customDeleter);
-      REQUIRE(deleterExecuted == false);
-   }
-
-   REQUIRE(deleterExecuted == true);
-}
-
-TEST_CASE("QScopedPointer empty", "[qscopedpointer]")
-{
-   QScopedPointer<int> ptr;
-
-   REQUIRE(ptr == nullptr);
-   REQUIRE(nullptr == ptr);
-   REQUIRE(ptr == ptr);
-
-   REQUIRE(! (ptr != nullptr));
-   REQUIRE(! (nullptr != ptr));
-   REQUIRE(! (ptr != ptr)) ;
-
-   REQUIRE(ptr.isNull() == true);
-}
-
-TEST_CASE("QScopedPointer is_nullptr", "[qscopedpointer]")
-{
-   QScopedPointer<int> ptr = nullptr;
-
-   REQUIRE(ptr == nullptr);
-   REQUIRE(nullptr == ptr);
-
-   REQUIRE(ptr.isNull() == true);
-}
-
 TEST_CASE("QScopedPointer comparison", "[qscopedpointer]]")
 {
    QScopedPointer<int> ptr1 = nullptr;
@@ -131,6 +89,48 @@ TEST_CASE("QScopedPointer comparison", "[qscopedpointer]]")
    REQUIRE( (ptr2 >  ptr2) == false);
    REQUIRE( (ptr2 <= ptr2) == true);
    REQUIRE( (ptr2 >= ptr2) == true);
+}
+
+TEST_CASE("QScopedPointer custom_deleter", "[qscopedpointer]")
+{
+   bool deleterExecuted = false;
+
+   {
+      auto customDeleter = [&deleterExecuted] (int *obj) {
+         deleterExecuted = true;
+         delete obj;
+      };
+
+      QScopedPointer<int, decltype(customDeleter)> ptr(new int, customDeleter);
+      REQUIRE(deleterExecuted == false);
+   }
+
+   REQUIRE(deleterExecuted == true);
+}
+
+TEST_CASE("QScopedPointer empty", "[qscopedpointer]")
+{
+   QScopedPointer<int> ptr;
+
+   REQUIRE(ptr == nullptr);
+   REQUIRE(nullptr == ptr);
+   REQUIRE(ptr == ptr);
+
+   REQUIRE(! (ptr != nullptr));
+   REQUIRE(! (nullptr != ptr));
+   REQUIRE(! (ptr != ptr)) ;
+
+   REQUIRE(ptr.isNull() == true);
+}
+
+TEST_CASE("QScopedPointer is_nullptr", "[qscopedpointer]")
+{
+   QScopedPointer<int> ptr = nullptr;
+
+   REQUIRE(ptr == nullptr);
+   REQUIRE(nullptr == ptr);
+
+   REQUIRE(ptr.isNull() == true);
 }
 
 TEST_CASE("QScopedPointer release", "[qscopedpointer]")

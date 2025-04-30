@@ -152,47 +152,6 @@ TEST_CASE("QObject connect", "[qobject]")
    REQUIRE(obj.m_titleB == "New Title");
 }
 
-TEST_CASE("QObject inherits", "[qobject]")
-{
-   Ginger obj;
-
-   REQUIRE(obj.inherits("QObject") == true);
-   REQUIRE(obj.inherits("Ginger") == true);
-   REQUIRE(obj.inherits("QFile") == false);
-
-   REQUIRE(obj.isWidgetType() == false);
-   REQUIRE(obj.isWindowType() == false);
-}
-
-TEST_CASE("QObject object_name", "[qobject]")
-{
-   Ginger obj;
-
-   REQUIRE(obj.objectName().isEmpty() == true);
-
-   obj.setObjectName("SomeObject");
-   REQUIRE(obj.objectName() == "SomeObject");
-
-   REQUIRE(obj.property<QString>("objectName") == "SomeObject");
-}
-
-TEST_CASE("QObject property", "[qobject]")
-{
-   Ginger obj;
-
-   REQUIRE(obj.dynamicPropertyNames().isEmpty() == true);
-
-   obj.setProperty("newProperty", QVariant(17));
-
-   REQUIRE(obj.property<int>("newProperty") == 17);
-
-   {
-      QList<QString> list = obj.dynamicPropertyNames();
-      REQUIRE(list.size() == 1);
-      REQUIRE(list.contains("newProperty") == true);
-   }
-}
-
 TEST_CASE("QObject connect_overload", "[qobject]")
 {
    Ginger obj;
@@ -242,4 +201,45 @@ TEST_CASE("QObject connect_overload", "[qobject]")
 
    obj.cargo();
    REQUIRE(obj.m_bags == -1);
+}
+
+TEST_CASE("QObject inherits", "[qobject]")
+{
+   Ginger obj;
+
+   REQUIRE(obj.inherits("QObject") == true);
+   REQUIRE(obj.inherits("Ginger") == true);
+   REQUIRE(obj.inherits("QFile") == false);
+
+   REQUIRE(obj.isWidgetType() == false);
+   REQUIRE(obj.isWindowType() == false);
+}
+
+TEST_CASE("QObject objectName", "[qobject]")
+{
+   Ginger obj;
+
+   REQUIRE(obj.objectName().isEmpty() == true);
+
+   obj.setObjectName("SomeObject");
+   REQUIRE(obj.objectName() == "SomeObject");
+
+   REQUIRE(obj.property<QString>("objectName") == "SomeObject");
+}
+
+TEST_CASE("QObject property", "[qobject]")
+{
+   Ginger obj;
+
+   REQUIRE(obj.dynamicPropertyNames().isEmpty() == true);
+
+   obj.setProperty("newProperty", QVariant(17));
+
+   REQUIRE(obj.property<int>("newProperty") == 17);
+
+   {
+      QList<QString> list = obj.dynamicPropertyNames();
+      REQUIRE(list.size() == 1);
+      REQUIRE(list.contains("newProperty") == true);
+   }
 }

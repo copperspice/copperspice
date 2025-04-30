@@ -42,8 +42,8 @@ TEST_CASE("QElapsedTimer comparison", "[qelapsedtimer]")
    REQUIRE(timer.secsTo(timer) == qint64(0));
 
    REQUIRE(timer == timer);
-   REQUIRE(! (timer != timer));
-   REQUIRE(! (timer < timer));
+   REQUIRE((timer != timer) == false);
+   REQUIRE((timer < timer) == false);
 
    QThread::msleep(10);
 

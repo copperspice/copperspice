@@ -58,11 +58,6 @@ QUniquePointer<QCommandLineParser> parseCommandLine(const QStringList &arguments
    return parser;
 }
 
-TEST_CASE("QCommandLineParser non_copyable", "[qcommandlineparser]")
-{
-   REQUIRE(((! std::is_copy_constructible_v<QCommandLineParser> && ! std::is_copy_assignable_v<QCommandLineParser>) ));
-}
-
 TEST_CASE("QCommandLineParser constructor", "[qcommandlineparser]")
 {
    QUniquePointer<QCommandLineParser> parser = parseCommandLine(

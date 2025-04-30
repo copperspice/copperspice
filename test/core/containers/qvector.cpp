@@ -169,14 +169,6 @@ TEST_CASE("QVector count", "[qvector]")
    REQUIRE(v.count(100) == 0);
 }
 
-TEST_CASE("QVector empty", "[qvector]")
-{
-   QVector<QString> v;
-
-   REQUIRE(v.isEmpty());
-   REQUIRE(v.size() == 0);
-}
-
 TEST_CASE("QVector comparison", "[qvector]")
 {
    QVector<QString> v1 = { "watermelon", "apple", "pear", "grapefruit" };
@@ -184,6 +176,14 @@ TEST_CASE("QVector comparison", "[qvector]")
 
    REQUIRE(v1 == v2);
    REQUIRE(! (v1 != v2));
+}
+
+TEST_CASE("QVector empty", "[qvector]")
+{
+   QVector<QString> v;
+
+   REQUIRE(v.isEmpty());
+   REQUIRE(v.size() == 0);
 }
 
 TEST_CASE("QVector erase", "[qvector]")

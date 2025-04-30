@@ -95,17 +95,6 @@ TEST_CASE("QVersionNumber copy_constructor", "[qversionnumber]")
    }
 }
 
-TEST_CASE("QVersionNumber empty", "[qversionnumber]")
-{
-   QVersionNumber version;
-
-   REQUIRE(version.majorVersion() == 0);
-   REQUIRE(version.minorVersion() == 0);
-   REQUIRE(version.microVersion() == 0);
-
-   REQUIRE(version.segments() == QVector<int>());
-}
-
 TEST_CASE("QVersionNumber comparison", "[qversionnumber]")
 {
    QVersionNumber data1;
@@ -165,6 +154,17 @@ TEST_CASE("QVersionNumber commonPrefix", "[qversionnumber]")
       REQUIRE(calculatedPrefix == common);
       REQUIRE(calculatedPrefix.segments() == common.segments());
    }
+}
+
+TEST_CASE("QVersionNumber empty", "[qversionnumber]")
+{
+   QVersionNumber version;
+
+   REQUIRE(version.majorVersion() == 0);
+   REQUIRE(version.minorVersion() == 0);
+   REQUIRE(version.microVersion() == 0);
+
+   REQUIRE(version.segments() == QVector<int>());
 }
 
 TEST_CASE("QVersionNumber prefixOf", "[qversionnumber]")

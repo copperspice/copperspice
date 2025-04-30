@@ -91,21 +91,17 @@ TEST_CASE("QByteArray replace", "[qbytearray]")
    REQUIRE(str == "A wacky fox took a nap");
 }
 
-TEST_CASE("QByteArray truncate", "[qbytearray]")
-{
-   QByteArray str = "A wacky fox and sizeable pig jumped halfway over a blue moon";
-
-   str.truncate(20);
-
-   REQUIRE(str == "A wacky fox and size");
-}
-
-TEST_CASE("QByteArray to_something", "[qbytearray]")
+TEST_CASE("QByteArray toUpper", "[qbytearray]")
 {
    QByteArray str = "Mango";
 
    str = str.toUpper();
    REQUIRE(str == "MANGO");
+}
+
+TEST_CASE("QByteArray toLower", "[qbytearray]")
+{
+   QByteArray str = "Mango";
 
    str = str.toLower();
    REQUIRE(str == "mango");
@@ -118,5 +114,14 @@ TEST_CASE("QByteArray trimmed", "[qbytearray]")
    str = str.trimmed();
 
    REQUIRE(str == "A wacky fox and sizeable pig");
+}
+
+TEST_CASE("QByteArray truncate", "[qbytearray]")
+{
+   QByteArray str = "A wacky fox and sizeable pig jumped halfway over a blue moon";
+
+   str.truncate(20);
+
+   REQUIRE(str == "A wacky fox and size");
 }
 
