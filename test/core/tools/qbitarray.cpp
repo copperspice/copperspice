@@ -107,7 +107,7 @@ TEST_CASE("QBitArray operator_c", "[qbitarray]")
    REQUIRE(data1 == data2);
 }
 
-TEST_CASE("QBitArray operator", "[qbitarray]")
+TEST_CASE("QBitArray operator_d", "[qbitarray]")
 {
    QBitArray data1(3, true);
    REQUIRE(data1[0]);

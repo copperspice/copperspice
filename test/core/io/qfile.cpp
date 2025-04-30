@@ -47,7 +47,7 @@ TEST_CASE("QFile exists", "[qfile]")
    REQUIRE(file.resize(10) == false);
 }
 
-TEST_CASE("QFile file_name", "[qfile]")
+TEST_CASE("QFile fileName", "[qfile]")
 {
    QFile file("c:/machine/path1/dir1/file1");
 

@@ -261,7 +261,7 @@ TEST_CASE("QStringView8 mid", "[qstringview8]")
    REQUIRE(view.mid(40, 8).isEmpty() == true);
 }
 
-TEST_CASE("QStringView8 operator", "[qstringview8]")
+TEST_CASE("QStringView8 operator_bracket", "[qstringview8]")
 {
    QString8 str      = "On a clear day you can see forever";
    QStringView8 view = str;

@@ -139,7 +139,7 @@ TEST_CASE("QTime msecs_to", "[qtime]")
    }
 }
 
-TEST_CASE("QTime null", "[qtime]")
+TEST_CASE("QTime is_null", "[qtime]")
 {
    QTime time;
 

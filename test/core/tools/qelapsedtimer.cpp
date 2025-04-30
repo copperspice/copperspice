@@ -32,7 +32,7 @@ TEST_CASE("QElapsedTimer traits", "[qelapsedtimer]")
    REQUIRE(std::has_virtual_destructor_v<QElapsedTimer> == false);
 }
 
-TEST_CASE("QElapsedTimer operators", "[qelapsedtimer]")
+TEST_CASE("QElapsedTimer comparison", "[qelapsedtimer]")
 {
    QElapsedTimer timer;
    timer.start();

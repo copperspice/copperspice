@@ -63,7 +63,7 @@ TEST_CASE("QVersionNumber constructor", "[qversionnumber]")
    }
 }
 
-TEST_CASE("QVersionNumber constructor_copy", "[qversionnumber]")
+TEST_CASE("QVersionNumber copy_constructor", "[qversionnumber]")
 {
    QVector<int> segments;
    QVersionNumber result;
@@ -106,7 +106,7 @@ TEST_CASE("QVersionNumber empty", "[qversionnumber]")
    REQUIRE(version.segments() == QVector<int>());
 }
 
-TEST_CASE("QVersionNumber operators", "[qversionnumber]")
+TEST_CASE("QVersionNumber comparison", "[qversionnumber]")
 {
    QVersionNumber data1;
    QVersionNumber data2(4, 5, 6);

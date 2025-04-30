@@ -90,7 +90,7 @@ TEST_CASE("QPointF manhattanLength", "[qpointf]")
    }
 }
 
-TEST_CASE("QPointF operators", "[qpointf]")
+TEST_CASE("QPointF math", "[qpointf]")
 {
    QPointF data1(50, 125);
    QPointF data2(10, 20);

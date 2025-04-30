@@ -32,7 +32,7 @@ TEST_CASE("QEasingCurve traits", "[qeasingcurve]")
    REQUIRE(std::has_virtual_destructor_v<QEasingCurve> == false);
 }
 
-TEST_CASE("QEasingCurve assignment_copy", "[qeasingcurve]")
+TEST_CASE("QEasingCurve copy_assign", "[qeasingcurve]")
 {
    QEasingCurve dataA(QEasingCurve::InOutExpo);
    QEasingCurve dataB = dataA;

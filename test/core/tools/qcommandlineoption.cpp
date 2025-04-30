@@ -48,7 +48,7 @@ TEST_CASE("QCommondLineOption constructor", "[qcommandlineoption]")
    REQUIRE(data.defaultValues().size() == 0);
 }
 
-TEST_CASE("QCommondLineOption copy", "[qcommandlineoption]")
+TEST_CASE("QCommondLineOption copy_constructor", "[qcommandlineoption]")
 {
    QString name = "name";
    QString description = "description";

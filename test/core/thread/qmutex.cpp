@@ -45,7 +45,7 @@ TEST_CASE("QRecursiveMutex traits", "[qrecursivemutex]")
    REQUIRE(std::has_virtual_destructor_v<QRecursiveMutex> == false);
 }
 
-TEST_CASE("QMutex basic", "[qmutex]")
+TEST_CASE("QMutex tryLock", "[qmutex]")
 {
    QMutex m;
 

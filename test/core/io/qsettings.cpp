@@ -134,7 +134,7 @@ TEST_CASE("QSettings allkeys", "[qsettings]")
    settings1.remove("food");
 }
 
-TEST_CASE("QSettings filename", "[qsettings]")
+TEST_CASE("QSettings fileName", "[qsettings]")
 {
    QCoreApplication::setOrganizationName("CopperSpice");
    QCoreApplication::setApplicationName("CsCoreTest");

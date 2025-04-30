@@ -43,7 +43,7 @@ TEST_CASE("QUrl to_encoded", "[qurl]")
    REQUIRE(uri.toEncoded() == "http://www.example.com/List%20of%20Holidays.xml");
 }
 
-TEST_CASE("QUrl is_valid", "[qurl]")
+TEST_CASE("QUrl isValid", "[qurl]")
 {
    QUrl uri("https://www.copperspice.com/style_guide/source_code_style.html");
    REQUIRE(uri.isValid());

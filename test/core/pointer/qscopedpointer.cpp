@@ -65,7 +65,7 @@ TEST_CASE("QScopedPointer empty", "[qscopedpointer]")
    REQUIRE(ptr.isNull() == true);
 }
 
-TEST_CASE("QScopedPointer nullptr", "[qscopedpointer]")
+TEST_CASE("QScopedPointer is_nullptr", "[qscopedpointer]")
 {
    QScopedPointer<int> ptr = nullptr;
 
@@ -75,7 +75,7 @@ TEST_CASE("QScopedPointer nullptr", "[qscopedpointer]")
    REQUIRE(ptr.isNull() == true);
 }
 
-TEST_CASE("QScopedPointer operators", "[qscopedpointer]]")
+TEST_CASE("QScopedPointer comparison", "[qscopedpointer]]")
 {
    QScopedPointer<int> ptr1 = nullptr;
 

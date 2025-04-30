@@ -92,7 +92,7 @@ TEST_CASE("QSharedPointer convert_b", "[qsharedpointer]")
    REQUIRE(ptr1.get() == ptr2.get());
 }
 
-TEST_CASE("QSharedPointer copy", "[qsharedpointer]")
+TEST_CASE("QSharedPointer copy_assign", "[qsharedpointer]")
 {
    QSharedPointer<int> ptr1;
    int *rawPointer = nullptr;
@@ -165,7 +165,7 @@ TEST_CASE("QSharedPointer move_assign", "[qsharedpointer]")
    REQUIRE(rawPointer == ptr1.data());
 }
 
-TEST_CASE("QSharedPointer move_construct", "[qsharedpointer]")
+TEST_CASE("QSharedPointer move_constructor", "[qsharedpointer]")
 {
    QSharedPointer<int> ptr1 = QMakeShared<int>();
    QSharedPointer<int> ptr2(std::move(ptr1));
@@ -174,7 +174,7 @@ TEST_CASE("QSharedPointer move_construct", "[qsharedpointer]")
    REQUIRE(ptr2.isNull() == false);
 }
 
-TEST_CASE("QSharedPointer nullptr", "[qsharedpointer]")
+TEST_CASE("QSharedPointer is_nullptr", "[qsharedpointer]")
 {
    QSharedPointer<int> ptr = nullptr;
 

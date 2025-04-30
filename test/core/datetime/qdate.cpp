@@ -255,7 +255,7 @@ TEST_CASE("QDate names", "[qdate]")
    }
 }
 
-TEST_CASE("QDate null", "[qdate]")
+TEST_CASE("QDate is_null", "[qdate]")
 {
    QDate date;
 

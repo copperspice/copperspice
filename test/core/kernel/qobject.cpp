@@ -193,7 +193,7 @@ TEST_CASE("QObject property", "[qobject]")
    }
 }
 
-TEST_CASE("QObject method_overload", "[qobject]")
+TEST_CASE("QObject connect_overload", "[qobject]")
 {
    Ginger obj;
 

@@ -97,7 +97,7 @@ TEST_CASE("QSharedArrayPointer move_assign", "[qsharedarraypointer]")
    REQUIRE(rawPointer == ptr1.get());
 }
 
-TEST_CASE("QSharedArrayPointer move_construct", "[qsharedarraypointer]")
+TEST_CASE("QSharedArrayPointer move_constructor", "[qsharedarraypointer]")
 {
    QSharedArrayPointer<int[]> ptr1 = QMakeShared<int[]>(1);
    QSharedArrayPointer<int>   ptr2(std::move(ptr1));

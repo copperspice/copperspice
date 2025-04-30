@@ -32,7 +32,7 @@ TEST_CASE("QLockFile traits", "[qlockfile]")
    REQUIRE(std::has_virtual_destructor_v<QLockFile> == false);
 }
 
-TEST_CASE("QLockFile basic", "[qlockfile]")
+TEST_CASE("QLockFile properties", "[qlockfile]")
 {
   QLockFile f("testfile");
 

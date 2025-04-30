@@ -43,7 +43,7 @@ TEST_CASE("QSaveFile open", "[qsavefile]")
    REQUIRE(file.resize(10) == true);
 }
 
-TEST_CASE("QSaveFile filename", "[qsavefile]")
+TEST_CASE("QSaveFile fileName", "[qsavefile]")
 {
    QSaveFile file("c:/machine/path1/dir1/file1");
 

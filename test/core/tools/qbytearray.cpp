@@ -111,7 +111,7 @@ TEST_CASE("QByteArray to_something", "[qbytearray]")
    REQUIRE(str == "mango");
 }
 
-TEST_CASE("QByteArray trim", "[qbytearray]")
+TEST_CASE("QByteArray trimmed", "[qbytearray]")
 {
    QByteArray str = "    A wacky fox and sizeable pig \n\t ";
 

@@ -73,7 +73,7 @@ void messageOperator(QtMsgType, QStringView msg) {
    fflush(handle);
 }
 
-TEST_CASE("QDebug basic", "[qdebug]")
+TEST_CASE("QDebug custom_message", "[qdebug]")
 {
    QString str(QDir::tempPath() + "/DebugTest.txt");
 

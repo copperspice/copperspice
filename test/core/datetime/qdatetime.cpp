@@ -106,7 +106,7 @@ TEST_CASE("QDateTime add_mseconds", "[qdatetime]")
    }
 }
 
-TEST_CASE("QDateTime assign", "[qdatetime]")
+TEST_CASE("QDateTime copy_assign", "[qdatetime]")
 {
    QDateTime dt1 = QDateTime(QDate(2019, 8, 17), QTime(14, 20, 0));
    QDateTime dt2;
@@ -257,7 +257,7 @@ TEST_CASE("QDateTime msecs_to", "[qdatetime]")
    REQUIRE(dt2.msecsTo(dt1) == 0);
 }
 
-TEST_CASE("QDateTime null", "[qdatetime]")
+TEST_CASE("QDateTime is_null", "[qdatetime]")
 {
    QDateTime dt;
 

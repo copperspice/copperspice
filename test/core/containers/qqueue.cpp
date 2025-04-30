@@ -32,7 +32,7 @@ TEST_CASE("QQueue traits", "[qqueue]")
    REQUIRE(std::has_virtual_destructor_v<QQueue<int>> == false);
 }
 
-TEST_CASE("QQueue assignment_copy", "[qqueue]")
+TEST_CASE("QQueue copy_assign", "[qqueue]")
 {
    QQueue<int> list1;
    list1.enqueue(1);

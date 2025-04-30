@@ -32,7 +32,7 @@ TEST_CASE("QTimeLine traits", "[qtimeline]")
    REQUIRE(std::has_virtual_destructor_v<QTimeLine> == true);
 }
 
-TEST_CASE("QTimeLine Basic empty", "[qtimeline]")
+TEST_CASE("QTimeLine properties", "[qtimeline]")
 {
    QTimeLine timeline;
 

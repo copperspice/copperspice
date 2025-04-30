@@ -64,7 +64,7 @@ TEST_CASE("QPointer destructor", "[qpointer]")
    REQUIRE(p1 == p2);
 }
 
-TEST_CASE("QPointer assignment_operators", "[qpointer]")
+TEST_CASE("QPointer copy_move_assign", "[qpointer]")
 {
    QObject *obj = new QObject;
 

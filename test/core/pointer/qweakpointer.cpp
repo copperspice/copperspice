@@ -57,7 +57,7 @@ TEST_CASE("QWeakPointer data", "[qweakpointer]")
    REQUIRE(weakPointer.data() == nullptr);
 }
 
-TEST_CASE("QWeakPointer nullptr", "[qweakpointer]")
+TEST_CASE("QWeakPointer is_nullptr", "[qweakpointer]")
 {
    QSharedPointer<int> sharedPtr = QMakeShared<int>();
    QWeakPointer<int> weakPtr = sharedPtr.toWeakRef();

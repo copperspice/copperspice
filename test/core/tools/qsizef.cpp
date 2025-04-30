@@ -55,7 +55,7 @@ TEST_CASE("QSizeF empty", "[qsizef]")
    REQUIRE(! data.isValid());
 }
 
-TEST_CASE("QSizeF operators", "[qsizef]")
+TEST_CASE("QSizeF math", "[qsizef]")
 {
    QSizeF data1(50, 125);
    QSizeF data2(10, 20);

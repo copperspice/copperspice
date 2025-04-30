@@ -60,8 +60,7 @@ void Ginger_MM::actionB(const QString &)
 {
 }
 
-
-TEST_CASE("QMetaMethod access_methods", "[qmetamethod]")
+TEST_CASE("QMetaMethod get_methods", "[qmetamethod]")
 {
    Ginger_MM obj;
 
@@ -97,7 +96,7 @@ TEST_CASE("QMetaMethod access_methods", "[qmetamethod]")
    }
 }
 
-TEST_CASE("QMetaMethod method", "[qmetamethod]")
+TEST_CASE("QMetaMethod method_lookUp", "[qmetamethod]")
 {
    QString signature = "someMethodName(QString,bool)";
 

@@ -32,7 +32,7 @@ TEST_CASE("QAtomicInt traits", "[qatomicint]")
    REQUIRE(std::has_virtual_destructor_v<QAtomicInt> == false);
 }
 
-TEST_CASE("QAtomicInt assignment", "[qatomic_int]")
+TEST_CASE("QAtomicInt copy_assign", "[qatomic_int]")
 {
    QAtomicInt atomic1(17);
    atomic1 = 42;

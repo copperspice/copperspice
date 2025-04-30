@@ -52,7 +52,7 @@ TEST_CASE("QMarginsF is_null", "[qmarginsf]")
    REQUIRE(data.isNull());
 }
 
-TEST_CASE("QMarginF operators", "[qmarginsf]")
+TEST_CASE("QMarginF math", "[qmarginsf]")
 {
    QMarginsF data1(25, 14, 100, 50);
    QMarginsF data2(2, 3, 4, 5);

@@ -112,7 +112,7 @@ TEST_CASE("QVector contains_b", "[qvector]")
    REQUIRE(v.contains(data2) == true);
 }
 
-TEST_CASE("QVector copy_move_constructors", "[qvector]")
+TEST_CASE("QVector copy_move_constructor", "[qvector]")
 {
    QVector<QString> v1 = { "watermelon", "apple", "pear", "grapefruit" };
 
@@ -132,7 +132,7 @@ TEST_CASE("QVector copy_move_constructors", "[qvector]")
    }
 }
 
-TEST_CASE("QVector copy_move_assignments", "[qvector]")
+TEST_CASE("QVector copy_move_assign", "[qvector]")
 {
    QVector<QString> v1 = { "watermelon", "apple", "pear", "grapefruit" };
 
@@ -154,7 +154,7 @@ TEST_CASE("QVector copy_move_assignments", "[qvector]")
    }
 }
 
-TEST_CASE("QVector count()", "[qvector]")
+TEST_CASE("QVector count", "[qvector]")
 {
    QVector<int> v;
 
