@@ -1704,9 +1704,7 @@ TEST_CASE("QVariant constructor_json_object", "[qvariant]")
    root["key_0"] = child;
 
    // part 1
-   QVariantMap map = root.toVariantMap();
-
-   // part 2
+   QVariantMap map     = root.toVariantMap();
    QJsonObject newRoot = QJsonObject::fromVariantMap(map);
 
    QJsonDocument doc(newRoot);
@@ -1716,7 +1714,7 @@ TEST_CASE("QVariant constructor_json_object", "[qvariant]")
 
    REQUIRE(result_1 == result_2);
 
-   // part 3
+   // part 2
    QVariant data = map;
 
    QJsonObject root_2  = QJsonObject::fromVariantMap(data.toMap());

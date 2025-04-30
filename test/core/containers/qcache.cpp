@@ -81,8 +81,8 @@ TEST_CASE("QCache remove", "[qcache]")
    //
    int *retrieved = cache["key1"];
 
-   CHECK(retrieved != nullptr);
-   CHECK(*retrieved == 17);
+   REQUIRE(retrieved != nullptr);
+   REQUIRE(*retrieved == 17);
 
    cache.remove("key1");
    REQUIRE(cache.contains("key1") == false);

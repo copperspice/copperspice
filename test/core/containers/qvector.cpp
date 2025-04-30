@@ -169,7 +169,6 @@ TEST_CASE("QVector count()", "[qvector]")
    REQUIRE(v.count(100) == 0);
 }
 
-
 TEST_CASE("QVector empty", "[qvector]")
 {
    QVector<QString> v;

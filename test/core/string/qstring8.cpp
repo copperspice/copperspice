@@ -368,12 +368,12 @@ TEST_CASE("QString8 index_ignore_case", "[qstring]")
 
    {
       position = str.indexOf("fox", 0, Qt::CaseInsensitive);
-      CHECK(position == 8);
+      REQUIRE(position == 8);
    }
 
    {
       position = str.indexOf("FOX", 0, Qt::CaseInsensitive);
-      CHECK(position == 8);
+      REQUIRE(position == 8);
    }
 
    {

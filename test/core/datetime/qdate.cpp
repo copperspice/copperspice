@@ -291,7 +291,7 @@ TEST_CASE("QDate ofDay", "[qdate]")
    {
       // dst starts at 00:00 and moves forward to 01:00 revise this test
       dt = QDateTime(QDate(2008, 10, 19), QTime(0, 0, 0), QTimeZone("America/Sao_Paulo"));
-      CHECK(dt == QDate(2008, 10, 19).startOfDay(QTimeZone("America/Sao_Paulo")));
+      REQUIRE(dt == QDate(2008, 10, 19).startOfDay(QTimeZone("America/Sao_Paulo")));
    }
 
    {
@@ -324,7 +324,7 @@ TEST_CASE("QDate ofDay", "[qdate]")
    {
       // dst starts at 00:00 and moves back to 23:00 revise this test
       dt = QDateTime(QDate(2008, 2, 17), QTime(0, 0, 0), QTimeZone("America/Sao_Paulo"));
-      CHECK(dt == QDate(2008, 2, 17).startOfDay(QTimeZone("America/Sao_Paulo")));
+      REQUIRE(dt == QDate(2008, 2, 17).startOfDay(QTimeZone("America/Sao_Paulo")));
    }
 
    {
