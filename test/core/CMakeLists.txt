@@ -81,6 +81,7 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qdatastream.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qdebug.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qdir.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/io/qdiriterator.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qfile.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qfiledevice.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qfileinfo.cpp
