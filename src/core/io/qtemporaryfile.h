@@ -42,10 +42,10 @@ class Q_CORE_EXPORT QTemporaryFile : public QFile
 
  public:
    QTemporaryFile();
-   explicit QTemporaryFile(const QString &tempPath);
+   explicit QTemporaryFile(const QString &fileName);
 
    explicit QTemporaryFile(QObject *parent);
-   QTemporaryFile(const QString &tempPath, QObject *parent);
+   QTemporaryFile(const QString &fileName, QObject *parent);
 
    QTemporaryFile(const QTemporaryFile &) = delete;
    QTemporaryFile &operator=(const QTemporaryFile &) = delete;
@@ -62,7 +62,7 @@ class Q_CORE_EXPORT QTemporaryFile : public QFile
 
    QString fileName() const override;
    QString fileTemplate() const;
-   void setFileTemplate(const QString &name);
+   void setFileTemplate(const QString &fileName);
 
    static QTemporaryFile *createNativeFile(const QString &fileName) {
       QFile file(fileName);

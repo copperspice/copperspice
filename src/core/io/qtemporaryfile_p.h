@@ -67,7 +67,7 @@ class QTemporaryFileEngine : public QFSFileEngine
 
    bool isReallyOpen();
    void setFileName(const QString &file) override;
-   void setFileTemplate(const QString &fileTemplate);
+   void setFileTemplate(const QString &fileName);
 
    bool open(QIODevice::OpenMode flags) override;
    bool remove() override;

@@ -161,12 +161,12 @@ void QTemporaryFileEngine::setFileName(const QString &file)
    QFSFileEngine::setFileName(file);
 }
 
-void QTemporaryFileEngine::setFileTemplate(const QString &fileTemplate)
+void QTemporaryFileEngine::setFileTemplate(const QString &fileName)
 {
    Q_D(QFSFileEngine);
 
    if (filePathIsTemplate) {
-      d->fileEntry = QFileSystemEntry(fileTemplate);
+      d->fileEntry = QFileSystemEntry(fileName);
    }
 }
 
@@ -339,11 +339,11 @@ QTemporaryFile::QTemporaryFile()
    // uses the form "c_temp.XXXXXX"
 }
 
-QTemporaryFile::QTemporaryFile(const QString &templateName)
+QTemporaryFile::QTemporaryFile(const QString &fileName)
    : QFile(*new QTemporaryFilePrivate, nullptr)
 {
    Q_D(QTemporaryFile);
-   d->templateName = templateName;
+   d->templateName = fileName;
 }
 
 QTemporaryFile::QTemporaryFile(QObject *parent)
@@ -355,11 +355,11 @@ QTemporaryFile::QTemporaryFile(QObject *parent)
    // uses the form "cs_temp.XXXXXX"
 }
 
-QTemporaryFile::QTemporaryFile(const QString &templateName, QObject *parent)
+QTemporaryFile::QTemporaryFile(const QString &fileName, QObject *parent)
    : QFile(*new QTemporaryFilePrivate, parent)
 {
    Q_D(QTemporaryFile);
-   d->templateName = templateName;
+   d->templateName = fileName;
 }
 
 QTemporaryFile::~QTemporaryFile()
@@ -401,13 +401,14 @@ QString QTemporaryFile::fileTemplate() const
    return d->templateName;
 }
 
-void QTemporaryFile::setFileTemplate(const QString &name)
+void QTemporaryFile::setFileTemplate(const QString &fileName)
 {
    Q_D(QTemporaryFile);
-   d->templateName = name;
+
+   d->templateName = fileName;
 
    if (d->fileEngine) {
-      static_cast<QTemporaryFileEngine *>(d->fileEngine)->setFileTemplate(name);
+      static_cast<QTemporaryFileEngine *>(d->fileEngine)->setFileTemplate(fileName);
    }
 }
 
