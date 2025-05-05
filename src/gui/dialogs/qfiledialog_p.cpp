@@ -1221,7 +1221,7 @@ void QFileDialogPrivate::_q_showContextMenu(const QPoint &position)
       // file context menu
       const bool ro = model && model->isReadOnly();
 
-      QFile::Permissions p(index.parent().data(QFileSystemModel::FilePermissions).toInt());
+      QFileDevice::Permissions p(index.parent().data(QFileSystemModel::FilePermissions).toInt());
       renameAction->setEnabled(! ro && p & QFile::WriteUser);
       menu.addAction(renameAction);
       deleteAction->setEnabled(! ro && p & QFile::WriteUser);
@@ -1278,7 +1278,7 @@ void QFileDialogPrivate::_q_deleteCurrent()
       QString filePath = index.data(QFileSystemModel::FilePathRole).toString();
       bool isDir = model->isDir(index);
 
-      QFile::Permissions p(index.parent().data(QFileSystemModel::FilePermissions).toInt());
+      QFileDevice::Permissions p(index.parent().data(QFileSystemModel::FilePermissions).toInt());
 
 #ifndef QT_NO_MESSAGEBOX
       Q_Q(QFileDialog);

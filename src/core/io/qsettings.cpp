@@ -1676,7 +1676,7 @@ void QConfFileSettingsPrivate::syncConfFile(int confFileNo)
          filePtr->timeStamp = tmpFileInfo.lastModified();
 
          if (createFile) {
-            QFile::Permissions perms = tmpFileInfo.permissions() | QFile::ReadOwner | QFile::WriteOwner;
+            QFileDevice::Permissions perms = tmpFileInfo.permissions() | QFile::ReadOwner | QFile::WriteOwner;
 
             if (! filePtr->userPerms) {
                perms |= QFile::ReadGroup | QFile::ReadOther;

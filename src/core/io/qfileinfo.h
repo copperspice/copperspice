@@ -112,8 +112,8 @@ class Q_CORE_EXPORT QFileInfo
    QString group() const;
    uint groupId() const;
 
-   bool permission(QFile::Permissions permissions) const;
-   QFile::Permissions permissions() const;
+   bool permission(QFileDevice::Permissions permissions) const;
+   QFileDevice::Permissions permissions() const;
 
    qint64 size() const;
 

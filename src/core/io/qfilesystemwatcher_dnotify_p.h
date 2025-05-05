@@ -68,7 +68,8 @@ class QDnotifyFileSystemWatcherEngine : public QFileSystemWatcherEngine
          QString path;
          uint ownerId;
          uint groupId;
-         QFile::Permissions permissions;
+
+         QFileDevice::Permissions permissions;
          QDateTime lastWrite;
       };
 

@@ -205,9 +205,9 @@ enum {
    PermMask   = 0777
 };
 }
-static QFile::Permissions modeToPermissions(quint32 mode)
+static QFileDevice::Permissions modeToPermissions(quint32 mode)
 {
-   QFile::Permissions ret;
+   QFileDevice::Permissions ret;
 
    if (mode & UnixFileAttributes::ReadUser) {
       ret |= QFile::ReadOwner | QFile::ReadUser;
@@ -238,7 +238,7 @@ static QFile::Permissions modeToPermissions(quint32 mode)
    }
    return ret;
 }
-static quint32 permissionsToMode(QFile::Permissions perms)
+static quint32 permissionsToMode(QFileDevice::Permissions perms)
 {
    quint32 mode = 0;
    if (perms & (QFile::ReadOwner | QFile::ReadUser)) {
@@ -525,7 +525,7 @@ class QZipWriterPrivate : public QZipPrivate
    }
 
    QZipWriter::Status status;
-   QFile::Permissions permissions;
+   QFileDevice::Permissions permissions;
    QZipWriter::CompressionPolicy compressionPolicy;
 
    enum EntryType { Directory, File, Symlink };
@@ -808,7 +808,7 @@ QZipReader::QZipReader(const QString &archive, QIODevice::OpenMode mode)
          status = FileReadError;
       } else if (f->error() == QFile::OpenError) {
          status = FileOpenError;
-      } else if (f->error() == QFile::PermissionsError) {
+      } else if (f->error() == QFileDevice::PermissionsError) {
          status = FilePermissionsError;
       } else {
          status = FileError;
@@ -1060,7 +1060,7 @@ QZipWriter::QZipWriter(const QString &fileName, QIODevice::OpenMode mode)
          status = QZipWriter::FileWriteError;
       } else if (f->error() == QFile::OpenError) {
          status = QZipWriter::FileOpenError;
-      } else if (f->error() == QFile::PermissionsError) {
+      } else if (f->error() == QFileDevice::PermissionsError) {
          status = QZipWriter::FilePermissionsError;
       } else {
          status = QZipWriter::FileError;
@@ -1121,12 +1121,12 @@ QZipWriter::CompressionPolicy QZipWriter::compressionPolicy() const
    return d->compressionPolicy;
 }
 
-void QZipWriter::setCreationPermissions(QFile::Permissions permissions)
+void QZipWriter::setCreationPermissions(QFileDevice::Permissions permissions)
 {
    d->permissions = permissions;
 }
 
-QFile::Permissions QZipWriter::creationPermissions() const
+QFileDevice::Permissions QZipWriter::creationPermissions() const
 {
    return d->permissions;
 }

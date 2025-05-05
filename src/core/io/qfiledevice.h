@@ -88,8 +88,8 @@ class Q_CORE_EXPORT QFileDevice : public QIODevice
    qint64 size() const override;
 
    virtual bool resize(qint64 size);
-   virtual Permissions permissions() const;
-   virtual bool setPermissions(Permissions permissionSpec);
+   virtual QFileDevice::Permissions permissions() const;
+   virtual bool setPermissions(QFileDevice::Permissions permissionSpec);
 
    enum MemoryMapFlags {
       NoOptions = 0

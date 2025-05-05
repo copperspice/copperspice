@@ -61,7 +61,8 @@ class QPollingFileSystemWatcherEngine : public QFileSystemWatcherEngine
    {
       uint ownerId;
       uint groupId;
-      QFile::Permissions permissions;
+
+      QFileDevice::Permissions permissions;
       QDateTime lastModified;
       QStringList entries;
 

@@ -77,7 +77,7 @@ class QExtendedInformation
    }
 #endif
 
-   QFile::Permissions permissions() const {
+   QFileDevice::Permissions permissions() const {
       return mFileInfo.permissions();
    }
 

@@ -800,7 +800,7 @@ uint QFileInfo::groupId() const
    return d->fileEngine->ownerId(QAbstractFileEngine::OwnerGroup);
 }
 
-bool QFileInfo::permission(QFile::Permissions permissions) const
+bool QFileInfo::permission(QFileDevice::Permissions permissions) const
 {
    Q_D(const QFileInfo);
 
@@ -809,7 +809,8 @@ bool QFileInfo::permission(QFile::Permissions permissions) const
    }
 
    if (d->fileEngine == nullptr) {
-      // QFileSystemMetaData::MetaDataFlag and QFile::Permissions overlap, so just static cast
+      // QFileSystemMetaData::MetaDataFlag and QFileDevice::Permissions overlap, so just static cast
+
       QFileSystemMetaData::MetaDataFlag permissionFlags = static_cast<QFileSystemMetaData::MetaDataFlag>((int)permissions);
 
       if (! d->cache_enabled || ! d->metaData.hasFlags(permissionFlags)) {
@@ -822,7 +823,7 @@ bool QFileInfo::permission(QFile::Permissions permissions) const
    return d->getFileFlags(QAbstractFileEngine::FileFlags((int)permissions)) == (uint)permissions;
 }
 
-QFile::Permissions QFileInfo::permissions() const
+QFileDevice::Permissions QFileInfo::permissions() const
 {
    Q_D(const QFileInfo);
 
@@ -838,7 +839,7 @@ QFile::Permissions QFileInfo::permissions() const
       return d->metaData.permissions();
    }
 
-   return QFile::Permissions(d->getFileFlags(QAbstractFileEngine::PermsMask) & QAbstractFileEngine::PermsMask);
+   return QFileDevice::Permissions(d->getFileFlags(QAbstractFileEngine::PermsMask) & QAbstractFileEngine::PermsMask);
 }
 
 qint64 QFileInfo::size() const

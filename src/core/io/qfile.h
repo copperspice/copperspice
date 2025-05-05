@@ -105,10 +105,11 @@ class Q_CORE_EXPORT QFile : public QFileDevice
    bool resize(qint64 sz) override;
    static bool resize(const QString &filename, qint64 sz);
 
-   Permissions permissions() const override;
-   static Permissions permissions(const QString &fileName);
-   bool setPermissions(Permissions permissions) override;
-   static bool setPermissions(const QString &fileName, Permissions permissions);
+   QFileDevice::Permissions permissions() const override;
+   static QFileDevice::Permissions permissions(const QString &fileName);
+
+   bool setPermissions(QFileDevice::Permissions permissions) override;
+   static bool setPermissions(const QString &fileName, QFileDevice::Permissions permissions);
 
  protected:
    QFile(QFilePrivate &dd, QObject *parent = nullptr);

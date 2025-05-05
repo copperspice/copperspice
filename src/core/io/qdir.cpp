@@ -891,7 +891,7 @@ bool QDir::removeRecursively()
          ok = QFile::remove(filePath);
 
          if (!ok) { // Read-only files prevent directory deletion on Windows, retry with Write permission.
-            const QFile::Permissions permissions = QFile::permissions(filePath);
+            const QFileDevice::Permissions permissions = QFile::permissions(filePath);
 
             if (!(permissions & QFile::WriteUser)) {
                ok = QFile::setPermissions(filePath, permissions | QFile::WriteUser) && QFile::remove(filePath);

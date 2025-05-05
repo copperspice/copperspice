@@ -786,7 +786,7 @@ bool QFileSystemEngine::removeFile(const QFileSystemEntry &entry, QSystemError &
    return false;
 }
 
-bool QFileSystemEngine::setPermissions(const QFileSystemEntry &entry, QFile::Permissions permissions,
+bool QFileSystemEngine::setPermissions(const QFileSystemEntry &entry, QFileDevice::Permissions permissions,
       QSystemError &error, QFileSystemMetaData *data)
 {
    mode_t mode = 0;

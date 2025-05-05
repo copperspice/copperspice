@@ -823,10 +823,10 @@ bool QFSFileEngine::setPermissions(uint perms)
    Q_D(QFSFileEngine);
 
    QSystemError error;
-   bool retval = QFileSystemEngine::setPermissions(d->fileEntry, QFile::Permissions(perms), error);
+   bool retval = QFileSystemEngine::setPermissions(d->fileEntry, QFileDevice::Permissions(perms), error);
 
    if (! retval) {
-      setError(QFile::PermissionsError, error.toString());
+      setError(QFileDevice::PermissionsError, error.toString());
    }
 
    return retval;
@@ -899,7 +899,7 @@ uchar *QFSFileEnginePrivate::map(qint64 offset, qint64 size, QFile::MemoryMapFla
    Q_Q(QFSFileEngine);
 
    if (openMode == QFile::NotOpen) {
-      q->setError(QFile::PermissionsError, qt_error_string(ERROR_ACCESS_DENIED));
+      q->setError(QFileDevice::PermissionsError, qt_error_string(ERROR_ACCESS_DENIED));
       return nullptr;
    }
 
@@ -917,7 +917,7 @@ uchar *QFSFileEnginePrivate::map(qint64 offset, qint64 size, QFile::MemoryMapFla
       }
 
       if (handle == INVALID_HANDLE_VALUE) {
-         q->setError(QFile::PermissionsError, qt_error_string(ERROR_ACCESS_DENIED));
+         q->setError(QFileDevice::PermissionsError, qt_error_string(ERROR_ACCESS_DENIED));
          return nullptr;
       }
 
@@ -926,7 +926,7 @@ uchar *QFSFileEnginePrivate::map(qint64 offset, qint64 size, QFile::MemoryMapFla
       mapHandle = ::CreateFileMapping(handle, nullptr, protection, 0, 0, nullptr);
 
       if (mapHandle == nullptr) {
-         q->setError(QFile::PermissionsError, qt_error_string());
+         q->setError(QFileDevice::PermissionsError, qt_error_string());
          return nullptr;
       }
    }
@@ -964,7 +964,7 @@ uchar *QFSFileEnginePrivate::map(qint64 offset, qint64 size, QFile::MemoryMapFla
 
    switch (GetLastError()) {
       case ERROR_ACCESS_DENIED:
-         q->setError(QFile::PermissionsError, qt_error_string());
+         q->setError(QFileDevice::PermissionsError, qt_error_string());
          break;
 
       case ERROR_INVALID_PARAMETER:
@@ -986,14 +986,14 @@ bool QFSFileEnginePrivate::unmap(uchar *ptr)
    Q_Q(QFSFileEngine);
 
    if (! maps.contains(ptr)) {
-      q->setError(QFile::PermissionsError, qt_error_string(ERROR_ACCESS_DENIED));
+      q->setError(QFileDevice::PermissionsError, qt_error_string(ERROR_ACCESS_DENIED));
       return false;
    }
 
    uchar *start = ptr - maps[ptr];
 
    if (!UnmapViewOfFile(start)) {
-      q->setError(QFile::PermissionsError, qt_error_string());
+      q->setError(QFileDevice::PermissionsError, qt_error_string());
       return false;
    }
 

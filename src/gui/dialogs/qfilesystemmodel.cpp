@@ -1336,7 +1336,7 @@ QModelIndex QFileSystemModel::mkdir(const QModelIndex &parent, const QString &na
    return d->index(node);
 }
 
-QFile::Permissions QFileSystemModel::permissions(const QModelIndex &index) const
+QFileDevice::Permissions QFileSystemModel::permissions(const QModelIndex &index) const
 {
    Q_D(const QFileSystemModel);
    return d->node(index)->permissions();

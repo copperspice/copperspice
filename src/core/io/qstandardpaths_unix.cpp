@@ -162,7 +162,7 @@ QString QStandardPaths::writableLocation(StandardLocation type)
          }
 
          // Unix access mode MUST be 0700
-         const QFile::Permissions wantedPerms = QFile::ReadUser | QFile::WriteUser | QFile::ExeUser
+         const QFileDevice::Permissions wantedPerms = QFile::ReadUser | QFile::WriteUser | QFile::ExeUser
                | QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner;
 
          if (fileInfo.permissions() != wantedPerms) {

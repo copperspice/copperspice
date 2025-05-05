@@ -71,7 +71,7 @@ class Q_GUI_EXPORT QZipReader
       uint isDir : 1;
       uint isFile : 1;
       uint isSymLink : 1;
-      QFile::Permissions permissions;
+      QFileDevice::Permissions permissions;
 
       uint crc;
       qint64 size;

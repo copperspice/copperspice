@@ -66,8 +66,8 @@ class Q_GUI_EXPORT QZipWriter
    void setCompressionPolicy(CompressionPolicy policy);
    CompressionPolicy compressionPolicy() const;
 
-   void setCreationPermissions(QFile::Permissions permissions);
-   QFile::Permissions creationPermissions() const;
+   void setCreationPermissions(QFileDevice::Permissions permissions);
+   QFileDevice::Permissions creationPermissions() const;
 
    void addFile(const QString &fileName, const QByteArray &data);
    void addFile(const QString &fileName, QIODevice *device);

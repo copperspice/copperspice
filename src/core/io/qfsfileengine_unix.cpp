@@ -653,8 +653,8 @@ bool QFSFileEngine::setPermissions(uint perms)
    Q_D(QFSFileEngine);
    QSystemError error;
 
-   if (!QFileSystemEngine::setPermissions(d->fileEntry, QFile::Permissions(perms), error, nullptr)) {
-      setError(QFile::PermissionsError, error.toString());
+   if (! QFileSystemEngine::setPermissions(d->fileEntry, QFileDevice::Permissions(perms), error, nullptr)) {
+      setError(QFileDevice::PermissionsError, error.toString());
       return false;
    }
 
@@ -698,7 +698,7 @@ uchar *QFSFileEnginePrivate::map(qint64 offset, qint64 size, QFile::MemoryMapFla
    (void) flags;
 
    if (openMode == QIODevice::NotOpen) {
-      q->setError(QFile::PermissionsError, qt_error_string(int(EACCES)));
+      q->setError(QFileDevice::PermissionsError, qt_error_string(int(EACCES)));
       return nullptr;
    }
 
@@ -748,7 +748,7 @@ uchar *QFSFileEnginePrivate::map(qint64 offset, qint64 size, QFile::MemoryMapFla
 
    switch (errno) {
       case EBADF:
-         q->setError(QFile::PermissionsError, qt_error_string(int(EACCES)));
+         q->setError(QFileDevice::PermissionsError, qt_error_string(int(EACCES)));
          break;
 
       case ENFILE:
@@ -772,7 +772,7 @@ bool QFSFileEnginePrivate::unmap(uchar *ptr)
    Q_Q(QFSFileEngine);
 
    if (! maps.contains(ptr)) {
-      q->setError(QFile::PermissionsError, qt_error_string(EACCES));
+      q->setError(QFileDevice::PermissionsError, qt_error_string(EACCES));
       return false;
    }
 

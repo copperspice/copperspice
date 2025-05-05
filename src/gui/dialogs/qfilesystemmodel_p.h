@@ -109,7 +109,7 @@ class QFileSystemModelPrivate : public QAbstractItemModelPrivate
          return QDateTime();
       }
 
-      QFile::Permissions permissions() const {
+      QFileDevice::Permissions permissions() const {
          if (info) {
             return info->permissions();
          }

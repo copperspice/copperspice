@@ -135,7 +135,7 @@ class Q_GUI_EXPORT QFileSystemModel : public QAbstractItemModel
 
    inline QString fileName(const QModelIndex &index) const;
    inline QIcon fileIcon(const QModelIndex &index) const;
-   QFile::Permissions permissions(const QModelIndex &index) const;
+   QFileDevice::Permissions permissions(const QModelIndex &index) const;
    QFileInfo fileInfo(const QModelIndex &index) const;
    bool remove(const QModelIndex &index) const;
 

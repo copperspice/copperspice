@@ -77,7 +77,8 @@ class QWindowsFileSystemWatcherEngine : public QFileSystemWatcherEngine
       // fileinfo bits
       uint ownerId;
       uint groupId;
-      QFile::Permissions permissions;
+
+      QFileDevice::Permissions permissions;
       QDateTime lastModified;
 
       PathInfo &operator=(const QFileInfo &fileInfo) {

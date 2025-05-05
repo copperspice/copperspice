@@ -680,22 +680,22 @@ bool QFile::resize(const QString &fileName, qint64 sz)
    return QFile(fileName).resize(sz);
 }
 
-QFile::Permissions QFile::permissions() const
+QFileDevice::Permissions QFile::permissions() const
 {
    return QFileDevice::permissions();
 }
 
-QFile::Permissions QFile::permissions(const QString &fileName)
+QFileDevice::Permissions QFile::permissions(const QString &fileName)
 {
    return QFile(fileName).permissions();
 }
 
-bool QFile::setPermissions(Permissions permissions)
+bool QFile::setPermissions(QFileDevice::Permissions permissions)
 {
    return QFileDevice::setPermissions(permissions);
 }
 
-bool QFile::setPermissions(const QString &fileName, Permissions permissions)
+bool QFile::setPermissions(const QString &fileName, QFileDevice::Permissions permissions)
 {
    return QFile(fileName).setPermissions(permissions);
 }

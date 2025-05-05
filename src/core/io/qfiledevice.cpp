@@ -458,16 +458,16 @@ bool QFileDevice::resize(qint64 sz)
    return false;
 }
 
-QFile::Permissions QFileDevice::permissions() const
+QFileDevice::Permissions QFileDevice::permissions() const
 {
    Q_D(const QFileDevice);
    QAbstractFileEngine::FileFlags perms = d->engine()->fileFlags(QAbstractFileEngine::PermsMask) &
          QAbstractFileEngine::PermsMask;
 
-   return QFile::Permissions((int)perms);
+   return QFileDevice::Permissions((int)perms);
 }
 
-bool QFileDevice::setPermissions(Permissions permissions)
+bool QFileDevice::setPermissions(QFileDevice::Permissions permissions)
 {
    Q_D(QFileDevice);
 
@@ -476,7 +476,7 @@ bool QFileDevice::setPermissions(Permissions permissions)
       return true;
    }
 
-   d->setError(QFile::PermissionsError, d->fileEngine->errorString());
+   d->setError(QFileDevice::PermissionsError, d->fileEngine->errorString());
 
    return false;
 }

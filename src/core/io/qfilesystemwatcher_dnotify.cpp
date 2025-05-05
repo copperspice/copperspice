@@ -466,7 +466,7 @@ bool QDnotifyFileSystemWatcherEngine::Directory::File::updateInfo()
    uint nOwnerId = fi.ownerId();
    uint nGroupId = fi.groupId();
 
-   QFile::Permissions nPermissions = fi.permissions();
+   QFileDevice::Permissions nPermissions = fi.permissions();
 
    if (nLastWrite != lastWrite || nOwnerId != ownerId || nGroupId != groupId || nPermissions != permissions) {
       ownerId = nOwnerId;

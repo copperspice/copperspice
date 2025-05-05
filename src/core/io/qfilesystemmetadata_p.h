@@ -45,7 +45,7 @@ class QFileSystemMetaData
    }
 
    enum MetaDataFlag {
-      // Permissions, overlaps with QFile::Permissions
+      // following permissions here overlap with QFileDevice::Permissions
       OtherReadPermission = 0x00000004,   OtherWritePermission = 0x00000002,  OtherExecutePermission = 0x00000001,
       GroupReadPermission = 0x00000040,   GroupWritePermission = 0x00000020,  GroupExecutePermission = 0x00000010,
       UserReadPermission  = 0x00000400,   UserWritePermission  = 0x00000200,  UserExecutePermission  = 0x00000100,
@@ -193,7 +193,7 @@ class QFileSystemMetaData
       return size_;
    }
 
-   QFile::Permissions permissions() const  {
+   QFileDevice::Permissions permissions() const  {
       return QFileDevice::Permissions(MetaDataFlag::AllPermissions & entryFlags);
    }
 
