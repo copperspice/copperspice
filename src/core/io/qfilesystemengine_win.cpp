@@ -1073,7 +1073,7 @@ bool QFileSystemEngine::fillMetaData(const QFileSystemEntry &entry, QFileSystemM
       SetErrorMode(oldmode);
    }
 
-   if (what & QFileSystemMetaData::Permissions) {
+   if (what & QFileSystemMetaData::MetaDataFlag::AllPermissions) {
       fillPermissions(fname, data, what);
    }
 

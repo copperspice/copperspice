@@ -659,7 +659,7 @@ QAbstractFileEngine::FileFlags QFSFileEngine::fileFlags(QAbstractFileEngine::Fil
    bool exists;
    {
       QFileSystemMetaData::MetaDataFlags queryFlags = Qt::EmptyFlag;
-      queryFlags |= QFileSystemMetaData::MetaDataFlags(uint(type)) & QFileSystemMetaData::Permissions;
+      queryFlags |= QFileSystemMetaData::MetaDataFlags(uint(type)) & QFileSystemMetaData::MetaDataFlag::AllPermissions;
 
       // AliasType and BundleType are 0x0
       if (type & TypesMask)

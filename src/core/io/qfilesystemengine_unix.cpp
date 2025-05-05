@@ -830,9 +830,10 @@ bool QFileSystemEngine::setPermissions(const QFileSystemEntry &entry, QFile::Per
    bool success = ::chmod(entry.nativeFilePath().constData(), mode) == 0;
 
    if (success && data) {
-      data->entryFlags &= ~QFileSystemMetaData::Permissions;
-      data->entryFlags |= QFileSystemMetaData::MetaDataFlag(uint(permissions));
-      data->knownFlagsMask |= QFileSystemMetaData::Permissions;
+      data->entryFlags &= ~QFileSystemMetaData::MetaDataFlag::AllPermissions;
+
+      data->entryFlags     |= QFileSystemMetaData::MetaDataFlag(uint(permissions));
+      data->knownFlagsMask |= QFileSystemMetaData::MetaDataFlag::AllPermissions;
    }
 
    if (!success) {

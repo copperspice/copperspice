@@ -831,8 +831,8 @@ QFile::Permissions QFileInfo::permissions() const
    }
 
    if (d->fileEngine == nullptr) {
-      if (! d->cache_enabled || !d->metaData.hasFlags(QFileSystemMetaData::Permissions)) {
-         QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::Permissions);
+      if (! d->cache_enabled || ! d->metaData.hasFlags(QFileSystemMetaData::MetaDataFlag::AllPermissions)) {
+         QFileSystemEngine::fillMetaData(d->fileEntry, d->metaData, QFileSystemMetaData::MetaDataFlag::AllPermissions);
       }
 
       return d->metaData.permissions();

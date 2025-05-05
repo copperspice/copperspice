@@ -508,8 +508,7 @@ QAbstractFileEngine::FileFlags QFSFileEngine::fileFlags(FileFlags type) const
    {
       QFileSystemMetaData::MetaDataFlags queryFlags = Qt::EmptyFlag;
 
-      queryFlags |= QFileSystemMetaData::MetaDataFlags(uint(type))
-            & QFileSystemMetaData::Permissions;
+      queryFlags |= QFileSystemMetaData::MetaDataFlags(uint(type)) & QFileSystemMetaData::MetaDataFlag::AllPermissions;
 
       if (type & TypesMask) {
          queryFlags |= QFileSystemMetaData::AliasType

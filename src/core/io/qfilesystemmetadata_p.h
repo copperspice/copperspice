@@ -60,7 +60,7 @@ class QFileSystemMetaData
       WritePermissions    = OtherWritePermission | GroupWritePermission | UserWritePermission | OwnerWritePermission,
       ExecutePermissions  = OtherExecutePermission | GroupExecutePermission | UserExecutePermission | OwnerExecutePermission,
 
-      Permissions         = OtherPermissions | GroupPermissions | UserPermissions | OwnerPermissions,
+      AllPermissions      = OtherPermissions | GroupPermissions | UserPermissions | OwnerPermissions,
 
       // Type
       LinkType            = 0x00010000,
@@ -194,7 +194,7 @@ class QFileSystemMetaData
    }
 
    QFile::Permissions permissions() const  {
-      return QFile::Permissions(Permissions & entryFlags);
+      return QFileDevice::Permissions(MetaDataFlag::AllPermissions & entryFlags);
    }
 
    QDateTime creationTime() const;
