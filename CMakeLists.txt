@@ -719,7 +719,25 @@ if (WITH_GUI)
    endif()
 
    if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
-      set(BUILD_PLATFORMS_XCB_PLUGIN TRUE)
+
+      if (XCB_FOUND)
+         set(BUILD_PLATFORMS_XCB_PLUGIN TRUE)
+      endif()
+
+      if (Wayland_FOUND AND TARGET OpenGL::EGL)
+         set(BUILD_PLATFORMS_WAYLAND_PLUGIN TRUE)
+      endif()
+
+      if (NOT XCB_FOUND AND NOT WAYLAND_FOUND)
+         message("")
+         message("----------------------------------------------------------------------")
+         message("Both XCB and Wayland plugins can not be turned off when building CsGui")
+         message("----------------------------------------------------------------------")
+         message("")
+
+         message(FATAL_ERROR "Abort Configuration")
+      endif()
+
    endif()
 
    add_subdirectory(src/plugins/imageformats)
