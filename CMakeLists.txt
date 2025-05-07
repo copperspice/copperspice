@@ -575,6 +575,15 @@ if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
          TYPE REQUIRED
       )
 
+      find_package(Wayland 1.18)
+      set_package_properties(Wayland PROPERTIES
+         PURPOSE "Required to build the Wayland display plugin"
+         DESCRIPTION "Libraries for the Wayland display protocol"
+         URL "https://gitlab.freedesktop.org/wayland/wayland"
+         TYPE RECOMMENDED
+      )
+
+      find_package(OpenGL COMPONENTS EGL)
    endif()
 
    if (WITH_MULTIMEDIA)
