@@ -526,6 +526,14 @@ if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
    )
 
    if (WITH_GUI)
+      find_package(Fontconfig)
+      set_package_properties(Fontconfig PROPERTIES
+         PURPOSE "Required for fonts configuration support"
+         DESCRIPTION "Library for configuring and customizing font access"
+         URL "http://www.freedesktop.org/wiki/Software/fontconfig/"
+         TYPE REQUIRED
+      )
+
       find_package(X11 COMPONENTS ICE SM Xcursor Xext Xfixes Xi Xinerama Xrandr Xrender)
       set_package_properties(X11 PROPERTIES
          PURPOSE "Required for X11/X.Org integration support"
@@ -567,13 +575,6 @@ if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
          TYPE REQUIRED
       )
 
-      find_package(Fontconfig)
-      set_package_properties(Fontconfig PROPERTIES
-         PURPOSE "Required for fonts configuration support"
-         DESCRIPTION "Library for configuring and customizing font access"
-         URL "http://www.freedesktop.org/wiki/Software/fontconfig/"
-         TYPE REQUIRED
-      )
    endif()
 
    if (WITH_MULTIMEDIA)
@@ -590,7 +591,7 @@ if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
       find_package(OpenGL)
       set_package_properties(OpenGL PROPERTIES
          PURPOSE "Required for OpenGL support"
-         DESCRIPTION "The Mesa 3D Graphics Library"
+         DESCRIPTION "Mesa 3D Graphics Library"
          URL "http://www.mesa3d.org/"
          TYPE REQUIRED
       )
