@@ -131,10 +131,10 @@ QStringList QPollingFileSystemWatcherEngine::addPaths(const QStringList &paths,
    QMutexLocker locker(&mutex);
    QStringList p = paths;
 
-   QMutableListIterator<QString> it(p);
+   QMutableListIterator<QString> iter(p);
 
-   while (it.hasNext()) {
-      QString path = it.next();
+   while (iter.hasNext()) {
+      QString path = iter.next();
       QFileInfo fi(path);
 
       if (! fi.exists()) {
@@ -160,7 +160,7 @@ QStringList QPollingFileSystemWatcherEngine::addPaths(const QStringList &paths,
          this->files.insert(path, fi);
       }
 
-      it.remove();
+      iter.remove();
    }
 
    start();
@@ -437,46 +437,16 @@ void QFileSystemWatcher::addPaths(const QStringList &paths)
    QStringList p = paths;
    QFileSystemWatcherEngine *engine = nullptr;
 
-   if (! objectName().startsWith(QLatin1String("_qt_autotest_force_engine_"))) {
-      // normal runtime case - search intelligently for best engine
-      if (d->native) {
-         engine = d->native;
-      } else {
-         d_func()->initPollerEngine();
-         engine = d->poller;
-      }
+   if (d->native == nullptr) {
+      d_func()->initPollerEngine();
+      engine = d->poller;
 
-   } else {
-      // Autotest override case - use the explicitly selected engine only
-      QString forceName = objectName().mid(26);
+    } else {
+      engine = d->native;
 
-      if (forceName == "poller") {
-#if defined(CS_SHOW_DEBUG_CORE)
-         qDebug("QFileSystemWatcher::addPaths() Do not use native engine, use only polling engine");
-#endif
-
-         d_func()->initPollerEngine();
-         engine = d->poller;
-
-      } else if (forceName == "native") {
-#if defined(CS_SHOW_DEBUG_CORE)
-         qDebug("QFileSystemWatcher::addPaths() Do not use polling engine, use only native engine");
-#endif
-
-         engine = d->native;
-
-      } else {
-#if defined(CS_SHOW_DEBUG_CORE)
-         qDebug() << "QFileSystemWatcher::addPaths() Do not use native engine or polling engine, using explicit"
-               << forceName << "engine";
-#endif
-
-         d_func()->initForcedEngine(forceName);
-         engine = d->forced;
-      }
    }
 
-   if (engine) {
+   if (engine != nullptr) {
       p = engine->addPaths(p, &d->files, &d->directories);
    }
 
