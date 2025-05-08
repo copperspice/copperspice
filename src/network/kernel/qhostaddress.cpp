@@ -546,7 +546,7 @@ QString QHostAddress::toString() const
       QIPAddressUtils::toString(s, d->a6.c);
 
       if (! d->scopeId.isEmpty()) {
-         s.append(QLatin1Char('%') + d->scopeId);
+         s.append(QChar('%') + d->scopeId);
       }
 
       return s;
@@ -702,18 +702,19 @@ QPair<QHostAddress, int> QHostAddress::parseSubnet(const QString &subnet)
       return invalid;
    }
 
-   int slash = subnet.indexOf(QLatin1Char('/'));
+   int slash = subnet.indexOf(QChar('/'));
    QString netStr = subnet;
    if (slash != -1) {
       netStr.truncate(slash);
    }
 
    int netmask = -1;
-   bool isIpv6 = netStr.contains(QLatin1Char(':'));
+   bool isIpv6 = netStr.contains(QChar(':'));
 
    if (slash != -1) {
       // is the netmask given in IP-form or in bit-count form?
-      if (!isIpv6 && subnet.indexOf(QLatin1Char('.'), slash + 1) != -1) {
+
+      if (!isIpv6 && subnet.indexOf(QChar('.'), slash + 1) != -1) {
          // IP-style, convert it to bit-count form
          QNetmaskAddress parser;
          if (! parser.setAddress(subnet.mid(slash + 1))) {
@@ -753,7 +754,7 @@ QPair<QHostAddress, int> QHostAddress::parseSubnet(const QString &subnet)
    }
 
    // parse the address manually
-   QStringList parts = netStr.split(QLatin1Char('.'));
+   QStringList parts = netStr.split(QChar('.'));
    if (parts.isEmpty() || parts.count() > 4) {
       return invalid;   // invalid IPv4 address
    }

@@ -1442,15 +1442,15 @@ bool QSslSocketPrivate::isMatchingHostname(const QSslCertificate &cert, const QS
 
 bool QSslSocketPrivate::isMatchingHostname(const QString &cn, const QString &hostname)
 {
-   int wildcard = cn.indexOf(QLatin1Char('*'));
+   int wildcard = cn.indexOf(QChar('*'));
 
    // Check this is a wildcard cert, if not then just compare the strings
    if (wildcard < 0) {
       return cn == hostname;
    }
 
-   int firstCnDot = cn.indexOf(QLatin1Char('.'));
-   int secondCnDot = cn.indexOf(QLatin1Char('.'), firstCnDot + 1);
+   int firstCnDot = cn.indexOf(QChar('.'));
+   int secondCnDot = cn.indexOf(QChar('.'), firstCnDot + 1);
 
    // Check at least 3 components
    if ((-1 == secondCnDot) || (secondCnDot + 1 >= cn.length())) {

@@ -380,7 +380,7 @@ bool QNetworkAccessBackend::start()
          // This is not ideal.
          const QString host = reply->url.host();
 
-         if (host == QLatin1String("localhost") || QHostAddress(host).isLoopback() || reply->url.isLocalFile()) {
+         if (host == "localhost" || QHostAddress(host).isLoopback() || reply->url.isLocalFile()) {
             // Don't need an open session for localhost access.
 
          } else {
@@ -402,7 +402,7 @@ bool QNetworkAccessBackend::start()
    if (session) {
       QNetworkConfigurationManager configManager;
       // The active configuration tells us what IAP is in use
-      QVariant v = session->sessionProperty(QLatin1String("ActiveConfiguration"));
+      QVariant v = session->sessionProperty("ActiveConfiguration");
       if (v.isValid()) {
          config = configManager.configurationFromIdentifier(v.value<QString>());
       }

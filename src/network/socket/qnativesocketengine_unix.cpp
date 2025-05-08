@@ -108,7 +108,7 @@ static inline void qt_socket_getPortAndAddress(const qt_sockaddr *s, quint16 *po
 #ifndef QT_NO_IPV6IFNAME
             char scopeid[IFNAMSIZ];
             if (::if_indextoname(s->a6.sin6_scope_id, scopeid)) {
-               addr->setScopeId(QLatin1String(scopeid));
+               addr->setScopeId(scopeid);
             } else
 #endif
                addr->setScopeId(QString::number(s->a6.sin6_scope_id));

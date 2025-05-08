@@ -225,7 +225,7 @@ void QAuthenticatorPrivate::updateCredentials()
 
    switch (method) {
       case QAuthenticatorPrivate::Ntlm:
-         if ((separatorPosn = user.indexOf(QLatin1String("\\"))) != -1) {
+         if ((separatorPosn = user.indexOf("\\")) != -1) {
             //domain name is present
             realm.clear();
             userDomain = user.left(separatorPosn);
@@ -287,7 +287,7 @@ void QAuthenticatorPrivate::parseHttpResponse(const QList<QPair<QByteArray, QByt
 
    switch (method) {
       case Basic:
-         this->options[QLatin1String("realm")] = realm = QString::fromLatin1(parseOptions.value("realm"));
+         this->options[QString("realm")] = realm = QString::fromLatin1(parseOptions.value("realm"));
          if (user.isEmpty() && password.isEmpty()) {
             phase = Done;
          }
@@ -298,7 +298,7 @@ void QAuthenticatorPrivate::parseHttpResponse(const QList<QPair<QByteArray, QByt
          break;
 
       case DigestMd5: {
-         this->options[QLatin1String("realm")] = realm = QString::fromLatin1(parseOptions.value("realm"));
+         this->options[QString("realm")] = realm = QString::fromLatin1(parseOptions.value("realm"));
          if (parseOptions.value("stale").toLower() == "true") {
             phase = Start;
          }
@@ -1308,7 +1308,7 @@ static QByteArray qNtlmPhase3(QAuthenticatorPrivate *ctx, const QByteArray &phas
    Q_ASSERT(QNtlmPhase3BlockBase::Size == sizeof(QNtlmPhase3BlockBase));
 
    // for kerberos style user@domain logins, NTLM domain string should be left empty
-   if (ctx->userDomain.isEmpty() && !ctx->extractedUser.contains(QLatin1Char('@'))) {
+   if (ctx->userDomain.isEmpty() && ! ctx->extractedUser.contains(QChar('@'))) {
       offset = qEncodeNtlmString(pb.domain, offset, ch.targetNameStr, unicode);
       pb.domainStr = ch.targetNameStr;
    } else {

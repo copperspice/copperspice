@@ -109,8 +109,8 @@ static bool currentProcessIsService()
    typedef BOOL (WINAPI * PtrLookupAccountName)(LPCTSTR lpSystemName, LPCTSTR lpAccountName, PSID Sid,
          LPDWORD cbSid, LPTSTR ReferencedDomainName, LPDWORD cchReferencedDomainName, PSID_NAME_USE peUse);
 
-   static PtrGetUserName ptrGetUserName = (PtrGetUserName)QSystemLibrary::resolve(QLatin1String("Advapi32"), "GetUserNameW");
-   static PtrLookupAccountName ptrLookupAccountName = (PtrLookupAccountName)QSystemLibrary::resolve(QLatin1String("Advapi32"), "LookupAccountNameW");
+   static PtrGetUserName ptrGetUserName = (PtrGetUserName)QSystemLibrary::resolve("Advapi32", "GetUserNameW");
+   static PtrLookupAccountName ptrLookupAccountName = (PtrLookupAccountName)QSystemLibrary::resolve("Advapi32", "LookupAccountNameW");
 
    if (ptrGetUserName && ptrLookupAccountName) {
       wchar_t userName[UNLEN + 1] = L"";
@@ -148,8 +148,9 @@ static QStringList splitSpaceSemicolon(const QString &source)
    int end;
 
    while (true) {
-      int space = source.indexOf(QLatin1Char(' '), start);
-      int semicolon = source.indexOf(QLatin1Char(';'), start);
+      int space     = source.indexOf(QChar(' '), start);
+      int semicolon = source.indexOf(QChar(';'), start);
+
       end = space;
 
       if (semicolon != -1 && (end == -1 || semicolon < end)) {
@@ -177,7 +178,7 @@ static bool isBypassed(const QString &host, const QStringList &bypassList)
       return false;
    }
 
-   bool isSimple = !host.contains(QLatin1Char('.')) && !host.contains(QLatin1Char(':'));
+   bool isSimple = ! host.contains(QChar('.')) && ! host.contains(QChar(':'));
 
    QHostAddress ipAddress;
    bool isIpAddress = ipAddress.setAddress(host);
@@ -300,7 +301,7 @@ static QList<QNetworkProxy> parseServerList(const QNetworkProxyQuery &query, con
       QNetworkProxy::ProxyType proxyType = QNetworkProxy::HttpProxy;
       quint16 port = 8080;
 
-      int pos = entry.indexOf(QLatin1Char('='));
+      int pos = entry.indexOf(QChar('='));
 
       QStringView scheme;
       QStringView protocolTag;
@@ -362,10 +363,10 @@ static QList<QNetworkProxy> parseServerList(const QNetworkProxyQuery &query, con
          result.prepend(taggedProxies.value(requiredTag));
       }
    }
-   if (!checkTags || requiredTag != QLatin1String("http")) {
+   if (! checkTags || requiredTag != "http") {
       // if there are different http proxies for http and https, prefer the https one (more likely to be capable of CONNECT)
-      QNetworkProxy httpProxy  = taggedProxies.value(QLatin1String("http"));
-      QNetworkProxy httpsProxy = taggedProxies.value(QLatin1String("http"));
+      QNetworkProxy httpProxy  = taggedProxies.value("http");
+      QNetworkProxy httpsProxy = taggedProxies.value("http");
 
       if (httpProxy != httpsProxy && httpProxy.type() == QNetworkProxy::HttpProxy &&
             httpsProxy.type() == QNetworkProxy::HttpProxy) {
@@ -636,13 +637,13 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
       // url could be empty, e.g. from QNetworkProxy::applicationProxy(), that's fine,
       // we'll still ask for the proxy.
       // But for a file url, we know we don't need one.
-      if (url.scheme() == QLatin1String("file") || url.scheme() == QLatin1String("qrc")) {
+      if (url.scheme() == "file" || url.scheme() == "qrc") {
          return sp->defaultResult;
       }
 
       if (query.queryType() != QNetworkProxyQuery::UrlRequest) {
          // change the scheme to https, maybe it'll work
-         url.setScheme(QLatin1String("https"));
+         url.setScheme("https");
       }
 
       QString urlQueryString = url.toString();

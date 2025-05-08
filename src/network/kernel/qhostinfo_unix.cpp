@@ -72,7 +72,7 @@ static res_state_ptr local_res = nullptr;
 
 static void resolveLibraryInternal()
 {
-   QLibrary lib(QLatin1String("resolv"));
+   QLibrary lib("resolv");
 
    if (!lib.load()) {
       return;

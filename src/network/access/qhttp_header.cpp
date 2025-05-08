@@ -123,12 +123,12 @@ bool QHttpHeader::parse(const QString &str)
 {
    Q_D(QHttpHeader);
    QStringList lst;
-   int pos = str.indexOf(QLatin1Char('\n'));
+   int pos = str.indexOf(QChar('\n'));
 
-   if (pos > 0 && str.at(pos - 1) == QLatin1Char('\r')) {
-      lst = str.trimmed().split(QLatin1String("\r\n"));
+   if (pos > 0 && str.at(pos - 1) == QChar('\r')) {
+      lst = str.trimmed().split("\r\n");
    } else {
-      lst = str.trimmed().split(QLatin1String("\n"));
+      lst = str.trimmed().split("\n");
    }
 
    lst.removeAll(QString()); // No empties
@@ -144,7 +144,7 @@ bool QHttpHeader::parse(const QString &str)
       if (!(*it).isEmpty()) {
          if ((*it)[0].isSpace()) {
             if (!lines.isEmpty()) {
-               lines.last() += QLatin1Char(' ');
+               lines.last() += QChar(' ');
                lines.last() += (*it).trimmed();
             }
          } else {
@@ -303,7 +303,7 @@ void QHttpHeader::removeAllValues(const QString &key)
 
 bool QHttpHeader::parseLine(const QString &line, int)
 {
-   int i = line.indexOf(QLatin1Char(':'));
+   int i = line.indexOf(QChar(':'));
    if (i == -1) {
       return false;
    }
@@ -317,14 +317,14 @@ QString QHttpHeader::toString() const
 {
    Q_D(const QHttpHeader);
    if (!isValid()) {
-      return QLatin1String("");
+      return QString("");
    }
 
-   QString ret = QLatin1String("");
+   QString ret = QString();
 
    QList<QPair<QString, QString> >::const_iterator it = d->values.constBegin();
    while (it != d->values.constEnd()) {
-      ret += (*it).first + QLatin1String(": ") + (*it).second + QLatin1String("\r\n");
+      ret += (*it).first + ": " + (*it).second + "\r\n";
       ++it;
    }
    return ret;
@@ -332,33 +332,33 @@ QString QHttpHeader::toString() const
 
 bool QHttpHeader::hasContentLength() const
 {
-   return hasKey(QLatin1String("content-length"));
+   return hasKey("content-length");
 }
 
 qint64 QHttpHeader::contentLength() const
 {
-   return value(QLatin1String("content-length")).toInteger<uint>();
+   return value("content-length").toInteger<uint>();
 }
 
 void QHttpHeader::setContentLength(qint64 len)
 {
-   setValue(QLatin1String("content-length"), QString::number(len));
+   setValue("content-length", QString::number(len));
 }
 
 bool QHttpHeader::hasContentType() const
 {
-   return hasKey(QLatin1String("content-type"));
+   return hasKey("content-type");
 }
 
 QString QHttpHeader::contentType() const
 {
-   QString type = value(QLatin1String("content-type"));
+   QString type = value("content-type");
 
    if (type.isEmpty()) {
       return QString();
    }
 
-   int pos = type.indexOf(QLatin1Char(';'));
+   int pos = type.indexOf(QChar(';'));
    if (pos == -1) {
       return type;
    }
@@ -467,15 +467,14 @@ bool QHttpRequestHeader::parseLine(const QString &line, int number)
       return QHttpHeader::parseLine(line, number);
    }
 
-   QStringList lst = line.simplified().split(QLatin1String(" "));
+   QStringList lst = line.simplified().split(" ");
    if (lst.count() > 0) {
       d->m = lst[0];
       if (lst.count() > 1) {
          d->p = lst[1];
          if (lst.count() > 2) {
             QString v = lst[2];
-            if (v.length() >= 8 && v.left(5) == QLatin1String("HTTP/") &&
-                  v[5].isDigit() && v[6] == QLatin1Char('.') && v[7].isDigit()) {
+            if (v.length() >= 8 && v.left(5) == "HTTP/" && v[5].isDigit() && v[6] == QChar('.') && v[7].isDigit()) {
                d->majVer = v[5].toLatin1() - '0';
                d->minVer = v[7].toLatin1() - '0';
                return true;
@@ -491,8 +490,8 @@ QString QHttpRequestHeader::toString() const
 {
    Q_D(const QHttpRequestHeader);
 
-   QString first(QLatin1String("%1 %2"));
-   QString last(QLatin1String(" HTTP/%3.%4\r\n%5\r\n"));
+   QString first("%1 %2");
+   QString last(" HTTP/%3.%4\r\n%5\r\n");
 
    return first.formatArg(d->m).formatArg(d->p) + last.formatArg(d->majVer).formatArg(d->minVer).formatArg(QHttpHeader::toString());
 }
@@ -593,13 +592,13 @@ bool QHttpResponseHeader::parseLine(const QString &line, int number)
       return false;
    }
 
-   if (l.left(5) == QLatin1String("HTTP/") && l[5].isDigit() && l[6] == QLatin1Char('.') &&
-         l[7].isDigit() && l[8] == QLatin1Char(' ') && l[9].isDigit()) {
+   if (l.left(5) == "HTTP/" && l[5].isDigit() && l[6] == QChar('.') &&
+         l[7].isDigit() && l[8] == QChar(' ') && l[9].isDigit()) {
 
       d->majVer = l[5].toLatin1() - '0';
       d->minVer = l[7].toLatin1() - '0';
 
-      int pos = l.indexOf(QLatin1Char(' '), 9);
+      int pos = l.indexOf(QChar(' '), 9);
 
       if (pos != -1) {
          d->reasonPhr = l.mid(pos + 1);
@@ -621,7 +620,7 @@ QString QHttpResponseHeader::toString() const
 {
    Q_D(const QHttpResponseHeader);
 
-   QString retval(QLatin1String("HTTP/%1.%2 %3 %4\r\n%5\r\n"));
+   QString retval("HTTP/%1.%2 %3 %4\r\n%5\r\n");
 
    return retval.formatArg(d->majVer).formatArg(d->minVer).formatArg(d->statCode)
          .formatArg(d->reasonPhr).formatArg(QHttpHeader::toString());

@@ -116,7 +116,7 @@ static QByteArray makeCacheKey(QUrl &url, QNetworkProxy *proxy)
 
    copy.setPort(copy.port(isEncrypted ? 443 : 80));
 
-   if (scheme == QLatin1String("preconnect-http")) {
+   if (scheme == "preconnect-http") {
       copy.setScheme("http");
 
    } else if (scheme == "preconnect-https") {

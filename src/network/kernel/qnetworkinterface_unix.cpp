@@ -77,7 +77,7 @@ static QHostAddress addressFromSockaddr(sockaddr *sa, int ifindex = 0, const QSt
          char scopeid[IFNAMSIZ];
 
          if (::if_indextoname(scope, scopeid)) {
-            address.setScopeId(QLatin1String(scopeid));
+            address.setScopeId(scopeid);
 
          } else
 #endif
@@ -195,7 +195,7 @@ static QNetworkInterfacePrivate *findInterface(int socket, QList<QNetworkInterfa
    // Search by name
    QList<QNetworkInterfacePrivate *>::iterator if_it = interfaces.begin();
    for ( ; if_it != interfaces.end(); ++if_it)
-      if ((*if_it)->name == QLatin1String(req.ifr_name)) {
+      if ((*if_it)->name == req.ifr_name) {
          // existing interface
          iface = *if_it;
          break;

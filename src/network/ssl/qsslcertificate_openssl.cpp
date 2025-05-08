@@ -396,7 +396,7 @@ static QVariant x509ExtensionToValue(X509_EXTENSION *ext)
          BASIC_CONSTRAINTS *basic = reinterpret_cast<BASIC_CONSTRAINTS *>(q_X509V3_EXT_d2i(ext));
 
          QVariantMap result;
-         result[QLatin1String("ca")] = basic->ca ? true : false;
+         result[QString("ca")] = basic->ca ? true : false;
          if (basic->pathlen) {
             result["pathLenConstraint"] = (qint64)q_ASN1_INTEGER_get(basic->pathlen);
          }
@@ -463,7 +463,7 @@ static QVariant x509ExtensionToValue(X509_EXTENSION *ext)
          if (auth_key->keyid) {
             QByteArray keyid(reinterpret_cast<const char *>(auth_key->keyid->data),
                              auth_key->keyid->length);
-            result[QLatin1String("keyid")] = keyid.toHex();
+            result[QString("keyid")] = keyid.toHex();
          }
 
          // issuer
@@ -471,7 +471,7 @@ static QVariant x509ExtensionToValue(X509_EXTENSION *ext)
 
          // serial
          if (auth_key->serial) {
-            result[QLatin1String("serial")] = (qint64)q_ASN1_INTEGER_get(auth_key->serial);
+            result[QString("serial")] = (qint64)q_ASN1_INTEGER_get(auth_key->serial);
          }
 
          q_AUTHORITY_KEYID_free(auth_key);

@@ -403,7 +403,7 @@ bool QSslCertificatePrivate::parse(const QByteArray &data)
                }
                extensions << extension;
 
-               if (extension.oid() == QLatin1String("2.5.29.17")) {
+               if (extension.oid() == "2.5.29.17") {
                   // subjectAltName
                   QAsn1Element sanElem;
 

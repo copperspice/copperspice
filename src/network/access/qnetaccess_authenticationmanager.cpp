@@ -93,16 +93,16 @@ static QByteArray proxyAuthenticationKey(const QNetworkProxy &proxy, const QStri
 
    switch (proxy.type()) {
       case QNetworkProxy::Socks5Proxy:
-         key.setScheme(QLatin1String("proxy-socks5"));
+         key.setScheme("proxy-socks5");
          break;
 
       case QNetworkProxy::HttpProxy:
       case QNetworkProxy::HttpCachingProxy:
-         key.setScheme(QLatin1String("proxy-http"));
+         key.setScheme("proxy-http");
          break;
 
       case QNetworkProxy::FtpCachingProxy:
-         key.setScheme(QLatin1String("proxy-ftp"));
+         key.setScheme("proxy-ftp");
          break;
 
       case QNetworkProxy::DefaultProxy:

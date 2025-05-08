@@ -101,8 +101,8 @@ static QHash<QHostAddress, QHostAddress> ipv4Netmasks()
    // iterate over the list and add the entries to our listing
    for (PIP_ADAPTER_INFO ptr = pAdapter; ptr; ptr = ptr->Next) {
       for (PIP_ADDR_STRING addr = &ptr->IpAddressList; addr; addr = addr->Next) {
-         QHostAddress address(QLatin1String(addr->IpAddress.String));
-         QHostAddress mask(QLatin1String(addr->IpMask.String));
+         QHostAddress address(addr->IpAddress.String);
+         QHostAddress mask(addr->IpMask.String);
          ipv4netmasks[address] = mask;
       }
    }

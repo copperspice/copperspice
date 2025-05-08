@@ -66,7 +66,7 @@ static bool isHostExcluded(CFDictionaryRef dict, const QString &host)
       return true;
    }
 
-   bool isSimple = !host.contains(QLatin1Char('.')) && !host.contains(QLatin1Char(':'));
+   bool isSimple = ! host.contains(QChar('.')) && ! host.contains(QChar(':'));
    CFNumberRef excludeSimples;
    if (isSimple &&
          (excludeSimples = (CFNumberRef)CFDictionaryGetValue(dict, kSCPropNetProxiesExcludeSimpleHostnames))) {
@@ -302,19 +302,19 @@ QList<QNetworkProxy> macQueryInternal(const QNetworkProxyQuery &query)
 
    // try the protocol-specific proxy
    QNetworkProxy protocolSpecificProxy;
-   if (protocol == QLatin1String("ftp")) {
+   if (protocol == "ftp") {
       protocolSpecificProxy =
          proxyFromDictionary(dict, QNetworkProxy::FtpCachingProxy,
                              kSCPropNetProxiesFTPEnable,
                              kSCPropNetProxiesFTPProxy,
                              kSCPropNetProxiesFTPPort);
-   } else if (protocol == QLatin1String("http")) {
+   } else if (protocol == "http") {
       protocolSpecificProxy =
          proxyFromDictionary(dict, QNetworkProxy::HttpProxy,
                              kSCPropNetProxiesHTTPEnable,
                              kSCPropNetProxiesHTTPProxy,
                              kSCPropNetProxiesHTTPPort);
-   } else if (protocol == QLatin1String("https")) {
+   } else if (protocol == "https") {
       isHttps = true;
       protocolSpecificProxy =
          proxyFromDictionary(dict, QNetworkProxy::HttpProxy,

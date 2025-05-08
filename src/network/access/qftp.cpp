@@ -532,7 +532,7 @@ static void _q_parseUnixDir(const QStringList &tokens, const QString &userName, 
    // Resolve filename
    QString name = tokens.at(7);
    if (info->isSymLink()) {
-      int linkPos = name.indexOf(QLatin1String(" ->"));
+      int linkPos = name.indexOf(" ->");
       if (linkPos != -1) {
          name.resize(linkPos);
       }
@@ -547,8 +547,8 @@ static void _q_parseUnixDir(const QStringList &tokens, const QString &userName, 
    info->setSize(tokens.at(5).toInteger<qint64>());
 
    QStringList formats;
-   formats << QLatin1String("MMM dd  yyyy") << QLatin1String("MMM dd hh:mm") << QLatin1String("MMM  d  yyyy")
-           << QLatin1String("MMM  d hh:mm") << QLatin1String("MMM  d yyyy") << QLatin1String("MMM dd yyyy");
+   formats << QString("MMM dd  yyyy") << QString("MMM dd hh:mm") << QString("MMM  d  yyyy")
+           << QString("MMM  d hh:mm") << QString("MMM  d yyyy")  << QString("MMM dd yyyy");
 
    QString dateString = tokens.at(6);
    dateString.replace(0, 1,dateString[0].toUpper());
@@ -605,7 +605,7 @@ static void _q_parseDosDir(const QStringList &tokens, const QString &userName, Q
    info->setName(name);
    info->setSymLink(name.toLower().endsWith(".lnk"));
 
-   if (tokens.at(2) == QLatin1String("<DIR>")) {
+   if (tokens.at(2) == "<DIR>") {
       info->setFile(false);
       info->setDir(true);
 
@@ -627,7 +627,7 @@ static void _q_parseDosDir(const QStringList &tokens, const QString &userName, Q
    if (extIndex != -1) {
       ext = name.mid(extIndex + 1);
    }
-   if (ext == QLatin1String("exe") || ext == QLatin1String("bat") || ext == QLatin1String("com")) {
+   if (ext == "exe" || ext == "bat" || ext == "com") {
       permissions |= QUrlInfo::ExeOwner | QUrlInfo::ExeGroup | QUrlInfo::ExeOther;
    }
 
@@ -636,7 +636,7 @@ static void _q_parseDosDir(const QStringList &tokens, const QString &userName, Q
    info->setReadable(true);
    info->setWritable(info->isFile());
 
-   QDateTime dateTime = QLocale::c().toDateTime(tokens.at(1), QLatin1String("MM-dd-yy  hh:mmAP"));
+   QDateTime dateTime = QLocale::c().toDateTime(tokens.at(1), "MM-dd-yy  hh:mmAP");
 
    if (dateTime.date().year() < 1971) {
       dateTime.setDate(QDate(dateTime.date().year() + 100, dateTime.date().month(), dateTime.date().day()));
@@ -709,7 +709,7 @@ void QFtpDTP::socketReadyRead()
       return;
    }
 
-   if (pi->currentCommand().startsWith(QLatin1String("LIST"))) {
+   if (pi->currentCommand().startsWith("LIST")) {
       while (socket->canReadLine()) {
          QUrlInfo i;
          QByteArray line = socket->readLine();
@@ -718,7 +718,7 @@ void QFtpDTP::socketReadyRead()
          qDebug("QFtpDTP read (list): '%s'", line.constData());
 #endif
 
-         if (parseDir(line, QLatin1String(""), &i)) {
+         if (parseDir(line, QString(), &i)) {
             emit listInfo(i);
 
          } else {
@@ -827,7 +827,7 @@ void QFtpDTP::socketBytesWritten(qint64 bytes)
 void QFtpDTP::setupSocket()
 {
    socket = listener.nextPendingConnection();
-   socket->setObjectName(QLatin1String("QFtpDTP Active state socket"));
+   socket->setObjectName("QFtpDTP Active state socket");
 
    connect(socket, &QTcpSocket::connected,    this, &QFtpDTP::socketConnected);
    connect(socket, &QTcpSocket::readyRead,    this, &QFtpDTP::socketReadyRead);
@@ -1169,8 +1169,7 @@ bool QFtpPI::processReply()
       }
 
    } else if (replyCodeX == 230) {
-      if (currentCmd.startsWith(QLatin1String("USER ")) && pendingCommands.count() > 0 &&
-            pendingCommands.first().startsWith(QLatin1String("PASS "))) {
+      if (currentCmd.startsWith("USER ") && pendingCommands.count() > 0 && pendingCommands.first().startsWith("PASS ")) {
          // no need to send the PASS -- we are already logged in
          pendingCommands.pop_front();
       }
@@ -1180,7 +1179,7 @@ bool QFtpPI::processReply()
 
    } else if (replyCodeX == 213) {
       // 213 File status.
-      if (currentCmd.startsWith(QLatin1String("SIZE "))) {
+      if (currentCmd.startsWith("SIZE ")) {
          dtp.setBytesTotal(m_replyText.simplified().toInteger<qint64>());
       }
 
@@ -1266,7 +1265,7 @@ bool QFtpPI::startNextCmd()
    // the address/port arguments are edited in.
    QHostAddress address = commandSocket.localAddress();
 
-   if (currentCmd.startsWith(QLatin1String("PORT"))) {
+   if (currentCmd.startsWith("PORT")) {
       if ((address.protocol() == QTcpSocket::IPv6Protocol) && transferConnectionExtended) {
          int port = dtp.setupListener(address);
          currentCmd = "EPRT |";
@@ -1287,7 +1286,7 @@ bool QFtpPI::startNextCmd()
          portArg += QChar(',') + QString::number((port & 0xff00) >> 8);
          portArg += QChar(',') + QString::number(port & 0xff);
 
-         currentCmd = QLatin1String("PORT ");
+         currentCmd = "PORT ";
          currentCmd += portArg;
 
       } else {
@@ -1435,14 +1434,15 @@ int QFtp::connectToHost(const QString &host, quint16 port)
 int QFtp::login(const QString &user, const QString &password)
 {
    QStringList cmds;
-   cmds << (QLatin1String("USER ") + (user.isEmpty() ? QLatin1String("anonymous") : user) + QLatin1String("\r\n"));
-   cmds << (QLatin1String("PASS ") + (password.isEmpty() ? QLatin1String("anonymous@") : password) + QLatin1String("\r\n"));
+   cmds << (QString("USER ") + (user.isEmpty() ? QString("anonymous") : user) + QString("\r\n"));
+   cmds << (QString("PASS ") + (password.isEmpty() ? QString("anonymous@") : password) + QString("\r\n"));
+
    return d_func()->addCommand(new QFtpCommand(Login, cmds));
 }
 
 int QFtp::close()
 {
-   return d_func()->addCommand(new QFtpCommand(Close, QStringList(QLatin1String("QUIT\r\n"))));
+   return d_func()->addCommand(new QFtpCommand(Close, QStringList("QUIT\r\n")));
 }
 
 int QFtp::setTransferMode(TransferMode mode)
@@ -1463,32 +1463,44 @@ int QFtp::setProxy(const QString &host, quint16 port)
 int QFtp::list(const QString &dir)
 {
    QStringList cmds;
-   cmds << QLatin1String("TYPE A\r\n");
-   cmds << QLatin1String(d_func()->transferMode == Passive ? "PASV\r\n" : "PORT\r\n");
-   if (dir.isEmpty()) {
-      cmds << QLatin1String("LIST\r\n");
+   cmds.append("TYPE A\r\n");
+
+   if (d_func()->transferMode) {
+      cmds.append("PASV\r\n");
    } else {
-      cmds << (QLatin1String("LIST ") + dir + QLatin1String("\r\n"));
+      cmds.append("PORT\r\n");
+   }
+
+   if (dir.isEmpty()) {
+      cmds.append("LIST\r\n");
+   } else {
+      cmds.append("LIST " + dir + "\r\n");
    }
    return d_func()->addCommand(new QFtpCommand(List, cmds));
 }
 
 int QFtp::cd(const QString &dir)
 {
-   return d_func()->addCommand(new QFtpCommand(Cd, QStringList(QLatin1String("CWD ") + dir + QLatin1String("\r\n"))));
+   return d_func()->addCommand(new QFtpCommand(Cd, QStringList("CWD " + dir + "\r\n")));
 }
 
 int QFtp::get(const QString &file, QIODevice *dev, TransferType type)
 {
    QStringList cmds;
    if (type == Binary) {
-      cmds << QLatin1String("TYPE I\r\n");
+      cmds.append("TYPE I\r\n");
    } else {
-      cmds << QLatin1String("TYPE A\r\n");
+      cmds.append("TYPE A\r\n");
    }
-   cmds << QLatin1String("SIZE ") + file + QLatin1String("\r\n");
-   cmds << QLatin1String(d_func()->transferMode == Passive ? "PASV\r\n" : "PORT\r\n");
-   cmds << QLatin1String("RETR ") + file + QLatin1String("\r\n");
+   cmds.append("SIZE " + file + "\r\n");
+
+   if (d_func()->transferMode == Passive) {
+      cmds.append("PASV\r\n");
+   } else {
+      cmds.append("PORT\r\n");
+   }
+
+   cmds.append("RETR " + file + "\r\n");
    return d_func()->addCommand(new QFtpCommand(Get, cmds, dev));
 }
 
@@ -1496,13 +1508,20 @@ int QFtp::put(const QByteArray &data, const QString &file, TransferType type)
 {
    QStringList cmds;
    if (type == Binary) {
-      cmds << QLatin1String("TYPE I\r\n");
+      cmds.append("TYPE I\r\n");
    } else {
-      cmds << QLatin1String("TYPE A\r\n");
+      cmds.append("TYPE A\r\n");
    }
-   cmds << QLatin1String(d_func()->transferMode == Passive ? "PASV\r\n" : "PORT\r\n");
-   cmds << QLatin1String("ALLO ") + QString::number(data.size()) + QLatin1String("\r\n");
-   cmds << QLatin1String("STOR ") + file + QLatin1String("\r\n");
+
+   if (d_func()->transferMode == Passive) {
+      cmds.append("PASV\r\n");
+   } else {
+      cmds.append("PORT\r\n");
+   }
+
+   cmds.append("ALLO " + QString::number(data.size()) + "\r\n");
+   cmds.append("STOR " + file + "\r\n");
+
    return d_func()->addCommand(new QFtpCommand(Put, cmds, data));
 }
 
@@ -1510,44 +1529,44 @@ int QFtp::put(QIODevice *dev, const QString &file, TransferType type)
 {
    QStringList cmds;
    if (type == Binary) {
-      cmds << QLatin1String("TYPE I\r\n");
+      cmds.append("TYPE I\r\n");
    } else {
-      cmds << QLatin1String("TYPE A\r\n");
+      cmds.append("TYPE A\r\n");
    }
-   cmds << QLatin1String(d_func()->transferMode == Passive ? "PASV\r\n" : "PORT\r\n");
+   cmds.append(d_func()->transferMode == Passive ? QString("PASV\r\n") : QString("PORT\r\n"));
    if (!dev->isSequential()) {
-      cmds << QLatin1String("ALLO ") + QString::number(dev->size()) + QLatin1String("\r\n");
+      cmds.append("ALLO " + QString::number(dev->size()) + "\r\n");
    }
-   cmds << QLatin1String("STOR ") + file + QLatin1String("\r\n");
+   cmds.append("STOR " + file + "\r\n");
    return d_func()->addCommand(new QFtpCommand(Put, cmds, dev));
 }
 
 int QFtp::remove(const QString &file)
 {
-   return d_func()->addCommand(new QFtpCommand(Remove, QStringList(QLatin1String("DELE ") + file + QLatin1String("\r\n"))));
+   return d_func()->addCommand(new QFtpCommand(Remove, QStringList("DELE " + file + "\r\n")));
 }
 
 int QFtp::mkdir(const QString &dir)
 {
-   return d_func()->addCommand(new QFtpCommand(Mkdir, QStringList(QLatin1String("MKD ") + dir + QLatin1String("\r\n"))));
+   return d_func()->addCommand(new QFtpCommand(Mkdir, QStringList("MKD " + dir + "\r\n")));
 }
 
 int QFtp::rmdir(const QString &dir)
 {
-   return d_func()->addCommand(new QFtpCommand(Rmdir, QStringList(QLatin1String("RMD ") + dir + QLatin1String("\r\n"))));
+   return d_func()->addCommand(new QFtpCommand(Rmdir, QStringList("RMD " + dir + "\r\n")));
 }
 
 int QFtp::rename(const QString &oldname, const QString &newname)
 {
    QStringList cmds;
-   cmds << QLatin1String("RNFR ") + oldname + QLatin1String("\r\n");
-   cmds << QLatin1String("RNTO ") + newname + QLatin1String("\r\n");
+   cmds << "RNFR " + oldname + "\r\n";
+   cmds << "RNTO " + newname + "\r\n";
    return d_func()->addCommand(new QFtpCommand(Rename, cmds));
 }
 
 int QFtp::rawCommand(const QString &command)
 {
-   QString cmd = command.trimmed() + QLatin1String("\r\n");
+   QString cmd = command.trimmed() + "\r\n";
    return d_func()->addCommand(new QFtpCommand(RawCommand, QStringList(cmd)));
 }
 

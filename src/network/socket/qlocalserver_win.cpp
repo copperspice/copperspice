@@ -208,7 +208,7 @@ bool QLocalServerPrivate::addListener()
 
          default:
             CloseHandle(listener.handle);
-            setError(QLatin1String("QLocalServerPrivate::addListener"));
+            setError("QLocalServerPrivate::addListener");
             listeners.removeLast();
             return false;
       }
@@ -305,7 +305,7 @@ void QLocalServerPrivate::_q_onNewConnection() {
          } else {
             if (GetLastError() != ERROR_IO_INCOMPLETE) {
                q->close();
-               setError(QLatin1String("QLocalServerPrivate::_q_onNewConnection"));
+               setError("QLocalServerPrivate::_q_onNewConnection");
                return;
             }
 

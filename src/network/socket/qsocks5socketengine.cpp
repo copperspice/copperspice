@@ -137,7 +137,7 @@ static QString dump(const QByteArray &buf)
    for (int i = 0; i < qMin(MAX_DATA_DUMP, buf.size()); ++i) {
 
       if (i) {
-         data += QLatin1Char(' ');
+         data += QChar(' ');
       }
 
       uint val = (unsigned char)buf.at(i);
@@ -145,7 +145,7 @@ static QString dump(const QByteArray &buf)
    }
 
    if (buf.size() > MAX_DATA_DUMP) {
-      data += QLatin1String(" ...");
+      data += " ...";
    }
 
    return QString::fromLatin1("size: %1 data: { %2 }").formatArg(buf.size()).formatArg(data);
@@ -540,7 +540,7 @@ bool QSocks5PasswordAuthenticator::continueAuthenticate(QTcpSocket *socket, bool
 
 QString QSocks5PasswordAuthenticator::errorString()
 {
-   return QLatin1String("Socks5 user name or password incorrect");
+   return QString("Socks5 user name or password incorrect");
 }
 
 
@@ -820,7 +820,7 @@ void QSocks5SocketEnginePrivate::parseAuthenticationMethodReply()
       return;
    } else if (buf.at(1) != data->authenticator->methodId()
               || !data->authenticator->beginAuthenticate(data->controlSocket, &authComplete)) {
-      setErrorState(AuthenticatingError, QLatin1String("Socks5 host did not support authentication method."));
+      setErrorState(AuthenticatingError, "Socks5 host did not support authentication method.");
       socketError = QAbstractSocket::SocketAccessError; // change the socket error
       emitConnectionNotification();
       return;
@@ -1185,7 +1185,7 @@ bool QSocks5SocketEngine::connectInternal()
       } else if (socketType() == QAbstractSocket::UdpSocket) {
          d->initialize(QSocks5SocketEnginePrivate::UdpAssociateMode);
          // all udp needs to be bound
-         if (!bind(QHostAddress(QLatin1String("0.0.0.0")), 0)) {
+         if (! bind(QHostAddress("0.0.0.0"), 0)) {
             return false;
          }
 
@@ -1563,11 +1563,11 @@ int QSocks5SocketEngine::accept()
          break;
 
       case QSocks5SocketEnginePrivate::ControlSocketError:
-         setError(QAbstractSocket::ProxyProtocolError, QLatin1String("Control socket error"));
+         setError(QAbstractSocket::ProxyProtocolError, "Control socket error");
          break;
 
       default:
-         setError(QAbstractSocket::ProxyProtocolError, QLatin1String("SOCKS5 proxy error"));
+         setError(QAbstractSocket::ProxyProtocolError, "SOCKS5 proxy error");
          break;
    }
 
@@ -1626,8 +1626,8 @@ qint64 QSocks5SocketEngine::read(char *data, qint64 maxlen)
          if (d->data->controlSocket->state() == QAbstractSocket::UnconnectedState) {
             //imitate remote closed
             close();
-            setError(QAbstractSocket::RemoteHostClosedError,
-                     QLatin1String("Remote host closed connection###"));
+
+            setError(QAbstractSocket::RemoteHostClosedError, "Remote host closed connection###");
             setState(QAbstractSocket::UnconnectedState);
             return -1;
          } else {
@@ -1693,16 +1693,14 @@ qint64 QSocks5SocketEngine::write(const char *data, qint64 len)
 bool QSocks5SocketEngine::joinMulticastGroup(const QHostAddress &,
       const QNetworkInterface &)
 {
-   setError(QAbstractSocket::UnsupportedSocketOperationError,
-            QLatin1String("Operation on socket is not supported"));
+   setError(QAbstractSocket::UnsupportedSocketOperationError, "Operation on socket is not supported");
    return false;
 }
 
 bool QSocks5SocketEngine::leaveMulticastGroup(const QHostAddress &,
       const QNetworkInterface &)
 {
-   setError(QAbstractSocket::UnsupportedSocketOperationError,
-            QLatin1String("Operation on socket is not supported"));
+   setError(QAbstractSocket::UnsupportedSocketOperationError, "Operation on socket is not supported");
    return false;
 }
 
@@ -1714,8 +1712,7 @@ QNetworkInterface QSocks5SocketEngine::multicastInterface() const
 
 bool QSocks5SocketEngine::setMulticastInterface(const QNetworkInterface &)
 {
-   setError(QAbstractSocket::UnsupportedSocketOperationError,
-            QLatin1String("Operation on socket is not supported"));
+   setError(QAbstractSocket::UnsupportedSocketOperationError, "Operation on socket is not supported");
    return false;
 }
 #endif // QT_NO_NETWORKINTERFACE
@@ -1748,7 +1745,7 @@ qint64 QSocks5SocketEngine::writeDatagram(const char *data, qint64 len, const QI
    if (! d->data) {
       d->initialize(QSocks5SocketEnginePrivate::UdpAssociateMode);
       // all udp needs to be bound
-      if (!bind(QHostAddress(QLatin1String("0.0.0.0")), 0)) {
+      if (!bind(QHostAddress("0.0.0.0"), 0)) {
          //### set error
          return -1;
       }

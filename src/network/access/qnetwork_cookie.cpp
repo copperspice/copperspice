@@ -217,13 +217,12 @@ QByteArray QNetworkCookie::toRawForm(RawForm form) const
 
       if (!isSessionCookie()) {
          result += "; expires=";
-         result += QLocale::c().toString(d->expirationDate.toUTC(),
-                                         QLatin1String("ddd, dd-MMM-yyyy hh:mm:ss 'GMT")).toLatin1();
+         result += QLocale::c().toString(d->expirationDate.toUTC(), QString("ddd, dd-MMM-yyyy hh:mm:ss 'GMT")).toLatin1();
       }
       if (!d->domain.isEmpty()) {
          result += "; domain=";
 
-         if (d->domain.startsWith(QLatin1Char('.'))) {
+         if (d->domain.startsWith('.')) {
             result += '.';
             result += QUrl::toAce(d->domain.mid(1));
          } else {
@@ -360,7 +359,7 @@ static QDateTime parseDateString(const QString &dateString)
    int zoneOffset = -1;
 
    // hour:minute:second.ms pm
-   QRegularExpression timeRegEx(QLatin1String("(\\d{1,2}):(\\d{1,2})(:(\\d{1,2})|)(\\.(\\d{1,3})|)((\\s{0,}(am|pm))|)"));
+   QRegularExpression timeRegEx("(\\d{1,2}):(\\d{1,2})(:(\\d{1,2})|)(\\.(\\d{1,3})|)((\\s{0,}(am|pm))|)");
 
    int at = 0;
    while (at < dateString.length()) {
@@ -772,7 +771,7 @@ QList<QNetworkCookie> QNetworkCookiePrivate::parseSetCookieHeaderLine(const QByt
                   if (!rawDomain.isEmpty()) {
                      QString maybeLeadingDot;
                      if (rawDomain.startsWith('.')) {
-                        maybeLeadingDot = QLatin1Char('.');
+                        maybeLeadingDot = QChar('.');
                         rawDomain = rawDomain.mid(1);
                      }
                      QString normalizedDomain = QUrl::fromAce(QUrl::toAce(QString::fromUtf8(rawDomain)));
@@ -829,9 +828,9 @@ void QNetworkCookie::normalize(const QUrl &url)
 {
    if (d->path.isEmpty()) {
       QString pathAndFileName = url.path();
-      QString defaultPath = pathAndFileName.left(pathAndFileName.lastIndexOf(QLatin1Char('/')) + 1);
+      QString defaultPath = pathAndFileName.left(pathAndFileName.lastIndexOf(QChar('/')) + 1);
       if (defaultPath.isEmpty()) {
-         defaultPath = QLatin1Char('/');
+         defaultPath = QChar('/');
       }
       d->path = defaultPath;
    }
@@ -842,8 +841,8 @@ void QNetworkCookie::normalize(const QUrl &url)
       QHostAddress hostAddress(d->domain);
       if (hostAddress.protocol() != QAbstractSocket::IPv4Protocol
             && hostAddress.protocol() != QAbstractSocket::IPv6Protocol
-            && !d->domain.startsWith(QLatin1Char('.'))) {
-         d->domain.prepend(QLatin1Char('.'));
+            && ! d->domain.startsWith(QChar('.'))) {
+         d->domain.prepend(QChar('.'));
       }
    }
 }
