@@ -764,7 +764,14 @@ TIFFFlushData1(TIFF* tif)
 		if (!TIFFAppendToStrip(tif,
 		    isTiled(tif) ? tif->tif_curtile : tif->tif_curstrip,
 		    tif->tif_rawdata, tif->tif_rawcc))
+		{
+			/* We update those variables even in case of error since there's */
+			/* code that doesn't really check the return code of this */
+			/* function */
+            tif->tif_rawcc = 0;
+            tif->tif_rawcp = tif->tif_rawdata;
 			return (0);
+        }
 		tif->tif_rawcc = 0;
 		tif->tif_rawcp = tif->tif_rawdata;
 	}
