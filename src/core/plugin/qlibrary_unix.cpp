@@ -59,7 +59,7 @@ QStringList QLibraryHandle::suffixes_sys(const QString &fullVersion)
    if (! fullVersion.isEmpty()) {
       suffixes << QString::fromLatin1(".so.%1").formatArg(fullVersion);
    } else {
-      suffixes << QLatin1String(".so");
+      suffixes << QString(".so");
    }
 
 # ifdef Q_OS_DARWIN
@@ -185,7 +185,7 @@ bool QLibraryHandle::load_sys()
 
          pHnd = dlopen(QFile::encodeName(attempt).constData(), dlFlags);
 
-         if (!pHnd && fileName.startsWith(QLatin1Char('/')) && QFile::exists(attempt)) {
+         if (!pHnd && fileName.startsWith(QChar('/')) && QFile::exists(attempt)) {
             // We only want to continue if dlopen failed due to that the shared library did not exist.
             // However, we are only able to apply this check for absolute filenames (since they are
             // not influenced by the content of LD_LIBRARY_PATH, /etc/ld.so.cache, DT_RPATH etc...)

@@ -111,7 +111,7 @@ HANDLE QSharedMemoryPrivate::handle()
 void QSharedMemoryPrivate::cleanHandle()
 {
    if (hand != nullptr && ! CloseHandle(hand)) {
-      setErrorString(QLatin1String("QSharedMemory::cleanHandle"));
+      setErrorString("QSharedMemory::cleanHandle");
    }
 
    hand = nullptr;
@@ -127,7 +127,7 @@ bool QSharedMemoryPrivate::create(int newSize)
 
    // Create the file mapping
    hand = CreateFileMapping(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, newSize, &nativeKey.toStdWString()[0]);
-   setErrorString(QLatin1String("QSharedMemory::create"));
+   setErrorString("QSharedMemory::create");
 
    // hand is valid when it already exists unlike unix so explicitly check
    return !(error == QSharedMemory::AlreadyExists || !hand);
@@ -140,7 +140,7 @@ bool QSharedMemoryPrivate::attach(QSharedMemory::AccessMode mode)
    memory = (void *)MapViewOfFile(handle(), permissions, 0, 0, 0);
 
    if (memory == nullptr) {
-      setErrorString(QLatin1String("QSharedMemory::attach"));
+      setErrorString("QSharedMemory::attach");
       cleanHandle();
       return false;
    }
@@ -165,7 +165,7 @@ bool QSharedMemoryPrivate::detach()
 {
    // umap memory
    if (! UnmapViewOfFile(memory)) {
-      setErrorString(QLatin1String("QSharedMemory::detach"));
+      setErrorString("QSharedMemory::detach");
       return false;
    }
 

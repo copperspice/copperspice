@@ -1108,7 +1108,7 @@ static bool isDirPath(const QString &dirPath, bool *existed)
    QString path = dirPath;
 
    if (path.length() == 2 && path.at(1) == ':') {
-      path += QLatin1Char('\\');
+      path += QChar('\\');
    }
 
    DWORD fileAttrib = ::GetFileAttributes(&QFSFileEnginePrivate::longFileName(path).toStdWString()[0]);

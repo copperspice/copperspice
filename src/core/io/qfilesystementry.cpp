@@ -164,7 +164,7 @@ QString QFileSystemEntry::fileName() const
 
 #if defined(Q_OS_WIN)
 
-   if (m_lastSeparator == -1 && m_filePath.length() >= 2 && m_filePath.at(1) == QLatin1Char(':')) {
+   if (m_lastSeparator == -1 && m_filePath.length() >= 2 && m_filePath.at(1) == QChar(':')) {
       return m_filePath.mid(2);
    }
 
@@ -181,22 +181,22 @@ QString QFileSystemEntry::path() const
 
 #if defined(Q_OS_WIN)
 
-      if (m_filePath.length() >= 2 && m_filePath.at(1) == QLatin1Char(':')) {
+      if (m_filePath.length() >= 2 && m_filePath.at(1) == QChar(':')) {
          return m_filePath.left(2);
       }
 
 #endif
 
-      return QString(QLatin1Char('.'));
+      return QString(QChar('.'));
    }
 
    if (m_lastSeparator == 0) {
-      return QString(QLatin1Char('/'));
+      return QString(QChar('/'));
    }
 
 #if defined(Q_OS_WIN)
 
-   if (m_lastSeparator == 2 && m_filePath.at(1) == QLatin1Char(':')) {
+   if (m_lastSeparator == 2 && m_filePath.at(1) == QChar(':')) {
       return m_filePath.left(m_lastSeparator + 1);
    }
 
@@ -221,7 +221,7 @@ QString QFileSystemEntry::baseName() const
 
 #if defined(Q_OS_WIN)
 
-   if (m_lastSeparator == -1 && m_filePath.length() >= 2 && m_filePath.at(1) == QLatin1Char(':')) {
+   if (m_lastSeparator == -1 && m_filePath.length() >= 2 && m_filePath.at(1) == QChar(':')) {
       return m_filePath.mid(2, length - 2);
    }
 
@@ -246,7 +246,7 @@ QString QFileSystemEntry::completeBaseName() const
 
 #if defined(Q_OS_WIN)
 
-   if (m_lastSeparator == -1 && m_filePath.length() >= 2 && m_filePath.at(1) == QLatin1Char(':')) {
+   if (m_lastSeparator == -1 && m_filePath.length() >= 2 && m_filePath.at(1) == QChar(':')) {
       return m_filePath.mid(2, length - 2);
    }
 
@@ -301,7 +301,7 @@ bool QFileSystemEntry::isAbsolute() const
    }
 
    bool temp1  = m_filePath.length() >= 3 && (m_filePath[0].isLetter() && m_filePath[1].unicode() == ':' && m_filePath[2].unicode() == '/');
-   bool retval = temp1 || (m_filePath.length() >= 2 && (m_filePath.at(0) == QLatin1Char('/') && m_filePath.at(1) == QLatin1Char('/')));
+   bool retval = temp1 || (m_filePath.length() >= 2 && (m_filePath.at(0) == QChar('/') && m_filePath.at(1) == QChar('/')));
 
    return retval;
 }
@@ -313,7 +313,7 @@ bool QFileSystemEntry::isDriveLetter_Root() const
    bool retval = false;
 
    if (m_filePath.length() == 3) {
-      retval = m_filePath.at(0).isLetter() && m_filePath.at(1) == QLatin1Char(':') && m_filePath.at(2) == QLatin1Char('/');
+      retval = m_filePath.at(0).isLetter() && m_filePath.at(1) == QChar(':') && m_filePath.at(2) == QChar('/');
    }
 
    return retval;
@@ -452,7 +452,7 @@ bool QFileSystemEntry::isClean() const
       } else if (dotok) {
          slashok = true;
 
-         if (*iter == QLatin1Char('.')) {
+         if (*iter == QChar('.')) {
             ++dots;
 
             if (dots > 2) {

@@ -561,8 +561,8 @@ QString QTimeZonePrivate::isoOffsetFormat(int offsetFromUtc)
    const int mins = offsetFromUtc / 60;
 
    return QString::fromUtf8("UTC%1%2:%3").formatArg(mins >= 0 ? '+' : '-')
-         .formatArg(qAbs(mins) / 60, 2, 10, QLatin1Char('0'))
-         .formatArg(qAbs(mins) % 60, 2, 10, QLatin1Char('0'));
+         .formatArg(qAbs(mins) / 60, 2, 10, QChar('0'))
+         .formatArg(qAbs(mins) % 60, 2, 10, QChar('0'));
 }
 
 QByteArray QTimeZonePrivate::ianaIdToWindowsId(const QByteArray &id)

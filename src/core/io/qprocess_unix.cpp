@@ -1098,7 +1098,7 @@ bool QProcessPrivate::startDetached(const QString &program, const QStringList &a
 
          argv[arguments.size() + 1] = nullptr;
 
-         if (!program.contains(QLatin1Char('/'))) {
+         if (! program.contains(QChar('/'))) {
             const QString path = QString::fromUtf8(::getenv("PATH"));
 
             if (!path.isEmpty()) {

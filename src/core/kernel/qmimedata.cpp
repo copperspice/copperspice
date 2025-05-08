@@ -234,7 +234,7 @@ QList<QUrl> QMimeData::urls() const
 {
    Q_D(const QMimeData);
 
-   QVariant data = d->retrieveTypedData(QLatin1String("text/uri-list"), QVariant::List);
+   QVariant data = d->retrieveTypedData("text/uri-list", QVariant::List);
    QList<QUrl> urls;
 
    if (data.type() == QVariant::Url) {

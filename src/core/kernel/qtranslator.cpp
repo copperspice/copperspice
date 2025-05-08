@@ -602,7 +602,7 @@ static QString find_translation(const QLocale &locale, const QString &filename, 
    // start guessing
    for (QString localeName : fuzzyLocales) {
       while (true) {
-         int rightmost = localeName.lastIndexOf(QLatin1Char('_'));
+         int rightmost = localeName.lastIndexOf(QChar('_'));
 
          // no truncations? fail
          if (rightmost <= 0) {

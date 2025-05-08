@@ -230,11 +230,11 @@ QVariant QSystemLocale::query(QueryType type, QVariant in) const
       case MeasurementSystem: {
          const QString meas_locale = QString::fromLatin1(d->lc_measurement_var.constData(), d->lc_measurement_var.size());
 
-         if (meas_locale.compare(QLatin1String("Metric"), Qt::CaseInsensitive) == 0) {
+         if (meas_locale.compare("Metric", Qt::CaseInsensitive) == 0) {
             return QLocale::MetricSystem;
          }
 
-         if (meas_locale.compare(QLatin1String("Other"), Qt::CaseInsensitive) == 0) {
+         if (meas_locale.compare("Other", Qt::CaseInsensitive) == 0) {
             return QLocale::MetricSystem;
          }
 
@@ -245,7 +245,7 @@ QVariant QSystemLocale::query(QueryType type, QVariant in) const
          static QString languages = QString::fromLatin1(qgetenv("LANGUAGE"));
 
          if (! languages.isEmpty()) {
-            QStringList lst = languages.split(QLatin1Char(':'));
+            QStringList lst = languages.split(QChar(':'));
 
             for (int i = 0; i < lst.size();) {
                const QString &name = lst.at(i);

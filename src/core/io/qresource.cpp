@@ -1059,7 +1059,7 @@ bool QResource::registerResource(const uchar *rccData, const QString &resourceRo
 {
    QString r = qt_resource_fixResourceRoot(resourceRoot);
 
-   if (! r.isEmpty() && r[0] != QLatin1Char('/')) {
+   if (! r.isEmpty() && r[0] != QChar('/')) {
       qWarning("QDir::registerResource() Registering resource %s requires an absolute path start with '/', current root is %s",
             rccData, csPrintable(resourceRoot));
       return false;
@@ -1354,7 +1354,7 @@ QString QResourceFileEngine::fileName(FileName file) const
    Q_D(const QResourceFileEngine);
 
    if (file == BaseName) {
-      int slash = d->resource.fileName().lastIndexOf(QLatin1Char('/'));
+      int slash = d->resource.fileName().lastIndexOf(QChar('/'));
 
       if (slash == -1) {
          return d->resource.fileName();
@@ -1364,12 +1364,12 @@ QString QResourceFileEngine::fileName(FileName file) const
 
    } else if (file == PathName || file == AbsolutePathName) {
       const QString path = (file == AbsolutePathName) ? d->resource.absoluteFilePath() : d->resource.fileName();
-      const int slash = path.lastIndexOf(QLatin1Char('/'));
+      const int slash    = path.lastIndexOf(QChar('/'));
 
       if (slash == -1) {
-         return QLatin1String(":");
+         return QString(":");
       } else if (slash <= 1) {
-         return QLatin1String(":/");
+         return QString(":/");
       }
 
       return path.left(slash);
@@ -1378,7 +1378,7 @@ QString QResourceFileEngine::fileName(FileName file) const
       const QString absoluteFilePath = d->resource.absoluteFilePath();
 
       if (file == CanonicalPathName) {
-         const int slash = absoluteFilePath.lastIndexOf(QLatin1Char('/'));
+         const int slash = absoluteFilePath.lastIndexOf(QChar('/'));
 
          if (slash != -1) {
             return absoluteFilePath.left(slash);

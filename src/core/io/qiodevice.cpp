@@ -976,31 +976,31 @@ QDebug operator<<(QDebug debug, QIODevice::OpenMode modes)
    QStringList modeList;
 
    if (modes == QIODevice::NotOpen) {
-      modeList << QLatin1String("NotOpen");
+      modeList.append("NotOpen");
 
    } else {
       if (modes & QIODevice::ReadOnly) {
-         modeList << QLatin1String("ReadOnly");
+         modeList.append("ReadOnly");
       }
 
       if (modes & QIODevice::WriteOnly) {
-         modeList << QLatin1String("WriteOnly");
+         modeList.append("WriteOnly");
       }
 
       if (modes & QIODevice::Append) {
-         modeList << QLatin1String("Append");
+         modeList.append("Append");
       }
 
       if (modes & QIODevice::Truncate) {
-         modeList << QLatin1String("Truncate");
+         modeList.append("Truncate");
       }
 
       if (modes & QIODevice::Text) {
-         modeList << QLatin1String("Text");
+         modeList.append("Text");
       }
 
       if (modes & QIODevice::Unbuffered) {
-         modeList << QLatin1String("Unbuffered");
+         modeList.append("Unbuffered");
       }
    }
 

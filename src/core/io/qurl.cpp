@@ -474,7 +474,7 @@ inline void QUrlPrivate::appendUserInfo(QString &appendTo, QUrl::FormattingOptio
       return;
 
    } else {
-      appendTo += QLatin1Char(':');
+      appendTo += QChar(':');
 
       if (! qt_urlRecode(appendTo, password.constBegin(), password.constEnd(), options, passwordActions)) {
          appendTo += password;
@@ -516,7 +516,7 @@ inline void QUrlPrivate::appendPath(QString &appendTo, QUrl::FormattingOptions o
 
    // check if we need to remove trailing slashes
    if (options & QUrl::StripTrailingSlash) {
-      while (thePath.length() > 1 && thePath.endsWith(QLatin1Char('/'))) {
+      while (thePath.length() > 1 && thePath.endsWith(QChar('/'))) {
          thePath.chop(1);
       }
    }
@@ -647,7 +647,7 @@ inline void QUrlPrivate::setAuthority(const QString &auth, int from, int end, QU
       if (uint(colonIndex) < uint(end)) {
          if (auth.at(from).unicode() == '[') {
             // check if colonIndex isn't inside the "[...]" part
-            int closingBracket = auth.indexOf(QLatin1Char(']'), from);
+            int closingBracket = auth.indexOf(QChar(']'), from);
 
             if (uint(closingBracket) > uint(colonIndex)) {
                colonIndex = -1;
@@ -1166,7 +1166,7 @@ inline QString QUrlPrivate::mergePaths(const QString &relativePath) const
    // the reference's path; otherwise
 
    if (!host.isEmpty() && path.isEmpty()) {
-      return QLatin1Char('/') + relativePath;
+      return QChar('/') + relativePath;
    }
 
    // Return a string consisting of the reference's path component
@@ -1672,12 +1672,12 @@ void QUrl::setHost(const QString &host, ParsingMode mode)
       // setHost failed, it might be IPv6 or IPvFuture in need of bracketing
       Q_ASSERT(d->m_error);
 
-      data.prepend(QLatin1Char('['));
-      data.append(QLatin1Char(']'));
+      data.prepend(QChar('['));
+      data.append(QChar(']'));
 
       if (!d->setHost(data, 0, data.length(), mode)) {
          // failed again
-         if (data.contains(QLatin1Char(':'))) {
+         if (data.contains(QChar(':'))) {
             // source data contains ':', so it's an IPv6 error
             d->m_error->code = QUrlPrivate::InvalidIPv6AddressError;
          }
@@ -2556,7 +2556,7 @@ QString QUrl::errorString() const
    }
 
    QString msg = errorMessage(errorCode, errorSource, errorPosition);
-   msg += QLatin1String("; source was \"");
+   msg += "; source was \"";
    msg += errorSource;
    msg += "\";";
 
@@ -2702,7 +2702,7 @@ QUrl QUrl::fromUserInput(const QString &userInput)
 
    // Else, try the prepended one and adjust the scheme from the host name
    if (urlPrepended.isValid() && (!urlPrepended.host().isEmpty() || !urlPrepended.path().isEmpty())) {
-      int dotIndex = trimmedString.indexOf(QLatin1Char('.'));
+      int dotIndex = trimmedString.indexOf(QChar('.'));
       const QString hostscheme = trimmedString.left(dotIndex).toLower();
 
       if (hostscheme == ftpScheme()) {

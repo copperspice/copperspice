@@ -129,7 +129,7 @@ QString QVersionNumber::toString() const
 
    for (int i = 0; i < segmentCount(); ++i) {
       if (! first) {
-         version += QLatin1Char('.');
+         version += QChar('.');
       }
 
       version += QString::number(segmentAt(i));

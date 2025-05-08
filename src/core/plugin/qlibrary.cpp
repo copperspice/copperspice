@@ -302,7 +302,7 @@ bool QLibrary::isLibrary(const QString &fileName)
 {
 
 #if defined(Q_OS_WIN)
-   return fileName.endsWith(QLatin1String(".dll"), Qt::CaseInsensitive);
+   return fileName.endsWith(".dll", Qt::CaseInsensitive);
 
 #else
    QString completeSuffix = QFileInfo(fileName).completeSuffix();
@@ -311,7 +311,7 @@ bool QLibrary::isLibrary(const QString &fileName)
       return false;
    }
 
-   QStringList suffixes = completeSuffix.split(QLatin1Char('.'));
+   QStringList suffixes = completeSuffix.split(QChar('.'));
 
 # if defined(Q_OS_DARWIN)
 
@@ -327,7 +327,7 @@ bool QLibrary::isLibrary(const QString &fileName)
    QStringList validSuffixList;
 
 #  if defined(Q_OS_UNIX)
-   validSuffixList << QLatin1String("so");
+   validSuffixList << QString("so");
 #  endif
 
    // Examples of valid library names:

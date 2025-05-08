@@ -162,7 +162,7 @@ QString QStandardPaths::writableLocation(StandardLocation type)
 
          case GenericCacheLocation:
          case CacheLocation:
-            path = qttestDir + QLatin1String("/Cache");
+            path = qttestDir + "/Cache";
 
             if (type == CacheLocation) {
                appendOrganizationAndApp(path);

@@ -143,7 +143,7 @@ bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode fileOpenMode)
          // we had received EISDIR anyway.
          if (QFileSystemEngine::fillMetaData(fd, metaData)
                && metaData.isDirectory()) {
-            q->setError(QFile::OpenError, QLatin1String("file to open is a directory"));
+            q->setError(QFile::OpenError, "file to open is a directory");
             QT_CLOSE(fd);
             return false;
          }
@@ -186,7 +186,7 @@ bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode fileOpenMode)
          // we had received EISDIR anyway.
          if (QFileSystemEngine::fillMetaData(QT_FILENO(fh), metaData)
                && metaData.isDirectory()) {
-            q->setError(QFile::OpenError, QLatin1String("file to open is a directory"));
+            q->setError(QFile::OpenError, "file to open is a directory");
             fclose(fh);
             return false;
          }
@@ -622,7 +622,7 @@ bool QFSFileEngine::isRelativePath() const
 {
    Q_D(const QFSFileEngine);
 
-   return d->fileEntry.filePath().length() ? d->fileEntry.filePath()[0] != QLatin1Char('/') : true;
+   return d->fileEntry.filePath().length() ? d->fileEntry.filePath()[0] != QChar('/') : true;
 
 }
 

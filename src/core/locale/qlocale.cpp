@@ -599,7 +599,7 @@ QString qt_readEscapedFormatString(const QString &format, int *idx)
 
          if (i + 1 < format.size() && format.at(i + 1).unicode() == '\'') {
             // "''" inside of a quoted string
-            result.append(QLatin1Char('\''));
+            result.append(QChar('\''));
             i += 2;
 
          } else {
@@ -2323,7 +2323,7 @@ QString QLocaleData::doubleToString(const QChar _zero, const QChar plus, const Q
       num_str.prepend(plus);
 
    } else if (flags & QLocaleData::BlankBeforePositive) {
-      num_str.prepend(QLatin1Char(' '));
+      num_str.prepend(QChar(' '));
    }
 
    if (flags & QLocaleData::CapitalEorX) {
@@ -2410,11 +2410,11 @@ QString QLocaleData::longLongToString(const QChar zero, const QChar group, const
    }
 
    if (base == 16 && (flags & Alternate || flags & ShowBase)) {
-      num_str.prepend(QLatin1String(flags & UppercaseBase ? "0X" : "0x"));
+      num_str.prepend(QString(flags & UppercaseBase ? "0X" : "0x"));
    }
 
    if (base == 2 && (flags & Alternate || flags & ShowBase)) {
-      num_str.prepend(QLatin1String(flags & UppercaseBase ? "0B" : "0b"));
+      num_str.prepend(QString(flags & UppercaseBase ? "0B" : "0b"));
    }
 
    // add sign
@@ -2423,7 +2423,7 @@ QString QLocaleData::longLongToString(const QChar zero, const QChar group, const
    } else if (flags & AlwaysShowSign) {
       num_str.prepend(plus);
    } else if (flags & BlankBeforePositive) {
-      num_str.prepend(QLatin1Char(' '));
+      num_str.prepend(' ');
    }
 
    return num_str;
@@ -2486,17 +2486,17 @@ QString QLocaleData::unsLongLongToString(const QChar zero, const QChar group, co
    }
 
    if (base == 16 && (flags & Alternate || flags & ShowBase)) {
-      num_str.prepend(QLatin1String(flags & UppercaseBase ? "0X" : "0x"));
+      num_str.prepend(QString(flags & UppercaseBase ? "0X" : "0x"));
 
    } else if (base == 2 && (flags & Alternate || flags & ShowBase)) {
-      num_str.prepend(QLatin1String(flags & UppercaseBase ? "0B" : "0b"));
+      num_str.prepend(QString(flags & UppercaseBase ? "0B" : "0b"));
    }
 
    // add sign
    if (flags & AlwaysShowSign) {
       num_str.prepend(plus);
    } else if (flags & BlankBeforePositive) {
-      num_str.prepend(QLatin1Char(' '));
+      num_str.prepend(QChar(' '));
    }
 
    return num_str;

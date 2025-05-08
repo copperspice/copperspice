@@ -95,8 +95,8 @@ static void resolveTimerAPI()
       }
 
       triedResolve   = true;
-      qtimeSetEvent  = (ptimeSetEvent)QSystemLibrary::resolve(QLatin1String("winmm"), "timeSetEvent");
-      qtimeKillEvent = (ptimeKillEvent)QSystemLibrary::resolve(QLatin1String("winmm"), "timeKillEvent");
+      qtimeSetEvent  = (ptimeSetEvent)QSystemLibrary::resolve("winmm", "timeSetEvent");
+      qtimeKillEvent = (ptimeKillEvent)QSystemLibrary::resolve("winmm", "timeKillEvent");
    }
 }
 

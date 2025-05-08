@@ -453,7 +453,7 @@ QUuid QUuid::createUuid()
    devUrandom = devUrandomStorage()->localData();
 
    if (! devUrandom) {
-      devUrandom = new QFile(QLatin1String("/dev/urandom"));
+      devUrandom = new QFile("/dev/urandom");
       devUrandom->open(QIODevice::ReadOnly | QIODevice::Unbuffered);
       devUrandomStorage()->setLocalData(devUrandom);
    }

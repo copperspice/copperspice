@@ -257,7 +257,7 @@ bool QSharedMemoryPrivate::create(int newSize)
    EINTR_LOOP(fd, shm_open(shmName.constData(), O_RDWR | O_CREAT | O_EXCL, 0666));
 
    if (fd == -1) {
-      QString function = QLatin1String("QSharedMemory::create");
+      QString function = "QSharedMemory::create";
 
       switch (errno) {
          case ENAMETOOLONG:
@@ -278,7 +278,7 @@ bool QSharedMemoryPrivate::create(int newSize)
    EINTR_LOOP(ret, ftruncate(fd, newSize));
 
    if (ret == -1) {
-      setErrorString(QLatin1String("QSharedMemory::create (ftruncate)"));
+      setErrorString("QSharedMemory::create (ftruncate)");
       qt_safe_close(fd);
       return false;
    }
@@ -296,7 +296,7 @@ bool QSharedMemoryPrivate::attach(QSharedMemory::AccessMode mode)
    int id = shmget(unix_key, 0, (mode == QSharedMemory::ReadOnly ? 0400 : 0600));
 
    if (-1 == id) {
-      setErrorString(QLatin1String("QSharedMemory::attach (shmget)"));
+      setErrorString("QSharedMemory::attach (shmget)");
       return false;
    }
 
@@ -305,7 +305,7 @@ bool QSharedMemoryPrivate::attach(QSharedMemory::AccessMode mode)
 
    if ((void *) - 1 == memory) {
       memory = nullptr;
-      setErrorString(QLatin1String("QSharedMemory::attach (shmat)"));
+      setErrorString("QSharedMemory::attach (shmat)");
       return false;
    }
 
@@ -315,7 +315,7 @@ bool QSharedMemoryPrivate::attach(QSharedMemory::AccessMode mode)
    if (!shmctl(id, IPC_STAT, &shmid_ds)) {
       size = (int)shmid_ds.shm_segsz;
    } else {
-      setErrorString(QLatin1String("QSharedMemory::attach (shmctl)"));
+      setErrorString("QSharedMemory::attach (shmctl)");
       return false;
    }
 
@@ -328,7 +328,7 @@ bool QSharedMemoryPrivate::attach(QSharedMemory::AccessMode mode)
    EINTR_LOOP(hand, shm_open(shmName.constData(), oflag, omode));
 
    if (hand == -1) {
-      QString function = QLatin1String("QSharedMemory::attach (shm_open)");
+      QString function = "QSharedMemory::attach (shm_open)";
 
       switch (errno) {
          case ENAMETOOLONG:
@@ -349,7 +349,7 @@ bool QSharedMemoryPrivate::attach(QSharedMemory::AccessMode mode)
    QT_STATBUF st;
 
    if (QT_FSTAT(hand, &st) == -1) {
-      setErrorString(QLatin1String("QSharedMemory::attach (fstat)"));
+      setErrorString("QSharedMemory::attach (fstat)");
       cleanHandle();
       return false;
    }
@@ -361,7 +361,7 @@ bool QSharedMemoryPrivate::attach(QSharedMemory::AccessMode mode)
    memory = mmap(0, size, mprot, MAP_SHARED, hand, 0);
 
    if (memory == MAP_FAILED || !memory) {
-      setErrorString(QLatin1String("QSharedMemory::attach (mmap)"));
+      setErrorString("QSharedMemory::attach (mmap)");
       cleanHandle();
       memory = 0;
       size = 0;
@@ -379,7 +379,7 @@ bool QSharedMemoryPrivate::detach()
 
    // detach from the memory segment
    if (-1 == shmdt(memory)) {
-      QString function = QLatin1String("QSharedMemory::detach");
+      QString function = "QSharedMemory::detach";
 
       switch (errno) {
          case EINVAL:
@@ -417,7 +417,7 @@ bool QSharedMemoryPrivate::detach()
    if (shmid_ds.shm_nattch == 0) {
       // mark for removal
       if (-1 == shmctl(id, IPC_RMID, &shmid_ds)) {
-         setErrorString(QLatin1String("QSharedMemory::detach"));
+         setErrorString("QSharedMemory::detach");
 
          switch (errno) {
             case EINVAL:
@@ -438,7 +438,7 @@ bool QSharedMemoryPrivate::detach()
 
    // detach from the memory segment
    if (munmap(memory, size) == -1) {
-      setErrorString(QLatin1String("QSharedMemory::detach (munmap)"));
+      setErrorString("QSharedMemory::detach (munmap)");
       return false;
    }
 
@@ -461,7 +461,7 @@ bool QSharedMemoryPrivate::detach()
       QByteArray shmName = QFile::encodeName(makePlatformSafeKey(key));
 
       if (shm_unlink(shmName.constData()) == -1 && errno != ENOENT) {
-         setErrorString(QLatin1String("QSharedMemory::detach (shm_unlink)"));
+         setErrorString("QSharedMemory::detach (shm_unlink)");
       }
    }
 

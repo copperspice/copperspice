@@ -384,7 +384,7 @@ QVariant QSettingsPrivate::stringListToVariantList(const QStringList &l)
       const QString &str = outStringList.at(i);
 
       if (str.startsWith('@')) {
-         if (str.length() >= 2 && str.at(1) == QLatin1Char('@')) {
+         if (str.length() >= 2 && str.at(1) == QChar('@')) {
             outStringList[i].remove(0, 1);
 
          } else {
@@ -439,37 +439,37 @@ QString QSettingsPrivate::variantToString(const QVariant &v)
       case QVariant::Rect: {
          QRect r = v.value<QRect>();
 
-         result += QLatin1String("@Rect(");
+         result += "@Rect(";
          result += QString::number(r.x());
-         result += QLatin1Char(' ');
+         result += QChar(' ');
          result += QString::number(r.y());
-         result += QLatin1Char(' ');
+         result += QChar(' ');
          result += QString::number(r.width());
-         result += QLatin1Char(' ');
+         result += QChar(' ');
          result += QString::number(r.height());
-         result += QLatin1Char(')');
+         result += QChar(')');
          break;
       }
 
       case QVariant::Size: {
          QSize s = v.value<QSize>();
 
-         result += QLatin1String("@Size(");
+         result += "@Size(";
          result += QString::number(s.width());
-         result += QLatin1Char(' ');
+         result += QChar(' ');
          result += QString::number(s.height());
-         result += QLatin1Char(')');
+         result += QChar(')');
          break;
       }
 
       case QVariant::Point: {
          QPoint p = v.value<QPoint>();
 
-         result += QLatin1String("@Point(");
+         result += "@Point(";
          result += QString::number(p.x());
-         result += QLatin1Char(' ');
+         result += QChar(' ');
          result += QString::number(p.y());
-         result += QLatin1Char(')');
+         result += QChar(')');
          break;
       }
 
@@ -982,8 +982,8 @@ QStringList QSettingsPrivate::splitArgs(const QString &s, int idx)
    int l = s.length();
 
    Q_ASSERT(l > 0);
-   Q_ASSERT(s.at(idx) == QLatin1Char('('));
-   Q_ASSERT(s.at(l - 1) == QLatin1Char(')'));
+   Q_ASSERT(s.at(idx) == QChar('('));
+   Q_ASSERT(s.at(l - 1) == QChar(')'));
 
    QStringList result;
    QString item;
@@ -991,11 +991,11 @@ QStringList QSettingsPrivate::splitArgs(const QString &s, int idx)
    for (++idx; idx < l; ++idx) {
       QChar c = s.at(idx);
 
-      if (c == QLatin1Char(')')) {
+      if (c == QChar(')')) {
          Q_ASSERT(idx == l - 1);
          result.append(item);
 
-      } else if (c == QLatin1Char(' ')) {
+      } else if (c == QChar(' ')) {
          result.append(item);
          item.clear();
 
@@ -2264,7 +2264,7 @@ int QSettings::beginReadArray(const QString &prefix)
    Q_D(QSettings);
    d->beginGroupOrArray(QSettingsGroup(d->normalizedKey(prefix), false));
 
-   return value(QLatin1String("size")).toInt();
+   return value("size").toInt();
 }
 
 void QSettings::beginWriteArray(const QString &prefix, int size)
@@ -2274,9 +2274,9 @@ void QSettings::beginWriteArray(const QString &prefix, int size)
    d->beginGroupOrArray(QSettingsGroup(d->normalizedKey(prefix), size < 0));
 
    if (size < 0) {
-      remove(QLatin1String("size"));
+      remove("size");
    } else {
-      setValue(QLatin1String("size"), size);
+      setValue("size", size);
    }
 }
 
@@ -2298,7 +2298,7 @@ void QSettings::endArray()
    }
 
    if (group.arraySizeGuess() != -1) {
-      setValue(group.name() + QLatin1String("/size"), group.arraySizeGuess());
+      setValue(group.name() + "/size", group.arraySizeGuess());
    }
 
    if (! group.isArray()) {
@@ -2490,7 +2490,7 @@ QSettings::Format QSettings::registerFormat(const QString &extension, ReadFunc r
    }
 
    QConfFileCustomFormat info;
-   info.extension = QLatin1Char('.');
+   info.extension = QChar('.');
    info.extension += extension;
    info.readFunc = readFunc;
    info.writeFunc = writeFunc;

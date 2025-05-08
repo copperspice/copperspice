@@ -45,7 +45,7 @@ static void resolveLibs()
    }
 
    // try to get GetTickCount64 from the system
-   QSystemLibrary kernel32(QLatin1String("kernel32"));
+   QSystemLibrary kernel32("kernel32");
 
    if (! kernel32.load()) {
       return;

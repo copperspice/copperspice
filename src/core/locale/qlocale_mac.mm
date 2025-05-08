@@ -169,10 +169,10 @@ static QString macToQtFormat(const QString &sys_fmt)
       if (sys_fmt.at(i).unicode() == '\'') {
          QString text = qt_readEscapedFormatString(sys_fmt, &i);
 
-         if (text == QLatin1String("'")) {
-            result += QLatin1String("''");
+         if (text == "'") {
+            result += "''";
          } else {
-            result += QLatin1Char('\'') + text + QLatin1Char('\'');
+            result += QChar('\'') + text + QChar('\'');
          }
 
          continue;
@@ -201,9 +201,9 @@ static QString macToQtFormat(const QString &sys_fmt)
 
             // only supports long (4) or short (2) year, use long for all others
             if (repeat == 2) {
-               result += QLatin1String("yy");
+               result += "yy";
             } else {
-               result += QLatin1String("yyyy");
+               result += "yyyy";
             }
 
             break;
@@ -213,9 +213,9 @@ static QString macToQtFormat(const QString &sys_fmt)
 
             // only support long, short and number, use short for narrow
             if (repeat == 5) {
-               result += QLatin1String("MMM");
+               result += "MMM";
             } else {
-               result += QString(repeat, QLatin1Char('M'));
+               result += QString(repeat, QChar('M'));
             }
 
             break;
@@ -228,9 +228,9 @@ static QString macToQtFormat(const QString &sys_fmt)
 
             // only support long, short and padded number, use short for narrow
             if (repeat == 4) {
-               result += QLatin1String("dddd");
+               result += "dddd";
             } else {
-               result += QLatin1String("ddd");
+               result += "ddd";
             }
 
             break;
@@ -240,29 +240,29 @@ static QString macToQtFormat(const QString &sys_fmt)
 
             // only supports long, short and padded number, use short for narrow
             if (repeat >= 5) {
-               result += QLatin1String("ddd");
+               result += "ddd";
             } else {
-               result += QString(repeat, QLatin1Char('d'));
+               result += QString(repeat, QChar('d'));
             }
 
             break;
 
          case 'a': // AM/PM (1): 1 = short
             // Translate to uppercase AM/PM
-            result += QLatin1String("AP");
+            result += "AP";
             break;
 
          case 'h': // Hour [1..12] (1..2): 1..2 = padded number
          case 'K': // Hour [0..11] (1..2): 1..2 = padded number
          case 'j': // Local Hour [12 or 24] (1..2): 1..2 = padded number
             // h is local hour
-            result += QString(repeat, QLatin1Char('h'));
+            result += QString(repeat, QChar('h'));
             break;
 
          case 'H': // Hour [0..23] (1..2): 1..2 = padded number
          case 'k': // Hour [1..24] (1..2): 1..2 = padded number
             // H is 0..23 hour
-            result += QString(repeat, QLatin1Char('H'));
+            result += QString(repeat, QChar('H'));
             break;
 
          case 'm': // Minutes (1..2): 1..2 = padded number
@@ -274,9 +274,9 @@ static QString macToQtFormat(const QString &sys_fmt)
 
             // uses msecs either unpadded or padded to 3 places
             if (repeat < 3) {
-               result += QLatin1Char('z');
+               result += QChar('z');
             } else {
-               result += QLatin1String("zzz");
+               result += "zzz";
             }
 
             break;
@@ -288,7 +288,7 @@ static QString macToQtFormat(const QString &sys_fmt)
          case 'V': // Time Zone (1..4)
          case 'X': // Time Zone (1..5)
          case 'x': // Time Zone (1..5)
-            result += QLatin1Char('t');
+            result += QChar('t');
             break;
 
          default:
@@ -296,8 +296,7 @@ static QString macToQtFormat(const QString &sys_fmt)
             // a..z and A..Z are reserved for format codes, so any occurrence of these not
             // already processed are not known and so unsupported formats to be ignored.
             // All other chars are allowed as literals.
-            if (c < QLatin1Char('A') || c > QLatin1Char('z') ||
-                  (c > QLatin1Char('Z') && c < QLatin1Char('a'))) {
+            if (c < QChar('A') || c > QChar('z') || (c > QChar('Z') && c < QChar('a'))) {
                result += QString(repeat, c);
             }
 
@@ -340,7 +339,7 @@ static QLocale::MeasurementSystem macMeasurementSystem()
    QCFType<CFLocaleRef> locale = CFLocaleCopyCurrent();
    CFStringRef system = static_cast<CFStringRef>(CFLocaleGetValue(locale, kCFLocaleMeasurementSystem));
 
-   if (QCFString::toQString(system) == QLatin1String("Metric")) {
+   if (QCFString::toQString(system) == "Metric") {
       return QLocale::MetricSystem;
    } else {
       return QLocale::ImperialSystem;

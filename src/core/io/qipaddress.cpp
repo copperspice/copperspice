@@ -325,7 +325,7 @@ void toString(QString &appendTo, IPv6Address address)
          if (address[12] != 0 || address[13] != 0 || address[14] != 0) {
             embeddedIp4 = true;
          } else if (address[15] == 0) {
-            appendTo.append(QLatin1String("::"));
+            appendTo.append("::");
             return;
          }
       }

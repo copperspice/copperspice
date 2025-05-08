@@ -229,8 +229,8 @@ void QPollingFileSystemWatcherEngine::timeout()
       QString path = x.key();
       QFileInfo fi(path);
 
-      if (!path.endsWith(QLatin1Char('/'))) {
-         fi = QFileInfo(path + QLatin1Char('/'));
+      if (!path.endsWith(QChar('/'))) {
+         fi = QFileInfo(path + QChar('/'));
       }
 
       if (!fi.exists()) {
