@@ -8,15 +8,30 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
    target_compile_definitions(CsWaylandClient
       PRIVATE
       -DQT_NO_DBUS
+      -DQT_FONTCONFIGDATABASE
+      -DQT_USE_FREETYPE
    )
 
    list(APPEND WAYLAND_CLIENT_PRIVATE_INCLUDES
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_integration_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_eventdispatcher_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_fontdatabase_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_services_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_theme_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qunix_eventdispatcher_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontconfig_database_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontengine_multifontconfig_p.h
    )
 
    target_sources(CsWaylandClient
       PRIVATE
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_integration.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_eventdispatcher.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_services.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_theme.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qunix_eventdispatcher.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontconfig_database.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontengine_multifontconfig.cpp
    )
 
    macro_generate_misc_private("${WAYLAND_CLIENT_PRIVATE_INCLUDES}" QtGui/private/platforms)
@@ -31,6 +46,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       CsCore
       CsGui
       Wayland::Client
+      ${FONTCONFIG_LIBRARIES}
    )
 
    if(GTK2_FOUND)
