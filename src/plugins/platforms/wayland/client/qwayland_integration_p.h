@@ -34,9 +34,18 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandIntegration : public QPlatformIntegration
    QWaylandIntegration();
    ~QWaylandIntegration();
 
-   QPlatformWindow *createPlatformWindow(QWindow *window) const override;
-   QPlatformBackingStore *createPlatformBackingStore(QWindow *window) const override;
    QAbstractEventDispatcher *createEventDispatcher() const override;
+   QPlatformBackingStore *createPlatformBackingStore(QWindow *window) const override;
+   QPlatformTheme *createPlatformTheme(const QString &name) const override;
+   QPlatformWindow *createPlatformWindow(QWindow *window) const override;
+
+   QStringList themeNames() const override;
+
+ private:
+   QPlatformClipboard *mClipboard;
+   QPlatformDrag *mDrag;
+   QPlatformFontDatabase *mFontDb;
+   QPlatformNativeInterface *mNativeInterface;
 };
 
 }

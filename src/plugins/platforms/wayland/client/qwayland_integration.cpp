@@ -23,21 +23,67 @@
 
 #include <qwayland_integration_p.h>
 
+#include <qplatform_accessibility.h>
+#include <qplatform_clipboard.h>
+#include <qplatform_cursor.h>
+#include <qplatform_drag.h>
+#include <qplatform_inputcontext.h>
+#include <qplatform_services.h>
+
 #include <qapplication_p.h>
+#include <qgenericunix_eventdispatcher_p.h>
+#include <qgenericunix_fontdatabase_p.h>
+#include <qgenericunix_theme_p.h>
 
 namespace QtWaylandClient {
 
-QWaylandIntegration::QWaylandIntegration()
+class GenericWaylandTheme: public QGenericUnixTheme
 {
+ public:
+   static QStringList themeNames() {
+      QStringList result;
+
+      if (QGuiApplication::desktopSettingsAware()) {
+         const QByteArray desktopEnvironment = QApplicationPrivate::platformIntegration()->services()->desktopEnvironment();
+
+         if (desktopEnvironment == "KDE") {
+            result.push_back("kde");
+
+         } else if (! desktopEnvironment.isEmpty() && desktopEnvironment != "UNKNOWN" &&
+            desktopEnvironment != "GNOME" && desktopEnvironment != "UNITY" &&
+            desktopEnvironment != "MATE"  && desktopEnvironment != "XFCE" && desktopEnvironment != "LXDE") {
+            // Ignore X11 desktop environments
+
+            result.push_back(QString::fromUtf8(desktopEnvironment.toLower()));
+         }
+      }
+
+      if (result.isEmpty()) {
+         result.push_back(QGenericUnixTheme::m_name);
+      }
+
+      return result;
+   }
+};
+
+QWaylandIntegration::QWaylandIntegration()
+   : mFontDb(new QGenericUnixFontDatabase()), mNativeInterface(nullptr)
+{
+   mClipboard = nullptr;
+   mDrag      = nullptr;
 }
 
 QWaylandIntegration::~QWaylandIntegration()
 {
+   delete mClipboard;
+   delete mDrag;
+   delete mFontDb;
+   delete mNativeInterface;
 }
 
-QPlatformWindow *QWaylandIntegration::createPlatformWindow(QWindow *window) const
+QAbstractEventDispatcher *QWaylandIntegration::createEventDispatcher() const
 {
-   return nullptr;
+   return createUnixEventDispatcher();
 }
 
 QPlatformBackingStore *QWaylandIntegration::createPlatformBackingStore(QWindow *window) const
@@ -45,9 +91,19 @@ QPlatformBackingStore *QWaylandIntegration::createPlatformBackingStore(QWindow *
    return nullptr;
 }
 
-QAbstractEventDispatcher *QWaylandIntegration::createEventDispatcher() const
+QPlatformTheme *QWaylandIntegration::createPlatformTheme(const QString &name) const
+{
+   return GenericWaylandTheme::createUnixTheme(name);
+}
+
+QPlatformWindow *QWaylandIntegration::createPlatformWindow(QWindow *window) const
 {
    return nullptr;
+}
+
+QStringList QWaylandIntegration::themeNames() const
+{
+   return GenericWaylandTheme::themeNames();
 }
 
 }
