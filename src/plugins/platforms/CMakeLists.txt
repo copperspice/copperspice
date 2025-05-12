@@ -9,6 +9,7 @@ include_directories(
    ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
 )
 
+
 if(BUILD_PLATFORMS_COCOA_PLUGIN)
    include_directories(
       ${CMAKE_CURRENT_SOURCE_DIR}/cocoa
@@ -30,6 +31,19 @@ if(BUILD_PLATFORMS_WINDOWS_PLUGIN)
 
    macro_generate_misc_private("${PLATFORMS_WIN_PRIVATE_INCLUDES}"            QtGui/private/platforms)
    macro_generate_misc_private("${PLATFORMS_WIN_OTHER_PRIVATE_INCLUDES}"      QtGui/private/platforms)
+endif()
+
+
+if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
+   include_directories(
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland
+      ${CMAKE_CURRENT_BINARY_DIR}
+   )
+
+   include(wayland/wayland_generic.cmake)
+   include(wayland/client/client.cmake)
+
+   macro_generate_misc_private("${PLATFORMS_WAYLAND_PRIVATE_INCLUDES}"     QtGui/private/platforms)
 endif()
 
 
