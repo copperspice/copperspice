@@ -2505,10 +2505,12 @@ QMenu *QTextControl::createStandardContextMenu(const QPointF &pos, QWidget *pare
 
    if (d->interactionFlags & Qt::TextEditable) {
 #ifndef QT_NO_CLIPBOARD
-      a = menu->addAction(tr("&Paste") + ACCEL_KEY(QKeySequence::Paste), this, SLOT(paste()));
+      a = menu->addAction(tr("&Paste") + ACCEL_KEY(QKeySequence::Paste));
       a->setEnabled(canPaste());
       a->setObjectName("edit-paste");
+
       setActionIcon(a, "edit-paste");
+      connect(a, &QAction::triggered, this, [this] () { this->paste(); });
 #endif
 
       a = menu->addAction(tr("Delete"), this, SLOT(_q_deleteSelected()));
