@@ -205,6 +205,7 @@ if(WITH_MULTIMEDIA AND GStreamer_FOUND)
       CsMultimedia_gst_camerabin
       PRIVATE
       ${GSTREAMER_INCLUDE_DIR}
+      ${GLIB2_INCLUDES}
    )
 
    target_compile_definitions(CsMultimedia_gst_camerabin
