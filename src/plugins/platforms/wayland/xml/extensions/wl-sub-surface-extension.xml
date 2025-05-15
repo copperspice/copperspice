@@ -1,0 +1,53 @@
+<protocol name="sub_surface_extension">
+
+    <copyright>
+***********************************************************************
+*
+* Copyright (c) 2012-2025 Barbara Geller
+* Copyright (c) 2012-2025 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software, released under the BSD 2-Clause license.
+* For license details refer to LICENSE provided with this project.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* https://opensource.org/licenses/BSD-2-Clause
+*
+***********************************************************************
+    </copyright>
+
+    <interface name="qt_sub_surface_extension" version="1">
+        <request name="get_sub_surface_aware_surface">
+            <arg name="id" type="new_id" interface="qt_sub_surface"/>
+            <arg name="surface" type="object" interface="wl_surface"/>
+        </request>
+    </interface>
+
+    <interface name="qt_sub_surface" version="1">
+        <request name="attach_sub_surface">
+            <arg name="sub_surface" type="object" interface="qt_sub_surface"/>
+            <arg name="x" type="int"/>
+            <arg name="y" type="int"/>
+        </request>
+
+        <request name="move_sub_surface">
+            <arg name="sub_surface" type="object" interface="qt_sub_surface"/>
+            <arg name="x" type="int"/>
+            <arg name="y" type="int"/>
+        </request>
+
+        <request name="raise">
+            <arg name="sub_surface" type="object" interface="qt_sub_surface"/>
+        </request>
+
+        <request name="lower">
+            <arg name="sub_surface" type="object" interface="qt_sub_surface"/>
+        </request>
+    </interface>
+</protocol>
