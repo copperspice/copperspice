@@ -1,0 +1,55 @@
+<protocol name="touch_extension">
+
+    <copyright>
+***********************************************************************
+*
+* Copyright (c) 2012-2025 Barbara Geller
+* Copyright (c) 2012-2025 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software, released under the BSD 2-Clause license.
+* For license details refer to LICENSE provided with this project.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* https://opensource.org/licenses/BSD-2-Clause
+*
+***********************************************************************
+    </copyright>
+
+    <interface name="qt_touch_extension" version="1">
+      <event name="touch">
+        <arg name="time" type="uint" />
+        <arg name="id" type="uint" />
+        <arg name="state" type="uint" />
+        <arg name="x" type="int" />
+        <arg name="y" type="int" />
+        <arg name="normalized_x" type="int" />
+        <arg name="normalized_y" type="int" />
+        <arg name="width" type="int" />
+        <arg name="height" type="int" />
+        <arg name="pressure" type="uint" />
+        <arg name="velocity_x" type="int" />
+        <arg name="velocity_y" type="int" />
+        <arg name="flags" type="uint" />
+        <arg name="rawdata" type="array" />
+      </event>
+
+      <enum name="flags">
+        <entry name="mouse_from_touch" value="0x1" />
+      </enum>
+
+      <event name="configure">
+        <arg name="flags" type="uint" />
+      </event>
+
+      <request name="dummy">
+      </request>
+
+    </interface>
+</protocol>
