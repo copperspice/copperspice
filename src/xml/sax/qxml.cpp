@@ -337,7 +337,7 @@ class QXmlSimpleReaderPrivate
    QXmlNamespaceSupport namespaceSupport;
 
    // error string
-   QString error;
+   QString m_error;
 
    // arguments for parse functions (this is needed to allow incremental
    // parsing)
@@ -365,8 +365,7 @@ class QXmlSimpleReaderPrivate
    bool startDTDwasReported;
 
    // used in parseString()
-   signed char Done;
-
+   signed char m_done;
 
    // variables
    QXmlContentHandler *contentHnd;
@@ -1613,7 +1612,7 @@ bool QXmlSimpleReaderPrivate::parseBeginOrContinue(int state, bool incremental)
 
    if (state == 0) {
       if (! parseProlog()) {
-         if (incremental && error.isEmpty()) {
+         if (incremental && m_error.isEmpty()) {
             pushParseState(nullptr, 0);
             return true;
 
@@ -1629,7 +1628,7 @@ bool QXmlSimpleReaderPrivate::parseBeginOrContinue(int state, bool incremental)
 
       if (! parseElement()) {
 
-         if (incremental && error.isEmpty()) {
+         if (incremental && m_error.isEmpty()) {
             pushParseState(nullptr, 1);
             return true;
 
@@ -1645,7 +1644,7 @@ bool QXmlSimpleReaderPrivate::parseBeginOrContinue(int state, bool incremental)
    // parse Misc*
    while (!atEnd()) {
       if (!parseMisc()) {
-         if (incremental && error.isEmpty()) {
+         if (incremental && m_error.isEmpty()) {
             pushParseState(nullptr, 2);
             return true;
 
@@ -1663,7 +1662,7 @@ bool QXmlSimpleReaderPrivate::parseBeginOrContinue(int state, bool incremental)
    }
 
    // is stack empty?
-   if (! tags.isEmpty() && !error.isEmpty()) {
+   if (! tags.isEmpty() && ! m_error.isEmpty()) {
       reportParseError(QString::fromLatin1(XMLERR_UNEXPECTEDEOF));
       tags.clear();
       return false;
@@ -6557,7 +6556,7 @@ bool QXmlSimpleReaderPrivate::parseString()
    signed char input;
 
    if (parseStack == nullptr || parseStack->isEmpty()) {
-      Done = parseString_s.length();
+      m_done = parseString_s.length();
       state = 0;
 
    } else {
@@ -6586,7 +6585,7 @@ bool QXmlSimpleReaderPrivate::parseString()
    }
 
    for (;;) {
-      if (state == Done) {
+      if (state == m_done) {
          return true;
       }
 
@@ -6730,7 +6729,8 @@ void QXmlSimpleReaderPrivate::init(const QXmlInputSource *i)
    xmlVersion.clear();
    encoding.clear();
    standalone = QXmlSimpleReaderPrivate::Unknown;
-   error.clear();
+
+   m_error.clear();
 }
 
 /*
@@ -6760,17 +6760,16 @@ bool QXmlSimpleReaderPrivate::entityExist(const QString &e) const
    }
 }
 
-void QXmlSimpleReaderPrivate::reportParseError(const QString &error)
+void QXmlSimpleReaderPrivate::reportParseError(const QString &newError)
 {
-   this->error = error;
+   m_error = newError;
    if (errorHnd) {
-      if (this->error.isEmpty()) {
+      if (m_error.isEmpty()) {
          const QXmlParseException ex(QString::fromLatin1(XMLERR_OK), columnNr + 1, lineNr + 1,
                                      thisPublicId, thisSystemId);
          errorHnd->fatalError(ex);
       } else {
-         const QXmlParseException ex(this->error, columnNr + 1, lineNr + 1,
-                                     thisPublicId, thisSystemId);
+         const QXmlParseException ex(m_error, columnNr + 1, lineNr + 1, thisPublicId, thisSystemId);
          errorHnd->fatalError(ex);
       }
    }
@@ -6805,7 +6804,7 @@ void QXmlSimpleReaderPrivate::unexpectedEof(ParseFunction where, int state)
 */
 void QXmlSimpleReaderPrivate::parseFailed(ParseFunction where, int state)
 {
-   if (parseStack != nullptr && error.isEmpty()) {
+   if (parseStack != nullptr && m_error.isEmpty()) {
       pushParseState(where, state);
    }
 }

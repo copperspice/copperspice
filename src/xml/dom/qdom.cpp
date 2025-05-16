@@ -179,13 +179,13 @@ class QDomNodePrivate
 
    QString name;               // this is the local name if prefix != null
    QString value;
-   QString prefix;             // set this only for ElementNode and AttributeNode
+   QString m_prefix;             // set this only for ElementNode and AttributeNode
    QString namespaceURI;       // set this only for ElementNode and AttributeNode
    bool createdWithDom1Interface : 1;
    bool hasParent                : 1;
 
-   int lineNumber;
-   int columnNumber;
+   int m_lineNumber;
+   int m_columnNumber;
 };
 
 class QDomNodeListPrivate
@@ -668,8 +668,8 @@ class QDomHandler : public QXmlDefaultHandler
    QString entityName;
    bool cdata;
    bool nsProcessing;
-   QXmlLocator *locator;
 
+   QXmlLocator *m_locator;
 };
 
 // Functions for verifying legal data
@@ -1280,8 +1280,9 @@ QDomNodePrivate::QDomNodePrivate(QDomDocumentPrivate *doc, QDomNodePrivate *par)
    last  = nullptr;
 
    createdWithDom1Interface = true;
-   lineNumber   = -1;
-   columnNumber = -1;
+
+   m_lineNumber   = -1;
+   m_columnNumber = -1;
 }
 
 QDomNodePrivate::QDomNodePrivate(QDomNodePrivate *n, bool deep)
@@ -1296,12 +1297,12 @@ QDomNodePrivate::QDomNodePrivate(QDomNodePrivate *n, bool deep)
 
    name = n->name;
    value = n->value;
-   prefix = n->prefix;
+   m_prefix = n->m_prefix;
    namespaceURI = n->namespaceURI;
    createdWithDom1Interface = n->createdWithDom1Interface;
-   lineNumber = -1;
-   columnNumber = -1;
 
+   m_lineNumber   = -1;
+   m_columnNumber = -1;
    if (!deep) {
       return;
    }
@@ -1818,8 +1819,8 @@ void QDomNodePrivate::save(QTextStream &s, int depth, int indent) const
 
 void QDomNodePrivate::setLocation(int lineNumber, int columnNumber)
 {
-   this->lineNumber   = lineNumber;
-   this->columnNumber = columnNumber;
+   m_lineNumber   = lineNumber;
+   m_columnNumber = columnNumber;
 }
 
 #define IMPL ((QDomNodePrivate*)impl)
@@ -1884,8 +1885,8 @@ QString QDomNode::nodeName() const
       return QString();
    }
 
-   if (!IMPL->prefix.isEmpty()) {
-      return IMPL->prefix + QLatin1Char(':') + IMPL->name;
+   if (! IMPL->m_prefix.isEmpty()) {
+      return IMPL->m_prefix + QChar(':') + IMPL->name;
    }
 
    return IMPL->name;
@@ -2015,16 +2016,16 @@ QString QDomNode::prefix() const
    if (!impl) {
       return QString();
    }
-   return IMPL->prefix;
+   return IMPL->m_prefix;
 }
 
 void QDomNode::setPrefix(const QString &pre)
 {
-   if (!impl || IMPL->prefix.isEmpty()) {
+   if (! impl || IMPL->m_prefix.isEmpty()) {
       return;
    }
    if (isAttr() || isElement()) {
-      IMPL->prefix = pre;
+      IMPL->m_prefix = pre;
    }
 }
 
@@ -2303,12 +2304,12 @@ QDomElement QDomNode::previousSiblingElement(const QString &tagName) const
 
 int QDomNode::lineNumber() const
 {
-   return impl ? impl->lineNumber : -1;
+   return impl ? impl->m_lineNumber : -1;
 }
 
 int QDomNode::columnNumber() const
 {
-   return impl ? impl->columnNumber : -1;
+   return impl ? impl->m_columnNumber : -1;
 }
 
 QDomNamedNodeMapPrivate::QDomNamedNodeMapPrivate(QDomNodePrivate *n)
@@ -2374,7 +2375,7 @@ QDomNodePrivate *QDomNamedNodeMapPrivate::namedItemNS(const QString &nsURI, cons
    for (; it != m_nodeMap.constEnd(); ++it) {
       n = *it;
 
-      if (! n->prefix.isEmpty()) {
+      if (! n->m_prefix.isEmpty()) {
          // node has a namespace
          if (n->namespaceURI == nsURI && n->name == localName) {
             return n;
@@ -2412,7 +2413,7 @@ QDomNodePrivate *QDomNamedNodeMapPrivate::setNamedItemNS(QDomNodePrivate *arg)
       return parent->appendChild(arg);
    }
 
-   if (!arg->prefix.isEmpty()) {
+   if (! arg->m_prefix.isEmpty()) {
       // node has a namespace
       QDomNodePrivate *n = namedItemNS(arg->namespaceURI, arg->name);
 
@@ -3052,7 +3053,7 @@ QDomAttrPrivate::QDomAttrPrivate(QDomDocumentPrivate *d, QDomNodePrivate *parent
 QDomAttrPrivate::QDomAttrPrivate(QDomDocumentPrivate *d, QDomNodePrivate *p, const QString &nsURI, const QString &qName)
    : QDomNodePrivate(d, p)
 {
-   qt_split_namespace(prefix, name, qName, !nsURI.isEmpty());
+   qt_split_namespace(m_prefix, name, qName, ! nsURI.isEmpty());
    namespaceURI = nsURI;
    createdWithDom1Interface = false;
    m_specified = false;
@@ -3162,7 +3163,7 @@ void QDomAttrPrivate::save(QTextStream &s, int, int) const
       s << name << "=\"" << encodeText(value, s, true, true) << '\"';
 
    } else {
-      s << prefix << ':' << name << "=\"" << encodeText(value, s, true, true) << '\"';
+      s << m_prefix << ':' << name << "=\"" << encodeText(value, s, true, true) << '\"';
 
       /* This is a fix for 138243, as good as it gets.
        *
@@ -3176,8 +3177,8 @@ void QDomAttrPrivate::save(QTextStream &s, int, int) const
        * and we don't do fixups by that anyway, and hence it's the user responsibility to not
        * arrive in those situations. */
 
-      if (! ownerNode || ownerNode->prefix != prefix) {
-         s << " xmlns:" << prefix << "=\"" << encodeText(namespaceURI, s, true, true) << '\"';
+      if (! ownerNode || ownerNode->m_prefix != m_prefix) {
+         s << " xmlns:" << m_prefix << "=\"" << encodeText(namespaceURI, s, true, true) << '\"';
       }
    }
 }
@@ -3257,7 +3258,7 @@ QDomElementPrivate::QDomElementPrivate(QDomDocumentPrivate *d, QDomNodePrivate *
 QDomElementPrivate::QDomElementPrivate(QDomDocumentPrivate *d, QDomNodePrivate *p, const QString &nsURI, const QString &qName)
    : QDomNodePrivate(d, p)
 {
-   qt_split_namespace(prefix, name, qName, ! nsURI.isEmpty());
+   qt_split_namespace(m_prefix, name, qName, ! nsURI.isEmpty());
    namespaceURI = nsURI;
    createdWithDom1Interface = false;
    m_attr = new QDomNamedNodeMapPrivate(this);
@@ -3337,7 +3338,7 @@ void QDomElementPrivate::setAttributeNS(const QString &nsURI, const QString &qNa
       m_attr->setNamedItem(n);
    } else {
       n->setNodeValue(newValue);
-      n->prefix = prefix;
+      n->m_prefix = prefix;
    }
 }
 
@@ -3375,7 +3376,7 @@ QDomAttrPrivate *QDomElementPrivate::setAttributeNodeNS(QDomAttrPrivate *newAttr
 {
    QDomNodePrivate *n = nullptr;
 
-   if (!newAttr->prefix.isEmpty()) {
+   if (! newAttr->m_prefix.isEmpty()) {
       n = m_attr->namedItemNS(newAttr->namespaceURI, newAttr->name);
    }
 
@@ -3434,11 +3435,11 @@ void QDomElementPrivate::save(QTextStream &s, int depth, int indent) const
        // the information that we get from startPrefixMapping()/endPrefixMapping() and use them.
        // Modifications becomes more complex then, however.
 
-      if (prefix.isEmpty()) {
+      if (m_prefix.isEmpty()) {
          nsDecl = QLatin1String(" xmlns");
       } else {
-         qName = prefix + QLatin1Char(':') + name;
-         nsDecl = QLatin1String(" xmlns:") + prefix;
+         qName = m_prefix + QChar(':') + name;
+         nsDecl = " xmlns:" + m_prefix;
       }
       nsDecl += QLatin1String("=\"") + encodeText(namespaceURI, s) + QLatin1Char('\"');
    }
@@ -3457,7 +3458,7 @@ void QDomElementPrivate::save(QTextStream &s, int depth, int indent) const
          if (it.value()->namespaceURI.isEmpty()) {
             s << it.value()->name << "=\"" << encodeText(it.value()->value, s, true, true) << '\"';
          } else {
-            s << it.value()->prefix << ':' << it.value()->name << "=\"" << encodeText(it.value()->value, s, true, true) << '\"';
+            s << it.value()->m_prefix << ':' << it.value()->name << "=\"" << encodeText(it.value()->value, s, true, true) << '\"';
             /* This is a fix for 138243, as good as it gets.
              *
              * QDomElementPrivate::save() output a namespace declaration if
@@ -3469,11 +3470,11 @@ void QDomElementPrivate::save(QTextStream &s, int depth, int indent) const
              * a different namespace. However, this can only occur by the user modifying the element,
              * and we don't do fixups by that anyway, and hence it's the user responsibility to not
              * arrive in those situations. */
-            if ((!it.value()->ownerNode ||
-                  it.value()->ownerNode->prefix != it.value()->prefix) &&
-                  !outputtedPrefixes.contains(it.value()->prefix)) {
-               s << " xmlns:" << it.value()->prefix << "=\"" << encodeText(it.value()->namespaceURI, s, true, true) << '\"';
-               outputtedPrefixes.insert(it.value()->prefix);
+
+            if ((! it.value()->ownerNode || it.value()->ownerNode->m_prefix != it.value()->m_prefix) &&
+                  ! outputtedPrefixes.contains(it.value()->m_prefix)) {
+               s << " xmlns:" << it.value()->m_prefix << "=\"" << encodeText(it.value()->namespaceURI, s, true, true) << '\"';
+               outputtedPrefixes.insert(it.value()->m_prefix);
             }
          }
       }
@@ -4594,18 +4595,16 @@ QDomNodePrivate *QDomDocumentPrivate::importNode(const QDomNodePrivate *imported
 
 void QDomDocumentPrivate::saveDocument(QTextStream &s, const int indent, QDomNode::EncodingPolicy encUsed) const
 {
-   const QDomNodePrivate *n = first;
+   const QDomNodePrivate *node = first;
 
    if (encUsed == QDomNode::EncodingFromDocument) {
 
 #ifndef QT_NO_TEXTCODEC
-      const QDomNodePrivate *n = first;
-
       QTextCodec *codec = nullptr;
 
-      if (n && n->isProcessingInstruction() && n->nodeName() == QLatin1String("xml")) {
-         // we have an XML declaration
-         QString data = n->nodeValue();
+      if (node != nullptr && node->isProcessingInstruction() && node->nodeName() == "xml") {
+         // have an XML declaration
+         QString data = node->nodeValue();
 
          QRegularExpression8 encoding("encoding\\s*=\\s*((\"([^\"]*)\")|('([^']*)'))");
          QRegularExpressionMatch8 match = encoding.match(data);
@@ -4632,15 +4631,15 @@ void QDomDocumentPrivate::saveDocument(QTextStream &s, const int indent, QDomNod
 #endif
       bool doc = false;
 
-      while (n) {
-         if (!doc && !(n->isProcessingInstruction() && n->nodeName() == QLatin1String("xml"))) {
+      while (node != nullptr) {
+         if (! doc && ! (node->isProcessingInstruction() && node->nodeName() == "xml")) {
             // save doctype after XML declaration
             type->save(s, 0, indent);
             doc = true;
          }
 
-         n->save(s, 0, indent);
-         n = n->next;
+         node->save(s, 0, indent);
+         node = node->next;
       }
    } else {
 
@@ -4658,20 +4657,20 @@ void QDomDocumentPrivate::saveDocument(QTextStream &s, const int indent, QDomNod
         << "\"?>\n";
 
       //  Skip the first processing instruction by name "xml", if any such exists.
-      const QDomNodePrivate *startNode = n;
+      const QDomNodePrivate *startNode = node;
 
       // First, we try to find the PI and sets the startNode to the one appearing after it.
-      while (n) {
-         if (n->isProcessingInstruction() && n->nodeName() == QLatin1String("xml")) {
-            startNode = n->next;
+      while (node != nullptr) {
+         if (node->isProcessingInstruction() && node->nodeName() == "xml") {
+            startNode = node->next;
             break;
          } else {
-            n = n->next;
+            node = node->next;
          }
       }
 
       // Now we serialize all the nodes after the faked XML declaration(the PI).
-      while (startNode) {
+      while (startNode != nullptr) {
          startNode->save(s, 0, indent);
          startNode = startNode->next;
       }
@@ -5035,7 +5034,7 @@ QDomComment QDomNode::toComment() const
 
 QDomHandler::QDomHandler(QDomDocumentPrivate *adoc, bool namespaceProcessing)
    : errorLine(0), errorColumn(0), doc(adoc), node(adoc), cdata(false),
-     nsProcessing(namespaceProcessing), locator(nullptr)
+     nsProcessing(namespaceProcessing), m_locator(nullptr)
 {
 }
 
@@ -5074,7 +5073,7 @@ bool QDomHandler::startElement(const QString &nsURI, const QString &, const QStr
       return false;
    }
 
-   n->setLocation(locator->lineNumber(), locator->columnNumber());
+   n->setLocation(m_locator->lineNumber(), m_locator->columnNumber());
 
    node->appendChild(n);
    node = n;
@@ -5126,7 +5125,7 @@ bool QDomHandler::characters(const QString  &ch)
       n.reset(doc->createTextNode(ch));
    }
 
-   n->setLocation(locator->lineNumber(), locator->columnNumber());
+   n->setLocation(m_locator->lineNumber(), m_locator->columnNumber());
    node->appendChild(n.data());
    n.take();
 
@@ -5138,7 +5137,7 @@ bool QDomHandler::processingInstruction(const QString &target, const QString &da
    QDomNodePrivate *n;
    n = doc->createProcessingInstruction(target, data);
    if (n) {
-      n->setLocation(locator->lineNumber(), locator->columnNumber());
+      n->setLocation(m_locator->lineNumber(), m_locator->columnNumber());
       node->appendChild(n);
       return true;
    } else {
@@ -5155,7 +5154,7 @@ bool QDomHandler::skippedEntity(const QString &name)
    }
 
    QDomNodePrivate *n = doc->createEntityReference(name);
-   n->setLocation(locator->lineNumber(), locator->columnNumber());
+   n->setLocation(m_locator->lineNumber(), m_locator->columnNumber());
    node->appendChild(n);
    return true;
 }
@@ -5196,7 +5195,7 @@ bool QDomHandler::comment(const QString &ch)
 {
    QDomNodePrivate *n;
    n = doc->createComment(ch);
-   n->setLocation(locator->lineNumber(), locator->columnNumber());
+   n->setLocation(m_locator->lineNumber(), m_locator->columnNumber());
    node->appendChild(n);
    return true;
 }
@@ -5232,7 +5231,7 @@ bool QDomHandler::notationDecl(const QString &name, const QString &publicId, con
 
 void QDomHandler::setDocumentLocator(QXmlLocator *locator)
 {
-   this->locator = locator;
+   m_locator = locator;
 }
 
 #endif // QT_NO_DOM
