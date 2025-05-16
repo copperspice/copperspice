@@ -46,10 +46,10 @@
 
 static void qt_split_namespace(QString &prefix, QString &name, const QString &qName, bool hasURI)
 {
-   int i = qName.indexOf(QLatin1Char(':'));
+   int i = qName.indexOf(QChar(':'));
    if (i == -1) {
       if (hasURI) {
-         prefix = QLatin1String("");
+         prefix = QString("");
       } else {
          prefix.clear();
       }
@@ -727,7 +727,7 @@ static QString fixedXmlName(const QString &_name, bool *ok, bool namespaces = fa
 
    *ok = true;
    if (namespaces && !prefix.isEmpty()) {
-      return prefix + QLatin1Char(':') + result;
+      return prefix + QChar(':') + result;
    }
    return result;
 }
@@ -773,7 +773,7 @@ static QString fixedComment(const QString &data, bool *ok)
    }
 
    for (;;) {
-      int idx = fixedData.indexOf(QLatin1String("--"));
+      int idx = fixedData.indexOf("--");
       if (idx == -1) {
          break;
       }
@@ -804,7 +804,7 @@ static QString fixedCDataSection(const QString &data, bool *ok)
    }
 
    for (;;) {
-      int idx = fixedData.indexOf(QLatin1String("]]>"));
+      int idx = fixedData.indexOf("]]>");
       if (idx == -1) {
          break;
       }
@@ -834,7 +834,7 @@ static QString fixedPIData(const QString &data, bool *ok)
    }
 
    for (;;) {
-      int idx = fixedData.indexOf(QLatin1String("?>"));
+      int idx = fixedData.indexOf("?>");
       if (idx == -1) {
          break;
       }
@@ -868,13 +868,12 @@ static QString fixedPubidLiteral(const QString &data, bool *ok)
       return QString();
    }
 
-   if (result.indexOf(QLatin1Char('\'')) != -1
-         && result.indexOf(QLatin1Char('"')) != -1) {
+   if (result.indexOf(QChar('\'')) != -1 && result.indexOf(QChar('"')) != -1) {
       if (QDomImplementationPrivate::invalidDataPolicy == QDomImplementation::ReturnNullNode) {
          *ok = false;
          return QString();
       } else {
-         result.remove(QLatin1Char('\''));
+         result.remove(QChar('\''));
       }
    }
 
@@ -894,13 +893,13 @@ static QString fixedSystemLiteral(const QString &data, bool *ok)
 
    QString result = data;
 
-   if (result.indexOf(QLatin1Char('\'')) != -1
-         && result.indexOf(QLatin1Char('"')) != -1) {
+   if (result.indexOf(QChar('\'')) != -1
+         && result.indexOf(QChar('"')) != -1) {
       if (QDomImplementationPrivate::invalidDataPolicy == QDomImplementation::ReturnNullNode) {
          *ok = false;
          return QString();
       } else {
-         result.remove(QLatin1Char('\''));
+         result.remove(QChar('\''));
       }
    }
 
@@ -966,8 +965,8 @@ QDomImplementation::~QDomImplementation()
 
 bool QDomImplementation::hasFeature(const QString &feature, const QString &version) const
 {
-   if (feature == QLatin1String("XML")) {
-      if (version.isEmpty() || version == QLatin1String("1.0")) {
+   if (feature == "XML") {
+      if (version.isEmpty() || version == "1.0") {
          return true;
       }
    }
@@ -2042,6 +2041,7 @@ bool QDomNode::hasAttributes() const
    if (! impl || !impl->isElement()) {
       return false;
    }
+
    return static_cast<QDomElementPrivate *>(impl)->hasAttributes();
 }
 
@@ -2314,9 +2314,9 @@ int QDomNode::columnNumber() const
 
 QDomNamedNodeMapPrivate::QDomNamedNodeMapPrivate(QDomNodePrivate *n)
 {
-   ref = 1;
+   ref      = 1;
    readonly = false;
-   parent = n;
+   parent   = n;
    appendToParent = false;
 }
 
@@ -2749,9 +2749,8 @@ QDomNodePrivate *QDomDocumentTypePrivate::appendChild(QDomNodePrivate *newChild)
 
 static QString quotedValue(const QString &data)
 {
-   QChar quote = data.indexOf(QLatin1Char('\'')) == -1
-                 ? QLatin1Char('\'')
-                 : QLatin1Char('"');
+   QChar quote = data.indexOf(QChar('\'')) == -1 ? QChar('\'') : QChar('"');
+
    return quote + data + quote;
 }
 
@@ -2866,7 +2865,7 @@ QString QDomDocumentType::internalSubset() const
 QDomDocumentFragmentPrivate::QDomDocumentFragmentPrivate(QDomDocumentPrivate *doc, QDomNodePrivate *parent)
    : QDomNodePrivate(doc, parent)
 {
-   name = QLatin1String("#document-fragment");
+   name = "#document-fragment";
 }
 
 QDomDocumentFragmentPrivate::QDomDocumentFragmentPrivate(QDomNodePrivate *n, bool deep)
@@ -2906,7 +2905,7 @@ QDomCharacterDataPrivate::QDomCharacterDataPrivate(QDomDocumentPrivate *d, QDomN
    : QDomNodePrivate(d, p)
 {
    value = data;
-   name = QLatin1String("#character-data");
+   name  = "#character-data";
 }
 
 QDomCharacterDataPrivate::QDomCharacterDataPrivate(QDomCharacterDataPrivate *n, bool deep)
@@ -3108,33 +3107,32 @@ static QString encodeText(const QString &str, QTextStream &s, const bool encodeQ
    while (i < len) {
       const QChar ati(retval.at(i));
 
-      if (ati == QLatin1Char('<')) {
-         retval.replace(i, 1, QLatin1String("&lt;"));
+      if (ati == QChar('<')) {
+         retval.replace(i, 1, "&lt;");
          len += 3;
          i += 4;
-      } else if (encodeQuotes && (ati == QLatin1Char('"'))) {
-         retval.replace(i, 1, QLatin1String("&quot;"));
+      } else if (encodeQuotes && (ati == QChar('"'))) {
+         retval.replace(i, 1, "&quot;");
          len += 5;
          i += 6;
-      } else if (ati == QLatin1Char('&')) {
-         retval.replace(i, 1, QLatin1String("&amp;"));
+      } else if (ati == QChar('&')) {
+         retval.replace(i, 1, "&amp;");
          len += 4;
          i += 5;
-      } else if (ati == QLatin1Char('>') && i >= 2 && retval[i - 1] == QLatin1Char(']') &&
-                 retval[i - 2] == QLatin1Char(']')) {
-         retval.replace(i, 1, QLatin1String("&gt;"));
+      } else if (ati == QChar('>') && i >= 2 && retval[i - 1] == QChar(']') && retval[i - 2] == QChar(']')) {
+         retval.replace(i, 1, "&gt;");
          len += 3;
          i += 4;
-      } else if (performAVN &&
-                 (ati == QChar(0xA) ||
-                  ati == QChar(0xD) ||
-                  ati == QChar(0x9))) {
-         const QString replacement(QLatin1String("&#x") + QString::number(ati.unicode(), 16) + QLatin1Char(';'));
+      } else if (performAVN && (ati == QChar(0xA) || ati == QChar(0xD) || ati == QChar(0x9))) {
+
+         const QString replacement("&#x" + QString::number(ati.unicode(), 16) + QChar(';'));
+
          retval.replace(i, 1, replacement);
          i += replacement.length();
          len += replacement.length() - 1;
+
       } else if (encodeEOLs && ati == QChar(0xD)) {
-         retval.replace(i, 1, QLatin1String("&#xd;")); // Replace a single 0xD with a ref for 0xD
+         retval.replace(i, 1, "&#xd;");    // Replace a single 0xD with a ref for 0xD
          len += 4;
          i += 5;
       } else {
@@ -3146,7 +3144,7 @@ static QString encodeText(const QString &str, QTextStream &s, const bool encodeQ
          {
             // We have to use a character reference to get it through.
             const ushort codepoint(ati.unicode());
-            const QString replacement(QLatin1String("&#x") + QString::number(codepoint, 16) + QLatin1Char(';'));
+            const QString replacement("&#x" + QString::number(codepoint, 16) + QChar(';'));
             retval.replace(i, 1, replacement);
             i += replacement.length();
             len += replacement.length() - 1;
@@ -3403,29 +3401,29 @@ bool QDomElementPrivate::hasAttributeNS(const QString &nsURI, const QString &loc
 
 QString QDomElementPrivate::text()
 {
-   QString t(QLatin1String(""));
+   QString retval;
 
    QDomNodePrivate *p = first;
    while (p) {
       if (p->isText() || p->isCDATASection()) {
-         t += p->nodeValue();
+         retval += p->nodeValue();
       } else if (p->isElement()) {
-         t += ((QDomElementPrivate *)p)->text();
+         retval += ((QDomElementPrivate *)p)->text();
       }
       p = p->next;
    }
 
-   return t;
+   return retval;
 }
 
 void QDomElementPrivate::save(QTextStream &s, int depth, int indent) const
 {
    if (!(prev && prev->isText())) {
-      s << QString(indent < 1 ? 0 : depth * indent, QLatin1Char(' '));
+      s << QString(indent < 1 ? 0 : depth * indent, QChar(' '));
    }
 
    QString qName(name);
-   QString nsDecl(QLatin1String(""));
+   QString nsDecl;
 
    if (!namespaceURI.isEmpty()) {
 
@@ -3436,12 +3434,13 @@ void QDomElementPrivate::save(QTextStream &s, int depth, int indent) const
        // Modifications becomes more complex then, however.
 
       if (m_prefix.isEmpty()) {
-         nsDecl = QLatin1String(" xmlns");
+         nsDecl = " xmlns";
       } else {
          qName = m_prefix + QChar(':') + name;
          nsDecl = " xmlns:" + m_prefix;
       }
-      nsDecl += QLatin1String("=\"") + encodeText(namespaceURI, s) + QLatin1Char('\"');
+
+      nsDecl += "=\"" + encodeText(namespaceURI, s) + QChar('\"');
    }
    s << '<' << qName << nsDecl;
 
@@ -3494,7 +3493,7 @@ void QDomElementPrivate::save(QTextStream &s, int depth, int indent) const
       }
       QDomNodePrivate::save(s, depth + 1, indent);
       if (!last->isText()) {
-         s << QString(indent < 1 ? 0 : depth * indent, QLatin1Char(' '));
+         s << QString(indent < 1 ? 0 : depth * indent, QChar(' '));
       }
 
       s << "</" << qName << '>';
@@ -3759,7 +3758,7 @@ QString QDomElement::text() const
 QDomTextPrivate::QDomTextPrivate(QDomDocumentPrivate *d, QDomNodePrivate *parent, const QString &val)
    : QDomCharacterDataPrivate(d, parent, val)
 {
-   name = QLatin1String("#text");
+   name = "#text";
 }
 
 QDomTextPrivate::QDomTextPrivate(QDomTextPrivate *n, bool deep)
@@ -3831,7 +3830,7 @@ QDomText QDomText::splitText(int offset)
 QDomCommentPrivate::QDomCommentPrivate(QDomDocumentPrivate *d, QDomNodePrivate *parent, const QString &val)
    : QDomCharacterDataPrivate(d, parent, val)
 {
-   name = QLatin1String("#comment");
+   name = "#comment";
 }
 
 QDomCommentPrivate::QDomCommentPrivate(QDomCommentPrivate *n, bool deep)
@@ -3852,11 +3851,11 @@ void QDomCommentPrivate::save(QTextStream &s, int depth, int indent) const
 {
    /* We don't output whitespace if we would pollute a text node. */
    if (!(prev && prev->isText())) {
-      s << QString(indent < 1 ? 0 : depth * indent, QLatin1Char(' '));
+      s << QString(indent < 1 ? 0 : depth * indent, QChar(' '));
    }
 
    s << "<!--" << value;
-   if (value.endsWith(QLatin1Char('-'))) {
+   if (value.endsWith(QChar('-'))) {
       s << ' ';   // Ensures that XML comment doesn't end with --->
    }
    s << "-->";
@@ -3890,7 +3889,7 @@ QDomCDATASectionPrivate::QDomCDATASectionPrivate(QDomDocumentPrivate *d, QDomNod
       const QString &val)
    : QDomTextPrivate(d, parent, val)
 {
-   name = QLatin1String("#cdata-section");
+   name = "#cdata-section";
 }
 
 QDomCDATASectionPrivate::QDomCDATASectionPrivate(QDomCDATASectionPrivate *n, bool deep)
@@ -4271,7 +4270,7 @@ QDomDocumentPrivate::QDomDocumentPrivate()
    type = new QDomDocumentTypePrivate(this, this);
    type->ref.deref();
 
-   name = QLatin1String("#document");
+   name = "#document";
 }
 
 QDomDocumentPrivate::QDomDocumentPrivate(const QString &aname)
@@ -4281,7 +4280,7 @@ QDomDocumentPrivate::QDomDocumentPrivate(const QString &aname)
    type->ref.deref();
    type->name = aname;
 
-   name = QLatin1String("#document");
+   name = "#document";
 }
 
 QDomDocumentPrivate::QDomDocumentPrivate(QDomDocumentTypePrivate *dt)
@@ -4295,7 +4294,7 @@ QDomDocumentPrivate::QDomDocumentPrivate(QDomDocumentTypePrivate *dt)
       type->ref.deref();
    }
 
-   name = QLatin1String("#document");
+   name = "#document";
 }
 
 QDomDocumentPrivate::QDomDocumentPrivate(QDomDocumentPrivate *n, bool deep)
@@ -4318,9 +4317,9 @@ void QDomDocumentPrivate::clear()
 
 static void initializeReader(QXmlSimpleReader &reader, bool namespaceProcessing)
 {
-   reader.setFeature(QLatin1String("http://xml.org/sax/features/namespaces"), namespaceProcessing);
-   reader.setFeature(QLatin1String("http://xml.org/sax/features/namespace-prefixes"), !namespaceProcessing);
-   reader.setFeature(QLatin1String("http://copperspice.com/xml/features/report-whitespace-only-CharData"), false);
+   reader.setFeature("http://xml.org/sax/features/namespaces", namespaceProcessing);
+   reader.setFeature("http://xml.org/sax/features/namespace-prefixes", ! namespaceProcessing);
+   reader.setFeature("http://copperspice.com/xml/features/report-whitespace-only-CharData", false);
 }
 
 bool QDomDocumentPrivate::setContent(QXmlInputSource *source, bool namespaceProcessing, QString *errorMsg,
@@ -4339,8 +4338,8 @@ bool QDomDocumentPrivate::setContent(QXmlInputSource *source, QXmlReader *reader
    type = new QDomDocumentTypePrivate(this, this);
    type->ref.deref();
 
-   bool namespaceProcessing = reader->feature(QLatin1String("http://xml.org/sax/features/namespaces"))
-                              && ! reader->feature(QLatin1String("http://xml.org/sax/features/namespace-prefixes"));
+   bool namespaceProcessing = reader->feature("http://xml.org/sax/features/namespaces")
+         && ! reader->feature("http://xml.org/sax/features/namespace-prefixes");
 
    QDomHandler hnd(this, namespaceProcessing);
    reader->setContentHandler(&hnd);
@@ -4645,7 +4644,7 @@ void QDomDocumentPrivate::saveDocument(QTextStream &s, const int indent, QDomNod
 
       // Write out the XML declaration.
 #ifdef QT_NO_TEXTCODEC
-      const QLatin1String codecName("iso-8859-1");
+      const QString codecName("iso-8859-1");
 #else
       const QTextCodec *const codec = s.codec();
       Q_ASSERT_X(codec, "QDomNode::save()", "A codec must be specified in the text stream.");
