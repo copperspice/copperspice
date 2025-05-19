@@ -1216,9 +1216,8 @@ void QTableView::paintEvent(QPaintEvent *event)
       if (alternate && verticalHeader->sectionsHidden()) {
          uint verticalOffset = verticalHeader->offset();
          int row = verticalHeader->logicalIndex(top);
-         for (int y = 0;
-            ((uint)(y += verticalHeader->sectionSize(top)) <= verticalOffset) && (top < bottom);
-            ++top) {
+
+         for (int tmp = 0; ((uint)(tmp += verticalHeader->sectionSize(top)) <= verticalOffset) && (top < bottom); ++top) {
             row = verticalHeader->logicalIndex(top);
             if (alternate && !verticalHeader->isSectionHidden(row)) {
                alternateBase = !alternateBase;
@@ -1977,11 +1976,12 @@ void QTableView::updateGeometries()
    const int columnCount = d->horizontalHeader->count();
    const int viewportWidth = vsize.width();
    int columnsInViewport = 0;
-   for (int width = 0, column = columnCount - 1; column >= 0; --column) {
+   for (int widthScroll = 0, column = columnCount - 1; column >= 0; --column) {
       int logical = d->horizontalHeader->logicalIndex(column);
       if (!d->horizontalHeader->isSectionHidden(logical)) {
-         width += d->horizontalHeader->sectionSize(logical);
-         if (width > viewportWidth) {
+         widthScroll += d->horizontalHeader->sectionSize(logical);
+
+         if (widthScroll > viewportWidth) {
             break;
          }
          ++columnsInViewport;
@@ -2007,11 +2007,13 @@ void QTableView::updateGeometries()
    const int rowCount = d->verticalHeader->count();
    const int viewportHeight = vsize.height();
    int rowsInViewport = 0;
-   for (int height = 0, row = rowCount - 1; row >= 0; --row) {
+
+   for (int heightScroll = 0, row = rowCount - 1; row >= 0; --row) {
       int logical = d->verticalHeader->logicalIndex(row);
       if (!d->verticalHeader->isSectionHidden(logical)) {
-         height += d->verticalHeader->sectionSize(logical);
-         if (height > viewportHeight) {
+         heightScroll += d->verticalHeader->sectionSize(logical);
+
+         if (heightScroll > viewportHeight) {
             break;
          }
          ++rowsInViewport;

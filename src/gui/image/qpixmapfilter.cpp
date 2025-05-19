@@ -677,7 +677,7 @@ Q_GUI_EXPORT void qt_blurImage(QImage &blurImage, qreal radius, bool quality, in
 
 Q_GUI_EXPORT extern bool qt_scaleForTransform(const QTransform &transform, qreal *scale);
 
-void QPixmapBlurFilter::draw(QPainter *painter, const QPointF &p, const QPixmap &src, const QRectF &rect) const
+void QPixmapBlurFilter::draw(QPainter *painter, const QPointF &p, const QPixmap &src, const QRectF &rectF) const
 {
    Q_D(const QPixmapBlurFilter);
    if (!painter->isActive()) {
@@ -688,7 +688,7 @@ void QPixmapBlurFilter::draw(QPainter *painter, const QPointF &p, const QPixmap 
       return;
    }
 
-   QRectF srcRect = rect;
+   QRectF srcRect = rectF;
    if (srcRect.isNull()) {
       srcRect = src.rect();
    }

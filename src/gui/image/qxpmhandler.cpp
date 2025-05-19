@@ -791,12 +791,12 @@ static bool read_xpm_string(QByteArray &buf, QIODevice *d, const char *const *so
 
    while (true) {
       if (offset == state.size() || state.isEmpty()) {
-         char buf[2048];
-         qint64 bytesRead = d->read(buf, sizeof(buf));
+         char buffer[2048];
+         qint64 bytesRead = d->read(buffer, sizeof(buffer));
          if (bytesRead <= 0) {
             return false;
          }
-         state = QByteArray(buf, int(bytesRead));
+         state = QByteArray(buffer, int(bytesRead));
          offset = 0;
       }
 
@@ -851,8 +851,8 @@ static bool read_xpm_header(QIODevice *device, const char *const *source, int &i
 
 // Reads XPM body (color information & pixels).
 
-static bool read_xpm_body(QIODevice *device, const char *const *source, int &index, QByteArray &state,
-   int cpp, int ncols, int w, int h, QImage &image)
+static bool read_xpm_body(QIODevice *device, const char *const *source, int &indexPos, QByteArray &state,
+      int cpp, int ncols, int w, int h, QImage &image)
 {
    QByteArray buf(200, 0);
    int i;
@@ -882,7 +882,7 @@ static bool read_xpm_body(QIODevice *device, const char *const *source, int &ind
    bool hasTransparency = false;
 
    for (currentColor = 0; currentColor < ncols; ++currentColor) {
-      if (!read_xpm_string(buf, device, source, index, state)) {
+      if (! read_xpm_string(buf, device, source, indexPos, state)) {
          qWarning("QImage::read_xpm_body() Color specification missing");
          return false;
       }
@@ -971,7 +971,7 @@ static bool read_xpm_body(QIODevice *device, const char *const *source, int &ind
 
    // Read pixels
    for (int y = 0; y < h; y++) {
-      if (!read_xpm_string(buf, device, source, index, state)) {
+      if (!read_xpm_string(buf, device, source, indexPos, state)) {
          qWarning("QImage::read_xpm_body() Pixels missing on image line %d", y);
          return false;
       }

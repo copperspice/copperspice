@@ -179,7 +179,8 @@ class Q_GUI_EXPORT QGraphicsViewPrivate : public QAbstractScrollAreaPrivate
    bool updateRect(const QRect &rect);
    bool updateRegion(const QRectF &rect, const QTransform &xform);
    bool updateSceneSlotReimplementedChecked;
-   QRegion exposedRegion;
+
+   QRegion m_exposedRegion;
 
    QList<QGraphicsItem *> findItems(const QRegion &exposedRegion, bool *allItems,
       const QTransform &viewTransform) const;

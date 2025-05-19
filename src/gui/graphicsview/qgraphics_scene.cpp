@@ -4407,7 +4407,7 @@ void QGraphicsScene::drawItems(QPainter *painter, int numItems,
 
    if (view) {
       d->updateAll = false;
-      expose = &view->d_func()->exposedRegion;
+      expose = &view->d_func()->m_exposedRegion;
       if (view->d_func()->optimizationFlags & QGraphicsView::DontAdjustForAntialiasing) {
          d->rectAdjust = 1;
       } else {

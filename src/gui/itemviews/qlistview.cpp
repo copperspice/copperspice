@@ -1777,12 +1777,12 @@ void QListModeViewBase::dragMoveEvent(QDragMoveEvent *event)
 
    // can't use indexAt, doesn't account for spacing.
    QPoint p = event->pos();
-   QRect rect(p.x() + horizontalOffset(), p.y() + verticalOffset(), 1, 1);
-   rect.adjust(-dd->spacing(), -dd->spacing(), dd->spacing(), dd->spacing());
-   const QVector<QModelIndex> intersectVector = dd->intersectingSet(rect);
-   QModelIndex index = intersectVector.count() > 0
-      ? intersectVector.last() : QModelIndex();
+   QRect rectX(p.x() + horizontalOffset(), p.y() + verticalOffset(), 1, 1);
+   rectX.adjust(-dd->spacing(), -dd->spacing(), dd->spacing(), dd->spacing());
+   const QVector<QModelIndex> intersectVector = dd->intersectingSet(rectX);
+   QModelIndex index = intersectVector.count() > 0 ? intersectVector.last() : QModelIndex();
    dd->hover = index;
+
    if (!dd->droppingOnItself(event, index)
       && dd->canDrop(event)) {
 

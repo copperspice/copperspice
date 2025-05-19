@@ -89,7 +89,8 @@ static constexpr const int max_buf = 4096;
 
 struct my_jpeg_source_mgr : public jpeg_source_mgr {
    // Nothing dynamic - cannot rely on destruction over longjump
-   QIODevice *device;
+   QIODevice *m_device;
+
    JOCTET buffer[max_buf];
    const QBuffer *memDevice;
 
@@ -110,10 +111,10 @@ extern "C" {
       if (src->memDevice) {
          src->next_input_byte = (const JOCTET *)(src->memDevice->data().constData() + src->memDevice->pos());
          num_read = src->memDevice->data().size() - src->memDevice->pos();
-         src->device->seek(src->memDevice->data().size());
+         src->m_device->seek(src->memDevice->data().size());
       } else {
          src->next_input_byte = src->buffer;
-         num_read = src->device->read((char *)src->buffer, max_buf);
+         num_read = src->m_device->read((char *)src->buffer, max_buf);
       }
       if (num_read <= 0) {
          // Insert a fake EOI marker - as per jpeglib recommendation
@@ -153,8 +154,8 @@ extern "C" {
    static void qt_term_source(j_decompress_ptr cinfo)
    {
       my_jpeg_source_mgr *src = (my_jpeg_source_mgr *)cinfo->src;
-      if (! src->device->isSequential()) {
-         src->device->seek(src->device->pos() - src->bytes_in_buffer);
+      if (! src->m_device->isSequential()) {
+         src->m_device->seek(src->m_device->pos() - src->bytes_in_buffer);
       }
    }
 }
@@ -166,7 +167,9 @@ inline my_jpeg_source_mgr::my_jpeg_source_mgr(QIODevice *device)
    jpeg_source_mgr::skip_input_data = qt_skip_input_data;
    jpeg_source_mgr::resync_to_restart = jpeg_resync_to_restart;
    jpeg_source_mgr::term_source = qt_term_source;
-   this->device = device;
+
+   this->m_device = device;
+
    memDevice = qobject_cast<QBuffer *>(device);
    bytes_in_buffer = 0;
    next_input_byte = buffer;
@@ -438,7 +441,7 @@ static bool read_jpeg_image(QImage *outImage, QSize scaledSize, QRect scaledClip
 
 struct my_jpeg_destination_mgr : public jpeg_destination_mgr {
    // Nothing dynamic - cannot rely on destruction over longjump
-   QIODevice *device;
+   QIODevice *m_deviceDest;
    JOCTET buffer[max_buf];
 
  public:
@@ -454,7 +457,7 @@ extern "C" {
    {
       my_jpeg_destination_mgr *dest = (my_jpeg_destination_mgr *)cinfo->dest;
 
-      int written = dest->device->write((char *)dest->buffer, max_buf);
+      int written = dest->m_deviceDest->write((char *)dest->buffer, max_buf);
       if (written == -1) {
          (*cinfo->err->error_exit)((j_common_ptr)cinfo);
       }
@@ -470,7 +473,7 @@ extern "C" {
       my_jpeg_destination_mgr *dest = (my_jpeg_destination_mgr *)cinfo->dest;
       qint64 n = max_buf - dest->free_in_buffer;
 
-      qint64 written = dest->device->write((char *)dest->buffer, n);
+      qint64 written = dest->m_deviceDest->write((char *)dest->buffer, n);
       if (written == -1) {
          (*cinfo->err->error_exit)((j_common_ptr)cinfo);
       }
@@ -483,7 +486,7 @@ inline my_jpeg_destination_mgr::my_jpeg_destination_mgr(QIODevice *device)
    jpeg_destination_mgr::init_destination = qt_init_destination;
    jpeg_destination_mgr::empty_output_buffer = qt_empty_output_buffer;
    jpeg_destination_mgr::term_destination = qt_term_destination;
-   this->device = device;
+   m_deviceDest = device;
    next_output_byte = buffer;
    free_in_buffer = max_buf;
 }

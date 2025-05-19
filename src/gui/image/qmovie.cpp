@@ -45,32 +45,32 @@ class QFrameInfo
 {
  public:
    QFrameInfo(bool endMark)
-      : pixmap(QPixmap()), delay(QMOVIE_INVALID_DELAY), endMark(endMark) {
+      : m_pixmap(QPixmap()), m_delay(QMOVIE_INVALID_DELAY), m_endMark(endMark) {
    }
 
    QFrameInfo()
-      : pixmap(QPixmap()), delay(QMOVIE_INVALID_DELAY), endMark(false) {
+      : m_pixmap(QPixmap()), m_delay(QMOVIE_INVALID_DELAY), m_endMark(false) {
    }
 
    QFrameInfo(const QPixmap &pixmap, int delay)
-      : pixmap(pixmap), delay(delay), endMark(false) {
+      : m_pixmap(pixmap), m_delay(delay), m_endMark(false) {
    }
 
    bool isValid() {
-      return endMark || !(pixmap.isNull() && (delay == QMOVIE_INVALID_DELAY));
+      return m_endMark || ! (m_pixmap.isNull() && (m_delay == QMOVIE_INVALID_DELAY));
    }
 
    bool isEndMarker() {
-      return endMark;
+      return m_endMark;
    }
 
    static QFrameInfo endMarker() {
       return QFrameInfo(true);
    }
 
-   QPixmap pixmap;
-   int delay;
-   bool endMark;
+   QPixmap m_pixmap;
+   int  m_delay;
+   bool m_endMark;
 };
 
 class QMoviePrivate
@@ -297,13 +297,13 @@ bool QMoviePrivate::next()
 
    QSize scaledSize = reader->scaledSize();
 
-   if (scaledSize.isValid() && (scaledSize != info.pixmap.size())) {
-      currentPixmap = QPixmap::fromImage( info.pixmap.toImage().scaled(scaledSize) );
+   if (scaledSize.isValid() && (scaledSize != info.m_pixmap.size())) {
+      currentPixmap = QPixmap::fromImage(info.m_pixmap.toImage().scaled(scaledSize) );
    } else {
-      currentPixmap = info.pixmap;
+      currentPixmap = info.m_pixmap;
    }
 
-   nextDelay = speedAdjustedDelay(info.delay);
+   nextDelay = speedAdjustedDelay(info.m_delay);
 
    // Adjust delay according to the time it took to read the frame
    int processingTime = time.elapsed();

@@ -91,7 +91,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
 
    QGraphicsItemPrivate()
       : z(0), opacity(1.), m_itemScene(nullptr), m_itemParent(nullptr), transformData(nullptr), graphicsEffect(nullptr),
-        index(-1), siblingIndex(-1), itemDepth(-1), focusProxy(nullptr), subFocusItem(nullptr),
+        index(-1), siblingIndex(-1), itemDepth(-1), focusProxy(nullptr), m_subFocusItem(nullptr),
         focusScopeItem(nullptr), imHints(Qt::ImhNone), panelModality(QGraphicsItem::NonModal),
         acceptedMouseButtons(0x1f), visible(1), explicitlyHidden(0), enabled(1), explicitlyDisabled(0), selected(0),
         acceptsHover(0), acceptDrops(0), isMemberOfGroup(0), handlesChildEvents(0), itemDiscovered(0),
@@ -408,7 +408,7 @@ class Q_GUI_EXPORT QGraphicsItemPrivate
 
    QGraphicsItem *focusProxy;
    QList<QGraphicsItem **> focusProxyRefs;
-   QGraphicsItem *subFocusItem;
+   QGraphicsItem *m_subFocusItem;
    QGraphicsItem *focusScopeItem;
    Qt::InputMethodHints imHints;
    QGraphicsItem::PanelModality panelModality;

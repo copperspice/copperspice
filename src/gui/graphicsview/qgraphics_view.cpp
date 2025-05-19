@@ -2637,8 +2637,8 @@ void QGraphicsView::paintEvent(QPaintEvent *event)
    d->scene->d_func()->painterStateProtection = !(d->optimizationFlags & DontSavePainterState);
 
    // Determine the exposed region
-   d->exposedRegion = event->region();
-   QRectF exposedSceneRect = mapToScene(d->exposedRegion.boundingRect()).boundingRect();
+   d->m_exposedRegion = event->region();
+   QRectF exposedSceneRect = mapToScene(d->m_exposedRegion.boundingRect()).boundingRect();
 
    // Set up the painter
    QPainter painter(viewport());
@@ -2717,8 +2717,7 @@ void QGraphicsView::paintEvent(QPaintEvent *event)
       } else {
          d->scene->d_func()->rectAdjust = 2;
       }
-      d->scene->d_func()->drawItems(&painter, viewTransformed ? &viewTransform : nullptr,
-         &d->exposedRegion, viewport());
+      d->scene->d_func()->drawItems(&painter, viewTransformed ? &viewTransform : nullptr, &d->m_exposedRegion, viewport());
       d->scene->d_func()->rectAdjust = oldRectAdjust;
       // Make sure the painter's world transform is restored correctly when
       // drawing without painter state protection (DontSavePainterState).
@@ -2742,7 +2741,7 @@ void QGraphicsView::paintEvent(QPaintEvent *event)
 
       // Find all exposed items
       bool allItems = false;
-      QList<QGraphicsItem *> itemList = d->findItems(d->exposedRegion, &allItems, viewTransform);
+      QList<QGraphicsItem *> itemList = d->findItems(d->m_exposedRegion, &allItems, viewTransform);
 
       if (!itemList.isEmpty()) {
          // Generate the style options.
@@ -2754,7 +2753,7 @@ void QGraphicsView::paintEvent(QPaintEvent *event)
          for (int i = 0; i < numItems; ++i) {
             QGraphicsItem *item = itemArray[i];
             QGraphicsItemPrivate *itemd = item->d_ptr.data();
-            itemd->initStyleOption(&styleOptionArray[i], viewTransform, d->exposedRegion, allItems);
+            itemd->initStyleOption(&styleOptionArray[i], viewTransform, d->m_exposedRegion, allItems);
             // Cache the item's area in view coordinates.
             // Note that we have to do this here in case the base class implementation
             // (QGraphicsScene::drawItems) is not called. If it is, we'll do this

@@ -103,18 +103,19 @@ class QSortFilterProxyModelGreaterThan
 
 struct QRowsRemoval {
    QRowsRemoval(const QModelIndex &parent_source, int start, int end)
-      : parent_source(parent_source), start(start), end(end)
+      : m_parent_source(parent_source), m_start(start), m_end(end)
    {
    }
 
-   QRowsRemoval() : start(-1), end(-1)
+   QRowsRemoval()
+      : m_start(-1), m_end(-1)
    {
    }
 
    bool contains(QModelIndex parent, int row) {
       do {
-         if (parent == parent_source) {
-            return row >= start && row <= end;
+         if (parent == m_parent_source) {
+            return row >= m_start && row <= m_end;
          }
 
          row = parent.row();
@@ -126,9 +127,10 @@ struct QRowsRemoval {
    }
 
  private:
-   QModelIndex parent_source;
-   int start;
-   int end;
+   QModelIndex m_parent_source;
+
+   int m_start;
+   int m_end;
 };
 
 class QSortFilterProxyModelPrivate : public QAbstractProxyModelPrivate
@@ -699,8 +701,9 @@ void QSortFilterProxyModelPrivate::insert_source_items(QVector<int> &source_to_p
    for (int i = proxy_intervals.size() - 1; i >= 0; --i) {
       QPair<int, QVector<int>> interval = proxy_intervals.at(i);
       int proxy_start = interval.first;
-      QVector<int> source_items = interval.second;
-      int proxy_end = proxy_start + source_items.size() - 1;
+
+      QVector<int> items = interval.second;
+      int proxy_end = proxy_start + items.size() - 1;
 
       if (emit_signal) {
          if (orient == Qt::Vertical) {
@@ -710,8 +713,8 @@ void QSortFilterProxyModelPrivate::insert_source_items(QVector<int> &source_to_p
          }
       }
 
-      for (int i = 0; i < source_items.size(); ++i) {
-         proxy_to_source.insert(proxy_start + i, source_items.at(i));
+      for (int j = 0; j < items.size(); ++j) {
+         proxy_to_source.insert(proxy_start + j, items.at(j));
       }
 
       build_source_to_proxy_mapping(proxy_to_source, source_to_proxy);

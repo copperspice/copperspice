@@ -1182,8 +1182,9 @@ void QGraphicsWidget::setFocusPolicy(Qt::FocusPolicy policy)
 QGraphicsWidget *QGraphicsWidget::focusWidget() const
 {
    Q_D(const QGraphicsWidget);
-   if (d->subFocusItem && d->subFocusItem->d_ptr->isWidget) {
-      return static_cast<QGraphicsWidget *>(d->subFocusItem);
+
+   if (d->m_subFocusItem && d->m_subFocusItem->d_ptr->isWidget) {
+      return static_cast<QGraphicsWidget *>(d->m_subFocusItem);
    }
 
    return nullptr;

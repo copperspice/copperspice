@@ -717,8 +717,8 @@ void QFormLayoutPrivate::setupVerticalLayoutData(int width)
 
    int rr = m_matrix.rowCount();
    int vidx = 1;
-   QFormLayout::RowWrapPolicy rowWrapPolicy = q->rowWrapPolicy();
-   bool wrapAllRows = (rowWrapPolicy == QFormLayout::WrapAllRows);
+   QFormLayout::RowWrapPolicy current_rowPolicy = q->rowWrapPolicy();
+   bool wrapAllRows = (current_rowPolicy == QFormLayout::WrapAllRows);
    bool addTopBottomStretch = true;
 
    vLayouts.clear();
@@ -784,7 +784,7 @@ void QFormLayoutPrivate::setupVerticalLayoutData(int width)
 
       // In separate lines, we make a vLayout for everything that isn't null
       // in side by side, we only separate label/field if we're going to wrap it
-      bool splitSideBySide = (rowWrapPolicy == QFormLayout::WrapLongRows)
+      bool splitSideBySide = (current_rowPolicy == QFormLayout::WrapLongRows)
          && ((maxLabelWidth < sh1.width()) || (width < (maxLabelWidth + min2.width())));
 
       if (wrapAllRows || splitSideBySide) {

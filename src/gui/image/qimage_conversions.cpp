@@ -1303,20 +1303,20 @@ void dither_to_Mono(QImageData *dst, const QImageData *src, Qt::ImageConversionF
             }
 
             int err;
-            uchar *p = dst->data + y * dst->bytes_per_line;
-            memset(p, 0, bmwidth);
+            uchar *ptrLine = dst->data + y * dst->bytes_per_line;
+            memset(ptrLine, 0, bmwidth);
             b1 = line1;
             b2 = line2;
             int bit = 7;
             for (int x = 1; x <= w; x++) {
                if (*b1 < 128) {                // black pixel
                   err = *b1++;
-                  *p |= 1 << bit;
+                  *ptrLine |= 1 << bit;
                } else {                        // white pixel
                   err = *b1++ - 255;
                }
                if (bit == 0) {
-                  p++;
+                  ++ptrLine;
                   bit = 7;
                } else {
                   bit--;
@@ -1499,7 +1499,7 @@ struct QRgbMap {
       : used(0)
    { }
 
-   uchar  pix;
+   uchar m_pix;
    uchar used;
    QRgb  rgb;
 };
@@ -1544,7 +1544,7 @@ static void convert_RGB_to_Indexed8(QImageData *dst, const QImageData *src, Qt::
                Q_ASSERT (pix != 256);        // too many colors
                // Insert into table at this unused position
                dst->colortable[pix] = p;
-               table[hash].pix = pix++;
+               table[hash].m_pix = pix++;
                table[hash].rgb = p;
                table[hash].used = 1;
                break;
@@ -1584,14 +1584,14 @@ static void convert_RGB_to_Indexed8(QImageData *dst, const QImageData *src, Qt::
                   } else {
                      // Insert into table at this unused position
                      dst->colortable[pix] = p;
-                     table[hash].pix = pix++;
+                     table[hash].m_pix = pix++;
                      table[hash].rgb = p;
                      table[hash].used = 1;
                   }
                   break;
                }
             }
-            *b++ = table[hash].pix;                // May occur once incorrectly
+            *b++ = table[hash].m_pix;                // May occur once incorrectly
          }
          src_data += src->bytes_per_line;
          dest_data += dst->bytes_per_line;
@@ -1672,9 +1672,9 @@ static void convert_RGB_to_Indexed8(QImageData *dst, const QImageData *src, Qt::
                // Bi-directional error diffusion
                if (y & 1) {
                   for (int x = 0; x < src->width; x++) {
-                     int pix = qMax(qMin(5, (l1[x] * 5 + 128) / 255), 0);
-                     int err = l1[x] - pix * 255 / 5;
-                     pv[chan][x] = pix;
+                     int pix_A = qMax(qMin(5, (l1[x] * 5 + 128) / 255), 0);
+                     int err   = l1[x] - pix_A * 255 / 5;
+                     pv[chan][x] = pix_A;
 
                      // Spread the error around...
                      if (x + 1 < src->width) {
@@ -1688,9 +1688,9 @@ static void convert_RGB_to_Indexed8(QImageData *dst, const QImageData *src, Qt::
                   }
                } else {
                   for (int x = src->width; x-- > 0;) {
-                     int pix = qMax(qMin(5, (l1[x] * 5 + 128) / 255), 0);
-                     int err = l1[x] - pix * 255 / 5;
-                     pv[chan][x] = pix;
+                     int pix_B = qMax(qMin(5, (l1[x] * 5 + 128) / 255), 0);
+                     int err   = l1[x] - pix_B * 255 / 5;
+                     pv[chan][x] = pix_B;
 
                      // Spread the error around...
                      if (x > 0) {

@@ -116,7 +116,7 @@ static QPainterPath qt_graphicsItem_shapeFromPath(const QPainterPath &path, cons
 }
 
 void QGraphicsItemPrivate::updateAncestorFlag(QGraphicsItem::GraphicsItemFlag childFlag,
-   AncestorFlag flag, bool enabled, bool root)
+   AncestorFlag flag, bool isEnabled, bool root)
 {
    Q_Q(QGraphicsItem);
 
@@ -126,27 +126,27 @@ void QGraphicsItemPrivate::updateAncestorFlag(QGraphicsItem::GraphicsItemFlag ch
       switch (int(childFlag)) {
          case -2:
             flag = AncestorFiltersChildEvents;
-            enabled = q->filtersChildEvents();
+            isEnabled = q->filtersChildEvents();
             break;
 
          case -1:
             flag = AncestorHandlesChildEvents;
-            enabled = q->handlesChildEvents();
+            isEnabled = q->handlesChildEvents();
             break;
 
          case QGraphicsItem::ItemClipsChildrenToShape:
             flag = AncestorClipsChildren;
-            enabled = itemFlags & QGraphicsItem::ItemClipsChildrenToShape;
+            isEnabled = itemFlags & QGraphicsItem::ItemClipsChildrenToShape;
             break;
 
          case QGraphicsItem::ItemIgnoresTransformations:
             flag = AncestorIgnoresTransformations;
-            enabled = itemFlags & QGraphicsItem::ItemIgnoresTransformations;
+            isEnabled = itemFlags & QGraphicsItem::ItemIgnoresTransformations;
             break;
 
          case QGraphicsItem::ItemContainsChildrenInShape:
             flag = AncestorContainsChildren;
-            enabled = itemFlags & QGraphicsItem::ItemContainsChildrenInShape;
+            isEnabled = itemFlags & QGraphicsItem::ItemContainsChildrenInShape;
             break;
 
          default:
@@ -159,7 +159,7 @@ void QGraphicsItemPrivate::updateAncestorFlag(QGraphicsItem::GraphicsItemFlag ch
          if ((m_itemParent->d_ptr->ancestorFlags & flag) || (int(m_itemParent->d_ptr->itemFlags & childFlag) == childFlag)
                || (int(childFlag) == -1 && m_itemParent->d_ptr->handlesChildEvents)
                || (int(childFlag) == -2 && m_itemParent->d_ptr->filtersDescendantEvents)) {
-            enabled = true;
+            isEnabled = true;
             ancestorFlags |= flag;
 
          } else {
@@ -174,12 +174,12 @@ void QGraphicsItemPrivate::updateAncestorFlag(QGraphicsItem::GraphicsItemFlag ch
 
    } else {
       // Don't set or propagate the ancestor flag if it's already correct.
-      if (((ancestorFlags & flag) && enabled) || (!(ancestorFlags & flag) && !enabled)) {
+      if (((ancestorFlags & flag) && isEnabled) || (! (ancestorFlags & flag) && ! isEnabled)) {
          return;
       }
 
       // Set the flag.
-      if (enabled) {
+      if (isEnabled) {
          ancestorFlags |= flag;
       } else {
          ancestorFlags &= ~flag;
@@ -194,7 +194,7 @@ void QGraphicsItemPrivate::updateAncestorFlag(QGraphicsItem::GraphicsItemFlag ch
    }
 
    for (int i = 0; i < children.size(); ++i) {
-      children.at(i)->d_ptr->updateAncestorFlag(childFlag, flag, enabled, false);
+      children.at(i)->d_ptr->updateAncestorFlag(childFlag, flag, isEnabled, false);
    }
 }
 
@@ -241,14 +241,15 @@ void QGraphicsItemPrivate::updateAncestorFlags()
    }
 }
 
-void QGraphicsItemPrivate::setIsMemberOfGroup(bool enabled)
+void QGraphicsItemPrivate::setIsMemberOfGroup(bool isEnabled)
 {
    Q_Q(QGraphicsItem);
-   isMemberOfGroup = enabled;
+
+   isMemberOfGroup = isEnabled;
 
    if (! qgraphicsitem_cast<QGraphicsItemGroup *>(q)) {
       for (QGraphicsItem *child : children) {
-         child->d_func()->setIsMemberOfGroup(enabled);
+         child->d_func()->setIsMemberOfGroup(isEnabled);
       }
    }
 }
@@ -416,9 +417,9 @@ void QGraphicsItemPrivate::setParentItemHelper(QGraphicsItem *newParent, const Q
       }
    }
 
-   if (subFocusItem && m_itemParent) {
+   if (m_subFocusItem && m_itemParent) {
       // Make sure none of the old parents point to this guy.
-      subFocusItem->d_ptr->clearSubFocus(m_itemParent);
+      m_subFocusItem->d_ptr->clearSubFocus(m_itemParent);
    }
 
    // We anticipate geometry changes. If the item is deleted, it will be
@@ -478,18 +479,19 @@ void QGraphicsItemPrivate::setParentItemHelper(QGraphicsItem *newParent, const Q
    }
 
    // Update focus scope item ptr in new scope.
-   QGraphicsItem *newFocusScopeItem = subFocusItem ? subFocusItem : parentFocusScopeItem;
+   QGraphicsItem *newFocusScopeItem = m_subFocusItem ? m_subFocusItem : parentFocusScopeItem;
+
    if (newFocusScopeItem && newParent) {
-      QGraphicsItem *p = newParent;
+      QGraphicsItem *p1 = newParent;
 
-      while (p) {
-         if (p->d_ptr->itemFlags & QGraphicsItem::ItemIsFocusScope) {
-            if (subFocusItem && subFocusItem != q_ptr) {
-               // Find the subFocusItem's topmost focus scope within the new parent's focusscope
+      while (p1) {
+         if (p1->d_ptr->itemFlags & QGraphicsItem::ItemIsFocusScope) {
+            if (m_subFocusItem && m_subFocusItem != q_ptr) {
+               // Find the subFocusItem's topmost focus scope within the new parent's focus scope
                QGraphicsItem *ancestorScope = nullptr;
-               QGraphicsItem *p2 = subFocusItem->d_ptr->m_itemParent;
+               QGraphicsItem *p2 = m_subFocusItem->d_ptr->m_itemParent;
 
-               while (p2 && p2 != p) {
+               while (p2 && p2 != p1) {
                   if (p2->d_ptr->itemFlags & QGraphicsItem::ItemIsFocusScope) {
                      ancestorScope = p2;
                   }
@@ -510,19 +512,19 @@ void QGraphicsItemPrivate::setParentItemHelper(QGraphicsItem *newParent, const Q
                }
             }
 
-            p->d_ptr->focusScopeItem = newFocusScopeItem;
+            p1->d_ptr->focusScopeItem = newFocusScopeItem;
             newFocusScopeItem->d_ptr->focusScopeItemChange(true);
 
             // Ensure the new item is no longer the subFocusItem. The
             // only way to set focus on a child of a focus scope is
             // by setting focus on the scope itself.
-            if (subFocusItem && !p->focusItem()) {
-               subFocusItem->d_ptr->clearSubFocus();
+            if (m_subFocusItem && ! p1->focusItem()) {
+               m_subFocusItem->d_ptr->clearSubFocus();
             }
             break;
          }
 
-         p = p->d_ptr->m_itemParent;
+         p1 = p1->d_ptr->m_itemParent;
       }
    }
 
@@ -597,11 +599,11 @@ void QGraphicsItemPrivate::setParentItemHelper(QGraphicsItem *newParent, const Q
    }
 
    // Restore the sub focus chain.
-   if (subFocusItem) {
-      subFocusItem->d_ptr->setSubFocus(newParent);
+   if (m_subFocusItem) {
+      m_subFocusItem->d_ptr->setSubFocus(newParent);
 
       if (m_itemParent && m_itemParent->isActive()) {
-         subFocusItem->setFocus();
+         m_subFocusItem->setFocus();
       }
    }
 
@@ -1544,7 +1546,7 @@ void QGraphicsItemPrivate::setVisibleHelper(bool newVisible, bool explicitly,
          }
 
          if (!done) {
-            QGraphicsItem *fi = subFocusItem;
+            QGraphicsItem *fi = m_subFocusItem;
             if (fi && fi != m_itemScene->focusItem()) {
                m_itemScene->setFocusItem(fi);
 
@@ -2138,9 +2140,9 @@ void QGraphicsItemPrivate::setFocusHelper(Qt::FocusReason focusReason, bool clim
 
    // Update the scene's focus item.
    if (m_itemScene) {
-      QGraphicsItem *p = q_ptr->panel();
+      QGraphicsItem *ptr= q_ptr->panel();
 
-      if ((! p && m_itemScene->isActive()) || (p && p->isActive())) {
+      if ((! ptr && m_itemScene->isActive()) || (ptr && ptr->isActive())) {
          // Visible items immediately gain focus from scene.
          m_itemScene->d_func()->setFocusItemHelper(f, focusReason);
       }
@@ -2243,7 +2245,7 @@ void QGraphicsItem::setFocusProxy(QGraphicsItem *item)
 
 QGraphicsItem *QGraphicsItem::focusItem() const
 {
-   return d_ptr->subFocusItem;
+   return d_ptr->m_subFocusItem;
 }
 
 QGraphicsItem *QGraphicsItem::focusScopeItem() const
@@ -3359,15 +3361,14 @@ void QGraphicsItem::setBoundingRegionGranularity(qreal granularity)
       QVariant::fromValue<qreal>(granularity));
 }
 
-bool QGraphicsItemPrivate::discardUpdateRequest(bool ignoreVisibleBit, bool ignoreDirtyBit,
-   bool ignoreOpacity) const
+bool QGraphicsItemPrivate::discardUpdateRequest(bool ignoreVisibleBit, bool ignoreDirtyBit, bool isIgnoreOpacity) const
 {
    // No scene, or if the scene is updating everything, means we have nothing
    // to do. The only exception is if the scene tracks the growing scene rect.
    return ! m_itemScene
       || (!visible && !ignoreVisibleBit && !this->ignoreVisible)
       || (!ignoreDirtyBit && fullUpdatePending)
-      || (!ignoreOpacity && !this->ignoreOpacity && childrenCombineOpacity() && isFullyTransparent());
+      || (! isIgnoreOpacity && ! this->ignoreOpacity && childrenCombineOpacity() && isFullyTransparent());
 }
 
 int QGraphicsItemPrivate::depth() const
@@ -3584,21 +3585,22 @@ void QGraphicsItemPrivate::setSubFocus(QGraphicsItem *rootItem, QGraphicsItem *s
 
    do {
       // Clear any existing ancestor's subFocusItem.
-      if (parent != q_ptr && parent->d_ptr->subFocusItem) {
-         if (parent->d_ptr->subFocusItem == q_ptr) {
+      if (parent != q_ptr && parent->d_ptr->m_subFocusItem) {
+         if (parent->d_ptr->m_subFocusItem == q_ptr) {
             break;
          }
-         parent->d_ptr->subFocusItem->d_ptr->clearSubFocus(nullptr, stopItem);
+
+         parent->d_ptr->m_subFocusItem->d_ptr->clearSubFocus(nullptr, stopItem);
       }
 
-      parent->d_ptr->subFocusItem = q_ptr;
+      parent->d_ptr->m_subFocusItem = q_ptr;
       parent->d_ptr->subFocusItemChange();
 
    } while (! parent->isPanel() && (parent = parent->d_ptr->m_itemParent) && (visible || ! parent->d_ptr->visible));
 
    if (m_itemScene && ! m_itemScene->isActive()) {
-      m_itemScene->d_func()->passiveFocusItem = subFocusItem;
-      m_itemScene->d_func()->lastFocusItem    = subFocusItem;
+      m_itemScene->d_func()->passiveFocusItem = m_subFocusItem;
+      m_itemScene->d_func()->lastFocusItem    = m_subFocusItem;
    }
 }
 
@@ -3608,11 +3610,11 @@ void QGraphicsItemPrivate::clearSubFocus(QGraphicsItem *rootItem, QGraphicsItem 
    QGraphicsItem *parent = rootItem ? rootItem : q_ptr;
 
    do {
-      if (parent->d_ptr->subFocusItem != q_ptr) {
+      if (parent->d_ptr->m_subFocusItem != q_ptr) {
          break;
       }
 
-      parent->d_ptr->subFocusItem = nullptr;
+      parent->d_ptr->m_subFocusItem = nullptr;
 
       if (parent != stopItem && !parent->isAncestorOf(stopItem)) {
          parent->d_ptr->subFocusItemChange();
