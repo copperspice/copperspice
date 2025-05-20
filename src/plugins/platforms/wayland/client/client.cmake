@@ -46,6 +46,32 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/xml/protocol/wl-text.xml
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/xml/protocol/wl-wayland.xml
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/xml/protocol/wl-xdg-shell.xml
+
+      # generated cs_wayland_scanner "client-code"
+      ${CMAKE_CURRENT_BINARY_DIR}/qwayland-text.cpp
+      ${CMAKE_CURRENT_BINARY_DIR}/qwayland-wayland.cpp
+      ${CMAKE_CURRENT_BINARY_DIR}/qwayland-xdg-shell.cpp
+
+      ${CMAKE_CURRENT_BINARY_DIR}/qwayland-hardware-integration.cpp
+      ${CMAKE_CURRENT_BINARY_DIR}/qwayland-qtkey-extension.cpp
+      ${CMAKE_CURRENT_BINARY_DIR}/qwayland-server-buffer-extension.cpp
+      ${CMAKE_CURRENT_BINARY_DIR}/qwayland-sub-surface-extension.cpp
+      ${CMAKE_CURRENT_BINARY_DIR}/qwayland-surface-extension.cpp
+      ${CMAKE_CURRENT_BINARY_DIR}/qwayland-touch-extension.cpp
+      ${CMAKE_CURRENT_BINARY_DIR}/qwayland-windowmanager.cpp
+
+      # generated upstream wayland scanner "public-code"
+      ${CMAKE_CURRENT_BINARY_DIR}/wayland-text-protocol.c
+      ${CMAKE_CURRENT_BINARY_DIR}/wayland-wayland-protocol.c
+      ${CMAKE_CURRENT_BINARY_DIR}/wayland-xdg-shell-protocol.c
+
+      ${CMAKE_CURRENT_BINARY_DIR}/wayland-hardware-integration-protocol.c
+      ${CMAKE_CURRENT_BINARY_DIR}/wayland-qtkey-extension-protocol.c
+      ${CMAKE_CURRENT_BINARY_DIR}/wayland-server-buffer-extension-protocol.c
+      ${CMAKE_CURRENT_BINARY_DIR}/wayland-sub-surface-extension-protocol.c
+      ${CMAKE_CURRENT_BINARY_DIR}/wayland-surface-extension-protocol.c
+      ${CMAKE_CURRENT_BINARY_DIR}/wayland-touch-extension-protocol.c
+      ${CMAKE_CURRENT_BINARY_DIR}/wayland-windowmanager-protocol.c
    )
 
    macro_generate_misc_private("${WAYLAND_CLIENT_PRIVATE_INCLUDES}" QtGui/private/platforms)
