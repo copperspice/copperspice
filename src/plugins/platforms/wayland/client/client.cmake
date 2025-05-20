@@ -26,12 +26,26 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
    target_sources(CsWaylandClient
       PRIVATE
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_integration.cpp
+
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_eventdispatcher.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_services.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_theme.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qunix_eventdispatcher.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontconfig_database.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontengine_multifontconfig.cpp
+
+      # wayland xml extensions and protocol files
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/xml/extensions/wl-hardware-integration.xml
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/xml/extensions/wl-qtkey-extension.xml
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/xml/extensions/wl-server-buffer-extension.xml
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/xml/extensions/wl-sub-surface-extension.xml
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/xml/extensions/wl-surface-extension.xml
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/xml/extensions/wl-touch-extension.xml
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/xml/extensions/wl-windowmanager.xml
+
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/xml/protocol/wl-text.xml
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/xml/protocol/wl-wayland.xml
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/xml/protocol/wl-xdg-shell.xml
    )
 
    macro_generate_misc_private("${WAYLAND_CLIENT_PRIVATE_INCLUDES}" QtGui/private/platforms)
