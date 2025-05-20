@@ -117,6 +117,90 @@ function(FUNCTION_GENERATE_RESOURCES LIB_APP)
 
          set_property(SOURCE ${resource} APPEND PROPERTY OBJECT_DEPENDS ${resource_out})
 
+      elseif("${resource_ext}" STREQUAL ".xml" AND "${resource_name}" MATCHES "wl-.*")
+         string(SUBSTRING "${resource_name}" 3 -1 resource_name)
+
+         # cs wayland scanner (1a)
+         set(resource_out ${CMAKE_CURRENT_BINARY_DIR}/qwayland-server-${resource_name}.h)
+
+         add_custom_command(
+            OUTPUT ${resource_out}
+            COMMAND cs_wayland_scanner${TOOLS_SUFFIX} server-header "${resource}" "${resource_out}"
+            DEPENDS cs_wayland_scanner${TOOLS_SUFFIX}
+            MAIN_DEPENDENCY "${resource}"
+         )
+
+         set_property(SOURCE ${resource} APPEND PROPERTY OBJECT_DEPENDS ${resource_out})
+
+         # cs wayland scanner (2a)
+         set(resource_out ${CMAKE_CURRENT_BINARY_DIR}/qwayland-${resource_name}.h)
+
+         add_custom_command(
+            OUTPUT ${resource_out}
+            COMMAND cs_wayland_scanner${TOOLS_SUFFIX} client-header "${resource}" "${resource_out}"
+            DEPENDS cs_wayland_scanner${TOOLS_SUFFIX}
+            MAIN_DEPENDENCY "${resource}"
+         )
+
+         set_property(SOURCE ${resource} APPEND PROPERTY OBJECT_DEPENDS ${resource_out})
+
+         # cs wayland scanner (3a)
+         set(resource_out ${CMAKE_CURRENT_BINARY_DIR}/qwayland-server-${resource_name}.cpp)
+
+         add_custom_command(
+            OUTPUT ${resource_out}
+            COMMAND cs_wayland_scanner${TOOLS_SUFFIX} server-code "${resource}" "${resource_out}"
+            DEPENDS cs_wayland_scanner${TOOLS_SUFFIX}
+            MAIN_DEPENDENCY "${resource}"
+         )
+
+         set_property(SOURCE ${resource} APPEND PROPERTY OBJECT_DEPENDS ${resource_out})
+
+         # cs wayland scanner (4a)
+         set(resource_out ${CMAKE_CURRENT_BINARY_DIR}/qwayland-${resource_name}.cpp)
+
+         add_custom_command(
+            OUTPUT ${resource_out}
+            COMMAND cs_wayland_scanner${TOOLS_SUFFIX} client-code "${resource}" "${resource_out}"
+            DEPENDS cs_wayland_scanner${TOOLS_SUFFIX}
+            MAIN_DEPENDENCY "${resource}"
+         )
+
+         set_property(SOURCE ${resource} APPEND PROPERTY OBJECT_DEPENDS ${resource_out})
+
+
+         # upstream wayland scanner (1b)
+         set(resource_out ${CMAKE_CURRENT_BINARY_DIR}/wayland-${resource_name}-server-protocol.h)
+
+         add_custom_command(
+            OUTPUT ${resource_out}
+            COMMAND wayland-scanner server-header "${resource}" "${resource_out}"
+            MAIN_DEPENDENCY "${resource}"
+         )
+
+         set_property(SOURCE ${resource} APPEND PROPERTY OBJECT_DEPENDS ${resource_out})
+
+         # upstream wayland scanner (2b)
+         set(resource_out ${CMAKE_CURRENT_BINARY_DIR}/wayland-${resource_name}-client-protocol.h)
+
+         add_custom_command(
+            OUTPUT ${resource_out}
+            COMMAND wayland-scanner client-header "${resource}" "${resource_out}"
+            MAIN_DEPENDENCY "${resource}"
+         )
+
+         set_property(SOURCE ${resource} APPEND PROPERTY OBJECT_DEPENDS ${resource_out})
+
+         # upstream wayland scanner (3b)
+         set(resource_out ${CMAKE_CURRENT_BINARY_DIR}/wayland-${resource_name}-protocol.c)
+
+         add_custom_command(
+            OUTPUT ${resource_out}
+            COMMAND wayland-scanner public-code "${resource}" "${resource_out}"
+            MAIN_DEPENDENCY "${resource}"
+         )
+
+         set_property(SOURCE ${resource} APPEND PROPERTY OBJECT_DEPENDS ${resource_out})
       endif()
 
    endforeach()
