@@ -266,7 +266,7 @@ class QBlitterPaintEnginePrivate : public QRasterPaintEnginePrivate
 
 inline void QBlitterPaintEnginePrivate::lock()
 {
-   if (!pmData->blittable()->isLocked()) {
+   if (! pmData->blittable()->isLocked()) {
       rasterBuffer->prepare(pmData->buffer());
    }
 }
@@ -384,8 +384,8 @@ void QBlitterPaintEnginePrivate::fillRect(const QRectF &rect, const QColor &colo
 
    } else {
       if (targetRect.x() >= 0 && targetRect.y() >= 0
-         && targetRect.width() <= q->paintDevice()->width()
-         && targetRect.height() <= q->paintDevice()->height()) {
+            && targetRect.width() <= q->paintDevice()->width()
+            && targetRect.height() <= q->paintDevice()->height()) {
          unlock();
 
          if (alpha) {

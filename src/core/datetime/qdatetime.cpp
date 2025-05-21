@@ -1399,8 +1399,7 @@ static void msecsToTime(qint64 msecs, QDate *date, QTime *time)
 // Converts a date/time value into msecs
 static qint64 timeToMSecs(const QDate &date, const QTime &time)
 {
-   return ((date.toJulianDay() - EPOCH_JD) * MSECS_PER_DAY)
-         + time.msecsSinceStartOfDay();
+   return ((date.toJulianDay() - EPOCH_JD) * MSECS_PER_DAY) + time.msecsSinceStartOfDay();
 }
 
 // Convert an MSecs Since Epoch into Local Time

@@ -664,10 +664,10 @@ QAbstractFileEngine::FileFlags QFSFileEngine::fileFlags(QAbstractFileEngine::Fil
       // AliasType and BundleType are 0x0
       if (type & TypesMask)
          queryFlags |= QFileSystemMetaData::AliasType
-               | QFileSystemMetaData::LinkType
-               | QFileSystemMetaData::FileType
-               | QFileSystemMetaData::DirectoryType
-               | QFileSystemMetaData::BundleType;
+                    | QFileSystemMetaData::LinkType
+                    | QFileSystemMetaData::FileType
+                    | QFileSystemMetaData::DirectoryType
+                    | QFileSystemMetaData::BundleType;
 
       if (type & FlagsMask) {
          queryFlags |= QFileSystemMetaData::HiddenAttribute | QFileSystemMetaData::ExistsAttribute;

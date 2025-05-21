@@ -1303,7 +1303,7 @@ void QFileDialogPrivate::_q_deleteCurrent()
 
       // event loop has run, can NOT reuse index because the model might have removed it
       if (isDir) {
-         if (!removeDirectory(filePath)) {
+         if (! removeDirectory(filePath)) {
 
 #ifndef QT_NO_MESSAGEBOX
             QMessageBox::warning(q, q->windowTitle(),

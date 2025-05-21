@@ -35,21 +35,21 @@ class Q_CORE_EXPORT QFileDevice : public QIODevice
 
  public:
    enum FileError {
-      NoError = 0,
-      ReadError = 1,
-      WriteError = 2,
-      FatalError = 3,
-      ResourceError = 4,
-      OpenError = 5,
-      AbortError = 6,
-      TimeOutError = 7,
+      NoError          = 0,
+      ReadError        = 1,
+      WriteError       = 2,
+      FatalError       = 3,
+      ResourceError    = 4,
+      OpenError        = 5,
+      AbortError       = 6,
+      TimeOutError     = 7,
       UnspecifiedError = 8,
-      RemoveError = 9,
-      RenameError = 10,
-      PositionError = 11,
-      ResizeError = 12,
+      RemoveError      = 9,
+      RenameError      = 10,
+      PositionError    = 11,
+      ResizeError      = 12,
       PermissionsError = 13,
-      CopyError = 14
+      CopyError        = 14,
    };
 
    enum Permission {
@@ -66,6 +66,9 @@ class Q_CORE_EXPORT QFileDevice : public QIODevice
    };
    using FileHandleFlags = QFlags<FileHandleFlag>;
 
+   enum MemoryMapFlags {
+      NoOptions = 0
+   };
    QFileDevice(const QFileDevice &) = delete;
    QFileDevice &operator=(const QFileDevice &) = delete;
 
@@ -91,9 +94,6 @@ class Q_CORE_EXPORT QFileDevice : public QIODevice
    virtual QFileDevice::Permissions permissions() const;
    virtual bool setPermissions(QFileDevice::Permissions permissionSpec);
 
-   enum MemoryMapFlags {
-      NoOptions = 0
-   };
 
    uchar *map(qint64 offset, qint64 size, MemoryMapFlags flags = NoOptions);
    bool unmap(uchar *address);

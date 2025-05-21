@@ -137,7 +137,8 @@ extern "C" {
       // any trouble anyway --- large skips are infrequent.
 
       if (num_bytes > 0) {
-         while (num_bytes > (long) src->bytes_in_buffer) {  // Should not happen in case of memDevice
+         while (num_bytes > (long) src->bytes_in_buffer) {
+            // Should not happen in case of memDevice
             num_bytes -= (long) src->bytes_in_buffer;
             (void) qt_fill_input_buffer(cinfo);
 
@@ -431,7 +432,8 @@ static bool read_jpeg_image(QImage *outImage, QSize scaledSize, QRect scaledClip
       if (!scaledClipRect.isEmpty()) {
          *outImage = outImage->copy(scaledClipRect);
       }
-      return !outImage->isNull();
+
+      return ! outImage->isNull();
    } else {
       return false;
    }

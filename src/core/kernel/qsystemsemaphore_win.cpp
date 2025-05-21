@@ -87,7 +87,7 @@ HANDLE QSystemSemaphorePrivate::handle(QSystemSemaphore::AccessMode)
 
 void QSystemSemaphorePrivate::cleanHandle()
 {
-   if (semaphore && !CloseHandle(semaphore)) {
+   if (semaphore && ! CloseHandle(semaphore)) {
 
 #if defined(CS_SHOW_DEBUG_CORE)
       qDebug() << QString("QSystemSemaphorePrivate::CloseHandle: sem failed");

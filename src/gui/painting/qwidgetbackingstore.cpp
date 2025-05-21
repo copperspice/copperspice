@@ -200,7 +200,8 @@ QRegion QWidgetBackingStore::dirtyRegion(QWidget *widget) const
    QRegion r(dirty);
    for (int i = 0; i < dirtyWidgets.size(); ++i) {
       QWidget *w = dirtyWidgets.at(i);
-      if (widgetDirty && w != widget && !widget->isAncestorOf(w)) {
+
+      if (widgetDirty && w != widget && ! widget->isAncestorOf(w)) {
          continue;
       }
       r += w->d_func()->dirty.translated(w->mapTo(tlw, QPoint()));
@@ -213,7 +214,8 @@ QRegion QWidgetBackingStore::dirtyRegion(QWidget *widget) const
       // Only in use with native child widgets
       for (int i = 0; i < dirtyOnScreenWidgets->size(); ++i) {
          QWidget *w = dirtyOnScreenWidgets->at(i);
-         if (widgetDirty && w != widget && !widget->isAncestorOf(w)) {
+
+         if (widgetDirty && w != widget && ! widget->isAncestorOf(w)) {
             continue;
          }
          QWidgetPrivate *wd = w->d_func();
@@ -233,11 +235,11 @@ QRegion QWidgetBackingStore::dirtyRegion(QWidget *widget) const
 
 QRegion QWidgetBackingStore::staticContents(QWidget *parent, const QRect &withinClipRect) const
 {
-   if (!parent && tlw->testAttribute(Qt::WA_StaticContents)) {
+   if (! parent && tlw->testAttribute(Qt::WA_StaticContents)) {
       const QSize surfaceGeometry(store->size());
 
       QRect surfaceRect(0, 0, surfaceGeometry.width(), surfaceGeometry.height());
-      if (!withinClipRect.isEmpty()) {
+      if (! withinClipRect.isEmpty()) {
          surfaceRect &= withinClipRect;
       }
       return QRegion(surfaceRect);
@@ -370,7 +372,7 @@ void QWidgetBackingStore::markDirty(const QRegion &rgn, QWidget *widget, UpdateT
       const bool eventAlreadyPosted = !widget->d_func()->dirty.isEmpty();
       widget->d_func()->dirty += rgn;
 
-      if (!eventAlreadyPosted || updateTime == UpdateNow) {
+      if (! eventAlreadyPosted || updateTime == UpdateNow) {
          sendUpdateRequest(widget, updateTime);
       }
 
@@ -388,11 +390,11 @@ void QWidgetBackingStore::markDirty(const QRegion &rgn, QWidget *widget, UpdateT
 
    if (QWidgetPrivate::get(widget)->renderToTexture) {
 
-      if (!widget->d_func()->inDirtyList) {
+      if (! widget->d_func()->inDirtyList) {
          addDirtyRenderToTextureWidget(widget);
       }
 
-      if (!updateRequestSent || updateTime == UpdateNow) {
+      if (! updateRequestSent || updateTime == UpdateNow) {
          sendUpdateRequest(tlw, updateTime);
       }
 
@@ -522,7 +524,8 @@ void QWidgetBackingStore::markDirty(const QRect &rect, QWidget *widget,
    if (bufferState == BufferInvalid) {
       const bool eventAlreadyPosted = !dirty.isEmpty();
       dirty += translatedRect;
-      if (!eventAlreadyPosted || updateTime == UpdateNow) {
+
+      if (! eventAlreadyPosted || updateTime == UpdateNow) {
          sendUpdateRequest(tlw, updateTime);
       }
       return;
@@ -549,7 +552,7 @@ void QWidgetBackingStore::markDirty(const QRect &rect, QWidget *widget,
 
 void QWidgetBackingStore::markDirtyOnScreen(const QRegion &region, QWidget *widget, const QPoint &topLevelOffset)
 {
-   if (!widget || widget->d_func()->paintOnScreen() || region.isEmpty()) {
+   if (! widget || widget->d_func()->paintOnScreen() || region.isEmpty()) {
       return;
    }
 
@@ -724,12 +727,12 @@ void QWidgetPrivate::moveRect(const QRect &rect, int dx, int dy)
          childExpose -= destRect;
       }
 
-      if (!pw->updatesEnabled()) {
+      if (! pw->updatesEnabled()) {
          return;
       }
 
       const bool childUpdatesEnabled = q->updatesEnabled();
-      if (childUpdatesEnabled && !childExpose.isEmpty()) {
+      if (childUpdatesEnabled && ! childExpose.isEmpty()) {
          childExpose.translate(- (m_privateData.crect.topLeft()) );
          wbs->markDirty(childExpose, q);
          isMoved = true;
@@ -777,7 +780,7 @@ void QWidgetPrivate::scrollRect(const QRect &rect, int dx, int dy)
    }
 
    QRect scrollRect = rect & clipRect();
-   bool overlapped = false;
+   bool overlapped  = false;
    bool accelerateScroll = accelEnv && isOpaque && !q_func()->testAttribute(Qt::WA_WState_InPaintEvent)
       && !(overlapped = isOverlapped(scrollRect.translated(m_privateData.crect.topLeft())));
 
@@ -817,11 +820,11 @@ void QWidgetPrivate::scrollRect(const QRect &rect, int dx, int dy)
          }
       }
 
-      if (!q->updatesEnabled()) {
+      if (! q->updatesEnabled()) {
          return;
       }
 
-      if (!childExpose.isEmpty()) {
+      if (! childExpose.isEmpty()) {
          wbs->markDirty(childExpose, q);
          isScrolled = true;
       }
@@ -1237,7 +1240,7 @@ void QWidgetBackingStore::doSync()
          if (w != tlw) {
             QWidget *npw = w->nativeParentWidget();
             if (w->internalWinId() || (npw && npw != tlw)) {
-               if (!w->internalWinId()) {
+               if (! w->internalWinId()) {
                   w = npw;
                }
                QWidgetPrivate *wPrivate = w->d_func();

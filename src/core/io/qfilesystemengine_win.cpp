@@ -997,7 +997,7 @@ bool QFileSystemEngine::fillMetaData(int fd, QFileSystemMetaData &data, QFileSys
 {
    HANDLE fHandle = (HANDLE)_get_osfhandle(fd);
 
-   if (fHandle  != INVALID_HANDLE_VALUE) {
+   if (fHandle != INVALID_HANDLE_VALUE) {
       return fillMetaData(fHandle, data, what);
    }
 

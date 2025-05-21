@@ -195,8 +195,8 @@ class Q_GUI_EXPORT QMatrix4x4
       General         = 0x001f    // General matrix, unknown contents
    };
 
-   int flagBits;           // Flag bits from the MatrixType enum
    qreal m_matrix4[4][4];         // Column-major order to match OpenGL.
+   int flagBits;                  // Flag bits from the MatrixType enum
 
    // Construct without initializing identity matrix
    explicit QMatrix4x4(int) {
@@ -1001,12 +1001,12 @@ inline QPoint operator*(const QMatrix4x4 &matrix, const QPoint &point)
    if (matrix.flagBits == QMatrix4x4::Identity) {
       return point;
 
-    } else if (matrix.flagBits < QMatrix4x4::Rotation2D) {
+   } else if (matrix.flagBits < QMatrix4x4::Rotation2D) {
       // Translation | Scale
       return QPoint(qRound(xin * matrix.m_matrix4[0][0] + matrix.m_matrix4[3][0]),
             qRound(yin * matrix.m_matrix4[1][1] + matrix.m_matrix4[3][1]));
 
-    } else if (matrix.flagBits < QMatrix4x4::Perspective) {
+   } else if (matrix.flagBits < QMatrix4x4::Perspective) {
       return QPoint(qRound(xin * matrix.m_matrix4[0][0] + yin * matrix.m_matrix4[1][0] + matrix.m_matrix4[3][0]),
             qRound(xin * matrix.m_matrix4[0][1] + yin * matrix.m_matrix4[1][1] + matrix.m_matrix4[3][1]));
 
@@ -1189,10 +1189,10 @@ inline QVector3D QMatrix4x4::map(const QVector3D &point) const
 
 inline QVector3D QMatrix4x4::mapVector(const QVector3D &vector) const
 {
-    if (flagBits < Scale) {
+   if (flagBits < Scale) {
       return vector;
 
-    } else if (flagBits < Rotation2D) {
+   } else if (flagBits < Rotation2D) {
       return QVector3D(vector.x() * m_matrix4[0][0],
             vector.y() * m_matrix4[1][1],
             vector.z() * m_matrix4[2][2]);

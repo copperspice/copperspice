@@ -46,10 +46,11 @@ class QFileSystemMetaData
 
    enum MetaDataFlag {
       // following permissions here overlap with QFileDevice::Permissions
-      OtherReadPermission = 0x00000004,   OtherWritePermission = 0x00000002,  OtherExecutePermission = 0x00000001,
-      GroupReadPermission = 0x00000040,   GroupWritePermission = 0x00000020,  GroupExecutePermission = 0x00000010,
-      UserReadPermission  = 0x00000400,   UserWritePermission  = 0x00000200,  UserExecutePermission  = 0x00000100,
-      OwnerReadPermission = 0x00004000,   OwnerWritePermission = 0x00002000,  OwnerExecutePermission = 0x00001000,
+
+      OtherReadPermission = 0x00000004,  OtherWritePermission = 0x00000002,  OtherExecutePermission = 0x00000001,
+      GroupReadPermission = 0x00000040,  GroupWritePermission = 0x00000020,  GroupExecutePermission = 0x00000010,
+      UserReadPermission  = 0x00000400,  UserWritePermission  = 0x00000200,  UserExecutePermission  = 0x00000100,
+      OwnerReadPermission = 0x00004000,  OwnerWritePermission = 0x00002000,  OwnerExecutePermission = 0x00001000,
 
       OtherPermissions    = OtherReadPermission | OtherWritePermission | OtherExecutePermission,
       GroupPermissions    = GroupReadPermission | GroupWritePermission | GroupExecutePermission,
@@ -107,7 +108,8 @@ class QFileSystemMetaData
 
       OwnerIds            = UserId | GroupId,
 
-      PosixStatFlags      = QFileSystemMetaData::OtherPermissions
+      PosixStatFlags      =
+              QFileSystemMetaData::OtherPermissions
             | QFileSystemMetaData::GroupPermissions
             | QFileSystemMetaData::OwnerPermissions
             | QFileSystemMetaData::FileType
@@ -118,7 +120,8 @@ class QFileSystemMetaData
             | QFileSystemMetaData::OwnerIds,
 
 #if defined(Q_OS_WIN)
-      WinStatFlags        = QFileSystemMetaData::FileType
+      WinStatFlags        =
+              QFileSystemMetaData::FileType
             | QFileSystemMetaData::DirectoryType
             | QFileSystemMetaData::HiddenAttribute
             | QFileSystemMetaData::ExistsAttribute

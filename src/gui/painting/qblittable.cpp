@@ -70,7 +70,8 @@ bool QBlittable::isLocked() const
 QImage *QBlittable::lock()
 {
    Q_D(QBlittable);
-   if (!d->locked) {
+
+   if (! d->locked) {
       d->cachedImg = doLock();
       d->locked = true;
    }

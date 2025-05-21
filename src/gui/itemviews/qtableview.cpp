@@ -363,7 +363,7 @@ void QSpanCollection::updateRemovedRows(int start, int end)
             if (span->will_be_deleted) {
                continue;
             }
-            if (!span_at_start && span->m_top == start) {
+            if (! span_at_start && span->m_top == start) {
                span_at_start = true;
             }
             spansToBeMoved.insert(it.key(), span);
@@ -399,7 +399,7 @@ void QSpanCollection::updateRemovedRows(int start, int end)
             }
             for (SubIndex::iterator it = subindex.begin(); it != subindex.end(); ) {
                Span *span = it.value();
-               if (!span->will_be_deleted) {
+               if (! span->will_be_deleted) {
                   it_top.value().insert(it.key(), span);
                }
                ++it;
@@ -1153,7 +1153,7 @@ void QTableView::paintEvent(QPaintEvent *event)
    // firstVisualRow is the visual index of the first visible row.  lastVisualRow is the visual index of the last visible Row.
    // same goes for ...VisualColumn
    int firstVisualRow = qMax(verticalHeader->visualIndexAt(0), 0);
-   int lastVisualRow = verticalHeader->visualIndexAt(verticalHeader->viewport()->height());
+   int lastVisualRow  = verticalHeader->visualIndexAt(verticalHeader->viewport()->height());
    if (lastVisualRow == -1) {
       lastVisualRow = d->model->rowCount(d->root) - 1;
    }
@@ -1219,7 +1219,8 @@ void QTableView::paintEvent(QPaintEvent *event)
 
          for (int tmp = 0; ((uint)(tmp += verticalHeader->sectionSize(top)) <= verticalOffset) && (top < bottom); ++top) {
             row = verticalHeader->logicalIndex(top);
-            if (alternate && !verticalHeader->isSectionHidden(row)) {
+
+            if (alternate && ! verticalHeader->isSectionHidden(row)) {
                alternateBase = !alternateBase;
             }
          }
@@ -1921,12 +1922,12 @@ void QTableView::updateGeometries()
    d->geometryRecursionBlock = true;
 
    int width = 0;
-   if (!d->verticalHeader->isHidden()) {
+   if (! d->verticalHeader->isHidden()) {
       width = qMax(d->verticalHeader->minimumWidth(), d->verticalHeader->sizeHint().width());
       width = qMin(width, d->verticalHeader->maximumWidth());
    }
    int height = 0;
-   if (!d->horizontalHeader->isHidden()) {
+   if (! d->horizontalHeader->isHidden()) {
       height = qMax(d->horizontalHeader->minimumHeight(), d->horizontalHeader->sizeHint().height());
       height = qMin(height, d->horizontalHeader->maximumHeight());
    }
@@ -1978,7 +1979,8 @@ void QTableView::updateGeometries()
    int columnsInViewport = 0;
    for (int widthScroll = 0, column = columnCount - 1; column >= 0; --column) {
       int logical = d->horizontalHeader->logicalIndex(column);
-      if (!d->horizontalHeader->isSectionHidden(logical)) {
+
+      if (! d->horizontalHeader->isSectionHidden(logical)) {
          widthScroll += d->horizontalHeader->sectionSize(logical);
 
          if (widthScroll > viewportWidth) {
@@ -1997,7 +1999,9 @@ void QTableView::updateGeometries()
          d->horizontalHeader->setOffset(0);
       }
       horizontalScrollBar()->setSingleStep(1);
-   } else { // ScrollPerPixel
+
+   } else {
+      // ScrollPerPixel
       horizontalScrollBar()->setPageStep(vsize.width());
       horizontalScrollBar()->setRange(0, horizontalLength - vsize.width());
       horizontalScrollBar()->setSingleStep(qMax(vsize.width() / (columnsInViewport + 1), 2));
@@ -2010,7 +2014,8 @@ void QTableView::updateGeometries()
 
    for (int heightScroll = 0, row = rowCount - 1; row >= 0; --row) {
       int logical = d->verticalHeader->logicalIndex(row);
-      if (!d->verticalHeader->isSectionHidden(logical)) {
+
+      if (! d->verticalHeader->isSectionHidden(logical)) {
          heightScroll += d->verticalHeader->sectionSize(logical);
 
          if (heightScroll > viewportHeight) {
@@ -2019,7 +2024,8 @@ void QTableView::updateGeometries()
          ++rowsInViewport;
       }
    }
-   rowsInViewport = qMax(rowsInViewport, 1); //there must be always at least 1 row
+
+   rowsInViewport = qMax(rowsInViewport, 1);      // there must be always at least 1 row
 
    if (verticalScrollMode() == QAbstractItemView::ScrollPerItem) {
       const int visibleRows = rowCount - d->verticalHeader->hiddenSectionCount();

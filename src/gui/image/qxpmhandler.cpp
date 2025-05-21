@@ -800,7 +800,7 @@ static bool read_xpm_string(QByteArray &buf, QIODevice *d, const char *const *so
          offset = 0;
       }
 
-      if (!gotQuote) {
+      if (! gotQuote) {
          if (state.at(offset++) == '"') {
             gotQuote = true;
          }
@@ -1046,14 +1046,18 @@ static bool read_xpm_body(QIODevice *device, const char *const *source, int &ind
 // One of the two HAS to be 0, the other one is used.
 bool qt_read_xpm_image_or_array(QIODevice *device, const char *const *source, QImage &image)
 {
-   if (!source) {
+   if (! source) {
       return true;
    }
 
    QByteArray buf(200, 0);
    QByteArray state;
 
-   int cpp, ncols, w, h, index = 0;
+   int cpp;
+   int ncols;
+   int w;
+   int h;
+   int index = 0;
 
    if (device) {
       // "/* XPM */"

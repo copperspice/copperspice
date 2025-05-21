@@ -766,7 +766,7 @@ void QRasterizer::rasterizeLine(const QPointF &a, const QPointF &b, qreal width,
    QPointF offs = QPointF(qAbs(b.y() - a.y()), qAbs(b.x() - a.x())) * width * 0.5;
    const QRectF clip(d->clipRect.topLeft() - offs, d->clipRect.bottomRight() + QPoint(1, 1) + offs);
 
-   if (!clip.contains(pa) || !clip.contains(pb)) {
+   if (! clip.contains(pa) || ! clip.contains(pb)) {
       qreal t1 = 0;
       qreal t2 = 1;
 
@@ -811,7 +811,7 @@ void QRasterizer::rasterizeLine(const QPointF &a, const QPointF &b, qreal width,
       pb = npb;
    }
 
-   if (!d->antialiased && d->legacyRounding) {
+   if (! d->antialiased && d->legacyRounding) {
       pa.rx() += (COORD_OFFSET - COORD_ROUNDING) / 64.;
       pa.ry() += (COORD_OFFSET - COORD_ROUNDING) / 64.;
       pb.rx() += (COORD_OFFSET - COORD_ROUNDING) / 64.;

@@ -34,10 +34,11 @@ static constexpr const qreal inv_dist_to_plane = 1.0 / 1024.0;
 
 QMatrix4x4::QMatrix4x4(const qreal *values)
 {
-   for (int row = 0; row < 4; ++row)
+   for (int row = 0; row < 4; ++row) {
       for (int col = 0; col < 4; ++col) {
          m_matrix4[col][row] = values[row * 4 + col];
       }
+   }
    flagBits = General;
 }
 
@@ -589,7 +590,9 @@ void QMatrix4x4::rotate(qreal angle, qreal x, qreal y, qreal z)
       return;
    }
    QMatrix4x4 m(1); // The "1" says to not load the identity.
-   qreal c, s, ic;
+   qreal c;
+   qreal s;
+   qreal ic;
    if (angle == 90.0f || angle == -270.0f) {
       s = 1.0f;
       c = 0.0f;
@@ -656,9 +659,11 @@ void QMatrix4x4::rotate(qreal angle, qreal x, qreal y, qreal z)
       m.flagBits = General;
       quick = true;
    }
-   if (!quick) {
+
+   if (! quick) {
       qreal len = x * x + y * y + z * z;
-      if (!qFuzzyIsNull(len - 1.0f) && !qFuzzyIsNull(len)) {
+
+      if (! qFuzzyIsNull(len - 1.0f) && ! qFuzzyIsNull(len)) {
          len = qSqrt(len);
          x /= len;
          y /= len;
@@ -766,7 +771,7 @@ void QMatrix4x4::projectedRotate(qreal angle, qreal x, qreal y, qreal z)
 
    if (! quick) {
       qreal len = x * x + y * y + z * z;
-      if (!qFuzzyIsNull(len - 1.0f) && !qFuzzyIsNull(len)) {
+      if (! qFuzzyIsNull(len - 1.0f) && ! qFuzzyIsNull(len)) {
          len = qSqrt(len);
          x /= len;
          y /= len;
@@ -1170,8 +1175,7 @@ QRect QMatrix4x4::mapRect(const QRect &rect) const
    QPoint tl = map(rect.topLeft());
    QPoint tr = map(QPoint(rect.x() + rect.width(), rect.y()));
    QPoint bl = map(QPoint(rect.x(), rect.y() + rect.height()));
-   QPoint br = map(QPoint(rect.x() + rect.width(),
-                          rect.y() + rect.height()));
+   QPoint br = map(QPoint(rect.x() + rect.width(), rect.y() + rect.height()));
 
    int xmin = qMin(qMin(tl.x(), tr.x()), qMin(bl.x(), br.x()));
    int xmax = qMax(qMax(tl.x(), tr.x()), qMax(bl.x(), br.x()));
@@ -1326,10 +1330,11 @@ QDebug operator<<(QDebug dbg, const QMatrix4x4 &m)
 
 QDataStream &operator<<(QDataStream &stream, const QMatrix4x4 &matrix)
 {
-   for (int row = 0; row < 4; ++row)
+   for (int row = 0; row < 4; ++row) {
       for (int col = 0; col < 4; ++col) {
          stream << double(matrix(row, col));
       }
+   }
    return stream;
 }
 

@@ -461,8 +461,8 @@ bool QFileDevice::resize(qint64 sz)
 QFileDevice::Permissions QFileDevice::permissions() const
 {
    Q_D(const QFileDevice);
-   QAbstractFileEngine::FileFlags perms = d->engine()->fileFlags(QAbstractFileEngine::PermsMask) &
-         QAbstractFileEngine::PermsMask;
+
+   QAbstractFileEngine::FileFlags perms = d->engine()->fileFlags(QAbstractFileEngine::PermsMask) & QAbstractFileEngine::PermsMask;
 
    return QFileDevice::Permissions((int)perms);
 }

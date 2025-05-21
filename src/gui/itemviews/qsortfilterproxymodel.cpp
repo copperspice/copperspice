@@ -118,7 +118,7 @@ struct QRowsRemoval {
             return row >= m_start && row <= m_end;
          }
 
-         row = parent.row();
+         row    = parent.row();
          parent = parent.parent();
 
       } while (row >= 0);
@@ -695,8 +695,7 @@ void QSortFilterProxyModelPrivate::insert_source_items(QVector<int> &source_to_p
    }
 
    QVector<QPair<int, QVector<int>>> proxy_intervals;
-   proxy_intervals = proxy_intervals_for_source_items_to_add(
-         proxy_to_source, source_items, sourceParent, orient);
+   proxy_intervals = proxy_intervals_for_source_items_to_add(proxy_to_source, source_items, sourceParent, orient);
 
    for (int i = proxy_intervals.size() - 1; i >= 0; --i) {
       QPair<int, QVector<int>> interval = proxy_intervals.at(i);

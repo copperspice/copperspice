@@ -398,7 +398,8 @@ void qt_bitmapblit32_sse2_base(QRasterBuffer *rasterBuffer, int x, int y, quint3
       while (height--) {
          for (int x = 0; x < width; x += 8) {
             const quint8 s = src[x >> 3];
-            if (!s) {
+
+            if (! s) {
                continue;
             }
             __m128i mask1 = _mm_set1_epi8(s);
@@ -412,7 +413,7 @@ void qt_bitmapblit32_sse2_base(QRasterBuffer *rasterBuffer, int x, int y, quint3
             _mm_maskmoveu_si128(c128, mask2, (char *)(dest + x + 4));
          }
          dest += destStride;
-         src += stride;
+         src  += stride;
       }
    } else {
       while (height--) {
@@ -424,7 +425,7 @@ void qt_bitmapblit32_sse2_base(QRasterBuffer *rasterBuffer, int x, int y, quint3
             _mm_maskmoveu_si128(c128, mask1, (char *)(dest));
          }
          dest += destStride;
-         src += stride;
+         src  += stride;
       }
    }
 }

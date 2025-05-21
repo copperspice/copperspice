@@ -2494,8 +2494,7 @@ QMenu *QTextControl::createStandardContextMenu(const QPointF &pos, QWidget *pare
       setActionIcon(a, "edit-copy");
    }
 
-   if ((d->interactionFlags & Qt::LinksAccessibleByKeyboard)
-      || (d->interactionFlags & Qt::LinksAccessibleByMouse)) {
+   if ((d->interactionFlags & Qt::LinksAccessibleByKeyboard) || (d->interactionFlags & Qt::LinksAccessibleByMouse)) {
 
       a = menu->addAction(tr("Copy &Link Location"), this, SLOT(_q_copyLink()));
       a->setEnabled(!d->linkToCopy.isEmpty());

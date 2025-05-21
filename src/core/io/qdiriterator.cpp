@@ -166,7 +166,7 @@ inline bool QDirIteratorPrivate::entryMatches(const QString &fileName, const QFi
 void QDirIteratorPrivate::advance()
 {
    if (engine) {
-      while (!fileEngineIterators.isEmpty()) {
+      while (! fileEngineIterators.isEmpty()) {
          // find the next valid iterator which matches the filters
          QAbstractFileEngineIterator *it;
 
@@ -187,7 +187,7 @@ void QDirIteratorPrivate::advance()
       QFileSystemEntry nextEntry;
       QFileSystemMetaData nextMetaData;
 
-      while (!nativeIterators.isEmpty()) {
+      while (! nativeIterators.isEmpty()) {
          // find the next valid iterator which matches the filters
          QFileSystemIterator *it;
 
@@ -300,7 +300,7 @@ bool QDirIteratorPrivate::matchesFilters(const QString &fileName, const QFileInf
    }
 
    // filter system files
-   if (!includeSystem && (! (fi.isFile() || fi.isDir() || fi.isSymLink()) || (!fi.exists() && fi.isSymLink()))) {
+   if (! includeSystem && (! (fi.isFile() || fi.isDir() || fi.isSymLink()) || (!fi.exists() && fi.isSymLink()))) {
       return false;
    }
 
@@ -368,12 +368,12 @@ QString QDirIterator::next()
 bool QDirIterator::hasNext() const
 {
    if (d->engine) {
-      return !d->fileEngineIterators.isEmpty();
+      return ! d->fileEngineIterators.isEmpty();
 
    } else
-#ifndef QT_NO_FILESYSTEMITERATOR
-      return !d->nativeIterators.isEmpty();
 
+#ifndef QT_NO_FILESYSTEMITERATOR
+      return ! d->nativeIterators.isEmpty();
 #else
       return false;
 #endif

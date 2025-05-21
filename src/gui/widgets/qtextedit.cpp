@@ -1024,11 +1024,9 @@ void QTextEditPrivate::relayoutDocument()
    // again then we have an endless loop, as _q_adjustScrollBars sets new ranges on the
    // scroll bars, the QAbstractScrollArea will find out about it and try to show/hide
    // the scroll bars again. That is why we try to detect this case here and break out.
-   if (lastUsedSize.isValid()
-      && !vbar->isHidden()
-      && viewport->width() < lastUsedSize.width()
-      && usedSize.height() < lastUsedSize.height()
-      && usedSize.height() <= viewport->height()) {
+
+   if (lastUsedSize.isValid() && !vbar->isHidden() && viewport->width() < lastUsedSize.width()
+         && usedSize.height() < lastUsedSize.height() && usedSize.height() <= viewport->height()) {
       return;
    }
 

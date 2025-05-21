@@ -35,8 +35,6 @@ class QBlitterPaintEnginePrivate;
 
 class Q_GUI_EXPORT QBlitterPaintEngine : public QRasterPaintEngine
 {
-   Q_DECLARE_PRIVATE(QBlitterPaintEngine)
-
  public:
    QBlitterPaintEngine(QBlittablePlatformPixmap *p);
 
@@ -90,9 +88,12 @@ class Q_GUI_EXPORT QBlitterPaintEngine : public QRasterPaintEngine
    void drawStaticTextItem(QStaticTextItem *) override;
 
    bool drawCachedGlyphs(int numGlyphs, const glyph_t *glyphs, const QFixedPoint *positions, QFontEngine *fontEngine) override;
+
+ private:
+   Q_DECLARE_PRIVATE(QBlitterPaintEngine)
 };
 
-
 #endif // QT_NO_BLITTABLE
+
 #endif // QPAINTENGINE_BLITTER_P_H
 

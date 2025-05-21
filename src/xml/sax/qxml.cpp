@@ -6764,8 +6764,7 @@ void QXmlSimpleReaderPrivate::reportParseError(const QString &newError)
    m_error = newError;
    if (errorHnd) {
       if (m_error.isEmpty()) {
-         const QXmlParseException ex(QString::fromLatin1(XMLERR_OK), columnNr + 1, lineNr + 1,
-                                     thisPublicId, thisSystemId);
+         const QXmlParseException ex(QString::fromLatin1(XMLERR_OK), columnNr + 1, lineNr + 1, thisPublicId, thisSystemId);
          errorHnd->fatalError(ex);
       } else {
          const QXmlParseException ex(m_error, columnNr + 1, lineNr + 1, thisPublicId, thisSystemId);

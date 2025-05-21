@@ -1768,7 +1768,7 @@ QAbstractItemView::DropIndicatorPosition QListModeViewBase::position(const QPoin
 void QListModeViewBase::dragMoveEvent(QDragMoveEvent *event)
 {
    if (qq->dragDropMode() == QAbstractItemView::InternalMove
-      && (event->source() != qq || !(event->possibleActions() & Qt::MoveAction))) {
+         && (event->source() != qq || !(event->possibleActions() & Qt::MoveAction))) {
       return;
    }
 
@@ -1783,8 +1783,7 @@ void QListModeViewBase::dragMoveEvent(QDragMoveEvent *event)
    QModelIndex index = intersectVector.count() > 0 ? intersectVector.last() : QModelIndex();
    dd->hover = index;
 
-   if (!dd->droppingOnItself(event, index)
-      && dd->canDrop(event)) {
+   if (! dd->droppingOnItself(event, index) && dd->canDrop(event)) {
 
       if (index.isValid() && dd->showDropIndicator) {
          QRect rect = qq->visualRect(index);

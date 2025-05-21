@@ -272,9 +272,12 @@ class QRasterPaintEnginePrivate : public QPaintEngineExPrivate
 
    QTransform brushMatrix() const {
       Q_Q(const QRasterPaintEngine);
+
       const QRasterPaintEngineState *s = q->state();
+
       QTransform m(s->matrix);
       m.translate(s->brushOrigin.x(), s->brushOrigin.y());
+
       return m;
    }
 
@@ -292,13 +295,21 @@ class QRasterPaintEnginePrivate : public QPaintEngineExPrivate
    void recalculateFastImages();
    bool canUseFastImageBlending(QPainter::CompositionMode mode, const QImage &image) const;
 
-   QPaintDevice *device;
-   QScopedPointer<QOutlineMapper> outlineMapper;
    QScopedPointer<QRasterBuffer>  rasterBuffer;
+   int deviceDepth;
+
+   uint mono_surface : 1;
+   uint outlinemapper_xform_dirty : 1;
 
 #if defined (Q_OS_WIN)
    HDC hdc;
 #endif
+
+   QPaintDevice *device;
+
+   QScopedPointer<QOutlineMapper> outlineMapper;
+   QScopedPointer<QRasterizer>    rasterizer;
+   QScopedPointer<QClipData>      baseClip;
 
    QRect deviceRect;
    QRect deviceRectUnclipped;
@@ -314,15 +325,6 @@ class QRasterPaintEnginePrivate : public QPaintEngineExPrivate
    QSpanData solid_color_filler;
 
    QFontEngine::GlyphFormat glyphCacheFormat;
-
-   QScopedPointer<QClipData> baseClip;
-
-   int deviceDepth;
-
-   uint mono_surface : 1;
-   uint outlinemapper_xform_dirty : 1;
-
-   QScopedPointer<QRasterizer> rasterizer;
 };
 
 class QClipData

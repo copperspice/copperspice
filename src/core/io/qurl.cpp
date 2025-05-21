@@ -2701,7 +2701,7 @@ QUrl QUrl::fromUserInput(const QString &userInput)
    }
 
    // Else, try the prepended one and adjust the scheme from the host name
-   if (urlPrepended.isValid() && (!urlPrepended.host().isEmpty() || !urlPrepended.path().isEmpty())) {
+   if (urlPrepended.isValid() && (! urlPrepended.host().isEmpty() || ! urlPrepended.path().isEmpty())) {
       int dotIndex = trimmedString.indexOf(QChar('.'));
       const QString hostscheme = trimmedString.left(dotIndex).toLower();
 

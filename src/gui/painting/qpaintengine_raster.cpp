@@ -444,14 +444,14 @@ QRasterPaintEngineState::QRasterPaintEngineState()
 
    txscale = 1.;
 
-   flags.fast_pen = true;
-   flags.antialiased = false;
-   flags.bilinear = false;
+   flags.fast_pen        = true;
+   flags.antialiased     = false;
+   flags.bilinear        = false;
    flags.legacy_rounding = false;
-   flags.fast_text = true;
-   flags.int_xform = true;
-   flags.tx_noshear = true;
-   flags.fast_images = true;
+   flags.fast_text       = true;
+   flags.int_xform       = true;
+   flags.tx_noshear      = true;
+   flags.fast_images     = true;
 
    clip = nullptr;
    flags.has_clip_ownership = false;
@@ -464,8 +464,8 @@ QRasterPaintEngineState::QRasterPaintEngineState(QRasterPaintEngineState &s)
      lastBrush(s.lastBrush), brushData(s.brushData), fillFlags(s.fillFlags), pixmapFlags(s.pixmapFlags),
      intOpacity(s.intOpacity), txscale(s.txscale), clip(s.clip), dirty(s.dirty), flag_bits(s.flag_bits)
 {
-   brushData.tempImage = nullptr;
-   penData.tempImage   = nullptr;
+   brushData.tempImage      = nullptr;
+   penData.tempImage        = nullptr;
    flags.has_clip_ownership = false;
 }
 
@@ -612,11 +612,10 @@ void QRasterPaintEngine::updateRasterState()
 
    if (s->dirty & (DirtyPen | DirtyCompositionMode | DirtyOpacity)) {
       const QPainter::CompositionMode mode = s->composition_mode;
-      s->flags.fast_text = (s->penData.type == QSpanData::Solid)
-         && s->intOpacity == 256
-         && (mode == QPainter::CompositionMode_Source
-            || (mode == QPainter::CompositionMode_SourceOver
-               && s->penData.solid.color.isOpaque()));
+
+      s->flags.fast_text = (s->penData.type == QSpanData::Solid) &&
+            s->intOpacity == 256 && (mode == QPainter::CompositionMode_Source ||
+            (mode == QPainter::CompositionMode_SourceOver && s->penData.solid.color.isOpaque()));
    }
 
    s->dirty = 0;
@@ -626,11 +625,12 @@ void QRasterPaintEngine::opacityChanged()
 {
    QRasterPaintEngineState *s = state();
 
-   s->fillFlags |= DirtyOpacity;
+   s->fillFlags   |= DirtyOpacity;
    s->strokeFlags |= DirtyOpacity;
    s->pixmapFlags |= DirtyOpacity;
-   s->dirty |= DirtyOpacity;
-   s->intOpacity = (int) (s->opacity * 256);
+   s->dirty       |= DirtyOpacity;
+
+   s->intOpacity = (int)(s->opacity * 256);
 }
 
 void QRasterPaintEngine::compositionModeChanged()
@@ -639,9 +639,8 @@ void QRasterPaintEngine::compositionModeChanged()
 
    QRasterPaintEngineState *s = state();
 
-   s->fillFlags |= DirtyCompositionMode;
-   s->dirty |= DirtyCompositionMode;
-
+   s->fillFlags   |= DirtyCompositionMode;
+   s->dirty       |= DirtyCompositionMode;
    s->strokeFlags |= DirtyCompositionMode;
    d->rasterBuffer->compositionMode = s->composition_mode;
 
@@ -983,7 +982,7 @@ bool QRasterPaintEngine::setClipRectInDeviceCoords(const QRect &r, Qt::ClipOpera
 
       Q_ASSERT(base);
       if (base->hasRectClip || base->hasRegionClip) {
-         if (!s->flags.has_clip_ownership) {
+         if (! s->flags.has_clip_ownership) {
             s->clip = new QClipData(d->rasterBuffer->height());
             s->flags.has_clip_ownership = true;
          }
@@ -1020,8 +1019,8 @@ void QRasterPaintEngine::clip(const QRegion &region, Qt::ClipOperation op)
    if (op == Qt::NoClip) {
       qrasterpaintengine_state_setNoClip(s);
    } else if (s->matrix.type() > QTransform::TxScale
-      || (op == Qt::IntersectClip && !clip->hasRectClip && !clip->hasRegionClip)
-      || (op == Qt::ReplaceClip && !baseClip->hasRectClip && !baseClip->hasRegionClip)) {
+         || (op == Qt::IntersectClip && ! clip->hasRectClip && ! clip->hasRegionClip)
+         || (op == Qt::ReplaceClip && ! baseClip->hasRectClip && ! baseClip->hasRegionClip)) {
       QPaintEngineEx::clip(region, op);
 
    } else {
@@ -1077,7 +1076,7 @@ void QRasterPaintEngine::fillPath(const QPainterPath &path, QSpanData *fillData)
          || deviceRect.top() < -QT_RASTER_COORD_LIMIT
          || deviceRect.bottom() > QT_RASTER_COORD_LIMIT);
 
-   if (!s->flags.antialiased && !do_clip) {
+   if (! s->flags.antialiased && ! do_clip) {
       d->initializeRasterizer(fillData);
       d->rasterizer->rasterize(path * s->matrix, path.fillRule());
       return;
@@ -1602,8 +1601,7 @@ void QRasterPaintEngine::fillPolygon(const QPointF *points, int pointCount, Poly
    QT_FT_Outline *outline = d->outlineMapper->convertPath(vp);
 
    // scanconvert
-   ProcessSpans brushBlend = d->getBrushFunc(d->outlineMapper->controlPointRect,
-         &s->brushData);
+   ProcessSpans brushBlend = d->getBrushFunc(d->outlineMapper->controlPointRect, &s->brushData);
    d->rasterize(outline, brushBlend, &s->brushData, d->rasterBuffer.data());
 }
 
@@ -1991,9 +1989,7 @@ void QRasterPaintEngine::drawImage(const QRectF &r, const QImage &img, const QRe
 
    const QClipData *clip = d->clip();
 
-   if (s->matrix.type() > QTransform::TxTranslate
-      && !stretch_sr
-      && (!clip || clip->hasRectClip)
+   if (s->matrix.type() > QTransform::TxTranslate && ! stretch_sr && (! clip || clip->hasRectClip)
       && s->intOpacity == 256
       && (d->rasterBuffer->compositionMode == QPainter::CompositionMode_SourceOver
          || d->rasterBuffer->compositionMode == QPainter::CompositionMode_Source)
@@ -2009,7 +2005,7 @@ void QRasterPaintEngine::drawImage(const QRectF &r, const QImage &img, const QRe
          QRectF transformedTargetRect = s->matrix.mapRect(r);
 
          if ((!(s->renderHints & QPainter::SmoothPixmapTransform) && !(s->renderHints & QPainter::Antialiasing))
-            || (isPixelAligned(transformedTargetRect) && isPixelAligned(sr))) {
+               || (isPixelAligned(transformedTargetRect) && isPixelAligned(sr))) {
             QRect clippedTransformedTargetRect = transformedTargetRect.toRect().intersected(clip ? clip->clipRect : d->deviceRect);
             if (clippedTransformedTargetRect.isNull()) {
                return;
@@ -2017,8 +2013,7 @@ void QRasterPaintEngine::drawImage(const QRectF &r, const QImage &img, const QRe
 
             QRectF clippedTargetRect = s->matrix.inverted().mapRect(QRectF(clippedTransformedTargetRect));
 
-            QRect clippedSourceRect
-               = QRectF(sr.x() + clippedTargetRect.x() - r.x(), sr.y() + clippedTargetRect.y() - r.y(),
+            QRect clippedSourceRect = QRectF(sr.x() + clippedTargetRect.x() - r.x(), sr.y() + clippedTargetRect.y() - r.y(),
                      clippedTargetRect.width(), clippedTargetRect.height()).toRect();
             clippedSourceRect = clippedSourceRect.intersected(img.rect());
 
@@ -2150,7 +2145,8 @@ void QRasterPaintEngine::drawImage(const QRectF &r, const QImage &img, const QRe
          SrcOverBlendFunc func = QDrawHelperFunctions::instance().blendFunctions[d->rasterBuffer->format][img.format()];
          if (func) {
             QPointF pt(r.x() + s->matrix.dx(), r.y() + s->matrix.dy());
-            if (!clip) {
+
+            if (! clip) {
                d->drawImage(pt, img, func, d->deviceRect, s->intOpacity, sr.toRect());
                return;
             } else if (clip->hasRectClip) {
@@ -3131,7 +3127,8 @@ void QRasterPaintEngine::drawBitmap(const QPointF &pos, const QImage &image, QSp
          for (int x = 0; x < xmax - xmin; ++x) {
             int src_x = x + x_offset;
             uchar pixel = src[src_x >> 3];
-            if (!pixel) {
+
+            if (! pixel) {
                x += 7 - (src_x % 8);
                continue;
             }
@@ -3167,7 +3164,7 @@ QRasterPaintEngine::ClipType QRasterPaintEngine::clipType() const
 
    const QClipData *clip = d->clip();
 
-   if (!clip || clip->hasRectClip) {
+   if (! clip || clip->hasRectClip) {
       return RectClip;
    } else {
       return ComplexClip;
@@ -3180,7 +3177,7 @@ QRect QRasterPaintEngine::clipBoundingRect() const
 
    const QClipData *clip = d->clip();
 
-   if (!clip) {
+   if (! clip) {
       return d->deviceRect;
    }
 
@@ -3217,11 +3214,10 @@ void QRasterPaintEnginePrivate::initializeRasterizer(QSpanData *data)
    rasterizer->initialize(blend, data);
 }
 
-void QRasterPaintEnginePrivate::rasterize(QT_FT_Outline *outline,
-   ProcessSpans callback,
-   QSpanData *spanData, QRasterBuffer *rasterBuffer)
+void QRasterPaintEnginePrivate::rasterize(QT_FT_Outline *outline, ProcessSpans callback,
+      QSpanData *spanData, QRasterBuffer *rasterBuffer)
 {
-   if (!callback || !outline) {
+   if (! callback || ! outline) {
       return;
    }
 
@@ -3232,8 +3228,7 @@ void QRasterPaintEnginePrivate::rasterize(QT_FT_Outline *outline,
       initializeRasterizer(spanData);
 
       const Qt::FillRule fillRule = outline->flags == QT_FT_OUTLINE_NONE
-         ? Qt::WindingFill
-         : Qt::OddEvenFill;
+         ? Qt::WindingFill : Qt::OddEvenFill;
 
       rasterizer->rasterize(outline, fillRule);
       return;
@@ -3254,22 +3249,21 @@ static inline uchar *alignAddress(uchar *address, quintptr alignmentMask)
 void QRasterPaintEnginePrivate::rasterize(QT_FT_Outline *outline, ProcessSpans callback,
       void *userData, QRasterBuffer *)
 {
-   if (!callback || !outline) {
+   if (! callback || !outline) {
       return;
    }
 
    Q_Q(QRasterPaintEngine);
    QRasterPaintEngineState *s = q->state();
 
-   if (!s->flags.antialiased) {
+   if (! s->flags.antialiased) {
       rasterizer->setAntialiased(s->flags.antialiased);
       rasterizer->setLegacyRoundingEnabled(s->flags.legacy_rounding);
       rasterizer->setClipRect(deviceRect);
       rasterizer->initialize(callback, userData);
 
       const Qt::FillRule fillRule = outline->flags == QT_FT_OUTLINE_NONE
-         ? Qt::WindingFill
-         : Qt::OddEvenFill;
+         ? Qt::WindingFill : Qt::OddEvenFill;
 
       rasterizer->rasterize(outline, fillRule);
       return;
@@ -4107,7 +4101,7 @@ void QGradientCache::generateGradientColorTable(const QGradient &gradient, QRgba
       }
 
       qreal diff = stops[current_stop + 1].first - stops[current_stop].first;
-      qreal c = (diff == 0) ? qreal(0) : 256 / diff;
+      qreal c    = (diff == 0) ? qreal(0) : 256 / diff;
       t = (dpos - stops[current_stop].first) * c;
       t_delta = incr * c;
 
