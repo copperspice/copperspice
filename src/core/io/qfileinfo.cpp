@@ -37,14 +37,15 @@ QString QFileInfoPrivate::getFileName(QAbstractFileEngine::FileName name) const
    QString ret;
 
    if (fileEngine == nullptr) {
-      // local file; use the QFileSystemEngine directly
+      // local file, use the QFileSystemEngine directly
 
       switch (name) {
          case QAbstractFileEngine::CanonicalName:
          case QAbstractFileEngine::CanonicalPathName: {
             QFileSystemEntry entry = QFileSystemEngine::canonicalName(fileEntry, metaData);
 
-            if (cache_enabled) { // be smart and store both
+            if (cache_enabled) {
+               // be smart and store both
                fileNames[QAbstractFileEngine::CanonicalName] = entry.filePath();
                fileNames[QAbstractFileEngine::CanonicalPathName] = entry.path();
             }
@@ -258,9 +259,6 @@ bool QFileInfo::operator==(const QFileInfo &fileinfo) const
 {
    Q_D(const QFileInfo);
 
-   // TODO: understand long and short file names on Windows
-   // ### (GetFullPathName())
-
    if (fileinfo.d_ptr == d_ptr) {
       return true;
    }
@@ -269,7 +267,7 @@ bool QFileInfo::operator==(const QFileInfo &fileinfo) const
       return false;
    }
 
-   // Assume files are the same if path is the same
+   // assume files are the same if path is the same
    if (d->fileEntry.filePath() == fileinfo.d_ptr->fileEntry.filePath()) {
       return true;
    }
@@ -277,7 +275,8 @@ bool QFileInfo::operator==(const QFileInfo &fileinfo) const
    Qt::CaseSensitivity sensitive;
 
    if (d->fileEngine == nullptr || fileinfo.d_ptr->fileEngine == nullptr) {
-      if (d->fileEngine != fileinfo.d_ptr->fileEngine) { // one is native, the other is a custom file-engine
+      if (d->fileEngine != fileinfo.d_ptr->fileEngine) {
+         // one is native, the other is a custom file-engine
          return false;
       }
 
@@ -291,7 +290,8 @@ bool QFileInfo::operator==(const QFileInfo &fileinfo) const
       sensitive = d->fileEngine->caseSensitive() ? Qt::CaseSensitive : Qt::CaseInsensitive;
    }
 
-   if (fileinfo.size() != size()) { //if the size isn't the same...
+   if (fileinfo.size() != size()) {
+      // if the size is not the same
       return false;
    }
 

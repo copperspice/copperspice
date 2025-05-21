@@ -88,7 +88,7 @@ extern "C" {
 static constexpr const int max_buf = 4096;
 
 struct my_jpeg_source_mgr : public jpeg_source_mgr {
-   // Nothing dynamic - cannot rely on destruction over longjump
+   // Nothing dynamic, can not rely on destruction over longjump
    QIODevice *m_device;
 
    JOCTET buffer[max_buf];
@@ -132,19 +132,17 @@ extern "C" {
    {
       my_jpeg_source_mgr *src = (my_jpeg_source_mgr *)cinfo->src;
 
-      // `dumb' implementation from jpeglib
+      // Not a great implementation. Could use fseek() except
+      // it doesn't work on pipes.  Not clear that being smart is worth
+      // any trouble anyway --- large skips are infrequent.
 
-      /* Just a dumb implementation for now.  Could use fseek() except
-       * it doesn't work on pipes.  Not clear that being smart is worth
-       * any trouble anyway --- large skips are infrequent.
-       */
       if (num_bytes > 0) {
          while (num_bytes > (long) src->bytes_in_buffer) {  // Should not happen in case of memDevice
             num_bytes -= (long) src->bytes_in_buffer;
             (void) qt_fill_input_buffer(cinfo);
-            /* note we assume that qt_fill_input_buffer will never return false,
-            * so suspension need not be handled.
-            */
+
+            // note we assume that qt_fill_input_buffer will never return false,
+            // so suspension need not be handled.
          }
          src->next_input_byte += (size_t) num_bytes;
          src->bytes_in_buffer -= (size_t) num_bytes;
@@ -440,7 +438,7 @@ static bool read_jpeg_image(QImage *outImage, QSize scaledSize, QRect scaledClip
 }
 
 struct my_jpeg_destination_mgr : public jpeg_destination_mgr {
-   // Nothing dynamic - cannot rely on destruction over longjump
+   // Nothing dynamic - cant rely on destruction over longjump
    QIODevice *m_deviceDest;
    JOCTET buffer[max_buf];
 

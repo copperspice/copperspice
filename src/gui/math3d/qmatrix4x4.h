@@ -837,7 +837,7 @@ inline QVector3D operator*(const QMatrix4x4 &matrix, const QVector3D &vector)
       return vector;
 
     } else if (matrix.flagBits < QMatrix4x4::Rotation2D) {
-        // Translation | Scale
+      // Translation | Scale
       return QVector3D(vector.x() * matrix.m_matrix4[0][0] + matrix.m_matrix4[3][0],
             vector.y() * matrix.m_matrix4[1][1] + matrix.m_matrix4[3][1],
             vector.z() * matrix.m_matrix4[2][2] + matrix.m_matrix4[3][2]);
@@ -1002,7 +1002,7 @@ inline QPoint operator*(const QMatrix4x4 &matrix, const QPoint &point)
       return point;
 
     } else if (matrix.flagBits < QMatrix4x4::Rotation2D) {
-        // Translation | Scale
+      // Translation | Scale
       return QPoint(qRound(xin * matrix.m_matrix4[0][0] + matrix.m_matrix4[3][0]),
             qRound(yin * matrix.m_matrix4[1][1] + matrix.m_matrix4[3][1]));
 

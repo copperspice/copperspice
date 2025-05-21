@@ -1023,10 +1023,7 @@ void QTextEditPrivate::relayoutDocument()
    // (narrower because the vertical scroll bar takes up horizontal space)) to disappear
    // again then we have an endless loop, as _q_adjustScrollBars sets new ranges on the
    // scroll bars, the QAbstractScrollArea will find out about it and try to show/hide
-   // the scroll bars again. That's why we try to detect this case here and break out.
-   //
-   // (if you change this please also check the layoutingLoop() testcase in
-   // QTextEdit's autotests)
+   // the scroll bars again. That is why we try to detect this case here and break out.
    if (lastUsedSize.isValid()
       && !vbar->isHidden()
       && viewport->width() < lastUsedSize.width()

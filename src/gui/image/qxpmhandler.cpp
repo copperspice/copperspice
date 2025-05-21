@@ -849,8 +849,7 @@ static bool read_xpm_header(QIODevice *device, const char *const *source, int &i
    return true;
 }
 
-// Reads XPM body (color information & pixels).
-
+// Reads XPM body (color information & pixels)
 static bool read_xpm_body(QIODevice *device, const char *const *source, int &indexPos, QByteArray &state,
       int cpp, int ncols, int w, int h, QImage &image)
 {

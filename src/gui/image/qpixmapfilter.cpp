@@ -720,9 +720,8 @@ void QPixmapBlurFilter::draw(QPainter *painter, const QPointF &p, const QPixmap 
    painter->setWorldTransform(transform);
 }
 
-// grayscales the image to dest (could be same). If rect isn't defined
-// destination image size is used to determine the dimension of grayscaling
-// process.
+// grayscales the image to dest (could be same). If rect is not defined
+// destination image size is used to determine the dimension of grayscaling rocess.
 static void grayscale(const QImage &image, QImage &dest, const QRect &rect = QRect())
 {
    QRect destRect = rect;

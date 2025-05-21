@@ -1775,7 +1775,7 @@ void QListModeViewBase::dragMoveEvent(QDragMoveEvent *event)
    // ignore by default
    event->ignore();
 
-   // can't use indexAt, doesn't account for spacing.
+   // can not use indexAt, does not account for spacing
    QPoint p = event->pos();
    QRect rectX(p.x() + horizontalOffset(), p.y() + verticalOffset(), 1, 1);
    rectX.adjust(-dd->spacing(), -dd->spacing(), dd->spacing(), dd->spacing());

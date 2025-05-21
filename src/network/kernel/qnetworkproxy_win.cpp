@@ -634,9 +634,8 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
       // try to get the proxy config for the URL
       QUrl url = query.url();
 
-      // url could be empty, e.g. from QNetworkProxy::applicationProxy(), that's fine,
-      // we'll still ask for the proxy.
-      // But for a file url, we know we don't need one.
+      // url could be empty, e.g. from QNetworkProxy::applicationProxy()
+      // still ask for the proxy, for a file url, we know we do not need one
       if (url.scheme() == "file" || url.scheme() == "qrc") {
          return sp->defaultResult;
       }

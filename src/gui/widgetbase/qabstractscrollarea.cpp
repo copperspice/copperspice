@@ -666,7 +666,7 @@ bool QAbstractScrollArea::event(QEvent *e)
          // There was a chance with accessibility client we get an vent before the viewport was created.
          // Also, in some cases we might get here from QWidget::event() virtual function which is (indirectly) called
          // from the viewport constructor at the time when the d->viewport is not yet initialized even without any
-         // accessibility client. See qabstractscrollarea autotest for a test case.
+         // accessibility client.
 
          if (d->viewport) {
             d->viewport->setAcceptDrops(acceptDrops());

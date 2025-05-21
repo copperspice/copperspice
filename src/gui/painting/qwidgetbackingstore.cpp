@@ -209,7 +209,8 @@ QRegion QWidgetBackingStore::dirtyRegion(QWidget *widget) const
    // Append the region that needs flush.
    r += dirtyOnScreen;
 
-   if (dirtyOnScreenWidgets) { // Only in use with native child widgets.
+   if (dirtyOnScreenWidgets) {
+      // Only in use with native child widgets
       for (int i = 0; i < dirtyOnScreenWidgets->size(); ++i) {
          QWidget *w = dirtyOnScreenWidgets->at(i);
          if (widgetDirty && w != widget && !widget->isAncestorOf(w)) {
@@ -361,7 +362,9 @@ void QWidgetBackingStore::markDirty(const QRegion &rgn, QWidget *widget, UpdateT
             sendUpdateRequest(widget, updateTime);
          }
 
-         return; // Already dirty.
+         // already dirty
+
+         return;
       }
 
       const bool eventAlreadyPosted = !widget->d_func()->dirty.isEmpty();
@@ -401,7 +404,9 @@ void QWidgetBackingStore::markDirty(const QRegion &rgn, QWidget *widget, UpdateT
       if (updateTime == UpdateNow) {
          sendUpdateRequest(tlw, updateTime);
       }
-      return; // Already dirty.
+      // already dirty
+
+      return;
    }
 
    if (bufferState == BufferInvalid) {
@@ -433,7 +438,7 @@ void QWidgetBackingStore::markDirty(const QRegion &rgn, QWidget *widget, UpdateT
          if (widget->d_func()->graphicsEffect) {
             widget->d_func()->dirty += widget->d_func()->effectiveRectFor(rgn.boundingRect());
          } else
-#endif //QT_NO_GRAPHICSEFFECT
+#endif
             widget->d_func()->dirty += rgn;
       }
    } else {
@@ -468,7 +473,9 @@ void QWidgetBackingStore::markDirty(const QRect &rect, QWidget *widget,
          if (updateTime == UpdateNow) {
             sendUpdateRequest(widget, updateTime);
          }
-         return; // Already dirty.
+         // already dirty
+
+         return;
       }
 
       const bool eventAlreadyPosted = !widget->d_func()->dirty.isEmpty();
@@ -507,7 +514,9 @@ void QWidgetBackingStore::markDirty(const QRect &rect, QWidget *widget,
       if (updateTime == UpdateNow) {
          sendUpdateRequest(tlw, updateTime);
       }
-      return; // Already dirty
+      // already dirty
+
+      return;
    }
 
    if (bufferState == BufferInvalid) {
@@ -546,7 +555,7 @@ void QWidgetBackingStore::markDirtyOnScreen(const QRegion &region, QWidget *widg
 
 
 
-   // Top-level.
+   // Top-level
    if (widget == tlw) {
       if (! widget->testAttribute(Qt::WA_WState_InPaintEvent)) {
          dirtyOnScreen += region;
@@ -554,7 +563,7 @@ void QWidgetBackingStore::markDirtyOnScreen(const QRegion &region, QWidget *widg
       return;
    }
 
-   // Alien widgets.
+   // Alien widgets
    if (!widget->internalWinId() && !widget->isWindow()) {
       QWidget *nativeParent = widget->nativeParentWidget();        // Alien widgets with the top-level as the native parent (common case).
 

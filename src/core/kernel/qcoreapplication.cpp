@@ -307,7 +307,6 @@ bool QCoreApplicationPrivate::is_app_running = false;
 // app closing down if true
 bool QCoreApplicationPrivate::is_app_closing = false;
 
-// initialized in qcoreapplication and in qtextstream autotest when setlocale is called.
 Q_CORE_EXPORT bool qt_locale_initialized = false;
 
 //  Create an instance of cs.conf. Ensures settings will not be thrown out of QSetting's cache for unused settings

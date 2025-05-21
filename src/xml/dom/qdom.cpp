@@ -3900,7 +3900,8 @@ QDomCDATASectionPrivate::QDomCDATASectionPrivate(QDomCDATASectionPrivate *n, boo
 QDomNodePrivate *QDomCDATASectionPrivate::cloneNode(bool deep)
 {
    QDomNodePrivate *p = new QDomCDATASectionPrivate(this, deep);
-   // We are not interested in this node
+
+   // not interested in this node
    p->ref.deref();
    return p;
 }
@@ -4584,8 +4585,7 @@ QDomNodePrivate *QDomDocumentPrivate::importNode(const QDomNodePrivate *imported
 
    if (node) {
       node->setOwnerDocument(this);
-      // The QDomNode constructor increases the refcount, so deref first to
-      // keep refcount balanced.
+      // The QDomNode constructor increases the refcount, so deref first to keep refcount balanced.
       node->ref.deref();
    }
 
@@ -4642,7 +4642,7 @@ void QDomDocumentPrivate::saveDocument(QTextStream &s, const int indent, QDomNod
       }
    } else {
 
-      // Write out the XML declaration.
+      // write out the XML declaration.
 #ifdef QT_NO_TEXTCODEC
       const QString codecName("iso-8859-1");
 #else
@@ -4658,7 +4658,7 @@ void QDomDocumentPrivate::saveDocument(QTextStream &s, const int indent, QDomNod
       //  Skip the first processing instruction by name "xml", if any such exists.
       const QDomNodePrivate *startNode = node;
 
-      // First, we try to find the PI and sets the startNode to the one appearing after it.
+      // First, try to find the PI and sets the startNode to the one appearing after it.
       while (node != nullptr) {
          if (node->isProcessingInstruction() && node->nodeName() == "xml") {
             startNode = node->next;
@@ -4668,7 +4668,7 @@ void QDomDocumentPrivate::saveDocument(QTextStream &s, const int indent, QDomNod
          }
       }
 
-      // Now we serialize all the nodes after the faked XML declaration(the PI).
+      // serialize all the nodes after the faked XML declaration(the PI).
       while (startNode != nullptr) {
          startNode->save(s, 0, indent);
          startNode = startNode->next;

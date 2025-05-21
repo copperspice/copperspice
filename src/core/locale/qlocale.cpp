@@ -2301,7 +2301,7 @@ QString QLocaleData::doubleToString(const QChar _zero, const QChar plus, const Q
       negative = sign != 0 && ! isZero(d);
    }
 
-   // pad with zeros. LeftAdjusted overrides this flag). Also, we don't pad special numbers
+   // pad with zeros, leftAdjusted overrides this flag, do not pad special numbers
    if (flags & QLocaleData::ZeroPadded && !(flags & QLocaleData::LeftAdjusted) && !special_number) {
       int num_pad_chars = width - num_str.length();
 
@@ -2507,7 +2507,7 @@ bool QLocaleData::numberToCLocale(const QString &num, GroupSeparatorMode group_s
    QString::const_iterator iter = num.begin();
    QString::const_iterator end  = num.end();
 
-   // Skip whitespace
+   // skip whitespace
    while (iter != end && iter->isSpace()) {
       ++iter;
    }
@@ -2877,7 +2877,7 @@ qint64 QLocaleData::bytearrayToLongLong(const char *num, int base, bool *ok, boo
    }
 
    if (*endptr != '\0') {
-      // we stopped at a non-digit character after converting some digits
+      // stopped at a non-digit character after converting some digits
       if (ok != nullptr) {
          *ok = false;
       }

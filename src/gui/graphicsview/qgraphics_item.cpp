@@ -122,7 +122,8 @@ void QGraphicsItemPrivate::updateAncestorFlag(QGraphicsItem::GraphicsItemFlag ch
 
    if (root) {
       // For root items only. This is the item that has either enabled or
-      // disabled \a childFlag, or has been reparented.
+      // disabled childFlag, or has been reparented.
+
       switch (int(childFlag)) {
          case -2:
             flag = AncestorFiltersChildEvents;
@@ -173,19 +174,19 @@ void QGraphicsItemPrivate::updateAncestorFlag(QGraphicsItem::GraphicsItemFlag ch
       }
 
    } else {
-      // Don't set or propagate the ancestor flag if it's already correct.
+      // Do not set or propagate the ancestor flag if it is already correct
       if (((ancestorFlags & flag) && isEnabled) || (! (ancestorFlags & flag) && ! isEnabled)) {
          return;
       }
 
-      // Set the flag.
+      // Set the flag
       if (isEnabled) {
          ancestorFlags |= flag;
       } else {
          ancestorFlags &= ~flag;
       }
 
-      // Don't process children if the item has the main flag set on itself.
+      // Do not process children if the item has the main flag set on itself.
       if ((int(childFlag) != -1 &&  int(itemFlags & childFlag) == childFlag)
          || (int(childFlag) == -1 && handlesChildEvents)
          || (int(childFlag) == -2 && filtersDescendantEvents)) {
@@ -423,8 +424,7 @@ void QGraphicsItemPrivate::setParentItemHelper(QGraphicsItem *newParent, const Q
    }
 
    // We anticipate geometry changes. If the item is deleted, it will be
-   // removed from the index at a later stage, and the whole scene will be
-   // updated.
+   // removed from the index at a later stage, and the whole scene will be updated.
    if (!inDestructor) {
       q_ptr->prepareGeometryChange();
    }
@@ -528,7 +528,7 @@ void QGraphicsItemPrivate::setParentItemHelper(QGraphicsItem *newParent, const Q
       }
    }
 
-   // Resolve depth.
+   // Resolve depth
    invalidateDepthRecursively();
 
    if ((m_itemParent = newParent)) {
@@ -1403,7 +1403,7 @@ void QGraphicsItemPrivate::setVisibleHelper(bool newVisible, bool explicitly,
       return;
    }
 
-   // Don't show child if parent is not visible
+   // Do not show child if parent is not visible
    if (m_itemParent && newVisible && ! m_itemParent->d_ptr->visible) {
       return;
    }
@@ -1597,7 +1597,7 @@ bool QGraphicsItem::isEnabled() const
 
 void QGraphicsItemPrivate::setEnabledHelper(bool newEnabled, bool explicitly, bool update)
 {
-   // Update explicit bit.
+   // Update explicit bit
    if (explicitly) {
       explicitlyDisabled = newEnabled ? 0 : 1;
    }
@@ -1638,7 +1638,7 @@ void QGraphicsItemPrivate::setEnabledHelper(bool newEnabled, bool explicitly, bo
       }
    }
 
-   // Modify the property.
+   // Modify the property
    const QVariant newEnabledVariant(q_ptr->itemChange(QGraphicsItem::ItemEnabledChange,
          quint32(newEnabled)));
    enabled = newEnabledVariant.toBool();
@@ -1745,7 +1745,7 @@ void QGraphicsItem::setOpacity(qreal opacity)
    bool wasFullyTransparent = d_ptr->isOpacityNull();
    d_ptr->opacity = newOpacity;
 
-   // Notify change.
+   // Notify change
    itemChange(ItemOpacityHasChanged, newOpacityVariant);
 
    // Update
@@ -1792,7 +1792,7 @@ void QGraphicsItem::setGraphicsEffect(QGraphicsEffect *effect)
    }
 
    if (effect) {
-      // Set new effect.
+      // Set new effect
       QGraphicsEffectSourcePrivate *sourced = new QGraphicsItemEffectSourcePrivate(this);
       QGraphicsEffectSource *source = new QGraphicsEffectSource(*sourced);
       d_ptr->graphicsEffect = effect;
@@ -3363,8 +3363,8 @@ void QGraphicsItem::setBoundingRegionGranularity(qreal granularity)
 
 bool QGraphicsItemPrivate::discardUpdateRequest(bool ignoreVisibleBit, bool ignoreDirtyBit, bool isIgnoreOpacity) const
 {
-   // No scene, or if the scene is updating everything, means we have nothing
-   // to do. The only exception is if the scene tracks the growing scene rect.
+   // No scene or if the scene is updating everything, there is nothing to do
+   // The only exception is if the scene tracks the growing scene rect
    return ! m_itemScene
       || (!visible && !ignoreVisibleBit && !this->ignoreVisible)
       || (!ignoreDirtyBit && fullUpdatePending)
@@ -3418,7 +3418,7 @@ void QGraphicsItemPrivate::invalidateChildGraphicsEffectsRecursively(QGraphicsIt
       childPrivate->invalidateChildGraphicsEffectsRecursively(reason);
    }
 }
-#endif //QT_NO_GRAPHICSEFFECT
+#endif
 
 void QGraphicsItemPrivate::invalidateDepthRecursively()
 {

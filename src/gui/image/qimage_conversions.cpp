@@ -1676,7 +1676,7 @@ static void convert_RGB_to_Indexed8(QImageData *dst, const QImageData *src, Qt::
                      int err   = l1[x] - pix_A * 255 / 5;
                      pv[chan][x] = pix_A;
 
-                     // Spread the error around...
+                     // Spread the error around
                      if (x + 1 < src->width) {
                         l1[x + 1] += (err * 7) >> 4;
                         l2[x + 1] += err >> 4;
@@ -1692,7 +1692,7 @@ static void convert_RGB_to_Indexed8(QImageData *dst, const QImageData *src, Qt::
                      int err   = l1[x] - pix_B * 255 / 5;
                      pv[chan][x] = pix_B;
 
-                     // Spread the error around...
+                     // Spread the error around
                      if (x > 0) {
                         l1[x - 1] += (err * 7) >> 4;
                         l2[x - 1] += err >> 4;
@@ -1716,7 +1716,8 @@ static void convert_RGB_to_Indexed8(QImageData *dst, const QImageData *src, Qt::
             src_data += src->bytes_per_line;
             dest_data += dst->bytes_per_line;
          }
-      } else { // OrderedDither
+      } else {
+         // OrderedDither
          for (int y = 0; y < src->height; y++) {
             const QRgb *p = (const QRgb *)src_data;
             const QRgb *end = p + src->width;

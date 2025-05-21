@@ -339,8 +339,7 @@ class QXmlSimpleReaderPrivate
    // error string
    QString m_error;
 
-   // arguments for parse functions (this is needed to allow incremental
-   // parsing)
+   // arguments for parse functions (this is needed to allow incremental parsing)
    bool parsePI_xmldecl;
    bool parseName_useRef;
    bool parseReference_charDataRead;

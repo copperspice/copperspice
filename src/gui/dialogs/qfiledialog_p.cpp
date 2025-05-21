@@ -1299,9 +1299,9 @@ void QFileDialogPrivate::_q_deleteCurrent()
       if (!(p & QFile::WriteUser)) {
          return;
       }
-#endif // QT_NO_MESSAGEBOX
+#endif
 
-      // the event loop has run, we can NOT reuse index because the model might have removed it.
+      // event loop has run, can NOT reuse index because the model might have removed it
       if (isDir) {
          if (!removeDirectory(filePath)) {
 

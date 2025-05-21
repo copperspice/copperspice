@@ -472,7 +472,7 @@ bool QTemporaryFile::open(OpenMode flags)
       }
    }
 
-   // reset the engine state so it creates a new, unique file name from the template;
+   // reset the engine state so it creates a new, unique file name from the template
    d->resetFileEngine();
 
    if (QFile::open(flags)) {

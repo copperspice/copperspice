@@ -1000,8 +1000,7 @@ QDateTimeEdit::StepEnabled QDateTimeEdit::stepEnabled() const
          return StepEnabled(StepUpEnabled | StepDownEnabled);
       }
 
-      // 3 cases.  date, time, datetime.  each case look
-      // at just the relavant component.
+      // 3 cases.  date, time, datetime. each case looks at just the relavant component
       QVariant max, min, val;
       if (!(d->sections & DateSections_Mask)) {
          // time only, no date

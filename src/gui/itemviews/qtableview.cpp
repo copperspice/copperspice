@@ -1139,7 +1139,7 @@ void QTableView::paintEvent(QPaintEvent *event)
 
    QPainter painter(d->viewport);
 
-   // if there's nothing to do, clear the area and return
+   // if there is nothing to do, clear the area and return
    if (horizontalHeader->count() == 0 || verticalHeader->count() == 0 || ! d->itemDelegate) {
       return;
    }
@@ -1150,8 +1150,8 @@ void QTableView::paintEvent(QPaintEvent *event)
    const QRegion region = event->region().translated(offset);
    const QVector<QRect> rects = region.rects();
 
-   //firstVisualRow is the visual index of the first visible row.  lastVisualRow is the visual index of the last visible Row.
-   //same goes for ...VisualColumn
+   // firstVisualRow is the visual index of the first visible row.  lastVisualRow is the visual index of the last visible Row.
+   // same goes for ...VisualColumn
    int firstVisualRow = qMax(verticalHeader->visualIndexAt(0), 0);
    int lastVisualRow = verticalHeader->visualIndexAt(verticalHeader->viewport()->height());
    if (lastVisualRow == -1) {
@@ -2029,7 +2029,8 @@ void QTableView::updateGeometries()
          d->verticalHeader->setOffset(0);
       }
       verticalScrollBar()->setSingleStep(1);
-   } else { // ScrollPerPixel
+   } else {
+      // ScrollPerPixel
       verticalScrollBar()->setPageStep(vsize.height());
       verticalScrollBar()->setRange(0, verticalLength - vsize.height());
       verticalScrollBar()->setSingleStep(qMax(vsize.height() / (rowsInViewport + 1), 2));

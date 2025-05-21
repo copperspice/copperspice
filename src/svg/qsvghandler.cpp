@@ -4394,8 +4394,8 @@ QSvgStyleSelector *QSvgHandler::selector() const
 {
    return m_selector;
 }
+#endif
 
-#endif // QT_NO_CSSPARSER
 bool QSvgHandler::processingInstruction(const QString &target, const QString &data)
 {
 #ifndef QT_NO_CSSPARSER

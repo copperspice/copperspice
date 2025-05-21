@@ -1188,10 +1188,6 @@ static QString qt_tzname(QDateTimePrivate::DaylightStatus daylightStatus)
 // Calls the platform variant of mktime for the given date, time, and daylightStatus,
 // and updates the date, time, daylightStatus and abbreviation with the returned values.
 
-// If the date falls outside the 1970 to 2037 range supported by mktime a
-// then null date/time will be returned and you should adjust the date first if
-// you need a guaranteed result.
-
 static qint64 qt_mktime(QDate *date, QTime *time, QDateTimePrivate::DaylightStatus *daylightStatus,
       QString *abbreviation, bool *ok = nullptr)
 {
@@ -1222,6 +1218,8 @@ static qint64 qt_mktime(QDate *date, QTime *time, QDateTimePrivate::DaylightStat
    int hh = local.tm_hour;
 #endif
 
+   // use std::chrono instead of mktime, ensure compiler support for timezones
+
    time_t secsSinceEpoch = mktime(&local);
 
    if (secsSinceEpoch != time_t(-1)) {
@@ -1229,9 +1227,9 @@ static qint64 qt_mktime(QDate *date, QTime *time, QDateTimePrivate::DaylightStat
       *time = QTime(local.tm_hour, local.tm_min, local.tm_sec, msec);
 
 #if defined(Q_OS_WIN)
-      // Windows mktime for the missing hour subtracts 1 hour from the time
-      // instead of adding 1 hour. If time differs and is standard time then
-      // this has happened, so add 2 hours to the time and 1 hour to the msecs
+      // Windows mktime for the missing hour subtracts 1 hour from the time instead of
+      // adding 1 hour. If time differs and is standard time then this has happened, so
+      // add 2 hours to the time and 1 hour to the msecs
 
       if (local.tm_isdst == 0 && local.tm_hour != hh) {
          if (time->hour() >= 22) {
@@ -1492,7 +1490,7 @@ static qint64 localMSecsToEpochMSecs(qint64 localMsecs, QDateTimePrivate::Daylig
          }
 
       } else {
-         // If we do not call mktime then need to call tzset to get offset
+         // if we do not call mktime then call tzset to get offset
          qt_tzset();
       }
 

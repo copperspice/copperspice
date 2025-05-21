@@ -2323,10 +2323,11 @@ inline void fetchTransformedBilinear_pixelBounds<BlendTransformedBilinear>(int, 
    Q_ASSERT(v2 >= l1 && v2 <= l2);
 }
 
-template <TextureBlendType blendType> /* blendType = BlendTransformedBilinear or BlendTransformedBilinearTiled */
+template <TextureBlendType blendType>
 static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator *,
    const QSpanData *data, int y, int x, int length)
 {
+   // blendType = BlendTransformedBilinear or BlendTransformedBilinearTiled
    int image_width = data->texture.width;
    int image_height = data->texture.height;
 
@@ -2365,18 +2366,20 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
             int idisty = 256 - disty;
             int x = fx >> 16;
 
-            // The idea is first to do the interpolation between the row s1 and the row s2
+            // first do the interpolation between the row s1 and the row s2
             // into an intermediate buffer, then we interpolate between two pixel of this buffer.
 
             // intermediate_buffer[0] is a buffer of red-blue component of the pixel, in the form 0x00RR00BB
             // intermediate_buffer[1] is the alpha-green component of the pixel, in the form 0x00AA00GG
             // +1 for the last pixel to interpolate with, and +1 for rounding errors.
             quint32 intermediate_buffer[2][buffer_size + 2];
-            // count is the size used in the intermediate_buffer.
+
+            // count is the size used in the intermediate_buffer
             int count = (qint64(length) * fdx + fixed_scale - 1) / fixed_scale + 2;
-            Q_ASSERT(count <= buffer_size + 2); //length is supposed to be <= buffer_size and data->m11 < 1 in this case
             int f = 0;
             int lim = count;
+            // length is supposed to be <= buffer_size and data->m11 < 1 in this case
+            Q_ASSERT(count <= buffer_size + 2);
             if constexpr (blendType == BlendTransformedBilinearTiled) {
                x %= image_width;
                if (x < 0) {
@@ -2497,7 +2500,8 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
                b++;
                fx += fdx;
             }
-         } else if ((fdx < 0 && fdx > -(fixed_scale / 8)) || std::abs(data->m22) < (1. / 8.)) { // scale up more than 8x
+         } else if ((fdx < 0 && fdx > -(fixed_scale / 8)) || std::abs(data->m22) < (1. / 8.)) {
+            // scale up more than 8x
             int y1 = (fy >> 16);
             int y2;
             fetchTransformedBilinear_pixelBounds<blendType>(image_height, image_y1, image_y2, y1, y2);
@@ -2518,7 +2522,8 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
                fx += fdx;
                ++b;
             }
-         } else { //scale down
+         } else {
+            // scale down
             int y1 = (fy >> 16);
             int y2;
             fetchTransformedBilinear_pixelBounds<blendType>(image_height, image_y1, image_y2, y1, y2);
@@ -2653,9 +2658,10 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
                ++b;
             }
          }
-      } else { //rotation
+      } else {
+         //rotation
          if (std::abs(data->m11) > 8 || std::abs(data->m22) > 8) {
-            //if we are zooming more than 8 times, we use 8bit precision for the position.
+            // if we are zooming more than 8 times, we use 8bit precision for the position.
             while (b < end) {
                int x1 = (fx >> 16);
                int x2;
@@ -2849,8 +2855,8 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
          fx += fdx;
          fy += fdy;
          fw += fdw;
-         //force increment to avoid /0
          if (!fw) {
+         // force increment to avoid /0
             fw += fdw;
          }
          ++b;
@@ -2860,11 +2866,11 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
    return buffer;
 }
 
-// blendType = BlendTransformedBilinear or BlendTransformedBilinearTiled
 template <TextureBlendType blendType>
 static const uint *fetchTransformedBilinear(uint *buffer, const Operator *,
    const QSpanData *data, int y, int x, int length)
 {
+   // blendType = BlendTransformedBilinear or BlendTransformedBilinearTiled
    const QPixelLayout *layout = &qPixelLayouts[data->texture.format];
    const QRgb *clut = data->texture.colorTable ? data->texture.colorTable->constData() : nullptr;
 
@@ -3023,7 +3029,8 @@ static const uint *fetchTransformedBilinear(uint *buffer, const Operator *,
                layout->convertToARGB32PM(buf1, buf1, len * 2, layout, clut);
                layout->convertToARGB32PM(buf2, buf2, len * 2, layout, clut);
 
-               if ((fdx < 0 && fdx > -(fixed_scale / 8)) || std::abs(data->m22) < (1. / 8.)) { // scale up more than 8x
+               if ((fdx < 0 && fdx > -(fixed_scale / 8)) || std::abs(data->m22) < (1. / 8.)) {
+                  // scale up more than 8x
                   int disty = (fy & 0x0000ffff) >> 8;
                   for (int i = 0; i < len; ++i) {
                      uint tl = buf1[i * 2 + 0];
@@ -3034,7 +3041,8 @@ static const uint *fetchTransformedBilinear(uint *buffer, const Operator *,
                      b[i] = interpolate_4_pixels(tl, tr, bl, br, distx, disty);
                      fracX += fdx;
                   }
-               } else { //scale down
+               } else {
+                  // scale down
                   int disty = (fy & 0x0000ffff) >> 12;
                   for (int i = 0; i < len; ++i) {
                      uint tl = buf1[i * 2 + 0];
@@ -3050,7 +3058,8 @@ static const uint *fetchTransformedBilinear(uint *buffer, const Operator *,
                b += len;
             }
          }
-      } else { //rotation
+      } else {
+         //rotation
          FetchPixelFunc fetch = qFetchPixel[layout->bpp];
          uint buf1[buffer_size];
          uint buf2[buffer_size];

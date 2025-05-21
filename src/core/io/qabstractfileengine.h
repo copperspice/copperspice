@@ -42,7 +42,8 @@ class Q_CORE_EXPORT QAbstractFileEngine
 {
  public:
    enum FileFlag {
-      //perms (overlaps the QFile::Permission)
+      //  overlaps the QFileDevice::Permission
+
       ReadOwnerPerm = 0x4000, WriteOwnerPerm = 0x2000, ExeOwnerPerm = 0x1000,
       ReadUserPerm  = 0x0400, WriteUserPerm  = 0x0200, ExeUserPerm  = 0x0100,
       ReadGroupPerm = 0x0040, WriteGroupPerm = 0x0020, ExeGroupPerm = 0x0010,

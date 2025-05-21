@@ -394,7 +394,7 @@ void QRasterPaintEngine::updateMatrix(const QTransform &matrix)
 {
    QRasterPaintEngineState *s = state();
 
-   // FALCON: get rid of this line, see drawImage call below.
+   // remove this line, see drawImage call below
    s->matrix = matrix;
    QTransform::TransformationType txop = s->matrix.type();
 
@@ -416,7 +416,7 @@ void QRasterPaintEngine::updateMatrix(const QTransform &matrix)
             && qreal(int(s->matrix.m22())) == s->matrix.m22();
          break;
 
-      default: // shear / perspective...
+      default: // shear / perspective
          s->flags.int_xform = false;
          break;
    }
@@ -737,7 +737,7 @@ void QRasterPaintEnginePrivate::drawImage(const QPointF &pt, const QImage &img, 
       return;
    }
 
-   // adapt the y paremeters...
+   // adapt the y paremeters
    int cy1 = clip.y();
    int cy2 = clip.y() + clip.height();
    int y = qRound(pt.y());
@@ -959,8 +959,7 @@ bool QRasterPaintEngine::setClipRectInDeviceCoords(const QRect &r, Qt::ClipOpera
 
    if (op == Qt::ReplaceClip || s->clip == nullptr) {
 
-      // No current clip, hence we intersect with sysclip and be
-      // done with it...
+      // No current clip, hence we intersect with sysclip and be done with it
       QRegion clipRegion = systemClip();
       QClipData *clip = new QClipData(d->rasterBuffer->height());
 
@@ -978,7 +977,8 @@ bool QRasterPaintEngine::setClipRectInDeviceCoords(const QRect &r, Qt::ClipOpera
       s->clip->enabled = true;
       s->flags.has_clip_ownership = true;
 
-   } else if (op == Qt::IntersectClip) { // intersect clip with current clip
+   } else if (op == Qt::IntersectClip) {
+      // intersect clip with current clip
       QClipData *base = s->clip;
 
       Q_ASSERT(base);

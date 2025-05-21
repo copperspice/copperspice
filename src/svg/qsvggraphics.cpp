@@ -373,7 +373,7 @@ void QSvgText::draw(QPainter *p, QSvgExtraStates &states)
    }
 
    if (states.svgFont) {
-      // SVG fonts not fully supported...
+      // SVG fonts not fully supported
       QString text = paragraphs.front();
       for (int i = 1; i < paragraphs.size(); ++i) {
          text.append(QLatin1Char('\n'));
@@ -423,8 +423,9 @@ void QSvgText::draw(QPainter *p, QSvgExtraStates &states)
             // Check if the current line fits into the bounding rectangle.
             if ((m_size.width() != 0 && line.naturalTextWidth() > scaledSize.width())
                   || (m_size.height() != 0 && y + line.height() > scaledSize.height())) {
-               // I need to set the bounds height to 'y-epsilon' to avoid drawing the current
-               // line. Since the font is scaled to 100 units, 1 should be a safe epsilon.
+
+               // Set the bounds height to 'y-epsilon' to avoid drawing the current line.
+               // Since the font is scaled to 100 units, 1 should be a safe epsilon.
                bounds.setHeight(y - 1);
                endOfBoundsReached = true;
                break;
