@@ -13,6 +13,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
    )
 
    list(APPEND WAYLAND_CLIENT_PRIVATE_INCLUDES
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_buffer_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_integration_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_popup_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_shellsurface_p.h
@@ -28,6 +29,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
 
    target_sources(CsWaylandClient
       PRIVATE
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_buffer.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_integration.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_shellsurface.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_toplevel.cpp
