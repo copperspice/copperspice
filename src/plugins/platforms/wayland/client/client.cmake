@@ -14,6 +14,9 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
 
    list(APPEND WAYLAND_CLIENT_PRIVATE_INCLUDES
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_integration_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_popup_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_shellsurface_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_toplevel_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_eventdispatcher_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_fontdatabase_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_services_p.h
@@ -26,6 +29,8 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
    target_sources(CsWaylandClient
       PRIVATE
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_integration.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_shellsurface.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_toplevel.cpp
 
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_eventdispatcher.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_services.cpp
