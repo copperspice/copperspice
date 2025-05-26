@@ -22,6 +22,13 @@ else()
 
 endif()
 
+if (HAVE_64BIT_IO)
+   target_compile_definitions(CsCore
+      PUBLIC
+      -DQT_LARGEFILE_SUPPORT
+   )
+endif()
+
 target_include_directories(CsCore
    PUBLIC
    $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
