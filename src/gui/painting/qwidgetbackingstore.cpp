@@ -209,7 +209,7 @@ QRegion QWidgetBackingStore::dirtyRegion(QWidget *widget) const
          continue;
       }
 
-      r += w->d_func()->dirty.translated(w->mapTo(tlw, QPoint()));
+      r += w->d_func()->m_dirty.translated(w->mapTo(tlw, QPoint()));
    }
 
    // Append the region that needs flush.
@@ -227,9 +227,9 @@ QRegion QWidgetBackingStore::dirtyRegion(QWidget *widget) const
 
          QWidgetPrivate *wd = w->d_func();
 
-         Q_ASSERT(wd->needsFlush);
-         r += wd->needsFlush->translated(w->mapTo(tlw, QPoint()));
+         Q_ASSERT(wd->m_needsFlush);
 
+         r += wd->m_needsFlush->translated(w->mapTo(tlw, QPoint()));
       }
    }
 
@@ -364,12 +364,12 @@ void QWidgetBackingStore::markDirty(const QRegion &rgn, QWidget *widget, UpdateT
 #endif
 
    if (widget->d_func()->paintOnScreen()) {
-      if (widget->d_func()->dirty.isEmpty()) {
-         widget->d_func()->dirty = rgn;
+      if (widget->d_func()->m_dirty.isEmpty()) {
+         widget->d_func()->m_dirty = rgn;
          sendUpdateRequest(widget, updateTime);
          return;
 
-      } else if (qt_region_strictContains(widget->d_func()->dirty, widget->rect())) {
+      } else if (qt_region_strictContains(widget->d_func()->m_dirty, widget->rect())) {
          if (updateTime == UpdateNow) {
             sendUpdateRequest(widget, updateTime);
          }
@@ -379,8 +379,8 @@ void QWidgetBackingStore::markDirty(const QRegion &rgn, QWidget *widget, UpdateT
          return;
       }
 
-      const bool eventAlreadyPosted = !widget->d_func()->dirty.isEmpty();
-      widget->d_func()->dirty += rgn;
+      const bool eventAlreadyPosted = ! widget->d_func()->m_dirty.isEmpty();
+      widget->d_func()->m_dirty += rgn;
 
       if (! eventAlreadyPosted || updateTime == UpdateNow) {
          sendUpdateRequest(widget, updateTime);
@@ -448,13 +448,14 @@ void QWidgetBackingStore::markDirty(const QRegion &rgn, QWidget *widget, UpdateT
    }
 
    if (widget->d_func()->inDirtyList) {
-      if (!qt_region_strictContains(widget->d_func()->dirty, widgetRect)) {
+      if (! qt_region_strictContains(widget->d_func()->m_dirty, widgetRect)) {
+
 #ifndef QT_NO_GRAPHICSEFFECT
          if (widget->d_func()->graphicsEffect) {
-            widget->d_func()->dirty += widget->d_func()->effectiveRectFor(rgn.boundingRect());
+            widget->d_func()->m_dirty += widget->d_func()->effectiveRectFor(rgn.boundingRect());
          } else
 #endif
-            widget->d_func()->dirty += rgn;
+            widget->d_func()->m_dirty += rgn;
       }
 
    } else {
@@ -481,11 +482,12 @@ void QWidgetBackingStore::markDirty(const QRect &rect, QWidget *widget,
 #endif
 
    if (widget->d_func()->paintOnScreen()) {
-      if (widget->d_func()->dirty.isEmpty()) {
-         widget->d_func()->dirty = QRegion(rect);
+      if (widget->d_func()->m_dirty.isEmpty()) {
+         widget->d_func()->m_dirty = QRegion(rect);
          sendUpdateRequest(widget, updateTime);
          return;
-      } else if (qt_region_strictContains(widget->d_func()->dirty, rect)) {
+
+      } else if (qt_region_strictContains(widget->d_func()->m_dirty, rect)) {
          if (updateTime == UpdateNow) {
             sendUpdateRequest(widget, updateTime);
          }
@@ -495,8 +497,9 @@ void QWidgetBackingStore::markDirty(const QRect &rect, QWidget *widget,
          return;
       }
 
-      const bool eventAlreadyPosted = !widget->d_func()->dirty.isEmpty();
-      widget->d_func()->dirty += rect;
+      const bool eventAlreadyPosted = ! widget->d_func()->m_dirty.isEmpty();
+      widget->d_func()->m_dirty += rect;
+
       if (!eventAlreadyPosted || updateTime == UpdateNow) {
          sendUpdateRequest(widget, updateTime);
       }
@@ -560,8 +563,8 @@ void QWidgetBackingStore::markDirty(const QRect &rect, QWidget *widget,
    }
 
    if (widget->d_func()->inDirtyList) {
-      if (!qt_region_strictContains(widget->d_func()->dirty, widgetRect)) {
-         widget->d_func()->dirty += widgetRect;
+      if (! qt_region_strictContains(widget->d_func()->m_dirty, widgetRect)) {
+         widget->d_func()->m_dirty += widgetRect;
       }
 
    } else {
@@ -603,12 +606,12 @@ void QWidgetBackingStore::markDirtyOnScreen(const QRegion &region, QWidget *widg
       // Alien widgets with native parent != tlw.
       QWidgetPrivate *nativeParentPrivate = nativeParent->d_func();
 
-      if (!nativeParentPrivate->needsFlush) {
-         nativeParentPrivate->needsFlush = new QRegion;
+      if (! nativeParentPrivate->m_needsFlush) {
+         nativeParentPrivate->m_needsFlush = new QRegion;
       }
 
       const QPoint nativeParentOffset = widget->mapTo(nativeParent, QPoint());
-      *nativeParentPrivate->needsFlush += region.translated(nativeParentOffset);
+      *nativeParentPrivate->m_needsFlush += region.translated(nativeParentOffset);
       appendDirtyOnScreenWidget(nativeParent);
 
       return;
@@ -616,10 +619,12 @@ void QWidgetBackingStore::markDirtyOnScreen(const QRegion &region, QWidget *widg
 
    // Native child widgets.
    QWidgetPrivate *widgetPrivate = widget->d_func();
-   if (!widgetPrivate->needsFlush) {
-      widgetPrivate->needsFlush = new QRegion;
+
+   if (! widgetPrivate->m_needsFlush) {
+      widgetPrivate->m_needsFlush = new QRegion;
    }
-   *widgetPrivate->needsFlush += region;
+
+   *widgetPrivate->m_needsFlush += region;
    appendDirtyOnScreenWidget(widget);
 }
 
@@ -839,13 +844,14 @@ void QWidgetPrivate::scrollRect(const QRect &rect, int dx, int dy)
 
       if (inDirtyList) {
          if (rect == q->rect()) {
-            dirty.translate(dx, dy);
+            m_dirty.translate(dx, dy);
          } else {
-            QRegion dirtyScrollRegion = dirty.intersected(scrollRect);
-            if (!dirtyScrollRegion.isEmpty()) {
-               dirty -= dirtyScrollRegion;
+            QRegion dirtyScrollRegion = m_dirty.intersected(scrollRect);
+
+            if (! dirtyScrollRegion.isEmpty()) {
+               m_dirty -= dirtyScrollRegion;
                dirtyScrollRegion.translate(dx, dy);
-               dirty += dirtyScrollRegion;
+               m_dirty += dirtyScrollRegion;
             }
          }
       }
@@ -1183,38 +1189,38 @@ void QWidgetBackingStore::doSync()
       }
 
       // Clip with mask() and clipRect().
-      wd->dirty &= wd->clipRect();
-      wd->clipToEffectiveMask(wd->dirty);
+      wd->m_dirty &= wd->clipRect();
+      wd->clipToEffectiveMask(wd->m_dirty);
 
       // Subtract opaque siblings and children.
       bool hasDirtySiblingsAbove = false;
 
       // We know for sure that the widget is not overlapped if 'isMoved' is true.
       if (! wd->isMoved) {
-         wd->subtractOpaqueSiblings(wd->dirty, &hasDirtySiblingsAbove);
+         wd->subtractOpaqueSiblings(wd->m_dirty, &hasDirtySiblingsAbove);
       }
 
       // Make a copy of the widget's dirty region, to restore it in case there is an opaque
       // render-to-texture child that completely covers the widget, because otherwise the
       // render-to-texture child won't be visible, due to its parent widget not being redrawn
       // with a proper blending mask.
-      const QRegion dirtyBeforeSubtractedOpaqueChildren = wd->dirty;
+      const QRegion dirtyBeforeSubtractedOpaqueChildren = wd->m_dirty;
 
       // Scrolled and moved widgets must draw all children.
       if (! wd->isScrolled && !wd->isMoved) {
-         wd->subtractOpaqueChildren(wd->dirty, w->rect());
+         wd->subtractOpaqueChildren(wd->m_dirty, w->rect());
       }
 
-      if (wd->dirty.isEmpty() && wd->textureChildSeen) {
-         wd->dirty = dirtyBeforeSubtractedOpaqueChildren;
+      if (wd->m_dirty.isEmpty() && wd->textureChildSeen) {
+         wd->m_dirty = dirtyBeforeSubtractedOpaqueChildren;
       }
 
-      if (wd->dirty.isEmpty()) {
+      if (wd->m_dirty.isEmpty()) {
          resetWidget(w);
          continue;
       }
 
-      const QRegion widgetDirty(w != tlw ? wd->dirty.translated(w->mapTo(tlw, QPoint())) : wd->dirty);
+      const QRegion widgetDirty(w != tlw ? wd->m_dirty.translated(w->mapTo(tlw, QPoint())) : wd->m_dirty);
       toClean += widgetDirty;
 
 #ifndef QT_NO_GRAPHICSVIEW
@@ -1279,8 +1285,9 @@ void QWidgetBackingStore::doSync()
                }
 
                QWidgetPrivate *wPrivate = w->d_func();
-               if (!wPrivate->needsFlush) {
-                  wPrivate->needsFlush = new QRegion;
+
+               if (! wPrivate->m_needsFlush) {
+                  wPrivate->m_needsFlush = new QRegion;
                }
                appendDirtyOnScreenWidget(w);
             }
@@ -1368,7 +1375,7 @@ void QWidgetBackingStore::doSync()
          flags |= QWidgetPrivate::DrawAsRoot;
       }
 
-      QRegion toBePainted(wd->dirty);
+      QRegion toBePainted(wd->m_dirty);
       resetWidget(w);
 
       QPoint offset(tlwOffset);
@@ -1423,11 +1430,12 @@ void QWidgetBackingStore::flush(QWidget *widget)
    for (int i = 0; i < dirtyOnScreenWidgets->size(); ++i) {
       QWidget *w = dirtyOnScreenWidgets->at(i);
       QWidgetPrivate *wd = w->d_func();
-      Q_ASSERT(wd->needsFlush);
+
+      Q_ASSERT(wd->m_needsFlush);
 
       QPlatformTextureList *widgetTexturesForNative = wd->textureChildSeen ? widgetTexturesFor(tlw, w) : nullptr;
-      qt_flush(w, *wd->needsFlush, store, tlw, tlwOffset, widgetTexturesForNative, this);
-      *wd->needsFlush = QRegion();
+      qt_flush(w, *wd->m_needsFlush, store, tlw, tlwOffset, widgetTexturesForNative, this);
+      *wd->m_needsFlush = QRegion();
    }
 
    dirtyOnScreenWidgets->clear();

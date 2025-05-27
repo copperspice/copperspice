@@ -147,7 +147,7 @@ void QWidgetBackingStoreTracker::unregisterWidgetSubtree(QWidget *widget)
 
 QWidgetPrivate::QWidgetPrivate()
    : extra(nullptr), focus_next(nullptr), focus_prev(nullptr), focus_child(nullptr),
-     m_widgetLayout(nullptr), needsFlush(nullptr), redirectDev(nullptr), m_widgetItem2(nullptr),
+     m_widgetLayout(nullptr), m_needsFlush(nullptr), redirectDev(nullptr), m_widgetItem2(nullptr),
      extraPaintEngine(nullptr), polished(nullptr), graphicsEffect(nullptr),
 
 #if ! defined(QT_NO_IM)
@@ -1019,8 +1019,8 @@ QWidget::~QWidget()
       }
    }
 
-   delete d->needsFlush;
-   d->needsFlush = nullptr;
+   delete d->m_needsFlush;
+   d->m_needsFlush = nullptr;
 
    // used by declarative library
    CSAbstractDeclarativeData *tmp_Data = CSInternalDeclarativeData::get_m_declarativeData(this);
@@ -1322,8 +1322,8 @@ bool QWidgetPrivate::isOverlapped(const QRect &rect) const
 void QWidgetPrivate::syncBackingStore()
 {
    if (paintOnScreen()) {
-      repaint_sys(dirty);
-      dirty = QRegion();
+      repaint_sys(m_dirty);
+      m_dirty = QRegion();
    } else if (QWidgetBackingStore *bs = maybeBackingStore()) {
       bs->sync();
    }
@@ -8291,8 +8291,8 @@ void QWidget::scroll(int dx, int dy)
       // until we can connect item updates directly to the view, we must
       // separately add a translated dirty region.
 
-      if (!d->dirty.isEmpty()) {
-         for (const QRect &rect : (d->dirty.translated(dx, dy)).rects()) {
+      if (! d->m_dirty.isEmpty()) {
+         for (const QRect &rect : (d->m_dirty.translated(dx, dy)).rects()) {
             proxy->update(rect);
          }
       }
@@ -8335,8 +8335,8 @@ void QWidget::scroll(int dx, int dy, const QRect &r)
       // Graphics View maintains its own dirty region as a list of rects;
       // until we can connect item updates directly to the view, we must
       // separately add a translated dirty region.
-      if (! d->dirty.isEmpty()) {
-         for (const QRect &rect : (d->dirty.translated(dx, dy) & r).rects()) {
+      if (! d->m_dirty.isEmpty()) {
+         for (const QRect &rect : (d->m_dirty.translated(dx, dy) & r).rects()) {
             proxy->update(rect);
          }
       }

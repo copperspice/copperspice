@@ -634,7 +634,7 @@ class Q_GUI_EXPORT QWidgetPrivate
    QWidget *focus_prev;
    QWidget *focus_child;
    QLayout *m_widgetLayout;
-   QRegion *needsFlush;
+   QRegion *m_needsFlush;
 
    QPaintDevice *redirectDev;
    QWidgetItemV2 *m_widgetItem2;
@@ -656,7 +656,7 @@ class Q_GUI_EXPORT QWidgetPrivate
 #endif
 
    QRegion opaqueChildren;
-   QRegion dirty;
+   QRegion m_dirty;
 
 #ifndef QT_NO_TOOLTIP
    QString toolTip;

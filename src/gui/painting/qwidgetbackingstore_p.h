@@ -160,12 +160,12 @@ class QWidgetBackingStore
 
 #ifndef QT_NO_GRAPHICSEFFECT
          if (widgetPrivate->graphicsEffect) {
-            widgetPrivate->dirty = widgetPrivate->effectiveRectFor(rgn.boundingRect());
+            widgetPrivate->m_dirty = widgetPrivate->effectiveRectFor(rgn.boundingRect());
 
          } else
 #endif
          {
-            widgetPrivate->dirty = rgn;
+            widgetPrivate->m_dirty = rgn;
             dirtyWidgets.append(widget);
             widgetPrivate->inDirtyList = true;
          }
@@ -268,7 +268,7 @@ class QWidgetBackingStore
          widget->d_func()->inDirtyList = false;
          widget->d_func()->isScrolled = false;
          widget->d_func()->isMoved = false;
-         widget->d_func()->dirty = QRegion();
+         widget->d_func()->m_dirty     = QRegion();
       }
    }
 
