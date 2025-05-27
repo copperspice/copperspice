@@ -292,10 +292,12 @@ inline QDateTime QFileSystemMetaData::creationTime() const
 {
    return QDateTime::fromTime_t(creationTime_);
 }
+
 inline QDateTime QFileSystemMetaData::modificationTime() const
 {
    return QDateTime::fromTime_t(modificationTime_);
 }
+
 inline QDateTime QFileSystemMetaData::accessTime() const
 {
    return QDateTime::fromTime_t(accessTime_);
@@ -305,6 +307,7 @@ inline uint QFileSystemMetaData::userId() const
 {
    return userId_;
 }
+
 inline uint QFileSystemMetaData::groupId() const
 {
    return groupId_;

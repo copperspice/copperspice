@@ -359,6 +359,7 @@ void QBlitterPaintEnginePrivate::fillRect(const QRectF &rect, const QColor &colo
    if (clipData) {
       if (clipData->hasRectClip) {
          unlock();
+
          if (alpha) {
             pmData->blittable()->alphaFillRect(targetRect & clipData->clipRect, color, q->state()->compositionMode());
          } else {
@@ -373,6 +374,7 @@ void QBlitterPaintEnginePrivate::fillRect(const QRectF &rect, const QColor &colo
 
             if (! intersectRect.isEmpty()) {
                unlock();
+
                if (alpha) {
                   pmData->blittable()->alphaFillRect(intersectRect, color, q->state()->compositionMode());
                } else {
@@ -397,6 +399,7 @@ void QBlitterPaintEnginePrivate::fillRect(const QRectF &rect, const QColor &colo
       } else {
          QRectF deviceRect(0, 0, q->paintDevice()->width(), q->paintDevice()->height());
          unlock();
+
          if (alpha) {
             pmData->blittable()->alphaFillRect(deviceRect & targetRect, color, q->state()->compositionMode());
          } else {
@@ -410,6 +413,7 @@ void QBlitterPaintEnginePrivate::clipAndDrawPixmap(const QRectF &clip, const QRe
    const QRectF &sr, bool opacity)
 {
    Q_Q(QBlitterPaintEngine);
+
    QRectF intersectedRect = clip.intersected(target);
 
    if (intersectedRect.isEmpty()) {
@@ -417,6 +421,7 @@ void QBlitterPaintEnginePrivate::clipAndDrawPixmap(const QRectF &clip, const QRe
    }
 
    QRectF source = sr;
+
    if (intersectedRect.size() != target.size()) {
       if (sr.size() == target.size()) {
          // no resize

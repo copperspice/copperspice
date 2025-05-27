@@ -47,13 +47,16 @@
 static void qt_split_namespace(QString &prefix, QString &name, const QString &qName, bool hasURI)
 {
    int i = qName.indexOf(QChar(':'));
+
    if (i == -1) {
       if (hasURI) {
          prefix = QString("");
       } else {
          prefix.clear();
       }
+
       name = qName;
+
    } else {
       prefix = qName.left(i);
       name   = qName.mid(i + 1);
@@ -181,6 +184,7 @@ class QDomNodePrivate
    QString value;
    QString m_prefix;             // set this only for ElementNode and AttributeNode
    QString namespaceURI;         // set this only for ElementNode and AttributeNode
+
    bool createdWithDom1Interface : 1;
    bool hasParent                : 1;
 
@@ -683,6 +687,7 @@ static QString fixedXmlName(const QString &_name, bool *ok, bool namespaces = fa
 {
    QString name;
    QString prefix;
+
    if (namespaces) {
       qt_split_namespace(prefix, name, _name, true);
    } else {
@@ -703,6 +708,7 @@ static QString fixedXmlName(const QString &_name, bool *ok, bool namespaces = fa
    bool firstChar = true;
    for (int i = 0; i < name.size(); ++i) {
       QChar c = name.at(i);
+
       if (firstChar) {
          if (QXmlUtils::isLetter(c) || c.unicode() == '_' || c.unicode() == ':') {
             result.append(c);
@@ -711,6 +717,7 @@ static QString fixedXmlName(const QString &_name, bool *ok, bool namespaces = fa
             *ok = false;
             return QString();
          }
+
       } else {
          if (QXmlUtils::isNameChar(c)) {
             result.append(c);
@@ -731,6 +738,7 @@ static QString fixedXmlName(const QString &_name, bool *ok, bool namespaces = fa
    if (namespaces && ! prefix.isEmpty()) {
       return prefix + QChar(':') + result;
    }
+
    return result;
 }
 
@@ -745,8 +753,10 @@ static QString fixedCharData(const QString &data, bool *ok)
    }
 
    QString result;
+
    for (int i = 0; i < data.size(); ++i) {
       QChar c = data.at(i);
+
       if (QXmlUtils::isChar(c)) {
          result.append(c);
       } else if (QDomImplementationPrivate::invalidDataPolicy == QDomImplementation::ReturnNullNode) {
@@ -779,14 +789,17 @@ static QString fixedComment(const QString &data, bool *ok)
       if (idx == -1) {
          break;
       }
+
       if (QDomImplementationPrivate::invalidDataPolicy == QDomImplementation::ReturnNullNode) {
          *ok = false;
          return QString();
       }
+
       fixedData.remove(idx, 2);
    }
 
    *ok = true;
+
    return fixedData;
 }
 
@@ -810,14 +823,17 @@ static QString fixedCDataSection(const QString &data, bool *ok)
       if (idx == -1) {
          break;
       }
+
       if (QDomImplementationPrivate::invalidDataPolicy == QDomImplementation::ReturnNullNode) {
          *ok = false;
          return QString();
       }
+
       fixedData.remove(idx, 3);
    }
 
    *ok = true;
+
    return fixedData;
 }
 
@@ -972,7 +988,9 @@ bool QDomImplementation::hasFeature(const QString &feature, const QString &versi
          return true;
       }
    }
+
    // ### add DOM level 2 features
+
    return false;
 }
 
@@ -1257,6 +1275,7 @@ int QDomNodeList::length() const
    if (!impl) {
       return 0;
    }
+
    return impl->length();
 }
 
@@ -1300,6 +1319,7 @@ QDomNodePrivate::QDomNodePrivate(QDomNodePrivate *n, bool deep)
    name   = n->name;
    value  = n->value;
    m_prefix = n->m_prefix;
+
    namespaceURI = n->namespaceURI;
    createdWithDom1Interface = n->createdWithDom1Interface;
 
@@ -1900,6 +1920,7 @@ QString QDomNode::nodeValue() const
    if (! impl) {
       return QString();
    }
+
    return IMPL->value;
 }
 
@@ -1908,6 +1929,7 @@ void QDomNode::setNodeValue(const QString &v)
    if (! impl) {
       return;
    }
+
    IMPL->setNodeValue(v);
 }
 
@@ -1916,6 +1938,7 @@ QDomNode::NodeType QDomNode::nodeType() const
    if (! impl) {
       return QDomNode::BaseNode;
    }
+
    return IMPL->nodeType();
 }
 
@@ -1924,6 +1947,7 @@ QDomNode QDomNode::parentNode() const
    if (! impl) {
       return QDomNode();
    }
+
    return QDomNode(IMPL->parent());
 }
 
@@ -1932,6 +1956,7 @@ QDomNodeList QDomNode::childNodes() const
    if (! impl) {
       return QDomNodeList();
    }
+
    return QDomNodeList(new QDomNodeListPrivate(impl));
 }
 
@@ -1940,6 +1965,7 @@ QDomNode QDomNode::firstChild() const
    if (! impl) {
       return QDomNode();
    }
+
    return QDomNode(IMPL->first);
 }
 
@@ -1948,6 +1974,7 @@ QDomNode QDomNode::lastChild() const
    if (! impl) {
       return QDomNode();
    }
+
    return QDomNode(IMPL->last);
 }
 
@@ -1956,6 +1983,7 @@ QDomNode QDomNode::previousSibling() const
    if (! impl) {
       return QDomNode();
    }
+
    return QDomNode(IMPL->prev);
 }
 
@@ -1964,6 +1992,7 @@ QDomNode QDomNode::nextSibling() const
    if (! impl) {
       return QDomNode();
    }
+
    return QDomNode(IMPL->next);
 }
 
@@ -1981,6 +2010,7 @@ QDomDocument QDomNode::ownerDocument() const
    if (! impl) {
       return QDomDocument();
    }
+
    return QDomDocument(IMPL->ownerDocument());
 }
 
@@ -2011,6 +2041,7 @@ QString QDomNode::namespaceURI() const
    if (! impl) {
       return QString();
    }
+
    return IMPL->namespaceURI;
 }
 
@@ -2019,6 +2050,7 @@ QString QDomNode::prefix() const
    if (! impl) {
       return QString();
    }
+
    return IMPL->m_prefix;
 }
 
@@ -2027,6 +2059,7 @@ void QDomNode::setPrefix(const QString &pre)
    if (! impl || IMPL->m_prefix.isEmpty()) {
       return;
    }
+
    if (isAttr() || isElement()) {
       IMPL->m_prefix = pre;
    }
@@ -2037,6 +2070,7 @@ QString QDomNode::localName() const
    if (! impl || IMPL->createdWithDom1Interface) {
       return QString();
    }
+
    return IMPL->name;
 }
 
@@ -2880,8 +2914,10 @@ QDomDocumentFragmentPrivate::QDomDocumentFragmentPrivate(QDomNodePrivate *n, boo
 QDomNodePrivate *QDomDocumentFragmentPrivate::cloneNode(bool deep)
 {
    QDomNodePrivate *p = new QDomDocumentFragmentPrivate(this, deep);
+
    // We are not interested in this node
    p->ref.deref();
+
    return p;
 }
 
@@ -3040,6 +3076,7 @@ QDomNode::NodeType QDomCharacterData::nodeType() const
    if (!impl) {
       return CharacterDataNode;
    }
+
    return QDomNode::nodeType();
 }
 
@@ -3056,6 +3093,7 @@ QDomAttrPrivate::QDomAttrPrivate(QDomDocumentPrivate *d, QDomNodePrivate *p, con
    : QDomNodePrivate(d, p)
 {
    qt_split_namespace(m_prefix, name, qName, ! nsURI.isEmpty());
+
    namespaceURI = nsURI;
    createdWithDom1Interface = false;
    m_specified = false;
@@ -3115,18 +3153,22 @@ static QString encodeText(const QString &str, QTextStream &s, const bool encodeQ
          retval.replace(i, 1, "&lt;");
          len += 3;
          i   += 4;
+
       } else if (encodeQuotes && (ati == QChar('"'))) {
          retval.replace(i, 1, "&quot;");
          len += 5;
          i   += 6;
+
       } else if (ati == QChar('&')) {
          retval.replace(i, 1, "&amp;");
          len += 4;
          i   += 5;
+
       } else if (ati == QChar('>') && i >= 2 && retval[i - 1] == QChar(']') && retval[i - 2] == QChar(']')) {
          retval.replace(i, 1, "&gt;");
          len += 3;
          i   += 4;
+
       } else if (performAVN && (ati == QChar(0xA) || ati == QChar(0xD) || ati == QChar(0x9))) {
 
          const QString replacement("&#x" + QString::number(ati.unicode(), 16) + QChar(';'));
@@ -3139,7 +3181,9 @@ static QString encodeText(const QString &str, QTextStream &s, const bool encodeQ
          retval.replace(i, 1, "&#xd;");    // Replace a single 0xD with a ref for 0xD
          len += 4;
          i += 5;
+
       } else {
+
 #ifndef QT_NO_TEXTCODEC
          if (codec->canEncode(ati)) {
             ++i;
@@ -3261,6 +3305,7 @@ QDomElementPrivate::QDomElementPrivate(QDomDocumentPrivate *d, QDomNodePrivate *
    : QDomNodePrivate(d, p)
 {
    qt_split_namespace(m_prefix, name, qName, ! nsURI.isEmpty());
+
    namespaceURI = nsURI;
    createdWithDom1Interface = false;
    m_attr = new QDomNamedNodeMapPrivate(this);
@@ -3330,7 +3375,9 @@ void QDomElementPrivate::setAttributeNS(const QString &nsURI, const QString &qNa
 {
    QString prefix;
    QString localName;
+
    qt_split_namespace(prefix, localName, qName, true);
+
    QDomNodePrivate *n = m_attr->namedItemNS(nsURI, localName);
 
    if (! n) {
@@ -3341,6 +3388,7 @@ void QDomElementPrivate::setAttributeNS(const QString &nsURI, const QString &qNa
       // to 0 here. This is ok since we created the QDomAttrPrivate.
       n->ref.deref();
       m_attr->setNamedItem(n);
+
    } else {
       n->setNodeValue(newValue);
       n->m_prefix = prefix;
@@ -3411,12 +3459,14 @@ QString QDomElementPrivate::text()
    QString retval;
 
    QDomNodePrivate *p = first;
+
    while (p) {
       if (p->isText() || p->isCDATASection()) {
          retval += p->nodeValue();
       } else if (p->isElement()) {
          retval += ((QDomElementPrivate *)p)->text();
       }
+
       p = p->next;
    }
 
@@ -3504,9 +3554,11 @@ void QDomElementPrivate::save(QTextStream &s, int depth, int indent) const
       }
 
       s << "</" << qName << '>';
+
    } else {
       s << "/>";
    }
+
    if (!(next && next->isText())) {
       /* -1 disables new lines. */
       if (indent != -1) {
@@ -3909,6 +3961,7 @@ QDomNodePrivate *QDomCDATASectionPrivate::cloneNode(bool deep)
 
    // not interested in this node
    p->ref.deref();
+
    return p;
 }
 
@@ -4334,6 +4387,7 @@ bool QDomDocumentPrivate::setContent(QXmlInputSource *source, bool namespaceProc
 {
    QXmlSimpleReader reader;
    initializeReader(reader, namespaceProcessing);
+
    return setContent(source, &reader, errorMsg, errorLine, errorColumn);
 }
 
@@ -4632,8 +4686,8 @@ void QDomDocumentPrivate::saveDocument(QTextStream &s, const int indent, QDomNod
       if (codec) {
          s.setCodec(codec);
       }
-
 #endif
+
       bool doc = false;
 
       while (node != nullptr) {
@@ -4646,6 +4700,7 @@ void QDomDocumentPrivate::saveDocument(QTextStream &s, const int indent, QDomNod
          node->save(s, 0, indent);
          node = node->next;
       }
+
    } else {
 
       // write out the XML declaration.
@@ -5061,6 +5116,7 @@ bool QDomHandler::startDTD(const QString &name, const QString &publicId, const Q
    doc->doctype()->name = name;
    doc->doctype()->publicId = publicId;
    doc->doctype()->systemId = systemId;
+
    return true;
 }
 
@@ -5068,6 +5124,7 @@ bool QDomHandler::startElement(const QString &nsURI, const QString &, const QStr
 {
    // tag name
    QDomNodePrivate *n;
+
    if (nsProcessing) {
       n = doc->createElementNS(nsURI, qName);
    } else {
@@ -5100,6 +5157,7 @@ bool QDomHandler::endElement(const QString &, const QString &, const QString &)
    if (! node || node == doc) {
       return false;
    }
+
    node = node->parent();
 
    return true;
@@ -5141,16 +5199,19 @@ bool QDomHandler::processingInstruction(const QString &target, const QString &da
 {
    QDomNodePrivate *n;
    n = doc->createProcessingInstruction(target, data);
+
    if (n) {
       n->setLocation(m_locator->lineNumber(), m_locator->columnNumber());
       node->appendChild(n);
       return true;
+
    } else {
       return false;
    }
 }
 
 extern bool qt_xml_skipped_entity_in_content;
+
 bool QDomHandler::skippedEntity(const QString &name)
 {
    // we can only handle inserting entity references into content
@@ -5161,6 +5222,7 @@ bool QDomHandler::skippedEntity(const QString &name)
    QDomNodePrivate *n = doc->createEntityReference(name);
    n->setLocation(m_locator->lineNumber(), m_locator->columnNumber());
    node->appendChild(n);
+
    return true;
 }
 
@@ -5169,6 +5231,7 @@ bool QDomHandler::fatalError(const QXmlParseException &exception)
    errorMsg    = exception.message();
    errorLine   = exception.lineNumber();
    errorColumn = exception.columnNumber();
+
    return QXmlDefaultHandler::fatalError(exception);
 }
 
@@ -5199,9 +5262,11 @@ bool QDomHandler::endEntity(const QString &)
 bool QDomHandler::comment(const QString &ch)
 {
    QDomNodePrivate *n;
+
    n = doc->createComment(ch);
    n->setLocation(m_locator->lineNumber(), m_locator->columnNumber());
    node->appendChild(n);
+
    return true;
 }
 

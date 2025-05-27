@@ -1777,9 +1777,12 @@ void QListModeViewBase::dragMoveEvent(QDragMoveEvent *event)
 
    // can not use indexAt, does not account for spacing
    QPoint p = event->pos();
+
    QRect rectX(p.x() + horizontalOffset(), p.y() + verticalOffset(), 1, 1);
    rectX.adjust(-dd->spacing(), -dd->spacing(), dd->spacing(), dd->spacing());
+
    const QVector<QModelIndex> intersectVector = dd->intersectingSet(rectX);
+
    QModelIndex index = intersectVector.count() > 0 ? intersectVector.last() : QModelIndex();
    dd->hover = index;
 
@@ -1788,6 +1791,7 @@ void QListModeViewBase::dragMoveEvent(QDragMoveEvent *event)
       if (index.isValid() && dd->showDropIndicator) {
          QRect rect = qq->visualRect(index);
          dd->dropIndicatorPosition = position(event->pos(), rect, index);
+
          // if spacing, should try to draw between items, not just next to item.
          switch (dd->dropIndicatorPosition) {
             case QAbstractItemView::AboveItem:
@@ -1798,6 +1802,7 @@ void QListModeViewBase::dragMoveEvent(QDragMoveEvent *event)
                   dd->dropIndicatorRect = QRect();
                }
                break;
+
             case QAbstractItemView::BelowItem:
                if (dd->isIndexDropEnabled(index.parent())) {
                   dd->dropIndicatorRect = QRect(rect.right() + dd->spacing(), rect.top(), 0, rect.height());
@@ -1806,6 +1811,7 @@ void QListModeViewBase::dragMoveEvent(QDragMoveEvent *event)
                   dd->dropIndicatorRect = QRect();
                }
                break;
+
             case QAbstractItemView::OnItem:
                if (dd->isIndexDropEnabled(index)) {
                   dd->dropIndicatorRect = rect;
@@ -1814,8 +1820,10 @@ void QListModeViewBase::dragMoveEvent(QDragMoveEvent *event)
                   dd->dropIndicatorRect = QRect();
                }
                break;
+
             case QAbstractItemView::OnViewport:
                dd->dropIndicatorRect = QRect();
+
                if (dd->isIndexDropEnabled(qq->rootIndex())) {
                   event->accept(); // allow dropping in empty areas
                }

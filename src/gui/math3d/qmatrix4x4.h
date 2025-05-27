@@ -269,6 +269,7 @@ QGenericMatrix<N, M, qreal> QMatrix4x4::toGenericMatrix() const
 
          } else if (matrixCol == matrixRow) {
             values[matrixCol * M + matrixRow] = 1.0f;
+
          } else {
             values[matrixCol * M + matrixRow] = 0.0f;
          }
@@ -661,6 +662,7 @@ inline QMatrix4x4 operator+(const QMatrix4x4 &m1, const QMatrix4x4 &m2)
    m.m_matrix4[3][3] = m1.m_matrix4[3][3] + m2.m_matrix4[3][3];
 
    m.flagBits = QMatrix4x4::General;
+
    return m;
 }
 
@@ -1031,7 +1033,6 @@ inline QPoint operator*(const QMatrix4x4 &matrix, const QPoint &point)
     }
 }
 
-
 inline QPointF operator*(const QMatrix4x4 &matrix, const QPointF &point)
 {
    qreal xin, yin;
@@ -1039,6 +1040,7 @@ inline QPointF operator*(const QMatrix4x4 &matrix, const QPointF &point)
 
    xin = point.x();
    yin = point.y();
+
    if (matrix.flagBits == QMatrix4x4::Identity) {
       return point;
 

@@ -770,11 +770,14 @@ QList<QNetworkCookie> QNetworkCookiePrivate::parseSetCookieHeaderLine(const QByt
                   QByteArray rawDomain = field.second;
                   if (!rawDomain.isEmpty()) {
                      QString maybeLeadingDot;
+
                      if (rawDomain.startsWith('.')) {
                         maybeLeadingDot = QChar('.');
                         rawDomain = rawDomain.mid(1);
                      }
+
                      QString normalizedDomain = QUrl::fromAce(QUrl::toAce(QString::fromUtf8(rawDomain)));
+
                      if (!normalizedDomain.isEmpty()) {
                         cookie.setDomain(maybeLeadingDot + normalizedDomain);
                      } else {
@@ -829,9 +832,11 @@ void QNetworkCookie::normalize(const QUrl &url)
    if (d->path.isEmpty()) {
       QString pathAndFileName = url.path();
       QString defaultPath = pathAndFileName.left(pathAndFileName.lastIndexOf(QChar('/')) + 1);
+
       if (defaultPath.isEmpty()) {
          defaultPath = QChar('/');
       }
+
       d->path = defaultPath;
    }
 
@@ -839,6 +844,7 @@ void QNetworkCookie::normalize(const QUrl &url)
       d->domain = url.host();
    } else {
       QHostAddress hostAddress(d->domain);
+
       if (hostAddress.protocol() != QAbstractSocket::IPv4Protocol
             && hostAddress.protocol() != QAbstractSocket::IPv6Protocol
             && ! d->domain.startsWith(QChar('.'))) {

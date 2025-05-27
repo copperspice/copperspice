@@ -2420,8 +2420,10 @@ QString QLocaleData::longLongToString(const QChar zero, const QChar group, const
    // add sign
    if (negative) {
       num_str.prepend(minus);
+
    } else if (flags & AlwaysShowSign) {
       num_str.prepend(plus);
+
    } else if (flags & BlankBeforePositive) {
       num_str.prepend(' ');
    }
@@ -2495,6 +2497,7 @@ QString QLocaleData::unsLongLongToString(const QChar zero, const QChar group, co
    // add sign
    if (flags & AlwaysShowSign) {
       num_str.prepend(plus);
+
    } else if (flags & BlankBeforePositive) {
       num_str.prepend(QChar(' '));
    }

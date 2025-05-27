@@ -3014,8 +3014,10 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
 {
    QRegionPrivate *region;
    EdgeTableEntry *pAET;            /* Active Edge Table       */
+
    int y;                           /* current scanline        */
    int iPts = 0;                    /* number of pts in buffer */
+
    EdgeTableEntry *pWETE;           /* Winding Edge Table Entry*/
    ScanLineList *pSLL;              /* current scanLineList    */
    QPoint *pts;                     /* output buffer           */
@@ -3027,9 +3029,11 @@ static QRegionPrivate *PolygonRegion(const QPoint *Pts, int Count, int rule)
 
    ScanLineListBlock SLLBlock;      /* header for scanlinelist */
    int fixWAET = false;
+
    POINTBLOCK FirstPtBlock, *curPtBlock; /* PtBlock buffers    */
    FirstPtBlock.pts = reinterpret_cast<QPoint *>(FirstPtBlock.data);
    POINTBLOCK *tmpPtBlock;
+
    int numFullPtBlocks = 0;
 
    ET.scanlines.next = nullptr;

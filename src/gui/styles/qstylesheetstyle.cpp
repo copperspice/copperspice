@@ -586,27 +586,38 @@ static QStyle::StandardPixmap subControlIcon(int pe)
    switch (pe) {
       case PseudoElement_MdiCloseButton:
          return QStyle::SP_TitleBarCloseButton;
+
       case PseudoElement_MdiMinButton:
          return QStyle::SP_TitleBarMinButton;
+
       case PseudoElement_MdiNormalButton:
          return QStyle::SP_TitleBarNormalButton;
+
       case PseudoElement_TitleBarCloseButton:
          return QStyle::SP_TitleBarCloseButton;
+
       case PseudoElement_TitleBarMinButton:
          return QStyle::SP_TitleBarMinButton;
+
       case PseudoElement_TitleBarMaxButton:
          return QStyle::SP_TitleBarMaxButton;
+
       case PseudoElement_TitleBarShadeButton:
          return QStyle::SP_TitleBarShadeButton;
+
       case PseudoElement_TitleBarUnshadeButton:
          return QStyle::SP_TitleBarUnshadeButton;
+
       case PseudoElement_TitleBarNormalButton:
          return QStyle::SP_TitleBarNormalButton;
+
       case PseudoElement_TitleBarContextHelpButton:
          return QStyle::SP_TitleBarContextHelpButton;
+
       default:
          break;
    }
+
    return QStyle::SP_CustomBase;
 }
 
@@ -1849,6 +1860,7 @@ QRenderRule QStyleSheetStyle::renderRule(const QObject *obj, const QStyleOption 
 
          case PseudoElement_ToolButtonDownArrow:
             state |= complex->state & QStyle::State_MouseOver;
+
             if (complex->state & QStyle::State_Sunken ||
                complex->activeSubControls & QStyle::SC_ToolButtonMenu) {
                state |= QStyle::State_Sunken;
@@ -1949,18 +1961,22 @@ QRenderRule QStyleSheetStyle::renderRule(const QObject *obj, const QStyleOption 
             case QTabBar::TriangularNorth:
                extraClass |= QCss::PseudoClass_Top;
                break;
+
             case QTabBar::RoundedSouth:
             case QTabBar::TriangularSouth:
                extraClass |= QCss::PseudoClass_Bottom;
                break;
+
             case QTabBar::RoundedEast:
             case QTabBar::TriangularEast:
                extraClass |= QCss::PseudoClass_Left;
                break;
+
             case QTabBar::RoundedWest:
             case QTabBar::TriangularWest:
                extraClass |= QCss::PseudoClass_Right;
                break;
+
             default:
                break;
          }
@@ -1989,18 +2005,22 @@ QRenderRule QStyleSheetStyle::renderRule(const QObject *obj, const QStyleOption 
             case QTabBar::TriangularNorth:
                extraClass |= QCss::PseudoClass_Top;
                break;
+
             case QTabBar::RoundedSouth:
             case QTabBar::TriangularSouth:
                extraClass |= QCss::PseudoClass_Bottom;
                break;
+
             case QTabBar::RoundedEast:
             case QTabBar::TriangularEast:
                extraClass |= QCss::PseudoClass_Left;
                break;
+
             case QTabBar::RoundedWest:
             case QTabBar::TriangularWest:
                extraClass |= QCss::PseudoClass_Right;
                break;
+
             default:
                break;
          }
@@ -2010,6 +2030,7 @@ QRenderRule QStyleSheetStyle::renderRule(const QObject *obj, const QStyleOption 
          if (btn->features & QStyleOptionButton::Flat) {
             extraClass |= QCss::PseudoClass_Flat;
          }
+
          if (btn->features & QStyleOptionButton::DefaultButton) {
             extraClass |= QCss::PseudoClass_Default;
          }
@@ -2023,7 +2044,6 @@ QRenderRule QStyleSheetStyle::renderRule(const QObject *obj, const QStyleOption 
             extraClass |= QCss::PseudoClass_Flat;
          }
       }
-
 
 #ifndef QT_NO_TOOLBAR
       else if (const QStyleOptionToolBar *tb = qstyleoption_cast<const QStyleOptionToolBar *>(opt)) {
@@ -2819,6 +2839,7 @@ QStyleSheetStyle::QStyleSheetStyle(QStyle *base)
    : QWindowsStyle(*new QStyleSheetStylePrivate), base(base), refcount(1)
 {
    ++numinstances;
+
    if (numinstances == 1) {
       styleSheetCaches = new QStyleSheetStyleCaches;
    }
@@ -2831,14 +2852,17 @@ QStyleSheetStyle::~QStyleSheetStyle()
       delete styleSheetCaches;
    }
 }
+
 QStyle *QStyleSheetStyle::baseStyle() const
 {
    if (base) {
       return base;
    }
+
    if (QStyleSheetStyle *me = qobject_cast<QStyleSheetStyle *>(QApplication::style())) {
       return me->base;
    }
+
    return QApplication::style();
 }
 
@@ -3225,6 +3249,7 @@ void QStyleSheetStyle::drawComplexControl(ComplexControl cc, const QStyleOptionC
             }
 
             frameRect = subControlRect(CC_GroupBox, opt, SC_GroupBoxFrame, w);
+
             QStyleOptionFrame frame;
             frame.QStyleOption::operator=(*gb);
             frame.features = gb->features;
@@ -3941,6 +3966,7 @@ void QStyleSheetStyle::drawControl(ControlElement ce, const QStyleOption *opt, Q
                   // We have a style defined, but QWindowsStyle won't draw anything if not checked.
                   // So we mimick what QWindowsStyle would do.
                   int checkcol = qMax(mi.maxIconWidth, QWindowsStylePrivate::windowsCheckMarkWidth);
+
                   QRect vCheckRect = visualRect(opt->direction, mi.rect, QRect(mi.rect.x(), mi.rect.y(),
                         checkcol, mi.rect.height()));
 
@@ -6276,6 +6302,7 @@ QRect QStyleSheetStyle::subControlRect(ComplexControl cc, const QStyleOptionComp
 
                   cr = horizontal ? QRect(cr.x() + sliderPos, cr.y(), len, thickness)
                      : QRect(cr.x(), cr.y() + sliderPos, thickness, len);
+
                   return subRule2.borderRect(cr);
                   break;
                }
@@ -6292,6 +6319,7 @@ QRect QStyleSheetStyle::subControlRect(ComplexControl cc, const QStyleOptionComp
          if (hasStyleRule(w, PseudoElement_MdiCloseButton) || hasStyleRule(w, PseudoElement_MdiNormalButton)
                || hasStyleRule(w, PseudoElement_MdiMinButton)) {
             QList<QVariant> layout = rule.styleHint("button-layout").toList();
+
             if (layout.isEmpty()) {
                layout = subControlLayout("mNX");
             }
@@ -6330,6 +6358,7 @@ QRect QStyleSheetStyle::subControlRect(ComplexControl cc, const QStyleOptionComp
             if (!subRule.hasDrawable() && !subRule.hasBox() && !subRule.hasBorder()) {
                break;
             }
+
             QHash<QStyle::SubControl, QRect> layoutRects = titleBarLayout(w, tb);
             return layoutRects.value(sc);
          }
@@ -6347,6 +6376,7 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
    RECURSION_GUARD(return baseStyle()->subElementRect(se, opt, w))
 
    QRenderRule rule = renderRule(w, opt);
+
 #ifndef QT_NO_TABBAR
    int pe = PseudoElement_None;
 #endif
@@ -6359,6 +6389,7 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
             if (rule.hasBox() || !rule.hasNativeBorder()) {
                return visualRect(opt->direction, opt->rect, rule.contentsRect(opt->rect));
             }
+
             return rule.baseStyleCanDraw() ? baseStyle()->subElementRect(se, &btnOpt, w)
                : QWindowsStyle::subElementRect(se, &btnOpt, w);
          }
@@ -6385,6 +6416,7 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
       case SE_RadioButtonContents:
          if (rule.hasBox() || rule.hasBorder() || hasStyleRule(w, PseudoElement_Indicator)) {
             bool isRadio = se == SE_RadioButtonContents;
+
             QRect ir = subElementRect(isRadio ? SE_RadioButtonIndicator : SE_CheckBoxIndicator, opt, w);
             ir = visualRect(opt->direction, opt->rect, ir);
             int spacing = pixelMetric(isRadio ? PM_RadioButtonLabelSpacing : PM_CheckBoxLabelSpacing, nullptr, w);
@@ -6441,8 +6473,10 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
 
             if (subRule.hasGeometry() || subRule.hasBox() || !subRule.hasNativeBorder() || hasStyleRule(w, pe)) {
                QRenderRule subRule2 = renderRule(w, opt, pe);
+
                QStyleOptionViewItem optCopy(*vopt);
                optCopy.rect = subRule.contentsRect(vopt->rect);
+
                QRect rect = ParentStyle::subElementRect(se, &optCopy, w);
                return positionRect(w, subRule2, pe, rect, opt->direction);
             }
@@ -6530,6 +6564,7 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
 
       case SE_TabBarTearIndicator: {
          QRenderRule subRule = renderRule(w, opt, PseudoElement_TabBarTear);
+
          if (subRule.hasContentsSize()) {
             QRect r;
 
@@ -6576,9 +6611,11 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
          PseudoElement pe = (se == SE_DockWidgetCloseButton) ? PseudoElement_DockWidgetCloseButton :
             PseudoElement_DockWidgetFloatButton;
          QRenderRule subRule2 = renderRule(w, opt, pe);
+
          if (!subRule2.hasPosition()) {
             break;
          }
+
          QRenderRule subRule = renderRule(w, opt, PseudoElement_DockWidgetTitle);
          return positionRect(w, subRule, subRule2, pe, opt->rect, opt->direction);
       }

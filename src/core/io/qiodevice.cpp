@@ -973,6 +973,7 @@ int qt_subtract_from_timeout(int timeout, int elapsed)
 QDebug operator<<(QDebug debug, QIODevice::OpenMode modes)
 {
    debug << "OpenMode(";
+
    QStringList modeList;
 
    if (modes == QIODevice::NotOpen) {
@@ -1005,6 +1006,7 @@ QDebug operator<<(QDebug debug, QIODevice::OpenMode modes)
    }
 
    std::sort(modeList.begin(), modeList.end());
+
    debug << modeList.join("|");
    debug << ')';
 

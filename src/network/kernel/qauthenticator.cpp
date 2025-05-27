@@ -288,6 +288,7 @@ void QAuthenticatorPrivate::parseHttpResponse(const QList<QPair<QByteArray, QByt
    switch (method) {
       case Basic:
          this->options[QString("realm")] = realm = QString::fromLatin1(parseOptions.value("realm"));
+
          if (user.isEmpty() && password.isEmpty()) {
             phase = Done;
          }
@@ -299,6 +300,7 @@ void QAuthenticatorPrivate::parseHttpResponse(const QList<QPair<QByteArray, QByt
 
       case DigestMd5: {
          this->options[QString("realm")] = realm = QString::fromLatin1(parseOptions.value("realm"));
+
          if (parseOptions.value("stale").toLower() == "true") {
             phase = Start;
          }
@@ -1296,13 +1298,11 @@ static QByteArray qNtlmPhase3(QAuthenticatorPrivate *ctx, const QByteArray &phas
    }
    bool unicode = ch.flags & NTLMSSP_NEGOTIATE_UNICODE;
 
-
    if (unicode) {
       pb.flags |= NTLMSSP_NEGOTIATE_UNICODE;
    } else {
       pb.flags |= NTLMSSP_NEGOTIATE_OEM;
    }
-
 
    int offset = QNtlmPhase3BlockBase::Size;
    Q_ASSERT(QNtlmPhase3BlockBase::Size == sizeof(QNtlmPhase3BlockBase));

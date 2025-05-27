@@ -431,6 +431,7 @@ void QDateTimeEdit::setSelectedSection(Section section)
 QString QDateTimeEdit::sectionText(Section section) const
 {
    Q_D(const QDateTimeEdit);
+
    if (section == QDateTimeEdit::NoSection || !(section & d->sections)) {
       return QString();
    }
@@ -486,6 +487,7 @@ void QDateTimeEdit::setDisplayFormat(const QString &format)
       d->currentSectionIndex = qMin(d->currentSectionIndex, d->sectionNodes.size() - 1);
       const bool timeShown = (d->sections & TimeSections_Mask);
       const bool dateShown = (d->sections & DateSections_Mask);
+
       Q_ASSERT(dateShown || timeShown);
 
       if (timeShown && ! dateShown) {
@@ -1002,6 +1004,7 @@ QDateTimeEdit::StepEnabled QDateTimeEdit::stepEnabled() const
 
       // 3 cases.  date, time, datetime. each case looks at just the relavant component
       QVariant max, min, val;
+
       if (!(d->sections & DateSections_Mask)) {
          // time only, no date
          max = d->maximum.toTime();
@@ -1687,8 +1690,6 @@ void QDateTimeEditPrivate::_q_editorCursorPositionChanged(int oldpos, int newpos
          edit->setCursorPosition(c);
       }
    }
-
-
 
    currentSectionIndex = s;
 

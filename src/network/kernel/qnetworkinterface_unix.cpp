@@ -194,6 +194,7 @@ static QNetworkInterfacePrivate *findInterface(int socket, QList<QNetworkInterfa
 #else
    // Search by name
    QList<QNetworkInterfacePrivate *>::iterator if_it = interfaces.begin();
+
    for ( ; if_it != interfaces.end(); ++if_it)
       if ((*if_it)->name == req.ifr_name) {
          // existing interface
@@ -215,9 +216,11 @@ static QList<QNetworkInterfacePrivate *> interfaceListing()
 {
    QList<QNetworkInterfacePrivate *> interfaces;
    int socket;
+
    if ((socket = qt_safe_socket(AF_INET, SOCK_STREAM, IPPROTO_IP)) == -1) {
       return interfaces;   // error
    }
+
    QSet<QByteArray> names = interfaceNames(socket);
    QSet<QByteArray>::const_iterator it = names.constBegin();
 

@@ -2106,6 +2106,7 @@ static void parseCSStoXMLAttrs(const QVector<QCss::Declaration> &declarations, Q
 {
    for (int i = 0; i < declarations.count(); ++i) {
       const QCss::Declaration &decl = declarations.at(i);
+
       if (decl.d->property.isEmpty()) {
          continue;
       }
@@ -2563,12 +2564,14 @@ static bool parseAnimateColorNode(QSvgNode *parent, const QXmlStreamAttributes &
 
    int ms = 1000;
    beginStr = beginStr.trimmed();
+
    if (beginStr.endsWith(QString("ms"))) {
       beginStr.chop(2);
       ms = 1;
    } else if (beginStr.endsWith(QString("s"))) {
       beginStr.chop(1);
    }
+
    durStr = durStr.trimmed();
    if (durStr.endsWith(QString("ms"))) {
       durStr.chop(2);
@@ -3498,8 +3501,10 @@ static QSvgNode *createSvgNode(QSvgNode *parent, const QXmlStreamAttributes &att
    }
 
    qreal height = 0;
+
    if (!heightStr.isEmpty()) {
       height = parseLength(heightStr, type, handler);
+
       if (type != QSvgHandler::LT_PT) {
          height = convertToPixels(height, false, type);
       }
@@ -3514,6 +3519,7 @@ static QSvgNode *createSvgNode(QSvgNode *parent, const QXmlStreamAttributes &att
       viewBoxStr    = viewBoxStr.replace(QChar('\t'), QChar(','));
       viewBoxValues = viewBoxStr.split(QChar(','), QStringParser::SkipEmptyParts);
    }
+
    if (viewBoxValues.count() == 4) {
       QString xStr      = viewBoxValues.at(0).trimmed();
       QString yStr      = viewBoxValues.at(1).trimmed();
@@ -3533,8 +3539,10 @@ static QSvgNode *createSvgNode(QSvgNode *parent, const QXmlStreamAttributes &att
          width = convertToPixels(width, false, type);
          height = convertToPixels(height, false, type);
       }
+
       node->setViewBox(QRectF(0, 0, width, height));
    }
+
    handler->setDefaultCoordinateSystem(QSvgHandler::LT_PX);
 
    return node;
@@ -4379,7 +4387,6 @@ QColor QSvgHandler::currentColor() const
 }
 
 #ifndef QT_NO_CSSPARSER
-
 void QSvgHandler::setInStyle(bool b)
 {
    m_inStyle = b;

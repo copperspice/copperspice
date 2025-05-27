@@ -573,8 +573,8 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
             if (path.hasImplicitClose()) {
                d->activeStroker->lineTo(p.x(), p.y());
             }
-
          }
+
          d->activeStroker->end();
       }
 

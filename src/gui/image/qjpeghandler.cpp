@@ -67,7 +67,6 @@ struct my_error_mgr : public jpeg_error_mgr {
 };
 
 extern "C" {
-
    static void my_error_exit (j_common_ptr cinfo)
    {
       my_error_mgr *myerr = (my_error_mgr *) cinfo->err;
@@ -89,6 +88,7 @@ static constexpr const int max_buf = 4096;
 
 struct my_jpeg_source_mgr : public jpeg_source_mgr {
    // Nothing dynamic, can not rely on destruction over longjump
+
    QIODevice *m_device;
 
    JOCTET buffer[max_buf];
@@ -108,23 +108,28 @@ extern "C" {
    {
       my_jpeg_source_mgr *src = (my_jpeg_source_mgr *)cinfo->src;
       qint64 num_read = 0;
+
       if (src->memDevice) {
          src->next_input_byte = (const JOCTET *)(src->memDevice->data().constData() + src->memDevice->pos());
          num_read = src->memDevice->data().size() - src->memDevice->pos();
          src->m_device->seek(src->memDevice->data().size());
+
       } else {
          src->next_input_byte = src->buffer;
          num_read = src->m_device->read((char *)src->buffer, max_buf);
       }
+
       if (num_read <= 0) {
          // Insert a fake EOI marker - as per jpeglib recommendation
          src->next_input_byte = src->buffer;
          src->buffer[0] = (JOCTET) 0xFF;
          src->buffer[1] = (JOCTET) JPEG_EOI;
          src->bytes_in_buffer = 2;
+
       } else {
          src->bytes_in_buffer = num_read;
       }
+
       return TRUE;
    }
 
@@ -139,12 +144,14 @@ extern "C" {
       if (num_bytes > 0) {
          while (num_bytes > (long) src->bytes_in_buffer) {
             // Should not happen in case of memDevice
+
             num_bytes -= (long) src->bytes_in_buffer;
             (void) qt_fill_input_buffer(cinfo);
 
             // note we assume that qt_fill_input_buffer will never return false,
             // so suspension need not be handled.
          }
+
          src->next_input_byte += (size_t) num_bytes;
          src->bytes_in_buffer -= (size_t) num_bytes;
       }
@@ -188,16 +195,18 @@ static inline bool read_jpeg_size(int &w, int &h, j_decompress_ptr cinfo)
 
 static inline bool read_jpeg_format(QImage::Format &format, j_decompress_ptr cinfo)
 {
-
    bool result = true;
+
    switch (cinfo->output_components) {
       case 1:
          format = QImage::Format_Grayscale8;
          break;
+
       case 3:
       case 4:
          format = QImage::Format_RGB32;
          break;
+
       default:
          result = false;
          break;
@@ -434,6 +443,7 @@ static bool read_jpeg_image(QImage *outImage, QSize scaledSize, QRect scaledClip
       }
 
       return ! outImage->isNull();
+
    } else {
       return false;
    }
@@ -441,7 +451,9 @@ static bool read_jpeg_image(QImage *outImage, QSize scaledSize, QRect scaledClip
 
 struct my_jpeg_destination_mgr : public jpeg_destination_mgr {
    // Nothing dynamic - cant rely on destruction over longjump
+
    QIODevice *m_deviceDest;
+
    JOCTET buffer[max_buf];
 
  public:
@@ -458,6 +470,7 @@ extern "C" {
       my_jpeg_destination_mgr *dest = (my_jpeg_destination_mgr *)cinfo->dest;
 
       int written = dest->m_deviceDest->write((char *)dest->buffer, max_buf);
+
       if (written == -1) {
          (*cinfo->err->error_exit)((j_common_ptr)cinfo);
       }
@@ -474,6 +487,7 @@ extern "C" {
       qint64 n = max_buf - dest->free_in_buffer;
 
       qint64 written = dest->m_deviceDest->write((char *)dest->buffer, n);
+
       if (written == -1) {
          (*cinfo->err->error_exit)((j_common_ptr)cinfo);
       }
@@ -486,7 +500,9 @@ inline my_jpeg_destination_mgr::my_jpeg_destination_mgr(QIODevice *device)
    jpeg_destination_mgr::init_destination = qt_init_destination;
    jpeg_destination_mgr::empty_output_buffer = qt_empty_output_buffer;
    jpeg_destination_mgr::term_destination = qt_term_destination;
+
    m_deviceDest = device;
+
    next_output_byte = buffer;
    free_in_buffer = max_buf;
 }

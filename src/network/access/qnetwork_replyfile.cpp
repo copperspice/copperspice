@@ -64,7 +64,9 @@ QNetworkReplyFileImpl::QNetworkReplyFileImpl(QObject *parent, const QNetworkRequ
       setError(QNetworkReply::ProtocolInvalidOperationError, msg);
       QMetaObject::invokeMethod(this, "error", Qt::QueuedConnection,
                                 Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ProtocolInvalidOperationError));
+
       QMetaObject::invokeMethod(this, "finished", Qt::QueuedConnection);
+
       return;
    }
 #endif
@@ -74,8 +76,8 @@ QNetworkReplyFileImpl::QNetworkReplyFileImpl(QObject *parent, const QNetworkRequ
    }
    setUrl(url);
 
-
    QString fileName = url.toLocalFile();
+
    if (fileName.isEmpty()) {
       if (url.scheme() == "qrc") {
          fileName = QChar(':') + url.path();
@@ -93,6 +95,7 @@ QNetworkReplyFileImpl::QNetworkReplyFileImpl(QObject *parent, const QNetworkRequ
       QMetaObject::invokeMethod(this, "error", Qt::QueuedConnection,
                   Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ContentOperationNotPermittedError));
       QMetaObject::invokeMethod(this, "finished", Qt::QueuedConnection);
+
       return;
    }
 
@@ -113,7 +116,9 @@ QNetworkReplyFileImpl::QNetworkReplyFileImpl(QObject *parent, const QNetworkRequ
          QMetaObject::invokeMethod(this, "error", Qt::QueuedConnection,
                                    Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ContentNotFoundError));
       }
+
       QMetaObject::invokeMethod(this, "finished", Qt::QueuedConnection);
+
       return;
    }
 
@@ -129,9 +134,11 @@ QNetworkReplyFileImpl::QNetworkReplyFileImpl(QObject *parent, const QNetworkRequ
    QMetaObject::invokeMethod(this, "readyRead", Qt::QueuedConnection);
    QMetaObject::invokeMethod(this, "finished", Qt::QueuedConnection);
 }
+
 void QNetworkReplyFileImpl::close()
 {
    Q_D(QNetworkReplyFileImpl);
+
    QNetworkReply::close();
    d->realFile.close();
 }
@@ -139,6 +146,7 @@ void QNetworkReplyFileImpl::close()
 void QNetworkReplyFileImpl::abort()
 {
    Q_D(QNetworkReplyFileImpl);
+
    QNetworkReply::close();
    d->realFile.close();
 }
@@ -146,9 +154,11 @@ void QNetworkReplyFileImpl::abort()
 qint64 QNetworkReplyFileImpl::bytesAvailable() const
 {
    Q_D(const QNetworkReplyFileImpl);
+
    if (!d->realFile.isOpen()) {
       return QNetworkReply::bytesAvailable();
    }
+
    return QNetworkReply::bytesAvailable() + d->realFile.bytesAvailable();
 }
 
@@ -166,6 +176,7 @@ qint64 QNetworkReplyFileImpl::size() const
 qint64 QNetworkReplyFileImpl::readData(char *data, qint64 maxlen)
 {
    Q_D(QNetworkReplyFileImpl);
+
    if (! d->realFile.isOpen()) {
       return -1;
    }
@@ -182,6 +193,6 @@ qint64 QNetworkReplyFileImpl::readData(char *data, qint64 maxlen)
       setAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
       return ret;
       setAttribute(QNetworkRequest::HttpReasonPhraseAttribute, QString("OK"));
+
    }
 }
-

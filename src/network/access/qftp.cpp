@@ -1434,6 +1434,7 @@ int QFtp::connectToHost(const QString &host, quint16 port)
 int QFtp::login(const QString &user, const QString &password)
 {
    QStringList cmds;
+
    cmds << (QString("USER ") + (user.isEmpty() ? QString("anonymous") : user) + QString("\r\n"));
    cmds << (QString("PASS ") + (password.isEmpty() ? QString("anonymous@") : password) + QString("\r\n"));
 
@@ -1450,6 +1451,7 @@ int QFtp::setTransferMode(TransferMode mode)
    int id = d_func()->addCommand(new QFtpCommand(SetTransferMode, QStringList()));
    d_func()->pi.transferConnectionExtended = true;
    d_func()->transferMode = mode;
+
    return id;
 }
 
@@ -1463,6 +1465,7 @@ int QFtp::setProxy(const QString &host, quint16 port)
 int QFtp::list(const QString &dir)
 {
    QStringList cmds;
+
    cmds.append("TYPE A\r\n");
 
    if (d_func()->transferMode) {
@@ -1476,6 +1479,7 @@ int QFtp::list(const QString &dir)
    } else {
       cmds.append("LIST " + dir + "\r\n");
    }
+
    return d_func()->addCommand(new QFtpCommand(List, cmds));
 }
 
@@ -1487,11 +1491,13 @@ int QFtp::cd(const QString &dir)
 int QFtp::get(const QString &file, QIODevice *dev, TransferType type)
 {
    QStringList cmds;
+
    if (type == Binary) {
       cmds.append("TYPE I\r\n");
    } else {
       cmds.append("TYPE A\r\n");
    }
+
    cmds.append("SIZE " + file + "\r\n");
 
    if (d_func()->transferMode == Passive) {
@@ -1501,12 +1507,14 @@ int QFtp::get(const QString &file, QIODevice *dev, TransferType type)
    }
 
    cmds.append("RETR " + file + "\r\n");
+
    return d_func()->addCommand(new QFtpCommand(Get, cmds, dev));
 }
 
 int QFtp::put(const QByteArray &data, const QString &file, TransferType type)
 {
    QStringList cmds;
+
    if (type == Binary) {
       cmds.append("TYPE I\r\n");
    } else {
@@ -1528,16 +1536,21 @@ int QFtp::put(const QByteArray &data, const QString &file, TransferType type)
 int QFtp::put(QIODevice *dev, const QString &file, TransferType type)
 {
    QStringList cmds;
+
    if (type == Binary) {
       cmds.append("TYPE I\r\n");
    } else {
       cmds.append("TYPE A\r\n");
    }
+
    cmds.append(d_func()->transferMode == Passive ? QString("PASV\r\n") : QString("PORT\r\n"));
+
    if (!dev->isSequential()) {
       cmds.append("ALLO " + QString::number(dev->size()) + "\r\n");
    }
+
    cmds.append("STOR " + file + "\r\n");
+
    return d_func()->addCommand(new QFtpCommand(Put, cmds, dev));
 }
 
@@ -1559,14 +1572,17 @@ int QFtp::rmdir(const QString &dir)
 int QFtp::rename(const QString &oldname, const QString &newname)
 {
    QStringList cmds;
+
    cmds << "RNFR " + oldname + "\r\n";
    cmds << "RNTO " + newname + "\r\n";
+
    return d_func()->addCommand(new QFtpCommand(Rename, cmds));
 }
 
 int QFtp::rawCommand(const QString &command)
 {
    QString cmd = command.trimmed() + "\r\n";
+
    return d_func()->addCommand(new QFtpCommand(RawCommand, QStringList(cmd)));
 }
 

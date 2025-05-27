@@ -839,6 +839,7 @@ void QWingedEdge::intersectAndAdd()
       int second = m_segments.segmentAt(i).vb;
 
       int last = first;
+
       for (int j = 0; j < intersections.size(); ++j) {
          const QPathSegments::Intersection &isect = intersections.at(j);
 
@@ -1779,7 +1780,6 @@ static void traverse(QWingedEdge &list, int edge, QPathEdge::Traversal traversal
       int flag = status.traversal == QPathEdge::LeftTraversal ? 1 : 2;
 
       QPathEdge *ep = list.edge(status.edge);
-
       ep->flag |= (flag | (flag << 4));
 
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
@@ -1849,6 +1849,7 @@ bool QWingedEdge::isInside(qreal x, qreal y) const
 static QVector<QCrossingEdge> findCrossings(const QWingedEdge &list, qreal y)
 {
    QVector<QCrossingEdge> crossings;
+
    for (int i = 0; i < list.edgeCount(); ++i) {
       const QPathEdge *edge = list.edge(i);
       QPointF a = *list.vertex(edge->first);
@@ -1856,10 +1857,12 @@ static QVector<QCrossingEdge> findCrossings(const QWingedEdge &list, qreal y)
 
       if ((a.y() < y && b.y() > y) || (a.y() > y && b.y() < y)) {
          const qreal intersection = a.x() + (b.x() - a.x()) * (y - a.y()) / (b.y() - a.y());
+
          const QCrossingEdge edge = { i, intersection };
          crossings << edge;
       }
    }
+
    return crossings;
 }
 

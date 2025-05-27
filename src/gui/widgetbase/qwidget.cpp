@@ -8290,6 +8290,7 @@ void QWidget::scroll(int dx, int dy)
       // Graphics View maintains its own dirty region as a list of rects;
       // until we can connect item updates directly to the view, we must
       // separately add a translated dirty region.
+
       if (!d->dirty.isEmpty()) {
          for (const QRect &rect : (d->dirty.translated(dx, dy)).rects()) {
             proxy->update(rect);
@@ -8341,6 +8342,7 @@ void QWidget::scroll(int dx, int dy, const QRect &r)
       }
 
       proxy->scroll(dx, dy, r.translated(proxy->subWidgetRect(this).topLeft().toPoint()));
+
       return;
    }
 

@@ -1154,12 +1154,14 @@ void QTableView::paintEvent(QPaintEvent *event)
    // same goes for ...VisualColumn
    int firstVisualRow = qMax(verticalHeader->visualIndexAt(0), 0);
    int lastVisualRow  = verticalHeader->visualIndexAt(verticalHeader->viewport()->height());
+
    if (lastVisualRow == -1) {
       lastVisualRow = d->model->rowCount(d->root) - 1;
    }
 
    int firstVisualColumn = horizontalHeader->visualIndexAt(0);
    int lastVisualColumn = horizontalHeader->visualIndexAt(horizontalHeader->viewport()->width());
+
    if (rightToLeft) {
       qSwap(firstVisualColumn, lastVisualColumn);
    }
@@ -1182,6 +1184,7 @@ void QTableView::paintEvent(QPaintEvent *event)
    for (int i = 0; i < rects.size(); ++i) {
       QRect dirtyArea = rects.at(i);
       dirtyArea.setBottom(qMin(dirtyArea.bottom(), int(y)));
+
       if (rightToLeft) {
          dirtyArea.setLeft(qMax(dirtyArea.left(), d->viewport->width() - int(x)));
       } else {
@@ -1224,10 +1227,12 @@ void QTableView::paintEvent(QPaintEvent *event)
                alternateBase = !alternateBase;
             }
          }
+
       } else {
          top = verticalHeader->visualIndexAt(dirtyArea.top());
          alternateBase = (top & 1) && alternate;
       }
+
       if (top == -1 || top > bottom) {
          continue;
       }
@@ -1919,6 +1924,7 @@ void QTableView::updateGeometries()
    if (d->geometryRecursionBlock) {
       return;
    }
+
    d->geometryRecursionBlock = true;
 
    int width = 0;
@@ -1926,11 +1932,13 @@ void QTableView::updateGeometries()
       width = qMax(d->verticalHeader->minimumWidth(), d->verticalHeader->sizeHint().width());
       width = qMin(width, d->verticalHeader->maximumWidth());
    }
+
    int height = 0;
    if (! d->horizontalHeader->isHidden()) {
       height = qMax(d->horizontalHeader->minimumHeight(), d->horizontalHeader->sizeHint().height());
       height = qMin(height, d->horizontalHeader->maximumHeight());
    }
+
    bool reverse = isRightToLeft();
    if (reverse) {
       setViewportMargins(0, height, width, 0);
@@ -1967,8 +1975,10 @@ void QTableView::updateGeometries()
    // ### move this block into the if
    QSize vsize = d->viewport->size();
    QSize max = maximumViewportSize();
+
    uint horizontalLength = d->horizontalHeader->length();
    uint verticalLength = d->verticalHeader->length();
+
    if ((uint)max.width() >= horizontalLength && (uint)max.height() >= verticalLength) {
       vsize = max;
    }
@@ -1976,7 +1986,9 @@ void QTableView::updateGeometries()
    // horizontal scroll bar
    const int columnCount = d->horizontalHeader->count();
    const int viewportWidth = vsize.width();
+
    int columnsInViewport = 0;
+
    for (int widthScroll = 0, column = columnCount - 1; column >= 0; --column) {
       int logical = d->horizontalHeader->logicalIndex(column);
 
@@ -1986,18 +1998,22 @@ void QTableView::updateGeometries()
          if (widthScroll > viewportWidth) {
             break;
          }
+
          ++columnsInViewport;
       }
    }
+
    columnsInViewport = qMax(columnsInViewport, 1); //there must be always at least 1 column
 
    if (horizontalScrollMode() == QAbstractItemView::ScrollPerItem) {
       const int visibleColumns = columnCount - d->horizontalHeader->hiddenSectionCount();
       horizontalScrollBar()->setRange(0, visibleColumns - columnsInViewport);
       horizontalScrollBar()->setPageStep(columnsInViewport);
+
       if (columnsInViewport >= visibleColumns) {
          d->horizontalHeader->setOffset(0);
       }
+
       horizontalScrollBar()->setSingleStep(1);
 
    } else {
@@ -2010,6 +2026,7 @@ void QTableView::updateGeometries()
    // vertical scroll bar
    const int rowCount = d->verticalHeader->count();
    const int viewportHeight = vsize.height();
+
    int rowsInViewport = 0;
 
    for (int heightScroll = 0, row = rowCount - 1; row >= 0; --row) {
@@ -2021,6 +2038,7 @@ void QTableView::updateGeometries()
          if (heightScroll > viewportHeight) {
             break;
          }
+
          ++rowsInViewport;
       }
    }
@@ -2031,10 +2049,13 @@ void QTableView::updateGeometries()
       const int visibleRows = rowCount - d->verticalHeader->hiddenSectionCount();
       verticalScrollBar()->setRange(0, visibleRows - rowsInViewport);
       verticalScrollBar()->setPageStep(rowsInViewport);
+
       if (rowsInViewport >= visibleRows) {
          d->verticalHeader->setOffset(0);
       }
+
       verticalScrollBar()->setSingleStep(1);
+
    } else {
       // ScrollPerPixel
       verticalScrollBar()->setPageStep(vsize.height());

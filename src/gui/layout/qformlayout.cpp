@@ -717,7 +717,9 @@ void QFormLayoutPrivate::setupVerticalLayoutData(int width)
 
    int rr   = m_matrix.rowCount();
    int vidx = 1;
+
    QFormLayout::RowWrapPolicy current_rowPolicy = q->rowWrapPolicy();
+
    bool wrapAllRows = (current_rowPolicy == QFormLayout::WrapAllRows);
    bool addTopBottomStretch = true;
 
@@ -747,6 +749,7 @@ void QFormLayoutPrivate::setupVerticalLayoutData(int width)
       for (int i = 0; i < rr; ++i) {
          const QFormLayoutItem *label = m_matrix(i, 0);
          const QFormLayoutItem *field = m_matrix(i, 1);
+
          if (label && (label->sizeHint.width() + (field ? field->minSize.width() : 0) <= width)) {
             maxLabelWidth = qMax(maxLabelWidth, label->sizeHint.width());
          }

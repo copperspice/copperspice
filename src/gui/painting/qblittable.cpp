@@ -25,7 +25,6 @@
 
 #ifndef QT_NO_BLITTABLE
 
-
 class QBlittablePrivate
 {
  public:
@@ -82,6 +81,7 @@ QImage *QBlittable::lock()
 void QBlittable::unlock()
 {
    Q_D(QBlittable);
+
    if (d->locked) {
       doUnlock();
       d->locked = false;

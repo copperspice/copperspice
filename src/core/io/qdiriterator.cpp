@@ -117,11 +117,9 @@ void QDirIteratorPrivate::pushDirectory(const QFileInfo &fileInfo)
    QString path = fileInfo.filePath();
 
 #ifdef Q_OS_WIN
-
    if (fileInfo.isSymLink()) {
       path = fileInfo.canonicalFilePath();
    }
-
 #endif
 
    if (iteratorFlags & QDirIterator::FollowSymlinks) {
@@ -135,6 +133,7 @@ void QDirIteratorPrivate::pushDirectory(const QFileInfo &fileInfo)
       if (it) {
          it->setPath(path);
          fileEngineIterators << it;
+
       } else {
          // no entry list
       }
@@ -143,6 +142,7 @@ void QDirIteratorPrivate::pushDirectory(const QFileInfo &fileInfo)
 #ifndef QT_NO_FILESYSTEMITERATOR
       QFileSystemIterator *it = new QFileSystemIterator(fileInfo.d_ptr->fileEntry,
             m_filters, m_nameFilters, iteratorFlags);
+
       nativeIterators << it;
 #endif
    }
@@ -202,8 +202,8 @@ void QDirIteratorPrivate::advance()
          nativeIterators.pop();
          delete it;
       }
-
 #endif
+
    }
 
    currentFileInfo = nextFileInfo;

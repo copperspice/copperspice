@@ -781,6 +781,7 @@ void QRasterizer::rasterizeLine(const QPointF &a, const QPointF &b, qreal width,
             if (o[i] <= low[i] || o[i] >= high[i]) {
                return;
             }
+
             continue;
          }
          const qreal d_inv = 1 / d[i];

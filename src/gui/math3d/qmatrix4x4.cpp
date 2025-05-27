@@ -39,6 +39,7 @@ QMatrix4x4::QMatrix4x4(const qreal *values)
          m_matrix4[col][row] = values[row * 4 + col];
       }
    }
+
    flagBits = General;
 }
 
@@ -55,6 +56,7 @@ QMatrix4x4::QMatrix4x4(const qreal *values, int cols, int rows)
          }
       }
    }
+
    flagBits = General;
 }
 
@@ -128,10 +130,12 @@ static inline qreal matrixDet3(const qreal m[4][4], int col0, int col1, int col2
 static inline qreal matrixDet4(const qreal m[4][4])
 {
    qreal det;
+
    det  = m[0][0] * matrixDet3(m, 1, 2, 3, 1, 2, 3);
    det -= m[1][0] * matrixDet3(m, 0, 2, 3, 1, 2, 3);
    det += m[2][0] * matrixDet3(m, 0, 1, 3, 1, 2, 3);
    det -= m[3][0] * matrixDet3(m, 0, 1, 2, 1, 2, 3);
+
    return det;
 }
 
@@ -147,7 +151,9 @@ QMatrix4x4 QMatrix4x4::inverted(bool *invertible) const
       if (invertible) {
          *invertible = true;
       }
+
       return QMatrix4x4();
+
    } else if (flagBits == Translation) {
       QMatrix4x4 inv;
       inv.m_matrix4[3][0] = -m_matrix4[3][0];
@@ -155,14 +161,18 @@ QMatrix4x4 QMatrix4x4::inverted(bool *invertible) const
       inv.m_matrix4[3][2] = -m_matrix4[3][2];
 
       inv.flagBits = Translation;
+
       if (invertible) {
          *invertible = true;
       }
+
       return inv;
+
    } else if (flagBits == Rotation || flagBits == (Rotation | Translation)) {
       if (invertible) {
          *invertible = true;
       }
+
       return orthonormalInverse();
    }
 
@@ -173,8 +183,10 @@ QMatrix4x4 QMatrix4x4::inverted(bool *invertible) const
       if (invertible) {
          *invertible = false;
       }
+
       return QMatrix4x4();
    }
+
    det = 1.0f / det;
 
    inv.m_matrix4[0][0] =  matrixDet3(m_matrix4, 1, 2, 3, 1, 2, 3) * det;
@@ -197,6 +209,7 @@ QMatrix4x4 QMatrix4x4::inverted(bool *invertible) const
    if (invertible) {
       *invertible = true;
    }
+
    return inv;
 }
 
@@ -207,6 +220,7 @@ QMatrix3x3 QMatrix4x4::normalMatrix() const
    // Handle the simple cases first.
    if (flagBits == Identity || flagBits == Translation) {
       return inv;
+
    } else if (flagBits == Scale || flagBits == (Translation | Scale)) {
       if (m_matrix4[0][0] == 0.0f || m_matrix4[1][1] == 0.0f || m_matrix4[2][2] == 0.0f) {
          return inv;
@@ -220,6 +234,7 @@ QMatrix3x3 QMatrix4x4::normalMatrix() const
    }
 
    qreal det = matrixDet3(m_matrix4, 0, 1, 2, 0, 1, 2);
+
    if (det == 0.0f) {
       return inv;
    }
@@ -244,11 +259,13 @@ QMatrix3x3 QMatrix4x4::normalMatrix() const
 QMatrix4x4 QMatrix4x4::transposed() const
 {
    QMatrix4x4 result(1); // The "1" says to not load the identity.
+
    for (int row = 0; row < 4; ++row) {
       for (int col = 0; col < 4; ++col) {
          result.m_matrix4[col][row] = m_matrix4[row][col];
       }
    }
+
    return result;
 }
 
@@ -272,6 +289,7 @@ QMatrix4x4 &QMatrix4x4::operator/=(qreal divisor)
    m_matrix4[3][3] /= divisor;
 
    flagBits = General;
+
    return *this;
 }
 
@@ -306,6 +324,7 @@ void QMatrix4x4::scale(const QVector3D &vector)
    qreal vx = vector.x();
    qreal vy = vector.y();
    qreal vz = vector.z();
+
    if (flagBits == Identity) {
       m_matrix4[0][0] = vx;
       m_matrix4[1][1] = vy;
@@ -423,6 +442,7 @@ void QMatrix4x4::scale(qreal factor)
       m_matrix4[2][2] = factor;
 
       flagBits = Scale;
+
    } else if (flagBits == Scale || flagBits == (Scale | Translation)) {
       m_matrix4[0][0] *= factor;
       m_matrix4[1][1] *= factor;
@@ -460,6 +480,7 @@ void QMatrix4x4::translate(const QVector3D &vector)
    qreal vx = vector.x();
    qreal vy = vector.y();
    qreal vz = vector.z();
+
    if (flagBits == Identity) {
       m_matrix4[3][0] = vx;
       m_matrix4[3][1] = vy;
@@ -545,6 +566,7 @@ void QMatrix4x4::translate(qreal x, qreal y, qreal z)
       m_matrix4[3][2] = z;
 
       flagBits = Translation;
+
    } else if (flagBits == Translation) {
       m_matrix4[3][0] += x;
       m_matrix4[3][1] += y;
@@ -556,6 +578,7 @@ void QMatrix4x4::translate(qreal x, qreal y, qreal z)
       m_matrix4[3][2] = m_matrix4[2][2] * z;
 
       flagBits |= Translation;
+
    } else if (flagBits == (Scale | Translation)) {
       m_matrix4[3][0] += m_matrix4[0][0] * x;
       m_matrix4[3][1] += m_matrix4[1][1] * y;
@@ -589,10 +612,12 @@ void QMatrix4x4::rotate(qreal angle, qreal x, qreal y, qreal z)
    if (angle == 0.0f) {
       return;
    }
+
    QMatrix4x4 m(1); // The "1" says to not load the identity.
    qreal c;
    qreal s;
    qreal ic;
+
    if (angle == 90.0f || angle == -270.0f) {
       s = 1.0f;
       c = 0.0f;
@@ -607,7 +632,9 @@ void QMatrix4x4::rotate(qreal angle, qreal x, qreal y, qreal z)
       c = qCos(a);
       s = qSin(a);
    }
+
    bool quick = false;
+
    if (x == 0.0f) {
       if (y == 0.0f) {
          if (z != 0.0f) {
@@ -624,9 +651,11 @@ void QMatrix4x4::rotate(qreal angle, qreal x, qreal y, qreal z)
                m.m_matrix4[1][0] = -s;
                m.m_matrix4[0][1] = s;
             }
+
             m.flagBits = General;
             quick = true;
          }
+
       } else if (z == 0.0f) {
          // Rotate around the Y axis.
          m.setToIdentity();
@@ -640,9 +669,11 @@ void QMatrix4x4::rotate(qreal angle, qreal x, qreal y, qreal z)
             m.m_matrix4[2][0] = s;
             m.m_matrix4[0][2] = -s;
          }
+
          m.flagBits = General;
          quick = true;
       }
+
    } else if (y == 0.0f && z == 0.0f) {
       // Rotate around the X axis.
       m.setToIdentity();
@@ -656,6 +687,7 @@ void QMatrix4x4::rotate(qreal angle, qreal x, qreal y, qreal z)
          m.m_matrix4[2][1] = -s;
          m.m_matrix4[1][2] = s;
       }
+
       m.flagBits = General;
       quick = true;
    }
@@ -669,6 +701,7 @@ void QMatrix4x4::rotate(qreal angle, qreal x, qreal y, qreal z)
          y /= len;
          z /= len;
       }
+
       ic = 1.0f - c;
 
       m.m_matrix4[0][0] = x * x * ic + c;
@@ -688,8 +721,10 @@ void QMatrix4x4::rotate(qreal angle, qreal x, qreal y, qreal z)
       m.m_matrix4[2][3] = 0.0f;
       m.m_matrix4[3][3] = 1.0f;
    }
+
    int flags = flagBits;
    *this *= m;
+
    if (flags != Identity) {
       flagBits = flags | Rotation;
    } else {
@@ -704,8 +739,10 @@ void QMatrix4x4::projectedRotate(qreal angle, qreal x, qreal y, qreal z)
    if (angle == 0.0f) {
       return;
    }
+
    QMatrix4x4 m(1); // The "1" says to not load the identity.
    qreal c, s, ic;
+
    if (angle == 90.0f || angle == -270.0f) {
       s = 1.0f;
       c = 0.0f;
@@ -720,7 +757,9 @@ void QMatrix4x4::projectedRotate(qreal angle, qreal x, qreal y, qreal z)
       c = qCos(a);
       s = qSin(a);
    }
+
    bool quick = false;
+
    if (x == 0.0f) {
       if (y == 0.0f) {
          if (z != 0.0f) {
@@ -736,9 +775,11 @@ void QMatrix4x4::projectedRotate(qreal angle, qreal x, qreal y, qreal z)
                m.m_matrix4[1][0] = -s;
                m.m_matrix4[0][1] = s;
             }
+
             m.flagBits = General;
             quick = true;
          }
+
       } else if (z == 0.0f) {
          // Rotate around the Y axis.
          m.setToIdentity();
@@ -750,6 +791,7 @@ void QMatrix4x4::projectedRotate(qreal angle, qreal x, qreal y, qreal z)
          } else {
             m.m_matrix4[0][3] = s * inv_dist_to_plane;
          }
+
          m.flagBits = General;
          quick = true;
       }
@@ -765,6 +807,7 @@ void QMatrix4x4::projectedRotate(qreal angle, qreal x, qreal y, qreal z)
       } else {
          m.m_matrix4[1][3] = -s * inv_dist_to_plane;
       }
+
       m.flagBits = General;
       quick = true;
    }
@@ -777,6 +820,7 @@ void QMatrix4x4::projectedRotate(qreal angle, qreal x, qreal y, qreal z)
          y /= len;
          z /= len;
       }
+
       ic = 1.0f - c;
 
       m.m_matrix4[0][0] = x * x * ic + c;
@@ -1076,11 +1120,13 @@ void QMatrix4x4::flipCoordinates()
       m_matrix4[2][2] = -m_matrix4[2][2];
 
       flagBits |= Scale;
+
    } else if (flagBits == Identity) {
       m_matrix4[1][1] = -1.0f;
       m_matrix4[2][2] = -1.0f;
 
       flagBits = Scale;
+
    } else {
       m_matrix4[1][0] = -m_matrix4[1][0];
       m_matrix4[1][1] = -m_matrix4[1][1];
@@ -1162,11 +1208,14 @@ QRect QMatrix4x4::mapRect(const QRect &rect) const
          w = -w;
          x -= w;
       }
+
       if (h < 0) {
          h = -h;
          y -= h;
       }
+
       return QRect(qRound(x), qRound(y), qRound(w), qRound(h));
+
    } else if (flagBits == Translation) {
       return QRect(qRound(rect.x() + m_matrix4[3][0]),
          qRound(rect.y() + m_matrix4[3][1]), rect.width(), rect.height());
@@ -1197,11 +1246,14 @@ QRectF QMatrix4x4::mapRect(const QRectF &rect) const
          w = -w;
          x -= w;
       }
+
       if (h < 0) {
          h = -h;
          y -= h;
       }
+
       return QRectF(x, y, w, h);
+
    } else if (flagBits == Translation) {
       return rect.translated(m_matrix4[3][0], m_matrix4[3][1]);
    }
@@ -1296,21 +1348,27 @@ QDebug operator<<(QDebug dbg, const QMatrix4x4 &m)
 {
    // Create a string that represents the matrix type.
    QByteArray bits;
+
    if ((m.flagBits & QMatrix4x4::Identity) != 0) {
       bits += "Identity,";
    }
+
    if ((m.flagBits & QMatrix4x4::General) != 0) {
       bits += "General,";
    }
+
    if ((m.flagBits & QMatrix4x4::Translation) != 0) {
       bits += "Translation,";
    }
+
    if ((m.flagBits & QMatrix4x4::Scale) != 0) {
       bits += "Scale,";
    }
+
    if ((m.flagBits & QMatrix4x4::Rotation) != 0) {
       bits += "Rotation,";
    }
+
    if (bits.size() > 0) {
       bits = bits.left(bits.size() - 1);
    }
@@ -1323,6 +1381,7 @@ QDebug operator<<(QDebug dbg, const QMatrix4x4 &m)
                  << m(2, 0) << m(2, 1) << m(2, 2) << m(2, 3) << endl
                  << m(3, 0) << m(3, 1) << m(3, 2) << m(3, 3) << endl
                  << qSetFieldWidth(0) << ')';
+
    return dbg.space();
 }
 
@@ -1335,6 +1394,7 @@ QDataStream &operator<<(QDataStream &stream, const QMatrix4x4 &matrix)
          stream << double(matrix(row, col));
       }
    }
+
    return stream;
 }
 
@@ -1347,7 +1407,9 @@ QDataStream &operator>>(QDataStream &stream, QMatrix4x4 &matrix)
          matrix(row, col) = qreal(x);
       }
    }
+
    matrix.optimize();
+
    return stream;
 }
 

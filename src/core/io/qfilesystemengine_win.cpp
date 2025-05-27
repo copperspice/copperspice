@@ -536,6 +536,7 @@ QFileSystemEntry QFileSystemEngine::canonicalName(const QFileSystemEntry &entry,
 
    if (data.exists()) {
       return QFileSystemEntry(slowCanonicalized(absoluteName(entry).filePath()));
+
    } else {
       return QFileSystemEntry();
    }

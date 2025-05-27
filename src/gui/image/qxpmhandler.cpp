@@ -793,9 +793,11 @@ static bool read_xpm_string(QByteArray &buf, QIODevice *d, const char *const *so
       if (offset == state.size() || state.isEmpty()) {
          char buffer[2048];
          qint64 bytesRead = d->read(buffer, sizeof(buffer));
+
          if (bytesRead <= 0) {
             return false;
          }
+
          state = QByteArray(buffer, int(bytesRead));
          offset = 0;
       }
@@ -804,6 +806,7 @@ static bool read_xpm_string(QByteArray &buf, QIODevice *d, const char *const *so
          if (state.at(offset++) == '"') {
             gotQuote = true;
          }
+
       } else {
          char c = state.at(offset++);
          if (c == '"') {
@@ -812,7 +815,9 @@ static bool read_xpm_string(QByteArray &buf, QIODevice *d, const char *const *so
          buf += c;
       }
    }
+
    state.remove(0, offset);
+
    return true;
 }
 

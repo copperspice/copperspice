@@ -122,6 +122,7 @@ bool QHttpHeader::isValid() const
 bool QHttpHeader::parse(const QString &str)
 {
    Q_D(QHttpHeader);
+
    QStringList lst;
    int pos = str.indexOf(QChar('\n'));
 
@@ -143,10 +144,12 @@ bool QHttpHeader::parse(const QString &str)
    for (; it != lst.end(); ++it) {
       if (!(*it).isEmpty()) {
          if ((*it)[0].isSpace()) {
+
             if (!lines.isEmpty()) {
                lines.last() += QChar(' ');
                lines.last() += (*it).trimmed();
             }
+
          } else {
             lines.append((*it));
          }
@@ -316,6 +319,7 @@ bool QHttpHeader::parseLine(const QString &line, int)
 QString QHttpHeader::toString() const
 {
    Q_D(const QHttpHeader);
+
    if (!isValid()) {
       return QString("");
    }
@@ -327,6 +331,7 @@ QString QHttpHeader::toString() const
       ret += (*it).first + ": " + (*it).second + "\r\n";
       ++it;
    }
+
    return ret;
 }
 
@@ -463,6 +468,7 @@ int QHttpRequestHeader::minorVersion() const
 bool QHttpRequestHeader::parseLine(const QString &line, int number)
 {
    Q_D(QHttpRequestHeader);
+
    if (number != 0) {
       return QHttpHeader::parseLine(line, number);
    }
@@ -470,13 +476,17 @@ bool QHttpRequestHeader::parseLine(const QString &line, int number)
    QStringList lst = line.simplified().split(" ");
    if (lst.count() > 0) {
       d->m = lst[0];
+
       if (lst.count() > 1) {
          d->p = lst[1];
+
          if (lst.count() > 2) {
             QString v = lst[2];
+
             if (v.length() >= 8 && v.left(5) == "HTTP/" && v[5].isDigit() && v[6] == QChar('.') && v[7].isDigit()) {
                d->majVer = v[5].toLatin1() - '0';
                d->minVer = v[7].toLatin1() - '0';
+
                return true;
             }
          }
@@ -583,6 +593,7 @@ int QHttpResponseHeader::minorVersion() const
 bool QHttpResponseHeader::parseLine(const QString &line, int number)
 {
    Q_D(QHttpResponseHeader);
+
    if (number != 0) {
       return QHttpHeader::parseLine(line, number);
    }

@@ -690,6 +690,7 @@ void QPixmapBlurFilter::draw(QPainter *painter, const QPointF &p, const QPixmap 
    }
 
    QRectF srcRect = rectF;
+
    if (srcRect.isNull()) {
       srcRect = src.rect();
    }
@@ -710,6 +711,7 @@ void QPixmapBlurFilter::draw(QPainter *painter, const QPointF &p, const QPixmap 
 
    if (srcRect == src.rect()) {
       srcImage = src.toImage();
+
    } else {
       QRect rect = srcRect.toAlignedRect().intersected(src.rect());
       srcImage = src.copy(rect).toImage();
@@ -717,6 +719,7 @@ void QPixmapBlurFilter::draw(QPainter *painter, const QPointF &p, const QPixmap 
 
    QTransform transform = painter->worldTransform();
    painter->translate(p);
+
    qt_blurImage(painter, srcImage, scaledRadius, (d->hints & QGraphicsBlurEffect::QualityHint), false);
    painter->setWorldTransform(transform);
 }
@@ -727,10 +730,12 @@ static void grayscale(const QImage &image, QImage &dest, const QRect &rect = QRe
 {
    QRect destRect = rect;
    QRect srcRect  = rect;
+
    if (rect.isNull()) {
       srcRect = dest.rect();
       destRect = dest.rect();
    }
+
    if (&image != &dest) {
       destRect.moveTo(QPoint(0, 0));
    }

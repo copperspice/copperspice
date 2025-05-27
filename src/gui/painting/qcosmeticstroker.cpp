@@ -542,17 +542,20 @@ void QCosmeticStroker::drawPath(const QVectorPath &path)
 
          QPointF p = QPointF(points[0], points[1]) * state->matrix;
          patternOffset = state->lastPen.dashOffset() * 64;
+
          lastPixel.x = INT_MIN;
          lastPixel.y = INT_MIN;
 
          bool closed;
          const QPainterPath::ElementType *e = subPath(type, end, points, &closed);
+
          if (closed) {
             const qreal *p = points + 2 * (e - type);
             QPointF p1 = QPointF(p[-4], p[-3]) * state->matrix;
             QPointF p2 = QPointF(p[-2], p[-1]) * state->matrix;
             calculateLastPoint(p1.x(), p1.y(), p2.x(), p2.y());
          }
+
          int caps = (!closed & drawCaps) ? CapBegin : NoCaps;
 
          points += 2;
@@ -560,6 +563,7 @@ void QCosmeticStroker::drawPath(const QVectorPath &path)
 
          while (type < e) {
             QPointF p2 = QPointF(points[0], points[1]) * state->matrix;
+
             switch (*type) {
                case QPainterPath::MoveToElement:
                   Q_ASSERT(!"Logic error");

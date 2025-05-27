@@ -1240,7 +1240,6 @@ static qint64 qt_mktime(QDate *date, QTime *time, QDateTimePrivate::DaylightStat
          secsSinceEpoch += SECS_PER_HOUR;
          local.tm_isdst = 1;
       }
-
 #endif
 
       if (local.tm_isdst >= 1) {
@@ -1612,6 +1611,7 @@ void QDateTimePrivate::setDateTime(const QDate &date, const QTime &time)
    if (date.isValid()) {
       days = date.toJulianDay() - EPOCH_JD;
       newStatus = ValidDate;
+
    } else if (date.isNull()) {
       newStatus = NullDate;
    }

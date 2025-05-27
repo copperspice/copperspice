@@ -536,8 +536,10 @@ QString QHostAddress::toString() const
          || d->protocol == QAbstractSocket::AnyIPProtocol) {
 
       quint32 i = toIPv4Address();
+
       QString s;
       QIPAddressUtils::toString(s, i);
+
       return s;
    }
 
@@ -704,6 +706,7 @@ QPair<QHostAddress, int> QHostAddress::parseSubnet(const QString &subnet)
 
    int slash = subnet.indexOf(QChar('/'));
    QString netStr = subnet;
+
    if (slash != -1) {
       netStr.truncate(slash);
    }
@@ -716,10 +719,12 @@ QPair<QHostAddress, int> QHostAddress::parseSubnet(const QString &subnet)
 
       if (!isIpv6 && subnet.indexOf(QChar('.'), slash + 1) != -1) {
          // IP-style, convert it to bit-count form
+
          QNetmaskAddress parser;
          if (! parser.setAddress(subnet.mid(slash + 1))) {
             return invalid;
          }
+
          netmask = parser.prefixLength();
 
       } else {

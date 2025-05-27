@@ -303,11 +303,11 @@ struct ThemeMapKey {
    bool noContent;
 
    ThemeMapKey() : partId(-1), stateId(-1) {}
+
    ThemeMapKey(const XPThemeData &data)
       : theme(data.theme), partId(data.partId), stateId(data.stateId),
         noBorder(data.noBorder), noContent(data.noContent)
    { }
-
 };
 
 inline uint qHash(const ThemeMapKey &key)

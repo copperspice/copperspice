@@ -53,6 +53,7 @@ QString QFileInfoPrivate::getFileName(QAbstractFileEngine::FileName name) const
 
             if (name == QAbstractFileEngine::CanonicalName) {
                ret = entry.filePath();
+
             } else {
                ret = entry.path();
             }

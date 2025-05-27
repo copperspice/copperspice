@@ -397,6 +397,7 @@ static QVariant x509ExtensionToValue(X509_EXTENSION *ext)
 
          QVariantMap result;
          result[QString("ca")] = basic->ca ? true : false;
+
          if (basic->pathlen) {
             result["pathLenConstraint"] = (qint64)q_ASN1_INTEGER_get(basic->pathlen);
          }

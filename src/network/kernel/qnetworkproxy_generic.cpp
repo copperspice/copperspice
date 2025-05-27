@@ -82,10 +82,13 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
 
    if (queryProtocol == "http") {
       proxy_env = qgetenv("http_proxy");
+
    } else if (queryProtocol == "https") {
       proxy_env = qgetenv("https_proxy");
+
    } else if (queryProtocol == "ftp") {
       proxy_env = qgetenv("ftp_proxy");
+
    } else {
       proxy_env = qgetenv("all_proxy");
    }

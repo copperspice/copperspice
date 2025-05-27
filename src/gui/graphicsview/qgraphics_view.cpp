@@ -2666,11 +2666,13 @@ void QGraphicsView::paintEvent(QPaintEvent *event)
 
       if (d->mustResizeBackgroundPixmap) {
          d->backgroundPixmap = QPixmap(viewport()->size());
+
          QBrush bgBrush = viewport()->palette().brush(viewport()->backgroundRole());
 
          if (! bgBrush.isOpaque()) {
             d->backgroundPixmap.fill(Qt::transparent);
          }
+
          QPainter p(&d->backgroundPixmap);
          p.fillRect(0, 0, d->backgroundPixmap.width(), d->backgroundPixmap.height(), bgBrush);
          d->backgroundPixmapExposed = QRegion(viewport()->rect());
@@ -2681,10 +2683,13 @@ void QGraphicsView::paintEvent(QPaintEvent *event)
       if (! d->backgroundPixmapExposed.isEmpty()) {
          QPainter backgroundPainter(&d->backgroundPixmap);
          backgroundPainter.setClipRegion(d->backgroundPixmapExposed, Qt::ReplaceClip);
+
          if (viewTransformed) {
             backgroundPainter.setTransform(viewTransform);
          }
+
          QRectF backgroundExposedSceneRect = mapToScene(d->backgroundPixmapExposed.boundingRect()).boundingRect();
+
          drawBackground(&backgroundPainter, backgroundExposedSceneRect);
          d->backgroundPixmapExposed = QRegion();
       }
@@ -2716,8 +2721,11 @@ void QGraphicsView::paintEvent(QPaintEvent *event)
       } else {
          d->scene->d_func()->rectAdjust = 2;
       }
+
       d->scene->d_func()->drawItems(&painter, viewTransformed ? &viewTransform : nullptr, &d->m_exposedRegion, viewport());
+
       d->scene->d_func()->rectAdjust = oldRectAdjust;
+
       // Make sure the painter's world transform is restored correctly when
       // drawing without painter state protection (DontSavePainterState).
       // We only change the worldTransform() so there's no need to do a full-blown
@@ -2735,6 +2743,7 @@ void QGraphicsView::paintEvent(QPaintEvent *event)
       if (! d->scene->d_func()->unpolishedItems.isEmpty()) {
          d->scene->d_func()->_q_polishItems();
       }
+
       // We reset updateAll here (after we've issued polish events)
       // so that we can discard update requests coming from polishEvent().
       d->scene->d_func()->updateAll = false;
@@ -2754,12 +2763,14 @@ void QGraphicsView::paintEvent(QPaintEvent *event)
             QGraphicsItem *item = itemArray[i];
             QGraphicsItemPrivate *itemd = item->d_ptr.data();
             itemd->initStyleOption(&styleOptionArray[i], viewTransform, d->m_exposedRegion, allItems);
+
             // Cache the item's area in view coordinates.
             // Note that we have to do this here in case the base class implementation
             // (QGraphicsScene::drawItems) is not called. If it is, we'll do this
             // operation twice, but that's the price one has to pay for using indirect painting
 
             const QRectF brect = adjustedItemEffectiveBoundingRect(item);
+
             if (!itemd->itemIsUntransformable()) {
                transform = item->sceneTransform();
                if (viewTransformed) {
@@ -2768,8 +2779,10 @@ void QGraphicsView::paintEvent(QPaintEvent *event)
             } else {
                transform = item->deviceTransform(viewTransform);
             }
+
             itemd->paintedViewBoundingRects.insert(d->viewport, transform.mapRect(brect).toRect());
          }
+
          // Draw the items.
          drawItems(&painter, numItems, itemArray, styleOptionArray);
          d->freeStyleOptionsArray(styleOptionArray);
@@ -2783,6 +2796,7 @@ void QGraphicsView::paintEvent(QPaintEvent *event)
    // Rubberband
    if (d->rubberBanding && !d->rubberBandRect.isEmpty()) {
       painter.restore();
+
       QStyleOptionRubberBand option;
       option.initFrom(viewport());
       option.rect = d->rubberBandRect;
@@ -2807,6 +2821,7 @@ void QGraphicsView::paintEvent(QPaintEvent *event)
 void QGraphicsView::resizeEvent(QResizeEvent *event)
 {
    Q_D(QGraphicsView);
+
    // Save the last center point - the resize may scroll the view, which
    // changes the center point.
    QPointF oldLastCenterPoint = d->lastCenterPoint;
@@ -2820,6 +2835,7 @@ void QGraphicsView::resizeEvent(QResizeEvent *event)
    } else {
       d->lastCenterPoint = oldLastCenterPoint;
    }
+
    d->centerView(d->resizeAnchor);
    d->keepLastCenterPoint = false;
 

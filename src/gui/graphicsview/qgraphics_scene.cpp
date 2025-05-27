@@ -4408,6 +4408,7 @@ void QGraphicsScene::drawItems(QPainter *painter, int numItems,
    if (view) {
       d->updateAll = false;
       expose = &view->d_func()->m_exposedRegion;
+
       if (view->d_func()->optimizationFlags & QGraphicsView::DontAdjustForAntialiasing) {
          d->rectAdjust = 1;
       } else {
@@ -4417,8 +4418,10 @@ void QGraphicsScene::drawItems(QPainter *painter, int numItems,
 
    // Find all toplevels, they are already sorted.
    QList<QGraphicsItem *> topLevelItems;
+
    for (int i = 0; i < numItems; ++i) {
       QGraphicsItem *item = items[i]->topLevelItem();
+
       if (!item->d_ptr->itemDiscovered) {
          topLevelItems << item;
          item->d_ptr->itemDiscovered = 1;
@@ -4427,6 +4430,7 @@ void QGraphicsScene::drawItems(QPainter *painter, int numItems,
    }
 
    d->rectAdjust = oldRectAdjust;
+
    // Reset discovery bits.
    for (int i = 0; i < topLevelItems.size(); ++i) {
       topLevelItems.at(i)->d_ptr->itemDiscovered = 0;

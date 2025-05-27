@@ -106,6 +106,7 @@ static QHash<QHostAddress, QHostAddress> ipv4Netmasks()
          ipv4netmasks[address] = mask;
       }
    }
+
    if (pAdapter != staticBuf) {
       free(pAdapter);
    }

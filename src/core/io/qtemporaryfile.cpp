@@ -257,6 +257,7 @@ bool QTemporaryFileEngine::remove()
       // file path was generated, it will be generated again in the scenario above.
 
       filePathIsTemplate = filePathWasTemplate;
+
       return true;
    }
 

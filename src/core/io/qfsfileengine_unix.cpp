@@ -145,6 +145,7 @@ bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode fileOpenMode)
          if (QFileSystemEngine::fillMetaData(fd, metaData) && metaData.isDirectory()) {
             q->setError(QFile::OpenError, "file to open is a directory");
             QT_CLOSE(fd);
+
             return false;
          }
       }
@@ -651,6 +652,7 @@ QString QFSFileEngine::owner(FileOwner own) const
 bool QFSFileEngine::setPermissions(uint perms)
 {
    Q_D(QFSFileEngine);
+
    QSystemError error;
 
    if (! QFileSystemEngine::setPermissions(d->fileEntry, QFileDevice::Permissions(perms), error, nullptr)) {

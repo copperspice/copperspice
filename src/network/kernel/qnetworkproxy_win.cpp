@@ -169,6 +169,7 @@ static QStringList splitSpaceSemicolon(const QString &source)
       }
       start = end + 1;
    }
+
    return list;
 }
 
@@ -363,6 +364,7 @@ static QList<QNetworkProxy> parseServerList(const QNetworkProxyQuery &query, con
          result.prepend(taggedProxies.value(requiredTag));
       }
    }
+
    if (! checkTags || requiredTag != "http") {
       // if there are different http proxies for http and https, prefer the https one (more likely to be capable of CONNECT)
       QNetworkProxy httpProxy  = taggedProxies.value("http");
@@ -636,6 +638,7 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
 
       // url could be empty, e.g. from QNetworkProxy::applicationProxy()
       // still ask for the proxy, for a file url, we know we do not need one
+
       if (url.scheme() == "file" || url.scheme() == "qrc") {
          return sp->defaultResult;
       }

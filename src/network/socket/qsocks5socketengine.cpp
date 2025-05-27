@@ -543,8 +543,6 @@ QString QSocks5PasswordAuthenticator::errorString()
    return QString("Socks5 user name or password incorrect");
 }
 
-
-
 QSocks5SocketEnginePrivate::QSocks5SocketEnginePrivate()
    : socks5State(Uninitialized)
    , readNotificationEnabled(false)
@@ -815,9 +813,11 @@ void QSocks5SocketEnginePrivate::parseAuthenticationMethodReply()
    bool authComplete = false;
    if (uchar(buf.at(1)) == S5_AUTHMETHOD_NONE) {
       authComplete = true;
+
    } else if (uchar(buf.at(1)) == S5_AUTHMETHOD_NOTACCEPTABLE) {
       reauthenticate();
       return;
+
    } else if (buf.at(1) != data->authenticator->methodId()
               || !data->authenticator->beginAuthenticate(data->controlSocket, &authComplete)) {
       setErrorState(AuthenticatingError, "Socks5 host did not support authentication method.");
@@ -1181,6 +1181,7 @@ bool QSocks5SocketEngine::connectInternal()
    if (!d->data) {
       if (socketType() == QAbstractSocket::TcpSocket) {
          d->initialize(QSocks5SocketEnginePrivate::ConnectMode);
+
 #ifndef QT_NO_UDPSOCKET
       } else if (socketType() == QAbstractSocket::UdpSocket) {
          d->initialize(QSocks5SocketEnginePrivate::UdpAssociateMode);
@@ -1620,7 +1621,9 @@ qint64 QSocks5SocketEngine::bytesAvailable() const
 qint64 QSocks5SocketEngine::read(char *data, qint64 maxlen)
 {
    Q_D(QSocks5SocketEngine);
+
    QSOCKS5_Q_DEBUG << "read( , maxlen = " << maxlen << ')';
+
    if (d->mode == QSocks5SocketEnginePrivate::ConnectMode) {
       if (d->connectData->readBuffer.size() == 0) {
          if (d->data->controlSocket->state() == QAbstractSocket::UnconnectedState) {
@@ -1629,7 +1632,9 @@ qint64 QSocks5SocketEngine::read(char *data, qint64 maxlen)
 
             setError(QAbstractSocket::RemoteHostClosedError, "Remote host closed connection###");
             setState(QAbstractSocket::UnconnectedState);
+
             return -1;
+
          } else {
             return 0;       // nothing to be read
          }
@@ -1684,6 +1689,7 @@ qint64 QSocks5SocketEngine::write(const char *data, qint64 len)
       return writeDatagram(data, len, QIpPacketHeader(d->peerAddress, d->peerPort));
 #endif
    }
+
    //### set an error ???
    return -1;
 }
@@ -1703,7 +1709,6 @@ bool QSocks5SocketEngine::leaveMulticastGroup(const QHostAddress &,
    setError(QAbstractSocket::UnsupportedSocketOperationError, "Operation on socket is not supported");
    return false;
 }
-
 
 QNetworkInterface QSocks5SocketEngine::multicastInterface() const
 {
@@ -1744,6 +1749,7 @@ qint64 QSocks5SocketEngine::writeDatagram(const char *data, qint64 len, const QI
    // it is possible to send with out first binding with udp, but socks5 requires a bind.
    if (! d->data) {
       d->initialize(QSocks5SocketEnginePrivate::UdpAssociateMode);
+
       // all udp needs to be bound
       if (!bind(QHostAddress("0.0.0.0"), 0)) {
          //### set error

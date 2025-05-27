@@ -184,6 +184,7 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
             p->drawLines(a);
             p->restore();
          }
+
          p->setPen((opt->state & State_On) ? opt->palette.highlightedText().color() : opt->palette.text().color());
          p->drawLines(a);
          break;
@@ -216,8 +217,10 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          }
 
          break;
+
       case PE_PanelMenu:
          break;
+
       case PE_PanelToolBar:
          break;
 #endif
@@ -2272,10 +2275,12 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
          }
          break;
 #endif // QT_NO_COMBOBOX
+
 #ifndef QT_NO_TOOLBAR
       case CE_ToolBar:
          if (const QStyleOptionToolBar *toolBar = qstyleoption_cast<const QStyleOptionToolBar *>(opt)) {
             // Compatibility with styles that use PE_PanelToolBar
+
             QStyleOptionFrame frame;
             frame.QStyleOption::operator=(*toolBar);
             frame.lineWidth = toolBar->lineWidth;
@@ -2285,11 +2290,13 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             if (widget && qobject_cast<QToolBar *>(widget->parentWidget())) {
                break;
             }
+
             qDrawShadePanel(p, toolBar->rect, toolBar->palette, false, toolBar->lineWidth,
                &toolBar->palette.brush(QPalette::Button));
          }
          break;
 #endif // QT_NO_TOOLBAR
+
       case CE_ColumnViewGrip: {
          // draw background gradients
          QLinearGradient g(0, 0, opt->rect.width(), 0);
@@ -2395,11 +2402,13 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
          break;
 
 #endif // QT_NO_ITEMVIEWS
+
 #ifndef QT_NO_FRAME
       case CE_ShapedFrame:
          if (const QStyleOptionFrame *f = qstyleoption_cast<const QStyleOptionFrame *>(opt)) {
             int frameShape  = f->frameShape;
             int frameShadow = QFrame::Plain;
+
             if (f->state & QStyle::State_Sunken) {
                frameShadow = QFrame::Sunken;
             } else if (f->state & QStyle::State_Raised) {
@@ -2409,6 +2418,7 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             int lw = f->lineWidth;
             int mlw = f->midLineWidth;
             QPalette::ColorRole foregroundRole = QPalette::WindowText;
+
             if (widget) {
                foregroundRole = widget->foregroundRole();
             }
@@ -3202,6 +3212,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
                   delete d->cachedOption;
                   d->cachedOption = nullptr;
                }
+
                d->cachedOption = new QStyleOptionViewItem(*vopt);
             }
 
@@ -3241,6 +3252,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
       default:
          break;
    }
+
    return r;
 }
 
@@ -3793,6 +3805,7 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
 
             int width = dial->rect.width();
             int height = dial->rect.height();
+
             qreal r = qMin(width, height) / 2;
             qreal d_ = r / 6;
             qreal dx = dial->rect.x() + d_ + (width - 2 * r) / 2 + 1;
@@ -3835,18 +3848,21 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
                p->drawLine(arrow[1], arrow[2]);
                p->setPen(pal.dark().color());
                p->drawLine(arrow[0], arrow[1]);
+
             } else if (a > 0 && a < 45) {
                p->setPen(pal.light().color());
                p->drawLine(arrow[2], arrow[0]);
                p->setPen(pal.dark().color());
                p->drawLine(arrow[1], arrow[2]);
                p->drawLine(arrow[0], arrow[1]);
+
             } else if (a >= 45 && a < 135) {
                p->setPen(pal.dark().color());
                p->drawLine(arrow[2], arrow[0]);
                p->drawLine(arrow[1], arrow[2]);
                p->setPen(pal.light().color());
                p->drawLine(arrow[0], arrow[1]);
+
             } else if (a >= 135 && a < 200) {
                p->setPen(pal.dark().color());
                p->drawLine(arrow[2], arrow[0]);
@@ -3860,17 +3876,21 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
             fropt.rect = dial->rect;
             fropt.state = dial->state;
             fropt.palette = dial->palette;
+
             if (fropt.state & QStyle::State_HasFocus) {
                br.adjust(0, 0, 2, 2);
+
                if (dial->subControls & SC_DialTickmarks) {
                   int r = qMin(width, height) / 2;
                   br.translate(-r / 6, - r / 6);
                   br.setWidth(br.width() + r / 3);
                   br.setHeight(br.height() + r / 3);
                }
+
                fropt.rect = br.adjusted(-2, -2, 2, 2);
                proxy()->drawPrimitive(QStyle::PE_FrameFocusRect, &fropt, p, widget);
             }
+
             p->restore();
          }
          break;
@@ -5172,6 +5192,7 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
       case CT_TabWidget:
          sz += QSize(4, 4);
          break;
+
       case CT_LineEdit:
          if (const QStyleOptionFrame *f = qstyleoption_cast<const QStyleOptionFrame *>(opt)) {
             sz += QSize(2 * f->lineWidth, 2 * f->lineWidth);
@@ -6255,11 +6276,14 @@ QIcon QCommonStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption
             closeIcon.addPixmap(openIcon.pixmap(32, 32), QIcon::Normal, QIcon::On);
             closeIcon.addPixmap(openIcon.pixmap(64, 64), QIcon::Normal, QIcon::On);
             closeIcon.addPixmap(openIcon.pixmap(128, 128), QIcon::Normal, QIcon::On);
+
             return closeIcon;
          }
+
          case SP_TitleBarNormalButton:
          case SP_TitleBarCloseButton: {
             QIcon titleBarIcon;
+
             if (standardIcon == SP_TitleBarCloseButton) {
                titleBarIcon.addFile(QLatin1String(":/copperspice/styles/macstyle/images/closedock-16.png"));
                titleBarIcon.addFile(QLatin1String(":/copperspice/styles/macstyle/images/closedock-down-16.png"), QSize(16, 16),
@@ -6269,6 +6293,7 @@ QIcon QCommonStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption
                titleBarIcon.addFile(QLatin1String(":/copperspice/styles/macstyle/images/dockdock-down-16.png"), QSize(16, 16),
                   QIcon::Normal, QIcon::On);
             }
+
             return titleBarIcon;
          }
 
@@ -6327,6 +6352,7 @@ QIcon QCommonStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/newdirectory-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/newdirectory-128.png"), QSize(128, 128));
          break;
+
       case SP_FileDialogBack:
          return QCommonStyle::standardIcon(SP_ArrowBack, option, widget);
 
@@ -6338,71 +6364,85 @@ QIcon QCommonStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/viewdetailed-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/viewdetailed-128.png"), QSize(128, 128));
          break;
+
       case SP_FileDialogInfoView:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/fileinfo-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/fileinfo-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/fileinfo-128.png"), QSize(128, 128));
          break;
+
       case SP_FileDialogContentsView:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/filecontents-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/filecontents-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/filecontents-128.png"), QSize(128, 128));
          break;
+
       case SP_FileDialogListView:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/viewlist-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/viewlist-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/viewlist-128.png"), QSize(128, 128));
          break;
+
       case SP_DialogOkButton:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-ok-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-ok-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-ok-128.png"), QSize(128, 128));
          break;
+
       case SP_DialogCancelButton:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-cancel-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-cancel-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-cancel-128.png"), QSize(128, 128));
          break;
+
       case SP_DialogHelpButton:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-help-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-help-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-help-128.png"), QSize(128, 128));
          break;
+
       case SP_DialogOpenButton:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-open-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-open-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-open-128.png"), QSize(128, 128));
          break;
+
       case SP_DialogSaveButton:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-save-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-save-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-save-128.png"), QSize(128, 128));
          break;
+
       case SP_DialogCloseButton:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-close-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-close-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-close-128.png"), QSize(128, 128));
          break;
+
       case SP_DialogApplyButton:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-apply-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-apply-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-apply-128.png"), QSize(128, 128));
          break;
+
       case SP_DialogResetButton:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-clear-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-clear-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-clear-128.png"), QSize(128, 128));
          break;
+
       case SP_DialogDiscardButton:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-delete-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-delete-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-delete-128.png"), QSize(128, 128));
          break;
+
       case SP_DialogYesButton:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-yes-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-yes-32.png"), QSize(32, 32));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-yes-128.png"), QSize(128, 128));
          break;
+
       case SP_DialogNoButton:
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-no-16.png"), QSize(16, 16));
          icon.addFile(QLatin1String(":/copperspice/styles/commonstyle/images/standardbutton-no-32.png"), QSize(32, 32));

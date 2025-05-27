@@ -68,9 +68,11 @@ static bool isHostExcluded(CFDictionaryRef dict, const QString &host)
 
    bool isSimple = ! host.contains(QChar('.')) && ! host.contains(QChar(':'));
    CFNumberRef excludeSimples;
+
    if (isSimple &&
          (excludeSimples = (CFNumberRef)CFDictionaryGetValue(dict, kSCPropNetProxiesExcludeSimpleHostnames))) {
       int enabled;
+
       if (CFNumberGetValue(excludeSimples, kCFNumberIntType, &enabled) && enabled) {
          return true;
       }
@@ -118,11 +120,14 @@ static QNetworkProxy proxyFromDictionary(CFDictionaryRef dict, QNetworkProxy::Pr
    CFNumberRef protoEnabled;
    CFNumberRef protoPort;
    CFStringRef protoHost;
+
    if (enableKey
          && (protoEnabled = (CFNumberRef)CFDictionaryGetValue(dict, enableKey))
          && (protoHost = (CFStringRef)CFDictionaryGetValue(dict, hostKey))
          && (protoPort = (CFNumberRef)CFDictionaryGetValue(dict, portKey))) {
+
       int enabled;
+
       if (CFNumberGetValue(protoEnabled, kCFNumberIntType, &enabled) && enabled) {
          QString host = QCFString::toQString(protoHost);
 
@@ -137,10 +142,10 @@ static QNetworkProxy proxyFromDictionary(CFDictionaryRef dict, QNetworkProxy::Pr
    return QNetworkProxy();
 }
 
-
 static QNetworkProxy proxyFromDictionary(CFDictionaryRef dict)
 {
    QNetworkProxy::ProxyType proxyType = QNetworkProxy::DefaultProxy;
+
    QString hostName;
    quint16 port = 0;
    QString user;
@@ -230,6 +235,7 @@ QList<QNetworkProxy> macQueryInternal(const QNetworkProxyQuery &query)
 
       if (CFNumberGetValue(pacEnabled, kCFNumberIntType, &enabled) && enabled) {
          // PAC is enabled
+
          CFStringRef pacLocationSetting = (CFStringRef)CFDictionaryGetValue(dict, kSCPropNetProxiesProxyAutoConfigURLString);
          QCFType<CFStringRef> cfPacLocation = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, pacLocationSetting, nullptr, nullptr,
                                               kCFStringEncodingUTF8);
@@ -278,11 +284,13 @@ QList<QNetworkProxy> macQueryInternal(const QNetworkProxyQuery &query)
 
          QCFType<CFErrorRef> pacError;
          QCFType<CFArrayRef> proxies = CFNetworkCopyProxiesForAutoConfigurationScript(pacScript, targetURL, &pacError);
+
          if (!proxies) {
             QString pacLocation = QCFString::toQString(cfPacLocation);
             QCFType<CFStringRef> pacErrorDescription = CFErrorCopyDescription(pacError);
             qWarning("macQueryInternal() Execution of PAC script at %s failed, %s", csPrintable(pacLocation),
                      csPrintable(QCFString::toQString(pacErrorDescription)));
+
             return result;
          }
 
@@ -302,6 +310,7 @@ QList<QNetworkProxy> macQueryInternal(const QNetworkProxyQuery &query)
 
    // try the protocol-specific proxy
    QNetworkProxy protocolSpecificProxy;
+
    if (protocol == "ftp") {
       protocolSpecificProxy =
          proxyFromDictionary(dict, QNetworkProxy::FtpCachingProxy,
@@ -322,6 +331,7 @@ QList<QNetworkProxy> macQueryInternal(const QNetworkProxyQuery &query)
                              kSCPropNetProxiesHTTPSProxy,
                              kSCPropNetProxiesHTTPSPort);
    }
+
    if (protocolSpecificProxy.type() != QNetworkProxy::DefaultProxy) {
       result << protocolSpecificProxy;
    }
@@ -342,18 +352,21 @@ QList<QNetworkProxy> macQueryInternal(const QNetworkProxyQuery &query)
                             kSCPropNetProxiesHTTPSEnable,
                             kSCPropNetProxiesHTTPSProxy,
                             kSCPropNetProxiesHTTPSPort);
+
       if (https.type() != QNetworkProxy::DefaultProxy && https != protocolSpecificProxy) {
          result << https;
       }
    }
 
    CFRelease(dict);
+
    return result;
 }
 
 QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkProxyQuery &query)
 {
    QList<QNetworkProxy> result = macQueryInternal(query);
+
    if (result.isEmpty()) {
       result << QNetworkProxy::NoProxy;
    }
@@ -362,5 +375,3 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
 }
 
 #endif
-
-

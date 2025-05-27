@@ -343,6 +343,7 @@ void QT_FASTCALL comp_func_solid_SourceOver_sse2(uint *destPixels, int length, u
          dstVector = _mm_add_epi8(colorVector, dstVector);
          _mm_store_si128((__m128i *)&dst[x], dstVector);
       }
+
       for (; x < length; ++x) {
          destPixels[x] = color + BYTE_MUL(destPixels[x], minusAlphaOfColor);
       }
@@ -395,6 +396,7 @@ void qt_bitmapblit32_sse2_base(QRasterBuffer *rasterBuffer, int x, int y, quint3
             0x04040404, 0x08080808);
       const __m128i maskadd2 = _mm_set_epi32(0x7f7f7f7f, 0x7e7e7e7e,
             0x7c7c7c7c, 0x78787878);
+
       while (height--) {
          for (int x = 0; x < width; x += 8) {
             const quint8 s = src[x >> 3];
@@ -402,28 +404,34 @@ void qt_bitmapblit32_sse2_base(QRasterBuffer *rasterBuffer, int x, int y, quint3
             if (! s) {
                continue;
             }
+
             __m128i mask1 = _mm_set1_epi8(s);
             __m128i mask2 = mask1;
 
             mask1 = _mm_and_si128(mask1, maskmask1);
             mask1 = _mm_add_epi8(mask1, maskadd1);
             _mm_maskmoveu_si128(c128, mask1, (char *)(dest + x));
+
             mask2 = _mm_and_si128(mask2, maskmask2);
             mask2 = _mm_add_epi8(mask2, maskadd2);
             _mm_maskmoveu_si128(c128, mask2, (char *)(dest + x + 4));
          }
+
          dest += destStride;
          src  += stride;
       }
+
    } else {
       while (height--) {
          const quint8 s = *src;
+
          if (s) {
             __m128i mask1 = _mm_set1_epi8(s);
             mask1 = _mm_and_si128(mask1, maskmask1);
             mask1 = _mm_add_epi8(mask1, maskadd1);
             _mm_maskmoveu_si128(c128, mask1, (char *)(dest));
          }
+
          dest += destStride;
          src  += stride;
       }
@@ -456,9 +464,11 @@ void qt_bitmapblit16_sse2(QRasterBuffer *rasterBuffer, int x, int y, const QRgba
    while (height--) {
       for (int x = 0; x < width; x += 8) {
          const quint8 s = src[x >> 3];
+
          if (!s) {
             continue;
          }
+
          __m128i mask = _mm_set1_epi8(s);
          mask = _mm_and_si128(mask, maskmask);
          mask = _mm_add_epi8(mask, maskadd);

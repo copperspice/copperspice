@@ -82,6 +82,7 @@ class Q_CORE_EXPORT QAbstractFileEngine
       BundleName,
       NFileNames = 9
    };
+
    enum FileOwner {
       OwnerUser,
       OwnerGroup
@@ -121,6 +122,7 @@ class Q_CORE_EXPORT QAbstractFileEngine
    virtual QString fileName(FileName file = DefaultName) const;
    virtual uint ownerId(FileOwner owner) const;
    virtual QString owner(FileOwner owner) const;
+
    virtual QDateTime fileTime(FileTime time) const;
    virtual void setFileName(const QString &file);
    virtual int handle() const;
