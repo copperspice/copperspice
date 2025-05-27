@@ -379,10 +379,10 @@ void qt_memfill16(quint16 *dest, quint16 value, int count)
    }
 }
 
-void qt_bitmapblit32_sse2_base(QRasterBuffer *rasterBuffer, int x, int y, quint32 color,
-   const uchar *src, int width, int height, int stride)
+void qt_bitmapblit32_sse2_base(QRasterBuffer *rasterBuffer, int xOffSet, int yOffSet, quint32 color,
+      const uchar *src, int width, int height, int stride)
 {
-   quint32 *dest = reinterpret_cast<quint32 *>(rasterBuffer->scanLine(y)) + x;
+   quint32 *dest = reinterpret_cast<quint32 *>(rasterBuffer->scanLine(yOffSet)) + xOffSet;
    const int destStride = rasterBuffer->bytesPerLine() / sizeof(quint32);
 
    const __m128i c128 = _mm_set1_epi32(color);
@@ -450,11 +450,11 @@ void qt_bitmapblit8888_sse2(QRasterBuffer *rasterBuffer, int x, int y, const QRg
    qt_bitmapblit32_sse2_base(rasterBuffer, x, y, ARGB2RGBA(color.toArgb32()), src, width, height, stride);
 }
 
-void qt_bitmapblit16_sse2(QRasterBuffer *rasterBuffer, int x, int y, const QRgba64 &color,
+void qt_bitmapblit16_sse2(QRasterBuffer *rasterBuffer, int xOffSet, int yOffSet, const QRgba64 &color,
    const uchar *src, int width, int height, int stride)
 {
    const quint16 c = qConvertRgb32To16(color.toArgb32());
-   quint16 *dest = reinterpret_cast<quint16 *>(rasterBuffer->scanLine(y)) + x;
+   quint16 *dest = reinterpret_cast<quint16 *>(rasterBuffer->scanLine(yOffSet)) + xOffSet;
    const int destStride = rasterBuffer->bytesPerLine() / sizeof(quint16);
 
    const __m128i c128     = _mm_set1_epi16(c);

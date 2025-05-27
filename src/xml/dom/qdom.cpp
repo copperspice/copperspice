@@ -3082,10 +3082,10 @@ QDomNode::NodeType QDomCharacterData::nodeType() const
 
 #undef IMPL
 
-QDomAttrPrivate::QDomAttrPrivate(QDomDocumentPrivate *d, QDomNodePrivate *parent, const QString &name_)
+QDomAttrPrivate::QDomAttrPrivate(QDomDocumentPrivate *d, QDomNodePrivate *parent, const QString &newName)
    : QDomNodePrivate(d, parent)
 {
-   name = name_;
+   name = newName;
    m_specified = false;
 }
 

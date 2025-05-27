@@ -2115,8 +2115,8 @@ static void parseCSStoXMLAttrs(const QVector<QCss::Declaration> &declarations, Q
       QString valueStr;
 
       if (decl.d->values.count() != 1) {
-         for (int i = 0; i < decl.d->values.count(); ++i) {
-            const QString &value = decl.d->values[i].toString();
+         for (int j = 0; j < decl.d->values.count(); ++j) {
+            const QString &value = decl.d->values[j].toString();
 
             if (value.isEmpty()) {
                valueStr += ',';
@@ -2138,10 +2138,10 @@ static void parseCSStoXMLAttrs(const QVector<QCss::Declaration> &declarations, Q
          valueStr.append(lst.at(0));
          valueStr.append( '(' );
 
-         for (int i = 1; i < lst.count(); ++i) {
-            valueStr.append(lst.at(i));
+         for (int k = 1; k < lst.count(); ++k) {
+            valueStr.append(lst.at(k));
 
-            if ((i + 1) < lst.count()) {
+            if ((k + 1) < lst.count()) {
                valueStr.append(',');
             }
          }
@@ -2204,11 +2204,9 @@ void QSvgHandler::parseCSStoXMLAttrs(QString css, QVector<QSvgCssAttribute> *att
       attribute.name = name;
 
       const int firstSymbol = m_cssParser.index;
-      int symbolCount = 0;
 
       do {
          m_cssParser.next();
-         ++symbolCount;
       } while (m_cssParser.hasNext() && !m_cssParser.test(QCss::SEMICOLON));
 
       for (int i = firstSymbol; i < m_cssParser.index - 1; ++i) {
@@ -2551,13 +2549,12 @@ static bool parseAnimateColorNode(QSvgNode *parent, const QXmlStreamAttributes &
 
    } else {
       QStringList str = valuesStr.split(';');
-      QStringList::const_iterator itr;
 
-      for (itr = str.constBegin(); itr != str.constEnd(); ++itr) {
+      for (auto iter = str.constBegin(); iter != str.constEnd(); ++iter) {
          QColor color;
-         QString str = *itr;
+         QString tmpStr = *iter;
 
-         resolveColor(QStringView(str), color, handler);
+         resolveColor(QStringView(tmpStr), color, handler);
          colors.append(color);
       }
    }
@@ -3523,8 +3520,9 @@ static QSvgNode *createSvgNode(QSvgNode *parent, const QXmlStreamAttributes &att
    if (viewBoxValues.count() == 4) {
       QString xStr      = viewBoxValues.at(0).trimmed();
       QString yStr      = viewBoxValues.at(1).trimmed();
-      QString widthStr  = viewBoxValues.at(2).trimmed();
-      QString heightStr = viewBoxValues.at(3).trimmed();
+
+      widthStr  = viewBoxValues.at(2).trimmed();
+      heightStr = viewBoxValues.at(3).trimmed();
 
       QSvgHandler::LengthType lt;
       qreal x = parseLength(xStr, lt, handler);
@@ -4117,9 +4115,9 @@ bool QSvgHandler::startElement(const QString &localName, const QXmlStreamAttribu
       return false;
    }
 
-   if (FactoryMethod method = findGroupFactory(localName)) {
+   if (FactoryMethod method_A = findGroupFactory(localName)) {
       //group
-      node = method(m_doc ? m_nodes.top() : nullptr, attributes, this);
+      node = method_A(m_doc ? m_nodes.top() : nullptr, attributes, this);
       Q_ASSERT(node);
 
       if (! m_doc) {
@@ -4150,10 +4148,11 @@ bool QSvgHandler::startElement(const QString &localName, const QXmlStreamAttribu
 
       parseStyle(node, attributes, this);
 
-   } else if (FactoryMethod method = findGraphicsFactory(localName)) {
+   } else if (FactoryMethod method_B = findGraphicsFactory(localName)) {
       //rendering element
       Q_ASSERT(!m_nodes.isEmpty());
-      node = method(m_nodes.top(), attributes, this);
+
+      node = method_B(m_nodes.top(), attributes, this);
 
       if (node) {
          switch (m_nodes.top()->type()) {
@@ -4199,14 +4198,15 @@ bool QSvgHandler::startElement(const QString &localName, const QXmlStreamAttribu
          }
       }
 
-   } else if (ParseMethod method = findUtilFactory(localName)) {
+   } else if (ParseMethod method_C = findUtilFactory(localName)) {
       Q_ASSERT(!m_nodes.isEmpty());
-      if (!method(m_nodes.top(), attributes, this)) {
-         qWarning("Problem parsing %s", csPrintable(localName));
+
+      if (! method_C(m_nodes.top(), attributes, this)) {
+         qWarning("Unable to parse %s", csPrintable(localName));
       }
 
-   } else if (StyleFactoryMethod method = findStyleFactoryMethod(localName)) {
-      QSvgStyleProperty *prop = method(m_nodes.top(), attributes, this);
+   } else if (StyleFactoryMethod method_D = findStyleFactoryMethod(localName)) {
+      QSvgStyleProperty *prop = method_D(m_nodes.top(), attributes, this);
 
       if (prop) {
          m_style = prop;
@@ -4216,9 +4216,9 @@ bool QSvgHandler::startElement(const QString &localName, const QXmlStreamAttribu
          qWarning("Could not parse node: %s", csPrintable(localName));
       }
 
-   } else if (StyleParseMethod method = findStyleUtilFactoryMethod(localName)) {
+   } else if (StyleParseMethod method_E = findStyleUtilFactoryMethod(localName)) {
       if (m_style) {
-         if (!method(m_style, attributes, this)) {
+         if (! method_E(m_style, attributes, this)) {
             qWarning("Problem parsing %s", csPrintable(localName));
          }
       }
@@ -4408,26 +4408,26 @@ bool QSvgHandler::processingInstruction(const QString &target, const QString &da
 #ifndef QT_NO_CSSPARSER
    if (target == "xml-stylesheet") {
 
-      static QRegularExpression rx("type=\\\"(.+?)\\\"");
-      QRegularExpressionMatch match = rx.match(data);
+      static QRegularExpression regExpA("type=\\\"(.+?)\\\"");
+      QRegularExpressionMatch matchA = regExpA.match(data);
 
       bool isCss = false;
 
-      while (match.hasMatch()) {
-         QStringView type = match.capturedView(1);
+      while (matchA.hasMatch()) {
+         QStringView type = matchA.capturedView(1);
 
          if (type.toLower() == "text/css") {
             isCss = true;
          }
 
-         match = rx.match(data, match.capturedEnd(0));
+         matchA = regExpA.match(data, matchA.capturedEnd(0));
       }
 
       if (isCss) {
-         static QRegularExpression rx("href=\\\"(.+?)\\\"");
-         QRegularExpressionMatch match = rx.match(data);
+         static QRegularExpression regExpB("href=\\\"(.+?)\\\"");
+         QRegularExpressionMatch matchB = regExpB.match(data);
 
-         QString addr = match.captured(1);
+         QString addr = matchB.captured(1);
          QFileInfo fi(addr);
 
          if (fi.exists()) {

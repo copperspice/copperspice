@@ -29,12 +29,13 @@ class QBlittablePrivate
 {
  public:
    QBlittablePrivate(const QSize &size, QBlittable::Capabilities caps)
-      : caps(caps), m_size(size), locked(false), cachedImg(nullptr)
+      : locked(false), m_caps(caps), m_size(size), cachedImg(nullptr)
    { }
 
-   QBlittable::Capabilities caps;
-   QSize m_size;
    bool locked;
+
+   QBlittable::Capabilities m_caps;
+   QSize m_size;
    QImage *cachedImg;
 };
 
@@ -51,7 +52,7 @@ QBlittable::~QBlittable()
 QBlittable::Capabilities QBlittable::capabilities() const
 {
    Q_D(const QBlittable);
-   return d->caps;
+   return d->m_caps;
 }
 
 QSize QBlittable::size() const

@@ -560,18 +560,18 @@ void QPaintEngineEx::stroke(const QVectorPath &path, const QPen &pen)
             }
 
          } else {
-            QPointF p = ((const QPointF *)points)[0] * state()->matrix;
-            d->activeStroker->moveTo(p.x(), p.y());
+            QPointF p1 = ((const QPointF *)points)[0] * state()->matrix;
+            d->activeStroker->moveTo(p1.x(), p1.y());
             points += 2;
 
             while (points < lastPoint) {
-               QPointF p = ((const QPointF *)points)[0] * state()->matrix;
-               d->activeStroker->lineTo(p.x(), p.y());
+               QPointF p2 = ((const QPointF *)points)[0] * state()->matrix;
+               d->activeStroker->lineTo(p2.x(), p2.y());
                points += 2;
             }
 
             if (path.hasImplicitClose()) {
-               d->activeStroker->lineTo(p.x(), p.y());
+               d->activeStroker->lineTo(p1.x(), p1.y());
             }
          }
 

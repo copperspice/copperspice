@@ -295,7 +295,6 @@ class QRasterPaintEnginePrivate : public QPaintEngineExPrivate
    void recalculateFastImages();
    bool canUseFastImageBlending(QPainter::CompositionMode mode, const QImage &image) const;
 
-   QScopedPointer<QRasterBuffer>  rasterBuffer;
    int deviceDepth;
 
    uint mono_surface : 1;
@@ -308,6 +307,7 @@ class QRasterPaintEnginePrivate : public QPaintEngineExPrivate
    QPaintDevice *device;
 
    QScopedPointer<QOutlineMapper> outlineMapper;
+   QScopedPointer<QRasterBuffer>  m_rasterBuffer;
    QScopedPointer<QRasterizer>    rasterizer;
    QScopedPointer<QClipData>      baseClip;
 

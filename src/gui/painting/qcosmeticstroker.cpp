@@ -550,9 +550,11 @@ void QCosmeticStroker::drawPath(const QVectorPath &path)
          const QPainterPath::ElementType *e = subPath(type, end, points, &closed);
 
          if (closed) {
-            const qreal *p = points + 2 * (e - type);
-            QPointF p1 = QPointF(p[-4], p[-3]) * state->matrix;
-            QPointF p2 = QPointF(p[-2], p[-1]) * state->matrix;
+            const qreal *ptr = points + 2 * (e - type);
+
+            QPointF p1 = QPointF(ptr[-4], ptr[-3]) * state->matrix;
+            QPointF p2 = QPointF(ptr[-2], ptr[-1]) * state->matrix;
+
             calculateLastPoint(p1.x(), p1.y(), p2.x(), p2.y());
          }
 

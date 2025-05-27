@@ -414,8 +414,9 @@ void QSvgText::draw(QPainter *p, QSvgExtraStates &states)
          tl.endLayout();
 
          bool endOfBoundsReached = false;
-         for (int i = 0; i < tl.lineCount(); ++i) {
-            QTextLine line = tl.lineAt(i);
+
+         for (int cnt = 0; cnt < tl.lineCount(); ++i) {
+            QTextLine line = tl.lineAt(cnt);
 
             qreal x = 0;
 

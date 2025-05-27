@@ -709,12 +709,13 @@ bool qt_stroke_side(Iterator *it, QStroker *stroker, bool capFirst, QLineF *star
 
             // Add these beziers
             for (int i = 0; i < count; ++i) {
-               QPointF cp1 = offsetCurves[i].pt2();
-               QPointF cp2 = offsetCurves[i].pt3();
-               QPointF ep = offsetCurves[i].pt4();
-               stroker->emitCubicTo(qt_real_to_fixed(cp1.x()), qt_real_to_fixed(cp1.y()),
-                  qt_real_to_fixed(cp2.x()), qt_real_to_fixed(cp2.y()),
-                  qt_real_to_fixed(ep.x()), qt_real_to_fixed(ep.y()));
+               QPointF tmp_cp1 = offsetCurves[i].pt2();
+               QPointF tmp_cp2 = offsetCurves[i].pt3();
+               QPointF tmp_ep  = offsetCurves[i].pt4();
+
+               stroker->emitCubicTo(qt_real_to_fixed(tmp_cp1.x()), qt_real_to_fixed(tmp_cp1.y()),
+                  qt_real_to_fixed(tmp_cp2.x()), qt_real_to_fixed(tmp_cp2.y()),
+                  qt_real_to_fixed(tmp_ep.x()),  qt_real_to_fixed(tmp_ep.y()));
             }
          }
 
