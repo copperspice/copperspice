@@ -18,6 +18,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_popup_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_shellsurface_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_toplevel_p.h
+
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_eventdispatcher_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_fontdatabase_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_services_p.h
@@ -25,6 +26,10 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qunix_eventdispatcher_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontconfig_database_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontengine_multifontconfig_p.h
+
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/shared/qwayland_mimehelper.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/shared/qwayland_shm_formathelper.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/shared/qwayland_xkb.h
    )
 
    target_sources(CsWaylandClient
@@ -40,6 +45,9 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qunix_eventdispatcher.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontconfig_database.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontengine_multifontconfig.cpp
+
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/shared/qwayland_mimehelper.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/shared/qwayland_xkb.cpp
 
       # wayland xml extensions and protocol files
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/xml/extensions/wl-hardware-integration.xml
@@ -94,6 +102,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       CsGui
       Wayland::Client
       ${FONTCONFIG_LIBRARIES}
+      ${XKBCOMMON_LIB}
    )
 
    if(GTK2_FOUND)
