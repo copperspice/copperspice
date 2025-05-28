@@ -30,6 +30,10 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/shared/qwayland_mimehelper.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/shared/qwayland_shm_formathelper.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/shared/qwayland_xkb.h
+
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/shellintegration/qwayland_shell_integration_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/shellintegration/qwayland_shell_integrationfactory_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/shellintegration/qwayland_shell_integrationplugin_p.h
    )
 
    target_sources(CsWaylandClient
@@ -48,6 +52,9 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
 
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/shared/qwayland_mimehelper.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/shared/qwayland_xkb.cpp
+
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/shellintegration/qwayland_shell_integrationfactory.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/shellintegration/qwayland_shell_integrationplugin.cpp
 
       # wayland xml extensions and protocol files
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/xml/extensions/wl-hardware-integration.xml
