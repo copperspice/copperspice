@@ -103,12 +103,13 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
 
       if (url.scheme() == "socks5") {
          QNetworkProxy proxy(QNetworkProxy::Socks5Proxy, url.host(),
-                             url.port() ? url.port() : 1080, url.userName(), url.password());
+               url.port() ? url.port() : 1080, url.userName(), url.password());
+
          proxyList << proxy;
 
       } else if (url.scheme() == "socks5h") {
          QNetworkProxy proxy(QNetworkProxy::Socks5Proxy, url.host(),
-                             url.port() ? url.port() : 1080, url.userName(), url.password());
+               url.port() ? url.port() : 1080, url.userName(), url.password());
 
          proxy.setCapabilities(QNetworkProxy::HostNameLookupCapability);
          proxyList << proxy;
@@ -117,7 +118,8 @@ QList<QNetworkProxy> QNetworkProxyFactory::systemProxyForQuery(const QNetworkPro
             && query.queryType() != QNetworkProxyQuery::TcpServer) {
 
          QNetworkProxy proxy(QNetworkProxy::HttpProxy, url.host(),
-                             url.port() ? url.port() : 8080, url.userName(), url.password());
+               url.port() ? url.port() : 8080, url.userName(), url.password());
+
          proxyList << proxy;
       }
    }

@@ -266,8 +266,8 @@ class QWidgetBackingStore
    void resetWidget(QWidget *widget) {
       if (widget) {
          widget->d_func()->inDirtyList = false;
-         widget->d_func()->isScrolled = false;
-         widget->d_func()->isMoved = false;
+         widget->d_func()->isScrolled  = false;
+         widget->d_func()->isMoved     = false;
          widget->d_func()->m_dirty     = QRegion();
       }
    }

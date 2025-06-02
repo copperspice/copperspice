@@ -221,11 +221,13 @@ class QSvgPaintEngine : public QPaintEngine
       saveGradientStops(str, g);
       str << QLatin1String("</linearGradient>") << endl;
    }
+
    void saveRadialGradientBrush(const QGradient *g) {
       QTextStream str(&d_func()->defs, QIODevice::Append);
       const QRadialGradient *grad = static_cast<const QRadialGradient *>(g);
       str << QLatin1String("<radialGradient ");
       saveGradientUnits(str, g);
+
       if (grad) {
          str << QLatin1String("cx=\"") << grad->center().x() << QLatin1String("\" ")
              << QLatin1String("cy=\"") << grad->center().y() << QLatin1String("\" ")
@@ -233,6 +235,7 @@ class QSvgPaintEngine : public QPaintEngine
              << QLatin1String("fx=\"") << grad->focalPoint().x() << QLatin1String("\" ")
              << QLatin1String("fy=\"") << grad->focalPoint().y() << QLatin1String("\" ");
       }
+
       str << QLatin1String("xml:id=\"") << d_func()->generateGradientName() << QLatin1String("\">\n");
       saveGradientStops(str, g);
       str << QLatin1String("</radialGradient>") << endl;
@@ -648,30 +651,42 @@ QPaintEngine *QSvgGenerator::paintEngine() const
 int QSvgGenerator::metric(QPaintDevice::PaintDeviceMetric metric) const
 {
    Q_D(const QSvgGenerator);
+
    switch (metric) {
       case QPaintDevice::PdmDepth:
          return 32;
+
       case QPaintDevice::PdmWidth:
          return d->engine->size().width();
+
       case QPaintDevice::PdmHeight:
          return d->engine->size().height();
+
       case QPaintDevice::PdmDpiX:
          return d->engine->resolution();
+
       case QPaintDevice::PdmDpiY:
          return d->engine->resolution();
+
       case QPaintDevice::PdmHeightMM:
          return qRound(d->engine->size().height() * 25.4 / d->engine->resolution());
+
       case QPaintDevice::PdmWidthMM:
          return qRound(d->engine->size().width() * 25.4 / d->engine->resolution());
+
       case QPaintDevice::PdmNumColors:
          return 0xffffffff;
+
       case QPaintDevice::PdmPhysicalDpiX:
          return d->engine->resolution();
+
       case QPaintDevice::PdmPhysicalDpiY:
          return d->engine->resolution();
+
       case QPaintDevice::PdmDevicePixelRatio:
       case QPaintDevice::PdmDevicePixelRatioScaled:
         return 1;
+
       default:
          qWarning("QSvgGenerator::metric(), unhandled metric %d\n", metric);
          break;

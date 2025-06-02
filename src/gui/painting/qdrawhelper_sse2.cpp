@@ -386,16 +386,12 @@ void qt_bitmapblit32_sse2_base(QRasterBuffer *rasterBuffer, int xOffSet, int yOf
    const int destStride = rasterBuffer->bytesPerLine() / sizeof(quint32);
 
    const __m128i c128 = _mm_set1_epi32(color);
-   const __m128i maskmask1 = _mm_set_epi32(0x10101010, 0x20202020,
-         0x40404040, 0x80808080);
-   const __m128i maskadd1 = _mm_set_epi32(0x70707070, 0x60606060,
-         0x40404040, 0x00000000);
+   const __m128i maskmask1 = _mm_set_epi32(0x10101010, 0x20202020, 0x40404040, 0x80808080);
+   const __m128i maskadd1  = _mm_set_epi32(0x70707070, 0x60606060, 0x40404040, 0x00000000);
 
    if (width > 4) {
-      const __m128i maskmask2 = _mm_set_epi32(0x01010101, 0x02020202,
-            0x04040404, 0x08080808);
-      const __m128i maskadd2 = _mm_set_epi32(0x7f7f7f7f, 0x7e7e7e7e,
-            0x7c7c7c7c, 0x78787878);
+      const __m128i maskmask2 = _mm_set_epi32(0x01010101, 0x02020202, 0x04040404, 0x08080808);
+      const __m128i maskadd2  = _mm_set_epi32(0x7f7f7f7f, 0x7e7e7e7e, 0x7c7c7c7c, 0x78787878);
 
       while (height--) {
          for (int x = 0; x < width; x += 8) {

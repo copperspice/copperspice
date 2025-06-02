@@ -63,7 +63,7 @@ QNetworkReplyFileImpl::QNetworkReplyFileImpl(QObject *parent, const QNetworkRequ
 
       setError(QNetworkReply::ProtocolInvalidOperationError, msg);
       QMetaObject::invokeMethod(this, "error", Qt::QueuedConnection,
-                                Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ProtocolInvalidOperationError));
+            Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ProtocolInvalidOperationError));
 
       QMetaObject::invokeMethod(this, "finished", Qt::QueuedConnection);
 
@@ -92,8 +92,10 @@ QNetworkReplyFileImpl::QNetworkReplyFileImpl(QObject *parent, const QNetworkRequ
                     "Can not open %1: Path is a directory").formatArg(url.toString());
 
       setError(QNetworkReply::ContentOperationNotPermittedError, msg);
+
       QMetaObject::invokeMethod(this, "error", Qt::QueuedConnection,
-                  Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ContentOperationNotPermittedError));
+            Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ContentOperationNotPermittedError));
+
       QMetaObject::invokeMethod(this, "finished", Qt::QueuedConnection);
 
       return;
@@ -103,18 +105,19 @@ QNetworkReplyFileImpl::QNetworkReplyFileImpl(QObject *parent, const QNetworkRequ
    bool opened = d->realFile.open(QIODevice::ReadOnly | QIODevice::Unbuffered);
 
    // could we open the file?
-   if (!opened) {
+   if (! opened) {
       QString msg = QCoreApplication::translate("QNetworkAccessFileBackend", "Error opening %1: %2")
-                  .formatArgs(d->realFile.fileName(), d->realFile.errorString());
+            .formatArgs(d->realFile.fileName(), d->realFile.errorString());
 
       if (d->realFile.exists()) {
          setError(QNetworkReply::ContentAccessDenied, msg);
          QMetaObject::invokeMethod(this, "error", Qt::QueuedConnection,
-                  Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ContentAccessDenied));
+               Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ContentAccessDenied));
+
       } else {
          setError(QNetworkReply::ContentNotFoundError, msg);
          QMetaObject::invokeMethod(this, "error", Qt::QueuedConnection,
-                                   Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ContentNotFoundError));
+               Q_ARG(QNetworkReply::NetworkError, QNetworkReply::ContentNotFoundError));
       }
 
       QMetaObject::invokeMethod(this, "finished", Qt::QueuedConnection);
@@ -129,7 +132,7 @@ QNetworkReplyFileImpl::QNetworkReplyFileImpl(QObject *parent, const QNetworkRequ
    QMetaObject::invokeMethod(this, "metaDataChanged", Qt::QueuedConnection);
 
    QMetaObject::invokeMethod(this, "downloadProgress", Qt::QueuedConnection,
-                             Q_ARG(qint64, d->realFileSize), Q_ARG(qint64, d->realFileSize));
+         Q_ARG(qint64, d->realFileSize), Q_ARG(qint64, d->realFileSize));
 
    QMetaObject::invokeMethod(this, "readyRead", Qt::QueuedConnection);
    QMetaObject::invokeMethod(this, "finished", Qt::QueuedConnection);
@@ -181,18 +184,18 @@ qint64 QNetworkReplyFileImpl::readData(char *data, qint64 maxlen)
       return -1;
    }
 
-   qint64 ret = d->realFile.read(data, maxlen);
+   qint64 retval = d->realFile.read(data, maxlen);
    if (bytesAvailable() == 0 && d->realFile.isOpen()) {
       d->realFile.close();
    }
 
-   if (ret == 0 && bytesAvailable() == 0) {
+   if (retval == 0 && bytesAvailable() == 0) {
       return -1;
 
    } else {
       setAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
-      return ret;
       setAttribute(QNetworkRequest::HttpReasonPhraseAttribute, QString("OK"));
 
+      return retval;
    }
 }

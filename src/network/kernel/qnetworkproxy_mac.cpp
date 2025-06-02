@@ -69,8 +69,7 @@ static bool isHostExcluded(CFDictionaryRef dict, const QString &host)
    bool isSimple = ! host.contains(QChar('.')) && ! host.contains(QChar(':'));
    CFNumberRef excludeSimples;
 
-   if (isSimple &&
-         (excludeSimples = (CFNumberRef)CFDictionaryGetValue(dict, kSCPropNetProxiesExcludeSimpleHostnames))) {
+   if (isSimple && (excludeSimples = (CFNumberRef)CFDictionaryGetValue(dict, kSCPropNetProxiesExcludeSimpleHostnames))) {
       int enabled;
 
       if (CFNumberGetValue(excludeSimples, kCFNumberIntType, &enabled) && enabled) {
@@ -84,7 +83,7 @@ static bool isHostExcluded(CFDictionaryRef dict, const QString &host)
    // not a simple host name
    // does it match the list of exclusions?
    CFArrayRef exclusionList = (CFArrayRef)CFDictionaryGetValue(dict, kSCPropNetProxiesExceptionsList);
-   if (!exclusionList) {
+   if (! exclusionList) {
       return false;
    }
 
@@ -114,8 +113,7 @@ static bool isHostExcluded(CFDictionaryRef dict, const QString &host)
 }
 
 static QNetworkProxy proxyFromDictionary(CFDictionaryRef dict, QNetworkProxy::ProxyType type,
-      CFStringRef enableKey, CFStringRef hostKey,
-      CFStringRef portKey)
+      CFStringRef enableKey, CFStringRef hostKey, CFStringRef portKey)
 {
    CFNumberRef protoEnabled;
    CFNumberRef protoPort;
@@ -237,8 +235,8 @@ QList<QNetworkProxy> macQueryInternal(const QNetworkProxyQuery &query)
          // PAC is enabled
 
          CFStringRef pacLocationSetting = (CFStringRef)CFDictionaryGetValue(dict, kSCPropNetProxiesProxyAutoConfigURLString);
-         QCFType<CFStringRef> cfPacLocation = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, pacLocationSetting, nullptr, nullptr,
-                                              kCFStringEncodingUTF8);
+         QCFType<CFStringRef> cfPacLocation = CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, pacLocationSetting,
+               nullptr, nullptr, kCFStringEncodingUTF8);
 
          QCFType<CFDataRef> pacData;
          QCFType<CFURLRef> pacUrl = CFURLCreateWithString(kCFAllocatorDefault, cfPacLocation, nullptr);
@@ -263,7 +261,7 @@ QList<QNetworkProxy> macQueryInternal(const QNetworkProxyQuery &query)
 
          QCFType<CFStringRef> pacScript = CFStringCreateFromExternalRepresentation(kCFAllocatorDefault, pacData, kCFStringEncodingISOLatin1);
 
-         if (!pacScript) {
+         if (! pacScript) {
             // This should never happen, but the documentation says it may return nullptr if there was a problem creating the object.
             QString pacLocation = QCFString::toQString(cfPacLocation);
             qWarning("macQueryInternal() Unable to read the PAC script at %s", csPrintable(pacLocation));
@@ -278,14 +276,14 @@ QList<QNetworkProxy> macQueryInternal(const QNetworkProxyQuery &query)
          QCFType<CFURLRef> targetURL = CFURLCreateWithBytes(kCFAllocatorDefault, (UInt8 *)encodedURL.data(),
                encodedURL.size(), kCFStringEncodingUTF8, nullptr);
 
-         if (!targetURL) {
+         if (! targetURL) {
             return result; // URL creation problem, abort
          }
 
          QCFType<CFErrorRef> pacError;
          QCFType<CFArrayRef> proxies = CFNetworkCopyProxiesForAutoConfigurationScript(pacScript, targetURL, &pacError);
 
-         if (!proxies) {
+         if (! proxies) {
             QString pacLocation = QCFString::toQString(cfPacLocation);
             QCFType<CFStringRef> pacErrorDescription = CFErrorCopyDescription(pacError);
             qWarning("macQueryInternal() Execution of PAC script at %s failed, %s", csPrintable(pacLocation),
@@ -312,24 +310,18 @@ QList<QNetworkProxy> macQueryInternal(const QNetworkProxyQuery &query)
    QNetworkProxy protocolSpecificProxy;
 
    if (protocol == "ftp") {
-      protocolSpecificProxy =
-         proxyFromDictionary(dict, QNetworkProxy::FtpCachingProxy,
-                             kSCPropNetProxiesFTPEnable,
-                             kSCPropNetProxiesFTPProxy,
-                             kSCPropNetProxiesFTPPort);
+      protocolSpecificProxy = proxyFromDictionary(dict, QNetworkProxy::FtpCachingProxy,
+            kSCPropNetProxiesFTPEnable, kSCPropNetProxiesFTPProxy, kSCPropNetProxiesFTPPort);
+
    } else if (protocol == "http") {
-      protocolSpecificProxy =
-         proxyFromDictionary(dict, QNetworkProxy::HttpProxy,
-                             kSCPropNetProxiesHTTPEnable,
-                             kSCPropNetProxiesHTTPProxy,
-                             kSCPropNetProxiesHTTPPort);
+      protocolSpecificProxy = proxyFromDictionary(dict, QNetworkProxy::HttpProxy,
+            kSCPropNetProxiesHTTPEnable, kSCPropNetProxiesHTTPProxy, kSCPropNetProxiesHTTPPort);
+
    } else if (protocol == "https") {
       isHttps = true;
-      protocolSpecificProxy =
-         proxyFromDictionary(dict, QNetworkProxy::HttpProxy,
-                             kSCPropNetProxiesHTTPSEnable,
-                             kSCPropNetProxiesHTTPSProxy,
-                             kSCPropNetProxiesHTTPSPort);
+
+      protocolSpecificProxy = proxyFromDictionary(dict, QNetworkProxy::HttpProxy,
+            kSCPropNetProxiesHTTPSEnable, kSCPropNetProxiesHTTPSProxy, kSCPropNetProxiesHTTPSPort);
    }
 
    if (protocolSpecificProxy.type() != QNetworkProxy::DefaultProxy) {
@@ -338,20 +330,16 @@ QList<QNetworkProxy> macQueryInternal(const QNetworkProxyQuery &query)
 
    // let's add SOCKSv5 if present too
    QNetworkProxy socks5 = proxyFromDictionary(dict, QNetworkProxy::Socks5Proxy,
-                          kSCPropNetProxiesSOCKSEnable,
-                          kSCPropNetProxiesSOCKSProxy,
-                          kSCPropNetProxiesSOCKSPort);
+         kSCPropNetProxiesSOCKSEnable, kSCPropNetProxiesSOCKSProxy, kSCPropNetProxiesSOCKSPort);
+
    if (socks5.type() != QNetworkProxy::DefaultProxy) {
       result << socks5;
    }
 
-   // let's add the HTTPS proxy if present (and if we haven't added
-   // yet)
-   if (!isHttps) {
+   // add the HTTPS proxy if present (and if we haven't added yet)
+   if (! isHttps) {
       QNetworkProxy https = proxyFromDictionary(dict, QNetworkProxy::HttpProxy,
-                            kSCPropNetProxiesHTTPSEnable,
-                            kSCPropNetProxiesHTTPSProxy,
-                            kSCPropNetProxiesHTTPSPort);
+            kSCPropNetProxiesHTTPSEnable, kSCPropNetProxiesHTTPSProxy, kSCPropNetProxiesHTTPSPort);
 
       if (https.type() != QNetworkProxy::DefaultProxy && https != protocolSpecificProxy) {
          result << https;

@@ -2424,9 +2424,9 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
             if constexpr (blendType != BlendTransformedBilinearTiled) {
 
 #if defined(__SSE2__)
-               const __m128i colorMask = _mm_set1_epi32(0x00ff00ff);
                const __m128i disty_128   = _mm_set1_epi16(disty);
                const __m128i idisty_128 = _mm_set1_epi16(idisty);
+               const __m128i colorMask  = _mm_set1_epi32(0x00ff00ff);
 
                lastIndex -= 3;
 
@@ -2460,9 +2460,9 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
                }
 
 #elif defined(__ARM_NEON__)
-               const int16x8_t colorMask = vdupq_n_s16(0x00ff);
                const int16x8_t disty_128  = vdupq_n_s16(disty);
                const int16x8_t idisty_128 = vdupq_n_s16(idisty);
+               const int16x8_t colorMask  = vdupq_n_s16(0x00ff);
 
                lastIndex -= 3;
 
@@ -2535,7 +2535,8 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
                int ag = (intermediate_buffer[1][x1]  * idistx + intermediate_buffer[1][x2] * distx) & 0xff00ff00;
 
                *b = rb | ag;
-               b++;
+               ++b;
+
                fx += fdx;
             }
 
@@ -2612,13 +2613,14 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
                BILINEAR_DOWNSCALE_BOUNDS_PROLOG
 
                const __m128i colorMask = _mm_set1_epi32(0x00ff00ff);
-               const __m128i v_256 = _mm_set1_epi16(256);
-               const __m128i v_disty = _mm_set1_epi16(disty);
-               const __m128i v_fdx = _mm_set1_epi32(fdx * 4);
+               const __m128i v_256     = _mm_set1_epi16(256);
+               const __m128i v_disty   = _mm_set1_epi16(disty);
+               const __m128i v_fdx     = _mm_set1_epi32(fdx * 4);
+
                __m128i v_fx = _mm_setr_epi32(fx, fx + fdx, fx + fdx + fdx, fx + fdx + fdx + fdx);
 
                while (b < boundedEnd) {
-                  __m128i offset = _mm_srli_epi32(v_fx, 16);
+                  __m128i offset    = _mm_srli_epi32(v_fx, 16);
                   const int offset0 = _mm_cvtsi128_si32(offset);
                   offset = _mm_srli_si128(offset, 4);
 
@@ -2629,10 +2631,10 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
                   offset = _mm_srli_si128(offset, 4);
 
                   const int offset3 = _mm_cvtsi128_si32(offset);
-                  const __m128i tl = _mm_setr_epi32(s1[offset0], s1[offset1], s1[offset2], s1[offset3]);
-                  const __m128i tr = _mm_setr_epi32(s1[offset0 + 1], s1[offset1 + 1], s1[offset2 + 1], s1[offset3 + 1]);
-                  const __m128i bl = _mm_setr_epi32(s2[offset0], s2[offset1], s2[offset2], s2[offset3]);
-                  const __m128i br = _mm_setr_epi32(s2[offset0 + 1], s2[offset1 + 1], s2[offset2 + 1], s2[offset3 + 1]);
+                  const __m128i tl  = _mm_setr_epi32(s1[offset0], s1[offset1], s1[offset2], s1[offset3]);
+                  const __m128i tr  = _mm_setr_epi32(s1[offset0 + 1], s1[offset1 + 1], s1[offset2 + 1], s1[offset3 + 1]);
+                  const __m128i bl  = _mm_setr_epi32(s2[offset0], s2[offset1], s2[offset2], s2[offset3]);
+                  const __m128i br  = _mm_setr_epi32(s2[offset0 + 1], s2[offset1 + 1], s2[offset2 + 1], s2[offset3 + 1]);
 
                   __m128i v_distx = _mm_srli_epi16(v_fx, 12);
                   v_distx = _mm_shufflehi_epi16(v_distx, _MM_SHUFFLE(2, 2, 0, 0));
@@ -2648,11 +2650,12 @@ static const uint *fetchTransformedBilinearARGB32PM(uint *buffer, const Operator
 #elif defined(__ARM_NEON__)
                BILINEAR_DOWNSCALE_BOUNDS_PROLOG
 
-               const int16x8_t colorMask = vdupq_n_s16(0x00ff);
+               const int16x8_t colorMask    = vdupq_n_s16(0x00ff);
                const int16x8_t invColorMask = vmvnq_s16(colorMask);
-               const int16x8_t v_256 = vdupq_n_s16(256);
-               const int16x8_t v_disty = vdupq_n_s16(disty);
-               const int16x8_t v_disty_ = vshlq_n_s16(v_disty, 4);
+               const int16x8_t v_256        = vdupq_n_s16(256);
+               const int16x8_t v_disty      = vdupq_n_s16(disty);
+               const int16x8_t v_disty_     = vshlq_n_s16(v_disty, 4);
+
                int32x4_t v_fdx = vdupq_n_s32(fdx * 4);
 
                ptrdiff_t secondLine = reinterpret_cast<const uint *>(s2) - reinterpret_cast<const uint *>(s1);
@@ -3359,7 +3362,7 @@ static const QRgba64 *fetchTransformedBilinear64(QRgba64 *buffer, const Operator
 
    const qreal delta_x = data->m11;
    const qreal delta_y = data->m12;
-   const qreal fdw = data->m13;
+   const qreal fdw     = data->m13;
 
    if (data->fast_matrix) {
       // The increment pr x in the scanline

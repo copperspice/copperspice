@@ -219,11 +219,12 @@
 
 #endif
 
-#if defined(Q_OS_DARWIN) && ! defined(QT_LARGEFILE_SUPPORT)
+//
+#ifdef Q_OS_DARWIN
+
+#if ! defined(QT_LARGEFILE_SUPPORT)
 #  define QT_LARGEFILE_SUPPORT 64
 #endif
-
-#ifdef Q_OS_DARWIN
 
 #if ! defined (CS_DOXYPRESS)
 #  include <AvailabilityMacros.h>

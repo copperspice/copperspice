@@ -785,7 +785,8 @@ static bool read_xpm_string(QByteArray &buf, QIODevice *d, const char *const *so
       return true;
    }
 
-   buf = "";
+   buf = QByteArray();
+
    bool gotQuote = false;
    int offset = 0;
 

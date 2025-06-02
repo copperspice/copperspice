@@ -592,7 +592,8 @@ void QApplication::setStyleSheet(const QString &styleSheet)
       // application style sheet removed
 
       if (! proxy) {
-         return;   // there was no stylesheet before
+         // there was no stylesheet before
+         return;
       }
 
       setStyle(proxy->base);

@@ -324,7 +324,7 @@ void QNetworkAccessFtpBackend::ftpDone()
             mdtmId = ftp->rawCommand(command.formatArg("MDTM"));   // get modified time
          }
 
-         if (!supportsSize && !supportsMdtm) {
+         if (! supportsSize && !supportsMdtm) {
             ftpDone();   // no commands sent, move to the next state
          }
 

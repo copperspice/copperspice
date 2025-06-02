@@ -462,8 +462,7 @@ static QVariant x509ExtensionToValue(X509_EXTENSION *ext)
 
          // keyid
          if (auth_key->keyid) {
-            QByteArray keyid(reinterpret_cast<const char *>(auth_key->keyid->data),
-                             auth_key->keyid->length);
+            QByteArray keyid(reinterpret_cast<const char *>(auth_key->keyid->data), auth_key->keyid->length);
             result[QString("keyid")] = keyid.toHex();
          }
 

@@ -49,7 +49,7 @@
 
 #define QT_MMAP                 ::mmap64
 
-#else 
+#else
 
 #define QT_FPOS_T               fpos_t
 #define QT_OFF_T                long

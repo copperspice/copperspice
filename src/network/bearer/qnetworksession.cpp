@@ -195,7 +195,7 @@ QVariant QNetworkSession::sessionProperty(const QString &key) const
 
 void QNetworkSession::setSessionProperty(const QString &key, const QVariant &value)
 {
-   if (!d) {
+   if (! d) {
       return;
    }
 

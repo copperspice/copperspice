@@ -619,8 +619,8 @@ static void _q_parseDosDir(const QStringList &tokens, const QString &userName, Q
    // machine, and QFileInfo's behavior depends on the local platform.
 
    int permissions = QUrlInfo::ReadOwner | QUrlInfo::WriteOwner
-                     | QUrlInfo::ReadGroup | QUrlInfo::WriteGroup
-                     | QUrlInfo::ReadOther | QUrlInfo::WriteOther;
+         | QUrlInfo::ReadGroup | QUrlInfo::WriteGroup | QUrlInfo::ReadOther | QUrlInfo::WriteOther;
+
    QString ext;
    int extIndex = name.lastIndexOf(QChar('.'));
 
@@ -1422,8 +1422,9 @@ QFtp::QFtp(QObject *parent)
 int QFtp::connectToHost(const QString &host, quint16 port)
 {
    QStringList cmds;
-   cmds << host;
-   cmds << QString::number((uint)port);
+
+   cmds.append(host);
+   cmds.append(QString::number((uint)port));
 
    int id = d_func()->addCommand(new QFtpCommand(ConnectToHost, cmds));
    d_func()->pi.transferConnectionExtended = true;
@@ -1458,7 +1459,10 @@ int QFtp::setTransferMode(TransferMode mode)
 int QFtp::setProxy(const QString &host, quint16 port)
 {
    QStringList args;
-   args << host << QString::number(port);
+
+   args.append(host);
+   args.append(QString::number(port));
+
    return d_func()->addCommand(new QFtpCommand(SetProxy, args));
 }
 

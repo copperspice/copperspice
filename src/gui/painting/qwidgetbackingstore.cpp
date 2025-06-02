@@ -500,7 +500,7 @@ void QWidgetBackingStore::markDirty(const QRect &rect, QWidget *widget,
       const bool eventAlreadyPosted = ! widget->d_func()->m_dirty.isEmpty();
       widget->d_func()->m_dirty += rect;
 
-      if (!eventAlreadyPosted || updateTime == UpdateNow) {
+      if (! eventAlreadyPosted || updateTime == UpdateNow) {
          sendUpdateRequest(widget, updateTime);
       }
 
@@ -596,7 +596,7 @@ void QWidgetBackingStore::markDirtyOnScreen(const QRegion &region, QWidget *widg
       QWidget *nativeParent = widget->nativeParentWidget();        // Alien widgets with the top-level as the native parent (common case).
 
       if (nativeParent == tlw) {
-         if (!widget->testAttribute(Qt::WA_WState_InPaintEvent)) {
+         if (! widget->testAttribute(Qt::WA_WState_InPaintEvent)) {
             dirtyOnScreen += region.translated(topLevelOffset);
          }
 
@@ -845,6 +845,7 @@ void QWidgetPrivate::scrollRect(const QRect &rect, int dx, int dy)
       if (inDirtyList) {
          if (rect == q->rect()) {
             m_dirty.translate(dx, dy);
+
          } else {
             QRegion dirtyScrollRegion = m_dirty.intersected(scrollRect);
 
@@ -1207,7 +1208,7 @@ void QWidgetBackingStore::doSync()
       const QRegion dirtyBeforeSubtractedOpaqueChildren = wd->m_dirty;
 
       // Scrolled and moved widgets must draw all children.
-      if (! wd->isScrolled && !wd->isMoved) {
+      if (! wd->isScrolled && ! wd->isMoved) {
          wd->subtractOpaqueChildren(wd->m_dirty, w->rect());
       }
 
@@ -1367,7 +1368,7 @@ void QWidgetBackingStore::doSync()
       int flags = QWidgetPrivate::DrawRecursive;
 
       // Scrolled and moved widgets must draw all children.
-      if (!wd->isScrolled && !wd->isMoved) {
+      if (! wd->isScrolled && ! wd->isMoved) {
          flags |= QWidgetPrivate::DontDrawOpaqueChildren;
       }
 

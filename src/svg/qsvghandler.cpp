@@ -2130,8 +2130,8 @@ static void parseCSStoXMLAttrs(const QVector<QCss::Declaration> &declarations, Q
       }
 
       if (val.type == QCss::Value::Uri) {
-         valueStr.prepend( "url(" );
-         valueStr.append( ')' );
+         valueStr.prepend("url(");
+         valueStr.append(')');
 
       } else if (val.type == QCss::Value::Function) {
          QStringList lst = val.variant.toStringList();
@@ -2196,7 +2196,7 @@ void QSvgHandler::parseCSStoXMLAttrs(QString css, QVector<QSvgCssAttribute> *att
       }
 
       m_cssParser.skipSpace();
-      if ( !m_cssParser.hasNext()) {
+      if (! m_cssParser.hasNext()) {
          break;
       }
 
@@ -3488,7 +3488,7 @@ static QSvgNode *createSvgNode(QSvgNode *parent, const QXmlStreamAttributes &att
    QSvgHandler::LengthType type = QSvgHandler::LT_PX; // FIXME: is the default correct?
    qreal width = 0;
 
-   if (!widthStr.isEmpty()) {
+   if (! widthStr.isEmpty()) {
       width = parseLength(widthStr, type, handler);
 
       if (type != QSvgHandler::LT_PT) {
@@ -3509,7 +3509,8 @@ static QSvgNode *createSvgNode(QSvgNode *parent, const QXmlStreamAttributes &att
    }
 
    QStringList viewBoxValues;
-   if (!viewBoxStr.isEmpty()) {
+
+   if (! viewBoxStr.isEmpty()) {
       viewBoxStr    = viewBoxStr.replace(QChar(' '),  QChar(','));
       viewBoxStr    = viewBoxStr.replace(QChar('\r'), QChar(','));
       viewBoxStr    = viewBoxStr.replace(QChar('\n'), QChar(','));
@@ -3518,8 +3519,8 @@ static QSvgNode *createSvgNode(QSvgNode *parent, const QXmlStreamAttributes &att
    }
 
    if (viewBoxValues.count() == 4) {
-      QString xStr      = viewBoxValues.at(0).trimmed();
-      QString yStr      = viewBoxValues.at(1).trimmed();
+      QString xStr = viewBoxValues.at(0).trimmed();
+      QString yStr = viewBoxValues.at(1).trimmed();
 
       widthStr  = viewBoxValues.at(2).trimmed();
       heightStr = viewBoxValues.at(3).trimmed();
@@ -3534,7 +3535,7 @@ static QSvgNode *createSvgNode(QSvgNode *parent, const QXmlStreamAttributes &att
 
    } else if (width && height) {
       if (type == QSvgHandler::LT_PT) {
-         width = convertToPixels(width, false, type);
+         width  = convertToPixels(width, false, type);
          height = convertToPixels(height, false, type);
       }
 

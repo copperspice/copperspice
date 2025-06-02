@@ -320,19 +320,20 @@ QString QHttpHeader::toString() const
 {
    Q_D(const QHttpHeader);
 
-   if (!isValid()) {
+   if (! isValid()) {
       return QString("");
    }
 
-   QString ret = QString();
+   QString retval = QString();
 
    QList<QPair<QString, QString> >::const_iterator it = d->values.constBegin();
+
    while (it != d->values.constEnd()) {
-      ret += (*it).first + ": " + (*it).second + "\r\n";
+      retval += (*it).first + ": " + (*it).second + "\r\n";
       ++it;
    }
 
-   return ret;
+   return retval;
 }
 
 bool QHttpHeader::hasContentLength() const

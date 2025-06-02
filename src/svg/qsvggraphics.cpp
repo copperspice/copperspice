@@ -61,6 +61,7 @@ static inline QRectF boundsOnStroke(QPainter *p, const QPainterPath &path, qreal
    QPainterPathStroker stroker;
    stroker.setWidth(width);
    QPainterPath stroke = stroker.createStroke(path);
+
    return p->transform().map(stroke).boundingRect();
 }
 
@@ -74,6 +75,7 @@ QRectF QSvgEllipse::bounds(QPainter *p, QSvgExtraStates &) const
    QPainterPath path;
    path.addEllipse(m_bounds);
    qreal sw = strokeWidth(p);
+
    return qFuzzyIsNull(sw) ? p->transform().map(path).boundingRect() : boundsOnStroke(p, path, sw);
 }
 
@@ -102,10 +104,8 @@ void QSvgArc::draw(QPainter *p, QSvgExtraStates &states)
    revertStyle(p, states);
 }
 
-QSvgImage::QSvgImage(QSvgNode *parent, const QImage &image,
-                     const QRect &bounds)
-   : QSvgNode(parent), m_image(image),
-     m_bounds(bounds)
+QSvgImage::QSvgImage(QSvgNode *parent, const QImage &image, const QRect &bounds)
+   : QSvgNode(parent), m_image(image), m_bounds(bounds)
 {
    if (m_bounds.width() == 0) {
       m_bounds.setWidth(m_image.width());
@@ -131,12 +131,14 @@ QSvgLine::QSvgLine(QSvgNode *parent, const QLineF &line)
 void QSvgLine::draw(QPainter *p, QSvgExtraStates &states)
 {
    applyStyle(p, states);
+
    if (p->pen().widthF() != 0) {
       qreal oldOpacity = p->opacity();
       p->setOpacity(oldOpacity * states.strokeOpacity);
       p->drawLine(m_line);
       p->setOpacity(oldOpacity);
    }
+
    revertStyle(p, states);
 }
 
@@ -156,8 +158,9 @@ void QSvgPath::draw(QPainter *p, QSvgExtraStates &states)
 QRectF QSvgPath::bounds(QPainter *p, QSvgExtraStates &) const
 {
    qreal sw = strokeWidth(p);
+
    return qFuzzyIsNull(sw) ? p->transform().map(m_path).boundingRect()
-          : boundsOnStroke(p, m_path, sw);
+         : boundsOnStroke(p, m_path, sw);
 }
 
 QSvgPolygon::QSvgPolygon(QSvgNode *parent, const QPolygonF &poly)
@@ -213,8 +216,7 @@ void QSvgPolyline::draw(QPainter *p, QSvgExtraStates &states)
 }
 
 QSvgRect::QSvgRect(QSvgNode *node, const QRectF &rect, int rx, int ry)
-   : QSvgNode(node),
-     m_rect(rect), m_rx(rx), m_ry(ry)
+   : QSvgNode(node), m_rect(rect), m_rx(rx), m_ry(ry)
 {
 }
 
@@ -264,8 +266,6 @@ void QSvgText::setTextArea(const QSizeF &size)
    m_type = TEXTAREA;
 }
 
-//QRectF QSvgText::bounds(QPainter *p, QSvgExtraStates &) const {}
-
 void QSvgText::draw(QPainter *p, QSvgExtraStates &states)
 {
    applyStyle(p, states);
@@ -274,6 +274,7 @@ void QSvgText::draw(QPainter *p, QSvgExtraStates &states)
 
    // Force the font to have a size of 100 pixels to avoid truncation problems
    // when the font is very small.
+
    qreal scale = 100.0 / p->font().pointSizeF();
    Qt::Alignment alignment = states.textAnchor;
 
@@ -324,7 +325,7 @@ void QSvgText::draw(QPainter *p, QSvgExtraStates &states)
 
             appendSpace = false;
             paragraphs.push_back(QString());
-                formatRanges.resize(formatRanges.size() + 1);
+            formatRanges.resize(formatRanges.size() + 1);
          }
 
       } else {
@@ -339,7 +340,7 @@ void QSvgText::draw(QPainter *p, QSvgExtraStates &states)
          newText.replace(QLatin1Char('\n'), QLatin1Char(' '));
 
          bool prependSpace = !appendSpace && !m_tspans[i]->isTspan() && (mode == Default) && !paragraphs.back().isEmpty() &&
-                             newText.startsWith(' ');
+               newText.startsWith(' ');
 
          if (appendSpace || prependSpace) {
             paragraphs.back().append(QLatin1Char(' '));
@@ -401,13 +402,12 @@ void QSvgText::draw(QPainter *p, QSvgExtraStates &states)
 
          while (true) {
             QTextLine line = tl.createLine();
-            if (!line.isValid())
-            {
+
+            if (! line.isValid()) {
                break;
             }
 
-            if (m_size.width() != 0)
-            {
+            if (m_size.width() != 0) {
                line.setLineWidth(scaledSize.width());
             }
          }

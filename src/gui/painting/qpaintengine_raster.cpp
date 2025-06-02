@@ -2386,11 +2386,9 @@ void QRasterPaintEngine::alphaPenBlt(const void *src, int bpl, int depth, int rx
          }
 
          if (depth == 8) {
-            s->penData.alphamapBlit(rb, rx, ry, s->penData.solid.color,
-               scanline, w, h, bpl, clip);
+            s->penData.alphamapBlit(rb, rx, ry, s->penData.solid.color, scanline, w, h, bpl, clip);
          } else if (depth == 32) {
-            s->penData.alphaRGBBlit(rb, rx, ry, s->penData.solid.color,
-               (const uint *) scanline, w, h, bpl / 4, clip);
+            s->penData.alphaRGBBlit(rb, rx, ry, s->penData.solid.color, (const uint *) scanline, w, h, bpl / 4, clip);
          }
 
          return;

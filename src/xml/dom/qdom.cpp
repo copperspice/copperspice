@@ -3190,7 +3190,7 @@ static QString encodeText(const QString &str, QTextStream &s, const bool encodeQ
          } else
 #endif
          {
-            // We have to use a character reference to get it through.
+            // use a character reference to get it through.
             const ushort codepoint(ati.unicode());
             const QString replacement("&#x" + QString::number(codepoint, 16) + QChar(';'));
             retval.replace(i, 1, replacement);
@@ -4713,8 +4713,7 @@ void QDomDocumentPrivate::saveDocument(QTextStream &s, const int indent, QDomNod
 #endif
 
       s << "<?xml version=\"1.0\" encoding=\""
-        << codecName
-        << "\"?>\n";
+        << codecName << "\"?>\n";
 
       //  Skip the first processing instruction by name "xml", if any such exists.
       const QDomNodePrivate *startNode = node;
@@ -5271,7 +5270,7 @@ bool QDomHandler::comment(const QString &ch)
 }
 
 bool QDomHandler::unparsedEntityDecl(const QString &name, const QString &publicId, const QString &systemId,
-                                     const QString &notationName)
+      const QString &notationName)
 {
    QDomEntityPrivate *e = new QDomEntityPrivate(doc, nullptr, name,
          publicId, systemId, notationName);

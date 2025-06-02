@@ -818,8 +818,7 @@ void QSocks5SocketEnginePrivate::parseAuthenticationMethodReply()
       reauthenticate();
       return;
 
-   } else if (buf.at(1) != data->authenticator->methodId()
-              || !data->authenticator->beginAuthenticate(data->controlSocket, &authComplete)) {
+   } else if (buf.at(1) != data->authenticator->methodId() || ! data->authenticator->beginAuthenticate(data->controlSocket, &authComplete)) {
       setErrorState(AuthenticatingError, "Socks5 host did not support authentication method.");
       socketError = QAbstractSocket::SocketAccessError; // change the socket error
       emitConnectionNotification();
@@ -1703,8 +1702,7 @@ bool QSocks5SocketEngine::joinMulticastGroup(const QHostAddress &,
    return false;
 }
 
-bool QSocks5SocketEngine::leaveMulticastGroup(const QHostAddress &,
-      const QNetworkInterface &)
+bool QSocks5SocketEngine::leaveMulticastGroup(const QHostAddress &, const QNetworkInterface &)
 {
    setError(QAbstractSocket::UnsupportedSocketOperationError, "Operation on socket is not supported");
    return false;

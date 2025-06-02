@@ -6701,8 +6701,10 @@ static QRectF setupTextLayout(QTextLayout *layout)
 {
    layout->setCacheEnabled(true);
    layout->beginLayout();
-   while (layout->createLine().isValid())
-      ;
+
+   while (layout->createLine().isValid()) {
+      // do nothing
+   }
 
    layout->endLayout();
    qreal maxWidth = 0;
