@@ -254,11 +254,10 @@ class XPThemeData
  public:
    explicit XPThemeData(const QWidget *w = nullptr, QPainter *p = nullptr, int themeIn = -1,
       int part = 0, int state = 0, const QRect &r = QRect())
-      : widget(w), painter(p), theme(themeIn), htheme(nullptr), partId(part), stateId(state),
+      : m_xpWidget(w), painter(p), theme(themeIn), partId(part), stateId(state),
         mirrorHorizontally(false), mirrorVertically(false), noBorder(false),
-        noContent(false), rotate(0), rect(r)
-   {
-   }
+        noContent(false), rotate(0), htheme(nullptr), m_xpRect(r)
+   { }
 
    HRGN mask(QWidget *widget);
    HTHEME handle();
@@ -279,11 +278,10 @@ class XPThemeData
    static QMarginsF themeMargins(const QWidget *widget = nullptr, QPainter *painter = nullptr, int themeIn = -1,
                int part = 0, int state = 0, int propId = TMT_CONTENTMARGINS);
 
-   const QWidget *widget;
+   const QWidget *m_xpWidget;
    QPainter *painter;
 
    int theme;
-   HTHEME htheme;
    int partId;
    int stateId;
 
@@ -292,7 +290,10 @@ class XPThemeData
    uint noBorder : 1;
    uint noContent : 1;
    uint rotate;
-   QRect rect;
+
+   HTHEME htheme;
+
+   QRect m_xpRect;
 };
 
 struct ThemeMapKey {

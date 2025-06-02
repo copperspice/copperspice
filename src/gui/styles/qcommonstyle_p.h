@@ -65,9 +65,6 @@ class QCommonStylePrivate : public QStylePrivate
 
    QSize viewItemSize(const QStyleOptionViewItem *option, int role) const;
 
-   mutable QRect decorationRect, displayRect, checkRect;
-   mutable QStyleOptionViewItem *cachedOption;
-
    bool isViewItemCached(const QStyleOptionViewItem &option) const {
       return cachedOption && (option.widget == cachedOption->widget
             && option.index == cachedOption->index
@@ -84,6 +81,12 @@ class QCommonStylePrivate : public QStylePrivate
             && option.font == cachedOption->font
             && option.viewItemPosition == cachedOption->viewItemPosition);
    }
+
+   mutable QRect decorationRect;
+   mutable QRect displayRect;
+   mutable QRect m_commonStyleCheckRect;
+
+   mutable QStyleOptionViewItem *cachedOption;
 #endif
    mutable QIcon tabBarcloseButtonIcon;
 

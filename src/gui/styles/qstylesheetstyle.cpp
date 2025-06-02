@@ -763,8 +763,8 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
             QStyleSheetBorderImageData *bi = m_renderBorder->bi;
             bi->pixmap = QPixmap(borderUri);
 
-            for (int i = 0; i < 4; i++) {
-               bi->cuts[i] = cuts[i];
+            for (int j = 0; j < 4; j++) {
+               bi->cuts[j] = cuts[j];
             }
 
             bi->horizStretch = horizStretch;
@@ -786,8 +786,8 @@ QRenderRule::QRenderRule(const QVector<QCss::Declaration> &declarations, const Q
 
       } else if (decl.d->propertyId == QCss::UnknownProperty) {
 
-         for (int i = 0; i < numKnownStyleHints; i++) {
-            QString styleHint(knownStyleHints[i]);
+         for (int j = 0; j < numKnownStyleHints; j++) {
+            QString styleHint(knownStyleHints[j]);
 
             if (decl.d->property.compare(styleHint) == 0) {
                QString  hintName = styleHint;
@@ -1955,8 +1955,8 @@ QRenderRule QStyleSheetStyle::renderRule(const QObject *obj, const QStyleOption 
          }
 
 #ifndef QT_NO_TABWIDGET
-      } else if (const QStyleOptionTabWidgetFrame *tab = qstyleoption_cast<const QStyleOptionTabWidgetFrame *>(opt)) {
-         switch (tab->shape) {
+      } else if (const QStyleOptionTabWidgetFrame *tab1 = qstyleoption_cast<const QStyleOptionTabWidgetFrame *>(opt)) {
+         switch (tab1->shape) {
             case QTabBar::RoundedNorth:
             case QTabBar::TriangularNorth:
                extraClass |= QCss::PseudoClass_Top;
@@ -1983,24 +1983,29 @@ QRenderRule QStyleSheetStyle::renderRule(const QObject *obj, const QStyleOption 
 #endif
 
 #ifndef QT_NO_TABBAR
-      } else if (const QStyleOptionTab *tab = qstyleoption_cast<const QStyleOptionTab *>(opt)) {
-         if (tab->position == QStyleOptionTab::OnlyOneTab) {
+      } else if (const QStyleOptionTab *tab2 = qstyleoption_cast<const QStyleOptionTab *>(opt)) {
+
+         if (tab2->position == QStyleOptionTab::OnlyOneTab) {
             extraClass |= QCss::PseudoClass_OnlyOne;
-         } else if (tab->position == QStyleOptionTab::Beginning) {
+
+         } else if (tab2->position == QStyleOptionTab::Beginning) {
             extraClass |= QCss::PseudoClass_First;
-         } else if (tab->position == QStyleOptionTab::End) {
+
+         } else if (tab2->position == QStyleOptionTab::End) {
             extraClass |= QCss::PseudoClass_Last;
-         } else if (tab->position == QStyleOptionTab::Middle) {
+
+         } else if (tab2->position == QStyleOptionTab::Middle) {
             extraClass |= QCss::PseudoClass_Middle;
          }
 
-         if (tab->selectedPosition == QStyleOptionTab::NextIsSelected) {
+         if (tab2->selectedPosition == QStyleOptionTab::NextIsSelected) {
             extraClass |= QCss::PseudoClass_NextSelected;
-         } else if (tab->selectedPosition == QStyleOptionTab::PreviousIsSelected) {
+
+         } else if (tab2->selectedPosition == QStyleOptionTab::PreviousIsSelected) {
             extraClass |= QCss::PseudoClass_PreviousSelected;
          }
 
-         switch (tab->shape) {
+         switch (tab2->shape) {
             case QTabBar::RoundedNorth:
             case QTabBar::TriangularNorth:
                extraClass |= QCss::PseudoClass_Top;
@@ -2836,7 +2841,7 @@ static void updateObjects(const QList<const QObject *> &objects)
 int QStyleSheetStyle::numinstances = 0;
 
 QStyleSheetStyle::QStyleSheetStyle(QStyle *base)
-   : QWindowsStyle(*new QStyleSheetStylePrivate), base(base), refcount(1)
+   : QWindowsStyle(*new QStyleSheetStylePrivate), m_styleSheetBase(base), refcount(1)
 {
    ++numinstances;
 
@@ -2855,12 +2860,12 @@ QStyleSheetStyle::~QStyleSheetStyle()
 
 QStyle *QStyleSheetStyle::baseStyle() const
 {
-   if (base) {
-      return base;
+   if (m_styleSheetBase) {
+      return m_styleSheetBase;
    }
 
    if (QStyleSheetStyle *me = qobject_cast<QStyleSheetStyle *>(QApplication::style())) {
-      return me->base;
+      return me->m_styleSheetBase;
    }
 
    return QApplication::style();
@@ -5171,7 +5176,7 @@ int QStyleSheetStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const 
          break;
 
       case PM_SliderControlThickness: {
-         QRenderRule subRule = renderRule(w, opt, PseudoElement_SliderHandle);
+         subRule = renderRule(w, opt, PseudoElement_SliderHandle);
          if (!subRule.hasContentsSize()) {
             break;
          }
@@ -5192,7 +5197,7 @@ int QStyleSheetStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const 
          break;
 
       case PM_DockWidgetTitleMargin: {
-         QRenderRule subRule = renderRule(w, opt, PseudoElement_DockWidgetTitle);
+         subRule = renderRule(w, opt, PseudoElement_DockWidgetTitle);
          if (!subRule.hasBox()) {
             break;
          }
@@ -5202,7 +5207,8 @@ int QStyleSheetStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const 
       }
 
       case PM_DockWidgetSeparatorExtent: {
-         QRenderRule subRule = renderRule(w, opt, PseudoElement_DockWidgetSeparator);
+         subRule = renderRule(w, opt, PseudoElement_DockWidgetSeparator);
+
          if (!subRule.hasContentsSize()) {
             break;
          }
@@ -5211,7 +5217,7 @@ int QStyleSheetStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const 
       }
 
       case PM_TitleBarHeight: {
-         QRenderRule subRule = renderRule(w, opt, PseudoElement_TitleBar);
+         subRule = renderRule(w, opt, PseudoElement_TitleBar);
          if (subRule.hasContentsSize()) {
             return subRule.size().height();
          } else if (subRule.hasBox() || subRule.hasBorder()) {
@@ -5229,7 +5235,7 @@ int QStyleSheetStyle::pixelMetric(PixelMetric m, const QStyleOption *opt, const 
          break;
 
       case PM_MdiSubWindowMinimizedWidth: {
-         QRenderRule subRule = renderRule(w, PseudoElement_None, QCss::PseudoClass_Minimized);
+         subRule = renderRule(w, PseudoElement_None, QCss::PseudoClass_Minimized);
          int width = subRule.size().width();
          if (width != -1) {
             return width;
@@ -6378,7 +6384,7 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
    QRenderRule rule = renderRule(w, opt);
 
 #ifndef QT_NO_TABBAR
-   int pe = PseudoElement_None;
+   int peEnumValue = PseudoElement_None;
 #endif
 
    switch (se) {
@@ -6524,33 +6530,34 @@ QRect QStyleSheetStyle::subElementRect(SubElement se, const QStyleOption *opt, c
 
 #ifndef QT_NO_TABBAR
       case SE_TabWidgetLeftCorner:
-         pe = PseudoElement_TabWidgetLeftCorner;
+         peEnumValue = PseudoElement_TabWidgetLeftCorner;
          [[fallthrough]];
 
       case SE_TabWidgetRightCorner:
-         if (pe == PseudoElement_None) {
-            pe = PseudoElement_TabWidgetRightCorner;
+         if (peEnumValue == PseudoElement_None) {
+            peEnumValue = PseudoElement_TabWidgetRightCorner;
          }
          [[fallthrough]];
 
       case SE_TabWidgetTabBar:
-         if (pe == PseudoElement_None) {
-            pe = PseudoElement_TabWidgetTabBar;
+         if (peEnumValue == PseudoElement_None) {
+            peEnumValue = PseudoElement_TabWidgetTabBar;
          }
          [[fallthrough]];
 
       case SE_TabWidgetTabPane:
       case SE_TabWidgetTabContents:
-         if (pe == PseudoElement_None) {
-            pe = PseudoElement_TabWidgetPane;
+         if (peEnumValue == PseudoElement_None) {
+            peEnumValue = PseudoElement_TabWidgetPane;
          }
 
-         if (hasStyleRule(w, pe)) {
-            QRect r = QWindowsStyle::subElementRect(pe == PseudoElement_TabWidgetPane ? SE_TabWidgetTabPane : se, opt, w);
-            QRenderRule subRule = renderRule(w, opt, pe);
-            r = positionRect(w, subRule, pe, r, opt->direction);
+         if (hasStyleRule(w, peEnumValue)) {
+            QRect r = QWindowsStyle::subElementRect((peEnumValue == PseudoElement_TabWidgetPane) ? SE_TabWidgetTabPane : se, opt, w);
 
-            if (pe == PseudoElement_TabWidgetTabBar) {
+            QRenderRule subRule = renderRule(w, opt, peEnumValue);
+            r = positionRect(w, subRule, peEnumValue, r, opt->direction);
+
+            if (peEnumValue == PseudoElement_TabWidgetTabBar) {
                Q_ASSERT(opt);
                r = opt->rect.intersected(r);
             }

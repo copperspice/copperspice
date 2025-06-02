@@ -192,12 +192,12 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
 
       case PE_Frame:
       case PE_FrameMenu:
-         if (const QStyleOptionFrame *frame = qstyleoption_cast<const QStyleOptionFrame *>(opt)) {
-            if (pe == PE_FrameMenu || (frame->state & State_Sunken) || (frame->state & State_Raised)) {
-               qDrawShadePanel(p, frame->rect, frame->palette, frame->state & State_Sunken,
-                  frame->lineWidth);
+         if (const QStyleOptionFrame *frame1 = qstyleoption_cast<const QStyleOptionFrame *>(opt)) {
+
+            if (pe == PE_FrameMenu || (frame1->state & State_Sunken) || (frame1->state & State_Raised)) {
+               qDrawShadePanel(p, frame1->rect, frame1->palette, frame1->state & State_Sunken, frame1->lineWidth);
             } else {
-               qDrawPlainRect(p, frame->rect, frame->palette.foreground().color(), frame->lineWidth);
+               qDrawPlainRect(p, frame1->rect, frame1->palette.foreground().color(), frame1->lineWidth);
             }
          }
          break;
@@ -207,13 +207,14 @@ void QCommonStyle::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, Q
          if (widget && qobject_cast<QToolBar *>(widget->parentWidget())) {
             break;
          }
-         if (const QStyleOptionFrame *frame = qstyleoption_cast<const QStyleOptionFrame *>(opt)) {
-            qDrawShadePanel(p, frame->rect, frame->palette, false, frame->lineWidth,
-               &frame->palette.brush(QPalette::Button));
 
-         } else if (const QStyleOptionToolBar *frame = qstyleoption_cast<const QStyleOptionToolBar *>(opt)) {
-            qDrawShadePanel(p, frame->rect, frame->palette, false, frame->lineWidth,
-               &frame->palette.brush(QPalette::Button));
+         if (const QStyleOptionFrame *frame2 = qstyleoption_cast<const QStyleOptionFrame *>(opt)) {
+            qDrawShadePanel(p, frame2->rect, frame2->palette, false, frame2->lineWidth,
+                  &frame2->palette.brush(QPalette::Button));
+
+         } else if (const QStyleOptionToolBar *frame3 = qstyleoption_cast<const QStyleOptionToolBar *>(opt)) {
+            qDrawShadePanel(p, frame3->rect, frame3->palette, false, frame3->lineWidth,
+                  &frame3->palette.brush(QPalette::Button));
          }
 
          break;
@@ -1994,11 +1995,13 @@ void QCommonStyle::drawControl(ControlElement element, const QStyleOption *opt,
             proxy()->drawItemText(p, tr, alignment, tb->palette, enabled, txt, QPalette::ButtonText);
 
             if (!txt.isEmpty() && opt->state & State_HasFocus) {
-               QStyleOptionFocusRect opt;
-               opt.rect = tr;
-               opt.palette = tb->palette;
-               opt.state = QStyle::State_None;
-               proxy()->drawPrimitive(QStyle::PE_FrameFocusRect, &opt, p, widget);
+               QStyleOptionFocusRect styleOption;
+
+               styleOption.rect = tr;
+               styleOption.palette = tb->palette;
+               styleOption.state = QStyle::State_None;
+
+               proxy()->drawPrimitive(QStyle::PE_FrameFocusRect, &styleOption, p, widget);
             }
          }
          break;
@@ -3207,7 +3210,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
       case SE_ItemViewItemFocusRect:
          if (const QStyleOptionViewItem *vopt = qstyleoption_cast<const QStyleOptionViewItem *>(opt)) {
             if (!d->isViewItemCached(*vopt)) {
-               d->viewItemLayout(vopt, &d->checkRect, &d->decorationRect, &d->displayRect, false);
+               d->viewItemLayout(vopt, &d->m_commonStyleCheckRect, &d->decorationRect, &d->displayRect, false);
                if (d->cachedOption) {
                   delete d->cachedOption;
                   d->cachedOption = nullptr;
@@ -3217,7 +3220,7 @@ QRect QCommonStyle::subElementRect(SubElement sr, const QStyleOption *opt,
             }
 
             if (sr == SE_ItemViewItemCheckIndicator) {
-               r = d->checkRect;
+               r = d->m_commonStyleCheckRect;
 
             } else if (sr == SE_ItemViewItemDecoration) {
                r = d->decorationRect;
@@ -3881,10 +3884,11 @@ void QCommonStyle::drawComplexControl(ComplexControl cc, const QStyleOptionCompl
                br.adjust(0, 0, 2, 2);
 
                if (dial->subControls & SC_DialTickmarks) {
-                  int r = qMin(width, height) / 2;
-                  br.translate(-r / 6, - r / 6);
-                  br.setWidth(br.width() + r / 3);
-                  br.setHeight(br.height() + r / 3);
+                  int radius = qMin(width, height) / 2;
+
+                  br.translate(-radius / 6, -radius / 6);
+                  br.setWidth(br.width() + radius / 3);
+                  br.setHeight(br.height() + radius / 3);
                }
 
                fropt.rect = br.adjusted(-2, -2, 2, 2);
@@ -5168,22 +5172,22 @@ QSize QCommonStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
       case CT_HeaderSection:
          if (const QStyleOptionHeader *hdr = qstyleoption_cast<const QStyleOptionHeader *>(opt)) {
             bool nullIcon = hdr->icon.isNull();
-            int margin = proxy()->pixelMetric(QStyle::PM_HeaderMargin, hdr, widget);
+
+            int margin1  = proxy()->pixelMetric(QStyle::PM_HeaderMargin, hdr, widget);
             int iconSize = nullIcon ? 0 : proxy()->pixelMetric(QStyle::PM_SmallIconSize, hdr, widget);
 
             QSize txt = hdr->fontMetrics.size(0, hdr->text);
-            sz.setHeight(margin + qMax(iconSize, txt.height()) + margin);
+            sz.setHeight(margin1 + qMax(iconSize, txt.height()) + margin1);
 
-            sz.setWidth((nullIcon ? 0 : margin) + iconSize
-               + (hdr->text.isEmpty() ? 0 : margin) + txt.width() + margin);
+            sz.setWidth((nullIcon ? 0 : margin1) + iconSize + (hdr->text.isEmpty() ? 0 : margin1) + txt.width() + margin1);
 
             if (hdr->sortIndicator != QStyleOptionHeader::None) {
-               int margin = proxy()->pixelMetric(QStyle::PM_HeaderMargin, hdr, widget);
+               int margin2 = proxy()->pixelMetric(QStyle::PM_HeaderMargin, hdr, widget);
 
                if (hdr->orientation == Qt::Horizontal) {
-                  sz.rwidth() += sz.height() + margin;
+                  sz.rwidth() += sz.height() + margin2;
                } else {
-                  sz.rheight() += sz.width() + margin;
+                  sz.rheight() += sz.width() + margin2;
                }
             }
          }

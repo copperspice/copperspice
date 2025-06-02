@@ -1216,8 +1216,8 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
                      menuitem->palette, true, 1,
                      &menuitem->palette.brush(QPalette::Button));
                } else {
-                  QBrush fill(menuitem->palette.light().color(), Qt::Dense4Pattern);
-                  qDrawShadePanel(p, vCheckRect, menuitem->palette, true, 1, &fill);
+                  QBrush styleFill(menuitem->palette.light().color(), Qt::Dense4Pattern);
+                  qDrawShadePanel(p, vCheckRect, menuitem->palette, true, 1, &styleFill);
                }
             } else if (!act) {
                p->fillRect(vCheckRect, menuitem->palette.brush(QPalette::Button));
@@ -1905,9 +1905,9 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
                if ( step > chunkCount - 5) {
                   x0 = reverse ? rect.left() + rect.width() - unit_width : rect.left() ;
                   x = 0;
-                  int chunksToDraw = step - (chunkCount - chunksInRow);
-                  for (int i = 0; i < chunksToDraw ; ++i) {
+                  int chunksToDraw2 = step - (chunkCount - chunksInRow);
 
+                  for (int i = 0; i < chunksToDraw2 ; ++i) {
                      pbBits.rect.setRect(x0 + x, myY, unit_width, myHeight);
                      pbBits.rect = m.mapRect(QRectF(pbBits.rect)).toRect();
 

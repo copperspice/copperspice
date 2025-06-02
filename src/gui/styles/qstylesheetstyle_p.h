@@ -115,7 +115,6 @@ class QStyleSheetStyle : public QWindowsStyle
    void repolish(QWidget *widget);
    void repolish(QApplication *app);
 
-   QStyle *base;
    void ref() {
       ++refcount;
    }
@@ -132,6 +131,8 @@ class QStyleSheetStyle : public QWindowsStyle
    void clearWidgetFont(QWidget *widget) const;
 
    bool styleSheetPalette(const QWidget *widget, const QStyleOption *option, QPalette *palette);
+
+   QStyle *m_styleSheetBase;
 
    static int numinstances;
 

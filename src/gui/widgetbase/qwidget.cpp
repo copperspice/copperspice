@@ -2206,7 +2206,7 @@ void QWidgetPrivate::inheritStyle()
       return;
    }
 
-   QStyle *origStyle   = proxy ? proxy->base : (extra ? static_cast<QStyle *>(extra->style.data()) : nullptr);
+   QStyle *origStyle   = proxy ? proxy->m_styleSheetBase : (extra ? static_cast<QStyle *>(extra->style.data()) : nullptr);
    QWidget *parent     = q->parentWidget();
    QStyle *parentStyle = (parent && parent->d_func()->extra) ? (QStyle *)parent->d_func()->extra->style : nullptr;
 

@@ -596,7 +596,7 @@ void QApplication::setStyleSheet(const QString &styleSheet)
          return;
       }
 
-      setStyle(proxy->base);
+      setStyle(proxy->m_styleSheetBase);
 
    } else if (proxy) {
       // style sheet update, just repolish
