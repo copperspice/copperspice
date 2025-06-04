@@ -1091,67 +1091,84 @@ void QGuiApplicationPrivate::createPlatformIntegration()
    // Get command line parameters
    QString icon;
 
-   int j = argc ? 1 : 0;
-   for (int i = 1; i < argc; i++) {
-      if (! argv[i]) {
+   int currentArg = m_argc ? 1 : 0;
+
+   for (int index = 1; index < m_argc; ++index) {
+
+      if (! m_argv[index]) {
          continue;
       }
 
-      if (*argv[i] != '-') {
-         argv[j++] = argv[i];
+      if (*m_argv[index] != '-') {
+         m_argv[currentArg] = m_argv[index];
+         ++currentArg;
+
          continue;
       }
 
       const bool isXcb = (platformName.startsWith("CsGuiXcb"));
 
       //
-      QString arg = QString::fromUtf8(argv[i]);
+      QString item = QString::fromUtf8(m_argv[index]);
 
-      if (arg.startsWith("--")) {
-         arg = arg.mid(1);
+      if (item.startsWith("--")) {
+         item = item.mid(1);
       }
 
-      if (arg == "-platformpluginpath") {
-         if (++i < argc) {
-            platformPluginPath = QString::fromUtf8(argv[i]);
+      if (item == "-platformpluginpath") {
+         ++index;
+
+         if (index < m_argc) {
+            platformPluginPath = QString::fromUtf8(m_argv[index]);
          }
 
-      } else if (arg == "-platform") {
-         if (++i < argc) {
-            platformName = QString::fromUtf8(argv[i]);
+      } else if (item == "-platform") {
+         ++index;
+
+         if (index < m_argc) {
+            platformName = QString::fromUtf8(m_argv[index]);
          }
 
-      } else if (arg == "-platformtheme") {
-         if (++i < argc) {
-            platformThemeName = QString::fromUtf8(argv[i]);
+      } else if (item == "-platformtheme") {
+         ++index;
+
+         if (index < m_argc) {
+            platformThemeName = QString::fromUtf8(m_argv[index]);
          }
 
-      } else if (arg == "-qwindowgeometry" || (isXcb && arg == "-geometry")) {
-         if (++i < argc) {
-            windowGeometrySpecification = QWindowGeometrySpecification::fromArgument(argv[i]);
+      } else if (item == "-qwindowgeometry" || (isXcb && item == "-geometry")) {
+         ++index;
+
+         if (index < m_argc) {
+            windowGeometrySpecification = QWindowGeometrySpecification::fromArgument(m_argv[index]);
          }
 
-      } else if (arg == "-qwindowtitle" || (isXcb && arg == "-title")) {
-         if (++i < argc) {
-            firstWindowTitle = QString::fromUtf8(argv[i]);
+      } else if (item == "-qwindowtitle" || (isXcb && item == "-title")) {
+         ++index;
+
+         if (index < m_argc) {
+            firstWindowTitle = QString::fromUtf8(m_argv[index]);
          }
 
-      } else if (arg == "-qwindowicon" || (isXcb && arg == "-icon")) {
-         if (++i < argc) {
-            icon = QString::fromUtf8(argv[i]);
+      } else if (item == "-qwindowicon" || (isXcb && item == "-icon")) {
+         ++index;
+
+         if (index < m_argc) {
+            icon = QString::fromUtf8(m_argv[index]);
          }
 
       } else {
-         argv[j++] = argv[i];
+         m_argv[currentArg] = m_argv[index];
+         ++currentArg;
       }
    }
 
-   if (j < argc) {
-      argv[j] = nullptr;
-      argc = j;
+   if (currentArg < m_argc) {
+      m_argc = currentArg;
+      m_argv[currentArg] = nullptr;
    }
 
-   init_platform(platformName, platformPluginPath, platformThemeName, argc, argv);
+   init_platform(platformName, platformPluginPath, platformThemeName, m_argc, m_argv);
 
    if (! icon.isEmpty()) {
       forcedWindowIcon = QDir::isAbsolutePath(icon) ? QIcon(icon) : QIcon::fromTheme(icon);
@@ -1215,35 +1232,39 @@ void QGuiApplicationPrivate::init()
 #endif
 
    QString s;
-   int j = argc ? 1 : 0;
+   int currentArg = m_argc ? 1 : 0;
 
-   for (int i = 1; i < argc; i++) {
+   for (int index = 1; index < m_argc; index++) {
 
-      if (! argv[i]) {
+      if (! m_argv[index]) {
          continue;
       }
 
-      if (*argv[i] != '-') {
-         argv[j++] = argv[i];
+      if (*m_argv[index] != '-') {
+         ++currentArg;
+
+         m_argv[currentArg] = m_argv[index];
          continue;
       }
 
-      QString arg = QString::fromUtf8(argv[i]);
+      QString item = QString::fromUtf8(m_argv[index]);
 
-      if (arg.startsWith("--")) {
-         arg = arg.mid(1);
+      if (item.startsWith("--")) {
+         item = item.mid(1);
       }
 
-      if (arg == "-plugin") {
-         if (++i < argc) {
-            pluginList << QString::fromUtf8(argv[i]);
+      if (item == "-plugin") {
+         ++index;
+
+         if (index < m_argc) {
+            pluginList << QString::fromUtf8(m_argv[index]);
          }
 
-      } else if (arg == "-reverse") {
+      } else if (item == "-reverse") {
          force_reverse = true;
 
 #ifdef Q_OS_DARWIN
-      } else if (arg.startsWith("-psn_")) {
+      } else if (item.startsWith("-psn_")) {
          // consume "-psn_xxxx" on Mac, which is passed when starting an app from Finder
          // used to change the working directory (for an app bundle) when running from finder
 
@@ -1258,11 +1279,11 @@ void QGuiApplicationPrivate::init()
 #endif
 
 #ifndef QT_NO_SESSIONMANAGER
-      } else if (arg == "-session" && i < argc - 1) {
-         ++i;
+      } else if (item == "-session" && index < m_argc - 1) {
+         ++index;
 
-         if (argv[i] && *argv[i]) {
-            session_id = QString::fromUtf8(argv[i]);
+         if (m_argv[index] && *m_argv[index]) {
+            session_id = QString::fromUtf8(m_argv[index]);
 
             int p = session_id.indexOf('_');
 
@@ -1275,14 +1296,17 @@ void QGuiApplicationPrivate::init()
          }
 #endif
 
-      } else if (arg.startsWith("-style=")) {
-         s = arg.mid(7).toLower();
+      } else if (item.startsWith("-style=")) {
+         s = item.mid(7).toLower();
 
-      } else if (arg.startsWith("-style") && i < argc - 1) {
-         s = QString::fromUtf8(argv[++i]).toLower();
+      } else if (item.startsWith("-style") && index < m_argc - 1) {
+         ++index;
+
+         s = QString::fromUtf8(m_argv[index]).toLower();
 
       } else {
-         argv[j++] = argv[i];
+         ++currentArg;
+         m_argv[currentArg] = m_argv[index];
       }
 
       if (! s.isEmpty()) {
@@ -1290,9 +1314,9 @@ void QGuiApplicationPrivate::init()
       }
    }
 
-   if (j < argc) {
-      argv[j] = nullptr;
-      argc = j;
+   if (currentArg < m_argc) {
+      m_argc = currentArg;
+      m_argv[currentArg] = nullptr;
    }
 
    // Load environment exported generic plugins

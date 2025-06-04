@@ -209,49 +209,54 @@ void QApplicationPrivate::process_cmdline()
    }
 
    // process platform independent command line
-   if (application_type == QApplicationPrivate::Tty || ! argc ) {
+   if (application_type == QApplicationPrivate::Tty || ! m_argc ) {
       return;
    }
 
-   int i;
-   int j = 1;
+   int index;
+   int currentArg = 1;
 
-   for (i = 1; i < argc; i++) {
+   for (index = 1; index < m_argc; ++index) {
       // if you add anything here, modify QCoreApplication::arguments()
 
-      if (! argv[i]) {
+      if (! m_argv[index]) {
          continue;
       }
 
-      if (*argv[i] != '-') {
-         argv[j++] = argv[i];
+      if (*m_argv[index] != '-') {
+         m_argv[currentArg] = m_argv[index];
+         ++currentArg;
+
          continue;
       }
 
-      QString arg = QString::fromUtf8(argv[i]);
+      QString item = QString::fromUtf8(m_argv[index]);
 
-      if (arg.startsWith("--")) {
-         arg = arg.mid(1);
+      if (item.startsWith("--")) {
+         item = item.mid(index);
       }
 
 #ifndef QT_NO_STYLE_STYLESHEET
-      if (arg == "-stylesheet" && i < argc - 1) {
-         styleSheet = "file:///";
-         styleSheet.append(QString::fromUtf8(argv[++i]));
+      if (item == "-stylesheet" && index < m_argc - 1) {
+         ++index;
 
-      } else if (arg.startsWith("-stylesheet=")) {
          styleSheet = "file:///";
-         styleSheet.append(arg.mid(12));
+         styleSheet.append(QString::fromUtf8(m_argv[index]));
+
+      } else if (item.startsWith("-stylesheet=")) {
+         styleSheet = "file:///";
+         styleSheet.append(item.mid(12));
 
       }
 #endif
 
-      argv[j++] = argv[i];
+      m_argv[currentArg] = m_argv[index];
+      ++currentArg;
    }
 
-   if (j < argc) {
-      argv[j] = nullptr;
-      argc = j;
+   if (currentArg < m_argc) {
+      m_argc = currentArg;
+      m_argv[currentArg] = nullptr;
    }
 }
 

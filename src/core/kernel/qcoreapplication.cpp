@@ -139,9 +139,9 @@ QString QCoreApplicationPrivate::appName() const
    retval = macMenuBarName();
 #endif
 
-   if (retval.isEmpty() && argv[0]) {
-      char *p = strrchr(argv[0], '/');
-      retval = QString::fromUtf8(p ? p + 1 : argv[0]);
+   if (retval.isEmpty() && m_argv[0]) {
+      char *p = strrchr(m_argv[0], '/');
+      retval = QString::fromUtf8(p ? p + 1 : m_argv[0]);
    }
 
    return retval;
@@ -167,37 +167,21 @@ static QString *qmljs_debug_arguments()
 
 void QCoreApplicationPrivate::processCommandLineArguments()
 {
-   int j = argc ? 1 : 0;
+   int currentArg = m_argc ? 1 : 0;
 
-   for (int i = 1; i < argc; ++i) {
+   for (int index = 1; index < m_argc; ++index) {
 
-      if (! argv[i]) {
+      if (! m_argv[index]) {
          continue;
       }
 
-      if (*argv[i] != '-') {
-         argv[j++] = argv[i];
-         continue;
-      }
-
-      QString arg = QString::fromUtf8(argv[i]);
-
-      if (arg.startsWith("-qmljsdebugger=")) {
-
-         *qmljs_debug_arguments() = arg.right(arg.length() - 15);
-
-      } else if (arg == "-qmljsdebugger" && i < argc - 1) {
-         ++i;
-         *qmljs_debug_arguments() = QString::fromUtf8(argv[i]);
-
-      } else {
-         argv[j++] = argv[i];
-      }
+      m_argv[currentArg] = m_argv[index];
+      ++currentArg;
    }
 
-   if (j < argc) {
-      argv[j] = nullptr;
-      argc    = j;
+   if (currentArg < m_argc) {
+      m_argc = currentArg;
+      m_argv[currentArg] = nullptr;
    }
 }
 
@@ -368,15 +352,15 @@ static QCoreApplicationData *coreappdata()
 
 static bool quitLockRefEnabled = true;
 
-QCoreApplicationPrivate::QCoreApplicationPrivate(int &aargc, char **aargv)
-   : argc(aargc), argv(aargv), application_type(QCoreApplicationPrivate::Tty),
+QCoreApplicationPrivate::QCoreApplicationPrivate(int &argc, char **argv)
+   : m_argc(argc), m_argv(argv), application_type(QCoreApplicationPrivate::Tty),
      in_exec(false), aboutToQuitEmitted(false)
 {
    static const char *const empty = "";
 
-   if (argc == 0 || argv == nullptr) {
-      argc = 0;
-      argv = const_cast<char **>(&empty);
+   if (m_argc == 0 || m_argv == nullptr) {
+      m_argc = 0;
+      m_argv = const_cast<char **>(&empty);
    }
 
    QCoreApplicationPrivate::is_app_closing = false;
@@ -1598,8 +1582,8 @@ QStringList QCoreApplication::arguments()
    }
 
 #else
-   const int ac = m_self->d_func()->argc;
-   char **const av = m_self->d_func()->argv;
+   const int ac = m_self->d_func()->m_argc;
+   char **const av = m_self->d_func()->m_argv;
 
    for (int index = 0; index < ac; ++index) {
       list << QString::fromUtf8(av[index]);
