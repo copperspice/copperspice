@@ -1489,17 +1489,16 @@ QString QCoreApplication::applicationFilePath()
 
 #endif
 
-   QString argv0 = arguments().at(0);
-
+   QString firstItem = arguments().at(0);
    QString absPath;
 
-   if (! argv0.isEmpty() && argv0.at(0) == '/') {
-      // If argv0 starts with a slash, it is already an absolute file path.
-      absPath = argv0;
+   if (firstItem.startsWith('/')) {
+      // it is already an absolute file path
+      absPath = firstItem;
 
-   } else if (argv0.contains('/')) {
-      // If argv0 contains one or more slashes, it is a file path relative to the current directory.
-      absPath = QDir::current().absoluteFilePath(argv0);
+   } else if (firstItem.contains('/')) {
+      // if firstItem contains one or more slashes, it is a file path relative to the current directory.
+      absPath = QDir::current().absoluteFilePath(firstItem);
 
    } else {
       // Otherwise, the file path has to be determined using the PATH environment variable.
@@ -1512,7 +1511,7 @@ QString QCoreApplication::applicationFilePath()
             continue;
          }
 
-         QString candidate = currentDir.absoluteFilePath(*p + QChar('/') + argv0);
+         QString candidate = currentDir.absoluteFilePath(*p + QChar('/') + firstItem);
          QFileInfo candidate_fi(candidate);
 
          if (candidate_fi.exists() && !candidate_fi.isDir()) {
@@ -1552,28 +1551,26 @@ QStringList QCoreApplication::arguments()
    list = qCmdLineArgs(0, nullptr);
 
    if (m_self->d_func()->application_type) {
-      // GUI app? Skip known, refer to qapplication.cpp
+      // skip any which are known, refer to qapplication.cpp in gui
       QStringList stripped;
 
-      for (int a = 0; a < list.count(); ++a) {
-         QString arg      = list.at(a);
-         QByteArray l1arg = arg.toLatin1();
+      for (int index = 0; index < list.count(); ++index) {
+         QString item = list.at(index);
 
-         if (l1arg == "-qdevel" || l1arg == "-qdebug" || l1arg == "-reverse" ||
-               l1arg == "-stylesheet" || l1arg == "-widgetcount") {
+         if (item == "-qdevel" || item == "-qdebug" || item == "-reverse") {
+            // do nothing
 
-            // no code should appear here
+         } else if (item == "-stylesheet" || item == "-widgetcount") {
+            // do nothing
 
-         } else if (l1arg.startsWith("-style=") || l1arg.startsWith("-qmljsdebugger=")) {
+         } else if (item.startsWith("-style=")) {
+            // do nothing
 
-            // no code should appear here
-
-         } else if (l1arg == "-style" || l1arg == "-qmljsdebugger" || l1arg == "-session" ||
-               l1arg == "-graphicssystem" || l1arg == "-testability") {
-            ++a;
+         } else if (item == "-style" || item == "-session" || item == "-graphicssystem" || item == "-testability") {
+            ++index;
 
          } else {
-            stripped += arg;
+            stripped += item;
 
          }
       }

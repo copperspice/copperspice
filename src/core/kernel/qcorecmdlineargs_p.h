@@ -120,17 +120,17 @@ static inline QStringList qCmdLineArgs(int t1, char *t2[])
    (void) t1;
    (void) t2;
 
-   QStringList args;
+   QStringList argList;
    int argc = 0;
 
    std::wstring tmp(GetCommandLine());
    QVector<wchar_t *> argv = qWinCmdLine<wchar_t>(&tmp[0], tmp.length(), argc);
 
    for (int index = 0; index < argc; ++index) {
-      args << QString::fromStdWString(std::wstring(argv[index]));
+      argList.append(QString::fromStdWString(std::wstring(argv[index])));
    }
 
-   return args;
+   return argList;
 }
 
 #else
@@ -138,13 +138,13 @@ static inline QStringList qCmdLineArgs(int t1, char *t2[])
 
 static inline QStringList qCmdLineArgs(int argc, char *argv[])
 {
-   QStringList args;
+   QStringList argList;
 
-   for (int i = 0; i != argc; ++i) {
-      args += QString::fromUtf8(argv[i]);
+   for (int index = 0; index < argc; ++index) {
+      argList.append(QString::fromUtf8(argv[index]));
    }
 
-   return args;
+   return argList;
 }
 
 #endif
