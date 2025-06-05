@@ -37,7 +37,7 @@
 #define QDATETIME_TIME_MIN            QTime(0, 0, 0, 0)
 #define QDATETIME_TIME_MAX            QTime(23, 59, 59, 999)
 #define QDATETIME_DATE_MIN            QDate(100, 1, 1)
-#define QDATETIME_DATE_MAX            QDate(9999, 12, 31)
+#define QDATETIME_DATE_MAX            QDate(3000, 12, 31)         // limit on Windows, refer to qt_mktime()
 
 #define QDATETIME_DATETIME_MIN        QDateTime(QDATETIME_DATE_MIN, QDATETIME_TIME_MIN)
 #define QDATETIME_DATETIME_MAX        QDateTime(QDATETIME_DATE_MAX, QDATETIME_TIME_MAX)
