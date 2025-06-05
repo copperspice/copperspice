@@ -1510,68 +1510,6 @@ static qint64 localMSecsToEpochMSecs(qint64 localMsecs, QDateTimePrivate::Daylig
       return utcMsecs;
 
    } else {
-
-      if constexpr (sizeof(time_t) < sizeof(qint64)) {
-
-         const qint64 msecsMax = qint64(MAX_C_TIME) * MSECS_PER_SEC;
-
-         if (localMsecs >= msecsMax - MSECS_PER_DAY) {
-            // Any LocalTime after 2037-12-31 *will* have any DST applied
-            // but this may fall outside the supported time_t range
-
-            // if localMsecs is within +/- 1 day of maximum time_t try mktime in case it does
-            // fall before maximum and can use proper DST conversion
-
-            if (localMsecs <= msecsMax + MSECS_PER_DAY) {
-               bool valid;
-               qint64 utcMsecs = qt_mktime(&dt, &tm, daylightStatus, abbreviation, &valid);
-
-               if (valid && utcMsecs <= msecsMax) {
-                  // mktime worked and falls in valid range, so use it
-                  if (localDate) {
-                     *localDate = dt;
-                  }
-
-                  if (localTime) {
-                     *localTime = tm;
-                  }
-
-                  return utcMsecs;
-               }
-            }
-
-            int year, month, day;
-            dt.getDate(&year, &month, &day);
-
-            // 2037 is not a leap year so make sure date is not Feb 29
-            if (month == 2 && day == 29) {
-               --day;
-            }
-
-            QDate fakeDate(2037, month, day);
-            qint64 fakeDiff = fakeDate.daysTo(dt);
-            qint64 utcMsecs = qt_mktime(&fakeDate, &tm, daylightStatus, abbreviation);
-
-            if (localDate) {
-               *localDate = fakeDate.addDays(fakeDiff);
-            }
-
-            if (localTime) {
-               *localTime = tm;
-            }
-
-            QDate utcDate;
-            QTime utcTime;
-
-            msecsToTime(utcMsecs, &utcDate, &utcTime);
-            utcDate = utcDate.addDays(fakeDiff);
-            utcMsecs = timeToMSecs(utcDate, utcTime);
-
-            return utcMsecs;
-         }
-      }
-
-      // inside 1970-2037 suported range
       qint64 utcMsecs = qt_mktime(&dt, &tm, daylightStatus, abbreviation);
 
       if (localDate) {
