@@ -1724,6 +1724,7 @@ QDateTimeEdit::Section QDateTimeEditPrivate::convertToPublic(QDateTimeParser::Se
 
       case DayOfWeekSectionShort:
       case DayOfWeekSectionLong:
+      case DaySection:
          return QDateTimeEdit::DaySection;
 
       case MonthSection:
