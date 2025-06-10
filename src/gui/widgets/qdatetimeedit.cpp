@@ -178,10 +178,15 @@ void QDateTimeEdit::setMaximumDateTime(const QDateTime &dt)
    Q_D(QDateTimeEdit);
 
    if (dt.isValid() && dt.date() <= QDATETIME_DATE_MAX) {
-      const QDateTime m   = dt.toTimeZone(d->m_timeZone);
-      const QDateTime min = d->minimum.toDateTime();
+      const QDateTime localTime = dt.toTimeZone(d->m_timeZone);
+      const QDateTime minimum   = d->minimum.toDateTime();
 
-      d->setRange((min < m ? min : m), m);
+      if (minimum < localTime) {
+         d->setRange(minimum, localTime);
+
+      } else {
+         d->setRange(localTime, localTime);
+      }
    }
 }
 
@@ -190,13 +195,14 @@ void QDateTimeEdit::setDateTimeRange(const QDateTime &min, const QDateTime &max)
    Q_D(QDateTimeEdit);
 
    const QDateTime minimum = min.toTimeZone(d->m_timeZone);
-   QDateTime maximum       = max.toTimeZone(d->m_timeZone);
+   const QDateTime maximum = max.toTimeZone(d->m_timeZone);
 
    if (min > max) {
-      maximum = minimum;
-   }
+      d->setRange(minimum, minimum);
 
-   d->setRange(minimum, maximum);
+   } else {
+       d->setRange(minimum, maximum);
+   }
 }
 
 QDate QDateTimeEdit::minimumDate() const

@@ -1739,10 +1739,10 @@ void QGuiApplicationPrivate::processMouseEvent(QWindowSystemInterfacePrivate::Mo
 
       points << point;
 
-      QEvent::Type type;
-      QList<QTouchEvent::TouchPoint> touchPoints = QWindowSystemInterfacePrivate::fromNativeTouchPoints(points, window, &type);
+      QEvent::Type typeValue;
+      QList<QTouchEvent::TouchPoint> touchPoints = QWindowSystemInterfacePrivate::fromNativeTouchPoints(points, window, &typeValue);
 
-      QWindowSystemInterfacePrivate::TouchEvent fake(window, e->timestamp, type, m_fakeTouchDevice, touchPoints, e->modifiers);
+      QWindowSystemInterfacePrivate::TouchEvent fake(window, e->timestamp, typeValue, m_fakeTouchDevice, touchPoints, e->modifiers);
       fake.flags |= QWindowSystemInterfacePrivate::WindowSystemEvent::Synthetic;
       processTouchEvent(&fake);
    }
@@ -2033,8 +2033,8 @@ void QGuiApplicationPrivate::processGeometryChangeEvent(QWindowSystemInterfacePr
    window->d_func()->geometry = newRect;
 
    if (isResize || window->d_func()->resizeEventPending) {
-      QResizeEvent e(newRect.size(), oldRect.size());
-      QGuiApplication::sendSpontaneousEvent(window, &e);
+      QResizeEvent eventResize(newRect.size(), oldRect.size());
+      QGuiApplication::sendSpontaneousEvent(window, &eventResize);
 
       window->d_func()->resizeEventPending = false;
 
@@ -2048,8 +2048,8 @@ void QGuiApplicationPrivate::processGeometryChangeEvent(QWindowSystemInterfacePr
 
    if (isMove) {
       //### frame geometry
-      QMoveEvent e(newRect.topLeft(), oldRect.topLeft());
-      QGuiApplication::sendSpontaneousEvent(window, &e);
+      QMoveEvent eventMove(newRect.topLeft(), oldRect.topLeft());
+      QGuiApplication::sendSpontaneousEvent(window, &eventMove);
 
       if (oldRect.x() != newRect.x()) {
          window->xChanged(newRect.x());

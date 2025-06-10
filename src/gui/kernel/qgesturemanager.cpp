@@ -206,9 +206,9 @@ QGesture *QGestureManager::getState(QObject *object, QGestureRecognizer *recogni
    }
 
    // check if the QGesture for this recognizer has already been created
-   for (QGesture *state : m_objectGestures.value(QGestureManager::ObjectGesture(object, type))) {
-      if (m_gestureToRecognizer.value(state) == recognizer) {
-         return state;
+   for (QGesture *item : m_objectGestures.value(QGestureManager::ObjectGesture(object, type))) {
+      if (m_gestureToRecognizer.value(item) == recognizer) {
+         return item;
       }
    }
 
@@ -633,20 +633,20 @@ void QGestureManager::getGestureTargets(const QSet<QGesture *> &gestures,
    GestureByTypes gestureByTypes;
 
    // sort gestures by types
-   for (QGesture *gesture : gestures) {
-      QWidget *receiver = m_gestureTargets.value(gesture, QPointer<QWidget>(nullptr));
+   for (QGesture *item : gestures) {
+      QWidget *receiver = m_gestureTargets.value(item, QPointer<QWidget>(nullptr));
       Q_ASSERT(receiver);
 
       if (receiver != nullptr) {
-         gestureByTypes[gesture->gestureType()].insert(receiver, gesture);
+         gestureByTypes[item->gestureType()].insert(receiver, item);
       }
    }
 
    // for each gesture type
    for (GestureByTypes::const_iterator git = gestureByTypes.cbegin(), gend = gestureByTypes.cend(); git != gend; ++git) {
-      const QHash<QWidget *, QGesture *> &gestures = git.value();
+      const QHash<QWidget *, QGesture *> &gestureHash = git.value();
 
-      for (QHash<QWidget *, QGesture *>::const_iterator wit = gestures.cbegin(), wend = gestures.cend(); wit != wend; ++wit) {
+      for (QHash<QWidget *, QGesture *>::const_iterator wit = gestureHash.cbegin(), wend = gestureHash.cend(); wit != wend; ++wit) {
          QWidget *widget = wit.key();
          QWidget *w = widget->parentWidget();
 
@@ -690,18 +690,16 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
    QSet<QGesture *> startedGestures;
 
    // first figure out the initial receivers of gestures
-   for (QSet<QGesture *>::const_iterator it = gestures.begin(),
-      e = gestures.end(); it != e; ++it) {
-      QGesture *gesture = *it;
-      QWidget *target = m_gestureTargets.value(gesture, QPointer<QWidget>(nullptr));
+   for (auto item : gestures) {
+      QWidget *target = m_gestureTargets.value(item, QPointer<QWidget>(nullptr));
 
       if (!target) {
          // the gesture has just started and doesn't have a target yet.
-         Q_ASSERT(gesture->state() == Qt::GestureStarted);
+         Q_ASSERT(item->state() == Qt::GestureStarted);
 
-         if (gesture->hasHotSpot()) {
+         if (item->hasHotSpot()) {
             // guess the target widget using the hotspot of the gesture
-            QPoint pt = gesture->hotSpot().toPoint();
+            QPoint pt = item->hotSpot().toPoint();
 
             if (QWidget *topLevel = QApplication::topLevelWidgetAt(pt)) {
                QWidget *child = topLevel->childAt(topLevel->mapFromGlobal(pt));
@@ -710,31 +708,31 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
 
          } else {
             // or use the context of the gesture
-            QObject *context = m_gestureOwners.value(gesture, nullptr);
+            QObject *context = m_gestureOwners.value(item, nullptr);
             if (context->isWidgetType()) {
                target = static_cast<QWidget *>(context);
             }
          }
 
          if (target) {
-            m_gestureTargets.insert(gesture, QPointer<QWidget>(target));
+            m_gestureTargets.insert(item, QPointer<QWidget>(target));
          }
       }
 
-      Qt::GestureType gestureType = gesture->gestureType();
+      Qt::GestureType gestureType = item->gestureType();
       Q_ASSERT(gestureType != Qt::CustomGesture);
       (void) gestureType;
 
       if (target) {
-         if (gesture->state() == Qt::GestureStarted) {
-            startedGestures.insert(gesture);
+         if (item->state() == Qt::GestureStarted) {
+            startedGestures.insert(item);
          } else {
-            normalStartedGestures[target].append(gesture);
+            normalStartedGestures[target].append(item);
          }
 
       } else {
          qWarning("QGestureManager::deliverEvent() Unable to find the target for the given gesture");
-         undeliveredGestures->insert(gesture);
+         undeliveredGestures->insert(item);
       }
    }
 
@@ -748,40 +746,38 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
 #endif
 
    // if there are conflicting gestures, send the GestureOverride event
-   for (GesturesPerWidget::const_iterator it = conflictedGestures.constBegin(),
-      e = conflictedGestures.constEnd(); it != e; ++it) {
+   for (GesturesPerWidget::const_iterator it = conflictedGestures.constBegin(), e = conflictedGestures.constEnd(); it != e; ++it) {
       QWidget *receiver = it.key();
+      QList<QGesture *> gesturesReceived = it.value();
 
-      QList<QGesture *> gestures = it.value();
-
-      QGestureEvent event(gestures);
+      QGestureEvent event(gesturesReceived);
       event.t = QEvent::GestureOverride;
 
       // mark event and individual gestures as ignored
       event.ignore();
 
-      for (QGesture *g : gestures) {
-         event.setAccepted(g, false);
+      for (QGesture *item : gesturesReceived) {
+         event.setAccepted(item, false);
       }
 
       QApplication::sendEvent(receiver, &event);
       bool eventAccepted = event.isAccepted();
 
-      for (QGesture *gesture : event.gestures()) {
+      for (QGesture *item : event.gestures()) {
 
-         if (eventAccepted || event.isAccepted(gesture)) {
-            QWidget *w = event.m_targetWidgets.value(gesture->gestureType(), nullptr);
+         if (eventAccepted || event.isAccepted(item)) {
+            QWidget *w = event.m_targetWidgets.value(item->gestureType(), nullptr);
             Q_ASSERT(w);
 
-            QList<QGesture *> &gestures = normalStartedGestures[w];
-            gestures.append(gesture);
+            QList<QGesture *> &gestureList = normalStartedGestures[w];
+            gestureList.append(item);
 
             // override the target
-            m_gestureTargets[gesture] = w;
+            m_gestureTargets[item] = w;
 
          } else {
-            QList<QGesture *> &gestures = normalStartedGestures[receiver];
-            gestures.append(gesture);
+            QList<QGesture *> &gestureList = normalStartedGestures[receiver];
+            gestureList.append(item);
          }
       }
    }
@@ -796,13 +792,13 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
          QApplication::sendEvent(it.key(), &event);
          bool eventAccepted = event.isAccepted();
 
-         for (QGesture *gesture : event.gestures()) {
+         for (QGesture *item : event.gestures()) {
 
-            if (gesture->state() == Qt::GestureStarted && (eventAccepted || event.isAccepted(gesture))) {
-               QWidget *w = event.m_targetWidgets.value(gesture->gestureType(), nullptr);
+            if (item->state() == Qt::GestureStarted && (eventAccepted || event.isAccepted(item))) {
+               QWidget *w = event.m_targetWidgets.value(item->gestureType(), nullptr);
                Q_ASSERT(w);
 
-               m_gestureTargets[gesture] = w;
+               m_gestureTargets[item] = w;
             }
          }
       }

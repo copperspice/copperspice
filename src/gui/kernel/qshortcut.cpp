@@ -259,13 +259,13 @@ static bool correctGraphicsWidgetContext(Qt::ShortcutContext context, QGraphicsW
 #endif
 
 #ifndef QT_NO_ACTION
-static bool correctActionContext(Qt::ShortcutContext context, QAction *a, QWidget *active_window)
+static bool correctActionContext(Qt::ShortcutContext context, QAction *actionMenu, QWidget *active_window)
 {
-   const QList<QWidget *> &widgets = static_cast<QActionPrivate *>(QActionPrivate::get(a))->widgets;
+   const QList<QWidget *> &widgets = static_cast<QActionPrivate *>(QActionPrivate::get(actionMenu))->widgets;
 
 #if defined(CS_SHOW_DEBUG_GUI)
    if (widgets.isEmpty()) {
-      qDebug() << "QShortCut() " << a << "is not connected to any widget, will not trigger";
+      qDebug() << "QShortCut() " << actionMenu << "is not connected to any widget, will not trigger";
    }
 #endif
 
@@ -291,8 +291,8 @@ static bool correctActionContext(Qt::ShortcutContext context, QAction *a, QWidge
          }
 #endif
 
-         QAction *a = menu->menuAction();
-         if (correctActionContext(context, a, active_window)) {
+         QAction *menuA = menu->menuAction();
+         if (correctActionContext(context, menuA, active_window)) {
             return true;
          }
 
@@ -304,11 +304,11 @@ static bool correctActionContext(Qt::ShortcutContext context, QAction *a, QWidge
    }
 
 #ifndef QT_NO_GRAPHICSVIEW
-   const QList<QGraphicsWidget *> &graphicsWidgets = static_cast<QActionPrivate *>(QActionPrivate::get(a))->graphicsWidgets;
+   const QList<QGraphicsWidget *> &graphicsWidgets = static_cast<QActionPrivate *>(QActionPrivate::get(actionMenu))->graphicsWidgets;
 
 #if defined(CS_SHOW_DEBUG_GUI)
    if (graphicsWidgets.isEmpty()) {
-      qDebug() << "QShortCut() " << a << " is not connected to any widget, will not trigger";
+      qDebug() << "QShortCut() " << actionMenu << " is not connected to any widget, will not trigger";
    }
 #endif
 

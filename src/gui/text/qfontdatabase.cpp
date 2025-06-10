@@ -519,8 +519,8 @@ QtFontFamily *QFontDatabasePrivate::family(const QString &familyName, FamilyRequ
 
    } else {
       if (flags & EnsureCreated) {
-         auto iter = m_families.insert(key, QtFontFamily(familyName));
          retval    = &iter.value();
+         iter   = m_families.insert(key, QtFontFamily(familyName));
       }
    }
 
@@ -1567,9 +1567,9 @@ bool QFontDatabase::isSmoothlyScalable(const QString &family, const QString &sty
    QtFontFamily *fontFamily = m_fontdatabase->family(familyName);
 
    if (! fontFamily) {
-      for (auto &family : m_fontdatabase->m_families) {
-         if (family.matchesFamilyName(familyName)) {
-            fontFamily = &family;
+      for (auto &item : m_fontdatabase->m_families) {
+         if (item.matchesFamilyName(familyName)) {
+            fontFamily = &item;
             fontFamily->ensurePopulated();
             break;
          }
@@ -1796,8 +1796,8 @@ bool QFontDatabase::italic(const QString &family, const QString &style) const
 
    for (auto &fontFoundry : fontFamily->m_foundries) {
       if (foundryName.isEmpty() || fontFoundry.m_fontMfg.compare(foundryName, Qt::CaseInsensitive) == 0) {
-         for (const auto &style : fontFoundry.m_styles) {
-            allStyles.style(style.key, style.styleName, true);
+         for (const auto &item : fontFoundry.m_styles) {
+            allStyles.style(item.key, item.styleName, true);
          }
       }
    }
@@ -1825,8 +1825,8 @@ bool QFontDatabase::bold(const QString &family, const QString &style) const
 
    for (auto &fontFoundry : fontFamily->m_foundries) {
       if (foundryName.isEmpty() || fontFoundry.m_fontMfg.compare(foundryName, Qt::CaseInsensitive) == 0) {
-         for (const auto &style : fontFoundry.m_styles) {
-            allStyles.style(style.key, style.styleName, true);
+         for (const auto &item : fontFoundry.m_styles) {
+            allStyles.style(item.key, item.styleName, true);
          }
       }
    }
@@ -1854,8 +1854,8 @@ int QFontDatabase::weight(const QString &family, const QString &style) const
 
    for (auto &fontFoundry : fontFamily->m_foundries) {
       if (foundryName.isEmpty() || fontFoundry.m_fontMfg.compare(foundryName, Qt::CaseInsensitive) == 0) {
-         for (const auto &style : fontFoundry.m_styles) {
-            allStyles.style(style.key, style.styleName, true);
+         for (const auto &item : fontFoundry.m_styles) {
+            allStyles.style(item.key, item.styleName, true);
          }
       }
    }
@@ -2498,8 +2498,9 @@ QFontEngine *QFontDatabase::findFont(const QFontDef &request, int script)
    // Until we specifically asked not to, try looking for Multi font engine first,
    // the last '1' indicates that we want Multi font engine instead of single ones
    bool multi = ! (request.styleStrategy & QFont::NoFontMerging);
-   QFontCache::Key key(request, script, multi ? 1 : 0);
-   engine = fontCache->findEngine(key);
+
+   QFontCache::Key fontKey(request, script, multi ? 1 : 0);
+   engine = fontCache->findEngine(fontKey);
 
    if (engine != nullptr) {
 #if defined(CS_SHOW_DEBUG_GUI_TEXT)
@@ -2554,25 +2555,26 @@ QFontEngine *QFontDatabase::findFont(const QFontDef &request, int script)
             QFontDef def = request;
             def.family   = fallbacks.at(i);
 
-            QFontCache::Key key(def, script, multi ? 1 : 0);
-            engine = fontCache->findEngine(key);
+            QFontCache::Key fallback(def, script, multi ? 1 : 0);
+            engine = fontCache->findEngine(fallback);
 
             if (engine == nullptr) {
-               QtFontDesc desc;
+               QtFontDesc fontDesc;
 
                do {
-                  fontFamily = match(script, def, def.family, QString(""), &desc, blackListed);
+                  fontFamily = match(script, def, def.family, QString(), &fontDesc, blackListed);
+
                   if (fontFamily != nullptr) {
                      QFontDef loadDef = def;
 
                      if (loadDef.family.isEmpty()) {
-                        loadDef.family = desc.family->m_name;
+                        loadDef.family = fontDesc.family->m_name;
                      }
 
-                     engine = loadEngine(script, loadDef, desc.family, desc.foundry, desc.style, desc.size);
+                     engine = loadEngine(script, loadDef, fontDesc.family, fontDesc.foundry, fontDesc.style, fontDesc.size);
 
                      if (engine != nullptr) {
-                        initFontDef(desc, loadDef, &engine->m_fontDef, multi);
+                        initFontDef(fontDesc, loadDef, &engine->m_fontDef, multi);
                      } else {
                         blackListed.append(fontFamily);
                      }

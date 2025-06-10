@@ -3201,28 +3201,32 @@ QWidget *QApplicationPrivate::findClosestTouchPointTarget(QTouchDevice *device, 
 {
    const QPointF screenPos = touchPoint.screenPos();
    int closestTouchPointId = -1;
+
    QObject *closestTarget  = nullptr;
    qreal closestDistance   = qreal(0.0);
 
-   auto it  = activeTouchPoints.constBegin();
-   auto ite = activeTouchPoints.constEnd();
+   auto iter     = activeTouchPoints.constBegin();
+   auto iter_end = activeTouchPoints.constEnd();
 
-   while (it != ite) {
-      if (it.key().device == device && it.key().touchPointId != touchPoint.id()) {
-         const QTouchEvent::TouchPoint &touchPoint = it->touchPoint;
+   while (iter != iter_end) {
+      if (iter.key().device == device && iter.key().touchPointId != touchPoint.id()) {
+         const QTouchEvent::TouchPoint &activePoint = iter->touchPoint;
 
-         qreal dx = screenPos.x() - touchPoint.screenPos().x();
-         qreal dy = screenPos.y() - touchPoint.screenPos().y();
+         qreal dx = screenPos.x() - activePoint.screenPos().x();
+         qreal dy = screenPos.y() - activePoint.screenPos().y();
          qreal distance = dx * dx + dy * dy;
 
          if (closestTouchPointId == -1 || distance < closestDistance) {
-            closestTouchPointId = touchPoint.id();
+            closestTouchPointId = activePoint.id();
+
             closestDistance = distance;
-            closestTarget = it.value().target.data();
+            closestTarget   = iter.value().target.data();
          }
       }
-      ++it;
+
+      ++iter;
    }
+
    return static_cast<QWidget *>(closestTarget);
 }
 

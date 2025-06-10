@@ -790,17 +790,17 @@ int QKeySequencePrivate::decodeString(const QString &str, QKeySequence::Sequence
             ++tran;
          }
 
-         for (int i = 0; i < numKeyNames; ++i) {
+         for (int j = 0; j < numKeyNames; ++j) {
             QString keyName;
 
             if (tran == 0) {
-               keyName = QCoreApplication::translate("QShortcut", keyname[i].name);
+               keyName = QCoreApplication::translate("QShortcut", keyname[j].name);
             } else {
-               keyName = QString::fromLatin1(keyname[i].name);
+               keyName = QString::fromLatin1(keyname[j].name);
             }
 
             if (accel == keyName.toLower()) {
-               ret |= keyname[i].key;
+               ret |= keyname[j].key;
                found = true;
                break;
             }

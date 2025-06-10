@@ -187,8 +187,9 @@ void QWhatsThat::mouseReleaseEvent(QMouseEvent *e)
       anchor.clear();
 
       if (!href.isEmpty()) {
-         QWhatsThisClickedEvent e(href);
-         if (QApplication::sendEvent(widget, &e)) {
+         QWhatsThisClickedEvent eventWhat(href);
+
+         if (QApplication::sendEvent(widget, &eventWhat)) {
             return;
          }
       }
@@ -368,22 +369,26 @@ QWhatsThisPrivate::~QWhatsThisPrivate()
    instance = nullptr;
 }
 
-bool QWhatsThisPrivate::eventFilter(QObject *o, QEvent *e)
+bool QWhatsThisPrivate::eventFilter(QObject *obj, QEvent *event)
 {
-   if (!o->isWidgetType()) {
+   if (! obj->isWidgetType()) {
       return false;
    }
-   QWidget *w = static_cast<QWidget *>(o);
+
+   QWidget *w = static_cast<QWidget *>(obj);
    bool customWhatsThis = w->testAttribute(Qt::WA_CustomWhatsThis);
 
-   switch (e->type()) {
+   switch (event->type()) {
       case QEvent::MouseButtonPress: {
-         QMouseEvent *me = static_cast<QMouseEvent *>(e);
+         QMouseEvent *me = static_cast<QMouseEvent *>(event);
+
          if (me->button() == Qt::RightButton || customWhatsThis) {
             return false;
          }
-         QHelpEvent e(QEvent::WhatsThis, me->pos(), me->globalPos());
-         if (!QApplication::sendEvent(w, &e) || ! e.isAccepted()) {
+
+         QHelpEvent eventHelp(QEvent::WhatsThis, me->pos(), me->globalPos());
+
+         if (! QApplication::sendEvent(w, &eventHelp) || ! eventHelp.isAccepted()) {
             leaveOnMouseRelease = true;
          }
 
@@ -391,14 +396,15 @@ bool QWhatsThisPrivate::eventFilter(QObject *o, QEvent *e)
       break;
 
       case QEvent::MouseMove: {
-         QMouseEvent *me = static_cast<QMouseEvent *>(e);
-         QHelpEvent e(QEvent::QueryWhatsThis, me->pos(), me->globalPos());
-         bool sentEvent = QApplication::sendEvent(w, &e);
+         QMouseEvent *me = static_cast<QMouseEvent *>(event);
+
+         QHelpEvent eventHelp(QEvent::QueryWhatsThis, me->pos(), me->globalPos());
+         bool sentEvent = QApplication::sendEvent(w, &eventHelp);
 
 #ifdef QT_NO_CURSOR
          (void) sentEvent;
 #else
-         QApplication::changeOverrideCursor((!sentEvent || ! e.isAccepted()) ?
+         QApplication::changeOverrideCursor((! sentEvent || ! eventHelp.isAccepted()) ?
             Qt::ForbiddenCursor : Qt::WhatsThisCursor);
 #endif
       }
@@ -406,29 +412,34 @@ bool QWhatsThisPrivate::eventFilter(QObject *o, QEvent *e)
 
       case QEvent::MouseButtonRelease:
       case QEvent::MouseButtonDblClick:
-         if (leaveOnMouseRelease && e->type() == QEvent::MouseButtonRelease) {
+         if (leaveOnMouseRelease && event->type() == QEvent::MouseButtonRelease) {
             QWhatsThis::leaveWhatsThisMode();
          }
-         if (static_cast<QMouseEvent *>(e)->button() == Qt::RightButton || customWhatsThis) {
-            return false;   // ignore RMB release
+
+         if (static_cast<QMouseEvent *>(event)->button() == Qt::RightButton || customWhatsThis) {
+            // ignore RMB release
+            return false;
          }
+
          break;
 
       case QEvent::KeyPress: {
-         QKeyEvent *kev = (QKeyEvent *)e;
+         QKeyEvent *eventKey = (QKeyEvent *)event;
 
-         if (kev->matches(QKeySequence::Cancel)) {
+         if (eventKey->matches(QKeySequence::Cancel)) {
             QWhatsThis::leaveWhatsThisMode();
             return true;
+
          } else if (customWhatsThis) {
             return false;
-         } else if (kev->key() == Qt::Key_Menu ||
-            (kev->key() == Qt::Key_F10 &&
-               kev->modifiers() == Qt::ShiftModifier)) {
-            // we don't react to these keys, they are used for context menus
+
+         } else if (eventKey->key() == Qt::Key_Menu || (eventKey->key() == Qt::Key_F10 &&
+               eventKey->modifiers() == Qt::ShiftModifier)) {
+            // do not react to these keys, they are used for context menus
             return false;
-         } else if (kev->key() != Qt::Key_Shift && kev->key() != Qt::Key_Alt // not a modifier key
-            && kev->key() != Qt::Key_Control && kev->key() != Qt::Key_Meta) {
+
+         } else if (eventKey->key() != Qt::Key_Shift && eventKey->key() != Qt::Key_Alt // not a modifier key
+               && eventKey->key() != Qt::Key_Control && eventKey->key() != Qt::Key_Meta) {
             QWhatsThis::leaveWhatsThisMode();
          }
       }
