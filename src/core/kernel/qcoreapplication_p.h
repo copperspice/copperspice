@@ -92,7 +92,6 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
    void appendApplicationPathToLibraryPaths(void);
    void processCommandLineArguments();
 
-   static QString qmljsDebugArguments();          // access arguments from other libraries
 
    QTranslatorList translators;
    static bool isTranslatorInstalled(QTranslator *translator);

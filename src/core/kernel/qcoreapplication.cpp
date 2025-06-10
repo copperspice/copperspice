@@ -159,12 +159,6 @@ bool QCoreApplicationPrivate::checkInstance(const char *function)
    return b;
 }
 
-static QString *qmljs_debug_arguments()
-{
-   static QString retval;
-   return &retval;
-}
-
 void QCoreApplicationPrivate::processCommandLineArguments()
 {
    int currentArg = m_argc ? 1 : 0;
@@ -485,11 +479,6 @@ void QCoreApplicationPrivate::appendApplicationPathToLibraryPaths()
    }
 
 #endif
-}
-
-QString QCoreApplicationPrivate::qmljsDebugArguments()
-{
-   return *qmljs_debug_arguments();
 }
 
 QString qAppName()
