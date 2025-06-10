@@ -80,8 +80,8 @@ QByteArray qt_inflateGZipDataFrom(QIODevice *device)
 
    // Adding 16 to the window size gives us gzip decoding
    if (inflateInit2(&zlibStream, MAX_WBITS + 16) != Z_OK) {
-      qWarning("Unable to initialize zlib, because: %s",
-               (zlibStream.msg != nullptr ? zlibStream.msg : "Unknown error"));
+      qWarning("Unable to initialize zlib, %s",
+            (zlibStream.msg != nullptr ? zlibStream.msg : "Unknown error"));
 
       return QByteArray();
    }
@@ -147,8 +147,8 @@ QSvgTinyDocument *QSvgTinyDocument::load(const QString &fileName)
    QFile file(fileName);
 
    if (! file.open(QFile::ReadOnly)) {
-      qWarning("Unable to open file '%s', because: %s",
-               csPrintable(fileName), csPrintable(file.errorString()));
+      qWarning("QSvgTinyDocument::load() Unable to open file %s, %s",
+            csPrintable(fileName), csPrintable(file.errorString()));
 
       return nullptr;
    }
@@ -167,8 +167,8 @@ QSvgTinyDocument *QSvgTinyDocument::load(const QString &fileName)
       doc = handler.document();
       doc->m_animationDuration = handler.animationDuration();
    } else {
-      qWarning("Cannot read file '%s', because: %s (line %d)",
-               csPrintable(fileName), csPrintable(handler.errorString()), handler.lineNumber());
+      qWarning("QSvgTinyDocument::load() Unable to read file %s, %s (line %d)",
+            csPrintable(fileName), csPrintable(handler.errorString()), handler.lineNumber());
    }
 
    return doc;

@@ -923,7 +923,7 @@ void QSvgGradientStyle::resolveStops()
             m_gradientStopsSet = st->gradientStopsSet();
          }
       } else {
-         qWarning("Could not resolve property : %s", csPrintable(m_link));
+         qWarning("QSvgGradientStyle::resolveStops() Unable to resolve property, %s", csPrintable(m_link));
       }
       m_link = QString();
    }

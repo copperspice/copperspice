@@ -2123,7 +2123,7 @@ QDomNode QDomNode::removeChild(const QDomNode &oldChild)
 QDomNode QDomNode::appendChild(const QDomNode &newChild)
 {
    if (!impl) {
-      qWarning("Calling appendChild() on a null node does nothing.");
+      qWarning("QDomNode::appendChild() Calling with a null node has no effect");
       return QDomNode();
    }
    return QDomNode(IMPL->appendChild(newChild.impl));
@@ -3836,7 +3836,7 @@ QDomNodePrivate *QDomTextPrivate::cloneNode(bool deep)
 QDomTextPrivate *QDomTextPrivate::splitText(int offset)
 {
    if (!parent()) {
-      qWarning("QDomText::splitText  The node has no parent. So I can not split");
+      qWarning("QDomText::splitText() Node has no parent, unable to split text");
       return nullptr;
    }
 
@@ -4708,7 +4708,8 @@ void QDomDocumentPrivate::saveDocument(QTextStream &s, const int indent, QDomNod
       const QString codecName("iso-8859-1");
 #else
       const QTextCodec *const codec = s.codec();
-      Q_ASSERT_X(codec, "QDomNode::save()", "A codec must be specified in the text stream.");
+      Q_ASSERT_X(codec, "QDomNode::save()", "Codec must be specified in the text stream.");
+
       const QString codecName = codec->name();
 #endif
 
@@ -4980,7 +4981,7 @@ QDomNodeList QDomDocument::elementsByTagNameNS(const QString &nsURI, const QStri
 
 QDomElement QDomDocument::elementById(const QString &)
 {
-   qWarning("elementById() is not implemented and will always return a null node.");
+   qWarning("QDomDocument::elementById() Not implemented, always returns a null node");
    return QDomElement();
 }
 

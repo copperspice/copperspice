@@ -141,7 +141,7 @@ void QSvgRenderer::setFramesPerSecond(int num)
 {
    Q_D(QSvgRenderer);
    if (num < 0) {
-      qWarning("QSvgRenderer::setFramesPerSecond: Cannot set negative value %d", num);
+      qWarning("QSvgRenderer::setFramesPerSecond() Unable to set negative value %d", num);
       return;
    }
    d->fps = num;

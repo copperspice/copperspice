@@ -89,7 +89,7 @@ QNetworkReplyFileImpl::QNetworkReplyFileImpl(QObject *parent, const QNetworkRequ
    QFileInfo fi(fileName);
    if (fi.isDir()) {
       QString msg = QCoreApplication::translate("QNetworkAccessFileBackend",
-                    "Can not open %1: Path is a directory").formatArg(url.toString());
+            "Unable to open %1: Path is a directory").formatArg(url.toString());
 
       setError(QNetworkReply::ContentOperationNotPermittedError, msg);
 

@@ -1411,7 +1411,7 @@ bool QXmlSimpleReader::feature(const QString &name, bool *ok) const
       return d->reportEntities;
 
    } else {
-      qWarning("Unknown feature %s", name.toLatin1().data());
+      qWarning("QXmlSimpleReader::feature() Unknown feature %s", csPrintable(name));
 
       if (ok != nullptr) {
          *ok = false;
@@ -1438,7 +1438,7 @@ void QXmlSimpleReader::setFeature(const QString &name, bool enable)
       d->reportEntities = enable;
 
    } else {
-      qWarning("Unknown feature %s", name.toLatin1().data());
+      qWarning("QXmlSimpleReader::setFeature() Unknown feature %s", csPrintable(name));
    }
 }
 

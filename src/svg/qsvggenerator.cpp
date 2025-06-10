@@ -242,7 +242,7 @@ class QSvgPaintEngine : public QPaintEngine
    }
 
    void saveConicalGradientBrush(const QGradient *) {
-      qWarning("Conical gradients are not supported");
+      qWarning("QSvgPaintEngine::saveConicalGradientBrush() Conical gradients are not supported");
    }
 
    void saveGradientStops(QTextStream &str, const QGradient *g) {
@@ -370,7 +370,7 @@ class QSvgPaintEngine : public QPaintEngine
             break;
          }
          default:
-            qWarning("Unsupported pen style");
+            qWarning("QSvgPaintEngine::qpenToSvg() Unsupported pen style");
             break;
       }
 
@@ -391,7 +391,7 @@ class QSvgPaintEngine : public QPaintEngine
             stream() << "stroke-linecap=\"round\" ";
             break;
          default:
-            qWarning("Unhandled cap style");
+            qWarning("QSvgPaintEngine::qpenToSvg() Unsupported cap style");
       }
 
       switch (spen.joinStyle()) {
@@ -407,7 +407,7 @@ class QSvgPaintEngine : public QPaintEngine
             stream() << "stroke-linejoin=\"round\" ";
             break;
          default:
-            qWarning("Unhandled join style");
+            qWarning("QSvgPaintEngine::qpenToSvg() Unsupported join style");
       }
    }
    void qbrushToSvg(const QBrush &sbrush) {
@@ -554,7 +554,7 @@ void QSvgGenerator::setSize(const QSize &size)
 {
    Q_D(QSvgGenerator);
    if (d->engine->isActive()) {
-      qWarning("QSvgGenerator::setSize(), cannot set size while SVG is being generated");
+      qWarning("QSvgGenerator::setSize() Unable to set size while SVG is being generated");
       return;
    }
    d->engine->setSize(size);
@@ -576,7 +576,7 @@ void QSvgGenerator::setViewBox(const QRectF &viewBox)
 {
    Q_D(QSvgGenerator);
    if (d->engine->isActive()) {
-      qWarning("QSvgGenerator::setViewBox(), cannot set viewBox while SVG is being generated");
+      qWarning("QSvgGenerator::setViewBox() Unable to set viewBox while SVG is being generated");
       return;
    }
    d->engine->setViewBox(viewBox);
@@ -597,7 +597,7 @@ void QSvgGenerator::setFileName(const QString &fileName)
 {
    Q_D(QSvgGenerator);
    if (d->engine->isActive()) {
-      qWarning("QSvgGenerator::setFileName(), cannot set file name while SVG is being generated");
+      qWarning("QSvgGenerator::setFileName() Unable to set file name while SVG is being generated");
       return;
    }
 
@@ -622,7 +622,7 @@ void QSvgGenerator::setOutputDevice(QIODevice *outputDevice)
 {
    Q_D(QSvgGenerator);
    if (d->engine->isActive()) {
-      qWarning("QSvgGenerator::setOutputDevice(), cannot set output device while SVG is being generated");
+      qWarning("QSvgGenerator::setOutputDevice() Unable to set output device while SVG is being generated");
       return;
    }
    d->owns_iodevice = false;
@@ -688,7 +688,7 @@ int QSvgGenerator::metric(QPaintDevice::PaintDeviceMetric metric) const
         return 1;
 
       default:
-         qWarning("QSvgGenerator::metric(), unhandled metric %d\n", metric);
+         qWarning("QSvgGenerator::metric() Unhandled metric %d\n", metric);
          break;
    }
    return 0;
@@ -698,19 +698,19 @@ bool QSvgPaintEngine::begin(QPaintDevice *)
 {
    Q_D(QSvgPaintEngine);
    if (!d->outputDevice) {
-      qWarning("QSvgPaintEngine::begin(), no output device");
+      qWarning("QSvgPaintEngine::begin() No output device");
       return false;
    }
 
    if (!d->outputDevice->isOpen()) {
       if (!d->outputDevice->open(QIODevice::WriteOnly | QIODevice::Text)) {
-         qWarning("QSvgPaintEngine::begin(), could not open output device: '%s'",
+         qWarning("QSvgPaintEngine::begin() Unable to open output device, '%s'",
                   csPrintable(d->outputDevice->errorString()));
          return false;
       }
 
    } else if (!d->outputDevice->isWritable()) {
-      qWarning("QSvgPaintEngine::begin(), could not write to read-only output device: '%s'",
+      qWarning("QSvgPaintEngine::begin() Unable to write to a read-only output device, '%s'",
                csPrintable(d->outputDevice->errorString()));
       return false;
    }

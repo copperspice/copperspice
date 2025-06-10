@@ -53,7 +53,7 @@
 
 void QSvgAnimation::draw(QPainter *, QSvgExtraStates &)
 {
-   qWarning("<animation> no implemented");
+   qWarning("QSvgAnimation::draw() Not implemented");
 }
 
 static inline QRectF boundsOnStroke(QPainter *p, const QPainterPath &path, qreal width)
