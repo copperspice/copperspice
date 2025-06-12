@@ -77,10 +77,10 @@ class QOpenGLVersionFunctionsBackend
 {
 public:
     QOpenGLVersionFunctionsBackend(QOpenGLContext *ctx)
-        : context(ctx)
+        : m_context(ctx)
     {}
 
-    QOpenGLContext *context;
+    QOpenGLContext *m_context;
     QAtomicInt refs;
 };
 
