@@ -70,10 +70,10 @@ class QGestureManager : public QObject
    enum State {
       Gesture,
       NotGesture,
-      MaybeGesture // this means timers are up and waiting for some
-      // more events, and input events are handled by
-      // gesture recognizer explicitly
-   } state;
+      MaybeGesture
+   };
+
+   State m_gestureState;
 
    struct ObjectGesture {
       QObject *object;

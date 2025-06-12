@@ -1790,7 +1790,7 @@ void QGuiApplicationPrivate::processWheelEvent(QWindowSystemInterfacePrivate::Wh
       return;
    }
 
-   QWheelEvent ev(localPoint, globalPoint, e->pixelDelta, e->angleDelta, buttons, e->modifiers, e->phase, e->source);
+   QWheelEvent ev(localPoint, globalPoint, e->pixelDelta, e->angleDelta, buttons, e->modifiers, e->m_phaseValue, e->source);
 
    ev.setTimestamp(e->timestamp);
    QGuiApplication::sendSpontaneousEvent(window, &ev);
@@ -2649,13 +2649,13 @@ void QGuiApplicationPrivate::reportRefreshRateChange(QWindowSystemInterfacePriva
    }
 }
 
-void QGuiApplicationPrivate::processExposeEvent(QWindowSystemInterfacePrivate::ExposeEvent *e)
+void QGuiApplicationPrivate::processExposeEvent(QWindowSystemInterfacePrivate::ExposeEvent *eventExpose)
 {
-   if (!e->exposed) {
+   if (! eventExpose->m_exposed) {
       return;
    }
 
-   QWindow *window = e->exposed.data();
+   QWindow *window = eventExpose->m_exposed.data();
    if (!window) {
       return;
    }
@@ -2674,9 +2674,9 @@ void QGuiApplicationPrivate::processExposeEvent(QWindowSystemInterfacePrivate::E
       p->receivedExpose = true;
    }
 
-   p->exposed = e->isExposed && window->screen();
+   p->exposed = eventExpose->isExposed && window->screen();
 
-   QExposeEvent exposeEvent(e->region);
+   QExposeEvent exposeEvent(eventExpose->m_exposeRegion);
    QCoreApplication::sendSpontaneousEvent(window, &exposeEvent);
 }
 

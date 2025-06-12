@@ -325,8 +325,8 @@ void QWindowSystemInterface::handleWheelEvent(QWindow *tlw, ulong timestamp, con
 }
 
 QWindowSystemInterfacePrivate::ExposeEvent::ExposeEvent(QWindow *exposed, const QRegion &region)
-   : WindowSystemEvent(Expose), exposed(exposed),
-     isExposed(exposed && exposed->handle() ? exposed->handle()->isExposed() : false), region(region)
+   : WindowSystemEvent(Expose), m_exposed(exposed), m_exposeRegion(region),
+     isExposed(exposed && exposed->handle() ? exposed->handle()->isExposed() : false)
 {
 }
 
@@ -840,7 +840,7 @@ bool QWindowSystemEventHandler::sendEvent(QWindowSystemInterfacePrivate::WindowS
 QWindowSystemInterfacePrivate::WheelEvent::WheelEvent(QWindow *w, ulong time, const QPointF &local, const QPointF &global,
       QPoint pixelD, QPoint angleD, Qt::KeyboardModifiers mods, Qt::ScrollPhase phase, Qt::MouseEventSource src)
    : InputEvent(w, time, Wheel, mods), pixelDelta(pixelD), angleDelta(angleD), localPos(local), globalPos(global),
-     phase(! QGuiApplicationPrivate::scrollNoPhaseAllowed && phase == Qt::NoScrollPhase ? Qt::ScrollUpdate : phase),
+     m_phaseValue(! QGuiApplicationPrivate::scrollNoPhaseAllowed && phase == Qt::NoScrollPhase ? Qt::ScrollUpdate : phase),
      source(src)
 {
 }

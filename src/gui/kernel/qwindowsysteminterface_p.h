@@ -272,7 +272,8 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
       QPoint angleDelta;
       QPointF localPos;
       QPointF globalPos;
-      Qt::ScrollPhase phase;
+
+      Qt::ScrollPhase m_phaseValue;
       Qt::MouseEventSource source;
    };
 
@@ -381,9 +382,11 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    {
     public:
       ExposeEvent(QWindow *exposed, const QRegion &region);
-      QPointer<QWindow> exposed;
+
+      QPointer<QWindow> m_exposed;
+      QRegion m_exposeRegion;
+
       bool isExposed;
-      QRegion region;
    };
 
    class FileOpenEvent : public WindowSystemEvent

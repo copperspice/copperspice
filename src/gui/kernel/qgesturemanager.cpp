@@ -67,7 +67,7 @@ static inline int panTouchPoints()
 }
 #endif
 QGestureManager::QGestureManager(QObject *parent)
-   : QObject(parent), state(NotGesture), m_lastCustomGestureId(Qt::CustomGesture)
+   : QObject(parent), m_gestureState(NotGesture), m_lastCustomGestureId(Qt::CustomGesture)
 {
 #if defined(Q_OS_DARWIN)
    registerGestureRecognizer(new QMacSwipeGestureRecognizer);
