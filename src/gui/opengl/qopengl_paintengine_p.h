@@ -159,8 +159,8 @@ class QOpenGL2PaintEngineExPrivate : public QPaintEngineExPrivate
     };
 
     QOpenGL2PaintEngineExPrivate(QOpenGL2PaintEngineEx *newPtr)
-      : q(newPtr), shaderManager(nullptr), width(0), height(0), ctx(nullptr), useSystemClip(true), elementIndicesVBOId(0),
-        snapToPixelGrid(false), nativePaintingActive(false), inverseScale(1),
+      : m_gl2PaintEngine(newPtr), shaderManager(nullptr), m_glWidth(0), m_glHeight(0), ctx(nullptr), useSystemClip(true),
+        elementIndicesVBOId(0), snapToPixelGrid(false), nativePaintingActive(false), inverseScale(1),
         lastTextureUnitUsed(QT_UNKNOWN_TEXTURE_UNIT)
     {
     }
@@ -250,15 +250,15 @@ class QOpenGL2PaintEngineExPrivate : public QPaintEngineExPrivate
 
     QOpenGLExtensions funcs;
 
-    QOpenGL2PaintEngineEx *q;
+    QOpenGL2PaintEngineEx *m_gl2PaintEngine;
     QOpenGLEngineShaderManager *shaderManager;
     QOpenGLPaintDevice* device;
 
-    int width;
-    int height;
+    int m_glWidth;
+    int m_glHeight;
 
     QOpenGLContext *ctx;
-    EngineMode mode;
+    EngineMode m_gl2Mode;
     QFontEngine::GlyphFormat glyphCacheFormat;
 
     bool vertexAttributeArraysEnabledState[QT_GL_VERTEX_ARRAY_TRACKED_COUNT];

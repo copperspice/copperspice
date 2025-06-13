@@ -303,7 +303,7 @@ void QOpenGLTextureGlyphCache::resizeTextureData(int width, int height)
     funcs->glBindFramebuffer(GL_FRAMEBUFFER, (GLuint)oldFbo);
 
     if (pex != nullptr) {
-        funcs->glViewport(0, 0, pex->width, pex->height);
+        funcs->glViewport(0, 0, pex->m_glWidth, pex->m_glHeight);
         pex->updateClipScissorTest();
     } else {
         if (m_vao.isCreated()) {
