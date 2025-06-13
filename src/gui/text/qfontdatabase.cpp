@@ -519,8 +519,8 @@ QtFontFamily *QFontDatabasePrivate::family(const QString &familyName, FamilyRequ
 
    } else {
       if (flags & EnsureCreated) {
-         retval    = &iter.value();
          iter   = m_families.insert(key, QtFontFamily(familyName));
+         retval = &iter.value();
       }
    }
 
