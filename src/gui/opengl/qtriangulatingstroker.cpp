@@ -291,14 +291,18 @@ void QTriangulatingStroker::moveTo(const qreal *pts)
 
 void QTriangulatingStroker::cubicTo(const qreal *pts)
 {
-    const QPointF *p = (const QPointF *) pts;
-    QBezier bezier = QBezier::fromPoints(*(p - 1), p[0], p[1], p[2]);
+    QBezier bezier = QBezier::fromPoints(
+         QPointF(pts[-2], pts[-1]), QPointF(pts[0], pts[1]), QPointF(pts[2], pts[3]), QPointF(pts[4], pts[5]));
 
     QRectF bounds = bezier.bounds();
-    float rad = qMax(bounds.width(), bounds.height());
+    float rad     = qMax(bounds.width(), bounds.height());
+
     int threshold = qMin<float>(64, (rad + m_curvyness_add) * m_curvyness_mul);
-    if (threshold < 4)
+
+    if (threshold < 4) {
         threshold = 4;
+    }
+
     qreal threshold_minus_1 = threshold - 1;
 
     float vx = 0.0;
@@ -309,11 +313,12 @@ void QTriangulatingStroker::cubicTo(const qreal *pts)
     float x;
     float y;
 
-    for (int i=1; i<threshold; ++i) {
-        qreal t = qreal(i) / threshold_minus_1;
-        QPointF p = bezier.pointAt(t);
-        x = p.x();
-        y = p.y();
+    for (int i = 1; i < threshold; ++i) {
+        qreal t  = qreal(i) / threshold_minus_1;
+        QPointF currentPoint = bezier.pointAt(t);
+
+        x = currentPoint.x();
+        y = currentPoint.y();
 
         normalVector(cx, cy, x, y, &vx, &vy);
 
