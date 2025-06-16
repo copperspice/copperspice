@@ -1320,11 +1320,10 @@ end:
          }
 
       } else {
-         if (context == FromString) {
-            // optimization
-            Q_ASSERT(getMaximum().date().toJulianDay() == 5373484);
+         if (context == QDateTimeParser::Context::FromString) {
+            Q_ASSERT(getMaximum().date().toJulianDay() == 2817152);
 
-            if (newCurrentValue.date().toJulianDay() > 5373484) {
+            if (newCurrentValue.date().toJulianDay() > 2817152) {
                state = Invalid;
             }
 
