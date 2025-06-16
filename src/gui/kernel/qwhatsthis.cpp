@@ -444,9 +444,11 @@ bool QWhatsThisPrivate::eventFilter(QObject *obj, QEvent *event)
          }
       }
       break;
+
       default:
          return false;
    }
+
    return true;
 }
 

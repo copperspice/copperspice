@@ -27,12 +27,12 @@
 #include <qwindowsysteminterface.h>
 
 #include <qalgorithms.h>
-#include <QAtomicInt>
-#include <QElapsedTimer>
-#include <QPointer>
-#include <QMutex>
-#include <QList>
-#include <QWaitCondition>
+#include <qatomicint.h>
+#include <qelapsedtimer.h>
+#include <qlist.h>
+#include <qmutex.h>
+#include <qpointer.h>
+#include <qwaitcondition.h>
 
 class QWindowSystemEventHandler;
 
@@ -257,6 +257,7 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
 
       QPointF localPos;
       QPointF globalPos;
+
       Qt::MouseButtons buttons;
       Qt::MouseEventSource source;
    };
@@ -281,15 +282,15 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    {
     public:
       KeyEvent(QWindow *w, ulong time, QEvent::Type t, int k, Qt::KeyboardModifiers mods, const QString &text = QString(),
-         bool autorep = false, ushort count = 1)
+            bool autorep = false, ushort count = 1)
          : InputEvent(w, time, Key, mods), key(k), unicode(text), repeat(autorep),
            repeatCount(count), keyType(t), nativeScanCode(0), nativeVirtualKey(0), nativeModifiers(0)
       {
       }
 
       KeyEvent(QWindow *w, ulong time, QEvent::Type t, int k, Qt::KeyboardModifiers mods,
-         quint32 nativeSC, quint32 nativeVK, quint32 nativeMods,
-         const QString &text = QString(), bool autorep = false, ushort count = 1)
+            quint32 nativeSC, quint32 nativeVK, quint32 nativeMods,
+            const QString &text = QString(), bool autorep = false, ushort count = 1)
          : InputEvent(w, time, Key, mods), key(k), unicode(text), repeat(autorep),
            repeatCount(count), keyType(t), nativeScanCode(nativeSC), nativeVirtualKey(nativeVK),
            nativeModifiers(nativeMods)
@@ -374,7 +375,10 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    {
     public:
       explicit ThemeChangeEvent(QWindow *w)
-         : WindowSystemEvent(ThemeChange), window(w) { }
+         : WindowSystemEvent(ThemeChange), window(w)
+      {
+      }
+
       QPointer<QWindow> window;
    };
 
@@ -554,8 +558,9 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
 
       WindowSystemEvent *takeFirstNonUserInputOrReturnNull() {
          const QMutexLocker locker(&mutex);
+
          for (int i = 0; i < impl.size(); ++i) {
-            if (!(impl.at(i)->type & QWindowSystemInterfacePrivate::UserInputEvent)) {
+            if (! (impl.at(i)->type & QWindowSystemInterfacePrivate::UserInputEvent)) {
                return impl.takeAt(i);
             }
          }
@@ -614,10 +619,10 @@ class Q_GUI_EXPORT QWindowSystemInterfacePrivate
    static QAtomicInt eventAccepted;
 
    static QList<QTouchEvent::TouchPoint> fromNativeTouchPoints(const QList<QWindowSystemInterface::TouchPoint> &points,
-      const QWindow *window, QEvent::Type *type = nullptr);
+         const QWindow *window, QEvent::Type *type = nullptr);
 
    static QList<QWindowSystemInterface::TouchPoint> toNativeTouchPoints(const QList<QTouchEvent::TouchPoint> &pointList,
-      const QWindow *window);
+         const QWindow *window);
 
    static void installWindowSystemEventHandler(QWindowSystemEventHandler *handler);
    static void removeWindowSystemEventhandler(QWindowSystemEventHandler *handler);

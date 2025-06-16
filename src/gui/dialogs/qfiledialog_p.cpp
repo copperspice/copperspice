@@ -1284,13 +1284,12 @@ void QFileDialogPrivate::_q_deleteCurrent()
       Q_Q(QFileDialog);
 
       if (!(p & QFile::WriteUser) && (QMessageBox::warning(q_func(), QFileDialog::tr("Delete"),
-               QFileDialog::tr("'%1' is write protected.\nDo you want to delete it anyway?")
-               .formatArg(fileName),
-               QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::No)) {
+            QFileDialog::tr("'%1' is write protected.\nDo you want to delete it anyway?").formatArg(fileName),
+            QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::No)) {
          return;
+
       } else if (QMessageBox::warning(q_func(), QFileDialog::tr("Delete"),
-            QFileDialog::tr("Are you sure you want to delete '%1'?")
-            .formatArg(fileName),
+            QFileDialog::tr("Are you sure you want to delete '%1'?").formatArg(fileName),
             QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::No) {
          return;
       }
@@ -1306,8 +1305,7 @@ void QFileDialogPrivate::_q_deleteCurrent()
          if (! removeDirectory(filePath)) {
 
 #ifndef QT_NO_MESSAGEBOX
-            QMessageBox::warning(q, q->windowTitle(),
-               QFileDialog::tr("Could not delete directory."));
+            QMessageBox::warning(q, q->windowTitle(), QFileDialog::tr("Unable to delete directory."));
 #endif
          }
       } else {

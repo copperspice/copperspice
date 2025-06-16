@@ -377,10 +377,11 @@ bool QWindowSystemInterfacePrivate::handleWindowSystemEvent(QWindowSystemInterfa
          delete ev;
 
       } else {
-         // Post the event on the Qt main thread queue and flush the queue.
+         // Post the event on the main thread queue and flush the queue.
          // This will wake up the Gui thread which will process the event.
          // Return the accepted state for the last event on the queue,
-         // which is the event posted by this function.
+         // which is the event posted by this method.
+
          postWindowSystemEvent(ev);
          accepted = QWindowSystemInterface::flushWindowSystemEvents();
       }
@@ -388,6 +389,7 @@ bool QWindowSystemInterfacePrivate::handleWindowSystemEvent(QWindowSystemInterfa
    } else {
       postWindowSystemEvent(ev);
    }
+
    return accepted;
 }
 
@@ -613,7 +615,7 @@ bool QWindowSystemInterface::sendWindowSystemEvents(QEventLoop::ProcessEventsFla
             QWindowSystemInterfacePrivate::getNonUserInputWindowSystemEvent() :
             QWindowSystemInterfacePrivate::getWindowSystemEvent();
 
-      if (!event) {
+      if (! event) {
          break;
       }
 
@@ -623,7 +625,7 @@ bool QWindowSystemInterface::sendWindowSystemEvents(QEventLoop::ProcessEventsFla
          }
 
       } else {
-         nevents++;
+         ++nevents;
          QGuiApplicationPrivate::processWindowSystemEvent(event);
       }
 
@@ -712,7 +714,7 @@ void QWindowSystemInterface::handleTabletEvent(QWindow *w, const QPointF &local,
 {
    ulong time = QWindowSystemInterfacePrivate::eventTime.elapsed();
    handleTabletEvent(w, time, local, global, device, pointerType, buttons, pressure,
-      xTilt, yTilt, tangentialPressure, rotation, z, uid, modifiers);
+         xTilt, yTilt, tangentialPressure, rotation, z, uid, modifiers);
 }
 
 void QWindowSystemInterface::handleTabletEvent(QWindow *w, ulong timestamp, bool down, const QPointF &local, const QPointF &global,
@@ -720,7 +722,7 @@ void QWindowSystemInterface::handleTabletEvent(QWindow *w, ulong timestamp, bool
       int z, qint64 uid, Qt::KeyboardModifiers modifiers)
 {
    handleTabletEvent(w, timestamp, local, global, device, pointerType, (down ? Qt::LeftButton : Qt::NoButton), pressure,
-      xTilt, yTilt, tangentialPressure, rotation, z, uid, modifiers);
+         xTilt, yTilt, tangentialPressure, rotation, z, uid, modifiers);
 }
 
 void QWindowSystemInterface::handleTabletEvent(QWindow *w, bool down, const QPointF &local, const QPointF &global,
@@ -728,7 +730,7 @@ void QWindowSystemInterface::handleTabletEvent(QWindow *w, bool down, const QPoi
       int z, qint64 uid, Qt::KeyboardModifiers modifiers)
 {
    handleTabletEvent(w, local, global, device, pointerType, (down ? Qt::LeftButton : Qt::NoButton), pressure,
-      xTilt, yTilt, tangentialPressure, rotation, z, uid, modifiers);
+         xTilt, yTilt, tangentialPressure, rotation, z, uid, modifiers);
 }
 
 void QWindowSystemInterface::handleTabletEnterProximityEvent(ulong timestamp, int device, int pointerType, qint64 uid)
@@ -812,6 +814,7 @@ void QWindowSystemInterface::handleEnterWhatsThisEvent()
 {
    QWindowSystemInterfacePrivate::WindowSystemEvent *e =
       new QWindowSystemInterfacePrivate::WindowSystemEvent(QWindowSystemInterfacePrivate::EnterWhatsThisMode);
+
    QWindowSystemInterfacePrivate::handleWindowSystemEvent(e);
 }
 #endif

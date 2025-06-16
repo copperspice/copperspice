@@ -96,8 +96,9 @@ class QOpenGLWindowPrivate : public QPaintDeviceWindowPrivate
 QOpenGLWindowPrivate::~QOpenGLWindowPrivate()
 {
    Q_Q(QOpenGLWindow);
+
    if (q->isValid()) {
-      q->makeCurrent(); // this works even when the platformwindow is destroyed
+      q->makeCurrent();             // this works even when the platformwindow is destroyed
       paintDevice.reset(nullptr);
       fbo.reset(nullptr);
       m_blitter.destroy();
@@ -151,6 +152,7 @@ void QOpenGLWindowPrivate::beginPaint(const QRegion &region)
       if (!fbo || fbo->size() != deviceSize) {
          QOpenGLFramebufferObjectFormat fboFormat;
          fboFormat.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
+
          if (q->requestedFormat().samples() > 0) {
             if (m_updateBehavior != QOpenGLWindow::PartialUpdateBlend) {
                fboFormat.setSamples(q->requestedFormat().samples());
@@ -158,9 +160,11 @@ void QOpenGLWindowPrivate::beginPaint(const QRegion &region)
                qWarning("QOpenGLWindow::beginPaint() PartialUpdateBlend does not support multisampling");
             }
          }
+
          fbo.reset(new QOpenGLFramebufferObject(deviceSize, fboFormat));
          markWindowAsDirty();
       }
+
    } else {
       markWindowAsDirty();
    }
@@ -191,12 +195,13 @@ void QOpenGLWindowPrivate::endPaint()
    if (m_updateBehavior == QOpenGLWindow::PartialUpdateBlit && m_hasFboBlit) {
       const int deviceWidth  = q->width()  * q->devicePixelRatio();
       const int deviceHeight = q->height() * q->devicePixelRatio();
+
       QOpenGLExtensions extensions(context.data());
       extensions.glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo->handle());
       extensions.glBindFramebuffer(GL_DRAW_FRAMEBUFFER, context->defaultFramebufferObject());
+
       extensions.glBlitFramebuffer(0, 0, deviceWidth, deviceHeight,
-         0, 0, deviceWidth, deviceHeight,
-         GL_COLOR_BUFFER_BIT, GL_NEAREST);
+            0, 0, deviceWidth, deviceHeight, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
    } else if (m_updateBehavior > QOpenGLWindow::NoPartialUpdate) {
       if (m_updateBehavior == QOpenGLWindow::PartialUpdateBlend) {
@@ -288,11 +293,12 @@ void QOpenGLWindow::makeCurrent()
    if (handle()) {
       d->context->makeCurrent(this);
    } else {
-      if (!d->offscreenSurface) {
+      if (! d->offscreenSurface) {
          d->offscreenSurface.reset(new QOffscreenSurface);
          d->offscreenSurface->setFormat(d->context->format());
          d->offscreenSurface->create();
       }
+
       d->context->makeCurrent(d->offscreenSurface.data());
    }
 
@@ -303,7 +309,7 @@ void QOpenGLWindow::doneCurrent()
 {
    Q_D(QOpenGLWindow);
 
-   if (!isValid()) {
+   if (! isValid()) {
       return;
    }
 
@@ -400,19 +406,22 @@ int QOpenGLWindow::metric(PaintDeviceMetric metric) const
             return d->paintDevice->depth();
          }
          break;
+
       default:
          break;
    }
+
    return QPaintDeviceWindow::metric(metric);
 }
 
 QPaintDevice *QOpenGLWindow::redirected(QPoint *) const
 {
    Q_D(const QOpenGLWindow);
+
    if (QOpenGLContext::currentContext() == d->context.data()) {
       return d->paintDevice.data();
    }
+
    return nullptr;
 }
-
 

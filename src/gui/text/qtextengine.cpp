@@ -896,8 +896,8 @@ void QTextEngine::bidiReorder(int numItems, const quint8 *levels, int *visualOrd
       i++;
    }
 
-   // implements reordering of the line (L2 according to BiDi spec):
-   // L2. From the highest level found in the text to the lowest odd level on each line,
+   // implements reordering of the line (L2 according to BiDi spec): L2
+   // From the highest level found in the text to the lowest odd level on each line,
    // reverse any contiguous sequence of characters that are at that level or higher.
 
    // reversing is only done up to the lowest odd level
@@ -941,7 +941,7 @@ void QTextEngine::bidiReorder(int numItems, const quint8 *levels, int *visualOrd
 }
 
 static inline void qt_getDefaultJustificationOpportunities(QStringView str,
-                  QGlyphLayout glyphs, const ushort *logClusters, int spaceAs)
+      QGlyphLayout glyphs, const ushort *logClusters, int spaceAs)
 {
    auto iter  = str.begin();
    uint index = 0;
@@ -1919,7 +1919,7 @@ QFixed QTextEngine::width(int from, int len) const
 
    for (int i = 0; i < layoutData->items.size(); i++) {
       const QScriptItem *si = layoutData->items.constData() + i;
-      int pos = si->position;
+      int pos  = si->position;
       int ilen = length(i);
 
       if (pos >= from + len) {
@@ -1949,12 +1949,15 @@ QFixed QTextEngine::width(int from, int len) const
          //                 fprintf(stderr, " %d", logClusters[k]);
          //             fprintf(stderr, "\n");
          // do the simple thing for now and give the first glyph in a cluster the full width, all other ones 0.
+
          int charFrom = from - pos;
+
          if (charFrom < 0) {
             charFrom = 0;
          }
 
          int glyphStart = logClusters[charFrom];
+
          if (charFrom > 0 && logClusters[charFrom - 1] == glyphStart)
             while (charFrom < ilen && logClusters[charFrom] == glyphStart) {
                ++charFrom;
@@ -2891,7 +2894,7 @@ void QTextEngine::setFormats(const QVector<QTextLayout::FormatRange> &formats)
 void QTextEngine::indexFormats()
 {
    QTextFormatCollection *collection = formatCollection();
-   if (!collection) {
+   if (! collection) {
       Q_ASSERT(!block.docHandle());
       specialData->formatCollection.reset(new QTextFormatCollection);
       collection = specialData->formatCollection.data();
@@ -2942,25 +2945,26 @@ static inline bool prevCharJoins(const QString &string, int pos)
 
 static inline bool isRetainableControlCode(QChar c)
 {
-   return (c.unicode() >= 0x202a && c.unicode() <= 0x202e) // LRE, RLE, PDF, LRO, RLO
-      || (c.unicode() >= 0x200e && c.unicode() <= 0x200f) // LRM, RLM
-      || (c.unicode() >= 0x2066 && c.unicode() <= 0x2069); // LRM, RLM
+   return (c.unicode() >= 0x202a && c.unicode() <= 0x202e)    // LRE, RLE, PDF, LRO, RLO
+      || (c.unicode() >= 0x200e && c.unicode() <= 0x200f)     // LRM, RLM
+      || (c.unicode() >= 0x2066 && c.unicode() <= 0x2069);    // LRM, RLM
 }
 
 static QString stringMidRetainingBidiCC(const QString &string, const QString &ellidePrefix,
-   const QString &ellideSuffix, int subStringFrom, int subStringTo,
-   int midStart, int midLength)
+      const QString &ellideSuffix, int subStringFrom, int subStringTo, int midStart, int midLength)
 {
    QString prefix;
 
    for (int i = subStringFrom; i < midStart; ++i) {
       QChar c = string.at(i);
+
       if (isRetainableControlCode(c)) {
          prefix += c;
       }
    }
 
    QString suffix;
+
    for (int i = midStart + midLength; i < subStringTo; ++i) {
       QChar c = string.at(i);
 
@@ -2968,6 +2972,7 @@ static QString stringMidRetainingBidiCC(const QString &string, const QString &el
          suffix += c;
       }
    }
+
    return prefix + ellidePrefix + string.mid(midStart, midLength) + ellideSuffix + suffix;
 }
 
@@ -2983,6 +2988,7 @@ QString QTextEngine::elidedText(Qt::TextElideMode mode, const QFixed &width, int
 
       for (int i = 0; i < layoutData->items.size(); ++i) {
          QScriptItem &si = layoutData->items[i];
+
          if (! si.num_glyphs) {
             shape(i);
          }
@@ -3169,6 +3175,7 @@ QFixed QTextEngine::calculateTabWidth(int item, QFixed x) const
    const QScriptItem &si = layoutData->items[item];
 
    QFixed dpiScale = 1;
+
    if (block.docHandle() && block.docHandle()->layout()) {
       QPaintDevice *pdev = block.docHandle()->layout()->paintDevice();
 
@@ -3200,13 +3207,15 @@ QFixed QTextEngine::calculateTabWidth(int item, QFixed x) const
             newTabs << tab;
             ++iter;
          }
+
          tabArray = newTabs;
       }
 
       for (int i = 0; i < tabArray.size(); ++i) {
          QFixed tab = QFixed::fromReal(tabArray[i].position) * dpiScale;
 
-         if (tab > x) {  // this is the tab we need.
+         if (tab > x) {
+            // this is the tab we need
             QTextOption::Tab tabSpec = tabArray[i];
             int tabSectionEnd = layoutData->string.count();
 
@@ -3279,6 +3288,7 @@ QFixed QTextEngine::calculateTabWidth(int item, QFixed x) const
                      break;
                }
             }
+
             return tab - x;
          }
       }
@@ -3329,6 +3339,7 @@ void QTextEngine::resolveFormats() const
    if (!specialData || specialData->formats.isEmpty()) {
       return;
    }
+
    Q_ASSERT(specialData->resolvedFormats.isEmpty());
 
    QTextFormatCollection *collection = formatCollection();
@@ -3337,6 +3348,7 @@ void QTextEngine::resolveFormats() const
 
    QVarLengthArray<int, 64> formatsSortedByStart;
    formatsSortedByStart.reserve(specialData->formats.size());
+
    for (int i = 0; i < specialData->formats.size(); ++i) {
       if (specialData->formats.at(i).length >= 0) {
          formatsSortedByStart.append(i);
@@ -3350,23 +3362,24 @@ void QTextEngine::resolveFormats() const
    std::sort(formatsSortedByEnd.begin(), formatsSortedByEnd.end(),
       FormatRangeComparatorByEnd(specialData->formats));
 
-   QVarLengthArray<int, 16>  currentFormats;
+   QVarLengthArray<int, 16> currentFormats;
    const int *startIt = formatsSortedByStart.constBegin();
-   const int *endIt = formatsSortedByEnd.constBegin();
+   const int *endIt   = formatsSortedByEnd.constBegin();
 
    for (int i = 0; i < layoutData->items.count(); ++i) {
       const QScriptItem *si = &layoutData->items.at(i);
       int end = si->position + length(si);
 
       while (startIt != formatsSortedByStart.constEnd() &&
-         specialData->formats.at(*startIt).start <= si->position) {
-         currentFormats.insert(std::upper_bound(currentFormats.begin(), currentFormats.end(), *startIt),
-            *startIt);
+            specialData->formats.at(*startIt).start <= si->position) {
+         currentFormats.insert(std::upper_bound(currentFormats.begin(), currentFormats.end(), *startIt), *startIt);
          ++startIt;
       }
+
       while (endIt != formatsSortedByEnd.constEnd() &&
-         specialData->formats.at(*endIt).start + specialData->formats.at(*endIt).length < end) {
+            specialData->formats.at(*endIt).start + specialData->formats.at(*endIt).length < end) {
          int *currentFormatIterator = std::lower_bound(currentFormats.begin(), currentFormats.end(), *endIt);
+
          if (*endIt < *currentFormatIterator) {
             currentFormatIterator = currentFormats.end();
          }
@@ -3382,13 +3395,14 @@ void QTextEngine::resolveFormats() const
          format = collection->charFormat(formatIndex(si));
       }
 
-      if (!currentFormats.isEmpty()) {
+      if (! currentFormats.isEmpty()) {
          for (int cur : currentFormats) {
             const QTextLayout::FormatRange &range = specialData->formats.at(cur);
             Q_ASSERT(range.start <= si->position && range.start + range.length >= end);
 
             format.merge(range.format);
          }
+
          format = collection->charFormat(collection->indexForFormat(format)); // get shared copy
       }
    }
@@ -3991,8 +4005,7 @@ QScriptItem &QTextLineItemIterator::next()
    glyphsEnd   = (itemEnd == si->position + itemLength) ? si->num_glyphs : logClusters[itemEnd - si->position];
 
    // show soft-hyphen at line-break
-   if (si->position + itemLength >= lineEnd
-         && eng->layoutData->string.at(lineEnd - 1) == QChar::SoftHyphen) {
+   if (si->position + itemLength >= lineEnd && eng->layoutData->string.at(lineEnd - 1) == QChar::SoftHyphen) {
       glyphs.attributes[glyphsEnd - 1].dontPrint = false;
    }
 
@@ -4013,8 +4026,7 @@ bool QTextLineItemIterator::getSelectionBounds(QFixed *selectionX, QFixed *selec
    }
 
    if (si->analysis.flags >= QScriptAnalysis::TabOrObject) {
-      if (si->position >= selection->start + selection->length
-         || si->position + itemLength <= selection->start) {
+      if (si->position >= selection->start + selection->length || si->position + itemLength <= selection->start) {
          return false;
       }
 
@@ -4032,7 +4044,8 @@ bool QTextLineItemIterator::getSelectionBounds(QFixed *selectionX, QFixed *selec
       }
 
       int start_glyph = logClusters[from];
-      int end_glyph = (to == itemLength) ? si->num_glyphs : logClusters[to];
+      int end_glyph   = (to == itemLength) ? si->num_glyphs : logClusters[to];
+
       QFixed soff;
       QFixed swidth;
 
@@ -4040,13 +4053,16 @@ bool QTextLineItemIterator::getSelectionBounds(QFixed *selectionX, QFixed *selec
          for (int g = glyphsEnd - 1; g >= end_glyph; --g) {
             soff += glyphs.effectiveAdvance(g);
          }
+
          for (int g = end_glyph - 1; g >= start_glyph; --g) {
             swidth += glyphs.effectiveAdvance(g);
          }
+
       } else {
          for (int g = glyphsStart; g < start_glyph; ++g) {
             soff += glyphs.effectiveAdvance(g);
          }
+
          for (int g = start_glyph; g < end_glyph; ++g) {
             swidth += glyphs.effectiveAdvance(g);
          }

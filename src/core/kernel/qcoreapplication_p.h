@@ -92,8 +92,12 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
    void appendApplicationPathToLibraryPaths(void);
    void processCommandLineArguments();
 
+   static QSettings *copperspiceConf();
 
-   QTranslatorList translators;
+   static bool testAttribute(uint flag) {
+      return attribs & (1 << flag);
+   }
+
    static bool isTranslatorInstalled(QTranslator *translator);
 
    int &m_argc;
@@ -107,6 +111,8 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
    QString cachedApplicationDirPath;
    QString cachedApplicationFilePath;
 
+   QTranslatorList translators;
+
    static QThread *theMainThread;
    static QAbstractEventDispatcher *eventDispatcher;  // points to the platform dispatcher
    static bool is_app_running;
@@ -114,12 +120,6 @@ class Q_CORE_EXPORT QCoreApplicationPrivate
 
    static bool setuidAllowed;
    static uint attribs;
-
-   static bool testAttribute(uint flag) {
-      return attribs & (1 << flag);
-   }
-
-   static QSettings *copperspiceConf();
 
  protected:
    QCoreApplication *q_ptr;

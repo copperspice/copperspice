@@ -115,6 +115,7 @@ extern QString qAppFileName();
 #endif
 
 bool QCoreApplicationPrivate::setuidAllowed = false;
+
 #if ! defined(Q_OS_WIN)
 
 #ifdef Q_OS_DARWIN
@@ -164,7 +165,6 @@ void QCoreApplicationPrivate::processCommandLineArguments()
    int currentArg = m_argc ? 1 : 0;
 
    for (int index = 1; index < m_argc; ++index) {
-
       if (! m_argv[index]) {
          continue;
       }
@@ -1475,7 +1475,6 @@ QString QCoreApplication::applicationFilePath()
       d->cachedApplicationFilePath = pfi.canonicalFilePath();
       return d->cachedApplicationFilePath;
    }
-
 #endif
 
    QString firstItem = arguments().at(0);
@@ -1503,7 +1502,7 @@ QString QCoreApplication::applicationFilePath()
          QString candidate = currentDir.absoluteFilePath(*p + QChar('/') + firstItem);
          QFileInfo candidate_fi(candidate);
 
-         if (candidate_fi.exists() && !candidate_fi.isDir()) {
+         if (candidate_fi.exists() && ! candidate_fi.isDir()) {
             absPath = candidate;
             break;
          }
@@ -1514,6 +1513,7 @@ QString QCoreApplication::applicationFilePath()
 
    QFileInfo fi(absPath);
    d->cachedApplicationFilePath = fi.exists() ? fi.canonicalFilePath() : QString();
+
    return d->cachedApplicationFilePath;
 #endif
 }

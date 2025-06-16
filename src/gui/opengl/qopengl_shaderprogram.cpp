@@ -2172,7 +2172,7 @@ bool QOpenGLShader::hasOpenGLShaders(ShaderType type, QOpenGLContext *context)
 #ifndef QT_OPENGL_ES_2
         // Geometry shaders require OpenGL 3.2 or newer
         QSurfaceFormat format = context->format();
-        return (! context->isOpenGLES()) && (format.version() >= qMakePair<int, int>(3, 2));
+        return (!context->isOpenGLES()) && (format.version() >= qMakePair<int, int>(3, 2));
 #else
         // No geometry shader support in OpenGL ES2
         return false;

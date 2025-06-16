@@ -213,6 +213,7 @@ QGesture *QGestureManager::getState(QObject *object, QGestureRecognizer *recogni
    }
 
    Q_ASSERT(recognizer);
+
    QGesture *state = recognizer->create(object);
    if (! state) {
       return nullptr;
@@ -654,9 +655,10 @@ void QGestureManager::getGestureTargets(const QSet<QGesture *> &gestures,
             QMap<Qt::GestureType, Qt::GestureFlags>::const_iterator it = w->d_func()->gestureContext.find(git.key());
 
             if (it != w->d_func()->gestureContext.constEnd()) {
-               // i.e. 'w' listens to gesture 'type'
-               if (!(it.value() & Qt::DontStartGestureOnChildren) && w != widget) {
-                  // conflicting gesture!
+               // for example,'w' listens to gesture 'type'
+
+               if (! (it.value() & Qt::DontStartGestureOnChildren) && w != widget) {
+                  // conflicting gesture
                   (*conflicts)[widget].append(wit.value());
                   break;
                }
@@ -666,6 +668,7 @@ void QGestureManager::getGestureTargets(const QSet<QGesture *> &gestures,
                w = nullptr;
                break;
             }
+
             w = w->parentWidget();
          }
 
@@ -676,8 +679,7 @@ void QGestureManager::getGestureTargets(const QSet<QGesture *> &gestures,
    }
 }
 
-void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
-   QSet<QGesture *> *undeliveredGestures)
+void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures, QSet<QGesture *> *undeliveredGestures)
 {
    if (gestures.isEmpty()) {
       return;
@@ -693,7 +695,7 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
    for (auto item : gestures) {
       QWidget *target = m_gestureTargets.value(item, QPointer<QWidget>(nullptr));
 
-      if (!target) {
+      if (! target) {
          // the gesture has just started and doesn't have a target yet.
          Q_ASSERT(item->state() == Qt::GestureStarted);
 
@@ -709,6 +711,7 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
          } else {
             // or use the context of the gesture
             QObject *context = m_gestureOwners.value(item, nullptr);
+
             if (context->isWidgetType()) {
                target = static_cast<QWidget *>(context);
             }
@@ -787,9 +790,9 @@ void QGestureManager::deliverEvents(const QSet<QGesture *> &gestures,
       e = normalStartedGestures.constEnd(); it != e; ++it) {
 
       if (! it.value().isEmpty()) {
-
          QGestureEvent event(it.value());
          QApplication::sendEvent(it.key(), &event);
+
          bool eventAccepted = event.isAccepted();
 
          for (QGesture *item : event.gestures()) {

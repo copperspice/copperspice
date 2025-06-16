@@ -283,9 +283,14 @@ void QTriangulatingStroker::moveTo(const qreal *pts)
             m_vertices[count - 1] = m_vertices.at(count + 1);
             m_vertices[count - 2] = m_vertices.at(count + 0);
         }
-        break; }
-    default: break; // ssssh gcc...
+        break;
     }
+
+    default:
+      break;
+
+    }
+
     emitLineSegment(m_cx, m_cy, m_nvx, m_nvy);
 }
 

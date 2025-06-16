@@ -295,8 +295,7 @@ void QOpenGLTextureGlyphCache::resizeTextureData(int width, int height)
 
     funcs->glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, oldWidth, oldHeight);
 
-    funcs->glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                                     GL_RENDERBUFFER, 0);
+    funcs->glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, 0);
     funcs->glDeleteTextures(1, &tmp_texture);
     funcs->glDeleteTextures(1, &oldTexture);
 

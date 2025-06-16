@@ -141,8 +141,8 @@ class Q_GUI_EXPORT QOpenGL2PaintEngineEx : public QPaintEngineEx
     friend class QOpenGLEngineShaderManager;
 };
 
-// This probably needs to grow to GL_MAX_VERTEX_ATTRIBS, but 3 is ok for now as that's
-// all the GL2 engine uses:
+// This probably needs to grow to GL_MAX_VERTEX_ATTRIBS, but 3 is ok for now since
+//  that is all the GL2 engine uses
 #define QT_GL_VERTEX_ARRAY_TRACKED_COUNT 3
 
 class QOpenGL2PaintEngineExPrivate : public QPaintEngineExPrivate
@@ -264,20 +264,20 @@ class QOpenGL2PaintEngineExPrivate : public QPaintEngineExPrivate
     bool vertexAttributeArraysEnabledState[QT_GL_VERTEX_ARRAY_TRACKED_COUNT];
 
     // dirty flags
-    bool matrixDirty; // Implies matrix uniforms are also dirty
+    bool matrixDirty;             // Implies matrix uniforms are also dirty
     bool compositionModeDirty;
     bool brushTextureDirty;
     bool brushUniformsDirty;
     bool opacityUniformDirty;
     bool matrixUniformDirty;
 
-    bool stencilClean; // Has the stencil not been used for clipping so far?
+    bool stencilClean;            // Has the stencil not been used for clipping so far?
     bool useSystemClip;
     QRegion dirtyStencilRegion;
     QRect currentScissorBounds;
     uint maxClip;
 
-    QBrush currentBrush; // May not be the state's brush!
+    QBrush currentBrush;          // May not be the state's brush!
     const QBrush noBrush;
 
     QImage currentBrushImage;

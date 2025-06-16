@@ -995,8 +995,7 @@ static void init_platform(const QString &pluginArgument, const QString &platform
    if (! QGuiApplicationPrivate::platform_theme) {
 
       for (const QString &themeName : themeNames) {
-         QGuiApplicationPrivate::platform_theme =
-                  QGuiApplicationPrivate::platform_integration->createPlatformTheme(themeName);
+         QGuiApplicationPrivate::platform_theme = QGuiApplicationPrivate::platform_integration->createPlatformTheme(themeName);
 
          if (QGuiApplicationPrivate::platform_theme) {
             break;
@@ -1440,17 +1439,20 @@ int QApplication::exec()
 
 void QGuiApplicationPrivate::sendQWindowEventToQPlatformWindow(QWindow *window, QEvent *event)
 {
-   if (!window) {
+   if (! window) {
       return;
    }
+
    QPlatformWindow *platformWindow = window->handle();
-   if (!platformWindow) {
+   if (! platformWindow) {
       return;
    }
+
    // spontaneous events come from the platform integration already, we don't need to send the events back
    if (event->spontaneous()) {
       return;
    }
+
    // let the platform window do any handling it needs to as well
    platformWindow->windowEvent(event);
 }
@@ -1598,25 +1600,30 @@ void QGuiApplicationPrivate::processMouseEvent(QWindowSystemInterfacePrivate::Mo
 {
    QEvent::Type type;
    Qt::MouseButtons stateChange = e->buttons ^ buttons;
+
    if (e->globalPos != QGuiApplicationPrivate::lastCursorPosition && (stateChange != Qt::NoButton)) {
       // A mouse event should not change both position and buttons at the same time. Instead we
       // should first send a move event followed by a button changed event. Since this is not the case
       // with the current event, we split it in two.
       QWindowSystemInterfacePrivate::MouseEvent mouseButtonEvent(
          e->window.data(), e->timestamp, e->type, e->localPos, e->globalPos, e->buttons, e->modifiers, e->source);
+
       if (e->flags & QWindowSystemInterfacePrivate::WindowSystemEvent::Synthetic) {
          mouseButtonEvent.flags |= QWindowSystemInterfacePrivate::WindowSystemEvent::Synthetic;
       }
+
       e->buttons = buttons;
+
       processMouseEvent(e);
       processMouseEvent(&mouseButtonEvent);
+
       return;
    }
 
-   QWindow *window = e->window.data();
+   QWindow *window  = e->window.data();
    modifier_buttons = e->modifiers;
 
-   QPointF localPoint = e->localPos;
+   QPointF localPoint  = e->localPos;
    QPointF globalPoint = e->globalPos;
 
    if (e->nullWindow()) {
@@ -1631,10 +1638,12 @@ void QGuiApplicationPrivate::processMouseEvent(QWindowSystemInterfacePrivate::Mo
             } else {
                window = currentMousePressWindow;
             }
+
          } else if (currentMousePressWindow) {
             window = currentMousePressWindow;
             currentMousePressWindow = nullptr;
          }
+
          QPointF delta = globalPoint - globalPoint.toPoint();
          localPoint = window->mapFromGlobal(globalPoint.toPoint()) + delta;
       }
@@ -1700,33 +1709,33 @@ void QGuiApplicationPrivate::processMouseEvent(QWindowSystemInterfacePrivate::Mo
    QMouseEvent ev(type, localPoint, localPoint, globalPoint, button, buttons, e->modifiers, e->source);
    ev.setTimestamp(e->timestamp);
 
-   if (window->d_func()->blockedByModalWindow && !qApp->d_func()->popupActive()) {
-      // a modal window is blocking this window, don't allow mouse events through
+   if (window->d_func()->blockedByModalWindow && ! qApp->d_func()->popupActive()) {
+      // a modal window is blocking this window, do not allow mouse events through
       return;
    }
 
    if (doubleClick && (ev.type() == QEvent::MouseButtonPress)) {
-      // QtBUG-25831, used to suppress delivery in qwidgetwindow.cpp
+      // used to suppress delivery in qwidgetwindow.cpp
       setMouseEventFlags(&ev, ev.flags() | Qt::MouseEventCreatedDoubleClick);
    }
 
    QGuiApplication::sendSpontaneousEvent(window, &ev);
    e->eventAccepted = ev.isAccepted();
-   if (!e->synthetic() && !ev.isAccepted()
-      && !frameStrut
-      && qApp->testAttribute(Qt::AA_SynthesizeTouchForUnhandledMouseEvents)) {
-      if (!m_fakeTouchDevice) {
+
+   if (! e->synthetic() && ! ev.isAccepted() && ! frameStrut && qApp->testAttribute(Qt::AA_SynthesizeTouchForUnhandledMouseEvents)) {
+      if (! m_fakeTouchDevice) {
          m_fakeTouchDevice = new QTouchDevice;
          QWindowSystemInterface::registerTouchDevice(m_fakeTouchDevice);
       }
+
       QList<QWindowSystemInterface::TouchPoint> points;
       QWindowSystemInterface::TouchPoint point;
       point.id = 1;
       point.area = QRectF(globalPoint.x() - 2, globalPoint.y() - 2, 4, 4);
 
-      // only translate left button related events to
-      // avoid strange touch event sequences when several
-      // buttons are pressed
+      // only translate left button related events to avoid strange touch event sequences
+      // when several buttons are pressed
+
       if (type == QEvent::MouseButtonPress && button == Qt::LeftButton) {
          point.state = Qt::TouchPointPressed;
       } else if (type == QEvent::MouseButtonRelease && button == Qt::LeftButton) {
@@ -1750,11 +1759,12 @@ void QGuiApplicationPrivate::processMouseEvent(QWindowSystemInterfacePrivate::Mo
    if (doubleClick) {
       mousePressButton = Qt::NoButton;
 
-      if (!e->window.isNull() || e->nullWindow()) { // QTBUG-36364, check if window closed in response to press
+      if (! e->window.isNull() || e->nullWindow()) {
+         // check if window closed in response to press
          const QEvent::Type doubleClickType = frameStrut ? QEvent::NonClientAreaMouseButtonDblClick : QEvent::MouseButtonDblClick;
 
          QMouseEvent dblClickEvent(doubleClickType, localPoint, localPoint, globalPoint,
-            button, buttons, e->modifiers, e->source);
+               button, buttons, e->modifiers, e->source);
 
          dblClickEvent.setTimestamp(e->timestamp);
          QGuiApplication::sendSpontaneousEvent(window, &dblClickEvent);
@@ -1765,9 +1775,9 @@ void QGuiApplicationPrivate::processMouseEvent(QWindowSystemInterfacePrivate::Mo
 void QGuiApplicationPrivate::processWheelEvent(QWindowSystemInterfacePrivate::WheelEvent *e)
 {
 #ifndef QT_NO_WHEELEVENT
-   QWindow *window = e->window.data();
+   QWindow *window     = e->window.data();
    QPointF globalPoint = e->globalPos;
-   QPointF localPoint = e->localPos;
+   QPointF localPoint  = e->localPos;
 
    if (e->nullWindow()) {
       window = QGuiApplication::topLevelWindowAt(globalPoint.toPoint());
@@ -2041,19 +2051,21 @@ void QGuiApplicationPrivate::processGeometryChangeEvent(QWindowSystemInterfacePr
       if (oldRect.width() != newRect.width()) {
          window->widthChanged(newRect.width());
       }
+
       if (oldRect.height() != newRect.height()) {
          window->heightChanged(newRect.height());
       }
    }
 
    if (isMove) {
-      //### frame geometry
+      // frame geometry
       QMoveEvent eventMove(newRect.topLeft(), oldRect.topLeft());
       QGuiApplication::sendSpontaneousEvent(window, &eventMove);
 
       if (oldRect.x() != newRect.x()) {
          window->xChanged(newRect.x());
       }
+
       if (oldRect.y() != newRect.y()) {
          window->yChanged(newRect.y());
       }
@@ -2633,17 +2645,19 @@ void QGuiApplicationPrivate::reportRefreshRateChange(QWindowSystemInterfacePriva
       return;
    }
 
-   if (!e->screen) {
+   if (! e->screen) {
       return;
    }
 
    QScreen *s = e->screen.data();
    qreal rate = e->rate;
-   // safeguard ourselves against buggy platform behavior...
+
+   // safeguard ourselves against buggy platform behavior
    if (rate < 1.0) {
       rate = 60.0;
    }
-   if (!qFuzzyCompare(s->d_func()->refreshRate, rate)) {
+
+   if (! qFuzzyCompare(s->d_func()->refreshRate, rate)) {
       s->d_func()->refreshRate = rate;
       emit s->refreshRateChanged(s->refreshRate());
    }
@@ -2656,12 +2670,13 @@ void QGuiApplicationPrivate::processExposeEvent(QWindowSystemInterfacePrivate::E
    }
 
    QWindow *window = eventExpose->m_exposed.data();
-   if (!window) {
+   if (! window) {
       return;
    }
+
    QWindowPrivate *p = qt_window_private(window);
 
-   if (!p->receivedExpose) {
+   if (! p->receivedExpose) {
       if (p->resizeEventPending) {
          // as a convenience for plugins, send a resize event before the first expose event if they haven't done so
          // window->geometry() should have a valid size as soon as a handle exists.

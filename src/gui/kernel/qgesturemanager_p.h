@@ -52,7 +52,7 @@ class QGestureManager : public QObject
    bool filterEvent(QGraphicsObject *receiver, QEvent *event);
 #endif
 
-   static QGestureManager *instance(); // declared in qapplication.cpp
+   static QGestureManager *instance();          // declared in qapplication.cpp
    static bool gesturePending(QObject *o);
 
    void cleanupCachedGestures(QObject *target, Qt::GestureType type);
@@ -87,9 +87,11 @@ class QGestureManager : public QObject
          if (object < rhs.object) {
             return true;
          }
+
          if (object == rhs.object) {
             return gesture < rhs.gesture;
          }
+
          return false;
       }
    };
