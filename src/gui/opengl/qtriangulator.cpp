@@ -1008,11 +1008,11 @@ void QTriangulator<T>::initialize(const QVectorPath &path, const QTransform &mat
             case QPainterPath::CurveToElement:
                 {
                     qreal pts[8];
-                    for (int i = 0; i < 4; ++i)
-                        matrix.map(p[2 * i - 2], p[2 * i - 1], &pts[2 * i + 0], &pts[2 * i + 1]);
+                    for (int idx = 0; idx < 4; ++idx)
+                        matrix.map(p[2 * idx - 2], p[2 * idx - 1], &pts[2 * idx + 0], &pts[2 * idx + 1]);
 
-                    for (int i = 0; i < 8; ++i)
-                        pts[i] *= lod;
+                    for (int idx = 0; idx < 8; ++idx)
+                        pts[idx] *= lod;
 
                     QBezier bezier = QBezier::fromPoints(QPointF(pts[0], pts[1]), QPointF(pts[2], pts[3]),
                           QPointF(pts[4], pts[5]), QPointF(pts[6], pts[7]));
@@ -1020,11 +1020,11 @@ void QTriangulator<T>::initialize(const QVectorPath &path, const QTransform &mat
                     QPolygonF poly = bezier.toPolygon();
 
                     // Skip first point, it already exists in 'm_vertices'.
-                    for (int j = 1; j < poly.size(); ++j) {
+                    for (int idx = 1; idx < poly.size(); ++idx) {
                         m_indices.push_back(T(m_vertices.size()));
                         m_vertices.resize(m_vertices.size() + 1);
-                        m_vertices.last().x = qRound(poly.at(j).x() * Q_FIXED_POINT_SCALE / lod);
-                        m_vertices.last().y = qRound(poly.at(j).y() * Q_FIXED_POINT_SCALE / lod);
+                        m_vertices.last().x = qRound(poly.at(idx).x() * Q_FIXED_POINT_SCALE / lod);
+                        m_vertices.last().y = qRound(poly.at(idx).y() * Q_FIXED_POINT_SCALE / lod);
                     }
                 }
                 i += 2;
@@ -2332,8 +2332,8 @@ void QTriangulator<T>::SimpleToMonotone::monotoneDecomposition()
         }
     }
 
-    for (int i = 0; i < diagonals.size(); ++i) {
-        createDiagonal(diagonals[i].first, diagonals[i].second);
+    for (int idx = 0; idx < diagonals.size(); ++idx) {
+        createDiagonal(diagonals[idx].first, diagonals[idx].second);
     }
 }
 

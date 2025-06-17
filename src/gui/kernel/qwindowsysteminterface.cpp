@@ -345,9 +345,9 @@ QWindowSystemInterfacePrivate::WindowSystemEvent *QWindowSystemInterfacePrivate:
    return windowSystemEventQueue.takeFirstNonUserInputOrReturnNull();
 }
 
-QWindowSystemInterfacePrivate::WindowSystemEvent *QWindowSystemInterfacePrivate::peekWindowSystemEvent(EventType t)
+QWindowSystemInterfacePrivate::WindowSystemEvent *QWindowSystemInterfacePrivate::peekWindowSystemEvent(EventType eventType)
 {
-   return windowSystemEventQueue.peekAtFirstOfType(t);
+   return windowSystemEventQueue.peekAtFirstOfType(eventType);
 }
 
 void QWindowSystemInterfacePrivate::removeWindowSystemEvent(WindowSystemEvent *event)
@@ -355,9 +355,9 @@ void QWindowSystemInterfacePrivate::removeWindowSystemEvent(WindowSystemEvent *e
    windowSystemEventQueue.remove(event);
 }
 
-void QWindowSystemInterfacePrivate::postWindowSystemEvent(WindowSystemEvent *ev)
+void QWindowSystemInterfacePrivate::postWindowSystemEvent(WindowSystemEvent *event)
 {
-   windowSystemEventQueue.append(ev);
+   windowSystemEventQueue.append(event);
    QAbstractEventDispatcher *dispatcher = QGuiApplicationPrivate::cs_internal_core_dispatcher();
 
    if (dispatcher) {
@@ -365,16 +365,17 @@ void QWindowSystemInterfacePrivate::postWindowSystemEvent(WindowSystemEvent *ev)
    }
 }
 
-bool QWindowSystemInterfacePrivate::handleWindowSystemEvent(QWindowSystemInterfacePrivate::WindowSystemEvent *ev)
+bool QWindowSystemInterfacePrivate::handleWindowSystemEvent(QWindowSystemInterfacePrivate::WindowSystemEvent *event)
 {
    bool accepted = true;
 
    if (synchronousWindowSystemEvents) {
       if (QThread::currentThread() == QGuiApplication::instance()->thread()) {
          // Process the event immediately on the current thread and return the accepted state.
-         QGuiApplicationPrivate::processWindowSystemEvent(ev);
-         accepted = ev->eventAccepted;
-         delete ev;
+         QGuiApplicationPrivate::processWindowSystemEvent(event);
+
+         accepted = event->eventAccepted;
+         delete event;
 
       } else {
          // Post the event on the main thread queue and flush the queue.
@@ -382,12 +383,12 @@ bool QWindowSystemInterfacePrivate::handleWindowSystemEvent(QWindowSystemInterfa
          // Return the accepted state for the last event on the queue,
          // which is the event posted by this method.
 
-         postWindowSystemEvent(ev);
+         postWindowSystemEvent(event);
          accepted = QWindowSystemInterface::flushWindowSystemEvents();
       }
 
    } else {
-      postWindowSystemEvent(ev);
+      postWindowSystemEvent(event);
    }
 
    return accepted;

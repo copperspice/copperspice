@@ -883,17 +883,19 @@ void QTextEngine::bidiReorder(int numItems, const quint8 *levels, int *visualOrd
    // first find highest and lowest levels
    quint8 levelLow  = 128;
    quint8 levelHigh = 0;
-   int i = 0;
 
-   while (i < numItems) {
-      //printf("level = %d\n", r->level);
-      if (levels[i] > levelHigh) {
-         levelHigh = levels[i];
+   int idx = 0;
+
+   while (idx < numItems) {
+      if (levels[idx] > levelHigh) {
+         levelHigh = levels[idx];
       }
-      if (levels[i] < levelLow) {
-         levelLow = levels[i];
+
+      if (levels[idx] < levelLow) {
+         levelLow = levels[idx];
       }
-      i++;
+
+      ++idx;
    }
 
    // implements reordering of the line (L2 according to BiDi spec): L2
@@ -906,8 +908,9 @@ void QTextEngine::bidiReorder(int numItems, const quint8 *levels, int *visualOrd
    }
 
    int count = numItems - 1;
-   for (i = 0; i < numItems; i++) {
-      visualOrder[i] = i;
+
+   for (idx = 0; idx < numItems; ++idx) {
+      visualOrder[idx] = idx;
    }
 
    while (levelHigh >= levelLow) {
@@ -1978,8 +1981,8 @@ QFixed QTextEngine::width(int from, int len) const
 
             glyphEnd = (charEnd == ilen) ? si->num_glyphs : logClusters[charEnd];
 
-            for (int i = glyphStart; i < glyphEnd; i++) {
-               w += glyphs.advances[i] * !glyphs.attributes[i].dontPrint;
+            for (int idx = glyphStart; idx < glyphEnd; ++idx) {
+               w += glyphs.advances[idx] * !glyphs.attributes[idx].dontPrint;
             }
          }
       }
@@ -2436,13 +2439,13 @@ void QTextEngine::justify(const QScriptLine &line)
 
       const QGlyphLayout g = shapedGlyphs(&si);
 
-      for (int i = gs; i < ge; ++i) {
-         g.justifications[i].type = QGlyphJustification::JustifyNone;
-         g.justifications[i].nKashidas  = 0;
-         g.justifications[i].space_18d6 = 0;
+      for (int j = gs; j < ge; ++j) {
+         g.justifications[j].type = QGlyphJustification::JustifyNone;
+         g.justifications[j].nKashidas  = 0;
+         g.justifications[j].space_18d6 = 0;
 
          justificationPoints.resize(nPoints + 3);
-         int justification = g.attributes[i].justification;
+         int justification = g.attributes[j].justification;
 
          switch (justification) {
             case Justification_Prohibited:
@@ -2468,7 +2471,7 @@ void QTextEngine::justify(const QScriptLine &line)
                [[fallthrough]];
 
             case Justification_Character:
-               set(&justificationPoints[nPoints++], justification, g.mid(i), fontEngine(si));
+               set(&justificationPoints[nPoints++], justification, g.mid(j), fontEngine(si));
                maxJustify = qMax(maxJustify, justification);
                break;
 
@@ -2480,7 +2483,7 @@ void QTextEngine::justify(const QScriptLine &line)
             case Justification_Arabic_Seen    :
             case Justification_Arabic_Kashida :
                if (justification >= kashida_type) {
-                  kashida_pos = i;
+                  kashida_pos  = j;
                   kashida_type = justification;
                }
          }
@@ -2998,19 +3001,18 @@ QString QTextEngine::elidedText(Qt::TextElideMode mode, const QFixed &width, int
 
          const int end = si.position + length(&si);
 
-         for (int i = si.position; i < end - 1; ++i) {
-            if (layoutData->string.at(i) == QLatin1Char('&')
-               && !attributes[i + 1].whiteSpace && attributes[i + 1].graphemeBoundary) {
+         for (int j = si.position; j < end - 1; ++j) {
+            if (layoutData->string.at(j) == QChar('&') && ! attributes[j + 1].whiteSpace && attributes[j + 1].graphemeBoundary) {
 
-               const int gp = logClusters[i - si.position];
+               const int gp = logClusters[j - si.position];
                glyphs.attributes[gp].dontPrint = true;
 
-               attributes[i] = attributes[i + 1];
+               attributes[j] = attributes[j + 1];
 
-               memset(attributes + i + 1, 0, sizeof(QCharAttributes));
+               memset(attributes + j + 1, 0, sizeof(QCharAttributes));
 
-               if (layoutData->string.at(i + 1) == '&') {
-                  ++i;
+               if (layoutData->string.at(j + 1) == '&') {
+                  ++j;
                }
             }
          }
@@ -3170,9 +3172,9 @@ void QTextEngine::setBoundary(int strPos) const
    }
 }
 
-QFixed QTextEngine::calculateTabWidth(int item, QFixed x) const
+QFixed QTextEngine::calculateTabWidth(int index, QFixed x) const
 {
-   const QScriptItem &si = layoutData->items[item];
+   const QScriptItem &si = layoutData->items[index];
 
    QFixed dpiScale = 1;
 
@@ -3223,11 +3225,12 @@ QFixed QTextEngine::calculateTabWidth(int item, QFixed x) const
                // find next tab to calculate the width required.
                tab = QFixed::fromReal(tabSpec.position);
 
-               for (int i = item + 1; i < layoutData->items.count(); i++) {
-                  const QScriptItem &item = layoutData->items[i];
-                  if (item.analysis.flags == QScriptAnalysis::TabOrObject) {
+               for (int j = index + 1; j < layoutData->items.count(); ++j) {
+                  const QScriptItem &itemScript = layoutData->items[j];
+
+                  if (itemScript.analysis.flags == QScriptAnalysis::TabOrObject) {
                      // found it
-                     tabSectionEnd = item.position;
+                     tabSectionEnd = itemScript.position;
                      break;
                   }
                }
@@ -3241,27 +3244,29 @@ QFixed QTextEngine::calculateTabWidth(int item, QFixed x) const
                QFixed length;
 
                // Calculate the length of text between this tab and the tabSectionEnd
-               for (int i = item; i < layoutData->items.count(); i++) {
-                  QScriptItem &item = layoutData->items[i];
+               for (int j = index; j < layoutData->items.count(); ++j) {
+                  QScriptItem &itemScript = layoutData->items[j];
 
-                  if (item.position > tabSectionEnd || item.position <= si.position) {
+                  if (itemScript.position > tabSectionEnd || itemScript.position <= si.position) {
                      continue;
                   }
 
-                  shape(i); // first, lets make sure relevant text is already shaped
+                  shape(j); // first, lets make sure relevant text is already shaped
 
-                  if (item.analysis.flags == QScriptAnalysis::Object) {
-                     length += item.width;
+                  if (itemScript.analysis.flags == QScriptAnalysis::Object) {
+                     length += itemScript.width;
                      continue;
                   }
 
-                  QGlyphLayout glyphs = this->shapedGlyphs(&item);
-                  const int end = qMin(item.position + item.num_glyphs, tabSectionEnd) - item.position;
-                  for (int i = 0; i < end; i++) {
-                     length += glyphs.advances[i] * !glyphs.attributes[i].dontPrint;
+                  QGlyphLayout glyphs = this->shapedGlyphs(&itemScript);
+
+                  const int end = qMin(itemScript.position + itemScript.num_glyphs, tabSectionEnd) - itemScript.position;
+
+                  for (int k = 0; k < end; ++k) {
+                     length += glyphs.advances[k] * !glyphs.attributes[k].dontPrint;
                   }
 
-                  if (end + item.position == tabSectionEnd && tabSpec.type == QTextOption::DelimiterTab) {
+                  if (end + itemScript.position == tabSectionEnd && tabSpec.type == QTextOption::DelimiterTab) {
                      // remove half of matching char
                      length -= glyphs.advances[end] / 2 * !glyphs.attributes[end].dontPrint;
                   }
@@ -3311,25 +3316,31 @@ namespace {
 class FormatRangeComparatorByStart
 {
  public:
-   FormatRangeComparatorByStart(const QVector<QTextLayout::FormatRange> &list) : list(list) { }
+   FormatRangeComparatorByStart(const QVector<QTextLayout::FormatRange> &list)
+      : m_startList(list)
+   { }
+
    bool operator()(int a, int b) {
-      return list.at(a).start < list.at(b).start;
+      return m_startList.at(a).start < m_startList.at(b).start;
    }
 
  private:
-   const QVector<QTextLayout::FormatRange> &list;
+   const QVector<QTextLayout::FormatRange> &m_startList;
 };
 
 class FormatRangeComparatorByEnd
 {
  public:
-   FormatRangeComparatorByEnd(const QVector<QTextLayout::FormatRange> &list) : list(list) { }
-   bool operator()(int a, int b) {
-      return list.at(a).start + list.at(a).length < list.at(b).start + list.at(b).length;
-   }
- private:
-   const QVector<QTextLayout::FormatRange> &list;
+   FormatRangeComparatorByEnd(const QVector<QTextLayout::FormatRange> &list)
+      : m_endList(list)
+   { }
 
+   bool operator()(int a, int b) {
+      return m_endList.at(a).start + m_endList.at(a).length < m_endList.at(b).start + m_endList.at(b).length;
+   }
+
+ private:
+   const QVector<QTextLayout::FormatRange> &m_endList;
 };
 
 } // namespace

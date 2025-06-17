@@ -297,18 +297,17 @@ static const char redefineHighp[] =
 struct QVersionDirectivePosition
 {
     constexpr QVersionDirectivePosition(int position = 0, int line = -1)
-        : position(position)
-        , line(line)
+        : m_position(position), m_line(line)
     {
     }
 
     constexpr bool hasPosition() const
     {
-        return position > 0;
+        return m_position > 0;
     }
 
-    const int position;
-    const int line;
+    const int m_position;
+    const int m_line;
 };
 
 static QVersionDirectivePosition findVersionDirectivePosition(const char *source)
@@ -431,7 +430,7 @@ bool QOpenGLShader::compileSourceCode(const char *source)
         if (versionDirectivePosition.hasPosition()) {
             // Append source up to and including the #version directive
             sourceChunks.append(source);
-            sourceChunkLengths.append(GLint(versionDirectivePosition.position));
+            sourceChunkLengths.append(GLint(versionDirectivePosition.m_position));
 
         } else {
             // QTBUG-55733: Intel on Windows with Compatibility profile requires a #version always
@@ -476,14 +475,14 @@ bool QOpenGLShader::compileSourceCode(const char *source)
 
         if (! version || ! strstr(version, "2.1 Mesa 8")) {
             // Append #line directive in order to compensate for text insertion
-            lineDirective = QString("#line %1\n").formatArg(versionDirectivePosition.line).toUtf8();
+            lineDirective = QString("#line %1\n").formatArg(versionDirectivePosition.m_line).toUtf8();
             sourceChunks.append(lineDirective.constData());
             sourceChunkLengths.append(GLint(lineDirective.length()));
         }
 
         // Append rest of shader code
-        sourceChunks.append(source + versionDirectivePosition.position);
-        sourceChunkLengths.append(GLint(qstrlen(source + versionDirectivePosition.position)));
+        sourceChunks.append(source + versionDirectivePosition.m_position);
+        sourceChunkLengths.append(GLint(qstrlen(source + versionDirectivePosition.m_position)));
 
         d->glfuncs->glShaderSource(d->shaderGuard->id(), sourceChunks.size(), sourceChunks.data(), sourceChunkLengths.data());
         return d->compile(this);
@@ -2171,7 +2170,6 @@ bool QOpenGLShader::hasOpenGLShaders(ShaderType type, QOpenGLContext *context)
     if (type == Geometry) {
 #ifndef QT_OPENGL_ES_2
         // Geometry shaders require OpenGL 3.2 or newer
-        QSurfaceFormat format = context->format();
         return (!context->isOpenGLES()) && (format.version() >= qMakePair<int, int>(3, 2));
 #else
         // No geometry shader support in OpenGL ES2

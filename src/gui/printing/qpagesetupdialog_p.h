@@ -39,7 +39,7 @@ class QPageSetupDialogPrivate : public QDialogPrivate
    Q_DECLARE_PUBLIC(QPageSetupDialog)
 
  public:
-   QPageSetupDialogPrivate(QPrinter *printer);
+   QPageSetupDialogPrivate(QPrinter *newPrinter);
 
    void setPrinter(QPrinter *newPrinter);
 

@@ -166,14 +166,15 @@ class QUnixPageSetupDialogPrivate : public QPageSetupDialogPrivate
    Q_DECLARE_PUBLIC(QPageSetupDialog)
 
  public:
-   QUnixPageSetupDialogPrivate(QPrinter *printer);
+   QUnixPageSetupDialogPrivate(QPrinter *newPrinter);
    ~QUnixPageSetupDialogPrivate();
    void init();
 
    QPageSetupWidget *widget;
 };
 
-QUnixPageSetupDialogPrivate::QUnixPageSetupDialogPrivate(QPrinter *printer) : QPageSetupDialogPrivate(printer)
+QUnixPageSetupDialogPrivate::QUnixPageSetupDialogPrivate(QPrinter *newPrinter)
+   : QPageSetupDialogPrivate(newPrinter)
 {
 }
 QUnixPageSetupDialogPrivate::~QUnixPageSetupDialogPrivate()

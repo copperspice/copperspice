@@ -2680,8 +2680,8 @@ void QGuiApplicationPrivate::processExposeEvent(QWindowSystemInterfacePrivate::E
       if (p->resizeEventPending) {
          // as a convenience for plugins, send a resize event before the first expose event if they haven't done so
          // window->geometry() should have a valid size as soon as a handle exists.
-         QResizeEvent e(window->geometry().size(), p->geometry.size());
-         QGuiApplication::sendSpontaneousEvent(window, &e);
+         QResizeEvent eventResize(window->geometry().size(), p->geometry.size());
+         QGuiApplication::sendSpontaneousEvent(window, &eventResize);
 
          p->resizeEventPending = false;
       }

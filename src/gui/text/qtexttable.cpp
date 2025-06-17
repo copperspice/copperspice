@@ -316,22 +316,24 @@ void QTextTablePrivate::update() const
          ++cell;
       }
 
-      int r = cell / nCols;
-      int c = cell % nCols;
+      int rowSize = cell / nCols;
+      int colSize = cell % nCols;
       cellIndices[i] = cell;
 
-      if (r + rowspan > nRows) {
-         grid = q_check_ptr((int *)realloc(grid, sizeof(int) * (r + rowspan) * nCols));
-         memset(grid + (nRows * nCols), 0, sizeof(int) * (r + rowspan - nRows)*nCols);
-         nRows = r + rowspan;
+      if (rowSize + rowspan > nRows) {
+         grid = q_check_ptr((int *)realloc(grid, sizeof(int) * (rowSize + rowspan) * nCols));
+         memset(grid + (nRows * nCols), 0, sizeof(int) * (rowSize + rowspan - nRows) * nCols);
+
+         nRows = rowSize + rowspan;
       }
 
-      Q_ASSERT(c + colspan <= nCols);
+      Q_ASSERT(colSize + colspan <= nCols);
 
-      for (int ii = 0; ii < rowspan; ++ii) {
-         for (int jj = 0; jj < colspan; ++jj) {
-            Q_ASSERT(grid[(r + ii)*nCols + c + jj] == 0);
-            grid[(r + ii)*nCols + c + jj] = fragment;
+      for (int j = 0; j < rowspan; ++j) {
+
+         for (int k = 0; k < colspan; ++k) {
+            Q_ASSERT(grid[(rowSize + j) * nCols + colSize + k] == 0);
+            grid[(rowSize + j) * nCols + colSize + k] = fragment;
          }
 
       }
@@ -481,12 +483,14 @@ void QTextTable::insertRows(int pos, int num)
       fmt.setTableCellColumnSpan(1);
 
       Q_ASSERT(fmt.objectIndex() == objectIndex());
-      int pos = it.position();
+
+      int newPos = it.position();
+
       int cfmt = p->formatCollection()->indexForFormat(fmt);
       int bfmt = p->formatCollection()->indexForFormat(QTextBlockFormat());
 
       for (int i = 0; i < num * (d->nCols - extended); ++i) {
-         p->insertBlock(QTextBeginningOfFrame, pos, bfmt, cfmt, QTextUndoCommand::MoveCursor);
+         p->insertBlock(QTextBeginningOfFrame, newPos, bfmt, cfmt, QTextUndoCommand::MoveCursor);
       }
    }
 
@@ -583,7 +587,7 @@ void QTextTable::insertColumns(int pos, int num)
          int cfmt = p->formatCollection()->indexForFormat(fmt);
          int bfmt = p->formatCollection()->indexForFormat(QTextBlockFormat());
 
-         for (int i = 0; i < num; ++i) {
+         for (int j = 0; j < num; ++j) {
             p->insertBlock(QTextBeginningOfFrame, position, bfmt, cfmt, QTextUndoCommand::MoveCursor);
          }
       }
@@ -641,8 +645,9 @@ void QTextTable::removeRows(int pos, int num)
 
    // delete whole table?
    if (pos == 0 && num == d->nRows) {
-      const int pos = p->fragmentMap().position(d->fragment_start);
-      p->remove(pos, p->fragmentMap().position(d->fragment_end) - pos + 1);
+      const int newPos = p->fragmentMap().position(d->fragment_start);
+
+      p->remove(newPos, p->fragmentMap().position(d->fragment_end) - newPos + 1);
       p->endEditBlock();
 
       return;
@@ -707,8 +712,9 @@ void QTextTable::removeColumns(int pos, int num)
 
    // delete whole table?
    if (pos == 0 && num == d->nCols) {
-      const int pos = p->fragmentMap().position(d->fragment_start);
-      p->remove(pos, p->fragmentMap().position(d->fragment_end) - pos + 1);
+      const int newPos = p->fragmentMap().position(d->fragment_start);
+
+      p->remove(newPos, p->fragmentMap().position(d->fragment_end) - newPos + 1);
       p->endEditBlock();
 
       return;
@@ -844,26 +850,26 @@ void QTextTable::mergeCells(int row, int column, int numRows, int numCols)
             continue;
          }
 
-         QTextDocumentPrivate::FragmentIterator it(&p->fragmentMap(), fragment);
-         uint pos = it.position();
+         QTextDocumentPrivate::FragmentIterator iterFrag(&p->fragmentMap(), fragment);
+         uint pos = iterFrag.position();
 
          if (firstCellIndex == -1) {
-            QFragmentFindHelper helper(pos, p->fragmentMap());
-            QList<int>::iterator it = std::lower_bound(d->cells.begin(), d->cells.end(), helper);
+            QFragmentFindHelper helperFrag(pos, p->fragmentMap());
+            QList<int>::iterator iter = std::lower_bound(d->cells.begin(), d->cells.end(), helperFrag);
 
-            Q_ASSERT(it != d->cells.end());
-            Q_ASSERT(! (helper < *it));
-            Q_ASSERT(*it == fragment);
+            Q_ASSERT(iter != d->cells.end());
+            Q_ASSERT(! (helperFrag < *iter));
+            Q_ASSERT(*iter == fragment);
 
-            firstCellIndex = cellIndex = it - d->cells.begin();
+            firstCellIndex = cellIndex = iter - d->cells.begin();
          }
 
          ++cellIndex;
 
-         QTextCharFormat fmt = fc->charFormat(it->format);
+         QTextCharFormat fmtChar = fc->charFormat(iterFrag->format);
 
-         const int cellRowSpan = fmt.tableCellRowSpan();
-         const int cellColSpan = fmt.tableCellColumnSpan();
+         const int cellRowSpan = fmtChar.tableCellRowSpan();
+         const int cellColSpan = fmtChar.tableCellColumnSpan();
 
          // update the grid for this cell
          for (int i = r; i < r + cellRowSpan; ++i) {
@@ -971,14 +977,16 @@ void QTextTable::splitCell(int row, int column, int numRows, int numCols)
 
    rowPositions[0] = cell.lastPosition();
 
-   for (int r = row + 1; r < row + rowSpan; ++r) {
+   for (int rowCount = row + 1; rowCount < row + rowSpan; ++rowCount) {
       // find the cell before which to insert the new cell markers
-      int gridIndex = r * d->nCols + column;
+      int gridIndex = rowCount * d->nCols + column;
 
       QVector<int>::iterator it = std::upper_bound(d->cellIndices.begin(), d->cellIndices.end(), gridIndex);
+
       int cellIndex = it - d->cellIndices.begin();
-      int fragment = d->cells.value(cellIndex, d->fragment_end);
-      rowPositions[r - row] = p->fragmentMap().position(fragment);
+      int fragment  = d->cells.value(cellIndex, d->fragment_end);
+
+      rowPositions[rowCount - row] = p->fragmentMap().position(fragment);
    }
 
    fmt.setTableCellColumnSpan(1);
@@ -989,16 +997,16 @@ void QTextTable::splitCell(int row, int column, int numRows, int numCols)
    int insertAdjustement = 0;
 
    for (int i = 0; i < numRows; ++i) {
-      for (int c = 0; c < colSpan - numCols; ++c) {
-         p->insertBlock(QTextBeginningOfFrame, rowPositions[i] + insertAdjustement + c, blockIndex, fmtIndex);
+      for (int colCount = 0; colCount < colSpan - numCols; ++colCount) {
+         p->insertBlock(QTextBeginningOfFrame, rowPositions[i] + insertAdjustement + colCount, blockIndex, fmtIndex);
       }
 
       insertAdjustement += colSpan - numCols;
    }
 
    for (int i = numRows; i < rowSpan; ++i) {
-      for (int c = 0; c < colSpan; ++c) {
-         p->insertBlock(QTextBeginningOfFrame, rowPositions[i] + insertAdjustement + c, blockIndex, fmtIndex);
+      for (int colCount = 0; colCount < colSpan; ++colCount) {
+         p->insertBlock(QTextBeginningOfFrame, rowPositions[i] + insertAdjustement + colCount, blockIndex, fmtIndex);
       }
 
       insertAdjustement += colSpan;
