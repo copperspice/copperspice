@@ -30,22 +30,22 @@ typedef unsigned int QRgb;                     // RGB triplet
 
 const QRgb  RGB_MASK    = 0x00ffffff;          // masks RGB values
 
-inline constexpr int qRed(QRgb rgb)                      // get red part of RGB
+inline constexpr uint8_t qRed(QRgb rgb)                  // get red part of RGB
 {
    return ((rgb >> 16) & 0xff);
 }
 
-inline constexpr int qGreen(QRgb rgb)                    // get green part of RGB
+inline constexpr uint8_t qGreen(QRgb rgb)                // get green part of RGB
 {
    return ((rgb >> 8) & 0xff);
 }
 
-inline constexpr int qBlue(QRgb rgb)                     // get blue part of RGB
+inline constexpr uint8_t qBlue(QRgb rgb)                 // get blue part of RGB
 {
    return (rgb & 0xff);
 }
 
-inline constexpr int qAlpha(QRgb rgb)                    // get alpha part of RGBA
+inline constexpr uint8_t qAlpha(QRgb rgb)                // get alpha part of RGBA
 {
    return rgb >> 24;
 }
