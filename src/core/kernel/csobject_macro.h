@@ -127,6 +127,12 @@ class cs_number<0>
 
 #define CS_OVERRIDE override
 
+#ifdef Q_CC_GNU
+#define CS_GNU_USED [[gnu::used]]
+#else
+#define CS_GNU_USED
+#endif
+
 #define CS_OBJECT_INTERNAL(classNameX)  \
  public:                                \
    static const char *cs_className()    \
@@ -143,7 +149,7 @@ class cs_number<0>
       return cs_number<0>{};                  \
    } \
    friend QMetaObject_T<classNameX>;          \
-   [[gnu::used]] Q_EXPORT_MAYBE static const QMetaObject_T<classNameX> &staticMetaObject()  \
+   CS_GNU_USED Q_EXPORT_MAYBE static const QMetaObject_T<classNameX> &staticMetaObject()  \
    { \
       static std::atomic<bool> isCreated(false);                            \
       static std::atomic<QMetaObject_T<classNameX> *> createdObj(nullptr);  \
@@ -221,7 +227,7 @@ class cs_number<0>
       return cs_number<0>{};                  \
    } \
    friend QMetaObject_T<classNameX>;          \
-   [[gnu::used]] Q_EXPORT_MAYBE static const QMetaObject_T<classNameX> &staticMetaObject() \
+   CS_GNU_USED Q_EXPORT_MAYBE static const QMetaObject_T<classNameX> &staticMetaObject() \
    { \
       static std::atomic<bool> isCreated(false);                             \
       static std::atomic<QMetaObject_T<classNameX> *> createdObj(nullptr);   \
