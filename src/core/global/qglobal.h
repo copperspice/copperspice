@@ -540,17 +540,22 @@ constexpr inline int qRound(double value)
 
 constexpr inline int qRound(float value)
 {
-   return value >= 0.0f ? int(value + 0.5f) : int(value - float(int(value - 1)) + 0.5f) + int(value- 1);
+   return value >= 0.0f ? int(value + 0.5f) : int(value - float(int(value - 1)) + 0.5f) + int(value - 1);
 }
 
-constexpr inline qint64 qRound64(double value)
+constexpr inline int16_t qRound16(double value)
 {
-   return value >= 0.0 ? qint64(value + 0.5) : qint64(value - double(qint64(value - 1)) + 0.5) + qint64(value - 1);
+   return value >= 0.0 ? int16_t(value + 0.5) : int16_t(value - double(int16_t(value - 1)) + 0.5) + int16_t(value - 1);
 }
 
-constexpr inline qint64 qRound64(float value)
+constexpr inline int64_t qRound64(double value)
 {
-   return value >= 0.0f ? qint64(value + 0.5f) : qint64(value - float(qint64(value - 1)) + 0.5f) + qint64(value - 1);
+   return value >= 0.0 ? int64_t(value + 0.5) : int64_t(value - double(int64_t(value - 1)) + 0.5) + int64_t(value - 1);
+}
+
+constexpr inline int64_t qRound64(float value)
+{
+   return value >= 0.0f ? int64_t(value + 0.5f) : int64_t(value - float(int64_t(value - 1)) + 0.5f) + int64_t(value - 1);
 }
 
 // enhanced to support size_type which can be 32 bit or 64 bit
