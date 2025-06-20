@@ -3191,7 +3191,7 @@ static QString encodeText(const QString &str, QTextStream &s, const bool encodeQ
 #endif
          {
             // use a character reference to get it through.
-            const ushort codepoint(ati.unicode());
+            const uint32_t codepoint  = ati.unicode();
             const QString replacement("&#x" + QString::number(codepoint, 16) + QChar(';'));
             retval.replace(i, 1, replacement);
             i += replacement.length();

@@ -986,7 +986,7 @@ static QString extractEncodingDecl(const QString &text, bool *needMoreText)
    }
 
    while (pos < endPos) {
-      ushort uc = text.at(pos).unicode();
+      uint32_t uc = text.at(pos).unicode();
       if (uc == '\'' || uc == '"') {
          break;
       }
@@ -1000,7 +1000,7 @@ static QString extractEncodingDecl(const QString &text, bool *needMoreText)
    QString encoding;
    ++pos;
    while (pos < endPos) {
-      ushort uc = text.at(pos).unicode();
+      uint32_t uc = text.at(pos).unicode();
       if (uc == '\'' || uc == '"') {
          break;
       }
@@ -1315,7 +1315,7 @@ void QXmlSimpleReaderPrivate::initIncrementalParsing()
 
 static inline bool is_S(QChar ch)
 {
-   ushort uc = ch.unicode();
+   uint32_t uc = ch.unicode();
    return (uc == ' ' || uc == '\t' || uc == '\n' || uc == '\r');
 }
 
@@ -1358,7 +1358,7 @@ static const char nameCharTable[128] = {
 
 static inline NameChar fastDetermineNameChar(QChar ch)
 {
-   ushort uc = ch.unicode();
+   uint32_t uc = ch.unicode();
    if (!(uc & ~0x7f)) { // uc < 128
       return (NameChar)nameCharTable[uc];
    }
@@ -6655,7 +6655,7 @@ void QXmlSimpleReaderPrivate::next()
 
    // the following could be written nicer, but since it is a time-critical
    // function, rather optimize for speed
-   ushort uc = c.unicode();
+   uint32_t uc = c.unicode();
    c = inputSource->next();
 
    // If we are not incremental parsing, we just skip over EndOfData chars to give the
