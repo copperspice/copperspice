@@ -270,13 +270,13 @@ class XPThemeData
    QMarginsF margins(int propId = TMT_CONTENTMARGINS);
 
    static QSizeF themeSize(const QWidget *widget = nullptr, QPainter *painter = nullptr, int themeIn = -1,
-               int part = 0, int state = 0);
+         int part = 0, int state = 0);
 
    static QMarginsF themeMargins(const QRect &rect, const QWidget *widget = nullptr, QPainter *painter = nullptr,
-               int themeIn = -1, int part = 0, int state = 0, int propId = TMT_CONTENTMARGINS);
+         int themeIn = -1, int part = 0, int state = 0, int propId = TMT_CONTENTMARGINS);
 
    static QMarginsF themeMargins(const QWidget *widget = nullptr, QPainter *painter = nullptr, int themeIn = -1,
-               int part = 0, int state = 0, int propId = TMT_CONTENTMARGINS);
+         int part = 0, int state = 0, int propId = TMT_CONTENTMARGINS);
 
    const QWidget *m_xpWidget;
    QPainter *painter;
@@ -303,7 +303,9 @@ struct ThemeMapKey {
    bool noBorder;
    bool noContent;
 
-   ThemeMapKey() : partId(-1), stateId(-1) {}
+   ThemeMapKey()
+      : partId(-1), stateId(-1)
+   { }
 
    ThemeMapKey(const XPThemeData &data)
       : theme(data.theme), partId(data.partId), stateId(data.stateId),
@@ -318,9 +320,7 @@ inline uint qHash(const ThemeMapKey &key)
 
 inline bool operator==(const ThemeMapKey &k1, const ThemeMapKey &k2)
 {
-   return k1.theme == k2.theme
-      && k1.partId == k2.partId
-      && k1.stateId == k2.stateId;
+   return k1.theme == k2.theme && k1.partId == k2.partId && k1.stateId == k2.stateId;
 }
 
 enum AlphaChannelType {

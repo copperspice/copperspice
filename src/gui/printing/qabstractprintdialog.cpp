@@ -44,6 +44,7 @@ QAbstractPrintDialog::QAbstractPrintDialog(QPrinter *printer, QWidget *parent)
 
    d->setPrinter(printer);
    d->m_minPage = printer->fromPage();
+
    int to = printer->toPage();
    d->m_maxPage = to > 0 ? to : INT_MAX;
 }
@@ -191,9 +192,11 @@ void QAbstractPrintDialogPrivate::setPrinter(QPrinter *newPrinter)
    if (newPrinter) {
       printer = newPrinter;
       ownsPrinter = false;
+
       if (printer->fromPage() || printer->toPage()) {
          options |= QAbstractPrintDialog::PrintPageRange;
       }
+
    } else {
       printer = new QPrinter;
       ownsPrinter = true;

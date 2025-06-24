@@ -41,7 +41,7 @@ static QList<QNetworkInterfacePrivate *> postProcess(QList<QNetworkInterfacePriv
    // Go through all available addresses and calculate the broadcast address
    // from the IP and the netmask
    //
-   // This is an IPv4-only thing -- IPv6 has no concept of broadcasts
+   // This is an IPv4-only, IPv6 has no concept of broadcasts
    // The math is:
    //    broadcast = IP | ~netmask
 
@@ -57,7 +57,7 @@ static QList<QNetworkInterfacePrivate *> postProcess(QList<QNetworkInterfacePriv
             continue;
          }
 
-         if (!addr_it->netmask().isNull() && addr_it->broadcast().isNull()) {
+         if (! addr_it->netmask().isNull() && addr_it->broadcast().isNull()) {
             QHostAddress bcast = addr_it->ip();
             bcast = QHostAddress(bcast.toIPv4Address() | ~addr_it->netmask().toIPv4Address());
             addr_it->setBroadcast(bcast);
@@ -101,10 +101,11 @@ QSharedDataPointer<QNetworkInterfacePrivate> QNetworkInterfaceManager::interface
    QList<QSharedDataPointer<QNetworkInterfacePrivate> > interfaceList      = allInterfaces();
    QList<QSharedDataPointer<QNetworkInterfacePrivate> >::const_iterator it = interfaceList.constBegin();
 
-   for ( ; it != interfaceList.constEnd(); ++it)
+   for ( ; it != interfaceList.constEnd(); ++it) {
       if ((*it)->index == index) {
          return *it;
       }
+   }
 
    return empty;
 }
@@ -162,12 +163,11 @@ bool QNetworkAddressEntry::operator==(const QNetworkAddressEntry &other) const
       return true;
    }
 
-   if (!d || !other.d) {
+   if (! d || !other.d) {
       return false;
    }
-   return d->address == other.d->address &&
-          d->netmask == other.d->netmask &&
-          d->broadcast == other.d->broadcast;
+
+   return d->address == other.d->address && d->netmask == other.d->netmask && d->broadcast == other.d->broadcast;
 }
 
 QHostAddress QNetworkAddressEntry::ip() const
@@ -339,6 +339,7 @@ static inline QDebug flagsDebug(QDebug debug, QNetworkInterface::InterfaceFlags 
    if (flags & QNetworkInterface::CanMulticast) {
       debug << "CanMulticast ";
    }
+
    return debug;
 }
 
@@ -346,7 +347,7 @@ static inline QDebug operator<<(QDebug debug, const QNetworkAddressEntry &entry)
 {
    debug << "(address = " << entry.ip();
 
-   if (!entry.netmask().isNull()) {
+   if (! entry.netmask().isNull()) {
       debug << ", netmask = " << entry.netmask();
    }
 

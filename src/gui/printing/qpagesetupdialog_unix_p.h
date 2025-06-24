@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef QPAGESETUPDialog_Unix_P_H
-#define QPAGESETUPDialog_Unix_P_H
+#ifndef QPAGESETUPDIALOG_UNIX_P_H
+#define QPAGESETUPDIALOG_UNIX_P_H
 
 #include <qglobal.h>
 

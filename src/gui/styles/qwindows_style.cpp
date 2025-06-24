@@ -1208,28 +1208,28 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
                return;
             }
 
-            QRect vCheckRect = visualRect(opt->direction, menuitem->rect, QRect(menuitem->rect.x(), menuitem->rect.y(), checkcol,
-                     menuitem->rect.height()));
-            if (!menuitem->icon.isNull() && checked) {
+            QRect vCheckRect = visualRect(opt->direction, menuitem->rect, QRect(menuitem->rect.x(), menuitem->rect.y(),
+                  checkcol, menuitem->rect.height()));
+
+            if (! menuitem->icon.isNull() && checked) {
                if (act) {
-                  qDrawShadePanel(p, vCheckRect,
-                     menuitem->palette, true, 1,
-                     &menuitem->palette.brush(QPalette::Button));
+                  qDrawShadePanel(p, vCheckRect, menuitem->palette, true, 1, &menuitem->palette.brush(QPalette::Button));
                } else {
                   QBrush styleFill(menuitem->palette.light().color(), Qt::Dense4Pattern);
                   qDrawShadePanel(p, vCheckRect, menuitem->palette, true, 1, &styleFill);
                }
-            } else if (!act) {
+
+            } else if (! act) {
                p->fillRect(vCheckRect, menuitem->palette.brush(QPalette::Button));
             }
 
             // On Windows Style, if we have a checkable item and an icon we
             // draw the icon recessed to indicate an item is checked. If we
             // have no icon, we draw a checkmark instead.
-            if (!menuitem->icon.isNull()) {
+            if (! menuitem->icon.isNull()) {
                QIcon::Mode mode = dis ? QIcon::Disabled : QIcon::Normal;
 
-               if (act && !dis) {
+               if (act && ! dis) {
                   mode = QIcon::Active;
                }
 
@@ -1244,9 +1244,11 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
                const int pixw = pixmap.width() / pixmap.devicePixelRatio();
                const int pixh = pixmap.height() / pixmap.devicePixelRatio();
 
-               if (act && !dis && !checked)
+               if (act && ! dis && ! checked) {
                   qDrawShadePanel(p, vCheckRect,  menuitem->palette, false, 1,
                      &menuitem->palette.brush(QPalette::Button));
+               }
+
                QRect pmr(0, 0, pixw, pixh);
                pmr.moveCenter(vCheckRect.center());
                p->setPen(menuitem->palette.text().color());
@@ -1256,7 +1258,7 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
                QStyleOptionMenuItem newMi = *menuitem;
                newMi.state = State_None;
 
-               if (!dis) {
+               if (! dis) {
                   newMi.state |= State_Enabled;
                }
 
@@ -1288,7 +1290,7 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
             QRect vTextRect = visualRect(opt->direction, menuitem->rect, textRect);
             QString s = menuitem->text;
 
-            if (!s.isEmpty()) {                     // draw text
+            if (! s.isEmpty()) {                     // draw text
                p->save();
                int t = s.indexOf(QLatin1Char('\t'));
                int text_flags = Qt::AlignVCenter | Qt::TextShowMnemonic | Qt::TextDontClip | Qt::TextSingleLine;
@@ -1332,15 +1334,16 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
                int dim = (h - 2 * QWindowsStylePrivate::windowsItemFrame) / 2;
                PrimitiveElement arrow;
                arrow = (opt->direction == Qt::RightToLeft) ? PE_IndicatorArrowLeft : PE_IndicatorArrowRight;
-               xpos = x + w - QWindowsStylePrivate::windowsArrowHMargin - QWindowsStylePrivate::windowsItemFrame - dim;
+               xpos  = x + w - QWindowsStylePrivate::windowsArrowHMargin - QWindowsStylePrivate::windowsItemFrame - dim;
+
                QRect  vSubMenuRect = visualRect(opt->direction, menuitem->rect, QRect(xpos, y + h / 2 - dim / 2, dim, dim));
                QStyleOptionMenuItem newMI = *menuitem;
 
-               newMI.rect = vSubMenuRect;
+               newMI.rect  = vSubMenuRect;
                newMI.state = dis ? State_None : State_Enabled;
+
                if (act)
-                  newMI.palette.setColor(QPalette::ButtonText,
-                     newMI.palette.highlightedText().color());
+                  newMI.palette.setColor(QPalette::ButtonText, newMI.palette.highlightedText().color());
                proxy()->drawPrimitive(arrow, &newMI, p, widget);
             }
 
@@ -1381,42 +1384,33 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
       case CE_TabBarTabShape:
          if (const QStyleOptionTab *tab = qstyleoption_cast<const QStyleOptionTab *>(opt)) {
             bool rtlHorTabs = (tab->direction == Qt::RightToLeft
-                  && (tab->shape == QTabBar::RoundedNorth
-                     || tab->shape == QTabBar::RoundedSouth));
+                  && (tab->shape == QTabBar::RoundedNorth || tab->shape == QTabBar::RoundedSouth));
+
             bool selected = tab->state & State_Selected;
-            bool lastTab = ((!rtlHorTabs && tab->position == QStyleOptionTab::End)
-                  || (rtlHorTabs
-                     && tab->position == QStyleOptionTab::Beginning));
-            bool firstTab = ((!rtlHorTabs
-                     && tab->position == QStyleOptionTab::Beginning)
-                  || (rtlHorTabs
-                     && tab->position == QStyleOptionTab::End));
+            bool lastTab = ((! rtlHorTabs && tab->position == QStyleOptionTab::End)
+                  || (rtlHorTabs && tab->position == QStyleOptionTab::Beginning));
+
+            bool firstTab = ((! rtlHorTabs && tab->position == QStyleOptionTab::Beginning)
+                  || (rtlHorTabs && tab->position == QStyleOptionTab::End));
+
             bool onlyOne = tab->position == QStyleOptionTab::OnlyOneTab;
 
-            bool previousSelected =
-               ((!rtlHorTabs
-                     && tab->selectedPosition == QStyleOptionTab::PreviousIsSelected)
-                  || (rtlHorTabs
-                     && tab->selectedPosition == QStyleOptionTab::NextIsSelected));
-            bool nextSelected =
-               ((!rtlHorTabs
-                     && tab->selectedPosition == QStyleOptionTab::NextIsSelected)
-                  || (rtlHorTabs
-                     && tab->selectedPosition
-                     == QStyleOptionTab::PreviousIsSelected));
+            bool previousSelected = ((! rtlHorTabs && tab->selectedPosition == QStyleOptionTab::PreviousIsSelected)
+                  || (rtlHorTabs && tab->selectedPosition == QStyleOptionTab::NextIsSelected));
+
+            bool nextSelected = ((! rtlHorTabs && tab->selectedPosition == QStyleOptionTab::NextIsSelected)
+                  || (rtlHorTabs && tab->selectedPosition == QStyleOptionTab::PreviousIsSelected));
 
             int tabBarAlignment = proxy()->styleHint(SH_TabBar_Alignment, tab, widget);
 
-            bool leftAligned = (!rtlHorTabs && tabBarAlignment == Qt::AlignLeft)
-               || (rtlHorTabs
+            bool leftAligned = (! rtlHorTabs && tabBarAlignment == Qt::AlignLeft) || (rtlHorTabs
                   && tabBarAlignment == Qt::AlignRight);
 
             bool rightAligned = (!rtlHorTabs && tabBarAlignment == Qt::AlignRight)
-               || (rtlHorTabs
-                  && tabBarAlignment == Qt::AlignLeft);
+                  || (rtlHorTabs && tabBarAlignment == Qt::AlignLeft);
 
-            QColor light = tab->palette.light().color();
-            QColor dark = tab->palette.dark().color();
+            QColor light  = tab->palette.light().color();
+            QColor dark   = tab->palette.dark().color();
             QColor shadow = tab->palette.shadow().color();
 
             int borderThinkness = proxy()->pixelMetric(PM_TabBarBaseOverlap, tab, widget);
@@ -1436,7 +1430,7 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
                   break;
 
                case QTabBar::RoundedNorth: {
-                  if (!selected) {
+                  if (! selected) {
                      y1 += 2;
                      x1 += onlyOne || firstTab ? borderThinkness : 0;
                      x2 -= onlyOne || lastTab ? borderThinkness : 0;
@@ -1879,9 +1873,9 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
                   d->startAnimation(new QProgressStyleAnimation(d->animationFps, opt->styleObject));
                }
 
-               int chunksInRow = 5;
-               int myY = pbBits.rect.y();
-               int myHeight = pbBits.rect.height();
+               int chunksInRow  = 5;
+               int myY          = pbBits.rect.y();
+               int myHeight     = pbBits.rect.height();
                int chunksToDraw = chunksInRow;
 
                if (step > chunkCount - 5) {
@@ -1892,7 +1886,7 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
                p->setClipRect(m.mapRect(QRectF(rect)).toRect());
 
                int x0 = reverse ? rect.left() + rect.width() - unit_width * (step) - unit_width  : rect.left() + unit_width * step;
-               int x = 0;
+               int x  = 0;
 
                for (int i = 0; i < chunksToDraw ; ++i) {
                   pbBits.rect.setRect(x0 + x, myY, unit_width, myHeight);
@@ -1901,10 +1895,11 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
                   x += reverse ? -unit_width : unit_width;
                }
 
-               //Draw wrap-around chunks
+               // Draw wrap-around chunks
                if ( step > chunkCount - 5) {
                   x0 = reverse ? rect.left() + rect.width() - unit_width : rect.left() ;
-                  x = 0;
+                  x  = 0;
+
                   int chunksToDraw2 = step - (chunkCount - chunksInRow);
 
                   for (int i = 0; i < chunksToDraw2 ; ++i) {

@@ -99,15 +99,15 @@ class Q_GUI_EXPORT QColor
    QRgb rgb() const;
    void setRgb(QRgb rgb);
 
-   int hue() const; // 0 <= hue < 360
+   int hue() const;                    // 0 <= hue < 360
    int saturation() const;
-   int hsvHue() const; // 0 <= hue < 360
+   int hsvHue() const;                 // 0 <= hue < 360
    int hsvSaturation() const;
    int value() const;
 
-   qreal hueF() const; // 0.0 <= hueF < 360.0
+   qreal hueF() const;                 // 0.0 <= hueF < 360.0
    qreal saturationF() const;
-   qreal hsvHueF() const; // 0.0 <= hueF < 360.0
+   qreal hsvHueF() const;              // 0.0 <= hueF < 360.0
    qreal hsvSaturationF() const;
    qreal valueF() const;
 
@@ -133,11 +133,11 @@ class Q_GUI_EXPORT QColor
    void getCmykF(qreal *c, qreal *m, qreal *y, qreal *k, qreal *a = nullptr);
    void setCmykF(qreal c, qreal m, qreal y, qreal k, qreal a = 1.0);
 
-   int hslHue() const; // 0 <= hue < 360
+   int hslHue() const;                 // 0 <= hue < 360
    int hslSaturation() const;
    int lightness() const;
 
-   qreal hslHueF() const; // 0.0 <= hueF < 360.0
+   qreal hslHueF() const;              // 0.0 <= hueF < 360.0
    qreal hslSaturationF() const;
    qreal lightnessF() const;
 
@@ -189,7 +189,6 @@ class Q_GUI_EXPORT QColor
    Spec cspec;
 
 #ifndef CS_DOXYPRESS
-
    union {
       struct {
          ushort alpha;
@@ -230,7 +229,6 @@ class Q_GUI_EXPORT QColor
    friend class QColormap;
    friend Q_GUI_EXPORT QDataStream &operator<<(QDataStream &stream, const QColor &color);
    friend Q_GUI_EXPORT QDataStream &operator>>(QDataStream &stream, QColor &color);
-
 };
 
 inline QColor::QColor()

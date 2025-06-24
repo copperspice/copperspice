@@ -970,11 +970,13 @@ static QString extractEncodingDecl(const QString &text, bool *needMoreText)
 
    int l = text.length();
    QString snip = QString::fromLatin1("<?xml").left(l);
+
    if (l > 0 && !text.startsWith(snip)) {
       return QString();
    }
 
    int endPos = text.indexOf('>');
+
    if (endPos == -1) {
       *needMoreText = l < 255; // we won't look forever
       return QString();
@@ -987,6 +989,7 @@ static QString extractEncodingDecl(const QString &text, bool *needMoreText)
 
    while (pos < endPos) {
       uint32_t uc = text.at(pos).unicode();
+
       if (uc == '\'' || uc == '"') {
          break;
       }
@@ -999,11 +1002,14 @@ static QString extractEncodingDecl(const QString &text, bool *needMoreText)
 
    QString encoding;
    ++pos;
+
    while (pos < endPos) {
       uint32_t uc = text.at(pos).unicode();
+
       if (uc == '\'' || uc == '"') {
          break;
       }
+
       encoding.append(uc);
       ++pos;
    }
@@ -1359,20 +1365,23 @@ static const char nameCharTable[128] = {
 static inline NameChar fastDetermineNameChar(QChar ch)
 {
    uint32_t uc = ch.unicode();
-   if (!(uc & ~0x7f)) { // uc < 128
+
+   if (! (uc & ~0x7f)) {
+      // uc < 128
       return (NameChar)nameCharTable[uc];
    }
 
    QChar::Category cat = ch.category();
-   // ### some these categories might be slightly wrong
-   if ((cat >= QChar::Letter_Uppercase && cat <= QChar::Letter_Other)
-         || cat == QChar::Number_Letter) {
+
+   // ### some of these categories might be slightly incorrect
+   if ((cat >= QChar::Letter_Uppercase && cat <= QChar::Letter_Other) || cat == QChar::Number_Letter) {
       return NameBeginning;
    }
-   if ((cat >= QChar::Number_DecimalDigit && cat <= QChar::Number_Other)
-         || (cat >= QChar::Mark_NonSpacing && cat <= QChar::Mark_Enclosing)) {
+
+   if ((cat >= QChar::Number_DecimalDigit && cat <= QChar::Number_Other) || (cat >= QChar::Mark_NonSpacing && cat <= QChar::Mark_Enclosing)) {
       return NameNotBeginning;
    }
+
    return NotName;
 }
 
@@ -6631,17 +6640,19 @@ bool QXmlSimpleReaderPrivate::insertXmlRef(const QString &data, const QString &n
    }
 
    if (reportEntities && lexicalHnd) {
-      if (!lexicalHnd->startEntity(name)) {
+      if (! lexicalHnd->startEntity(name)) {
          reportParseError(lexicalHnd->errorString());
          return false;
       }
    }
+
    return true;
 }
 
 void QXmlSimpleReaderPrivate::next()
 {
    int count = xmlRefStack.size();
+
    while (count != 0) {
       if (xmlRefStack.top().isEmpty()) {
          xmlRefStack.pop_back();

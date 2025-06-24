@@ -987,6 +987,7 @@ void QTriangulator<T>::initialize(const QVectorPath &path, const QTransform &mat
 
     const qreal *p = path.points();
     const QPainterPath::ElementType *e = path.elements();
+
     if (e) {
         for (int i = 0; i < path.elementCount(); ++i, ++e, p += 2) {
             switch (*e) {

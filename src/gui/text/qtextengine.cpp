@@ -925,10 +925,10 @@ void QTextEngine::bidiReorder(int numItems, const quint8 *levels, int *visualOrd
          while (i <= count && levels[i] >= levelHigh) {
             ++i;
          }
+
          int end = i - 1;
 
          if (start != end) {
-
             for (int j = 0; j < (end - start + 1) / 2; j++) {
                int tmp = visualOrder[start + j];
                visualOrder[start + j] = visualOrder[end - j];

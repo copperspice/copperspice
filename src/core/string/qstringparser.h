@@ -243,7 +243,7 @@ class Q_CORE_EXPORT QStringParser
 
       // V data type is char, string
       template <typename T, typename V,
-                  typename = typename std::enable_if<! std::is_arithmetic<typename std::remove_reference<V>::type>::value>::type>
+            typename = typename std::enable_if<! std::is_arithmetic<typename std::remove_reference<V>::type>::value>::type>
 
       [[nodiscard]] static T formatArg(const T &str, V &&value, int fieldwidth = 0, QChar32 fillChar = QChar32(' '))
       {
@@ -343,37 +343,37 @@ class Q_CORE_EXPORT QStringParser
 
       template <typename T>
       static T section(const T &str, QChar32 separator, int firstSection, int lastSection = -1,
-               SectionFlags flags = SectionDefault) {
+            SectionFlags flags = SectionDefault) {
          return section(str, T(separator), firstSection, lastSection, flags);
       }
 
       template <typename T, int N>
       static T section(const T &str, const char (&separator)[N], int firstSection, int lastSection = -1,
-               SectionFlags flags = SectionDefault) {
+            SectionFlags flags = SectionDefault) {
          return section(str, T(separator), firstSection, lastSection, flags);
       }
 
       template <typename T>
       static T section(const T &str, const T &separator, int firstSection, int lastSection = -1,
-               SectionFlags flags = SectionDefault);
+            SectionFlags flags = SectionDefault);
 
 #if defined (CS_DOXYPRESS)
       template <typename T>
       static T section(const T &str, const QRegularExpression &separator, int firstSection, int lastSection = -1,
-               SectionFlags flags = SectionDefault);
+            SectionFlags flags = SectionDefault);
 #else
       template <typename T>
       static T section(const T &str, const Cs::QRegularExpression<T> &separator, int firstSection, int lastSection = -1,
-               SectionFlags flags = SectionDefault);
+            SectionFlags flags = SectionDefault);
 #endif
 
       template <typename T>
       static QList<T> split(const T &str, QChar32 separator, SplitBehavior behavior = KeepEmptyParts,
-               Qt::CaseSensitivity cs = Qt::CaseSensitive);
+            Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
       template <typename T>
       static QList<T> split(const T &str, const T &separator, SplitBehavior behavior = KeepEmptyParts,
-               Qt::CaseSensitivity cs = Qt::CaseSensitive);
+            Qt::CaseSensitivity cs = Qt::CaseSensitive);
 
 #if defined (CS_DOXYPRESS)
       template <typename T>
