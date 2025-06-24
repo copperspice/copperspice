@@ -113,25 +113,26 @@ namespace regex_constants {
 
 enum flag_type_ {
 
-   no_except = cs_regex_ns::regbase::no_except,
-   failbit = cs_regex_ns::regbase::failbit,
-   literal = cs_regex_ns::regbase::literal,
-   icase = cs_regex_ns::regbase::icase,
-   nocollate = cs_regex_ns::regbase::nocollate,
-   collate = cs_regex_ns::regbase::collate,
-   nosubs = cs_regex_ns::regbase::nosubs,
-   optimize = cs_regex_ns::regbase::optimize,
-   bk_plus_qm = cs_regex_ns::regbase::bk_plus_qm,
-   bk_vbar = cs_regex_ns::regbase::bk_vbar,
-   no_intervals = cs_regex_ns::regbase::no_intervals,
-   no_char_classes = cs_regex_ns::regbase::no_char_classes,
+   no_except          = cs_regex_ns::regbase::no_except,
+   failbit            = cs_regex_ns::regbase::failbit,
+   literal            = cs_regex_ns::regbase::literal,
+   icase              = cs_regex_ns::regbase::icase,
+   nocollate          = cs_regex_ns::regbase::nocollate,
+   collate            = cs_regex_ns::regbase::collate,
+   nosubs             = cs_regex_ns::regbase::nosubs,
+   optimize           = cs_regex_ns::regbase::optimize,
+   bk_plus_qm         = cs_regex_ns::regbase::bk_plus_qm,
+   bk_vbar            = cs_regex_ns::regbase::bk_vbar,
+   no_intervals       = cs_regex_ns::regbase::no_intervals,
+   no_char_classes    = cs_regex_ns::regbase::no_char_classes,
    no_escape_in_lists = cs_regex_ns::regbase::no_escape_in_lists,
-   no_mod_m = cs_regex_ns::regbase::no_mod_m,
-   mod_x = cs_regex_ns::regbase::mod_x,
-   mod_s = cs_regex_ns::regbase::mod_s,
-   no_mod_s = cs_regex_ns::regbase::no_mod_s,
+   no_mod_m           = cs_regex_ns::regbase::no_mod_m,
+   mod_x              = cs_regex_ns::regbase::mod_x,
+   mod_s              = cs_regex_ns::regbase::mod_s,
+   no_mod_s           = cs_regex_ns::regbase::no_mod_s,
+
    save_subexpression_location = cs_regex_ns::regbase::save_subexpression_location,
-   no_empty_expressions = cs_regex_ns::regbase::no_empty_expressions,
+   no_empty_expressions        = cs_regex_ns::regbase::no_empty_expressions,
 
    basic        = cs_regex_ns::regbase::basic,
    extended     = cs_regex_ns::regbase::extended,
@@ -222,5 +223,5 @@ static constexpr const escape_syntax_type syntax_max                   = 60;
 }   // end namespace
 
 }   // end namespace
-#endif
 
+#endif
