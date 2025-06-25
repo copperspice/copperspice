@@ -13,6 +13,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
    )
 
    list(APPEND WAYLAND_CLIENT_PRIVATE_INCLUDES
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_abstract_decoration_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_buffer_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_cursor_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_decoration_factory_p.h
@@ -55,6 +56,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
 
    target_sources(CsWaylandClient
       PRIVATE
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_abstract_decoration.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_buffer.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_cursor.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_decoration_factory.cpp
