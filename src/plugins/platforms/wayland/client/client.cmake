@@ -21,6 +21,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_extended_surface_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_inputcontext_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_integration_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_native_interface_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_popup_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_shellsurface_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_toplevel_p.h
@@ -64,6 +65,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_extended_surface.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_inputcontext.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_integration.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_native_interface.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_shellsurface.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_toplevel.cpp
 
