@@ -218,7 +218,7 @@ static QString toOffsetString(Qt::DateFormat format, int offset)
       result = QString("%1%2:%3");
    }
 
-   return result.formatArg(offset >= 0 ? '+' : '-')
+   return result.formatArg(offset >= 0 ? QChar('+') : QChar('-'))
          .formatArg(qAbs(offset) / SECS_PER_HOUR, 2, 10, '0')
          .formatArg((offset / 60) % 60, 2, 10, '0');
 }
