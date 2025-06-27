@@ -131,7 +131,7 @@ QString QNetworkInterfacePrivate::makeHwAddress(int len, uchar *data)
          retval += QChar(':');
       }
 
-      retval += QString("%1X").formatArg(data[i], 2, '0');
+      retval += QString("%1").formatArg(data[i], 2, 16, '0');
    }
 
    return retval;
