@@ -128,14 +128,18 @@ class Q_CORE_EXPORT QStringParser
                std::string buffer = std::string(32, '\0');
                auto result = std::to_chars(buffer.data(), buffer.data() + 32, value, base);
 
-               arg = T::fromUtf8(buffer.c_str());
+               if (result.ec == std::errc()) {
+                  arg = T::fromUtf8(buffer.c_str());
+               }
             }
 
             if (d.locale_occurrences > 0) {
                std::string buffer = std::string(32, '\0');
                auto result = std::to_chars(buffer.data(), buffer.data() + 32, value, base);
 
-               locale_arg = T::fromUtf8(buffer.c_str());
+               if (result.ec == std::errc()) {
+                  locale_arg = T::fromUtf8(buffer.c_str());
+               }
 
                QLocale locale;
 
