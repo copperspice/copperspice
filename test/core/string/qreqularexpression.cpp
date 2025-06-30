@@ -150,9 +150,45 @@ TEST_CASE("QRegularExpression replace", "[qregularexpression]")
 {
    QString8 str = "@3::A   A::@2::B   @A";
 
-   QRegularExpression regex = QRegularExpression("(::)?@[0-9]+");
-   str.replace(regex, "");
+   QRegularExpression regExp = QRegularExpression("(::)?@[0-9]+");
+   str.replace(regExp, "");
 
    REQUIRE(str == "::A   A::B   @A");
 }
 
+//
+TEST_CASE("QRegularExpression digit_a", "[qregularexpression]")
+{
+   QRegularExpression regExp = QRegularExpression("\\d");
+   QRegularExpressionMatch match = regExp.match("12");
+
+   REQUIRE(regExp.isValid() == true);
+   REQUIRE(match.hasMatch() == true);
+}
+
+TEST_CASE("QRegularExpression digit_b", "[qregularexpression]")
+{
+   QRegularExpression regExp = QRegularExpression("[[:digit:]]");
+   QRegularExpressionMatch match = regExp.match("5");
+
+   REQUIRE(regExp.isValid() == true);
+   REQUIRE(match.hasMatch() == true);
+}
+
+TEST_CASE("QRegularExpression word", "[qregularexpression]")
+{
+   QRegularExpression regExp = QRegularExpression("[[:word:]]");
+   QRegularExpressionMatch match = regExp.match("b");
+
+   REQUIRE(regExp.isValid() == true);
+   REQUIRE(match.hasMatch() == true);
+}
+
+TEST_CASE("QRegularExpression xdigit", "[qregularexpression]")
+{
+   QRegularExpression regExp = QRegularExpression("[[:xdigit:]]");
+   QRegularExpressionMatch match = regExp.match("a0");
+
+   REQUIRE(regExp.isValid() == true);
+   REQUIRE(match.hasMatch() == true);
+}

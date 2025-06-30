@@ -24,11 +24,43 @@
 
 #include <cs_catch2.h>
 
+TEST_CASE("QStringParser formatArg_char", "[qstringparser]")
+{
+   QString str = "Value %1";
+   char data   = 0x21;
+
+   SECTION ("formatArg a") {
+      str = QStringParser::formatArg(str, data, 0, 8);
+      REQUIRE(str == "Value 41");
+   }
+
+   SECTION ("formatArg b") {
+      str = QStringParser::formatArg(str, data, 0, 16);
+      REQUIRE(str == "Value 21");
+   }
+}
+
+TEST_CASE("QStringParser formatArg_uchar", "[qstringparser]")
+{
+   QString str = "Value %1";
+   uchar data  = 0x21;
+
+   SECTION ("formatArg a") {
+      str = QStringParser::formatArg(str, data, 0, 8);
+      REQUIRE(str == "Value 41");
+   }
+
+   SECTION ("formatArg b") {
+      str = QStringParser::formatArg(str, data, 0, 16);
+      REQUIRE(str == "Value 21");
+   }
+}
+
 TEST_CASE("QStringParser formatArg_str", "[qstringparser]")
 {
    QString str1 = "Hello %1";
 
-   SECTION("formatArg a") {
+   SECTION ("formatArg a") {
       str1 = str1.formatArg("CopperSpice");
       REQUIRE(str1 == "Hello CopperSpice");
    }
@@ -38,7 +70,7 @@ TEST_CASE("QStringParser formatArg_str", "[qstringparser]")
       REQUIRE(str2 == "Hello CopperSpice");
    }
 
-   SECTION("formatArg c") {
+   SECTION ("formatArg c") {
       str1 = str1.formatArg(17);
       REQUIRE(str1 == "Hello 17");
    }
@@ -65,33 +97,7 @@ TEST_CASE("QStringParser formatArg_int", "[qstringparser]")
    }
 }
 
-TEST_CASE("QStringParser formatArg16", "[qstringparser]")
-{
-   QString16 str = "Value %1";
-
-   SECTION ("formatArg a") {
-      str = QStringParser::formatArg(str, 5400, 0, 16);
-      REQUIRE(str == "Value 1518");
-   }
-
-   SECTION ("formatArg b") {
-      str = QStringParser::formatArg(str, 3.14, 0);
-      REQUIRE(str == "Value 3.14");
-   }
-}
-
-TEST_CASE("QStringParser number_a", "[qstringparser]")
-{
-   QString str;
-
-   str = QStringParser::number(73);
-   REQUIRE(str == "73");
-
-   str = QStringParser::number(3.1415);
-   REQUIRE(str == "3.1415");
-}
-
-TEST_CASE("QStringParser number_b", "[qstringparser]")
+TEST_CASE("QStringParser formatArg_int64", "[qstringparser]")
 {
    QString str1 = "Numeric Value %1";
 
@@ -122,6 +128,46 @@ TEST_CASE("QStringParser number_b", "[qstringparser]")
 
       REQUIRE(str2 == "Numeric Value 7654321");
    }
+}
+
+TEST_CASE("QStringParser formatArg16", "[qstringparser]")
+{
+   QString16 str = "Value %1";
+
+   SECTION ("formatArg a") {
+      str = QStringParser::formatArg(str, 5400, 0, 16);
+      REQUIRE(str == "Value 1518");
+   }
+
+   SECTION ("formatArg b") {
+      str = QStringParser::formatArg(str, 3.14, 0);
+      REQUIRE(str == "Value 3.14");
+   }
+}
+
+TEST_CASE("QStringParser number", "[qstringparser]")
+{
+   QString str;
+
+   str = QStringParser::number(73);
+   REQUIRE(str == "73");
+
+   str = QStringParser::number(-9528);
+   REQUIRE(str == "-9528");
+
+   str = QStringParser::number(12345678912345LL);
+   REQUIRE(str == "12345678912345");
+
+   str = QStringParser::number(3.1415);
+   REQUIRE(str == "3.1415");
+
+   str = QStringParser::number('!');
+   REQUIRE(str == "33");
+
+   //
+   char c = '!';
+   str = QStringParser::number(c);
+   REQUIRE(str == "33");
 }
 
 TEST_CASE("QStringParser section", "[qstringparser]")
@@ -290,11 +336,17 @@ TEST_CASE("QStringParser formatArgs_str", "[qstringparser]")
 
 TEST_CASE("QStringParser formatArg_chain", "[qstringparser]")
 {
-   QString str = "Values (A):  %1  %2  %3  %4  %5  %6  %7  %8  %9  %3  %2  %10  %11  %12";
+   //
+   QString str    = "Values (A):  %1  %2  %3  %4  %5  %6  %7  %8  %9  %3  %2  %10  %11  %12";
+   QString result = str.formatArg("apple").formatArg("pear").formatArg(5).formatArg(3.14).formatArg("grape").formatArg(0);
 
-   str = str.formatArg("apple").formatArg("pear").formatArg(5).formatArg(3.14).formatArg("grape").formatArg(0);
+   REQUIRE(result == "Values (A):  apple  pear  5  3.14  grape  0  %7  %8  %9  5  pear  %10  %11  %12");
 
-   REQUIRE(str == "Values (A):  apple  pear  5  3.14  grape  0  %7  %8  %9  5  pear  %10  %11  %12");
+   //
+   str    = "%1 + %2 = %3";
+   result = str.formatArg("5").formatArg("3").formatArg("8");
+
+   REQUIRE(result == "5 + 3 = 8");
 }
 
 TEST_CASE("QStringParser formatArg_no_chain", "[qstringparser]")
