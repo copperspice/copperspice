@@ -24,6 +24,7 @@
 #include <qplatform_fontdatabase.h>
 
 #include <qapplication.h>
+#include <qdebug.h>
 #include <qdir.h>
 #include <qfontengine_p.h>
 #include <qlibraryinfo.h>
@@ -188,7 +189,12 @@ void QPlatformFontDatabase::populateFontDatabase()
    QString fontpath = fontDir();
 
    if (! QFile::exists(fontpath)) {
-      qWarning("QFontDatabase::populateFontDatabase() Unable to find font directory '%s'", csPrintable(QDir::toNativeSeparators(fontpath)));
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+      qDebug("QFontDatabase::populateFontDatabase() Unable to locate the font directory %s",
+            csPrintable(QDir::toNativeSeparators(fontpath)));
+#endif
+
       return;
    }
 
