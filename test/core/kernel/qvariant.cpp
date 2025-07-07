@@ -55,11 +55,1575 @@ TEST_CASE("QVariant traits", "[qvariant]")
    REQUIRE(std::has_virtual_destructor_v<QVariant> == false);
 }
 
-TEST_CASE("QVariant empty", "[qvariant]")
+TEST_CASE("QVariant can_convert_t_bytearray", "[qvariant]")
+{
+   QByteArray value(11, ' ');
+
+   value[0]  = 'C';
+   value[1]  = 'o';
+   value[2]  = 'p';
+   value[3]  = 'p';
+   value[4]  = 'e';
+   value[5]  = 'r';
+   value[6]  = 'S';
+   value[7]  = 'p';
+   value[8]  = 'i';
+   value[9]  = 'c';
+   value[10] = 'e';
+   value[11] = '\0';
+
+   QVariant data = value;
+
+   REQUIRE(data.type() == QVariant::ByteArray);
+
+   REQUIRE(data.canConvert<bool>() == true);
+   REQUIRE(data.canConvert<short>() == true);
+   REQUIRE(data.canConvert<ushort>() == true);
+   REQUIRE(data.canConvert<int>() == true);
+   REQUIRE(data.canConvert<uint>() == true);
+   REQUIRE(data.canConvert<long>() == true);
+   REQUIRE(data.canConvert<ulong>() == true);
+   REQUIRE(data.canConvert<long long>() == true);
+   REQUIRE(data.canConvert<unsigned long long>() == true);
+   REQUIRE(data.canConvert<double>() == true);
+   REQUIRE(data.canConvert<float>() == true);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == true);
+   REQUIRE(data.canConvert<QChar>() == true);
+   REQUIRE(data.canConvert<QString8>() == true);
+   REQUIRE(data.canConvert<QString16>() == true);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_char", "[qvariant]")
+{
+   QVariant data = QChar('B');
+
+   REQUIRE(data.type() == QVariant::QChar);
+
+   REQUIRE(data.canConvert<bool>() == true);
+   REQUIRE(data.canConvert<short>() == true);
+   REQUIRE(data.canConvert<ushort>() == true);
+   REQUIRE(data.canConvert<int>() == true);
+   REQUIRE(data.canConvert<uint>() == true);
+   REQUIRE(data.canConvert<long>() == true);
+   REQUIRE(data.canConvert<ulong>() == true);
+   REQUIRE(data.canConvert<long long>() == true);
+   REQUIRE(data.canConvert<unsigned long long>() == true);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == true);
+   REQUIRE(data.canConvert<QChar>() == true);
+   REQUIRE(data.canConvert<QString8>() == true);
+   REQUIRE(data.canConvert<QString16>() == true);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_string8", "[qvariant]")
+{
+   QVariant data = QString("apple");
+
+   REQUIRE(data.type() == QVariant::String);
+
+   REQUIRE(data.canConvert<bool>() == true);
+   REQUIRE(data.canConvert<short>() == true);
+   REQUIRE(data.canConvert<ushort>() == true);
+   REQUIRE(data.canConvert<int>() == true);
+   REQUIRE(data.canConvert<uint>() == true);
+   REQUIRE(data.canConvert<long>() == true);
+   REQUIRE(data.canConvert<ulong>() == true);
+   REQUIRE(data.canConvert<long long>() == true);
+   REQUIRE(data.canConvert<unsigned long long>() == true);
+   REQUIRE(data.canConvert<double>() == true);
+   REQUIRE(data.canConvert<float>() == true);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == true);
+   REQUIRE(data.canConvert<QChar>() == true);
+   REQUIRE(data.canConvert<QString8>() == true);
+   REQUIRE(data.canConvert<QString16>() == true);
+   REQUIRE(data.canConvert<QStringList>() == true);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == true);
+   REQUIRE(data.canConvert<QTime>() == true);
+   REQUIRE(data.canConvert<QDateTime>() == true);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == true);
+   REQUIRE(data.canConvert<QUuid>() == true);
+
+   // test two
+   data = QString("53");
+
+   REQUIRE(data.canConvert<bool>() == true);
+   REQUIRE(data.canConvert<short>() == true);
+   REQUIRE(data.canConvert<ushort>() == true);
+   REQUIRE(data.canConvert<int>() == true);
+   REQUIRE(data.canConvert<uint>() == true);
+   REQUIRE(data.canConvert<long>() == true);
+   REQUIRE(data.canConvert<ulong>() == true);
+   REQUIRE(data.canConvert<long long>() == true);
+   REQUIRE(data.canConvert<unsigned long long>() == true);
+   REQUIRE(data.canConvert<double>() == true);
+   REQUIRE(data.canConvert<float>() == true);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == true);
+   REQUIRE(data.canConvert<QChar>() == true);
+   REQUIRE(data.canConvert<QString8>() == true);
+   REQUIRE(data.canConvert<QString16>() == true);
+   REQUIRE(data.canConvert<QStringList>() == true);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == true);
+   REQUIRE(data.canConvert<QTime>() == true);
+   REQUIRE(data.canConvert<QDateTime>() == true);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == true);
+   REQUIRE(data.canConvert<QUuid>() == true);
+
+   // test three
+   data = QString("2021-04-01");
+
+   REQUIRE(data.canConvert<bool>() == true);
+   REQUIRE(data.canConvert<short>() == true);
+   REQUIRE(data.canConvert<ushort>() == true);
+   REQUIRE(data.canConvert<int>() == true);
+   REQUIRE(data.canConvert<uint>() == true);
+   REQUIRE(data.canConvert<long>() == true);
+   REQUIRE(data.canConvert<ulong>() == true);
+   REQUIRE(data.canConvert<long long>() == true);
+   REQUIRE(data.canConvert<unsigned long long>() == true);
+   REQUIRE(data.canConvert<double>() == true);
+   REQUIRE(data.canConvert<float>() == true);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == true);
+   REQUIRE(data.canConvert<QChar>() == true);
+   REQUIRE(data.canConvert<QString8>() == true);
+   REQUIRE(data.canConvert<QString16>() == true);
+   REQUIRE(data.canConvert<QStringList>() == true);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == true);
+   REQUIRE(data.canConvert<QTime>() == true);
+   REQUIRE(data.canConvert<QDateTime>() == true);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == true);
+   REQUIRE(data.canConvert<QUuid>() == true);
+}
+
+TEST_CASE("QVariant can_convert_t_string16", "[qvariant]")
+{
+   QVariant data = QString16("apple");
+
+   REQUIRE(data.type() == QVariant::String16);
+
+   REQUIRE(data.canConvert<bool>() == true);
+   REQUIRE(data.canConvert<short>() == true);
+   REQUIRE(data.canConvert<ushort>() == true);
+   REQUIRE(data.canConvert<int>() == true);
+   REQUIRE(data.canConvert<uint>() == true);
+   REQUIRE(data.canConvert<long>() == true);
+   REQUIRE(data.canConvert<ulong>() == true);
+   REQUIRE(data.canConvert<long long>() == true);
+   REQUIRE(data.canConvert<unsigned long long>() == true);
+   REQUIRE(data.canConvert<double>() == true);
+   REQUIRE(data.canConvert<float>() == true);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == true);
+   REQUIRE(data.canConvert<QChar>() == true);
+   REQUIRE(data.canConvert<QString8>() == true);
+   REQUIRE(data.canConvert<QString16>() == true);
+   REQUIRE(data.canConvert<QStringList>() == true);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == true);
+   REQUIRE(data.canConvert<QTime>() == true);
+   REQUIRE(data.canConvert<QDateTime>() == true);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == true);
+   REQUIRE(data.canConvert<QUuid>() == true);
+}
+
+TEST_CASE("QVariant can_convert_t_date", "[qvariant]")
+{
+   QVariant data = QDate(2021, 4, 1);
+
+   REQUIRE(data.type() == QVariant::Date);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == false);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == true);
+   REQUIRE(data.canConvert<QString16>() == true);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == true);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == true);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_time", "[qvariant]")
+{
+   QVariant data = QTime(14, 52, 3);
+
+   REQUIRE(data.type() == QVariant::Time);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == false);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == true);
+   REQUIRE(data.canConvert<QString16>() == true);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == true);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_datetime", "[qvariant]")
+{
+   QVariant data = QDateTime(QDate(2021, 4, 1), QTime(14, 52, 3));
+
+   REQUIRE(data.type() == QVariant::DateTime);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == false);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == true);
+   REQUIRE(data.canConvert<QString16>() == true);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == true);
+   REQUIRE(data.canConvert<QTime>() == true);
+   REQUIRE(data.canConvert<QDateTime>() == true);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_list", "[qvariant]")
+{
+   QList<QVariant> list1 = {QString("orange"), 17};
+   QVariant data = list1;
+
+   REQUIRE(data.type() == QVariant::List);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == false);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == false);
+   REQUIRE(data.canConvert<QString16>() == false);
+   REQUIRE(data.canConvert<QStringList>() == true);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == true);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_hash", "[qvariant]")
+{
+   QHash<QString, QVariant> hash1 = { {"orange", 17} };
+   QVariant data = hash1;
+
+   REQUIRE(data.type() == QVariant::Hash);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == false);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == false);
+   REQUIRE(data.canConvert<QString16>() == false);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == true);
+   REQUIRE(data.canConvert<QVariantMap>() == true);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_multihash", "[qvariant]")
+{
+   QMultiHash<QString, QVariant> hash1 = { {"orange", 17}, {"orange", 42} };
+   QVariant data = hash1;
+
+   REQUIRE(data.type() == QVariant::MultiHash);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == false);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == false);
+   REQUIRE(data.canConvert<QString16>() == false);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>()  == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == true);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_map", "[qvariant]")
+{
+   QMap<QString, QVariant> map1 = { {"orange", 17} };
+
+   QVariant data    = map1;
+   QVariantMap map2 = data.value<QVariantMap>();
+
+   REQUIRE(data.type() == QVariant::Map);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == false);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == false);
+   REQUIRE(data.canConvert<QString16>() == false);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == true);
+   REQUIRE(data.canConvert<QVariantMap>() == true);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_multimap", "[qvariant]")
+{
+   QMultiMap<QString, QVariant> map = { {"orange", 17}, {"orange", 42} };
+   QVariant data = map;
+
+   REQUIRE(data.type() == QVariant::MultiMap);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == false);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == false);
+   REQUIRE(data.canConvert<QString16>() == false);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantMap>()  == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == true);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_json_value", "[qvariant]")
+{
+   {
+      QJsonValue value = QJsonValue(9.37);
+      QVariant data = value;
+
+      REQUIRE(data.type() == QVariant::JsonValue);
+
+      REQUIRE(data.canConvert<bool>() == true);
+      REQUIRE(data.canConvert<short>() == true);
+      REQUIRE(data.canConvert<ushort>() == true);
+      REQUIRE(data.canConvert<int>() == true);
+      REQUIRE(data.canConvert<uint>() == true);
+      REQUIRE(data.canConvert<long>() == true);
+      REQUIRE(data.canConvert<ulong>() == true);
+      REQUIRE(data.canConvert<long long>() == true);
+      REQUIRE(data.canConvert<unsigned long long>() == true);
+      REQUIRE(data.canConvert<double>() == true);
+      REQUIRE(data.canConvert<float>() == true);
+
+      REQUIRE(data.canConvert<QBitArray>() == false);
+      REQUIRE(data.canConvert<QByteArray>() == false);
+      REQUIRE(data.canConvert<QChar>() == true);
+      REQUIRE(data.canConvert<QString8>() == true);
+      REQUIRE(data.canConvert<QString16>() == true);
+      REQUIRE(data.canConvert<QStringList>() == false);
+      REQUIRE(data.canConvert<QStringView>() == false);
+
+      REQUIRE(data.canConvert<QDate>() == false);
+      REQUIRE(data.canConvert<QTime>() == false);
+      REQUIRE(data.canConvert<QDateTime>() == false);
+      REQUIRE(data.canConvert<QLocale>() == false);
+
+      REQUIRE(data.canConvert<QVariantList>() == true);
+      REQUIRE(data.canConvert<QVariantHash>() == true);
+      REQUIRE(data.canConvert<QVariantMap>() == true);
+      REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+      REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+      REQUIRE(data.canConvert<QJsonArray>() == false);
+      REQUIRE(data.canConvert<QJsonDocument>() == false);
+      REQUIRE(data.canConvert<QJsonValue>() == true);
+      REQUIRE(data.canConvert<QJsonObject>() == false);
+
+      REQUIRE(data.canConvert<QLine>() == false);
+      REQUIRE(data.canConvert<QLineF>() == false);
+      REQUIRE(data.canConvert<QPoint>() == false);
+      REQUIRE(data.canConvert<QPointF>() == false);
+      REQUIRE(data.canConvert<QRect>() == false);
+      REQUIRE(data.canConvert<QRectF>() == false);
+      REQUIRE(data.canConvert<QSize>() == false);
+      REQUIRE(data.canConvert<QSizeF>() == false);
+
+      REQUIRE(data.canConvert<QEasingCurve>() == false);
+      REQUIRE(data.canConvert<QModelIndex>() == false);
+      REQUIRE(data.canConvert<QUrl>() == false);
+      REQUIRE(data.canConvert<QUuid>() == false);
+   }
+
+   {
+      QJsonValue value = QJsonValue(QString("CopperSpice"));
+      QVariant data = value;
+
+      REQUIRE(data.type() == QVariant::JsonValue);
+
+      REQUIRE(data.canConvert<bool>() == true);
+      REQUIRE(data.canConvert<short>() == true);
+      REQUIRE(data.canConvert<ushort>() == true);
+      REQUIRE(data.canConvert<int>() == true);
+      REQUIRE(data.canConvert<uint>() == true);
+      REQUIRE(data.canConvert<long>() == true);
+      REQUIRE(data.canConvert<ulong>() == true);
+      REQUIRE(data.canConvert<long long>() == true);
+      REQUIRE(data.canConvert<unsigned long long>() == true);
+      REQUIRE(data.canConvert<double>() == true);
+      REQUIRE(data.canConvert<float>() == true);
+
+      REQUIRE(data.canConvert<QBitArray>() == false);
+      REQUIRE(data.canConvert<QByteArray>() == false);
+      REQUIRE(data.canConvert<QChar>() == true);
+      REQUIRE(data.canConvert<QString8>() == true);
+      REQUIRE(data.canConvert<QString16>() == true);
+      REQUIRE(data.canConvert<QStringList>() == false);
+      REQUIRE(data.canConvert<QStringView>() == false);
+
+      REQUIRE(data.canConvert<QDate>() == false);
+      REQUIRE(data.canConvert<QTime>() == false);
+      REQUIRE(data.canConvert<QDateTime>() == false);
+      REQUIRE(data.canConvert<QLocale>() == false);
+
+      REQUIRE(data.canConvert<QVariantList>() == true);
+      REQUIRE(data.canConvert<QVariantHash>() == true);
+      REQUIRE(data.canConvert<QVariantMap>() == true);
+      REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+      REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+      REQUIRE(data.canConvert<QJsonArray>() == false);
+      REQUIRE(data.canConvert<QJsonDocument>() == false);
+      REQUIRE(data.canConvert<QJsonValue>() == true);
+      REQUIRE(data.canConvert<QJsonObject>() == false);
+
+      REQUIRE(data.canConvert<QLine>() == false);
+      REQUIRE(data.canConvert<QLineF>() == false);
+      REQUIRE(data.canConvert<QPoint>() == false);
+      REQUIRE(data.canConvert<QPointF>() == false);
+      REQUIRE(data.canConvert<QRect>() == false);
+      REQUIRE(data.canConvert<QRectF>() == false);
+      REQUIRE(data.canConvert<QSize>() == false);
+      REQUIRE(data.canConvert<QSizeF>() == false);
+
+      REQUIRE(data.canConvert<QEasingCurve>() == false);
+      REQUIRE(data.canConvert<QModelIndex>() == false);
+      REQUIRE(data.canConvert<QUrl>() == false);
+      REQUIRE(data.canConvert<QUuid>() == false);
+   }
+}
+
+TEST_CASE("QVariant can_convert_t_line", "[qvariant]")
+{
+   QVariant data = QLine(6, 12, 0, 3);
+
+   REQUIRE(data.type() == QVariant::Line);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == false);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == false);
+   REQUIRE(data.canConvert<QString16>() == false);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == true);
+   REQUIRE(data.canConvert<QLineF>() == true);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_linef", "[qvariant]")
+{
+   QVariant data = QLineF(6.4, 12.8, 0, 3.2);
+
+   REQUIRE(data.type() == QVariant::LineF);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == false);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == false);
+   REQUIRE(data.canConvert<QString16>() == false);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == true);
+   REQUIRE(data.canConvert<QLineF>() == true);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_point", "[qvariant]")
+{
+   QVariant data = QPoint(17, 42);
+
+   REQUIRE(data.type() == QVariant::Point);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == false);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == false);
+   REQUIRE(data.canConvert<QString16>() == false);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == true);
+   REQUIRE(data.canConvert<QPointF>() == true);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_pointf", "[qvariant]")
+{
+   QVariant data = QPointF(17.9, 42.0);
+
+   REQUIRE(data.type() == QVariant::PointF);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == false);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == false);
+   REQUIRE(data.canConvert<QString16>() == false);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == true);
+   REQUIRE(data.canConvert<QPointF>() == true);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_rect", "[qvariant]")
+{
+   QVariant data = QRect(9, 12, 18, 7);
+
+   REQUIRE(data.type() == QVariant::Rect);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == false);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == false);
+   REQUIRE(data.canConvert<QString16>() == false);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == true);
+   REQUIRE(data.canConvert<QRectF>() == true);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_rectf", "[qvariant]")
+{
+   QVariant data = QRectF(9.7, 12.1, 18.0, 7.4);
+
+   REQUIRE(data.type() == QVariant::RectF);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == false);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == false);
+   REQUIRE(data.canConvert<QString16>() == false);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == true);
+   REQUIRE(data.canConvert<QRectF>() == true);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_size", "[qvariant]")
+{
+   QVariant data = QSize(9, 12);
+
+   REQUIRE(data.type() == QVariant::Size);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == false);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == false);
+   REQUIRE(data.canConvert<QString16>() == false);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == true);
+   REQUIRE(data.canConvert<QSizeF>() == true);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_sizef", "[qvariant]")
+{
+   QVariant data = QSizeF(9.7, 12.1);
+
+   REQUIRE(data.type() == QVariant::SizeF);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == false);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == false);
+   REQUIRE(data.canConvert<QString16>() == false);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == true);
+   REQUIRE(data.canConvert<QSizeF>() == true);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_url", "[qvariant]")
+{
+   QString str("https://www.copperspice.com");
+
+   QUrl url(str);
+   QVariant data(url);
+
+   REQUIRE(data.type() == QVariant::Url);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == true);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == true);
+   REQUIRE(data.canConvert<QString16>() == true);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == true);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant can_convert_t_uuid", "[qvariant]")
+{
+   QUuid value("{ba80a7c0-d463-e361-78eb-1394049152ba}");
+   QVariant data = value;
+
+   REQUIRE(data.type() == QVariant::Uuid);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == true);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == true);
+   REQUIRE(data.canConvert<QString16>() == true);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == false);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == true);
+}
+
+TEST_CASE("QVariant can_convert_t_easing_curve", "[qvariant]")
+{
+   QEasingCurve curve(QEasingCurve::OutElastic);
+   curve.setAmplitude(2.0);
+   curve.setPeriod(0.5);
+
+   QVariant data = QVariant::fromValue(curve);
+
+   REQUIRE(data.type() == QVariant::EasingCurve);
+
+   REQUIRE(data.canConvert<bool>() == false);
+   REQUIRE(data.canConvert<short>() == false);
+   REQUIRE(data.canConvert<ushort>() == false);
+   REQUIRE(data.canConvert<int>() == false);
+   REQUIRE(data.canConvert<uint>() == false);
+   REQUIRE(data.canConvert<long>() == false);
+   REQUIRE(data.canConvert<ulong>() == false);
+   REQUIRE(data.canConvert<long long>() == false);
+   REQUIRE(data.canConvert<unsigned long long>() == false);
+   REQUIRE(data.canConvert<double>() == false);
+   REQUIRE(data.canConvert<float>() == false);
+
+   REQUIRE(data.canConvert<QBitArray>() == false);
+   REQUIRE(data.canConvert<QByteArray>() == false);
+   REQUIRE(data.canConvert<QChar>() == false);
+   REQUIRE(data.canConvert<QString8>() == false);
+   REQUIRE(data.canConvert<QString16>() == false);
+   REQUIRE(data.canConvert<QStringList>() == false);
+   REQUIRE(data.canConvert<QStringView>() == false);
+
+   REQUIRE(data.canConvert<QDate>() == false);
+   REQUIRE(data.canConvert<QTime>() == false);
+   REQUIRE(data.canConvert<QDateTime>() == false);
+   REQUIRE(data.canConvert<QLocale>() == false);
+
+   REQUIRE(data.canConvert<QVariantList>() == false);
+   REQUIRE(data.canConvert<QVariantHash>() == false);
+   REQUIRE(data.canConvert<QVariantMap>() == false);
+   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
+   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
+
+   REQUIRE(data.canConvert<QJsonArray>() == false);
+   REQUIRE(data.canConvert<QJsonDocument>() == false);
+   REQUIRE(data.canConvert<QJsonValue>() == false);
+   REQUIRE(data.canConvert<QJsonObject>() == false);
+
+   REQUIRE(data.canConvert<QLine>() == false);
+   REQUIRE(data.canConvert<QLineF>() == false);
+   REQUIRE(data.canConvert<QPoint>() == false);
+   REQUIRE(data.canConvert<QPointF>() == false);
+   REQUIRE(data.canConvert<QRect>() == false);
+   REQUIRE(data.canConvert<QRectF>() == false);
+   REQUIRE(data.canConvert<QSize>() == false);
+   REQUIRE(data.canConvert<QSizeF>() == false);
+
+   REQUIRE(data.canConvert<QEasingCurve>() == true);
+   REQUIRE(data.canConvert<QModelIndex>() == false);
+   REQUIRE(data.canConvert<QUrl>() == false);
+   REQUIRE(data.canConvert<QUuid>() == false);
+}
+
+TEST_CASE("QVariant constructor_empty", "[qvariant]")
 {
    QVariant data;
 
-   REQUIRE(! data.isValid());
+   REQUIRE(data.isValid() == false);
    REQUIRE(data.type() == QVariant::Invalid);
 
    REQUIRE(data.toBool()              == false);
@@ -376,12 +1940,6 @@ TEST_CASE("QVariant constructor_bytearray", "[qvariant]")
    REQUIRE(data.type() == QVariant::ByteArray);
    REQUIRE(data.typeName() == "QByteArray");
 
-   REQUIRE(data.canConvert<bool>() == true);
-   REQUIRE(data.canConvert<int>() == true);
-   REQUIRE(data.canConvert<double>() == true);
-   REQUIRE(data.canConvert<QString>() == true);
-   REQUIRE(data.canConvert<QString16>() == true);
-
    REQUIRE(data.toBool()              == true);
    REQUIRE(data.toInt()               == 0);
    REQUIRE(data.toUInt()              == 0);
@@ -498,9 +2056,6 @@ TEST_CASE("QVariant constructor_char", "[qvariant]")
    REQUIRE(data.type() == QVariant::QChar);
    REQUIRE(data.typeName() == "QChar");
 
-   REQUIRE(data.canConvert<QString8>() == true);
-   REQUIRE(data.canConvert<QString16>() == true);
-
    REQUIRE(data.toBool()              == true);
    REQUIRE(data.toInt()               == 66);
    REQUIRE(data.toUInt()              == 66);
@@ -561,8 +2116,6 @@ TEST_CASE("QVariant constructor_string8", "[qvariant]")
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::String);
    REQUIRE(data.typeName() == "QString");
-
-   REQUIRE(data.canConvert<QString16>() == true);
 
    REQUIRE(data.toBool()              == true);
    REQUIRE(data.toInt()               == 0);
@@ -674,9 +2227,6 @@ TEST_CASE("QVariant constructor_string8", "[qvariant]")
    // test three
    data = QString("2021-04-01");
 
-   REQUIRE(data.canConvert<QDate>() == true);
-   REQUIRE(data.canConvert<QTime>() == true);
-
    REQUIRE(data.toBool()              == true);
    REQUIRE(data.toInt()               == 2021);
    REQUIRE(data.toUInt()              == 2021);
@@ -737,8 +2287,6 @@ TEST_CASE("QVariant constructor_string16", "[qvariant]")
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::String16);
    REQUIRE(data.typeName() == "QString16");
-
-   REQUIRE(data.canConvert<QString>() == true);
 
    REQUIRE(data.toBool()              == true);
    REQUIRE(data.toInt()               == 0);
@@ -920,12 +2468,6 @@ TEST_CASE("QVariant constructor_date", "[qvariant]")
    REQUIRE(data.type() == QVariant::Date);
    REQUIRE(data.typeName() == "QDate");
 
-   REQUIRE(data.canConvert<int>() == false);
-   REQUIRE(data.canConvert<QString>() == true);
-   REQUIRE(data.canConvert<QDate>() == true);
-   REQUIRE(data.canConvert<QTime>() == false);
-   REQUIRE(data.canConvert<QDateTime>() == true);
-
    REQUIRE(data.toBool()              == false);
    REQUIRE(data.toInt()               == 0);
    REQUIRE(data.toUInt()              == 0);
@@ -987,12 +2529,6 @@ TEST_CASE("QVariant constructor_time", "[qvariant]")
    REQUIRE(data.type() == QVariant::Time);
    REQUIRE(data.typeName() == "QTime");
 
-   REQUIRE(data.canConvert<int>() == false);
-   REQUIRE(data.canConvert<QString>() == true);
-   REQUIRE(data.canConvert<QDate>() == false);
-   REQUIRE(data.canConvert<QTime>() == true);
-   REQUIRE(data.canConvert<QDateTime>() == false);
-
    REQUIRE(data.toBool()              == false);
    REQUIRE(data.toInt()               == 0);
    REQUIRE(data.toUInt()              == 0);
@@ -1053,12 +2589,6 @@ TEST_CASE("QVariant constructor_datetime", "[qvariant]")
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::DateTime);
    REQUIRE(data.typeName() == "QDateTime");
-
-   REQUIRE(data.canConvert<int>() == false);
-   REQUIRE(data.canConvert<QString>() == true);
-   REQUIRE(data.canConvert<QDate>() == true);
-   REQUIRE(data.canConvert<QTime>() == true);
-   REQUIRE(data.canConvert<QDateTime>() == true);
 
    REQUIRE(data.toBool()              == false);
    REQUIRE(data.toInt()               == 0);
@@ -1185,15 +2715,6 @@ TEST_CASE("QVariant constructor_list", "[qvariant]")
    REQUIRE(data.type() == QVariant::List);
    REQUIRE(data.typeName() == "QVariantList");
 
-   REQUIRE(data.canConvert<QString>() == false);
-   REQUIRE(data.canConvert<QStringList>() == true);
-
-   REQUIRE(data.canConvert<QVariantHash>() == false);
-   REQUIRE(data.canConvert<QVariantMap>() == false);
-   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
-   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
-   REQUIRE(data.canConvert<QMap<QString, QVariant>>() == false);
-
    REQUIRE(list1    == list2);
    REQUIRE(list2[0] == QString("orange"));
    REQUIRE(list2[1] == 17);
@@ -1260,12 +2781,6 @@ TEST_CASE("QVariant constructor_hash", "[qvariant]")
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::Hash);
    REQUIRE(data.typeName() == "QVariantHash");
-
-   REQUIRE(data.canConvert<QVariantList>() == false);
-   REQUIRE(data.canConvert<QVariantMap>() == true);
-   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
-   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
-   REQUIRE(data.canConvert<QMap<QString, QVariant>>() == true);
 
    QVariantHash hash2 = data.value<QVariantHash>();
    REQUIRE(hash1 == hash2);
@@ -1337,11 +2852,6 @@ TEST_CASE("QVariant constructor_multihash", "[qvariant]")
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::MultiHash);
    REQUIRE(data.typeName() == "QVariantMultiHash");
-
-   REQUIRE(data.canConvert<QVariantList>() == false);
-   REQUIRE(data.canConvert<QVariantMap>()  == false);
-   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
-   REQUIRE(data.canConvert<QMultiHash<QString, QVariant>>() == true);
 
    QVariantMultiHash hash2 = data.value<QVariantMultiHash>();
    REQUIRE(hash1 == hash2);
@@ -1416,12 +2926,6 @@ TEST_CASE("QVariant constructor_map", "[qvariant]")
    REQUIRE(data.type() == QVariant::Map);
    REQUIRE(data.typeName() == "QVariantMap");
 
-   REQUIRE(data.canConvert<QVariantList>() == false);
-   REQUIRE(data.canConvert<QVariantHash>() == true);
-   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
-   REQUIRE(data.canConvert<QVariantMultiMap>() == false);
-   REQUIRE(data.canConvert<QMap<QString, QVariant>>() == true);
-
    REQUIRE(map2.contains("orange") == true);
    REQUIRE(map2.contains("17") == false);
 
@@ -1495,12 +2999,6 @@ TEST_CASE("QVariant constructor_multimap", "[qvariant]")
    REQUIRE(data.type() == QVariant::MultiMap);
    REQUIRE(data.typeName() == "QVariantMultiMap");
 
-   REQUIRE(data.canConvert<QVariantList>() == false);
-   REQUIRE(data.canConvert<QVariantMap>()  == false);
-   REQUIRE(data.canConvert<QVariantHash>() == false);
-   REQUIRE(data.canConvert<QVariantMultiHash>() == false);
-   REQUIRE(data.canConvert<QMultiMap<QString, QVariant>>() == true);
-
    REQUIRE(map.values("orange") == QVariantList( {17, 42} ));
 
    REQUIRE(data.toBool()              == false);
@@ -1566,13 +3064,6 @@ TEST_CASE("QVariant constructor_json_value", "[qvariant]")
       REQUIRE(data.type() == QVariant::JsonValue);
       REQUIRE(data.typeName() == "QJsonValue");
 
-      REQUIRE(data.canConvert<bool>() == true);
-      REQUIRE(data.canConvert<double>() == true);
-      REQUIRE(data.canConvert<int>() == true);
-
-      REQUIRE(data.canConvert<QString>() == true);
-      REQUIRE(data.canConvert<QString16>() == true);
-
       REQUIRE(data.toBool()              == true);
       REQUIRE(data.toInt()               == 9);
       REQUIRE(data.toUInt()              == 9);
@@ -1632,13 +3123,6 @@ TEST_CASE("QVariant constructor_json_value", "[qvariant]")
 
       REQUIRE(data.isValid());
       REQUIRE(data.type() == QVariant::JsonValue);
-
-      REQUIRE(data.canConvert<bool>() == true);
-      REQUIRE(data.canConvert<double>() == true);
-      REQUIRE(data.canConvert<int>() == true);
-
-      REQUIRE(data.canConvert<QString>() == true);
-      REQUIRE(data.canConvert<QString16>() == true);
 
       REQUIRE(data.toBool()              == true);
       REQUIRE(data.toInt()               == 0);
@@ -1732,8 +3216,6 @@ TEST_CASE("QVariant constructor_line", "[qvariant]")
    REQUIRE(data.type() == QVariant::Line);
    REQUIRE(data.typeName() == "QLine");
 
-   REQUIRE(data.canConvert<QLineF>() == true);
-
    REQUIRE(data.value<QLine>()  == QLine(6, 12, 0, 3));
    REQUIRE(data.value<QLineF>() == QLineF(6, 12, 0, 3));
 
@@ -1797,8 +3279,6 @@ TEST_CASE("QVariant constructor_linef", "[qvariant]")
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::LineF);
    REQUIRE(data.typeName() == "QLineF");
-
-   REQUIRE(data.canConvert<QLine>() == true);
 
    REQUIRE(data.value<QLine>()  == QLine(6, 13, 0, 3));
    REQUIRE(data.value<QLineF>() == QLineF(6.4, 12.8, 0, 3.2));
@@ -1864,8 +3344,6 @@ TEST_CASE("QVariant constructor_point", "[qvariant]")
    REQUIRE(data.type() == QVariant::Point);
    REQUIRE(data.typeName() == "QPoint");
 
-   REQUIRE(data.canConvert<QPointF>() == true);
-
    REQUIRE(data.value<QPoint>()  == QPoint(17, 42));
    REQUIRE(data.value<QPointF>() == QPointF(17, 42));
 
@@ -1929,8 +3407,6 @@ TEST_CASE("QVariant constructor_pointf", "[qvariant]")
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::PointF);
    REQUIRE(data.typeName() == "QPointF");
-
-   REQUIRE(data.canConvert<QPoint>() == true);
 
    REQUIRE(data.value<QPoint>()  == QPoint(18, 42));
    REQUIRE(data.value<QPointF>() == QPointF(17.9, 42.0));
@@ -1996,8 +3472,6 @@ TEST_CASE("QVariant constructor_rect", "[qvariant]")
    REQUIRE(data.type() == QVariant::Rect);
    REQUIRE(data.typeName() == "QRect");
 
-   REQUIRE(data.canConvert<QRectF>() == true);
-
    REQUIRE(data.value<QRect>()  == QRect(9, 12, 18, 7));
    REQUIRE(data.value<QRectF>() == QRectF(9, 12, 18, 7));
 
@@ -2061,8 +3535,6 @@ TEST_CASE("QVariant constructor_rectf", "[qvariant]")
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::RectF);
    REQUIRE(data.typeName() == "QRectF");
-
-   REQUIRE(data.canConvert<QRect>() == true);
 
    REQUIRE(data.value<QRect>()  == QRect(10, 12, 18, 7));
    REQUIRE(data.value<QRectF>() == QRectF(9.7, 12.1, 18.0, 7.4));
@@ -2128,8 +3600,6 @@ TEST_CASE("QVariant constructor_size", "[qvariant]")
    REQUIRE(data.type() == QVariant::Size);
    REQUIRE(data.typeName() == "QSize");
 
-   REQUIRE(data.canConvert<QSizeF>() == true);
-
    REQUIRE(data.value<QSize>()  == QSize(9, 12));
    REQUIRE(data.value<QSizeF>() == QSizeF(9, 12));
 
@@ -2193,8 +3663,6 @@ TEST_CASE("QVariant constructor_sizef", "[qvariant]")
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::SizeF);
    REQUIRE(data.typeName() == "QSizeF");
-
-   REQUIRE(data.canConvert<QSize>() == true);
 
    REQUIRE(data.value<QSize>()  == QSize(10, 12));
    REQUIRE(data.value<QSizeF>() == QSizeF(9.7, 12.1));
@@ -2261,8 +3729,6 @@ TEST_CASE("QVariant constructor_url", "[qvariant]")
    REQUIRE(tmpStr.isValid());
    REQUIRE(tmpStr.type() == QVariant::String);
 
-   REQUIRE(tmpStr.canConvert<QUrl>() == true);
-
    QUrl url(str);
    QVariant data(url);
 
@@ -2271,9 +3737,6 @@ TEST_CASE("QVariant constructor_url", "[qvariant]")
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::Url);
    REQUIRE(data.typeName() == "QUrl");
-
-   REQUIRE(data.canConvert<QString8>() == true);
-   REQUIRE(data.canConvert<QString16>() == true);
 
    REQUIRE(data.toBool()              == false);
    REQUIRE(data.toInt()               == 0);
@@ -2336,9 +3799,6 @@ TEST_CASE("QVariant constructor_uuid", "[qvariant]")
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::Uuid);
    REQUIRE(data.typeName() == "QUuid");
-
-   REQUIRE(data.canConvert<QString>() == true);
-   REQUIRE(data.canConvert<QString16>() == true);
 
    REQUIRE(data.toBool()              == false);
    REQUIRE(data.toInt()               == 0);
@@ -2404,9 +3864,6 @@ TEST_CASE("QVariant constructor_easing_curve", "[qvariant]")
    REQUIRE(data.isValid());
    REQUIRE(data.type() == QVariant::EasingCurve);
    REQUIRE(data.typeName() == "QEasingCurve");
-
-   REQUIRE(data.canConvert<int>() == false);
-   REQUIRE(data.canConvert<QString>() == false);
 
    REQUIRE(data.toBool()              == false);
    REQUIRE(data.toInt()               == 0);
@@ -2545,10 +4002,98 @@ TEST_CASE("QVariant constructor_user_type", "[qvariant]")
    QVariant data2 = data1;
 
    REQUIRE(data2.isValid());
-   REQUIRE(data1.userType() == QVariant::typeToTypeId<MyCustomType>());
+   REQUIRE(data2.userType() == QVariant::typeToTypeId<MyCustomType>());
    REQUIRE(data2.typeName() == "MyCustomType");
 
+   REQUIRE(data2.canConvert(QVariant::Bool) == false);
+   REQUIRE(data2.canConvert(QVariant::Short) == false);
+   REQUIRE(data2.canConvert(QVariant::UShort) == false);
+   REQUIRE(data2.canConvert(QVariant::Int) == false);
+   REQUIRE(data2.canConvert(QVariant::UInt) == false);
+   REQUIRE(data2.canConvert(QVariant::Long) == false);
+   REQUIRE(data2.canConvert(QVariant::ULong) == false);
+   REQUIRE(data2.canConvert(QVariant::LongLong) == false);
+   REQUIRE(data2.canConvert(QVariant::ULongLong) == false);
+   REQUIRE(data2.canConvert(QVariant::Double) == false);
+   REQUIRE(data2.canConvert(QVariant::Float) == false);
+
+   REQUIRE(data2.canConvert(QVariant::QChar) == false);
+   REQUIRE(data2.canConvert(QVariant::Char) == false);
+   REQUIRE(data2.canConvert(QVariant::SChar) == false);
+   REQUIRE(data2.canConvert(QVariant::UChar) == false);
+   REQUIRE(data2.canConvert(QVariant::Char8_t) == false);
+   REQUIRE(data2.canConvert(QVariant::Char16_t) == false);
+   REQUIRE(data2.canConvert(QVariant::Char32_t) == false);
+
+   REQUIRE(data2.canConvert(QVariant::ByteArray) == false);
+   REQUIRE(data2.canConvert(QVariant::BitArray) == false);
+   REQUIRE(data2.canConvert(QVariant::String) == false);
+   REQUIRE(data2.canConvert(QVariant::String16) == false);
+   REQUIRE(data2.canConvert(QVariant::StringList) == false);
+   REQUIRE(data2.canConvert(QVariant::StringView) == false);
+
    REQUIRE(data2.canConvert(QVariant::Date) == false);
+   REQUIRE(data2.canConvert(QVariant::DateTime) == false);
+   REQUIRE(data2.canConvert(QVariant::Time) == false);
+   REQUIRE(data2.canConvert(QVariant::Locale) == false);
+
+   REQUIRE(data2.canConvert(QVariant::JsonArray) == false);
+   REQUIRE(data2.canConvert(QVariant::JsonDocument) == false);
+   REQUIRE(data2.canConvert(QVariant::JsonObject) == false);
+   REQUIRE(data2.canConvert(QVariant::JsonValue) == false);
+
+   REQUIRE(data2.canConvert(QVariant::Line) == false);
+   REQUIRE(data2.canConvert(QVariant::LineF) == false);
+   REQUIRE(data2.canConvert(QVariant::Point) == false);
+   REQUIRE(data2.canConvert(QVariant::PointF) == false);
+   REQUIRE(data2.canConvert(QVariant::Polygon) == false);
+   REQUIRE(data2.canConvert(QVariant::PolygonF) == false);
+   REQUIRE(data2.canConvert(QVariant::Rect) == false);
+   REQUIRE(data2.canConvert(QVariant::RectF) == false);
+   REQUIRE(data2.canConvert(QVariant::Size) == false);
+   REQUIRE(data2.canConvert(QVariant::SizeF) == false);
+
+   REQUIRE(data2.canConvert(QVariant::List) == false);
+   REQUIRE(data2.canConvert(QVariant::Hash) == false);
+   REQUIRE(data2.canConvert(QVariant::MultiHash) == false);
+   REQUIRE(data2.canConvert(QVariant::Map) == false);
+   REQUIRE(data2.canConvert(QVariant::MultiMap) == false);
+
+   REQUIRE(data2.canConvert(QVariant::Void) == false);
+   REQUIRE(data2.canConvert(QVariant::VoidStar) == false);
+   REQUIRE(data2.canConvert(QVariant::ObjectStar) == false);
+   REQUIRE(data2.canConvert(QVariant::WidgetStar) == false);
+
+   REQUIRE(data2.canConvert(QVariant::EasingCurve) == false);
+   REQUIRE(data2.canConvert(QVariant::ModelIndex) == false);
+   REQUIRE(data2.canConvert(QVariant::PersistentModelIndex) == false);
+   REQUIRE(data2.canConvert(QVariant::Url) == false);
+   REQUIRE(data2.canConvert(QVariant::Uuid) == false);
+
+   REQUIRE(data2.canConvert(QVariant::Bitmap) == false);
+   REQUIRE(data2.canConvert(QVariant::Brush) == false);
+   REQUIRE(data2.canConvert(QVariant::Color) == false);
+   REQUIRE(data2.canConvert(QVariant::Cursor) == false);
+   REQUIRE(data2.canConvert(QVariant::Font) == false);
+   REQUIRE(data2.canConvert(QVariant::Icon) == false);
+   REQUIRE(data2.canConvert(QVariant::Image) == false);
+   REQUIRE(data2.canConvert(QVariant::KeySequence) == false);
+   REQUIRE(data2.canConvert(QVariant::Matrix) == false);
+   REQUIRE(data2.canConvert(QVariant::Matrix4x4) == false);
+   REQUIRE(data2.canConvert(QVariant::Palette) == false);
+   REQUIRE(data2.canConvert(QVariant::Pen) == false);
+   REQUIRE(data2.canConvert(QVariant::Pixmap) == false);
+   REQUIRE(data2.canConvert(QVariant::Quaternion) == false);
+   REQUIRE(data2.canConvert(QVariant::Region) == false);
+   REQUIRE(data2.canConvert(QVariant::RegularExpression) == false);
+   REQUIRE(data2.canConvert(QVariant::SizePolicy) == false);
+   REQUIRE(data2.canConvert(QVariant::TextFormat) == false);
+   REQUIRE(data2.canConvert(QVariant::TextLength) == false);
+   REQUIRE(data2.canConvert(QVariant::Transform) == false);
+   REQUIRE(data2.canConvert(QVariant::Variant) == false);
+   REQUIRE(data2.canConvert(QVariant::Vector2D) == false);
+   REQUIRE(data2.canConvert(QVariant::Vector3D) == false);
+   REQUIRE(data2.canConvert(QVariant::Vector4D) == false);
 
    MyCustomType data3 = data2.value<MyCustomType>();
 
@@ -2619,11 +4164,25 @@ TEST_CASE("QVariant convert_int", "[qvariant]")
       REQUIRE(data.type() != QVariant::Double);
       REQUIRE(data.type() != QVariant::Char);
 
+      REQUIRE(data.canConvert(QVariant::Bool) == true);
+      REQUIRE(data.canConvert(QVariant::Short) == true);
+      REQUIRE(data.canConvert(QVariant::UShort) == true);
       REQUIRE(data.canConvert(QVariant::Int) == true);
       REQUIRE(data.canConvert(QVariant::UInt)== true);
+      REQUIRE(data.canConvert(QVariant::Long) == true);
+      REQUIRE(data.canConvert(QVariant::ULong) == true);
       REQUIRE(data.canConvert(QVariant::LongLong)== true);
+      REQUIRE(data.canConvert(QVariant::ULongLong) == true);
       REQUIRE(data.canConvert(QVariant::Double)== true);
-      REQUIRE(data.canConvert(QVariant::Char)== true);
+      REQUIRE(data.canConvert(QVariant::Float) == true);
+
+      REQUIRE(data.canConvert(QVariant::QChar) == true);
+      REQUIRE(data.canConvert(QVariant::Char) == true);
+      REQUIRE(data.canConvert(QVariant::SChar) == true);
+      REQUIRE(data.canConvert(QVariant::UChar) == true);
+      REQUIRE(data.canConvert(QVariant::Char8_t) == false);
+      REQUIRE(data.canConvert(QVariant::Char16_t) == false);
+      REQUIRE(data.canConvert(QVariant::Char32_t) == false);
 
       REQUIRE(data.toUInt()     == 17);
       REQUIRE(data.toUInt()     == 17);
@@ -2641,10 +4200,25 @@ TEST_CASE("QVariant convert_int", "[qvariant]")
       REQUIRE(data.type() != QVariant::LongLong);
       REQUIRE(data.type() != QVariant::Char);
 
-      REQUIRE(data.canConvert(QVariant::Int)== true);
+      REQUIRE(data.canConvert(QVariant::Bool) == true);
+      REQUIRE(data.canConvert(QVariant::Short) == true);
+      REQUIRE(data.canConvert(QVariant::UShort) == true);
+      REQUIRE(data.canConvert(QVariant::Int) == true);
       REQUIRE(data.canConvert(QVariant::UInt)== true);
+      REQUIRE(data.canConvert(QVariant::Long) == true);
+      REQUIRE(data.canConvert(QVariant::ULong) == true);
       REQUIRE(data.canConvert(QVariant::LongLong)== true);
-      REQUIRE(data.canConvert(QVariant::Char)== true);
+      REQUIRE(data.canConvert(QVariant::ULongLong) == true);
+      REQUIRE(data.canConvert(QVariant::Double)== true);
+      REQUIRE(data.canConvert(QVariant::Float) == true);
+
+      REQUIRE(data.canConvert(QVariant::QChar) == true);
+      REQUIRE(data.canConvert(QVariant::Char) == true);
+      REQUIRE(data.canConvert(QVariant::SChar) == true);
+      REQUIRE(data.canConvert(QVariant::UChar) == true);
+      REQUIRE(data.canConvert(QVariant::Char8_t) == false);
+      REQUIRE(data.canConvert(QVariant::Char16_t) == false);
+      REQUIRE(data.canConvert(QVariant::Char32_t) == false);
 
       REQUIRE(data.toUInt()     == 0xFFFF0000);
       REQUIRE(data.toUInt()     == 4294901760);
@@ -2661,10 +4235,25 @@ TEST_CASE("QVariant convert_int", "[qvariant]")
       REQUIRE(data.type() != QVariant::LongLong);
       REQUIRE(data.type() == QVariant::Char);
 
+      REQUIRE(data.canConvert(QVariant::Bool) == true);
+      REQUIRE(data.canConvert(QVariant::Short) == true);
+      REQUIRE(data.canConvert(QVariant::UShort) == true);
       REQUIRE(data.canConvert(QVariant::Int) == true);
-      REQUIRE(data.canConvert(QVariant::UInt) == true);
-      REQUIRE(data.canConvert(QVariant::LongLong) == true);
+      REQUIRE(data.canConvert(QVariant::UInt)== true);
+      REQUIRE(data.canConvert(QVariant::Long) == true);
+      REQUIRE(data.canConvert(QVariant::ULong) == true);
+      REQUIRE(data.canConvert(QVariant::LongLong)== true);
+      REQUIRE(data.canConvert(QVariant::ULongLong) == true);
+      REQUIRE(data.canConvert(QVariant::Double)== false);
+      REQUIRE(data.canConvert(QVariant::Float) == false);
+
+      REQUIRE(data.canConvert(QVariant::QChar) == true);
       REQUIRE(data.canConvert(QVariant::Char) == true);
+      REQUIRE(data.canConvert(QVariant::SChar) == true);
+      REQUIRE(data.canConvert(QVariant::UChar) == true);
+      REQUIRE(data.canConvert(QVariant::Char8_t) == false);
+      REQUIRE(data.canConvert(QVariant::Char16_t) == false);
+      REQUIRE(data.canConvert(QVariant::Char32_t) == false);
 
       REQUIRE(data.toInt()      == 97);
       REQUIRE(data.toUInt()     == 97);
@@ -2680,10 +4269,25 @@ TEST_CASE("QVariant convert_int", "[qvariant]")
       REQUIRE(data.type() != QVariant::LongLong);
       REQUIRE(data.type() == QVariant::Char);
 
+      REQUIRE(data.canConvert(QVariant::Bool) == true);
+      REQUIRE(data.canConvert(QVariant::Short) == true);
+      REQUIRE(data.canConvert(QVariant::UShort) == true);
       REQUIRE(data.canConvert(QVariant::Int) == true);
-      REQUIRE(data.canConvert(QVariant::UInt) == true);
-      REQUIRE(data.canConvert(QVariant::LongLong) == true);
+      REQUIRE(data.canConvert(QVariant::UInt)== true);
+      REQUIRE(data.canConvert(QVariant::Long) == true);
+      REQUIRE(data.canConvert(QVariant::ULong) == true);
+      REQUIRE(data.canConvert(QVariant::LongLong)== true);
+      REQUIRE(data.canConvert(QVariant::ULongLong) == true);
+      REQUIRE(data.canConvert(QVariant::Double)== false);
+      REQUIRE(data.canConvert(QVariant::Float) == false);
+
+      REQUIRE(data.canConvert(QVariant::QChar) == true);
       REQUIRE(data.canConvert(QVariant::Char) == true);
+      REQUIRE(data.canConvert(QVariant::SChar) == true);
+      REQUIRE(data.canConvert(QVariant::UChar) == true);
+      REQUIRE(data.canConvert(QVariant::Char8_t) == false);
+      REQUIRE(data.canConvert(QVariant::Char16_t) == false);
+      REQUIRE(data.canConvert(QVariant::Char32_t) == false);
 
       REQUIRE(data.toInt()      == -16);
       REQUIRE(data.toUInt()     == 240);
@@ -2699,10 +4303,25 @@ TEST_CASE("QVariant convert_int", "[qvariant]")
       REQUIRE(data.type() == QVariant::LongLong);
       REQUIRE(data.type() != QVariant::Char);
 
+      REQUIRE(data.canConvert(QVariant::Bool) == true);
+      REQUIRE(data.canConvert(QVariant::Short) == true);
+      REQUIRE(data.canConvert(QVariant::UShort) == true);
       REQUIRE(data.canConvert(QVariant::Int) == true);
-      REQUIRE(data.canConvert(QVariant::UInt) == true);
-      REQUIRE(data.canConvert(QVariant::LongLong) == true);
+      REQUIRE(data.canConvert(QVariant::UInt)== true);
+      REQUIRE(data.canConvert(QVariant::Long) == true);
+      REQUIRE(data.canConvert(QVariant::ULong) == true);
+      REQUIRE(data.canConvert(QVariant::LongLong)== true);
+      REQUIRE(data.canConvert(QVariant::ULongLong) == true);
+      REQUIRE(data.canConvert(QVariant::Double)== true);
+      REQUIRE(data.canConvert(QVariant::Float) == true);
+
+      REQUIRE(data.canConvert(QVariant::QChar) == true);
       REQUIRE(data.canConvert(QVariant::Char) == true);
+      REQUIRE(data.canConvert(QVariant::SChar) == true);
+      REQUIRE(data.canConvert(QVariant::UChar) == true);
+      REQUIRE(data.canConvert(QVariant::Char8_t) == false);
+      REQUIRE(data.canConvert(QVariant::Char16_t) == false);
+      REQUIRE(data.canConvert(QVariant::Char32_t) == false);
 
       REQUIRE(data.toInt()      == 0);
       REQUIRE(data.toUInt()     == 0);
@@ -2720,9 +4339,25 @@ TEST_CASE("QVariant convert_uint", "[qvariant]")
       REQUIRE(data.type() == QVariant::UInt);
       REQUIRE(data.type() != QVariant::LongLong);
 
+      REQUIRE(data.canConvert(QVariant::Bool) == true);
+      REQUIRE(data.canConvert(QVariant::Short) == true);
+      REQUIRE(data.canConvert(QVariant::UShort) == true);
       REQUIRE(data.canConvert(QVariant::Int) == true);
-      REQUIRE(data.canConvert(QVariant::UInt) == true);
-      REQUIRE(data.canConvert(QVariant::LongLong) == true);
+      REQUIRE(data.canConvert(QVariant::UInt)== true);
+      REQUIRE(data.canConvert(QVariant::Long) == true);
+      REQUIRE(data.canConvert(QVariant::ULong) == true);
+      REQUIRE(data.canConvert(QVariant::LongLong)== true);
+      REQUIRE(data.canConvert(QVariant::ULongLong) == true);
+      REQUIRE(data.canConvert(QVariant::Double)== true);
+      REQUIRE(data.canConvert(QVariant::Float) == true);
+
+      REQUIRE(data.canConvert(QVariant::QChar) == true);
+      REQUIRE(data.canConvert(QVariant::Char) == true);
+      REQUIRE(data.canConvert(QVariant::SChar) == true);
+      REQUIRE(data.canConvert(QVariant::UChar) == true);
+      REQUIRE(data.canConvert(QVariant::Char8_t) == false);
+      REQUIRE(data.canConvert(QVariant::Char16_t) == false);
+      REQUIRE(data.canConvert(QVariant::Char32_t) == false);
 
       REQUIRE(data.toInt()      == -65536);
       REQUIRE(data.toUInt()     == 0xFFFF0000);
@@ -2740,10 +4375,25 @@ TEST_CASE("QVariant convert_double", "[qvariant]")
       REQUIRE(data.type() != QVariant::LongLong);
       REQUIRE(data.type() == QVariant::Double);
 
+      REQUIRE(data.canConvert(QVariant::Bool) == true);
+      REQUIRE(data.canConvert(QVariant::Short) == true);
+      REQUIRE(data.canConvert(QVariant::UShort) == true);
       REQUIRE(data.canConvert(QVariant::Int) == true);
-      REQUIRE(data.canConvert(QVariant::UInt) == true);
-      REQUIRE(data.canConvert(QVariant::LongLong) == true);
-      REQUIRE(data.canConvert(QVariant::Double) == true);
+      REQUIRE(data.canConvert(QVariant::UInt)== true);
+      REQUIRE(data.canConvert(QVariant::Long) == true);
+      REQUIRE(data.canConvert(QVariant::ULong) == true);
+      REQUIRE(data.canConvert(QVariant::LongLong)== true);
+      REQUIRE(data.canConvert(QVariant::ULongLong) == true);
+      REQUIRE(data.canConvert(QVariant::Double)== true);
+      REQUIRE(data.canConvert(QVariant::Float) == true);
+
+      REQUIRE(data.canConvert(QVariant::QChar) == true);
+      REQUIRE(data.canConvert(QVariant::Char) == true);
+      REQUIRE(data.canConvert(QVariant::SChar) == true);
+      REQUIRE(data.canConvert(QVariant::UChar) == true);
+      REQUIRE(data.canConvert(QVariant::Char8_t) == false);
+      REQUIRE(data.canConvert(QVariant::Char16_t) == false);
+      REQUIRE(data.canConvert(QVariant::Char32_t) == false);
 
       REQUIRE(data.toInt()      == 3);
       REQUIRE(data.toUInt()     == 3);
@@ -2758,102 +4408,102 @@ TEST_CASE("QVariant can_convert_string8", "[qvariant]")
 
    REQUIRE(data.canConvert(QVariant::Invalid) == false);
 
-   REQUIRE(data.canConvert(QVariant::Bool));
-   REQUIRE(data.canConvert(QVariant::Double));
-   REQUIRE(data.canConvert(QVariant::Float));
-   REQUIRE(data.canConvert(QVariant::Int));
-   REQUIRE(data.canConvert(QVariant::Long));
-   REQUIRE(data.canConvert(QVariant::LongLong));
-   REQUIRE(data.canConvert(QVariant::Short));
-   REQUIRE(data.canConvert(QVariant::UInt));
-   REQUIRE(data.canConvert(QVariant::ULong));
-   REQUIRE(data.canConvert(QVariant::ULongLong));
-   REQUIRE(data.canConvert(QVariant::UShort));
+   REQUIRE(data.canConvert(QVariant::Bool) == true);
+   REQUIRE(data.canConvert(QVariant::Short) == true);
+   REQUIRE(data.canConvert(QVariant::UShort) == true);
+   REQUIRE(data.canConvert(QVariant::Int) == true);
+   REQUIRE(data.canConvert(QVariant::UInt) == true);
+   REQUIRE(data.canConvert(QVariant::Long) == true);
+   REQUIRE(data.canConvert(QVariant::ULong) == true);
+   REQUIRE(data.canConvert(QVariant::LongLong) == true);
+   REQUIRE(data.canConvert(QVariant::ULongLong) == true);
+   REQUIRE(data.canConvert(QVariant::Double) == true);
+   REQUIRE(data.canConvert(QVariant::Float) == true);
 
-   REQUIRE(data.canConvert(QVariant::QChar));
-   REQUIRE(data.canConvert(QVariant::Char));
-   REQUIRE(data.canConvert(QVariant::SChar));
-   REQUIRE(data.canConvert(QVariant::UChar));
-   REQUIRE(data.canConvert(QVariant::Char8_t) == false);;
-   REQUIRE(data.canConvert(QVariant::Char16_t) == false);;
+   REQUIRE(data.canConvert(QVariant::QChar) == true);
+   REQUIRE(data.canConvert(QVariant::Char) == true);
+   REQUIRE(data.canConvert(QVariant::SChar) == true);
+   REQUIRE(data.canConvert(QVariant::UChar) == true);
+   REQUIRE(data.canConvert(QVariant::Char8_t) == false);
+   REQUIRE(data.canConvert(QVariant::Char16_t) == false);
    REQUIRE(data.canConvert(QVariant::Char32_t) == false);
 
-   REQUIRE(data.canConvert(QVariant::ByteArray));
+   REQUIRE(data.canConvert(QVariant::ByteArray) == true);
    REQUIRE(data.canConvert(QVariant::BitArray) == false);
-   REQUIRE(data.canConvert(QVariant::String));
-   REQUIRE(data.canConvert(QVariant::String16));
-   REQUIRE(data.canConvert(QVariant::StringList));
+   REQUIRE(data.canConvert(QVariant::String) == true);
+   REQUIRE(data.canConvert(QVariant::String16) == true);
+   REQUIRE(data.canConvert(QVariant::StringList) == true);
    REQUIRE(data.canConvert(QVariant::StringView) == false);
 
-   REQUIRE(data.canConvert(QVariant::Date));
-   REQUIRE(data.canConvert(QVariant::DateTime));
-   REQUIRE(data.canConvert(QVariant::Time));
+   REQUIRE(data.canConvert(QVariant::Date) == true);
+   REQUIRE(data.canConvert(QVariant::DateTime) == true);
+   REQUIRE(data.canConvert(QVariant::Time) == true);
    REQUIRE(data.canConvert(QVariant::Locale) == false);
 
-   REQUIRE(! data.canConvert(QVariant::JsonArray));
-   REQUIRE(! data.canConvert(QVariant::JsonDocument));
-   REQUIRE(! data.canConvert(QVariant::JsonObject));
-   REQUIRE(! data.canConvert(QVariant::JsonValue));
+   REQUIRE(data.canConvert(QVariant::JsonArray) == false);
+   REQUIRE(data.canConvert(QVariant::JsonDocument) == false);
+   REQUIRE(data.canConvert(QVariant::JsonObject) == false);
+   REQUIRE(data.canConvert(QVariant::JsonValue) == false);
 
-   REQUIRE(! data.canConvert(QVariant::Line));
-   REQUIRE(! data.canConvert(QVariant::LineF));
-   REQUIRE(! data.canConvert(QVariant::Point));
-   REQUIRE(! data.canConvert(QVariant::PointF));
-   REQUIRE(! data.canConvert(QVariant::Polygon));
-   REQUIRE(! data.canConvert(QVariant::PolygonF));
-   REQUIRE(! data.canConvert(QVariant::Rect));
-   REQUIRE(! data.canConvert(QVariant::RectF));
-   REQUIRE(! data.canConvert(QVariant::Size));
-   REQUIRE(! data.canConvert(QVariant::SizeF));
+   REQUIRE(data.canConvert(QVariant::Line) == false);
+   REQUIRE(data.canConvert(QVariant::LineF) == false);
+   REQUIRE(data.canConvert(QVariant::Point) == false);
+   REQUIRE(data.canConvert(QVariant::PointF) == false);
+   REQUIRE(data.canConvert(QVariant::Polygon) == false);
+   REQUIRE(data.canConvert(QVariant::PolygonF) == false);
+   REQUIRE(data.canConvert(QVariant::Rect) == false);
+   REQUIRE(data.canConvert(QVariant::RectF) == false);
+   REQUIRE(data.canConvert(QVariant::Size) == false);
+   REQUIRE(data.canConvert(QVariant::SizeF) == false);
 
-   REQUIRE(! data.canConvert(QVariant::List));
-   REQUIRE(! data.canConvert(QVariant::Hash));
-   REQUIRE(! data.canConvert(QVariant::MultiHash));
-   REQUIRE(! data.canConvert(QVariant::Map));
-   REQUIRE(! data.canConvert(QVariant::MultiMap));
+   REQUIRE(data.canConvert(QVariant::List) == false);
+   REQUIRE(data.canConvert(QVariant::Hash) == false);
+   REQUIRE(data.canConvert(QVariant::MultiHash) == false);
+   REQUIRE(data.canConvert(QVariant::Map) == false);
+   REQUIRE(data.canConvert(QVariant::MultiMap) == false);
 
-   REQUIRE(! data.canConvert(QVariant::Void));
-   REQUIRE(! data.canConvert(QVariant::VoidStar));
-   REQUIRE(! data.canConvert(QVariant::ObjectStar));
-   REQUIRE(! data.canConvert(QVariant::WidgetStar));
+   REQUIRE(data.canConvert(QVariant::Void) == false);
+   REQUIRE(data.canConvert(QVariant::VoidStar) == false);
+   REQUIRE(data.canConvert(QVariant::ObjectStar) == false);
+   REQUIRE(data.canConvert(QVariant::WidgetStar) == false);
 
-   REQUIRE(! data.canConvert(QVariant::EasingCurve));
-   REQUIRE(! data.canConvert(QVariant::ModelIndex));
-   REQUIRE(! data.canConvert(QVariant::PersistentModelIndex));
-   REQUIRE(data.canConvert(QVariant::Url));
-   REQUIRE(data.canConvert(QVariant::Uuid));
+   REQUIRE(data.canConvert(QVariant::EasingCurve) == false);
+   REQUIRE(data.canConvert(QVariant::ModelIndex) == false);
+   REQUIRE(data.canConvert(QVariant::PersistentModelIndex) == false);
+   REQUIRE(data.canConvert(QVariant::Url) == true);
+   REQUIRE(data.canConvert(QVariant::Uuid) == true);
 
-   REQUIRE(! data.canConvert(QVariant::Bitmap));
-   REQUIRE(! data.canConvert(QVariant::Brush));
-   REQUIRE(data.canConvert(QVariant::Color));
-   REQUIRE(! data.canConvert(QVariant::Cursor));
-   REQUIRE(data.canConvert(QVariant::Font));
-   REQUIRE(! data.canConvert(QVariant::Icon));
-   REQUIRE(! data.canConvert(QVariant::Image));
-   REQUIRE(data.canConvert(QVariant::KeySequence));
-   REQUIRE(! data.canConvert(QVariant::Matrix));
-   REQUIRE(! data.canConvert(QVariant::Matrix4x4));
-   REQUIRE(! data.canConvert(QVariant::Palette));
-   REQUIRE(! data.canConvert(QVariant::Pen));
-   REQUIRE(! data.canConvert(QVariant::Pixmap));
-   REQUIRE(! data.canConvert(QVariant::Quaternion));
-   REQUIRE(! data.canConvert(QVariant::Region));
-   REQUIRE(! data.canConvert(QVariant::RegularExpression));
-   REQUIRE(! data.canConvert(QVariant::SizePolicy));
-   REQUIRE(! data.canConvert(QVariant::TextFormat));
-   REQUIRE(! data.canConvert(QVariant::TextLength));
-   REQUIRE(! data.canConvert(QVariant::Transform));
-   REQUIRE(! data.canConvert(QVariant::Variant));
-   REQUIRE(! data.canConvert(QVariant::Vector2D));
-   REQUIRE(! data.canConvert(QVariant::Vector3D));
-   REQUIRE(! data.canConvert(QVariant::Vector4D));
+   REQUIRE(data.canConvert(QVariant::Bitmap) == false);
+   REQUIRE(data.canConvert(QVariant::Brush) == false);
+   REQUIRE(data.canConvert(QVariant::Color) == true);
+   REQUIRE(data.canConvert(QVariant::Cursor) == false);
+   REQUIRE(data.canConvert(QVariant::Font) == true);
+   REQUIRE(data.canConvert(QVariant::Icon) == false);
+   REQUIRE(data.canConvert(QVariant::Image) == false);
+   REQUIRE(data.canConvert(QVariant::KeySequence) == true);
+   REQUIRE(data.canConvert(QVariant::Matrix) == false);
+   REQUIRE(data.canConvert(QVariant::Matrix4x4) == false);
+   REQUIRE(data.canConvert(QVariant::Palette) == false);
+   REQUIRE(data.canConvert(QVariant::Pen) == false);
+   REQUIRE(data.canConvert(QVariant::Pixmap) == false);
+   REQUIRE(data.canConvert(QVariant::Quaternion) == false);
+   REQUIRE(data.canConvert(QVariant::Region) == false);
+   REQUIRE(data.canConvert(QVariant::RegularExpression) == false);
+   REQUIRE(data.canConvert(QVariant::SizePolicy) == false);
+   REQUIRE(data.canConvert(QVariant::TextFormat) == false);
+   REQUIRE(data.canConvert(QVariant::TextLength) == false);
+   REQUIRE(data.canConvert(QVariant::Transform) == false);
+   REQUIRE(data.canConvert(QVariant::Variant) == false);
+   REQUIRE(data.canConvert(QVariant::Vector2D) == false);
+   REQUIRE(data.canConvert(QVariant::Vector3D) == false);
+   REQUIRE(data.canConvert(QVariant::Vector4D) == false);
 }
 
 TEST_CASE("QVariant can_convert_string16", "[qvariant]")
 {
    QVariant data = QString16("apple");
 
-   REQUIRE(! data.canConvert(QVariant::Invalid));
+   REQUIRE(data.canConvert(QVariant::Invalid) == false);
 }
 
 TEST_CASE("QVariant swap_string", "[qvariant]")
