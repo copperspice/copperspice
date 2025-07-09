@@ -224,27 +224,34 @@ inline QString AnchorVertex::toString() const
       case Qt::AnchorLeft:
          edge = "Left";
          break;
+
       case Qt::AnchorHorizontalCenter:
          edge = "HorizontalCenter";
          break;
+
       case Qt::AnchorRight:
          edge = "Right";
          break;
+
       case Qt::AnchorTop:
          edge = "Top";
          break;
+
       case Qt::AnchorVerticalCenter:
          edge = "VerticalCenter";
          break;
+
       case Qt::AnchorBottom:
          edge = "Bottom";
          break;
+
       default:
          edge = "None";
          break;
    }
 
    QString itemName;
+
    if (m_item->isLayout()) {
       itemName = "layout";
    } else {

@@ -37,7 +37,7 @@ static QFactoryLoader *loader()
 
 static QFactoryLoader *directLoader()
 {
-   static QFactoryLoader retval(QXcbGlIntegrationInterface_ID, "", Qt::CaseInsensitive);
+   static QFactoryLoader retval(QXcbGlIntegrationInterface_ID, QString(), Qt::CaseInsensitive);
    return &retval;
 }
 
@@ -62,13 +62,13 @@ QXcbGlIntegration *QXcbGlIntegrationFactory::create(const QString &platform, con
    if (! pluginPath.isEmpty()) {
       QCoreApplication::addLibraryPath(pluginPath);
 
-      if (QXcbGlIntegration *ret = loadIntegration(directLoader(), platform)) {
-         return ret;
+      if (QXcbGlIntegration *retval = loadIntegration(directLoader(), platform)) {
+         return retval;
       }
    }
 
-   if (QXcbGlIntegration *ret = loadIntegration(loader(), platform)) {
-      return ret;
+   if (QXcbGlIntegration *retval = loadIntegration(loader(), platform)) {
+      return retval;
    }
 
    return nullptr;
@@ -83,7 +83,7 @@ QStringList QXcbGlIntegrationFactory::keys(const QString &pluginPath)
       list = directLoader()->keySet().toList();
 
       if (! list.isEmpty()) {
-         const QString postFix = QString(" (from ") + QDir::toNativeSeparators(pluginPath) + ')';
+         const QString postFix = " (from " + QDir::toNativeSeparators(pluginPath) + ')';
 
          for (auto &item : list) {
             item.append(postFix);

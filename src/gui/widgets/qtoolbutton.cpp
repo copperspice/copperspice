@@ -263,6 +263,7 @@ QSize QToolButton::sizeHint() const
    if (opt.toolButtonStyle != Qt::ToolButtonIconOnly) {
       QSize textSize = fm.size(Qt::TextShowMnemonic, text());
       textSize.setWidth(textSize.width() + fm.width(QChar(' ')) * 2);
+
       if (opt.toolButtonStyle == Qt::ToolButtonTextUnderIcon) {
          h += 4 + textSize.height();
          if (textSize.width() > w) {
@@ -786,8 +787,7 @@ void QToolButton::setDefaultAction(QAction *action)
 
    QString buttonText = action->iconText();
 
-   // If iconText() is generated from text(), we need to escape any '&'s so they
-   // don't turn into shortcuts
+   // if iconText() is generated from text(), we need to escape any '&'s so they do no turn into shortcuts
    if (QActionPrivate::get(action)->iconText.isEmpty()) {
       buttonText.replace("&", "&&");
    }

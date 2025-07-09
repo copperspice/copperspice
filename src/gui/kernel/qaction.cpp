@@ -519,10 +519,12 @@ QString QAction::text() const
    Q_D(const QAction);
 
    QString s = d->text;
+
    if (s.isEmpty()) {
       s = d->iconText;
       s.replace(QChar('&'), QString("&&"));
    }
+
    return s;
 }
 

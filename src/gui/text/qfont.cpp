@@ -1119,6 +1119,7 @@ QString QFont::key() const
 QString QFont::toString() const
 {
    const QChar comma(QChar(','));
+
    return family() + comma +
       QString::number(     pointSizeF()) + comma +
       QString::number(      pixelSize()) + comma +

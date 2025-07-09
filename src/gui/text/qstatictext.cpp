@@ -394,13 +394,16 @@ void QStaticTextPrivate::paintText(const QPointF &topLeftPosition, QPainter *p)
          .formatArg(QString::number(color.green(), 16), 2, QChar('0'))
          .formatArg(QString::number(color.blue(), 16),  2, QChar('0')));
 #endif
+
       document.setDefaultFont(font);
       document.setDocumentMargin(0.0);
+
 #ifndef QT_NO_TEXTHTMLPARSER
       document.setHtml(text);
 #else
       document.setPlainText(text);
 #endif
+
       if (textWidth >= 0.0) {
          document.setTextWidth(textWidth);
       } else {

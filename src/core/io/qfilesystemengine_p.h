@@ -77,7 +77,6 @@ class QFileSystemEngine
    static QString nativeAbsoluteFilePath(const QString &path);
 #endif
 
-   //homePath, rootPath and tempPath shall return clean paths
    static QString homePath();
    static QString rootPath();
    static QString tempPath();

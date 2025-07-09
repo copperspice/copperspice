@@ -806,12 +806,16 @@ QSplitterLayoutStruct *QSplitterPrivate::insertWidget(int index, QWidget *w)
    } else {
       QSplitterHandle *newHandle = nullptr;
       sls = new QSplitterLayoutStruct;
+
       QString tmp = "qt_splithandle_";
       tmp += w->objectName();
+
       newHandle = q->createHandle();
       newHandle->setObjectName(tmp);
+
       sls->handle = newHandle;
       sls->widget = w;
+
       w->lower();
       list.insert(index, sls);
 
@@ -819,9 +823,9 @@ QSplitterLayoutStruct *QSplitterPrivate::insertWidget(int index, QWidget *w)
          newHandle->show();   // will trigger sending of post events
       }
    }
+
    return sls;
 }
-
 
 QSplitter::QSplitter(QWidget *parent)
    : QFrame(*new QSplitterPrivate, parent)
@@ -1352,14 +1356,17 @@ bool QSplitter::restoreState(const QByteArray &state)
 void QSplitter::setStretchFactor(int index, int stretch)
 {
    Q_D(QSplitter);
+
    if (index <= -1 || index >= d->list.count()) {
       return;
    }
 
    QWidget *widget = d->list.at(index)->widget;
+
    QSizePolicy sp = widget->sizePolicy();
    sp.setHorizontalStretch(stretch);
    sp.setVerticalStretch(stretch);
+
    widget->setSizePolicy(sp);
 }
 
@@ -1372,11 +1379,14 @@ QTextStream &operator<<(QTextStream &ts, const QSplitter &splitter)
 QTextStream &operator>>(QTextStream &ts, QSplitter &splitter)
 {
    QString line = ts.readLine();
+
    line = line.simplified();
    line.remove(QChar(' '));
+
    line = line.toUpper();
 
    splitter.restoreState(line.toLatin1());
+
    return ts;
 }
 

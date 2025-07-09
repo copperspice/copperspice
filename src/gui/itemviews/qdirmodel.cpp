@@ -695,6 +695,7 @@ QModelIndex QDirModel::index(const QString &path, int column) const
    // On Windows, "filename......." and "filename" are equivalent
    if (absolutePath.endsWith(QChar('.'))) {
       int i;
+
       for (i = absolutePath.count() - 1; i >= 0; --i) {
          if (absolutePath.at(i) != '.') {
             break;
@@ -721,22 +722,30 @@ QModelIndex QDirModel::index(const QString &path, int column) const
 
 #if defined(Q_OS_WIN)
    if (absolutePath.startsWith("//")) {
+      // UNC path
       QString host = pathElements.first();
       int r = 0;
-      for (; r < d->root.children.count(); ++r)
+
+      for (; r < d->root.children.count(); ++r) {
          if (d->root.children.at(r).info.fileName() == host) {
             break;
          }
+      }
+
       bool childAppended = false;
+
       if (r >= d->root.children.count() && d->allowAppendChild) {
          d->appendChild(&d->root, "//" + host);
          childAppended = true;
       }
+
       idx = index(r, 0, QModelIndex());
       pathElements.pop_front();
+
       if (childAppended) {
          emit const_cast<QDirModel *>(this)->layoutChanged();
       }
+
    } else
 #endif
 
@@ -825,9 +834,11 @@ QModelIndex QDirModel::mkdir(const QModelIndex &parent, const QString &name)
 
    QDir newDir(name);
    QDir dir(path);
+
    if (newDir.isRelative()) {
       newDir = QDir(path + QChar('/') + name);
    }
+
    QString childName = newDir.dirName(); // Get the singular name of the directory
    newDir.cdUp();
 
@@ -1094,8 +1105,10 @@ QString QDirModelPrivate::name(const QModelIndex &index) const
 {
    const QDirNode *n = node(index);
    const QFileInfo info = n->info;
+
    if (info.isRoot()) {
       QString name = info.absoluteFilePath();
+
 #if defined(Q_OS_WIN)
       if (name.startsWith(QChar('/'))) { // UNC host
          return info.fileName();
@@ -1113,12 +1126,14 @@ QString QDirModelPrivate::name(const QModelIndex &index) const
 QString QDirModelPrivate::size(const QModelIndex &index) const
 {
    const QDirNode *n = node(index);
+
    if (n->info.isDir()) {
 #ifdef Q_OS_DARWIN
       return QString("--");
 #else
       return QString("");
 #endif
+
       // Windows   - ""
       // OS X      - "--"
       // Konqueror - "4 KB"

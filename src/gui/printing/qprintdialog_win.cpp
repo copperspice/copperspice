@@ -147,7 +147,9 @@ static void qt_win_read_back_PRINTDLGEX(PRINTDLGEX *pd, QPrintDialog *pdlg, QPri
       pdlg->setPrintRange(QPrintDialog::CurrentPage);
       pdlg->setFromTo(0, 0);
 
-   } else { // PD_ALLPAGES
+   } else {
+      // PD_ALLPAGES
+
       pdlg->setPrintRange(QPrintDialog::AllPages);
       pdlg->setFromTo(0, 0);
    }

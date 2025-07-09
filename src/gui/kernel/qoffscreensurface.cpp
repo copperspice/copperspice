@@ -89,7 +89,8 @@ QOffscreenSurface::SurfaceType QOffscreenSurface::surfaceType() const
 void QOffscreenSurface::create()
 {
    Q_D(QOffscreenSurface);
-   if (!d->platformOffscreenSurface && !d->offscreenWindow) {
+
+   if (! d->platformOffscreenSurface && !d->offscreenWindow) {
       d->platformOffscreenSurface = QGuiApplicationPrivate::platformIntegration()->createPlatformOffscreenSurface(this);
 
       // No platform offscreen surface, fallback to an invisible window
@@ -100,8 +101,10 @@ void QOffscreenSurface::create()
 
          d->offscreenWindow = new QWindow(d->screen);
          d->offscreenWindow->setObjectName("QOffscreenSurface");
+
          // Remove this window from the global list since we do not want it to be destroyed when closing the app.
          // The QOffscreenSurface has to be usable even after exiting the event loop.
+
          QGuiApplicationPrivate::window_list.removeOne(d->offscreenWindow);
          d->offscreenWindow->setSurfaceType(QWindow::OpenGLSurface);
          d->offscreenWindow->setFormat(d->requestedFormat);

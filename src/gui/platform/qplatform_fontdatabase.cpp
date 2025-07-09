@@ -245,6 +245,7 @@ QFontEngine *QPlatformFontDatabase::fontEngine(const QByteArray &fontData, qreal
    (void) hintingPreference;
 
    qWarning("QPlatformFontDatabase::fontEngine() Plugin does not support font engines created directly from font data");
+
    return nullptr;
 }
 
@@ -254,6 +255,7 @@ QStringList QPlatformFontDatabase::addApplicationFont(const QByteArray &fontData
    (void) fileName;
 
    qWarning("QPlatformFontDatabase::addApplicationFont() Plugin does not support application fonts");
+
    return QStringList();
 }
 

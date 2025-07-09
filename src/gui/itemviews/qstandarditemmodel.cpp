@@ -1969,7 +1969,8 @@ bool QStandardItemModel::dropMimeData(const QMimeData *data, Qt::DropAction acti
 
    // check if the format is supported
    QString format = "application/x-qstandarditemmodeldatalist";
-   if (!data->hasFormat(format)) {
+
+   if (! data->hasFormat(format)) {
       return QAbstractItemModel::dropMimeData(data, action, row, column, parent);
    }
 

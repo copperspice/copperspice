@@ -441,7 +441,7 @@ void QPrintPreviewDialogPrivate::setupActions()
    QObject::connect(printAction,     &QAction::triggered, q, &QPrintPreviewDialog::_q_print);
    QObject::connect(pageSetupAction, &QAction::triggered, q, &QPrintPreviewDialog::_q_pageSetup);
 
-   // Initial state:
+   // Initial state
    fitPageAction->setChecked(true);
    singleModeAction->setChecked(true);
 
@@ -600,16 +600,20 @@ void QPrintPreviewDialogPrivate::_q_print()
 
       QString fileName = QFileDialog::getSaveFileName(q, title, printer->outputFileName(), QChar('*') + suffix);
 
-      if (!fileName.isEmpty()) {
+      if (! fileName.isEmpty()) {
          if (QFileInfo(fileName).suffix().isEmpty()) {
             fileName.append(suffix);
          }
+
          printer->setOutputFileName(fileName);
       }
+
       if (!printer->outputFileName().isEmpty()) {
          preview->print();
       }
+
       q->accept();
+
       return;
    }
 #endif

@@ -1442,7 +1442,7 @@ bool QFileSystemEngine::setPermissions(const QFileSystemEntry &entry, QFileDevic
 
    bool retval = (::_wchmod(&entry.nativeFilePath().toStdWString()[0], mode) == 0);
 
-   if (!retval) {
+   if (! retval) {
       error = QSystemError(errno, QSystemError::StandardLibraryError);
    }
 

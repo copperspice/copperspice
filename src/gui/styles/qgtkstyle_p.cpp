@@ -858,6 +858,7 @@ QIcon QGtkStylePrivate::getFilesystemIcon(const QFileInfo &info)
             NULL,
             GNOME_ICON_LOOKUP_FLAGS_NONE,
             NULL);
+
       QString iconName = QString::fromUtf8(icon_name);
       g_free(icon_name);
 

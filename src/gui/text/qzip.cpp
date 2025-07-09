@@ -495,6 +495,7 @@ QZipReader::FileInfo QZipPrivate::fillFileInfo(int index) const
    while (!fileInfo.filePath.isEmpty() && (fileInfo.filePath.at(0) == QChar('.') || fileInfo.filePath.at(0) == QChar('/'))) {
       fileInfo.filePath = fileInfo.filePath.mid(1);
    }
+
    while (!fileInfo.filePath.isEmpty() && fileInfo.filePath.at(fileInfo.filePath.size() - 1) == QChar('/')) {
       fileInfo.filePath.chop(1);
    }
@@ -1141,6 +1142,7 @@ void QZipWriter::addFile(const QString &fileName, QIODevice *device)
    Q_ASSERT(device);
    QIODevice::OpenMode mode = device->openMode();
    bool opened = false;
+
    if ((mode & QIODevice::ReadOnly) == 0) {
       opened = true;
       if (! device->open(QIODevice::ReadOnly)) {
@@ -1148,7 +1150,9 @@ void QZipWriter::addFile(const QString &fileName, QIODevice *device)
          return;
       }
    }
+
    d->addEntry(QZipWriterPrivate::File, QDir::fromNativeSeparators(fileName), device->readAll());
+
    if (opened) {
       device->close();
    }

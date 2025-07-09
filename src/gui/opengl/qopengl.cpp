@@ -197,23 +197,29 @@ bool VersionTerm::matches(const QVersionNumber &other) const
     case GreaterEqualThan:
         return other >= number;
     }
+
     return false;
 }
 
 VersionTerm VersionTerm::fromJson(const QJsonValue &v)
 {
     VersionTerm result;
-    if (!v.isObject())
+
+    if (!v.isObject()) {
         return result;
+    }
+
     const QJsonObject o = v.toObject();
     result.number = QVersionNumber::fromString(o.value(valueKey()).toString());
     const QString opS = o.value(opKey()).toString();
+
     for (size_t i = 0; i < sizeof(operators) / sizeof(operators[0]); ++i) {
         if (opS == operators[i]) {
             result.op = static_cast<Operator>(i);
             break;
         }
     }
+
     return result;
 }
 
@@ -357,150 +363,179 @@ static bool matches(const QJsonObject &object,
 
     const QJsonValue vendorV = object.value(vendorIdKey());
     if (vendorV.isString()) {
-        if (gpu.vendorId != vendorV.toString().toInteger<unsigned int>(nullptr, /* base */ 0))
+        if (gpu.vendorId != vendorV.toString().toInteger<unsigned int>(nullptr, /* base */ 0)) {
             return false;
+        }
+
     } else {
         if (object.contains(glVendorKey())) {
             const QByteArray glVendorV = object.value(glVendorKey()).toString().toUtf8();
-            if (!gpu.glVendor.contains(glVendorV))
+
+            if (!gpu.glVendor.contains(glVendorV)) {
                 return false;
+            }
         }
     }
 
     if (gpu.deviceId) {
         const QJsonValue deviceIdV = object.value(deviceIdKey());
         switch (deviceIdV.type()) {
-        case QJsonValue::Array:
-            if (!contains(deviceIdV.toArray(), gpu.deviceId))
-                return false;
-            break;
-        case QJsonValue::Undefined:
-        case QJsonValue::Null:
-            break;
-        default:
+
+           case QJsonValue::Array:
+              if (! contains(deviceIdV.toArray(), gpu.deviceId)) {
+                 return false;
+              }
+
+              break;
+
+           case QJsonValue::Undefined:
+           case QJsonValue::Null:
+              break;
+
+           default:
               qWarning().noquote() << msgSyntaxWarning(object, "Device ID must be of type array.");
         }
     }
-    if (!gpu.driverVersion.isNull()) {
+
+    if (! gpu.driverVersion.isNull()) {
         const QJsonValue driverVersionV = object.value(driverVersionKey());
+
         switch (driverVersionV.type()) {
-        case QJsonValue::Object:
-            if (!VersionTerm::fromJson(driverVersionV).matches(gpu.driverVersion))
-                return false;
-            break;
-        case QJsonValue::Undefined:
-        case QJsonValue::Null:
-            break;
-        default:
+           case QJsonValue::Object:
+               if (! VersionTerm::fromJson(driverVersionV).matches(gpu.driverVersion)) {
+                   return false;
+               }
+
+               break;
+
+           case QJsonValue::Undefined:
+           case QJsonValue::Null:
+               break;
+
+           default:
                qWarning().noquote() << msgSyntaxWarning(object, "Driver version must be of type object.");
         }
     }
 
     if (!gpu.driverDescription.isEmpty()) {
         const QJsonValue driverDescriptionV = object.value(driverDescriptionKey());
+
         if (driverDescriptionV.isString()) {
-            if (!gpu.driverDescription.contains(driverDescriptionV.toString().toUtf8()))
-                return false;
+            if (!gpu.driverDescription.contains(driverDescriptionV.toString().toUtf8())) {
+               return false;
+            }
         }
     }
 
     return true;
 }
 
-static bool readGpuFeatures(const QOpenGLConfig::Gpu &gpu, const QString &osName,
-                  const QString &osRelease, const QJsonDocument &doc,
-                  QSet<QString> *result, QString *errorMessage)
+static bool readGpuFeatures(const QOpenGLConfig::Gpu &gpu, const QString &osName, const QString &osRelease,
+      const QJsonDocument &doc, QSet<QString> *result, QString *errorMessage)
 {
     result->clear();
     errorMessage->clear();
     const QJsonValue entriesV = doc.object().value(QString("entries"));
 
-    if (!entriesV.isArray()) {
+    if (! entriesV.isArray()) {
         *errorMessage = "No entries read.";
         return false;
     }
 
     const QJsonArray entriesA = entriesV.toArray();
+
     for (auto eit = entriesA.constBegin(), ecend = entriesA.constEnd(); eit != ecend; ++eit) {
         if (eit->isObject()) {
             const QJsonObject object = eit->toObject();
+
             if (matches(object, osName, osRelease, gpu)) {
                 const QJsonValue featuresListV = object.value(featuresKey());
+
                 if (featuresListV.isArray()) {
                     const QJsonArray featuresListA = featuresListV.toArray();
-                    for (auto fit = featuresListA.constBegin(), fcend = featuresListA.constEnd(); fit != fcend; ++fit)
+
+                    for (auto fit = featuresListA.constBegin(), fcend = featuresListA.constEnd(); fit != fcend; ++fit) {
                         result->insert(fit->toString());
+                    }
                 }
             }
         }
     }
+
     return true;
 }
 
-static bool readGpuFeatures(const QOpenGLConfig::Gpu &gpu,
-                            const QString &osName,
-                            const QString &osRelease,
-                            const QByteArray &jsonAsciiData,
-                            QSet<QString> *result, QString *errorMessage)
+static bool readGpuFeatures(const QOpenGLConfig::Gpu &gpu, const QString &osName, const QString &osRelease,
+      const QByteArray &jsonAsciiData, QSet<QString> *result, QString *errorMessage)
 {
     result->clear();
     errorMessage->clear();
+
     QJsonParseError error;
     const QJsonDocument document = QJsonDocument::fromJson(jsonAsciiData, &error);
+
     if (document.isNull()) {
         const int lineNumber = 1 + jsonAsciiData.left(error.offset).count('\n');
+
         QTextStream str(errorMessage);
         str << "Failed to parse data: \"" << error.errorString()
             << "\" at line " << lineNumber << " (offset: "
             << error.offset << ").";
+
         return false;
     }
+
     return readGpuFeatures(gpu, osName, osRelease, document, result, errorMessage);
 }
 
-static bool readGpuFeatures(const QOpenGLConfig::Gpu &gpu,
-                            const QString &osName,
-                            const QString &osRelease,
-                            const QString &fileName,
-                            QSet<QString> *result, QString *errorMessage)
+static bool readGpuFeatures(const QOpenGLConfig::Gpu &gpu, const QString &osName, const QString &osRelease,
+      const QString &fileName, QSet<QString> *result, QString *errorMessage)
 {
     result->clear();
     errorMessage->clear();
     QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly)) {
+
+    if (! file.open(QIODevice::ReadOnly)) {
         QTextStream str(errorMessage);
-        str << "Cannot open \"" << QDir::toNativeSeparators(fileName) << "\": "
+
+        str << "Unable to open \"" << QDir::toNativeSeparators(fileName) << "\": "
             << file.errorString();
+
         return false;
     }
+
     const bool success = readGpuFeatures(gpu, osName, osRelease, file.readAll(), result, errorMessage);
-    if (!success) {
+
+    if (! success) {
         errorMessage->prepend("Error reading \"" + QDir::toNativeSeparators(fileName) + "\": ");
     }
+
     return success;
 }
 
-QSet<QString> QOpenGLConfig::gpuFeatures(const QOpenGLConfig::Gpu &gpu,
-                                         const QString &osName,
-                                         const QString &osRelease,
-                                         const QJsonDocument &doc)
+QSet<QString> QOpenGLConfig::gpuFeatures(const QOpenGLConfig::Gpu &gpu, const QString &osName,
+      const QString &osRelease, const QJsonDocument &doc)
 {
     QSet<QString> result;
     QString errorMessage;
-    if (!readGpuFeatures(gpu, osName, osRelease, doc, &result, &errorMessage))
+
+    if (! readGpuFeatures(gpu, osName, osRelease, doc, &result, &errorMessage)) {
         qWarning().noquote() << errorMessage;
+    }
+
     return result;
 }
 
-QSet<QString> QOpenGLConfig::gpuFeatures(const QOpenGLConfig::Gpu &gpu,
-                                         const QString &osName,
-                                         const QString &osRelease,
-                                         const QString &fileName)
+QSet<QString> QOpenGLConfig::gpuFeatures(const QOpenGLConfig::Gpu &gpu, const QString &osName,
+      const QString &osRelease, const QString &fileName)
 {
     QSet<QString> result;
     QString errorMessage;
-    if (!readGpuFeatures(gpu, osName, osRelease, fileName, &result, &errorMessage))
+
+    if (! readGpuFeatures(gpu, osName, osRelease, fileName, &result, &errorMessage)) {
         qWarning().noquote() << errorMessage;
+    }
+
     return result;
 }
 
@@ -519,12 +554,15 @@ QOpenGLConfig::Gpu QOpenGLConfig::Gpu::fromContext()
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
     QScopedPointer<QOpenGLContext> tmpContext;
     QScopedPointer<QOffscreenSurface> tmpSurface;
-    if (!ctx) {
+
+    if (! ctx) {
         tmpContext.reset(new QOpenGLContext);
-        if (!tmpContext->create()) {
+
+        if (! tmpContext->create()) {
             qWarning("QOpenGLConfig::Gpu::fromContext: Failed to create temporary context");
             return QOpenGLConfig::Gpu();
         }
+
         tmpSurface.reset(new QOffscreenSurface);
         tmpSurface->setFormat(tmpContext->format());
         tmpSurface->create();
@@ -534,8 +572,10 @@ QOpenGLConfig::Gpu QOpenGLConfig::Gpu::fromContext()
     QOpenGLConfig::Gpu gpu;
     ctx = QOpenGLContext::currentContext();
     const GLubyte *p = ctx->functions()->glGetString(GL_VENDOR);
-    if (p)
-        gpu.glVendor = QByteArray(reinterpret_cast<const char *>(p));
+
+    if (p) {
+       gpu.glVendor = QByteArray(reinterpret_cast<const char *>(p));
+    }
 
     return gpu;
 }

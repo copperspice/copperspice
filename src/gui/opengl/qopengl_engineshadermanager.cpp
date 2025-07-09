@@ -424,7 +424,7 @@ QOpenGLEngineShaderProg *QOpenGLEngineSharedShaders::findProgramInCache(const QO
 
         newProg->program->link();
         if (newProg->program->isLinked()) {
-            if (!inCache)
+            if (! inCache)
                 shaderCache.store(newProg->program, QOpenGLContext::currentContext());
         } else {
             QString error;
@@ -433,6 +433,7 @@ QOpenGLEngineShaderProg *QOpenGLEngineSharedShaders::findProgramInCache(const QO
 #if defined(CS_SHOW_DEBUG_GUI_OPENGL)
             QString br("\n");
             error += "\n  Shaders Used:\n";
+
             for (int i = 0; i < newProg->program->shaders().count(); ++i) {
                 QOpenGLShader *shader = newProg->program->shaders().at(i);
                 error += "    " + shader->objectName() + ": \n" + shader->sourceCode() + br;

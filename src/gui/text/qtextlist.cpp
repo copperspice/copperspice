@@ -122,7 +122,9 @@ QString QTextList::itemText(const QTextBlock &blockIt) const
             // works for up to 4999 items
             static const char romanSymbolsLower[] = "iiivixxxlxcccdcmmmm";
             static const char romanSymbolsUpper[] = "IIIVIXXXLXCCCDCMMMM";
+
             QByteArray romanSymbols; // wrap to have "mid"
+
             if (style == QTextListFormat::ListLowerRoman) {
                romanSymbols = QByteArray::fromRawData(romanSymbolsLower, sizeof(romanSymbolsLower));
             } else {
@@ -131,11 +133,14 @@ QString QTextList::itemText(const QTextBlock &blockIt) const
 
             int c[] = { 1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000 };
             int n = item;
+
             for (int i = 12; i >= 0; n %= c[i], i--) {
                int q = n / c[i];
+
                if (q > 0) {
                   int startDigit = i + (i + 3) / 4;
                   int numDigits;
+
                   if (i % 4) {
                      // c[i] == 4|5|9|40|50|90|400|500|900
                      if ((i - 2) % 4) {
@@ -145,6 +150,7 @@ QString QTextList::itemText(const QTextBlock &blockIt) const
                         // c[i] == 5|50|500 (V, L, D)
                         numDigits = 1;
                      }
+
                   } else {
                      // c[i] == 1|10|100|1000 (I, II, III, X, XX, ...)
                      numDigits = q;
@@ -153,16 +159,20 @@ QString QTextList::itemText(const QTextBlock &blockIt) const
                   romanNumeral.append(romanSymbols.mid(startDigit, numDigits));
                }
             }
+
             result = QString::fromLatin1(romanNumeral);
+
          } else {
             result = "?";
          }
 
       }
       break;
+
       default:
          Q_ASSERT(false);
    }
+
    if (blockIt.textDirection() == Qt::RightToLeft) {
       return numberSuffix + result + numberPrefix;
    } else {

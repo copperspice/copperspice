@@ -129,6 +129,7 @@ QString qt_accStripAmp(const QString &text)
 {
    QString newText(text);
    int ampIndex = qt_accAmpIndex(newText);
+
    if (ampIndex != -1) {
       newText.remove(ampIndex, 1);
    }

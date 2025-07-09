@@ -98,8 +98,7 @@ QWindowsStylePrivate::QWindowsStylePrivate()
    : alt_down(false), menuBarTimer(0)
 {
 #if defined(Q_OS_WIN)
-   if ((QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA
-         && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))) {
+   if ((QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))) {
       QSystemLibrary shellLib("shell32");
       pSHGetStockIconInfo = (PtrSHGetStockIconInfo)shellLib.resolve("SHGetStockIconInfo");
    }
@@ -2496,6 +2495,7 @@ QSize QWindowsStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
             if (w < minwidth + defwidth && !btn->text.isEmpty()) {
                w = minwidth + defwidth;
             }
+
             if (h < minheight + defwidth) {
                h = minheight + defwidth;
             }
@@ -2512,6 +2512,7 @@ QSize QWindowsStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
 
             if (mi->menuItemType == QStyleOptionMenuItem::Separator) {
                sz = QSize(10, QWindowsStylePrivate::windowsSepHeight);
+
             } else if (mi->icon.isNull()) {
                sz.setHeight(sz.height() - 2);
                w -= 6;
@@ -2519,23 +2520,27 @@ QSize QWindowsStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
 
             if (mi->menuItemType != QStyleOptionMenuItem::Separator && !mi->icon.isNull()) {
                int iconExtent = proxy()->pixelMetric(PM_SmallIconSize, opt, widget);
-               sz.setHeight(qMax(sz.height(),
-                     mi->icon.actualSize(QSize(iconExtent, iconExtent)).height()
-                     + 2 * QWindowsStylePrivate::windowsItemFrame));
+
+               sz.setHeight(qMax(sz.height(), mi->icon.actualSize(
+                     QSize(iconExtent, iconExtent)).height() + 2 * QWindowsStylePrivate::windowsItemFrame));
             }
+
             int maxpmw = mi->maxIconWidth;
             int tabSpacing = 20;
 
             if (mi->text.contains(QChar('\t'))) {
                w += tabSpacing;
+
             } else if (mi->menuItemType == QStyleOptionMenuItem::SubMenu) {
                w += 2 * QWindowsStylePrivate::windowsArrowHMargin;
+
             } else if (mi->menuItemType == QStyleOptionMenuItem::DefaultItem) {
                // adjust the font and add the difference in size.
                // it would be better if the font could be adjusted in the initStyleOption qmenu func!!
                QFontMetrics fm(mi->font);
                QFont fontBold = mi->font;
                fontBold.setBold(true);
+
                QFontMetrics fmBold(fontBold);
                w += fmBold.width(mi->text) - fm.width(mi->text);
             }
@@ -2550,7 +2555,7 @@ QSize QWindowsStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
 
 #ifndef QT_NO_MENUBAR
       case CT_MenuBarItem:
-         if (!sz.isEmpty()) {
+         if (! sz.isEmpty()) {
             sz += QSize(QWindowsStylePrivate::windowsItemHMargin * 4, QWindowsStylePrivate::windowsItemVMargin * 2);
          }
          break;
@@ -2569,9 +2574,7 @@ QSize QWindowsStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
    return sz;
 }
 
-
-QIcon QWindowsStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption *option,
-   const QWidget *widget) const
+QIcon QWindowsStyle::standardIcon(StandardPixmap standardIcon, const QStyleOption *option, const QWidget *widget) const
 {
    return QCommonStyle::standardIcon(standardIcon, option, widget);
 }

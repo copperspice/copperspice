@@ -286,10 +286,11 @@ class QComboBoxDelegate : public QItemDelegate
    static void setSeparator(QAbstractItemModel *model, const QModelIndex &index) {
       model->setData(index, QString::fromLatin1("separator"), Qt::AccessibleDescriptionRole);
 
-      if (QStandardItemModel *m = qobject_cast<QStandardItemModel *>(model))
+      if (QStandardItemModel *m = qobject_cast<QStandardItemModel *>(model)) {
          if (QStandardItem *item = m->itemFromIndex(index)) {
             item->setFlags(item->flags() & ~(Qt::ItemIsSelectable | Qt::ItemIsEnabled));
          }
+      }
    }
 
  protected:

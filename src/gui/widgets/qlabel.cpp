@@ -893,6 +893,7 @@ void QLabelPrivate::updateShortcut()
    if (! text.contains(QChar('&'))) {
       return;
    }
+
    hasShortcut = true;
    shortcutId = q->grabShortcut(QKeySequence::mnemonic(text));
 }

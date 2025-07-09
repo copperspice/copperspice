@@ -77,6 +77,7 @@ double qt_multiplierForUnit(QPrinter::Unit unit, int resolution)
       case QPageSize::Unit::DevicePixel:
          return 72.0 / resolution;
    }
+
    return 1.0;
 }
 
@@ -176,34 +177,39 @@ void QPrinterPrivate::changeEngines(QPrinter::OutputFormat format, const QPrinte
       delete oldPrintEngine;
    }
 }
+
 #ifndef QT_NO_PRINTPREVIEWWIDGET
 QList<const QPicture *> QPrinterPrivate::previewPages() const
 {
    if (previewEngine) {
       return previewEngine->pages();
    }
+
    return QList<const QPicture *>();
 }
 
 void QPrinterPrivate::setPreviewMode(bool enable)
 {
    Q_Q(QPrinter);
+
    if (enable) {
       if (!previewEngine) {
          previewEngine = new QPreviewPaintEngine;
       }
+
       had_default_engines = use_default_engine;
       use_default_engine = false;
       realPrintEngine = printEngine;
       realPaintEngine = paintEngine;
       q->setEngines(previewEngine, previewEngine);
       previewEngine->setProxyEngines(realPrintEngine, realPaintEngine);
+
    } else {
       q->setEngines(realPrintEngine, realPaintEngine);
       use_default_engine = had_default_engines;
    }
 }
-#endif // QT_NO_PRINTPREVIEWWIDGET
+#endif
 
 void QPrinterPrivate::setProperty(QPrintEngine::PrintEnginePropertyKey key, const QVariant &value)
 {
@@ -375,15 +381,11 @@ bool QPrinter::isValid() const
    return d->validPrinter;
 }
 
-
-
 QString QPrinter::outputFileName() const
 {
    Q_D(const QPrinter);
    return d->printEngine->property(QPrintEngine::PPK_OutputFileName).toString();
 }
-
-
 
 void QPrinter::setOutputFileName(const QString &fileName)
 {
@@ -420,7 +422,6 @@ QString QPrinter::docName() const
    Q_D(const QPrinter);
    return d->printEngine->property(QPrintEngine::PPK_DocumentName).toString();
 }
-
 
 void QPrinter::setDocName(const QString &name)
 {
@@ -633,20 +634,16 @@ void QPrinter::setFontEmbeddingEnabled(bool enable)
    d->setProperty(QPrintEngine::PPK_FontEmbedding, enable);
 }
 
-
 bool QPrinter::fontEmbeddingEnabled() const
 {
    Q_D(const QPrinter);
    return d->printEngine->property(QPrintEngine::PPK_FontEmbedding).toBool();
 }
 
-
 void QPrinter::setDoubleSidedPrinting(bool doubleSided)
 {
    setDuplex(doubleSided ? DuplexAuto : DuplexNone);
 }
-
-
 
 bool QPrinter::doubleSidedPrinting() const
 {

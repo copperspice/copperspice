@@ -188,14 +188,17 @@ QInternalMimeData::~QInternalMimeData()
 bool QInternalMimeData::hasFormat(const QString &mimeType) const
 {
    bool foundFormat = hasFormat_sys(mimeType);
+
    if (! foundFormat && mimeType == "application/x-qt-image") {
       QStringList imageFormats = imageReadMimeFormats();
+
       for (int i = 0; i < imageFormats.size(); ++i) {
          if ((foundFormat = hasFormat_sys(imageFormats.at(i)))) {
             break;
          }
       }
    }
+
    return foundFormat;
 }
 
@@ -205,6 +208,7 @@ QStringList QInternalMimeData::formats() const
 
    if (! realFormats.contains("application/x-qt-image")) {
       QStringList imageFormats = imageReadMimeFormats();
+
       for (int i = 0; i < imageFormats.size(); ++i) {
          if (realFormats.contains(imageFormats.at(i))) {
             realFormats += "application/x-qt-image";
@@ -212,6 +216,7 @@ QStringList QInternalMimeData::formats() const
          }
       }
    }
+
    return realFormats;
 }
 
@@ -243,6 +248,7 @@ QVariant QInternalMimeData::retrieveData(const QString &mimeType, QVariant::Type
    } else if (mimeType == "application/x-color" && data.type() == QVariant::ByteArray) {
       QColor c;
       QByteArray ba = data.toByteArray();
+
       if (ba.size() == 8) {
          ushort *colBuf = (ushort *)ba.data();
 
@@ -306,8 +312,8 @@ bool QInternalMimeData::hasFormatHelper(const QString &mimeType, const QMimeData
             if ((foundFormat = data->hasFormat(imageFormats.at(i)))) {
                break;
             }
-
          }
+
       } else if (mimeType.startsWith("image/")) {
          return data->hasImage() && imageWriteMimeFormats().contains(mimeType);
       }

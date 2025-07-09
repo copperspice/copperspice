@@ -472,16 +472,19 @@ bool QPixmapIconEngine::read(QDataStream &in)
    uint state;
 
    in >> num_entries;
+
    for (int i = 0; i < num_entries; ++i) {
       if (in.atEnd()) {
          pixmaps.clear();
          return false;
       }
+
       in >> pm;
       in >> fileName;
       in >> sz;
       in >> mode;
       in >> state;
+
       if (pm.isNull()) {
          addFile(fileName, sz, QIcon::Mode(mode), QIcon::State(state));
       } else {
@@ -490,6 +493,7 @@ bool QPixmapIconEngine::read(QDataStream &in)
          pixmaps += pe;
       }
    }
+
    return true;
 }
 

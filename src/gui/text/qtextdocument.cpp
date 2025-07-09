@@ -1807,7 +1807,9 @@ void QTextHtmlExporter::emitBlockAttributes(const QTextBlock &block)
    emitPageBreakPolicy(format.pageBreakPolicy());
 
    QTextCharFormat diff;
-   if (emptyBlock) { // only print character properties when we don't expect them to be repeated by actual text in the parag
+
+   if (emptyBlock) {
+      // only print character properties when we don't expect them to be repeated by actual text in the parag
       const QTextCharFormat blockCharFmt = block.charFormat();
       diff = formatDifference(defaultCharFormat, blockCharFmt).toCharFormat();
    }
@@ -1815,6 +1817,7 @@ void QTextHtmlExporter::emitBlockAttributes(const QTextBlock &block)
    diff.clearProperty(QTextFormat::BackgroundBrush);
    if (format.hasProperty(QTextFormat::BackgroundBrush)) {
       QBrush bg = format.background();
+
       if (bg.style() != Qt::NoBrush) {
          diff.setProperty(QTextFormat::BackgroundBrush, format.property(QTextFormat::BackgroundBrush));
       }
@@ -1945,7 +1948,7 @@ void QTextHtmlExporter::emitBlock(const QTextBlock &block)
       html += "<li";
 
       const QTextCharFormat blockFmt = formatDifference(defaultCharFormat, block.charFormat()).toCharFormat();
-      if (!blockFmt.properties().isEmpty()) {
+      if (! blockFmt.properties().isEmpty()) {
          html += " style=\"";
          emitCharFormatStyle(blockFmt);
          html += QChar('\"');
@@ -1959,6 +1962,7 @@ void QTextHtmlExporter::emitBlock(const QTextBlock &block)
       html += "<hr";
 
       QTextLength width = blockFormat.lengthProperty(QTextFormat::BlockTrailingHorizontalRulerWidth);
+
       if (width.type() != QTextLength::VariableLength) {
          emitTextLength("width", width);
       } else {
@@ -1970,28 +1974,34 @@ void QTextHtmlExporter::emitBlock(const QTextBlock &block)
    }
 
    const bool pre = blockFormat.nonBreakableLines();
+
    if (pre) {
       if (list) {
          html += QChar('>');
       }
+
       html += "<pre";
-   } else if (!list) {
+
+   } else if (! list) {
       html += "<p";
+
    }
 
    emitBlockAttributes(block);
 
    html += QChar('>');
+
    if (block.begin().atEnd()) {
       html += "<br />";
    }
 
    QTextBlock::iterator it = block.begin();
-   if (fragmentMarkers && !it.atEnd() && block == m_textHtmlDoc->begin()) {
+
+   if (fragmentMarkers && ! it.atEnd() && block == m_textHtmlDoc->begin()) {
       html += "<!--StartFragment-->";
    }
 
-   for (; !it.atEnd(); ++it) {
+   for (; ! it.atEnd(); ++it) {
       emitFragment(it.fragment());
    }
 
@@ -2001,14 +2011,18 @@ void QTextHtmlExporter::emitBlock(const QTextBlock &block)
 
    if (pre) {
       html += "</pre>";
+
    } else if (list) {
       html += "</li>";
+
    } else {
       html += "</p>";
    }
 
    if (list) {
-      if (list->itemNumber(block) == list->count() - 1) { // last item? close list
+      if (list->itemNumber(block) == list->count() - 1) {
+         // last item? close list
+
          if (isOrderedList(list->format().style())) {
             html += "</ol>";
          } else {
@@ -2088,7 +2102,7 @@ void QTextHtmlExporter::emitBackgroundAttribute(const QTextFormat &format)
 
          const QString url = findUrlForImage(m_textHtmlDoc, cacheKey, isPixmap);
 
-         if (!url.isEmpty()) {
+         if (! url.isEmpty()) {
             emitAttribute("background", url);
          }
       }
@@ -2159,7 +2173,7 @@ void QTextHtmlExporter::emitTable(const QTextTable *table)
 
          html += "\n<td";
 
-         if (!widthEmittedForColumn[col] && cell.columnSpan() == 1) {
+         if (! widthEmittedForColumn[col] && cell.columnSpan() == 1) {
             emitTextLength("width", columnWidths.at(col));
             widthEmittedForColumn[col] = true;
          }
@@ -2176,25 +2190,30 @@ void QTextHtmlExporter::emitTable(const QTextTable *table)
          emitBackgroundAttribute(cellFormat);
 
          QTextCharFormat oldDefaultCharFormat = defaultCharFormat;
-
          QTextCharFormat::VerticalAlignment valign = cellFormat.verticalAlignment();
 
          QString styleString;
+
          if (valign >= QTextCharFormat::AlignMiddle && valign <= QTextCharFormat::AlignBottom) {
             styleString += " vertical-align:";
+
             switch (valign) {
                case QTextCharFormat::AlignMiddle:
                   styleString += "middle";
                   break;
+
                case QTextCharFormat::AlignTop:
                   styleString += "top";
                   break;
+
                case QTextCharFormat::AlignBottom:
                   styleString += "bottom";
                   break;
+
                default:
                   break;
             }
+
             styleString += QChar(';');
 
             QTextCharFormat temp;
@@ -2205,12 +2224,15 @@ void QTextHtmlExporter::emitTable(const QTextTable *table)
          if (cellFormat.hasProperty(QTextFormat::TableCellLeftPadding)) {
             styleString += " padding-left:" + QString::number(cellFormat.leftPadding()) + QChar(';');
          }
+
          if (cellFormat.hasProperty(QTextFormat::TableCellRightPadding)) {
             styleString += " padding-right:" + QString::number(cellFormat.rightPadding()) + QChar(';');
          }
+
          if (cellFormat.hasProperty(QTextFormat::TableCellTopPadding)) {
             styleString += " padding-top:" + QString::number(cellFormat.topPadding()) + QChar(';');
          }
+
          if (cellFormat.hasProperty(QTextFormat::TableCellBottomPadding)) {
             styleString += " padding-bottom:" + QString::number(cellFormat.bottomPadding()) + QChar(';');
          }
@@ -2220,15 +2242,14 @@ void QTextHtmlExporter::emitTable(const QTextTable *table)
          }
 
          html += QChar('>');
-
          emitFrame(cell.begin());
-
          html += "</td>";
 
          defaultCharFormat = oldDefaultCharFormat;
       }
 
       html += "</tr>";
+
       if (headerRowCount > 0 && row == headerRowCount - 1) {
          html += "</thead>";
       }
@@ -2239,7 +2260,7 @@ void QTextHtmlExporter::emitTable(const QTextTable *table)
 
 void QTextHtmlExporter::emitFrame(QTextFrame::iterator frameIt)
 {
-   if (!frameIt.atEnd()) {
+   if (! frameIt.atEnd()) {
       QTextFrame::iterator next = frameIt;
       ++next;
 
@@ -2287,6 +2308,7 @@ void QTextHtmlExporter::emitTextFrame(const QTextFrame *f)
 
    html += QChar('>');
    html += "\n<tr>\n<td style=\"border: none;\">";
+
    emitFrame(f->begin());
    html += "</td></tr></table>";
 }
@@ -2320,14 +2342,14 @@ void QTextHtmlExporter::emitFrameStyle(const QTextFrameFormat &format, FrameType
    }
 
    if (format.hasProperty(QTextFormat::FrameMargin)
-      || format.hasProperty(QTextFormat::FrameLeftMargin)
-      || format.hasProperty(QTextFormat::FrameRightMargin)
-      || format.hasProperty(QTextFormat::FrameTopMargin)
-      || format.hasProperty(QTextFormat::FrameBottomMargin))
-      emitMargins(QString::number(format.topMargin()),
-         QString::number(format.bottomMargin()),
-         QString::number(format.leftMargin()),
-         QString::number(format.rightMargin()));
+         || format.hasProperty(QTextFormat::FrameLeftMargin)
+         || format.hasProperty(QTextFormat::FrameRightMargin)
+         || format.hasProperty(QTextFormat::FrameTopMargin)
+         || format.hasProperty(QTextFormat::FrameBottomMargin)) {
+
+      emitMargins(QString::number(format.topMargin()), QString::number(format.bottomMargin()),
+            QString::number(format.leftMargin()), QString::number(format.rightMargin()));
+   }
 
    if (html.length() == originalHtmlLength) {
       html.chop(styleAttribute.length());
