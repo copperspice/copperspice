@@ -1118,7 +1118,7 @@ QString QFont::key() const
 
 QString QFont::toString() const
 {
-   const QChar comma(QLatin1Char(','));
+   const QChar comma(QChar(','));
    return family() + comma +
       QString::number(     pointSizeF()) + comma +
       QString::number(      pixelSize()) + comma +
@@ -1138,7 +1138,7 @@ uint qHash(const QFont &font, uint seed)
 
 bool QFont::fromString(const QString &descrip)
 {
-   QStringList l(descrip.split(QLatin1Char(',')));
+   QStringList l(descrip.split(QChar(',')));
 
    int count = l.count();
    if (! count || (count > 2 && count < 9) || count > 11) {

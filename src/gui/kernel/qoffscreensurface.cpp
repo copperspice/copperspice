@@ -99,7 +99,7 @@ void QOffscreenSurface::create()
          }
 
          d->offscreenWindow = new QWindow(d->screen);
-         d->offscreenWindow->setObjectName(QLatin1String("QOffscreenSurface"));
+         d->offscreenWindow->setObjectName("QOffscreenSurface");
          // Remove this window from the global list since we do not want it to be destroyed when closing the app.
          // The QOffscreenSurface has to be usable even after exiting the event loop.
          QGuiApplicationPrivate::window_list.removeOne(d->offscreenWindow);

@@ -806,7 +806,7 @@ QSplitterLayoutStruct *QSplitterPrivate::insertWidget(int index, QWidget *w)
    } else {
       QSplitterHandle *newHandle = nullptr;
       sls = new QSplitterLayoutStruct;
-      QString tmp = QLatin1String("qt_splithandle_");
+      QString tmp = "qt_splithandle_";
       tmp += w->objectName();
       newHandle = q->createHandle();
       newHandle->setObjectName(tmp);
@@ -1050,7 +1050,7 @@ void QSplitter::setRubberBand(int pos)
       d->rubberBand = new QRubberBand(QRubberBand::Line, this);
 
       // For accessibility to identify this special widget.
-      d->rubberBand->setObjectName(QLatin1String("qt_rubberband"));
+      d->rubberBand->setObjectName("qt_rubberband");
 
       d->blockChildAdd = temp;
    }
@@ -1373,7 +1373,7 @@ QTextStream &operator>>(QTextStream &ts, QSplitter &splitter)
 {
    QString line = ts.readLine();
    line = line.simplified();
-   line.replace(QLatin1Char(' '), QString());
+   line.remove(QChar(' '));
    line = line.toUpper();
 
    splitter.restoreState(line.toLatin1());

@@ -167,7 +167,7 @@ void QCUPSSupport::setBannerPages(QPrinter *printer, const BannerPage startBanne
    const QString startBanner = bannerPageToString(startBannerPage);
    const QString endBanner   = bannerPageToString(endBannerPage);
 
-   setCupsOption(cupsOptions, "job-sheets", startBanner + QLatin1Char(',') + endBanner);
+   setCupsOption(cupsOptions, "job-sheets", startBanner + QChar(',') + endBanner);
    setCupsOptions(printer, cupsOptions);
 }
 

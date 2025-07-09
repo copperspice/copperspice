@@ -369,8 +369,9 @@ class Q_GUI_EXPORT QLineControl : public QInputControl
 
       if (m_maskData) {
          mask = m_inputMask;
-         if (m_blank != QLatin1Char(' ')) {
-            mask += QLatin1Char(';');
+
+         if (m_blank != QChar(' ')) {
+            mask += QChar(';');
             mask += m_blank;
          }
       }

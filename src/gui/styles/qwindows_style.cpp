@@ -100,7 +100,7 @@ QWindowsStylePrivate::QWindowsStylePrivate()
 #if defined(Q_OS_WIN)
    if ((QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA
          && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))) {
-      QSystemLibrary shellLib(QLatin1String("shell32"));
+      QSystemLibrary shellLib("shell32");
       pSHGetStockIconInfo = (PtrSHGetStockIconInfo)shellLib.resolve("SHGetStockIconInfo");
    }
 #endif
@@ -1292,7 +1292,7 @@ void QWindowsStyle::drawControl(ControlElement ce, const QStyleOption *opt, QPai
 
             if (! s.isEmpty()) {                     // draw text
                p->save();
-               int t = s.indexOf(QLatin1Char('\t'));
+               int t = s.indexOf(QChar('\t'));
                int text_flags = Qt::AlignVCenter | Qt::TextShowMnemonic | Qt::TextDontClip | Qt::TextSingleLine;
 
                if (!proxy()->styleHint(SH_UnderlineShortcut, menuitem, widget)) {
@@ -2526,7 +2526,7 @@ QSize QWindowsStyle::sizeFromContents(ContentsType ct, const QStyleOption *opt,
             int maxpmw = mi->maxIconWidth;
             int tabSpacing = 20;
 
-            if (mi->text.contains(QLatin1Char('\t'))) {
+            if (mi->text.contains(QChar('\t'))) {
                w += tabSpacing;
             } else if (mi->menuItemType == QStyleOptionMenuItem::SubMenu) {
                w += 2 * QWindowsStylePrivate::windowsArrowHMargin;

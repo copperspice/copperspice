@@ -55,11 +55,11 @@ QString QClipboard::text(QString &subtype, Mode mode) const
    const QStringList formats = data->formats();
 
    if (subtype.isEmpty()) {
-      if (formats.contains(QLatin1String("text/plain"))) {
-         subtype = QLatin1String("plain");
+      if (formats.contains("text/plain")) {
+         subtype = "plain";
       } else {
          for (int i = 0; i < formats.size(); ++i)
-            if (formats.at(i).startsWith(QLatin1String("text/"))) {
+            if (formats.at(i).startsWith("text/")) {
                subtype = formats.at(i).mid(5);
                break;
             }
@@ -67,15 +67,15 @@ QString QClipboard::text(QString &subtype, Mode mode) const
             return QString();
          }
       }
-   } else if (!formats.contains(QLatin1String("text/") + subtype)) {
+   } else if (!formats.contains("text/" + subtype)) {
       return QString();
    }
 
-   const QByteArray rawData = data->data(QLatin1String("text/") + subtype);
+   const QByteArray rawData = data->data("text/" + subtype);
 
 #ifndef QT_NO_TEXTCODEC
    QTextCodec *codec = QTextCodec::codecForMib(106); // utf-8 is default
-   if (subtype == QLatin1String("html")) {
+   if (subtype == "html") {
       codec = QTextCodec::codecForHtml(rawData, codec);
    } else {
       codec = QTextCodec::codecForUtfText(rawData, codec);

@@ -133,7 +133,7 @@ QString qt_accStripAmp(const QString &text)
       newText.remove(ampIndex, 1);
    }
 
-   return newText.replace(QLatin1String("&&"), QLatin1String("&"));
+   return newText.replace(QString("&&"), QString("&"));
 }
 
 QString qt_accHotKey(const QString &text)

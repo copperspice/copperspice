@@ -59,7 +59,7 @@ bool QInputControl::isAcceptableInput(const QKeyEvent *event) const
       return true;
    }
 
-   if (m_type == TextEdit && c == QLatin1Char('\t')) {
+   if (m_type == TextEdit && c == QChar('\t')) {
       return true;
    }
 

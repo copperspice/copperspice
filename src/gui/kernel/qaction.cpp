@@ -521,7 +521,7 @@ QString QAction::text() const
    QString s = d->text;
    if (s.isEmpty()) {
       s = d->iconText;
-      s.replace(QLatin1Char('&'), QString("&&"));
+      s.replace(QChar('&'), QString("&&"));
    }
    return s;
 }

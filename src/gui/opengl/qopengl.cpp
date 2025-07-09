@@ -209,7 +209,7 @@ VersionTerm VersionTerm::fromJson(const QJsonValue &v)
     result.number = QVersionNumber::fromString(o.value(valueKey()).toString());
     const QString opS = o.value(opKey()).toString();
     for (size_t i = 0; i < sizeof(operators) / sizeof(operators[0]); ++i) {
-        if (opS == QLatin1String(operators[i])) {
+        if (opS == operators[i]) {
             result.op = static_cast<Operator>(i);
             break;
         }
@@ -378,9 +378,7 @@ static bool matches(const QJsonObject &object,
         case QJsonValue::Null:
             break;
         default:
-            qWarning().noquote()
-                << msgSyntaxWarning(object,
-                                    QLatin1String("Device ID must be of type array."));
+              qWarning().noquote() << msgSyntaxWarning(object, "Device ID must be of type array.");
         }
     }
     if (!gpu.driverVersion.isNull()) {
@@ -394,9 +392,7 @@ static bool matches(const QJsonObject &object,
         case QJsonValue::Null:
             break;
         default:
-            qWarning().noquote()
-                << msgSyntaxWarning(object,
-                                    QLatin1String("Driver version must be of type object."));
+               qWarning().noquote() << msgSyntaxWarning(object, "Driver version must be of type object.");
         }
     }
 
@@ -420,7 +416,7 @@ static bool readGpuFeatures(const QOpenGLConfig::Gpu &gpu, const QString &osName
     const QJsonValue entriesV = doc.object().value(QString("entries"));
 
     if (!entriesV.isArray()) {
-        *errorMessage = QLatin1String("No entries read.");
+        *errorMessage = "No entries read.";
         return false;
     }
 
@@ -479,9 +475,7 @@ static bool readGpuFeatures(const QOpenGLConfig::Gpu &gpu,
     }
     const bool success = readGpuFeatures(gpu, osName, osRelease, file.readAll(), result, errorMessage);
     if (!success) {
-        errorMessage->prepend(QLatin1String("Error reading \"")
-                              + QDir::toNativeSeparators(fileName)
-                              + QLatin1String("\": "));
+        errorMessage->prepend("Error reading \"" + QDir::toNativeSeparators(fileName) + "\": ");
     }
     return success;
 }

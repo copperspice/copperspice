@@ -160,7 +160,7 @@ static void qt_win_read_back_PRINTDLGEX(PRINTDLGEX *pd, QPrintDialog *pdlg, QPri
    if (d->ep->printToFile && d->ep->fileName.isEmpty()) {
       d->ep->fileName = "FILE:";
 
-   } else if (!d->ep->printToFile && d->ep->fileName == QLatin1String("FILE:")) {
+   } else if (! d->ep->printToFile && d->ep->fileName == "FILE:") {
       d->ep->fileName.clear();
    }
 }

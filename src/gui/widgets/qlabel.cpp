@@ -890,7 +890,7 @@ void QLabelPrivate::updateShortcut()
    // But then we do want to hide the ampersands, so we can't use shortcutId.
    hasShortcut = false;
 
-   if (!text.contains(QLatin1Char('&'))) {
+   if (! text.contains(QChar('&'))) {
       return;
    }
    hasShortcut = true;

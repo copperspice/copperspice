@@ -394,7 +394,7 @@ void QPixmapIconEngine::addFile(const QString &fileName, const QSize &size, QIco
       return;
    }
 
-   const QString abs = fileName.startsWith(QLatin1Char(':')) ? fileName : QFileInfo(fileName).absoluteFilePath();
+   const QString abs = fileName.startsWith(QChar(':')) ? fileName : QFileInfo(fileName).absoluteFilePath();
    const bool ignoreSize = !size.isValid();
    ImageReader imageReader(abs);
    const QString format = imageReader.format();
@@ -454,7 +454,7 @@ void QPixmapIconEngine::addFile(const QString &fileName, const QSize &size, QIco
 
 QString QPixmapIconEngine::key() const
 {
-   return QLatin1String("QPixmapIconEngine");
+   return QString("QPixmapIconEngine");
 }
 
 QIconEngine *QPixmapIconEngine::clone() const

@@ -183,7 +183,7 @@ QDesktopWidget::QDesktopWidget()
 {
    Q_D(QDesktopWidget);
 
-   setObjectName(QLatin1String("desktop"));
+   setObjectName("desktop");
    d->_q_updateScreens();
 
    connect(qApp, &QApplication::screenAdded,          this, &QDesktopWidget::_q_updateScreens);

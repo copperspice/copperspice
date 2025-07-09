@@ -164,7 +164,7 @@ QDirModel::QDirModel(const QStringList &nameFilters, QDir::Filters filters,
    Q_D(QDirModel);
 
    // always start with QDir::drives()
-   d->nameFilters = nameFilters.isEmpty() ? QStringList(QLatin1String("*")) : nameFilters;
+   d->nameFilters = nameFilters.isEmpty() ? QStringList("*") : nameFilters;
    d->filters = filters;
    d->sort = sort;
    d->root.parent = nullptr;
@@ -464,7 +464,7 @@ void QDirModel::sort(int column, Qt::SortOrder order)
 
 QStringList QDirModel::mimeTypes() const
 {
-   return QStringList(QLatin1String("text/uri-list"));
+   return QStringList("text/uri-list");
 }
 
 QMimeData *QDirModel::mimeData(const QModelIndexList &indexes) const
@@ -693,7 +693,7 @@ QModelIndex QDirModel::index(const QString &path, int column) const
    absolutePath = absolutePath.toLower();
 
    // On Windows, "filename......." and "filename" are equivalent
-   if (absolutePath.endsWith(QLatin1Char('.'))) {
+   if (absolutePath.endsWith(QChar('.'))) {
       int i;
       for (i = absolutePath.count() - 1; i >= 0; --i) {
          if (absolutePath.at(i) != '.') {
@@ -704,7 +704,7 @@ QModelIndex QDirModel::index(const QString &path, int column) const
    }
 #endif
 
-   QStringList pathElements = absolutePath.split(QLatin1Char('/'), QStringParser::SkipEmptyParts);
+   QStringList pathElements = absolutePath.split(QChar('/'), QStringParser::SkipEmptyParts);
    if ((pathElements.isEmpty() || !QFileInfo(path).exists())
 
 #if !defined(Q_OS_WIN)
@@ -720,7 +720,7 @@ QModelIndex QDirModel::index(const QString &path, int column) const
    }
 
 #if defined(Q_OS_WIN)
-   if (absolutePath.startsWith(QLatin1String("//"))) { // UNC path
+   if (absolutePath.startsWith("//")) {
       QString host = pathElements.first();
       int r = 0;
       for (; r < d->root.children.count(); ++r)
@@ -729,7 +729,7 @@ QModelIndex QDirModel::index(const QString &path, int column) const
          }
       bool childAppended = false;
       if (r >= d->root.children.count() && d->allowAppendChild) {
-         d->appendChild(&d->root, QLatin1String("//") + host);
+         d->appendChild(&d->root, "//" + host);
          childAppended = true;
       }
       idx = index(r, 0, QModelIndex());
@@ -741,12 +741,12 @@ QModelIndex QDirModel::index(const QString &path, int column) const
 #endif
 
 #if defined(Q_OS_WIN)
-      if (pathElements.at(0).endsWith(QLatin1Char(':'))) {
-         pathElements[0] += QLatin1Char('/');
+      if (pathElements.at(0).endsWith(QChar(':'))) {
+         pathElements[0] += QChar('/');
       }
 #else
       // add the "/" item, since it is a valid path element on unix
-      pathElements.prepend(QLatin1String("/"));
+      pathElements.prepend("/");
 #endif
 
    for (int i = 0; i < pathElements.count(); ++i) {
@@ -779,7 +779,7 @@ QModelIndex QDirModel::index(const QString &path, int column) const
 
       // we couldn't find the path element, we create a new node since we _know_ that the path is valid
       if (row == -1) {
-         QString newPath = parent->info.absoluteFilePath() + QLatin1Char('/') + element;
+         QString newPath = parent->info.absoluteFilePath() + QChar('/') + element;
 
          if (!d->allowAppendChild || !QFileInfo(newPath).isDir()) {
             return QModelIndex();
@@ -826,7 +826,7 @@ QModelIndex QDirModel::mkdir(const QModelIndex &parent, const QString &name)
    QDir newDir(name);
    QDir dir(path);
    if (newDir.isRelative()) {
-      newDir = QDir(path + QLatin1Char('/') + name);
+      newDir = QDir(path + QChar('/') + name);
    }
    QString childName = newDir.dirName(); // Get the singular name of the directory
    newDir.cdUp();
@@ -1097,11 +1097,11 @@ QString QDirModelPrivate::name(const QModelIndex &index) const
    if (info.isRoot()) {
       QString name = info.absoluteFilePath();
 #if defined(Q_OS_WIN)
-      if (name.startsWith(QLatin1Char('/'))) { // UNC host
+      if (name.startsWith(QChar('/'))) { // UNC host
          return info.fileName();
       }
 
-      if (name.endsWith(QLatin1Char('/'))) {
+      if (name.endsWith(QChar('/'))) {
          name.chop(1);
       }
 #endif
@@ -1115,9 +1115,9 @@ QString QDirModelPrivate::size(const QModelIndex &index) const
    const QDirNode *n = node(index);
    if (n->info.isDir()) {
 #ifdef Q_OS_DARWIN
-      return QLatin1String("--");
+      return QString("--");
 #else
-      return QLatin1String("");
+      return QString("");
 #endif
       // Windows   - ""
       // OS X      - "--"

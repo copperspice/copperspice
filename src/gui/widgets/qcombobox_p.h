@@ -280,7 +280,7 @@ class QComboBoxDelegate : public QItemDelegate
    QComboBoxDelegate(QObject *parent, QComboBox *cmb) : QItemDelegate(parent), mCombo(cmb) {}
 
    static bool isSeparator(const QModelIndex &index) {
-      return index.data(Qt::AccessibleDescriptionRole).toString() == QLatin1String("separator");
+      return index.data(Qt::AccessibleDescriptionRole).toString() == "separator";
    }
 
    static void setSeparator(QAbstractItemModel *model, const QModelIndex &index) {

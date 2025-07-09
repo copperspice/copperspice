@@ -623,8 +623,7 @@ QVariant QDoubleSpinBoxPrivate::validateAndInterpret(QString &input, int &pos,
          break;
 
       case 2:
-         if (copy.at(1) == locale.decimalPoint()
-               && ((plus && copy.at(0) == QLatin1Char('+')) || (minus && copy.at(0) == QLatin1Char('-')))) {
+         if (copy.at(1) == locale.decimalPoint() && ((plus && copy.at(0) == QChar('+')) || (minus && copy.at(0) == QChar('-')))) {
             state = QValidator::Intermediate;
             goto end;
          }

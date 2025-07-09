@@ -71,14 +71,14 @@ class ZoomFactorValidator : public QDoubleValidator
 
    State validate(QString &input, int &pos) const override {
       bool replacePercent = false;
-      if (input.endsWith(QLatin1Char('%'))) {
+      if (input.endsWith(QChar('%'))) {
          input = input.left(input.length() - 1);
          replacePercent = true;
       }
 
       State state = QDoubleValidator::validate(input, pos);
       if (replacePercent) {
-         input += QLatin1Char('%');
+         input += QChar('%');
       }
 
       const int num_size = 4;
@@ -396,8 +396,8 @@ void QPrintPreviewDialogPrivate::setupActions()
    zoomGroup = new QActionGroup(q);
    zoomInAction = zoomGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Zoom in"));
    zoomOutAction = zoomGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Zoom out"));
-   qt_setupActionIcon(zoomInAction,  QLatin1String("zoom-in"));
-   qt_setupActionIcon(zoomOutAction, QLatin1String("zoom-out"));
+   qt_setupActionIcon(zoomInAction,  "zoom-in");
+   qt_setupActionIcon(zoomOutAction, "zoom-out");
 
    // Portrait/Landscape
    orientationGroup = new QActionGroup(q);
@@ -405,8 +405,8 @@ void QPrintPreviewDialogPrivate::setupActions()
    landscapeAction = orientationGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Landscape"));
    portraitAction->setCheckable(true);
    landscapeAction->setCheckable(true);
-   qt_setupActionIcon(portraitAction, QLatin1String("layout-portrait"));
-   qt_setupActionIcon(landscapeAction, QLatin1String("layout-landscape"));
+   qt_setupActionIcon(portraitAction,  "layout-portrait");
+   qt_setupActionIcon(landscapeAction, "layout-landscape");
 
    QObject::connect(portraitAction,  &QAction::triggered, preview, &QPrintPreviewWidget::setPortraitOrientation);
    QObject::connect(landscapeAction, &QAction::triggered, preview, &QPrintPreviewWidget::setLandscapeOrientation);
@@ -417,12 +417,13 @@ void QPrintPreviewDialogPrivate::setupActions()
    facingModeAction = modeGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog",   "Show facing pages"));
    overviewModeAction = modeGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Show overview of all pages"));
 
-   qt_setupActionIcon(singleModeAction, QLatin1String("view-page-one"));
-   qt_setupActionIcon(facingModeAction, QLatin1String("view-page-sided"));
-   qt_setupActionIcon(overviewModeAction, QLatin1String("view-page-multi"));
-   singleModeAction->setObjectName(QLatin1String("singleModeAction"));
-   facingModeAction->setObjectName(QLatin1String("facingModeAction"));
-   overviewModeAction->setObjectName(QLatin1String("overviewModeAction"));
+   qt_setupActionIcon(singleModeAction,   "view-page-one");
+   qt_setupActionIcon(facingModeAction,   "view-page-sided");
+   qt_setupActionIcon(overviewModeAction, "view-page-multi");
+
+   singleModeAction->setObjectName("singleModeAction");
+   facingModeAction->setObjectName("facingModeAction");
+   overviewModeAction->setObjectName("overviewModeAction");
 
    singleModeAction->setCheckable(true);
    facingModeAction->setCheckable(true);
@@ -434,8 +435,8 @@ void QPrintPreviewDialogPrivate::setupActions()
    printerGroup = new QActionGroup(q);
    printAction = printerGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Print"));
    pageSetupAction = printerGroup->addAction(QCoreApplication::translate("QPrintPreviewDialog", "Page setup"));
-   qt_setupActionIcon(printAction, QLatin1String("print"));
-   qt_setupActionIcon(pageSetupAction, QLatin1String("page-setup"));
+   qt_setupActionIcon(printAction, "print");
+   qt_setupActionIcon(pageSetupAction, "page-setup");
 
    QObject::connect(printAction,     &QAction::triggered, q, &QPrintPreviewDialog::_q_print);
    QObject::connect(pageSetupAction, &QAction::triggered, q, &QPrintPreviewDialog::_q_pageSetup);
@@ -595,10 +596,10 @@ void QPrintPreviewDialogPrivate::_q_print()
    if (printer->outputFormat() != QPrinter::NativeFormat) {
 
       QString title = QCoreApplication::translate("QPrintPreviewDialog", "Export to PDF");
-      QString suffix = QLatin1String(".pdf");
+      QString suffix = ".pdf";
 
-      QString fileName = QFileDialog::getSaveFileName(q, title, printer->outputFileName(),
-            QLatin1Char('*') + suffix);
+      QString fileName = QFileDialog::getSaveFileName(q, title, printer->outputFileName(), QChar('*') + suffix);
+
       if (!fileName.isEmpty()) {
          if (QFileInfo(fileName).suffix().isEmpty()) {
             fileName.append(suffix);
@@ -652,7 +653,7 @@ void QPrintPreviewDialogPrivate::_q_zoomFactorChanged()
 {
    QString text = zoomFactor->lineEdit()->text();
    bool ok;
-   qreal factor = text.remove(QLatin1Char('%')).toFloat(&ok);
+   qreal factor = text.remove(QChar('%')).toFloat(&ok);
    factor = qMax(qreal(1.0), qMin(qreal(1000.0), factor));
    if (ok) {
       preview->setZoomFactor(factor / 100.0);

@@ -391,7 +391,7 @@ void QPrinter::setOutputFileName(const QString &fileName)
    ABORT_IF_ACTIVE("QPrinter::setOutputFileName");
 
    QFileInfo fi(fileName);
-   if (! fi.suffix().compare(QLatin1String("pdf"), Qt::CaseInsensitive)) {
+   if (! fi.suffix().compare("pdf", Qt::CaseInsensitive)) {
       setOutputFormat(QPrinter::PdfFormat);
 
    } else if (fileName.isEmpty()) {

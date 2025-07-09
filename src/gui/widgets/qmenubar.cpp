@@ -62,7 +62,7 @@ class QMenuBarExtension : public QToolButton
 QMenuBarExtension::QMenuBarExtension(QWidget *parent)
    : QToolButton(parent)
 {
-   setObjectName(QLatin1String("qt_menubar_ext_button"));
+   setObjectName("qt_menubar_ext_button");
    setAutoRaise(true);
 
 #ifndef QT_NO_MENU

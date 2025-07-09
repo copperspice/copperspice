@@ -163,7 +163,7 @@ QIconTheme::QIconTheme(const QString &themeName)
    for ( int i = 0 ; i < iconDirs.size() ; ++i) {
       QDir iconDir(iconDirs[i]);
 
-      QString themeDir = iconDir.path() + QLatin1Char('/') + themeName;
+      QString themeDir = iconDir.path() + QChar('/') + themeName;
       QFileInfo themeDirInfo(themeDir);
 
       if (themeDirInfo.isDir()) {
@@ -171,7 +171,8 @@ QIconTheme::QIconTheme(const QString &themeName)
       }
 
       if (!m_valid) {
-         themeIndex.setFileName(themeDir + QLatin1String("/index.theme"));
+         themeIndex.setFileName(themeDir + "/index.theme");
+
          if (themeIndex.exists()) {
             m_valid = true;
          }
@@ -185,45 +186,35 @@ QIconTheme::QIconTheme(const QString &themeName)
       while (keyIterator.hasNext()) {
 
          const QString key = keyIterator.next();
-         if (key.endsWith(QLatin1String("/Size"))) {
             // Note the QSettings ini-format does not accept
             // slashes in key names, hence we have to cheat
+         if (key.endsWith("/Size")) {
             if (int size = indexReader.value(key).toInt()) {
                QString directoryKey = key.left(key.size() - 5);
                QIconDirInfo dirInfo(directoryKey);
                dirInfo.size = size;
-               QString type = indexReader.value(directoryKey +
-                     QLatin1String("/Type")
-                  ).toString();
 
-               if (type == QLatin1String("Fixed")) {
+               QString type = indexReader.value(directoryKey + "/Type").toString();
+               if (type == "Fixed") {
                   dirInfo.type = QIconDirInfo::Fixed;
-               } else if (type == QLatin1String("Scalable")) {
+               } else if (type == "Scalable") {
                   dirInfo.type = QIconDirInfo::Scalable;
                } else {
                   dirInfo.type = QIconDirInfo::Threshold;
                }
 
-               dirInfo.threshold = indexReader.value(directoryKey +
-                     QLatin1String("/Threshold"),
-                     2).toInt();
+               dirInfo.threshold = indexReader.value(directoryKey + "/Threshold", 2).toInt();
+               dirInfo.minSize   = indexReader.value(directoryKey + "/MinSize", size).toInt();
+               dirInfo.maxSize   = indexReader.value(directoryKey + "/MaxSize", size).toInt();
 
-               dirInfo.minSize = indexReader.value(directoryKey +
-                     QLatin1String("/MinSize"),
-                     size).toInt();
-
-               dirInfo.maxSize = indexReader.value(directoryKey +
-                     QLatin1String("/MaxSize"),
-                     size).toInt();
                m_keyList.append(dirInfo);
             }
          }
       }
 
       // Parent themes provide fallbacks for missing icons
-      m_parents = indexReader.value(
-            QLatin1String("Icon Theme/Inherits")).toStringList();
 
+      m_parents = indexReader.value("Icon Theme/Inherits").toStringList();
       m_parents.removeAll(QString());
 
       // Ensure a default platform fallback for all themes
@@ -236,8 +227,8 @@ QIconTheme::QIconTheme(const QString &themeName)
       }
 
       // Ensure that all themes fall back to hicolor
-      if (! m_parents.contains(QLatin1String("hicolor"))) {
-         m_parents.append(QLatin1String("hicolor"));
+      if (! m_parents.contains("hicolor")) {
+         m_parents.append("hicolor");
       }
    }
 #endif //QT_NO_SETTINGS
@@ -305,7 +296,7 @@ QThemeIconInfo QIconLoader::findIconHelper(const QString &themeName,
          break;
       }
       // If it's possible - find next fallback for the icon
-      const int indexOfDash = iconNameFallback.lastIndexOf(QLatin1Char('-'));
+      const int indexOfDash = iconNameFallback.lastIndexOf(QChar('-'));
       if (indexOfDash == -1) {
          break;
       }
@@ -582,7 +573,7 @@ QPixmap QIconLoaderEngine::pixmap(const QSize &size, QIcon::Mode mode,
 
 QString QIconLoaderEngine::key() const
 {
-   return QLatin1String("QIconLoaderEngine");
+   return QString("QIconLoaderEngine");
 }
 
 void QIconLoaderEngine::virtual_hook(int id, void *data)

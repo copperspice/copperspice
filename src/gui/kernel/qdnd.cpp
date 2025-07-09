@@ -188,7 +188,7 @@ QInternalMimeData::~QInternalMimeData()
 bool QInternalMimeData::hasFormat(const QString &mimeType) const
 {
    bool foundFormat = hasFormat_sys(mimeType);
-   if (!foundFormat && mimeType == QLatin1String("application/x-qt-image")) {
+   if (! foundFormat && mimeType == "application/x-qt-image") {
       QStringList imageFormats = imageReadMimeFormats();
       for (int i = 0; i < imageFormats.size(); ++i) {
          if ((foundFormat = hasFormat_sys(imageFormats.at(i)))) {
@@ -202,11 +202,12 @@ bool QInternalMimeData::hasFormat(const QString &mimeType) const
 QStringList QInternalMimeData::formats() const
 {
    QStringList realFormats = formats_sys();
-   if (!realFormats.contains(QLatin1String("application/x-qt-image"))) {
+
+   if (! realFormats.contains("application/x-qt-image")) {
       QStringList imageFormats = imageReadMimeFormats();
       for (int i = 0; i < imageFormats.size(); ++i) {
          if (realFormats.contains(imageFormats.at(i))) {
-            realFormats += QLatin1String("application/x-qt-image");
+            realFormats += "application/x-qt-image";
             break;
          }
       }
@@ -218,7 +219,7 @@ QVariant QInternalMimeData::retrieveData(const QString &mimeType, QVariant::Type
 {
    QVariant data = retrieveData_sys(mimeType, type);
 
-   if (mimeType == QLatin1String("application/x-qt-image")) {
+   if (mimeType == "application/x-qt-image") {
       if (! data.isValid() || (data.type() == QVariant::ByteArray && data.toByteArray().isEmpty())) {
          // try to find an image
          QStringList imageFormats = imageReadMimeFormats();
@@ -239,7 +240,7 @@ QVariant QInternalMimeData::retrieveData(const QString &mimeType, QVariant::Type
          data = QImage::fromData(data.toByteArray());
       }
 
-   } else if (mimeType == QLatin1String("application/x-color") && data.type() == QVariant::ByteArray) {
+   } else if (mimeType == "application/x-color" && data.type() == QVariant::ByteArray) {
       QColor c;
       QByteArray ba = data.toByteArray();
       if (ba.size() == 8) {
@@ -307,7 +308,7 @@ bool QInternalMimeData::hasFormatHelper(const QString &mimeType, const QMimeData
             }
 
          }
-      } else if (mimeType.startsWith(QLatin1String("image/"))) {
+      } else if (mimeType.startsWith("image/")) {
          return data->hasImage() && imageWriteMimeFormats().contains(mimeType);
       }
    }

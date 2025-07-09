@@ -861,7 +861,7 @@ QIcon QGtkStylePrivate::getFilesystemIcon(const QFileInfo &info)
       QString iconName = QString::fromUtf8(icon_name);
       g_free(icon_name);
 
-      if (iconName.startsWith(QLatin1Char('/'))) {
+      if (iconName.startsWith(QChar('/'))) {
          return QIcon(iconName);
       }
       return QIcon::fromTheme(iconName);

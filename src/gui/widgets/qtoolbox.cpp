@@ -288,7 +288,7 @@ int QToolBox::insertItem(int index, QWidget *widget, const QIcon &icon, const QS
    QToolBoxPrivate::Page c;
    c.widget = widget;
    c.button = new QToolBoxButton(this);
-   c.button->setObjectName(QLatin1String("qt_toolbox_toolboxbutton"));
+   c.button->setObjectName("qt_toolbox_toolboxbutton");
 
    connect(c.button, &QToolBoxButton::clicked, this, &QToolBox::_q_buttonClicked);
 

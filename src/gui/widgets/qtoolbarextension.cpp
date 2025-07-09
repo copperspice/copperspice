@@ -33,7 +33,7 @@
 QToolBarExtension::QToolBarExtension(QWidget *parent)
    : QToolButton(parent)
 {
-   setObjectName(QLatin1String("qt_toolbar_ext_button"));
+   setObjectName("qt_toolbar_ext_button");
    setAutoRaise(true);
    setOrientation(Qt::Horizontal);
    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
