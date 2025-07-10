@@ -481,6 +481,27 @@ bool QFileDevice::setPermissions(QFileDevice::Permissions permissions)
    return false;
 }
 
+QDateTime QFileDevice::fileTime(QFileDevice::FileTimeType type)
+{
+   Q_D(const QFileDevice);
+
+   return d->engine()->fileTime(type);
+}
+
+bool QFileDevice::setFileTime(const QDateTime &newTime, QFileDevice::FileTimeType type)
+{
+   Q_D(QFileDevice);
+
+   if (d->engine()->setFileTime(newTime, type)) {
+      unsetError();
+      return true;
+   }
+
+   d->setError(QFile::FileTimeError, d->fileEngine->errorString());
+
+   return false;
+}
+
 uchar *QFileDevice::map(qint64 offset, qint64 size, MemoryMapFlags flags)
 {
    Q_D(QFileDevice);

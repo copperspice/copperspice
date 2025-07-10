@@ -50,6 +50,7 @@ class Q_CORE_EXPORT QFileDevice : public QIODevice
       ResizeError      = 12,
       PermissionsError = 13,
       CopyError        = 14,
+      FileTimeError    = 15
    };
 
    enum Permission {
@@ -101,6 +102,8 @@ class Q_CORE_EXPORT QFileDevice : public QIODevice
    virtual QFileDevice::Permissions permissions() const;
    virtual bool setPermissions(QFileDevice::Permissions permissionSpec);
 
+   QDateTime fileTime(QFileDevice::FileTimeType type);
+   bool setFileTime(const QDateTime &newTime, QFileDevice::FileTimeType type);
 
    uchar *map(qint64 offset, qint64 size, MemoryMapFlags flags = NoOptions);
    bool unmap(uchar *address);
