@@ -296,6 +296,14 @@ QDateTime QAbstractFileEngine::fileTime(QFileDevice::FileTimeType type) const
    return QDateTime();
 }
 
+bool QAbstractFileEngine::setFileTime(const QDateTime &newTime, QFileDevice::FileTimeType type)
+{
+   (void) newTime;
+   (void) type;
+
+   return false;
+}
+
 void QAbstractFileEngine::setFileName(const QString &file)
 {
    (void) file;

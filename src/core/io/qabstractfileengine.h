@@ -116,6 +116,8 @@ class Q_CORE_EXPORT QAbstractFileEngine
    virtual FileFlags fileFlags(FileFlags type = FileInfoAll) const;
 
    virtual QDateTime fileTime(QFileDevice::FileTimeType type) const;
+   virtual bool setFileTime(const QDateTime &newTime, QFileDevice::FileTimeType type);
+
    virtual bool setPermissions(uint perms);
    virtual QString fileName(FileName file = DefaultName) const;
    virtual uint ownerId(FileOwner owner) const;
