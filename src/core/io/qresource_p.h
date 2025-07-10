@@ -74,7 +74,7 @@ class QResourceFileEngine : public QAbstractFileEngine
    uint ownerId(FileOwner) const override;
    QString owner(FileOwner) const override;
 
-   QDateTime fileTime(FileTime time) const override;
+   QDateTime fileTime(QFileDevice::FileTimeType) const override;
 
    QAbstractFileEngineIterator *beginEntryList(QDir::Filters filters, const QStringList &filterNames) override;
    QAbstractFileEngineIterator *endEntryList() override;

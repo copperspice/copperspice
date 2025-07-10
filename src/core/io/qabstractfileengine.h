@@ -25,6 +25,7 @@
 #define QABSTRACTFILEENGINE_H
 
 #include <qdir.h>
+#include <qfiledevice.h>
 
 #ifdef open
 #error qabstractfileengine.h must be included before any header file that defines open
@@ -87,11 +88,6 @@ class Q_CORE_EXPORT QAbstractFileEngine
       OwnerUser,
       OwnerGroup
    };
-   enum FileTime {
-      CreationTime,
-      ModificationTime,
-      AccessTime
-   };
 
    QAbstractFileEngine(const QAbstractFileEngine &) = delete;
    QAbstractFileEngine &operator=(const QAbstractFileEngine &) = delete;
@@ -118,12 +114,13 @@ class Q_CORE_EXPORT QAbstractFileEngine
    virtual bool isRelativePath() const;
    virtual QStringList entryList(QDir::Filters filters, const QStringList &filterNames) const;
    virtual FileFlags fileFlags(FileFlags type = FileInfoAll) const;
+
+   virtual QDateTime fileTime(QFileDevice::FileTimeType type) const;
    virtual bool setPermissions(uint perms);
    virtual QString fileName(FileName file = DefaultName) const;
    virtual uint ownerId(FileOwner owner) const;
    virtual QString owner(FileOwner owner) const;
 
-   virtual QDateTime fileTime(FileTime time) const;
    virtual void setFileName(const QString &file);
    virtual int handle() const;
 

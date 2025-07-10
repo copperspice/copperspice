@@ -69,6 +69,13 @@ class Q_CORE_EXPORT QFileDevice : public QIODevice
    enum MemoryMapFlags {
       NoOptions = 0
    };
+
+   enum FileTimeType {
+      CreateTime,
+      ModifiedTime,
+      AccessTime
+   };
+
    QFileDevice(const QFileDevice &) = delete;
    QFileDevice &operator=(const QFileDevice &) = delete;
 

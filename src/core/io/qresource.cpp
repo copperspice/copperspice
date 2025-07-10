@@ -1407,7 +1407,7 @@ QString QResourceFileEngine::owner(FileOwner) const
    return QString();
 }
 
-QDateTime QResourceFileEngine::fileTime(FileTime) const
+QDateTime QResourceFileEngine::fileTime(QFileDevice::FileTimeType) const
 {
    return QDateTime();
 }

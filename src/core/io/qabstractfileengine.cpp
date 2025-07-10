@@ -289,9 +289,9 @@ QString QAbstractFileEngine::owner(FileOwner owner) const
    return QString();
 }
 
-QDateTime QAbstractFileEngine::fileTime(FileTime time) const
+QDateTime QAbstractFileEngine::fileTime(QFileDevice::FileTimeType type) const
 {
-   (void) time;
+   (void) type;
 
    return QDateTime();
 }

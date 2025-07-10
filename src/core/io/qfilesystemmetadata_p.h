@@ -204,7 +204,8 @@ class QFileSystemMetaData
    QDateTime modificationTime() const;
    QDateTime accessTime() const;
 
-   QDateTime fileTime(QAbstractFileEngine::FileTime time) const;
+   QDateTime fileTime(QFileDevice::FileTimeType type) const;
+
    uint userId() const;
    uint groupId() const;
    uint ownerId(QAbstractFileEngine::FileOwner owner) const;
@@ -270,17 +271,17 @@ inline bool QFileSystemMetaData::isAlias() const
 #endif
 
 #if (defined(Q_OS_UNIX)) || defined (Q_OS_WIN)
-inline QDateTime QFileSystemMetaData::fileTime(QAbstractFileEngine::FileTime time) const
+inline QDateTime QFileSystemMetaData::fileTime(QFileDevice::FileTimeType type) const
 {
-   switch (time) {
-      case QAbstractFileEngine::ModificationTime:
+   switch (type) {
+      case QFileDevice::CreateTime:
+         return creationTime();
+
+      case QFileDevice::ModifiedTime:
          return modificationTime();
 
-      case QAbstractFileEngine::AccessTime:
+      case QFileDevice::AccessTime:
          return accessTime();
-
-      case QAbstractFileEngine::CreationTime:
-         return creationTime();
    }
 
    return QDateTime();

@@ -196,7 +196,7 @@ uint QFileInfoPrivate::getFileFlags(QAbstractFileEngine::FileFlags request) cons
    return fileFlags & request;
 }
 
-QDateTime &QFileInfoPrivate::getFileTime(QAbstractFileEngine::FileTime request) const
+QDateTime &QFileInfoPrivate::getFileTime(QFileDevice::FileTimeType type) const
 {
    Q_ASSERT(fileEngine);
    // should never be called when using the native FS
@@ -207,20 +207,22 @@ QDateTime &QFileInfoPrivate::getFileTime(QAbstractFileEngine::FileTime request) 
 
    uint cf;
 
-   if (request == QAbstractFileEngine::CreationTime) {
+   if (type == QFileDevice::FileTimeType::CreateTime) {
       cf = CachedCTime;
-   } else if (request == QAbstractFileEngine::ModificationTime) {
+
+   } else if (type == QFileDevice::FileTimeType::ModifiedTime) {
       cf = CachedMTime;
+
    } else {
       cf = CachedATime;
    }
 
    if (! getCachedFlag(cf)) {
-      fileTimes[request] = fileEngine->fileTime(request);
+      fileTimes[type] = fileEngine->fileTime(type);
       setCachedFlag(cf);
    }
 
-   return fileTimes[request];
+   return fileTimes[type];
 }
 
 QFileInfo::QFileInfo(QFileInfoPrivate *p)
@@ -884,7 +886,7 @@ QDateTime QFileInfo::created() const
       return d->metaData.creationTime();
    }
 
-   return d->getFileTime(QAbstractFileEngine::CreationTime);
+   return d->getFileTime(QFileDevice::FileTimeType::CreateTime);
 }
 
 QDateTime QFileInfo::lastModified() const
@@ -903,7 +905,7 @@ QDateTime QFileInfo::lastModified() const
       return d->metaData.modificationTime();
    }
 
-   return d->getFileTime(QAbstractFileEngine::ModificationTime);
+   return d->getFileTime(QFileDevice::FileTimeType::ModifiedTime);
 }
 
 QDateTime QFileInfo::lastRead() const
@@ -922,7 +924,7 @@ QDateTime QFileInfo::lastRead() const
       return d->metaData.accessTime();
    }
 
-   return d->getFileTime(QAbstractFileEngine::AccessTime);
+   return d->getFileTime(QFileDevice::FileTimeType::AccessTime);
 }
 
 void QFileInfo::detach()

@@ -683,12 +683,12 @@ bool QFSFileEngine::setSize(qint64 size)
    return ret;
 }
 
-QDateTime QFSFileEngine::fileTime(FileTime time) const
+QDateTime QFSFileEngine::fileTime(QFileDevice::FileTimeType type) const
 {
    Q_D(const QFSFileEngine);
 
    if (d->doStat(QFileSystemMetaData::Times)) {
-      return d->metaData.fileTime(time);
+      return d->metaData.fileTime(type);
    }
 
    return QDateTime();

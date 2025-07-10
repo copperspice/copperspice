@@ -117,7 +117,7 @@ class QFileInfoPrivate : public QSharedData
    }
 
    uint getFileFlags(QAbstractFileEngine::FileFlags) const;
-   QDateTime &getFileTime(QAbstractFileEngine::FileTime) const;
+   QDateTime &getFileTime(QFileDevice::FileTimeType type) const;
    QString getFileName(QAbstractFileEngine::FileName) const;
    QString getFileOwner(QAbstractFileEngine::FileOwner own) const;
 
