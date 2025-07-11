@@ -843,6 +843,47 @@ bool QFileSystemEngine::setPermissions(const QFileSystemEntry &entry, QFileDevic
    return success;
 }
 
+bool QFileSystemEngine::setFileTime(int fd, const QDateTime &newTime, QFileDevice::FileTimeType type, QSystemError &error)
+{
+   bool retval = false;
+
+   struct timespec timeSpec[2];
+   qint64 ms = newTime.toMSecsSinceEpoch();
+
+   switch (type) {
+      case QFileDevice::FileTimeType::CreateTime:
+         // not supported by posix
+         error = QSystemError(EINVAL, QSystemError::StandardLibraryError);
+         return retval;
+
+      case QFileDevice::FileTimeType::ModifiedTime:
+         timeSpec[0].tv_sec  = 0;
+         timeSpec[0].tv_nsec = UTIME_OMIT;
+
+         timeSpec[1].tv_sec = ms/1000;
+         timeSpec[1].tv_nsec = (ms % 1000) * 1000000;
+
+         break;
+
+      case QFileDevice::FileTimeType::AccessTime:
+         timeSpec[1].tv_sec  = 0;
+         timeSpec[1].tv_nsec = UTIME_OMIT;
+
+         timeSpec[0].tv_sec = ms/1000;
+         timeSpec[0].tv_nsec = (ms % 1000) * 1000000;
+
+         break;
+   }
+
+   retval = futimens(fd, timeSpec) != -1;
+
+   if (! retval) {
+      error = QSystemError(errno, QSystemError::StandardLibraryError);
+   }
+
+   return retval;
+}
+
 QString QFileSystemEngine::homePath()
 {
    QString home = QFile::decodeName(qgetenv("HOME"));
