@@ -69,6 +69,8 @@ class Q_CORE_EXPORT QFSFileEngine : public QAbstractFileEngine
    QString owner(FileOwner own) const override;
 
    QDateTime fileTime(QFileDevice::FileTimeType type) const override;
+   bool setFileTime(const QDateTime &newTime, QFileDevice::FileTimeType type) override;
+
    void setFileName(const QString &file) override;
    int handle() const override;
 
