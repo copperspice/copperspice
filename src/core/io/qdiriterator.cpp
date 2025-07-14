@@ -56,7 +56,7 @@ class QDirIteratorPrivate
 
    bool entryMatches(const QString &fileName, const QFileInfo &fileInfo);
    void pushDirectory(const QFileInfo &fileInfo);
-   void checkAndPushDirectory(const QFileInfo &);
+   void checkAndPushDirectory(const QFileInfo &fileInfo);
    bool matchesFilters(const QString &fileName, const QFileInfo &fi) const;
 
    QScopedPointer<QAbstractFileEngine> engine;

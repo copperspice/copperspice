@@ -1497,9 +1497,12 @@ static inline QDateTime fileTimeToQDateTime(const FILETIME *time)
 {
    QDateTime retval;
 
-   SYSTEMTIME sTime, lTime;
+   SYSTEMTIME sTime;
+   SYSTEMTIME lTime;
+
    FileTimeToSystemTime(time, &sTime);
    SystemTimeToTzSpecificLocalTime(nullptr, &sTime, &lTime);
+
    retval.setDate(QDate(lTime.wYear, lTime.wMonth, lTime.wDay));
    retval.setTime(QTime(lTime.wHour, lTime.wMinute, lTime.wSecond, lTime.wMilliseconds));
 

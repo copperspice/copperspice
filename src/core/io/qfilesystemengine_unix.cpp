@@ -836,7 +836,7 @@ bool QFileSystemEngine::setPermissions(const QFileSystemEntry &entry, QFileDevic
       data->knownFlagsMask |= QFileSystemMetaData::MetaDataFlag::AllPermissions;
    }
 
-   if (!success) {
+   if (! success) {
       error = QSystemError(errno, QSystemError::StandardLibraryError);
    }
 

@@ -56,8 +56,7 @@ static inline QByteArray openModeToFopenMode(QIODevice::OpenMode flags, const QF
       if (flags & QIODevice::WriteOnly) {
          metaData.clearFlags(QFileSystemMetaData::FileType);
 
-         if (!fileEntry.isEmpty()
-               && QFileSystemEngine::fillMetaData(fileEntry, metaData, QFileSystemMetaData::FileType)
+         if (!fileEntry.isEmpty() && QFileSystemEngine::fillMetaData(fileEntry, metaData, QFileSystemMetaData::FileType)
                && metaData.isFile()) {
             mode += '+';
          } else {
@@ -175,10 +174,9 @@ bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode fileOpenMode)
          fh = QT_FOPEN(fileEntry.nativeFilePath().constData(), fopenMode.constData());
       } while (!fh && errno == EINTR);
 
-      // On failure, return and report the error.
-      if (!fh) {
-         q->setError(errno == EMFILE ? QFile::ResourceError : QFile::OpenError,
-               qt_error_string(int(errno)));
+      // On failure return and report the error
+      if (! fh) {
+         q->setError(errno == EMFILE ? QFile::ResourceError : QFile::OpenError, qt_error_string(int(errno)));
          return false;
       }
 
@@ -204,8 +202,7 @@ bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode fileOpenMode)
          } while (ret == -1 && errno == EINTR);
 
          if (ret == -1) {
-            q->setError(errno == EMFILE ? QFile::ResourceError : QFile::OpenError,
-                  qt_error_string(int(errno)));
+            q->setError(errno == EMFILE ? QFile::ResourceError : QFile::OpenError, qt_error_string(int(errno)));
             return false;
          }
       }
@@ -349,14 +346,15 @@ bool QFSFileEngine::remove()
    Q_D(QFSFileEngine);
 
    QSystemError error;
-   bool ret = QFileSystemEngine::removeFile(d->fileEntry, error);
+   bool retval = QFileSystemEngine::removeFile(d->fileEntry, error);
+
    d->metaData.clear();
 
-   if (!ret) {
+   if (! retval) {
       setError(QFile::RemoveError, error.toString());
    }
 
-   return ret;
+   return retval;
 }
 
 bool QFSFileEngine::copy(const QString &newName)
@@ -364,13 +362,13 @@ bool QFSFileEngine::copy(const QString &newName)
    Q_D(QFSFileEngine);
 
    QSystemError error;
-   bool ret = QFileSystemEngine::copyFile(d->fileEntry, QFileSystemEntry(newName), error);
+   bool retval = QFileSystemEngine::copyFile(d->fileEntry, QFileSystemEntry(newName), error);
 
-   if (! ret) {
+   if (! retval) {
       setError(QFile::CopyError, error.toString());
    }
 
-   return ret;
+   return retval;
 }
 
 bool QFSFileEngine::renameOverwrite(const QString &newName)
@@ -382,27 +380,29 @@ bool QFSFileEngine::renameOverwrite(const QString &newName)
 bool QFSFileEngine::rename(const QString &newName)
 {
    Q_D(QFSFileEngine);
-   QSystemError error;
-   bool ret = QFileSystemEngine::renameFile(d->fileEntry, QFileSystemEntry(newName), error);
 
-   if (!ret) {
+   QSystemError error;
+   bool retval = QFileSystemEngine::renameFile(d->fileEntry, QFileSystemEntry(newName), error);
+
+   if (! retval) {
       setError(QFile::RenameError, error.toString());
    }
 
-   return ret;
+   return retval;
 }
 
 bool QFSFileEngine::link(const QString &newName)
 {
    Q_D(QFSFileEngine);
-   QSystemError error;
-   bool ret = QFileSystemEngine::createLink(d->fileEntry, QFileSystemEntry(newName), error);
 
-   if (!ret) {
+   QSystemError error;
+   bool retval = QFileSystemEngine::createLink(d->fileEntry, QFileSystemEntry(newName), error);
+
+   if (! retval) {
       setError(QFile::RenameError, error.toString());
    }
 
-   return ret;
+   return retval;
 }
 
 qint64 QFSFileEnginePrivate::nativeSize() const
@@ -452,15 +452,15 @@ QString QFSFileEngine::tempPath()
 
 QFileInfoList QFSFileEngine::drives()
 {
-   QFileInfoList ret;
-   ret.append(QFileInfo(rootPath()));
+   QFileInfoList retval;
+   retval.append(QFileInfo(rootPath()));
 
-   return ret;
+   return retval;
 }
 
 bool QFSFileEnginePrivate::doStat(QFileSystemMetaData::MetaDataFlags flags) const
 {
-   if (!tried_stat || !metaData.hasFlags(flags)) {
+   if (! tried_stat || ! metaData.hasFlags(flags)) {
       tried_stat = 1;
 
       int localFd = fd;
@@ -483,7 +483,7 @@ bool QFSFileEnginePrivate::doStat(QFileSystemMetaData::MetaDataFlags flags) cons
 
 bool QFSFileEnginePrivate::isSymlink() const
 {
-   if (!metaData.hasFlags(QFileSystemMetaData::LinkType)) {
+   if (! metaData.hasFlags(QFileSystemMetaData::LinkType)) {
       QFileSystemEngine::fillMetaData(fileEntry, metaData, QFileSystemMetaData::LinkType);
    }
 
@@ -666,21 +666,22 @@ bool QFSFileEngine::setPermissions(uint perms)
 bool QFSFileEngine::setSize(qint64 size)
 {
    Q_D(QFSFileEngine);
-   bool ret = false;
+
+   bool retval = false;
 
    if (d->fd != -1) {
-      ret = QT_FTRUNCATE(d->fd, size) == 0;
+      retval = QT_FTRUNCATE(d->fd, size) == 0;
    } else if (d->fh) {
-      ret = QT_FTRUNCATE(QT_FILENO(d->fh), size) == 0;
+      retval = QT_FTRUNCATE(QT_FILENO(d->fh), size) == 0;
    } else {
-      ret = QT_TRUNCATE(d->fileEntry.nativeFilePath().constData(), size) == 0;
+      retval = QT_TRUNCATE(d->fileEntry.nativeFilePath().constData(), size) == 0;
    }
 
-   if (!ret) {
+   if (! retval) {
       setError(QFile::ResizeError, qt_error_string(errno));
    }
 
-   return ret;
+   return retval;
 }
 
 QDateTime QFSFileEngine::fileTime(QFileDevice::FileTimeType type) const
@@ -724,6 +725,7 @@ bool QFSFileEngine::setFileTime(const QDateTime &newTime, QFileDevice::FileTimeT
 uchar *QFSFileEnginePrivate::map(qint64 offset, qint64 size, QFile::MemoryMapFlags flags)
 {
    Q_Q(QFSFileEngine);
+
    (void) flags;
 
    if (openMode == QIODevice::NotOpen) {
@@ -731,16 +733,12 @@ uchar *QFSFileEnginePrivate::map(qint64 offset, qint64 size, QFile::MemoryMapFla
       return nullptr;
    }
 
-   if (offset < 0 || offset != qint64(QT_OFF_T(offset))
-         || size < 0 || quint64(size) > quint64(size_t(-1))) {
+   if (offset < 0 || offset != qint64(QT_OFF_T(offset)) || size < 0 || quint64(size) > quint64(size_t(-1))) {
       q->setError(QFile::UnspecifiedError, qt_error_string(int(EINVAL)));
       return nullptr;
    }
 
-   // If we know the mapping will extend beyond EOF, fail early to avoid
-   // undefined behavior. Otherwise, let mmap have its say.
-   if (doStat(QFileSystemMetaData::SizeAttribute)
-         && (QT_OFF_T(size) > metaData.size() - QT_OFF_T(offset))) {
+   if (doStat(QFileSystemMetaData::SizeAttribute) && (QT_OFF_T(size) > metaData.size() - QT_OFF_T(offset))) {
       qWarning("QFSFileEngine::map() Mapping beyond the end of a file is not portable");
    }
 
@@ -766,8 +764,7 @@ uchar *QFSFileEnginePrivate::map(qint64 offset, qint64 size, QFile::MemoryMapFla
    QT_OFF_T realOffset = QT_OFF_T(offset);
    realOffset &= ~(QT_OFF_T(pageSize - 1));
 
-   void *mapAddress = QT_MMAP((void *)nullptr, realSize,
-         access, MAP_SHARED, nativeHandle(), realOffset);
+   void *mapAddress = QT_MMAP((void *)nullptr, realSize, access, MAP_SHARED, nativeHandle(), realOffset);
 
    if (MAP_FAILED != mapAddress) {
       uchar *address = extra + static_cast<uchar *>(mapAddress);
@@ -786,9 +783,10 @@ uchar *QFSFileEnginePrivate::map(qint64 offset, qint64 size, QFile::MemoryMapFla
          break;
 
       case EINVAL:
+         [[fallthrough]];
 
-      // size are out of bounds
       default:
+         // size are out of bounds
          q->setError(QFile::UnspecifiedError, qt_error_string(int(errno)));
          break;
    }
@@ -813,8 +811,8 @@ bool QFSFileEnginePrivate::unmap(uchar *ptr)
       return false;
    }
 
-
    maps.remove(ptr);
+
    return true;
 }
 

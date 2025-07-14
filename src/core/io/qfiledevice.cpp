@@ -506,8 +506,7 @@ uchar *QFileDevice::map(qint64 offset, qint64 size, MemoryMapFlags flags)
 {
    Q_D(QFileDevice);
 
-   if (d->engine()
-         && d->fileEngine->supportsExtension(QAbstractFileEngine::MapExtension)) {
+   if (d->engine() && d->fileEngine->supportsExtension(QAbstractFileEngine::MapExtension)) {
       unsetError();
       uchar *address = d->fileEngine->map(offset, size, flags);
 

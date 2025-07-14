@@ -863,7 +863,7 @@ bool QFSFileEngine::setSize(qint64 size)
       return false;
    }
 
-   if (!d->fileEntry.isEmpty()) {
+   if (! d->fileEntry.isEmpty()) {
       // resize file on disk
       QFile file(d->fileEntry.filePath());
 

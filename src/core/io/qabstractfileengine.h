@@ -119,11 +119,13 @@ class Q_CORE_EXPORT QAbstractFileEngine
    virtual bool setFileTime(const QDateTime &newTime, QFileDevice::FileTimeType type);
 
    virtual bool setPermissions(uint perms);
+
    virtual QString fileName(FileName file = DefaultName) const;
+   virtual void setFileName(const QString &file);
+
    virtual uint ownerId(FileOwner owner) const;
    virtual QString owner(FileOwner owner) const;
 
-   virtual void setFileName(const QString &file);
    virtual int handle() const;
 
    bool atEnd() const;
