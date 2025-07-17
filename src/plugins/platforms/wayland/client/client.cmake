@@ -16,7 +16,9 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_abstract_decoration_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_buffer_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_cursor_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_data_device_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_data_devicemanager_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_data_source_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_dataoffer_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_decoration_factory_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_decoration_plugin_p.h
@@ -68,7 +70,9 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_abstract_decoration.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_buffer.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_cursor.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_data_device.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_data_devicemanager.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_data_source.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_dataoffer.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_decoration_factory.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_decoration_plugin.cpp
