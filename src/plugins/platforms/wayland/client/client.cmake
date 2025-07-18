@@ -15,6 +15,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
    list(APPEND WAYLAND_CLIENT_PRIVATE_INCLUDES
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_abstract_decoration_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_buffer_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_clipboard_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_cursor_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_data_device_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_data_devicemanager_p.h
@@ -69,6 +70,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       PRIVATE
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_abstract_decoration.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_buffer.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_clipboard.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_cursor.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_data_device.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_data_devicemanager.cpp
