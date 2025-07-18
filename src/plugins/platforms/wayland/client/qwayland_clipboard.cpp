@@ -1,0 +1,85 @@
+/***********************************************************************
+*
+* Copyright (c) 2012-2025 Barbara Geller
+* Copyright (c) 2012-2025 Ansel Sermersheim
+*
+* Copyright (c) 2015 The Qt Company Ltd.
+* Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software. You can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* https://www.gnu.org/licenses/
+*
+***********************************************************************/
+
+#include <qwayland_clipboard_p.h>
+
+#include <qwayland_data_device_p.h>
+#include <qwayland_data_source_p.h>
+#include <qwayland_dataoffer_p.h>
+
+#ifndef QT_NO_DRAGANDDROP
+
+namespace QtWaylandClient {
+
+QWaylandClipboard::QWaylandClipboard(QWaylandDisplay *display)
+{
+}
+
+QWaylandClipboard::~QWaylandClipboard()
+{
+}
+
+QMimeData *QWaylandClipboard::mimeData(QClipboard::Mode mode)
+{
+   if (mode != QClipboard::Clipboard) {
+      return &m_emptyData;
+   }
+
+   // pending implementation
+
+   return &m_emptyData;
+}
+
+void QWaylandClipboard::setMimeData(QMimeData *data, QClipboard::Mode mode)
+{
+   if (mode != QClipboard::Clipboard) {
+      return;
+   }
+
+   static const QString plain = "text/plain";
+   static const QString utf8  = "text/plain;charset=utf-8";
+
+   if (data != nullptr && data->hasFormat(plain) && ! data->hasFormat(utf8)) {
+      data->setData(utf8, data->data(plain));
+   }
+
+   emitChanged(mode);
+}
+
+bool QWaylandClipboard::supportsMode(QClipboard::Mode mode) const
+{
+   return mode == QClipboard::Clipboard;
+}
+
+bool QWaylandClipboard::ownsMode(QClipboard::Mode mode) const
+{
+   if (mode != QClipboard::Clipboard) {
+      return false;
+   }
+   // pending implementation
+   return false;
+}
+
+}
+
+#endif // QT_NO_DRAGANDDROP
