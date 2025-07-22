@@ -149,6 +149,7 @@ target_sources(CsGui
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_fax3sm.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_flush.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_getimage.c
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_hash_set.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_luv.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_lzw.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_next.c
@@ -164,6 +165,7 @@ target_sources(CsGui
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_tile.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_version.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_warning.c
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_webp.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_write.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_zip.c
 )
