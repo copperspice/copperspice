@@ -31,10 +31,8 @@
 
 #include <qglobal.h>
 
-#ifdef _MSC_VER
-#include <basetsd.h>
-typedef SSIZE_T ssize_t;
-#endif
+#include <stdint.h>
+#include <inttypes.h>
 
 /* Signed 16-bit type */
 #define TIFF_INT16_T int16_t
@@ -61,19 +59,7 @@ typedef SSIZE_T ssize_t;
 #define TIFF_UINT8_T uint8_t
 
 /* Signed size type */
-#define TIFF_SSIZE_T ssize_t
-
-/* Pointer difference type */
-#define TIFF_PTRDIFF_T ptrdiff_t
-
-/* Define to 1 if the system has the type `int16'. */
-/* #undef HAVE_INT16 */
-
-/* Define to 1 if the system has the type `int32'. */
-/* #undef HAVE_INT32 */
-
-/* Define to 1 if the system has the type `int8'. */
-/* #undef HAVE_INT8 */
+#define TIFF_SSIZE_T intptr_t
 
 /* Compatibility stuff. */
 
