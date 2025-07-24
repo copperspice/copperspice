@@ -182,7 +182,6 @@ target_sources(CsGui
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftbase.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftbbox.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftbitmap.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftdebug.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftglyph.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftinit.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftmm.c
@@ -211,10 +210,11 @@ target_sources(CsGui
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/raster/raster.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/sdf/ftbsdf.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/sdf/ftsdf.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/sdf/ftsdfrend.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/sdf/ftsdfcommon.c
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/sdf/ftsdfrend.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/sfnt/sfnt.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/smooth/smooth.c
+   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/svg/svg.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/truetype/truetype.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/type1/type1.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/type42/type42.c
@@ -296,13 +296,17 @@ endif()
 if (CMAKE_SYSTEM_NAME MATCHES "Windows")
    target_sources(CsGui
       PRIVATE
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/builds/windows/ftdebug.c
       ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftsystem.c
    )
+
 else()
    target_sources(CsGui
       PRIVATE
-      ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/builds/unix/ftsystem.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftdebug.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/builds/unix/ftsystem.c
    )
+
    add_definitions(
       -DHAVE_FCNTL_H
    )
