@@ -4,7 +4,7 @@
  *
  *   Signed Distance Field support for outline fonts (body).
  *
- * Copyright (C) 2020-2021 by
+ * Copyright (C) 2020-2024 by
  * David Turner, Robert Wilhelm, and Werner Lemberg.
  *
  * Written by Anuj Verma.
@@ -204,7 +204,7 @@
   {
     FT_Memory  memory;
 
-  } SDF_TRaster;
+  } SDF_TRaster, *SDF_PRaster;
 
 
   /**************************************************************************
@@ -497,7 +497,7 @@
       goto Exit;
     }
 
-    if ( !FT_QALLOC( ptr, sizeof ( *ptr ) ) )
+    if ( !FT_QNEW( ptr ) )
     {
       *ptr = null_edge;
       *edge = ptr;
@@ -536,7 +536,7 @@
       goto Exit;
     }
 
-    if ( !FT_QALLOC( ptr, sizeof ( *ptr ) ) )
+    if ( !FT_QNEW( ptr ) )
     {
       *ptr     = null_contour;
       *contour = ptr;
@@ -591,7 +591,7 @@
       goto Exit;
     }
 
-    if ( !FT_QALLOC( ptr, sizeof ( *ptr ) ) )
+    if ( !FT_QNEW( ptr ) )
     {
       *ptr        = null_shape;
       ptr->memory = memory;
@@ -738,6 +738,18 @@
 
     contour = shape->contours;
 
+    /* If the control point coincides with any of the end points */
+    /* then it is a line and should be treated as one to avoid   */
+    /* unnecessary complexity later in the algorithm.            */
+    if ( ( contour->last_pos.x == control_1->x &&
+           contour->last_pos.y == control_1->y ) ||
+         ( control_1->x == to->x &&
+           control_1->y == to->y )               )
+    {
+      sdf_line_to( to, user );
+      goto Exit;
+    }
+
     FT_CALL( sdf_edge_new( memory, &edge ) );
 
     edge->edge_type = SDF_EDGE_CONIC;
@@ -764,9 +776,9 @@
                 const FT_26D6_Vec*  to,
                 void*               user )
   {
-    SDF_Shape*    shape    = ( SDF_Shape* )user;
-    SDF_Edge*     edge     = NULL;
-    SDF_Contour*  contour  = NULL;
+    SDF_Shape*    shape   = ( SDF_Shape* )user;
+    SDF_Edge*     edge    = NULL;
+    SDF_Contour*  contour = NULL;
 
     FT_Error   error  = FT_Err_Ok;
     FT_Memory  memory = shape->memory;
@@ -841,12 +853,12 @@
    *
    */
 
-  /* Return the control box of a edge.  The control box is a rectangle */
-  /* in which all the control points can fit tightly.                  */
+  /* Return the control box of an edge.  The control box is a rectangle */
+  /* in which all the control points can fit tightly.                   */
   static FT_CBox
   get_control_box( SDF_Edge  edge )
   {
-    FT_CBox  cbox;
+    FT_CBox  cbox   = { 0, 0, 0, 0 };
     FT_Bool  is_set = 0;
 
 
@@ -859,7 +871,7 @@
       cbox.yMax = edge.control_b.y;
 
       is_set = 1;
-      /* fall through */
+      FALL_THROUGH;
 
     case SDF_EDGE_CONIC:
       if ( is_set )
@@ -887,7 +899,7 @@
 
         is_set = 1;
       }
-      /* fall through */
+      FALL_THROUGH;
 
     case SDF_EDGE_LINE:
       if ( is_set )
@@ -1065,7 +1077,7 @@
   static FT_Error
   split_sdf_conic( FT_Memory     memory,
                    FT_26D6_Vec*  control_points,
-                   FT_Int        max_splits,
+                   FT_UInt       max_splits,
                    SDF_Edge**    out )
   {
     FT_Error     error = FT_Err_Ok;
@@ -1134,25 +1146,40 @@
   static FT_Error
   split_sdf_cubic( FT_Memory     memory,
                    FT_26D6_Vec*  control_points,
-                   FT_Int        max_splits,
+                   FT_UInt       max_splits,
                    SDF_Edge**    out )
   {
-    FT_Error     error = FT_Err_Ok;
-    FT_26D6_Vec  cpos[7];
-    SDF_Edge*    left,*  right;
+    FT_Error       error = FT_Err_Ok;
+    FT_26D6_Vec    cpos[7];
+    SDF_Edge*      left, *right;
+    const FT_26D6  threshold = ONE_PIXEL / 4;
 
 
-    if ( !memory || !out  )
+    if ( !memory || !out )
     {
       error = FT_THROW( Invalid_Argument );
       goto Exit;
     }
 
-    /* split the conic */
+    /* split the cubic */
     cpos[0] = control_points[0];
     cpos[1] = control_points[1];
     cpos[2] = control_points[2];
     cpos[3] = control_points[3];
+
+    /* If the segment is flat enough we won't get any benefit by */
+    /* splitting it further, so we can just stop splitting.      */
+    /*                                                           */
+    /* Check the deviation of the Bezier curve and stop if it is */
+    /* smaller than the pre-defined `threshold` value.           */
+    if ( FT_ABS( 2 * cpos[0].x - 3 * cpos[1].x + cpos[3].x ) < threshold &&
+         FT_ABS( 2 * cpos[0].y - 3 * cpos[1].y + cpos[3].y ) < threshold &&
+         FT_ABS( cpos[0].x - 3 * cpos[2].x + 2 * cpos[3].x ) < threshold &&
+         FT_ABS( cpos[0].y - 3 * cpos[2].y + 2 * cpos[3].y ) < threshold )
+    {
+      split_cubic( cpos );
+      goto Append;
+    }
 
     split_cubic( cpos );
 
@@ -1250,13 +1277,32 @@
           /* Subdivide the curve and add it to the list. */
           {
             FT_26D6_Vec  ctrls[3];
+            FT_26D6      dx, dy;
+            FT_UInt      num_splits;
 
 
             ctrls[0] = edge->start_pos;
             ctrls[1] = edge->control_a;
             ctrls[2] = edge->end_pos;
 
-            error = split_sdf_conic( memory, ctrls, 32, &new_edges );
+            dx = FT_ABS( ctrls[2].x + ctrls[0].x - 2 * ctrls[1].x );
+            dy = FT_ABS( ctrls[2].y + ctrls[0].y - 2 * ctrls[1].y );
+            if ( dx < dy )
+              dx = dy;
+
+            /* Calculate the number of necessary bisections.  Each      */
+            /* bisection causes a four-fold reduction of the deviation, */
+            /* hence we bisect the Bezier curve until the deviation     */
+            /* becomes less than 1/8 of a pixel.  For more details      */
+            /* check file `ftgrays.c`.                                  */
+            num_splits = 1;
+            while ( dx > ONE_PIXEL / 8 )
+            {
+              dx         >>= 2;
+              num_splits <<= 1;
+            }
+
+            error = split_sdf_conic( memory, ctrls, num_splits, &new_edges );
           }
           break;
 
@@ -1277,8 +1323,10 @@
 
         default:
           error = FT_THROW( Invalid_Argument );
-          goto Exit;
         }
+
+        if ( error != FT_Err_Ok )
+          goto Exit;
 
         edges = edges->next;
       }
@@ -1891,7 +1939,7 @@
     /* now factor is 16.16 */
     factor = FT_DivFix( factor, sq_line_length );
 
-    /* clamp the factor between 0.0 and 1.0 in fixed point */
+    /* clamp the factor between 0.0 and 1.0 in fixed-point */
     if ( factor > FT_INT_16D16( 1 ) )
       factor = FT_INT_16D16( 1 );
     if ( factor < 0 )
@@ -2061,7 +2109,8 @@
     FT_Error  error = FT_Err_Ok;
 
     FT_26D6_Vec  aA, bB;         /* A, B in the above comment             */
-    FT_26D6_Vec  nearest_point;  /* point on curve nearest to `point`     */
+    FT_26D6_Vec  nearest_point = { 0, 0 };
+                                 /* point on curve nearest to `point`     */
     FT_26D6_Vec  direction;      /* direction of curve at `nearest_point` */
 
     FT_26D6_Vec  p0, p1, p2;     /* control points of a conic curve       */
@@ -2322,11 +2371,11 @@
      *     ```
      *
      * (6) Our task is to find a value of `t` such that the above equation
-     *     `Q(t)` becomes zero, this is, the point-to-curve vector makes
+     *     `Q(t)` becomes zero, that is, the point-to-curve vector makes
      *     90~degrees with the curve.  We solve this with the Newton-Raphson
      *     method.
      *
-     * (7) We first assume an arbitary value of factor `t`, which we then
+     * (7) We first assume an arbitrary value of factor `t`, which we then
      *     improve.
      *
      *     ```
@@ -2357,7 +2406,8 @@
     FT_Error  error = FT_Err_Ok;
 
     FT_26D6_Vec  aA, bB, cC;     /* A, B, C in the above comment          */
-    FT_26D6_Vec  nearest_point;  /* point on curve nearest to `point`     */
+    FT_26D6_Vec  nearest_point = { 0, 0 };
+                                 /* point on curve nearest to `point`     */
     FT_26D6_Vec  direction;      /* direction of curve at `nearest_point` */
 
     FT_26D6_Vec  p0, p1, p2;     /* control points of a conic curve       */
@@ -2634,11 +2684,11 @@
      *     ```
      *
      * (6) Our task is to find a value of `t` such that the above equation
-     *     `Q(t)` becomes zero, this is, the point-to-curve vector makes
+     *     `Q(t)` becomes zero, that is, the point-to-curve vector makes
      *     90~degree with curve.  We solve this with the Newton-Raphson
      *     method.
      *
-     * (7) We first assume an arbitary value of factor `t`, which we then
+     * (7) We first assume an arbitrary value of factor `t`, which we then
      *     improve.
      *
      *     ```
@@ -2668,8 +2718,9 @@
 
     FT_Error  error = FT_Err_Ok;
 
-    FT_26D6_Vec   aA, bB, cC, dD; /* A, B, C in the above comment          */
-    FT_16D16_Vec  nearest_point;  /* point on curve nearest to `point`     */
+    FT_26D6_Vec   aA, bB, cC, dD; /* A, B, C, D in the above comment       */
+    FT_16D16_Vec  nearest_point = { 0, 0 };
+                                  /* point on curve nearest to `point`     */
     FT_16D16_Vec  direction;      /* direction of curve at `nearest_point` */
 
     FT_26D6_Vec  p0, p1, p2, p3;  /* control points of a cubic curve       */
@@ -2966,7 +3017,7 @@
         diff = current_dist.distance - min_dist.distance;
 
 
-        if ( FT_ABS(diff ) < CORNER_CHECK_EPSILON )
+        if ( FT_ABS( diff ) < CORNER_CHECK_EPSILON )
           min_dist = resolve_corner( min_dist, current_dist );
         else if ( diff < 0 )
           min_dist = current_dist;
@@ -3116,7 +3167,7 @@
         if ( min_dist.distance > sp_sq )
           min_dist.distance = sp_sq;
 
-        /* square_root the values and fit in a 6.10 fixed point */
+        /* square_root the values and fit in a 6.10 fixed-point */
         if ( USE_SQUARED_DISTANCES )
           min_dist.distance = square_root( min_dist.distance );
 
@@ -3208,7 +3259,7 @@
     /* and also determine the signs properly.             */
     SDF_Signed_Distance*  dists = NULL;
 
-    const FT_16D16  fixed_spread = FT_INT_16D16( spread );
+    const FT_16D16  fixed_spread = (FT_16D16)FT_INT_16D16( spread );
 
 
     if ( !shape || !bitmap )
@@ -3240,7 +3291,7 @@
     buffer   = (FT_SDFFormat*)bitmap->buffer;
 
     if ( USE_SQUARED_DISTANCES )
-      sp_sq = fixed_spread * fixed_spread;
+      sp_sq = FT_INT_16D16( (FT_Int)( spread * spread ) );
     else
       sp_sq = fixed_spread;
 
@@ -3284,6 +3335,7 @@
             FT_26D6_Vec          grid_point = zero_vector;
             SDF_Signed_Distance  dist       = max_sdf;
             FT_UInt              index      = 0;
+            FT_16D16             diff       = 0;
 
 
             if ( x < 0 || x >= width )
@@ -3311,7 +3363,7 @@
             if ( dist.distance > sp_sq )
               continue;
 
-            /* square_root the values and fit in a 6.10 fixed-point */
+            /* take the square root of the distance if required */
             if ( USE_SQUARED_DISTANCES )
               dist.distance = square_root( dist.distance );
 
@@ -3323,11 +3375,15 @@
             /* check whether the pixel is set or not */
             if ( dists[index].sign == 0 )
               dists[index] = dist;
-            else if ( dists[index].distance > dist.distance )
-              dists[index] = dist;
-            else if ( FT_ABS( dists[index].distance - dist.distance )
-                        < CORNER_CHECK_EPSILON )
-              dists[index] = resolve_corner( dists[index], dist );
+            else
+            {
+              diff = FT_ABS( dists[index].distance - dist.distance );
+
+              if ( diff <= CORNER_CHECK_EPSILON )
+                dists[index] = resolve_corner( dists[index], dist );
+              else if ( dists[index].distance > dist.distance )
+                dists[index] = dist;
+            }
           }
         }
 
@@ -3706,25 +3762,23 @@
    */
 
   static FT_Error
-  sdf_raster_new( FT_Memory   memory,
-                  FT_Raster*  araster)
+  sdf_raster_new( void*       memory_,   /* FT_Memory    */
+                  FT_Raster*  araster_ ) /* SDF_PRaster* */
   {
-    FT_Error      error  = FT_Err_Ok;
-    SDF_TRaster*  raster = NULL;
-    FT_Int        line   = __LINE__;
-
-    /* in non-debugging mode this is not used */
-    FT_UNUSED( line );
+    FT_Memory     memory  = (FT_Memory)memory_;
+    SDF_PRaster*  araster = (SDF_PRaster*)araster_;
 
 
-    *araster = 0;
-    if ( !FT_ALLOC( raster, sizeof ( SDF_TRaster ) ) )
-    {
+    FT_Error     error;
+    SDF_PRaster  raster = NULL;
+
+
+    if ( !FT_NEW( raster ) )
       raster->memory = memory;
-      *araster       = (FT_Raster)raster;
-    }
 
-    return error;
+    *araster = raster;
+
+   return error;
   }
 
 
@@ -3783,7 +3837,7 @@
     }
 
     /* if the outline is empty, return */
-    if ( outline->n_points <= 0 || outline->n_contours <= 0 )
+    if ( outline->n_points == 0 || outline->n_contours == 0 )
       goto Exit;
 
     /* check whether the outline has valid fields */

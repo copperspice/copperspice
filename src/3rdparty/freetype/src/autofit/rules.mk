@@ -3,7 +3,7 @@
 #
 
 
-# Copyright (C) 2003-2021 by
+# Copyright (C) 2003-2024 by
 # David Turner, Robert Wilhelm, and Werner Lemberg.
 #
 # This file is part of the FreeType project, and may only be used, modified,
@@ -39,16 +39,18 @@ AUTOF_DRV_SRC := $(AUTOF_DIR)/afblue.c   \
                  $(AUTOF_DIR)/afmodule.c \
                  $(AUTOF_DIR)/afranges.c \
                  $(AUTOF_DIR)/afshaper.c \
+                 $(AUTOF_DIR)/ft-hb.c
 
 # AUTOF driver headers
 #
-AUTOF_DRV_H := $(AUTOF_DRV_SRC:%c=%h)  \
-               $(AUTOF_DIR)/afcover.h  \
-               $(AUTOF_DIR)/aferrors.h \
-               $(AUTOF_DIR)/afscript.h \
-               $(AUTOF_DIR)/afstyles.h \
-               $(AUTOF_DIR)/aftypes.h  \
-               $(AUTOF_DIR)/afwrtsys.h
+AUTOF_DRV_H := $(AUTOF_DRV_SRC:%c=%h)   \
+               $(AUTOF_DIR)/afcover.h   \
+               $(AUTOF_DIR)/aferrors.h  \
+               $(AUTOF_DIR)/afscript.h  \
+               $(AUTOF_DIR)/afstyles.h  \
+               $(AUTOF_DIR)/aftypes.h   \
+               $(AUTOF_DIR)/afws-decl.h \
+               $(AUTOF_DIR)/afws-iter.h
 
 
 # AUTOF driver object(s)

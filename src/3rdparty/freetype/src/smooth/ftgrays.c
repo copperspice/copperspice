@@ -4,7 +4,7 @@
  *
  *   A new `perfect' anti-aliasing renderer (body).
  *
- * Copyright (C) 2000-2021 by
+ * Copyright (C) 2000-2024 by
  * David Turner, Robert Wilhelm, and Werner Lemberg.
  *
  * This file is part of the FreeType project, and may only be used,
@@ -149,14 +149,10 @@
 #define FT_INT_MAX    INT_MAX
 #define FT_ULONG_MAX  ULONG_MAX
 
-#define ADD_LONG( a, b )                                    \
-          (long)( (unsigned long)(a) + (unsigned long)(b) )
-#define SUB_LONG( a, b )                                    \
-          (long)( (unsigned long)(a) - (unsigned long)(b) )
-#define MUL_LONG( a, b )                                    \
-          (long)( (unsigned long)(a) * (unsigned long)(b) )
-#define NEG_LONG( a )                                       \
-          (long)( -(unsigned long)(a) )
+#define ADD_INT( a, b )                                  \
+          (int)( (unsigned int)(a) + (unsigned int)(b) )
+
+#define FT_STATIC_BYTE_CAST( type, var )  (type)(unsigned char)(var)
 
 
 #define ft_memset   memset
@@ -243,8 +239,11 @@ typedef ptrdiff_t  FT_PtrDist;
 #define FT_ERROR( x )   do { } while ( 0 )     /* nothing */
 #define FT_THROW( e )   FT_ERR_CAT( Smooth_Err_, e )
 
-
 #endif /* !FT_DEBUG_LEVEL_TRACE */
+
+
+#define FT_Trace_Enable()   do { } while ( 0 )  /* nothing */
+#define FT_Trace_Disable()  do { } while ( 0 )  /* nothing */
 
 
 #define FT_DEFINE_OUTLINE_FUNCS( class_,               \
@@ -279,6 +278,8 @@ typedef ptrdiff_t  FT_PtrDist;
 #else /* !STANDALONE_ */
 
 
+#include <ft2build.h>
+#include FT_CONFIG_CONFIG_H
 #include "ftgrays.h"
 #include <freetype/internal/ftobjs.h>
 #include <freetype/internal/ftdebug.h>
@@ -332,7 +333,9 @@ typedef ptrdiff_t  FT_PtrDist;
 #define PIXEL_BITS  8
 
 #define ONE_PIXEL       ( 1 << PIXEL_BITS )
+#undef TRUNC
 #define TRUNC( x )      (TCoord)( (x) >> PIXEL_BITS )
+#undef FRACT
 #define FRACT( x )      (TCoord)( (x) & ( ONE_PIXEL - 1 ) )
 
 #if PIXEL_BITS >= 6
@@ -359,7 +362,7 @@ typedef ptrdiff_t  FT_PtrDist;
     }                                                              \
   FT_END_STMNT
 
-#ifdef  __arm__
+#if defined( __GNUC__ ) && __GNUC__ < 7 && defined( __arm__ )
   /* Work around a bug specific to GCC which make the compiler fail to */
   /* optimize a division and modulo operation on the same parameters   */
   /* into a single call to `__aeabi_idivmod'.  See                     */
@@ -379,14 +382,23 @@ typedef ptrdiff_t  FT_PtrDist;
 #endif /* __arm__ */
 
 
-  /* These macros speed up repetitive divisions by replacing them */
-  /* with multiplications and right shifts.                       */
-#define FT_UDIVPREP( c, b )                                        \
-  long  b ## _r = c ? (long)( FT_ULONG_MAX >> PIXEL_BITS ) / ( b ) \
-                    : 0
-#define FT_UDIV( a, b )                                                \
-  (TCoord)( ( (unsigned long)( a ) * (unsigned long)( b ## _r ) ) >>   \
-            ( sizeof( long ) * FT_CHAR_BIT - PIXEL_BITS ) )
+  /* Calculating coverages for a slanted line requires a division each */
+  /* time the line crosses from cell to cell.  These macros speed up   */
+  /* the repetitive divisions by replacing them with multiplications   */
+  /* and right shifts so that at most two divisions are performed for  */
+  /* each slanted line.  Nevertheless, these divisions are noticeable  */
+  /* in the overall performance because flattened curves produce a     */
+  /* very large number of slanted lines.                               */
+  /*                                                                   */
+  /* The division results here are always within ONE_PIXEL.  Therefore */
+  /* the shift magnitude should be at least PIXEL_BITS wider than the  */
+  /* divisors to provide sufficient accuracy of the multiply-shift.    */
+  /* It should not exceed (64 - PIXEL_BITS) to prevent overflowing and */
+  /* leave enough room for 64-bit unsigned multiplication however.     */
+#define FT_UDIVPREP( c, b )                                \
+  FT_Int64  b ## _r = c ? (FT_Int64)0xFFFFFFFF / ( b ) : 0
+#define FT_UDIV( a, b )                                           \
+  (TCoord)( ( (FT_UInt64)( a ) * (FT_UInt64)( b ## _r ) ) >> 32 )
 
 
   /* Scale area and apply fill rule to calculate the coverage byte. */
@@ -406,21 +418,21 @@ typedef ptrdiff_t  FT_PtrDist;
 
   /* It is faster to write small spans byte-by-byte than calling     */
   /* `memset'.  This is mainly due to the cost of the function call. */
-#define FT_GRAY_SET( d, s, count )                          \
-  FT_BEGIN_STMNT                                            \
-    unsigned char* q = d;                                   \
-    switch ( count )                                        \
-    {                                                       \
-      case 7: *q++ = (unsigned char)s; /* fall through */   \
-      case 6: *q++ = (unsigned char)s; /* fall through */   \
-      case 5: *q++ = (unsigned char)s; /* fall through */   \
-      case 4: *q++ = (unsigned char)s; /* fall through */   \
-      case 3: *q++ = (unsigned char)s; /* fall through */   \
-      case 2: *q++ = (unsigned char)s; /* fall through */   \
-      case 1: *q   = (unsigned char)s; /* fall through */   \
-      case 0: break;                                        \
-      default: FT_MEM_SET( d, s, count );                   \
-    }                                                       \
+#define FT_GRAY_SET( d, s, count )                   \
+  FT_BEGIN_STMNT                                     \
+    unsigned char* q = d;                            \
+    switch ( count )                                 \
+    {                                                \
+      case 7: *q++ = (unsigned char)s; FALL_THROUGH; \
+      case 6: *q++ = (unsigned char)s; FALL_THROUGH; \
+      case 5: *q++ = (unsigned char)s; FALL_THROUGH; \
+      case 4: *q++ = (unsigned char)s; FALL_THROUGH; \
+      case 3: *q++ = (unsigned char)s; FALL_THROUGH; \
+      case 2: *q++ = (unsigned char)s; FALL_THROUGH; \
+      case 1: *q   = (unsigned char)s; FALL_THROUGH; \
+      case 0: break;                                 \
+      default: FT_MEM_SET( d, s, count );            \
+    }                                                \
   FT_END_STMNT
 
 
@@ -477,7 +489,7 @@ typedef ptrdiff_t  FT_PtrDist;
 
   typedef struct  gray_TWorker_
   {
-    ft_jmp_buf  jump_buffer;
+    FT_BBox     cbox;
 
     TCoord  min_ex, max_ex;  /* min and max integer pixel coordinates */
     TCoord  min_ey, max_ey;
@@ -485,13 +497,10 @@ typedef ptrdiff_t  FT_PtrDist;
 
     PCell       cell;        /* current cell                             */
     PCell       cell_free;   /* call allocation next free slot           */
-    PCell       cell_limit;  /* cell allocation limit                    */
+    PCell       cell_null;   /* last cell, used as dumpster and limit    */
 
     PCell*      ycells;      /* array of cell linked-lists; one per      */
                              /* vertical coordinate in the current band  */
-
-    PCell       cells;       /* cell storage area     */
-    FT_PtrDist  max_cells;   /* cell storage capacity */
 
     TPos        x,  y;       /* last point position */
 
@@ -500,6 +509,8 @@ typedef ptrdiff_t  FT_PtrDist;
 
     FT_Raster_Span_Func  render_span;
     void*                render_span_data;
+
+    ft_jmp_buf  jump_buffer;
 
   } gray_TWorker, *gray_PWorker;
 
@@ -513,25 +524,14 @@ typedef ptrdiff_t  FT_PtrDist;
   static gray_TWorker  ras;
 #endif
 
-  /*
-   * Return a pointer to the 'null cell', used as a sentinel at the end of
-   * all `ycells` linked lists.  Its x coordinate should be maximal to
-   * ensure no NULL checks are necessary when looking for an insertion point
-   * in `gray_set_cell`.  Other loops should check the cell pointer with
-   * CELL_IS_NULL() to detect the end of the list.
-   */
-#define NULL_CELL_PTR( ras )  (ras).cells
-
   /* The |x| value of the null cell.  Must be the largest possible */
   /* integer value stored in a `TCell.x` field.                    */
 #define CELL_MAX_X_VALUE    INT_MAX
 
-  /* Return true iff |cell| points to the null cell. */
-#define CELL_IS_NULL( cell )  ( (cell)->x == CELL_MAX_X_VALUE )
 
-
-#define FT_INTEGRATE( ras, a, b )                                     \
-           ras.cell->cover += (a), ras.cell->area += (a) * (TArea)(b)
+#define FT_INTEGRATE( ras, a, b )                                       \
+          ras.cell->cover = ADD_INT( ras.cell->cover, a ),              \
+          ras.cell->area  = ADD_INT( ras.cell->area, (a) * (TArea)(b) )
 
 
   typedef struct gray_TRaster_
@@ -558,7 +558,7 @@ typedef ptrdiff_t  FT_PtrDist;
 
       printf( "%3d:", y );
 
-      for ( ; !CELL_IS_NULL( cell ); cell = cell->next )
+      for ( ; cell != ras.cell_null; cell = cell->next )
         printf( " (%3d, c:%4d, a:%6d)",
                 cell->x, cell->cover, cell->area );
       printf( "\n" );
@@ -577,7 +577,7 @@ typedef ptrdiff_t  FT_PtrDist;
                           TCoord  ey )
   {
     /* Move the cell pointer to a new position in the linked list. We use  */
-    /* NULL to indicate that the cell is outside of the clipping region    */
+    /* a dumpster null cell for everything outside of the clipping region  */
     /* during the render phase.  This means that:                          */
     /*                                                                     */
     /* . the new vertical position must be within min_ey..max_ey-1.        */
@@ -590,7 +590,7 @@ typedef ptrdiff_t  FT_PtrDist;
 
 
     if ( ey_index < 0 || ey_index >= ras.count_ey || ex >= ras.max_ex )
-      ras.cell = NULL_CELL_PTR( ras );
+      ras.cell = ras.cell_null;
     else
     {
       PCell*  pcell = ras.ycells + ey_index;
@@ -614,7 +614,7 @@ typedef ptrdiff_t  FT_PtrDist;
 
       /* insert new cell */
       cell = ras.cell_free++;
-      if ( cell >= ras.cell_limit )
+      if ( cell >= ras.cell_null )
         ft_longjmp( ras.jump_buffer, 1 );
 
       cell->x     = ex;
@@ -630,7 +630,7 @@ typedef ptrdiff_t  FT_PtrDist;
   }
 
 
-#ifndef FT_LONG64
+#ifndef FT_INT64
 
   /**************************************************************************
    *
@@ -658,8 +658,8 @@ typedef ptrdiff_t  FT_PtrDist;
       return;
     }
 
-    fx1   = FRACT( x1 );
-    fx2   = FRACT( x2 );
+    fx1 = FRACT( x1 );
+    fx2 = FRACT( x2 );
 
     /* everything is located in a single cell.  That is easy! */
     /*                                                        */
@@ -926,7 +926,7 @@ typedef ptrdiff_t  FT_PtrDist;
     }
     else                                  /* any other line */
     {
-      TPos  prod = dx * (TPos)fy1 - dy * (TPos)fx1;
+      FT_Int64  prod = dx * (FT_Int64)fy1 - dy * (FT_Int64)fx1;
       FT_UDIVPREP( ex1 != ex2, dx );
       FT_UDIVPREP( ey1 != ey2, dy );
 
@@ -999,51 +999,24 @@ typedef ptrdiff_t  FT_PtrDist;
 #endif
 
   /*
-   * Benchmarking shows that using DDA to flatten the quadratic Bézier arcs
-   * is slightly faster in the following cases:
-   *
-   *   - When the host CPU is 64-bit.
-   *   - When SSE2 SIMD registers and instructions are available (even on
-   *     x86).
-   *
-   * For other cases, using binary splits is actually slightly faster.
+   * For now, the code that uses DDA to render conic curves requires
+   * `FT_Int64` to be defined.  See for example
+   *    https://gitlab.freedesktop.org/freetype/freetype/-/issues/1071.
    */
-#if defined( __SSE2__ )    || \
-    defined( __x86_64__ )  || \
-    defined( __aarch64__ ) || \
-    defined( _M_AMD64 )    || \
-    defined( _M_ARM64 )
-#  define BEZIER_USE_DDA  1
-#else
-#  define BEZIER_USE_DDA  0
-#endif
 
-  /*
-   * For now, the code that depends on `BEZIER_USE_DDA` requires `FT_Int64`
-   * to be defined.  If `FT_LONG64` is not defined, meaning there is no
-   * 64-bit type available, disable it to avoid compilation errors.  See for
-   * example https://gitlab.freedesktop.org/freetype/freetype/-/issues/1071.
-   */
-#if !defined( FT_LONG64 )
-#  undef BEZIER_USE_DDA
-#  define BEZIER_USE_DDA  0
-#endif
+#ifdef FT_INT64
 
-#if BEZIER_USE_DDA
+#define LEFT_SHIFT( a, b )  (FT_Int64)( (FT_UInt64)(a) << (b) )
 
-#ifdef __SSE2__
-#  include <emmintrin.h>
-#endif
 
   static void
   gray_render_conic( RAS_ARG_ const FT_Vector*  control,
                               const FT_Vector*  to )
   {
     FT_Vector  p0, p1, p2;
-    TPos       dx, dy;
+    TPos       ax, ay, bx, by, dx, dy;
     int        shift;
 
-    FT_Int64  ax, ay, bx, by;
     FT_Int64  rx, ry;
     FT_Int64  qx, qy;
     FT_Int64  px, py;
@@ -1071,8 +1044,13 @@ typedef ptrdiff_t  FT_PtrDist;
       return;
     }
 
-    dx = FT_ABS( p0.x + p2.x - 2 * p1.x );
-    dy = FT_ABS( p0.y + p2.y - 2 * p1.y );
+    bx = p1.x - p0.x;
+    by = p1.y - p0.y;
+    ax = p2.x - p1.x - bx;  /* p0.x + p2.x - 2 * p1.x */
+    ay = p2.y - p1.y - by;  /* p0.y + p2.y - 2 * p1.y */
+
+    dx = FT_ABS( ax );
+    dy = FT_ABS( ay );
     if ( dx < dy )
       dx = dy;
 
@@ -1082,16 +1060,17 @@ typedef ptrdiff_t  FT_PtrDist;
       return;
     }
 
-    /* We can calculate the number of necessary bisections because  */
+    /* We can calculate the number of necessary segments because    */
     /* each bisection predictably reduces deviation exactly 4-fold. */
     /* Even 32-bit deviation would vanish after 16 bisections.      */
-    shift = 0;
+    shift = 16;
     do
     {
-      dx   >>= 2;
-      shift += 1;
+      dx >>= 2;
+      shift--;
 
     } while ( dx > ONE_PIXEL / 4 );
+    count = 0x10000U >> shift;
 
     /*
      * The (P0,P1,P2) arc equation, for t in [0,1] range:
@@ -1126,89 +1105,30 @@ typedef ptrdiff_t  FT_PtrDist;
      *     EMIT(P)
      *
      * To ensure accurate results, perform computations on 64-bit
-     * values, after scaling them by 2^32:
+     * values, after scaling them by 2^32.
      *
-     *     R << 32   = 2 * A << (32 - N - N)
-     *               = A << (33 - 2 *N)
+     *           h = 1 / 2^N
      *
-     *     Q << 32   = (2 * B << (32 - N)) + (A << (32 - N - N))
-     *               = (B << (33 - N)) + (A << (32 - N - N))
+     *     R << 32 = 2 * A << (32 - N - N)
+     *             = A << (33 - 2*N)
+     *
+     *     Q << 32 = (2 * B << (32 - N)) + (A << (32 - N - N))
+     *             = (B << (33 - N)) + (A << (32 - 2*N))
      */
 
-#ifdef __SSE2__
-    /* Experience shows that for small shift values, */
-    /* SSE2 is actually slower.                      */
-    if ( shift > 2 )
-    {
-      union
-      {
-        struct { FT_Int64  ax, ay, bx, by; }  i;
-        struct { __m128i  a, b; }  vec;
+    rx = LEFT_SHIFT( ax, shift + shift );
+    ry = LEFT_SHIFT( ay, shift + shift );
 
-      } u;
+    qx = LEFT_SHIFT( bx, shift + 17 ) + rx;
+    qy = LEFT_SHIFT( by, shift + 17 ) + ry;
 
-      union
-      {
-        struct { FT_Int32  px_lo, px_hi, py_lo, py_hi; }  i;
-        __m128i  vec;
+    rx *= 2;
+    ry *= 2;
 
-      } v;
+    px = LEFT_SHIFT( p0.x, 32 );
+    py = LEFT_SHIFT( p0.y, 32 );
 
-      __m128i  a, b;
-      __m128i  r, q, q2;
-      __m128i  p;
-
-
-      u.i.ax = p0.x + p2.x - 2 * p1.x;
-      u.i.ay = p0.y + p2.y - 2 * p1.y;
-      u.i.bx = p1.x - p0.x;
-      u.i.by = p1.y - p0.y;
-
-      a = _mm_load_si128( &u.vec.a );
-      b = _mm_load_si128( &u.vec.b );
-
-      r  = _mm_slli_epi64( a, 33 - 2 * shift );
-      q  = _mm_slli_epi64( b, 33 - shift );
-      q2 = _mm_slli_epi64( a, 32 - 2 * shift );
-
-      q = _mm_add_epi64( q2, q );
-
-      v.i.px_lo = 0;
-      v.i.px_hi = p0.x;
-      v.i.py_lo = 0;
-      v.i.py_hi = p0.y;
-
-      p = _mm_load_si128( &v.vec );
-
-      for ( count = ( 1U << shift ); count > 0; count-- )
-      {
-        p = _mm_add_epi64( p, q );
-        q = _mm_add_epi64( q, r );
-
-        _mm_store_si128( &v.vec, p );
-
-        gray_render_line( RAS_VAR_ v.i.px_hi, v.i.py_hi );
-      }
-
-      return;
-    }
-#endif  /* __SSE2__ */
-
-    ax = p0.x + p2.x - 2 * p1.x;
-    ay = p0.y + p2.y - 2 * p1.y;
-    bx = p1.x - p0.x;
-    by = p1.y - p0.y;
-
-    rx = ax << ( 33 - 2 * shift );
-    ry = ay << ( 33 - 2 * shift );
-
-    qx = ( bx << ( 33 - shift ) ) + ( ax << ( 32 - 2 * shift ) );
-    qy = ( by << ( 33 - shift ) ) + ( ay << ( 32 - 2 * shift ) );
-
-    px = (FT_Int64)p0.x << 32;
-    py = (FT_Int64)p0.y << 32;
-
-    for ( count = 1U << shift; count > 0; count-- )
+    do
     {
       px += qx;
       py += qy;
@@ -1217,10 +1137,10 @@ typedef ptrdiff_t  FT_PtrDist;
 
       gray_render_line( RAS_VAR_ (FT_Pos)( px >> 32 ),
                                  (FT_Pos)( py >> 32 ) );
-    }
+    } while ( --count );
   }
 
-#else  /* !BEZIER_USE_DDA */
+#else  /* !FT_INT64 */
 
   /*
    * Note that multiple attempts to speed up the function below
@@ -1256,7 +1176,7 @@ typedef ptrdiff_t  FT_PtrDist;
     FT_Vector   bez_stack[16 * 2 + 1];  /* enough to accommodate bisections */
     FT_Vector*  arc = bez_stack;
     TPos        dx, dy;
-    int         draw, split;
+    int         draw;
 
 
     arc[0].x = UPSCALE( to->x );
@@ -1299,7 +1219,9 @@ typedef ptrdiff_t  FT_PtrDist;
     /* many times as there are trailing zeros in the counter.         */
     do
     {
-      split = draw & ( -draw );  /* isolate the rightmost 1-bit */
+      int  split = draw & ( -draw );  /* isolate the rightmost 1-bit */
+
+
       while ( ( split >>= 1 ) )
       {
         gray_split_conic( arc );
@@ -1312,7 +1234,7 @@ typedef ptrdiff_t  FT_PtrDist;
     } while ( --draw );
   }
 
-#endif  /* !BEZIER_USE_DDA */
+#endif  /* !FT_INT64 */
 
 
   /*
@@ -1416,8 +1338,10 @@ typedef ptrdiff_t  FT_PtrDist;
 
   static int
   gray_move_to( const FT_Vector*  to,
-                gray_PWorker      worker )
+                void*             worker_ )  /* gray_PWorker */
   {
+    gray_PWorker  worker = (gray_PWorker)worker_;
+
     TPos  x, y;
 
 
@@ -1435,8 +1359,11 @@ typedef ptrdiff_t  FT_PtrDist;
 
   static int
   gray_line_to( const FT_Vector*  to,
-                gray_PWorker      worker )
+                void*             worker_ )   /* gray_PWorker */
   {
+    gray_PWorker  worker = (gray_PWorker)worker_;
+
+
     gray_render_line( RAS_VAR_ UPSCALE( to->x ), UPSCALE( to->y ) );
     return 0;
   }
@@ -1445,8 +1372,11 @@ typedef ptrdiff_t  FT_PtrDist;
   static int
   gray_conic_to( const FT_Vector*  control,
                  const FT_Vector*  to,
-                 gray_PWorker      worker )
+                 void*             worker_ )   /* gray_PWorker */
   {
+    gray_PWorker  worker = (gray_PWorker)worker_;
+
+
     gray_render_conic( RAS_VAR_ control, to );
     return 0;
   }
@@ -1456,137 +1386,13 @@ typedef ptrdiff_t  FT_PtrDist;
   gray_cubic_to( const FT_Vector*  control1,
                  const FT_Vector*  control2,
                  const FT_Vector*  to,
-                 gray_PWorker      worker )
+                 void*             worker_ )   /* gray_PWorker */
   {
+    gray_PWorker  worker = (gray_PWorker)worker_;
+
+
     gray_render_cubic( RAS_VAR_ control1, control2, to );
     return 0;
-  }
-
-
-  static void
-  gray_sweep( RAS_ARG )
-  {
-    int  fill = ras.outline.flags & FT_OUTLINE_EVEN_ODD_FILL ? 0x100 : INT_MIN;
-    int  coverage;
-    int  y;
-
-
-    for ( y = ras.min_ey; y < ras.max_ey; y++ )
-    {
-      PCell   cell  = ras.ycells[y - ras.min_ey];
-      TCoord  x     = ras.min_ex;
-      TArea   cover = 0;
-      TArea   area;
-
-      unsigned char*  line = ras.target.origin - ras.target.pitch * y;
-
-
-      for ( ; !CELL_IS_NULL( cell ); cell = cell->next )
-      {
-        if ( cover != 0 && cell->x > x )
-        {
-          FT_FILL_RULE( coverage, cover, fill );
-          FT_GRAY_SET( line + x, coverage, cell->x - x );
-        }
-
-        cover += (TArea)cell->cover * ( ONE_PIXEL * 2 );
-        area   = cover - cell->area;
-
-        if ( area != 0 && cell->x >= ras.min_ex )
-        {
-          FT_FILL_RULE( coverage, area, fill );
-          line[cell->x] = (unsigned char)coverage;
-        }
-
-        x = cell->x + 1;
-      }
-
-      if ( cover != 0 )  /* only if cropped */
-      {
-        FT_FILL_RULE( coverage, cover, fill );
-        FT_GRAY_SET( line + x, coverage, ras.max_ex - x );
-      }
-    }
-  }
-
-
-  static void
-  gray_sweep_direct( RAS_ARG )
-  {
-    int  fill = ras.outline.flags & FT_OUTLINE_EVEN_ODD_FILL ? 0x100 : INT_MIN;
-    int  coverage;
-    int  y;
-
-    FT_Span  span[FT_MAX_GRAY_SPANS];
-    int      n = 0;
-
-
-    for ( y = ras.min_ey; y < ras.max_ey; y++ )
-    {
-      PCell   cell  = ras.ycells[y - ras.min_ey];
-      TCoord  x     = ras.min_ex;
-      TArea   cover = 0;
-      TArea   area;
-
-
-      for ( ; !CELL_IS_NULL( cell ); cell = cell->next )
-      {
-        if ( cover != 0 && cell->x > x )
-        {
-          FT_FILL_RULE( coverage, cover, fill );
-
-          span[n].coverage = (unsigned char)coverage;
-          span[n].x        = (short)x;
-          span[n].len      = (unsigned short)( cell->x - x );
-
-          if ( ++n == FT_MAX_GRAY_SPANS )
-          {
-            /* flush the span buffer and reset the count */
-            ras.render_span( y, n, span, ras.render_span_data );
-            n = 0;
-          }
-        }
-
-        cover += (TArea)cell->cover * ( ONE_PIXEL * 2 );
-        area   = cover - cell->area;
-
-        if ( area != 0 && cell->x >= ras.min_ex )
-        {
-          FT_FILL_RULE( coverage, area, fill );
-
-          span[n].coverage = (unsigned char)coverage;
-          span[n].x        = (short)cell->x;
-          span[n].len      = 1;
-
-          if ( ++n == FT_MAX_GRAY_SPANS )
-          {
-            /* flush the span buffer and reset the count */
-            ras.render_span( y, n, span, ras.render_span_data );
-            n = 0;
-          }
-        }
-
-        x = cell->x + 1;
-      }
-
-      if ( cover != 0 )  /* only if cropped */
-      {
-        FT_FILL_RULE( coverage, cover, fill );
-
-        span[n].coverage = (unsigned char)coverage;
-        span[n].x        = (short)x;
-        span[n].len      = (unsigned short)( ras.max_ex - x );
-
-        ++n;
-      }
-
-      if ( n )
-      {
-        /* flush the span buffer and reset the count */
-        ras.render_span( y, n, span, ras.render_span_data );
-        n = 0;
-      }
-    }
   }
 
 
@@ -1649,6 +1455,8 @@ typedef ptrdiff_t  FT_PtrDist;
 
     int   n;         /* index of contour in outline     */
     int   first;     /* index of first point in contour */
+    int   last;      /* index of last point in contour  */
+
     char  tag;       /* current point's state           */
 
     int   shift;
@@ -1663,18 +1471,17 @@ typedef ptrdiff_t  FT_PtrDist;
 
     shift = func_interface->shift;
     delta = func_interface->delta;
-    first = 0;
 
+    last = -1;
     for ( n = 0; n < outline->n_contours; n++ )
     {
-      int  last;  /* index of last point in contour */
+      FT_TRACE5(( "FT_Outline_Decompose: Contour %d\n", n ));
 
-
-      FT_TRACE5(( "FT_Outline_Decompose: Outline %d\n", n ));
-
+      first = last + 1;
       last  = outline->contours[n];
-      if ( last < 0 )
+      if ( last < first )
         goto Invalid_Outline;
+
       limit = outline->points + last;
 
       v_start   = outline->points[first];
@@ -1857,11 +1664,9 @@ typedef ptrdiff_t  FT_PtrDist;
                   v_start.x / 64.0, v_start.y / 64.0 ));
       error = func_interface->line_to( &v_start, user );
 
-   Close:
+    Close:
       if ( error )
         goto Exit;
-
-      first = last + 1;
     }
 
     FT_TRACE5(( "FT_Outline_Decompose: Done\n", n ));
@@ -1892,10 +1697,10 @@ typedef ptrdiff_t  FT_PtrDist;
 
 
   static int
-  gray_convert_glyph_inner( RAS_ARG,
+  gray_convert_glyph_inner( RAS_ARG_
                             int  continued )
   {
-    int  error;
+    volatile int  error;
 
 
     if ( ft_setjmp( ras.jump_buffer ) == 0 )
@@ -1906,11 +1711,11 @@ typedef ptrdiff_t  FT_PtrDist;
       if ( continued )
         FT_Trace_Enable();
 
-      FT_TRACE7(( "band [%d..%d]: %ld cell%s\n",
+      FT_TRACE7(( "band [%d..%d]: %td cell%s remaining\n",
                   ras.min_ey,
                   ras.max_ey,
-                  ras.cell_free - ras.cells,
-                  ras.cell_free - ras.cells == 1 ? "" : "s" ));
+                  ras.cell_null - ras.cell_free,
+                  ras.cell_null - ras.cell_free == 1 ? "" : "s" ));
     }
     else
     {
@@ -1924,14 +1729,144 @@ typedef ptrdiff_t  FT_PtrDist;
   }
 
 
+  static void
+  gray_sweep( RAS_ARG )
+  {
+    int  fill = ( ras.outline.flags & FT_OUTLINE_EVEN_ODD_FILL ) ? 0x100
+                                                                 : INT_MIN;
+    int  coverage;
+    int  y;
+
+
+    for ( y = ras.min_ey; y < ras.max_ey; y++ )
+    {
+      PCell   cell  = ras.ycells[y - ras.min_ey];
+      TCoord  x     = ras.min_ex;
+      TArea   cover = 0;
+
+      unsigned char*  line = ras.target.origin - ras.target.pitch * y;
+
+
+      for ( ; cell != ras.cell_null; cell = cell->next )
+      {
+        TArea  area;
+
+
+        if ( cover != 0 && cell->x > x )
+        {
+          FT_FILL_RULE( coverage, cover, fill );
+          FT_GRAY_SET( line + x, coverage, cell->x - x );
+        }
+
+        cover += (TArea)cell->cover * ( ONE_PIXEL * 2 );
+        area   = cover - cell->area;
+
+        if ( area != 0 && cell->x >= ras.min_ex )
+        {
+          FT_FILL_RULE( coverage, area, fill );
+          line[cell->x] = (unsigned char)coverage;
+        }
+
+        x = cell->x + 1;
+      }
+
+      if ( cover != 0 )  /* only if cropped */
+      {
+        FT_FILL_RULE( coverage, cover, fill );
+        FT_GRAY_SET( line + x, coverage, ras.max_ex - x );
+      }
+    }
+  }
+
+
+  static void
+  gray_sweep_direct( RAS_ARG )
+  {
+    int  fill = ( ras.outline.flags & FT_OUTLINE_EVEN_ODD_FILL ) ? 0x100
+                                                                 : INT_MIN;
+    int  coverage;
+    int  y;
+
+    FT_Span  span[FT_MAX_GRAY_SPANS];
+    int      n = 0;
+
+
+    for ( y = ras.min_ey; y < ras.max_ey; y++ )
+    {
+      PCell   cell  = ras.ycells[y - ras.min_ey];
+      TCoord  x     = ras.min_ex;
+      TArea   cover = 0;
+
+
+      for ( ; cell != ras.cell_null; cell = cell->next )
+      {
+        TArea  area;
+
+
+        if ( cover != 0 && cell->x > x )
+        {
+          FT_FILL_RULE( coverage, cover, fill );
+
+          span[n].coverage = (unsigned char)coverage;
+          span[n].x        = (short)x;
+          span[n].len      = (unsigned short)( cell->x - x );
+
+          if ( ++n == FT_MAX_GRAY_SPANS )
+          {
+            /* flush the span buffer and reset the count */
+            ras.render_span( y, n, span, ras.render_span_data );
+            n = 0;
+          }
+        }
+
+        cover += (TArea)cell->cover * ( ONE_PIXEL * 2 );
+        area   = cover - cell->area;
+
+        if ( area != 0 && cell->x >= ras.min_ex )
+        {
+          FT_FILL_RULE( coverage, area, fill );
+
+          span[n].coverage = (unsigned char)coverage;
+          span[n].x        = (short)cell->x;
+          span[n].len      = 1;
+
+          if ( ++n == FT_MAX_GRAY_SPANS )
+          {
+            /* flush the span buffer and reset the count */
+            ras.render_span( y, n, span, ras.render_span_data );
+            n = 0;
+          }
+        }
+
+        x = cell->x + 1;
+      }
+
+      if ( cover != 0 )  /* only if cropped */
+      {
+        FT_FILL_RULE( coverage, cover, fill );
+
+        span[n].coverage = (unsigned char)coverage;
+        span[n].x        = (short)x;
+        span[n].len      = (unsigned short)( ras.max_ex - x );
+
+        ++n;
+      }
+
+      if ( n )
+      {
+        /* flush the span buffer and reset the count */
+        ras.render_span( y, n, span, ras.render_span_data );
+        n = 0;
+      }
+    }
+  }
+
+
   static int
   gray_convert_glyph( RAS_ARG )
   {
-    const TCoord  yMin = ras.min_ey;
-    const TCoord  yMax = ras.max_ey;
-
     TCell    buffer[FT_MAX_GRAY_POOL];
-    size_t   height = (size_t)( yMax - yMin );
+    size_t   height = (size_t)( ras.cbox.yMax - ras.cbox.yMin );
     size_t   n = FT_MAX_GRAY_POOL / 8;
     TCoord   y;
     TCoord   bands[32];  /* enough to accommodate bisections */
@@ -1940,7 +1875,16 @@ typedef ptrdiff_t  FT_PtrDist;
     int  continued = 0;
 
 
+    /* Initialize the null cell at the end of the poll. */
+    ras.cell_null        = buffer + FT_MAX_GRAY_POOL - 1;
+    ras.cell_null->x     = CELL_MAX_X_VALUE;
+    ras.cell_null->area  = 0;
+    ras.cell_null->cover = 0;
+    ras.cell_null->next  = NULL;
+
     /* set up vertical bands */
+    ras.ycells     = (PCell*)buffer;
+
     if ( height > n )
     {
       /* two divisions rounded up */
@@ -1948,50 +1892,38 @@ typedef ptrdiff_t  FT_PtrDist;
       height  = ( height + n - 1 ) / n;
     }
 
-    /* memory management */
-    n = ( height * sizeof ( PCell ) + sizeof ( TCell ) - 1 ) / sizeof ( TCell );
-
-    ras.cells      = buffer + n;
-    ras.max_cells  = (FT_PtrDist)( FT_MAX_GRAY_POOL - n );
-    ras.cell_limit = ras.cells + ras.max_cells;
-    ras.ycells     = (PCell*)buffer;
-
-    /* Initialize the null cell at the start of the `cells` array.    */
-    /* Note that this requires `ras.cell_free` initialization to skip */
-    /* over the first entry in the array.                             */
-    PCell null_cell  = NULL_CELL_PTR( ras );
-    null_cell->x     = CELL_MAX_X_VALUE;
-    null_cell->area  = 0;
-    null_cell->cover = 0;
-    null_cell->next  = NULL;;
-
-    for ( y = yMin; y < yMax; )
+    for ( y = ras.cbox.yMin; y < ras.cbox.yMax; )
     {
       ras.min_ey = y;
       y         += height;
-      ras.max_ey = FT_MIN( y, yMax );
+      ras.max_ey = FT_MIN( y, ras.cbox.yMax );
+
+      ras.count_ey = ras.max_ey - ras.min_ey;
 
       band    = bands;
-      band[1] = ras.min_ey;
-      band[0] = ras.max_ey;
+      band[1] = ras.cbox.xMin;
+      band[0] = ras.cbox.xMax;
 
       do
       {
-        TCoord  width = band[0] - band[1];
-        TCoord  w;
+        TCoord  i;
         int     error;
 
 
-        for ( w = 0; w < width; ++w )
-          ras.ycells[w] = null_cell;
+        ras.min_ex = band[1];
+        ras.max_ex = band[0];
 
-        ras.cell_free = ras.cells + 1;  /* NOTE: Skip over the null cell. */
-        ras.cell      = null_cell;
-        ras.min_ey    = band[1];
-        ras.max_ey    = band[0];
-        ras.count_ey  = width;
+        /* memory management: zero out and skip ycells */
+        for ( i = 0; i < ras.count_ey; ++i )
+          ras.ycells[i] = ras.cell_null;
 
-        error     = gray_convert_glyph_inner( RAS_VAR, continued );
+        n = ( (size_t)ras.count_ey * sizeof ( PCell ) + sizeof ( TCell ) - 1 )
+              / sizeof ( TCell );
+
+        ras.cell_free = buffer + n;
+        ras.cell      = ras.cell_null;
+
+        error     = gray_convert_glyph_inner( RAS_VAR_ continued );
         continued = 1;
 
         if ( !error )
@@ -2007,10 +1939,10 @@ typedef ptrdiff_t  FT_PtrDist;
           return error;
 
         /* render pool overflow; we will reduce the render band by half */
-        width >>= 1;
+        i = ( band[0] - band[1] ) >> 1;
 
         /* this should never happen even with tiny rendering pool */
-        if ( width == 0 )
+        if ( i == 0 )
         {
           FT_TRACE7(( "gray_convert_glyph: rotten glyph\n" ));
           return FT_THROW( Raster_Overflow );
@@ -2018,7 +1950,7 @@ typedef ptrdiff_t  FT_PtrDist;
 
         band++;
         band[1]  = band[0];
-        band[0] += width;
+        band[0] += i;
       } while ( band >= bands );
     }
 
@@ -2049,7 +1981,7 @@ typedef ptrdiff_t  FT_PtrDist;
       return FT_THROW( Invalid_Outline );
 
     /* return immediately if the outline is empty */
-    if ( outline->n_points == 0 || outline->n_contours <= 0 )
+    if ( outline->n_points == 0 || outline->n_contours == 0 )
       return Smooth_Err_Ok;
 
     if ( !outline->contours || !outline->points )
@@ -2069,10 +2001,7 @@ typedef ptrdiff_t  FT_PtrDist;
       ras.render_span      = (FT_Raster_Span_Func)params->gray_spans;
       ras.render_span_data = params->user;
 
-      ras.min_ex = params->clip_box.xMin;
-      ras.min_ey = params->clip_box.yMin;
-      ras.max_ex = params->clip_box.xMax;
-      ras.max_ey = params->clip_box.yMax;
+      ras.cbox = params->clip_box;
     }
     else
     {
@@ -2098,14 +2027,14 @@ typedef ptrdiff_t  FT_PtrDist;
       ras.render_span      = (FT_Raster_Span_Func)NULL;
       ras.render_span_data = NULL;
 
-      ras.min_ex = 0;
-      ras.min_ey = 0;
-      ras.max_ex = (FT_Pos)target_map->width;
-      ras.max_ey = (FT_Pos)target_map->rows;
+      ras.cbox.xMin = 0;
+      ras.cbox.yMin = 0;
+      ras.cbox.xMax = (FT_Pos)target_map->width;
+      ras.cbox.yMax = (FT_Pos)target_map->rows;
     }
 
     /* exit if nothing to do */
-    if ( ras.max_ex <= ras.min_ex || ras.max_ey <= ras.min_ey )
+    if ( ras.cbox.xMin >= ras.cbox.xMax || ras.cbox.yMin >= ras.cbox.yMax )
       return Smooth_Err_Ok;
 
     return gray_convert_glyph( RAS_VAR );
@@ -2143,19 +2072,20 @@ typedef ptrdiff_t  FT_PtrDist;
 #else /* !STANDALONE_ */
 
   static int
-  gray_raster_new( FT_Memory   memory,
-                   FT_Raster*  araster )
+  gray_raster_new( void*       memory_,
+                   FT_Raster*  araster_ )
   {
+    FT_Memory      memory  = (FT_Memory)memory_;
+    gray_PRaster*  araster = (gray_PRaster*)araster_;
+
     FT_Error      error;
     gray_PRaster  raster = NULL;
 
 
-    *araster = 0;
-    if ( !FT_ALLOC( raster, sizeof ( gray_TRaster ) ) )
-    {
+    if ( !FT_NEW( raster ) )
       raster->memory = memory;
-      *araster       = (FT_Raster)raster;
-    }
+
+    *araster = raster;
 
     return error;
   }

@@ -4,7 +4,7 @@
  *
  *   FreeType sbits manager (body).
  *
- * Copyright (C) 2000-2021 by
+ * Copyright (C) 2000-2024 by
  * David Turner, Robert Wilhelm, and Werner Lemberg.
  *
  * This file is part of the FreeType project, and may only be used,
@@ -53,8 +53,7 @@
 
     size = (FT_ULong)pitch * bitmap->rows;
 
-    if ( !FT_QALLOC( sbit->buffer, size ) )
-      FT_MEM_COPY( sbit->buffer, bitmap->buffer, size );
+    FT_MEM_DUP( sbit->buffer, bitmap->buffer, size );
 
     return error;
   }
@@ -111,7 +110,7 @@
     FTC_SFamilyClass  clazz;
 
 
-    if ( (FT_UInt)(gindex - gnode->gindex) >= snode->count )
+    if ( gindex - gnode->gindex >= snode->count )
     {
       FT_ERROR(( "ftc_snode_load: invalid glyph index" ));
       return FT_THROW( Invalid_Argument );
@@ -171,7 +170,7 @@
       sbit->xadvance  = (FT_Char)xadvance;
       sbit->yadvance  = (FT_Char)yadvance;
       sbit->format    = (FT_Byte)bitmap->pixel_mode;
-      sbit->max_grays = (FT_Byte)(bitmap->num_grays - 1);
+      sbit->max_grays = (FT_Byte)( bitmap->num_grays - 1 );
 
       if ( slot->internal->flags & FT_GLYPH_OWN_BITMAP )
       {
@@ -233,7 +232,7 @@
       goto Exit;
     }
 
-    if ( !FT_NEW( snode ) )
+    if ( !FT_QNEW( snode ) )
     {
       FT_UInt  count, start;
 
@@ -248,7 +247,9 @@
       snode->count = count;
       for ( node_count = 0; node_count < count; node_count++ )
       {
-        snode->sbits[node_count].width = 255;
+        snode->sbits[node_count].width  = 255;
+        snode->sbits[node_count].height = 0;
+        snode->sbits[node_count].buffer = NULL;
       }
 
       error = ftc_snode_load( snode,
@@ -340,10 +341,10 @@
     FT_Bool     result;
 
 
-    if (list_changed)
+    if ( list_changed )
       *list_changed = FALSE;
-    result = FT_BOOL( gnode->family == gquery->family                    &&
-                      (FT_UInt)( gindex - gnode->gindex ) < snode->count );
+    result = FT_BOOL( gnode->family == gquery->family       &&
+                      gindex - gnode->gindex < snode->count );
     if ( result )
     {
       /* check if we need to load the glyph bitmap now */
@@ -408,20 +409,5 @@
 
     return result;
   }
-
-
-#ifdef FTC_INLINE
-
-  FT_LOCAL_DEF( FT_Bool )
-  FTC_SNode_Compare( FTC_SNode   snode,
-                     FTC_GQuery  gquery,
-                     FTC_Cache   cache,
-                     FT_Bool*    list_changed )
-  {
-    return ftc_snode_compare( FTC_NODE( snode ), gquery,
-                              cache, list_changed );
-  }
-
-#endif
 
 /* END */

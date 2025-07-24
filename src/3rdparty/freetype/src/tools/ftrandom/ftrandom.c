@@ -29,7 +29,7 @@
 /* This file is now part of the FreeType library */
 
 
-#define _XOPEN_SOURCE 500 /* for `kill', `strdup', `random', and `srandom' */
+#define _XOPEN_SOURCE 600 /* for `kill', `strdup', `random', and `srandom' */
 
 
 #include <stdio.h>
@@ -520,7 +520,7 @@
     char        buffer[1024];
 
 
-    sprintf( buffer, "%s/test%d", results_dir, test_num++ );
+    snprintf( buffer, 1024, "%s/test%d", results_dir, test_num++ );
 
     if ( copyfont ( &fontlist[i], buffer ) )
     {

@@ -3,7 +3,7 @@
 #
 
 
-# Copyright (C) 1996-2021 by
+# Copyright (C) 1996-2024 by
 # David Turner, Robert Wilhelm, and Werner Lemberg.
 #
 # This file is part of the FreeType project, and may only be used, modified,
@@ -36,7 +36,9 @@ SFNT_DRV_SRC := $(SFNT_DIR)/pngshim.c   \
                 $(SFNT_DIR)/ttbdf.c     \
                 $(SFNT_DIR)/ttcmap.c    \
                 $(SFNT_DIR)/ttcolr.c    \
+                $(SFNT_DIR)/ttsvg.c     \
                 $(SFNT_DIR)/ttcpal.c    \
+                $(SFNT_DIR)/ttgpos.c    \
                 $(SFNT_DIR)/ttkern.c    \
                 $(SFNT_DIR)/ttload.c    \
                 $(SFNT_DIR)/ttmtx.c     \

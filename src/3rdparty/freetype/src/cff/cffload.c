@@ -4,7 +4,7 @@
  *
  *   OpenType and CFF data/program tables loader (body).
  *
- * Copyright (C) 1996-2021 by
+ * Copyright (C) 1996-2024 by
  * David Turner, Robert Wilhelm, and Werner Lemberg.
  *
  * This file is part of the FreeType project, and may only be used,
@@ -400,7 +400,7 @@
 
   /* Allocate a table containing pointers to an index's elements. */
   /* The `pool' argument makes this function convert the index    */
-  /* entries to C-style strings (this is, NULL-terminated).       */
+  /* entries to C-style strings (that is, null-terminated).       */
   static FT_Error
   cff_index_get_pointers( CFF_Index   idx,
                           FT_Byte***  table,
@@ -622,7 +622,7 @@
     FT_Byte*    bytes;
     FT_ULong    byte_len;
     FT_Error    error;
-    FT_String*  name = 0;
+    FT_String*  name = NULL;
 
 
     if ( !idx->stream )  /* CFF2 does not include a name index */
@@ -771,8 +771,7 @@
 
     case 3:
       /* first, compare to the cache */
-      if ( (FT_UInt)( glyph_index - fdselect->cache_first ) <
-                        fdselect->cache_count )
+      if ( glyph_index - fdselect->cache_first < fdselect->cache_count )
       {
         fd = fdselect->cache_fd;
         break;
@@ -835,7 +834,6 @@
   {
     FT_Error   error   = FT_Err_Ok;
     FT_UInt    i;
-    FT_Long    j;
     FT_UShort  max_cid = 0;
 
 
@@ -853,9 +851,10 @@
 
     /* When multiple GIDs map to the same CID, we choose the lowest */
     /* GID.  This is not described in any spec, but it matches the  */
-    /* behaviour of recent Acroread versions.                       */
-    for ( j = (FT_Long)num_glyphs - 1; j >= 0; j-- )
-      charset->cids[charset->sids[j]] = (FT_UShort)j;
+    /* behaviour of recent Acroread versions.  The loop stops when  */
+    /* the unsigned index wraps around after reaching zero.         */
+    for ( i = num_glyphs - 1; i < num_glyphs; i-- )
+      charset->cids[charset->sids[i]] = (FT_UShort)i;
 
     charset->max_cid    = max_cid;
     charset->num_glyphs = num_glyphs;
@@ -1139,6 +1138,8 @@
     {
       FT_UInt   vsOffset;
       FT_UInt   format;
+      FT_UInt   dataCount;
+      FT_UInt   regionCount;
       FT_ULong  regionListOffset;
 
 
@@ -1161,16 +1162,16 @@
       }
 
       /* read top level fields */
-      if ( FT_READ_ULONG( regionListOffset )   ||
-           FT_READ_USHORT( vstore->dataCount ) )
+      if ( FT_READ_ULONG( regionListOffset ) ||
+           FT_READ_USHORT( dataCount )       )
         goto Exit;
 
       /* make temporary copy of item variation data offsets; */
       /* we'll parse region list first, then come back       */
-      if ( FT_QNEW_ARRAY( dataOffsetArray, vstore->dataCount ) )
+      if ( FT_QNEW_ARRAY( dataOffsetArray, dataCount ) )
         goto Exit;
 
-      for ( i = 0; i < vstore->dataCount; i++ )
+      for ( i = 0; i < dataCount; i++ )
       {
         if ( FT_READ_ULONG( dataOffsetArray[i] ) )
           goto Exit;
@@ -1179,13 +1180,14 @@
       /* parse regionList and axisLists */
       if ( FT_STREAM_SEEK( vsOffset + regionListOffset ) ||
            FT_READ_USHORT( vstore->axisCount )           ||
-           FT_READ_USHORT( vstore->regionCount )         )
+           FT_READ_USHORT( regionCount )                 )
         goto Exit;
 
-      if ( FT_QNEW_ARRAY( vstore->varRegionList, vstore->regionCount ) )
+      vstore->regionCount = 0;
+      if ( FT_QNEW_ARRAY( vstore->varRegionList, regionCount ) )
         goto Exit;
 
-      for ( i = 0; i < vstore->regionCount; i++ )
+      for ( i = 0; i < regionCount; i++ )
       {
         CFF_VarRegion*  region = &vstore->varRegionList[i];
 
@@ -1193,29 +1195,37 @@
         if ( FT_QNEW_ARRAY( region->axisList, vstore->axisCount ) )
           goto Exit;
 
+        /* keep track of how many axisList to deallocate on error */
+        vstore->regionCount++;
+
         for ( j = 0; j < vstore->axisCount; j++ )
         {
           CFF_AxisCoords*  axis = &region->axisList[j];
 
-          FT_Int16  start14, peak14, end14;
+          FT_Int  start, peak, end;
 
 
-          if ( FT_READ_SHORT( start14 ) ||
-               FT_READ_SHORT( peak14 )  ||
-               FT_READ_SHORT( end14 )   )
+          if ( FT_READ_SHORT( start ) ||
+               FT_READ_SHORT( peak )  ||
+               FT_READ_SHORT( end )   )
             goto Exit;
 
-          axis->startCoord = FT_fdot14ToFixed( start14 );
-          axis->peakCoord  = FT_fdot14ToFixed( peak14 );
-          axis->endCoord   = FT_fdot14ToFixed( end14 );
+          /* immediately tag invalid ranges with special peak = 0 */
+          if ( ( start < 0 && end > 0 ) || start > peak || peak > end )
+            peak = 0;
+
+          axis->startCoord = FT_fdot14ToFixed( start );
+          axis->peakCoord  = FT_fdot14ToFixed( peak );
+          axis->endCoord   = FT_fdot14ToFixed( end );
         }
       }
 
       /* use dataOffsetArray now to parse varData items */
-      if ( FT_QNEW_ARRAY( vstore->varData, vstore->dataCount ) )
+      vstore->dataCount = 0;
+      if ( FT_QNEW_ARRAY( vstore->varData, dataCount ) )
         goto Exit;
 
-      for ( i = 0; i < vstore->dataCount; i++ )
+      for ( i = 0; i < dataCount; i++ )
       {
         CFF_VarData*  data = &vstore->varData[i];
 
@@ -1236,6 +1246,9 @@
 
         if ( FT_QNEW_ARRAY( data->regionIndices, data->regionIdxCount ) )
           goto Exit;
+
+        /* keep track of how many regionIndices to deallocate on error */
+        vstore->dataCount++;
 
         for ( j = 0; j < data->regionIdxCount; j++ )
         {
@@ -1279,7 +1292,7 @@
   /* Blended values are written to a different buffer,     */
   /* using reserved operator 255.                          */
   /*                                                       */
-  /* Blend calculation is done in 16.16 fixed point.       */
+  /* Blend calculation is done in 16.16 fixed-point.       */
   FT_LOCAL_DEF( FT_Error )
   cff_blend_doBlend( CFF_SubFont  subFont,
                      CFF_Parser   parser,
@@ -1352,27 +1365,28 @@
     for ( i = 0; i < numBlends; i++ )
     {
       const FT_Int32*  weight = &blend->BV[1];
-      FT_UInt32        sum;
+      FT_Fixed         sum;
 
 
       /* convert inputs to 16.16 fixed point */
-      sum = cff_parse_num( parser, &parser->stack[i + base] ) * 0x10000;
+      sum = cff_parse_fixed( parser, &parser->stack[i + base] );
 
       for ( j = 1; j < blend->lenBV; j++ )
-        sum += cff_parse_num( parser, &parser->stack[delta++] ) * *weight++;
+        sum += FT_MulFix( cff_parse_fixed( parser, &parser->stack[delta++] ),
+                          *weight++ );
 
       /* point parser stack to new value on blend_stack */
       parser->stack[i + base] = subFont->blend_top;
 
-      /* Push blended result as Type 2 5-byte fixed point number.  This */
+      /* Push blended result as Type 2 5-byte fixed-point number.  This */
       /* will not conflict with actual DICTs because 255 is a reserved  */
       /* opcode in both CFF and CFF2 DICTs.  See `cff_parse_num' for    */
       /* decode of this, which rounds to an integer.                    */
       *subFont->blend_top++ = 255;
-      *subFont->blend_top++ = (FT_Byte)( sum >> 24 );
-      *subFont->blend_top++ = (FT_Byte)( sum >> 16 );
-      *subFont->blend_top++ = (FT_Byte)( sum >>  8 );
-      *subFont->blend_top++ = (FT_Byte)sum;
+      *subFont->blend_top++ = (FT_Byte)( (FT_UInt32)sum >> 24 );
+      *subFont->blend_top++ = (FT_Byte)( (FT_UInt32)sum >> 16 );
+      *subFont->blend_top++ = (FT_Byte)( (FT_UInt32)sum >>  8 );
+      *subFont->blend_top++ = (FT_Byte)( (FT_UInt32)sum );
     }
 
     /* leave only numBlends results on parser stack */
@@ -1485,44 +1499,31 @@
       for ( j = 0; j < lenNDV; j++ )
       {
         CFF_AxisCoords*  axis = &varRegion->axisList[j];
-        FT_Fixed         axisScalar;
 
 
-        /* compute the scalar contribution of this axis; */
-        /* ignore invalid ranges                         */
-        if ( axis->startCoord > axis->peakCoord ||
-             axis->peakCoord > axis->endCoord   )
-          axisScalar = FT_FIXED_ONE;
-
-        else if ( axis->startCoord < 0 &&
-                  axis->endCoord > 0   &&
-                  axis->peakCoord != 0 )
-          axisScalar = FT_FIXED_ONE;
-
-        /* peak of 0 means ignore this axis */
-        else if ( axis->peakCoord == 0 )
-          axisScalar = FT_FIXED_ONE;
+        /* compute the scalar contribution of this axis */
+        /* with peak of 0 used for invalid axes         */
+        if ( axis->peakCoord == NDV[j] ||
+             axis->peakCoord == 0      )
+          continue;
 
         /* ignore this region if coords are out of range */
-        else if ( NDV[j] < axis->startCoord ||
-                  NDV[j] > axis->endCoord   )
-          axisScalar = 0;
-
-        /* calculate a proportional factor */
-        else
+        else if ( NDV[j] <= axis->startCoord ||
+                  NDV[j] >= axis->endCoord   )
         {
-          if ( NDV[j] == axis->peakCoord )
-            axisScalar = FT_FIXED_ONE;
-          else if ( NDV[j] < axis->peakCoord )
-            axisScalar = FT_DivFix( NDV[j] - axis->startCoord,
-                                    axis->peakCoord - axis->startCoord );
-          else
-            axisScalar = FT_DivFix( axis->endCoord - NDV[j],
-                                    axis->endCoord - axis->peakCoord );
+          blend->BV[master] = 0;
+          break;
         }
 
-        /* take product of all the axis scalars */
-        blend->BV[master] = FT_MulFix( blend->BV[master], axisScalar );
+        /* adjust proportionally */
+        else if ( NDV[j] < axis->peakCoord )
+          blend->BV[master] = FT_MulDiv( blend->BV[master],
+                                         NDV[j] - axis->startCoord,
+                                         axis->peakCoord - axis->startCoord );
+        else   /* NDV[j] > axis->peakCoord ) */
+          blend->BV[master] = FT_MulDiv( blend->BV[master],
+                                         axis->endCoord - NDV[j],
+                                         axis->endCoord - axis->peakCoord );
       }
 
       FT_TRACE4(( ", %f ",
@@ -1580,16 +1581,17 @@
 #ifdef TT_CONFIG_OPTION_GX_VAR_SUPPORT
 
   FT_LOCAL_DEF( FT_Error )
-  cff_get_var_blend( CFF_Face     face,
+  cff_get_var_blend( FT_Face      face,             /* CFF_Face */
                      FT_UInt     *num_coords,
                      FT_Fixed*   *coords,
                      FT_Fixed*   *normalizedcoords,
                      FT_MM_Var*  *mm_var )
   {
-    FT_Service_MultiMasters  mm = (FT_Service_MultiMasters)face->mm;
+    CFF_Face                 cffface = (CFF_Face)face;
+    FT_Service_MultiMasters  mm      = (FT_Service_MultiMasters)cffface->mm;
 
 
-    return mm->get_var_blend( FT_FACE( face ),
+    return mm->get_var_blend( face,
                               num_coords,
                               coords,
                               normalizedcoords,
@@ -1598,13 +1600,14 @@
 
 
   FT_LOCAL_DEF( void )
-  cff_done_blend( CFF_Face  face )
+  cff_done_blend( FT_Face  face )    /* CFF_Face */
   {
-    FT_Service_MultiMasters  mm = (FT_Service_MultiMasters)face->mm;
+    CFF_Face                 cffface = (CFF_Face)face;
+    FT_Service_MultiMasters  mm      = (FT_Service_MultiMasters)cffface->mm;
 
 
-    if (mm)
-      mm->done_blend( FT_FACE( face ) );
+    if ( mm )
+      mm->done_blend( face );
   }
 
 #endif /* TT_CONFIG_OPTION_GX_VAR_SUPPORT */
@@ -1641,13 +1644,6 @@
       goto Exit;
     }
 
-    /* Zero out the code to gid/sid mappings. */
-    for ( j = 0; j < 256; j++ )
-    {
-      encoding->sids [j] = 0;
-      encoding->codes[j] = 0;
-    }
-
     /* Note: The encoding table in a CFF font is indexed by glyph index;  */
     /* the first encoded glyph index is 1.  Hence, we read the character  */
     /* code (`glyph_code') at index j and make the assignment:            */
@@ -1662,6 +1658,10 @@
 
     if ( offset > 1 )
     {
+      /* Zero out the code to gid/sid mappings. */
+      FT_ARRAY_ZERO( encoding->sids,  256 );
+      FT_ARRAY_ZERO( encoding->codes, 256 );
+
       encoding->offset = base_offset + offset;
 
       /* we need to parse the table to determine its size */
@@ -1819,7 +1819,8 @@
         /* Construct code to GID mapping from code to SID mapping */
         /* and charset.                                           */
 
-        encoding->count = 0;
+        encoding->offset = offset; /* used in cff_face_init */
+        encoding->count  = 0;
 
         error = cff_charset_compute_cids( charset, num_glyphs,
                                           stream->memory );
@@ -2002,7 +2003,7 @@
     /*       Top and Font DICTs are not allowed to have blend operators. */
     error = cff_parser_init( &parser,
                              code,
-                             &subfont->font_dict,
+                             top,
                              font->library,
                              stackSize,
                              0,

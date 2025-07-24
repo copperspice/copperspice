@@ -4,7 +4,7 @@
  *
  *   Signed Distance Field renderer interface (body).
  *
- * Copyright (C) 2020-2021 by
+ * Copyright (C) 2020-2024 by
  * David Turner, Robert Wilhelm, and Werner Lemberg.
  *
  * Written by Anuj Verma.
@@ -197,10 +197,10 @@
 
 
   static FT_Module_Interface
-  ft_sdf_requester( FT_Renderer  render,
+  ft_sdf_requester( FT_Module    module,
                     const char*  module_interface )
   {
-    FT_UNUSED( render );
+    FT_UNUSED( module );
 
     return ft_service_list_lookup( sdf_services, module_interface );
   }
@@ -221,9 +221,9 @@
    */
 
   static FT_Error
-  ft_sdf_init( FT_Renderer  render )
+  ft_sdf_init( FT_Module  module )   /* SDF_Renderer */
   {
-    SDF_Renderer  sdf_render = SDF_RENDERER( render );
+    SDF_Renderer  sdf_render = SDF_RENDERER( module );
 
 
     sdf_render->spread    = DEFAULT_SPREAD;
@@ -236,9 +236,9 @@
 
 
   static void
-  ft_sdf_done( FT_Renderer  render )
+  ft_sdf_done( FT_Module  module )
   {
-    FT_UNUSED( render );
+    FT_UNUSED( module );
   }
 
 
@@ -298,6 +298,7 @@
       goto Exit;
     }
 
+    /* nothing to render */
     if ( !bitmap->rows || !bitmap->pitch )
       goto Exit;
 
@@ -350,6 +351,10 @@
     error = render->raster_render( render->raster,
                                    (const FT_Raster_Params*)&params );
 
+    /* transform the outline back to the original state */
+    if ( x_shift || y_shift )
+      FT_Outline_Translate( outline, -x_shift, -y_shift );
+
   Exit:
     if ( !error )
     {
@@ -361,9 +366,6 @@
       FT_FREE( bitmap->buffer );
       slot->internal->flags &= ~FT_GLYPH_OWN_BITMAP;
     }
-
-    if ( x_shift || y_shift )
-      FT_Outline_Translate( outline, -x_shift, -y_shift );
 
     return error;
   }
@@ -506,8 +508,20 @@
       goto Exit;
     }
 
+    /* nothing to render */
     if ( !bitmap->rows || !bitmap->pitch )
       goto Exit;
+
+    /* Do not generate SDF if the bitmap is not owned by the       */
+    /* glyph: it might be that the source buffer is already freed. */
+    if ( !( slot->internal->flags & FT_GLYPH_OWN_BITMAP ) )
+    {
+      FT_ERROR(( "ft_bsdf_render: can't generate SDF from"
+                 " unowned source bitmap\n" ));
+
+      error = FT_THROW( Invalid_Argument );
+      goto Exit;
+    }
 
     FT_Bitmap_New( &target );
 
@@ -543,15 +557,14 @@
     {
       /* the glyph is successfully converted to a SDF */
       if ( slot->internal->flags & FT_GLYPH_OWN_BITMAP )
-      {
         FT_FREE( bitmap->buffer );
-        slot->internal->flags &= ~FT_GLYPH_OWN_BITMAP;
-      }
 
-      slot->bitmap           = target;
-      slot->bitmap_top      += y_pad;
-      slot->bitmap_left     -= x_pad;
-      slot->internal->flags |= FT_GLYPH_OWN_BITMAP;
+      slot->bitmap       = target;
+      slot->bitmap_top  += y_pad;
+      slot->bitmap_left -= x_pad;
+
+      if ( target.buffer )
+        slot->internal->flags |= FT_GLYPH_OWN_BITMAP;
     }
     else if ( target.buffer )
       FT_FREE( target.buffer );

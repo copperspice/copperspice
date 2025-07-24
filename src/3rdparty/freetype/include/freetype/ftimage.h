@@ -5,7 +5,7 @@
  *   FreeType glyph image formats and default raster interface
  *   (specification).
  *
- * Copyright (C) 1996-2021 by
+ * Copyright (C) 1996-2024 by
  * David Turner, Robert Wilhelm, and Werner Lemberg.
  *
  * This file is part of the FreeType project, and may only be used,
@@ -19,18 +19,18 @@
   /**************************************************************************
    *
    * Note: A 'raster' is simply a scan-line converter, used to render
-   *       FT_Outlines into FT_Bitmaps.
+   *       `FT_Outline`s into `FT_Bitmap`s.
+   *
+   * Note: This file can be used for `STANDALONE_` compilation of raster
+   *       (B/W) and smooth (anti-aliased) renderers.  Therefore, it must
+   *       rely on standard variable types only instead of aliases in
+   *       `fttypes.h`.
    *
    */
 
 
 #ifndef FTIMAGE_H_
 #define FTIMAGE_H_
-
-
-  /* STANDALONE_ is from ftgrays.c */
-#ifndef STANDALONE_
-#endif
 
 
 FT_BEGIN_HEADER
@@ -261,6 +261,12 @@ FT_BEGIN_HEADER
    *   palette ::
    *     A typeless pointer to the bitmap palette; this field is intended for
    *     paletted pixel modes.  Not used currently.
+   *
+   * @note:
+   *   `width` and `rows` refer to the *physical* size of the bitmap, not the
+   *   *logical* one.  For example, if @FT_Pixel_Mode is set to
+   *   `FT_PIXEL_MODE_LCD`, the logical width is a just a third of the
+   *   physical one.
    */
   typedef struct  FT_Bitmap_
   {
@@ -317,7 +323,7 @@ FT_BEGIN_HEADER
    *
    *     If bit~2 is set, bits 5-7 contain the drop-out mode (as defined in
    *     the OpenType specification; the value is the same as the argument to
-   *     the 'SCANMODE' instruction).
+   *     the 'SCANTYPE' instruction).
    *
    *     Bits 3 and~4 are reserved for internal purposes.
    *
@@ -340,14 +346,14 @@ FT_BEGIN_HEADER
    */
   typedef struct  FT_Outline_
   {
-    short       n_contours;      /* number of contours in glyph        */
-    short       n_points;        /* number of points in the glyph      */
+    unsigned short   n_contours;  /* number of contours in glyph        */
+    unsigned short   n_points;    /* number of points in the glyph      */
 
-    FT_Vector*  points;          /* the outline's points               */
-    char*       tags;            /* the points flags                   */
-    short*      contours;        /* the contour end points             */
+    FT_Vector*       points;      /* the outline's points               */
+    unsigned char*   tags;        /* the points flags                   */
+    unsigned short*  contours;    /* the contour end points             */
 
-    int         flags;           /* outline masks                      */
+    int              flags;       /* outline masks                      */
 
   } FT_Outline;
 
@@ -355,8 +361,8 @@ FT_BEGIN_HEADER
 
   /* Following limits must be consistent with */
   /* FT_Outline.{n_contours,n_points}         */
-#define FT_OUTLINE_CONTOURS_MAX  SHRT_MAX
-#define FT_OUTLINE_POINTS_MAX    SHRT_MAX
+#define FT_OUTLINE_CONTOURS_MAX  USHRT_MAX
+#define FT_OUTLINE_POINTS_MAX    USHRT_MAX
 
 
   /**************************************************************************
@@ -406,11 +412,11 @@ FT_BEGIN_HEADER
    *     information.
    *
    *   FT_OUTLINE_OVERLAP ::
-   *     This flag indicates that this outline contains overlapping contrours
-   *     and the anti-aliased renderer should perform oversampling to
-   *     mitigate possible artifacts.  This flag should _not_ be set for
-   *     well designed glyphs without overlaps because it quadruples the
-   *     rendering time.
+   *     [Since 2.10.3] This flag indicates that this outline contains
+   *     overlapping contours and the anti-aliased renderer should perform
+   *     oversampling to mitigate possible artifacts.  This flag should _not_
+   *     be set for well designed glyphs without overlaps because it quadruples
+   *     the rendering time.
    *
    *   FT_OUTLINE_HIGH_PRECISION ::
    *     This flag indicates that the scan-line converter should try to
@@ -433,8 +439,8 @@ FT_BEGIN_HEADER
    *   rasterizer; see the `tags` field in @FT_Outline.
    *
    *   Please refer to the description of the 'SCANTYPE' instruction in the
-   *   OpenType specification (in file `ttinst1.doc`) how simple drop-outs,
-   *   smart drop-outs, and stubs are defined.
+   *   [OpenType specification](https://learn.microsoft.com/en-us/typography/opentype/spec/tt_instructions#scantype)
+   *   how simple drop-outs, smart drop-outs, and stubs are defined.
    */
 #define FT_OUTLINE_NONE             0x0
 #define FT_OUTLINE_OWNER            0x1
@@ -700,11 +706,13 @@ FT_BEGIN_HEADER
    *   to get a simple enumeration without assigning special numbers.
    */
 #ifndef FT_IMAGE_TAG
-#define FT_IMAGE_TAG( value, _x1, _x2, _x3, _x4 )  \
-          value = ( ( (unsigned long)_x1 << 24 ) | \
-                    ( (unsigned long)_x2 << 16 ) | \
-                    ( (unsigned long)_x3 << 8  ) | \
-                      (unsigned long)_x4         )
+
+#define FT_IMAGE_TAG( value, _x1, _x2, _x3, _x4 )                         \
+          value = ( ( FT_STATIC_BYTE_CAST( unsigned long, _x1 ) << 24 ) | \
+                    ( FT_STATIC_BYTE_CAST( unsigned long, _x2 ) << 16 ) | \
+                    ( FT_STATIC_BYTE_CAST( unsigned long, _x3 ) << 8  ) | \
+                      FT_STATIC_BYTE_CAST( unsigned long, _x4 )         )
+
 #endif /* FT_IMAGE_TAG */
 
 
@@ -744,6 +752,10 @@ FT_BEGIN_HEADER
    *     contours.  Some Type~1 fonts, like those in the Hershey family,
    *     contain glyphs in this format.  These are described as @FT_Outline,
    *     but FreeType isn't currently capable of rendering them correctly.
+   *
+   *   FT_GLYPH_FORMAT_SVG ::
+   *     [Since 2.12] The glyph is represented by an SVG document in the
+   *     'SVG~' table.
    */
   typedef enum  FT_Glyph_Format_
   {
@@ -752,7 +764,8 @@ FT_BEGIN_HEADER
     FT_IMAGE_TAG( FT_GLYPH_FORMAT_COMPOSITE, 'c', 'o', 'm', 'p' ),
     FT_IMAGE_TAG( FT_GLYPH_FORMAT_BITMAP,    'b', 'i', 't', 's' ),
     FT_IMAGE_TAG( FT_GLYPH_FORMAT_OUTLINE,   'o', 'u', 't', 'l' ),
-    FT_IMAGE_TAG( FT_GLYPH_FORMAT_PLOTTER,   'p', 'l', 'o', 't' )
+    FT_IMAGE_TAG( FT_GLYPH_FORMAT_PLOTTER,   'p', 'l', 'o', 't' ),
+    FT_IMAGE_TAG( FT_GLYPH_FORMAT_SVG,       'S', 'V', 'G', ' ' )
 
   } FT_Glyph_Format;
 
@@ -854,7 +867,7 @@ FT_BEGIN_HEADER
    *   @FT_SpanFunc that takes the y~coordinate of the span as a parameter.
    *
    *   The anti-aliased rasterizer produces coverage values from 0 to 255,
-   *   this is, from completely transparent to completely opaque.
+   *   that is, from completely transparent to completely opaque.
    */
   typedef struct  FT_Span_
   {
