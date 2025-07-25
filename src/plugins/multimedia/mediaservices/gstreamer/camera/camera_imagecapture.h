@@ -30,9 +30,7 @@
 
 #include <qgstreamerbufferprobe_p.h>
 
-#if GST_CHECK_VERSION(1,0,0)
 #include <gst/video/video.h>
-#endif
 
 class CameraBinImageCapture : public QCameraImageCaptureControl, public QGstreamerBusMessageFilter
 {
@@ -60,11 +58,7 @@ class CameraBinImageCapture : public QCameraImageCaptureControl, public QGstream
    CS_SLOT_1(Private, void updateState())
    CS_SLOT_2(updateState)
 
-#if GST_CHECK_VERSION(1,0,0)
    static GstPadProbeReturn encoderEventProbe(GstPad *, GstPadProbeInfo *info, gpointer user_data);
-#else
-   static gboolean encoderEventProbe(GstElement *, GstEvent *event, gpointer user_data);
-#endif
 
    class EncoderProbe : public QGstreamerBufferProbe
    {
@@ -103,11 +97,7 @@ class CameraBinImageCapture : public QCameraImageCaptureControl, public QGstream
    GstElement *m_jpegEncoderElement;
    GstElement *m_metadataMuxerElement;
 
-#if GST_CHECK_VERSION(1,0,0)
    GstVideoInfo m_videoInfo;
-#else
-   int m_bytesPerLine;
-#endif
 
    int m_requestId;
    bool m_ready;

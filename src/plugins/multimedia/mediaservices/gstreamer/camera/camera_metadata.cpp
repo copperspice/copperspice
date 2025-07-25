@@ -28,8 +28,6 @@
 #include <gst/gst.h>
 #include <gst/gstversion.h>
 
-#if GST_CHECK_VERSION(0,10,30)
-
 static QVariant fromGStreamerOrientation(const QVariant &value)
 {
    // Note gstreamer tokens either describe the counter clockwise rotation of the
@@ -50,8 +48,6 @@ static QVariant fromGStreamerOrientation(const QVariant &value)
       return 0;
    }
 }
-
-#endif
 
 static QVariant toGStreamerOrientation(const QVariant &value)
 {
@@ -103,11 +99,7 @@ static const QGStreamerMetaDataKeys *qt_gstreamerMetaDataKeys()
       // metadataKeys()->append(QGStreamerMetaDataKey(QMediaMetaData::Author, 0, QVariant::String));
 
       metadataKeys()->append(QGStreamerMetaDataKey(QMediaMetaData::Comment, GST_TAG_COMMENT, QVariant::String));
-
-#if GST_CHECK_VERSION(0,10,31)
       metadataKeys()->append(QGStreamerMetaDataKey(QMediaMetaData::Date, GST_TAG_DATE_TIME, QVariant::DateTime));
-#endif
-
       metadataKeys()->append(QGStreamerMetaDataKey(QMediaMetaData::Description, GST_TAG_DESCRIPTION, QVariant::String));
 
       // metadataKeys()->append(QGStreamerMetaDataKey(QMediaMetaData::Category, 0, QVariant::String));
@@ -141,10 +133,7 @@ static const QGStreamerMetaDataKeys *qt_gstreamerMetaDataKeys()
       metadataKeys()->append(QGStreamerMetaDataKey(QMediaMetaData::AlbumTitle, GST_TAG_ALBUM, QVariant::String));
       metadataKeys()->append(QGStreamerMetaDataKey(QMediaMetaData::AlbumArtist,  GST_TAG_ARTIST, QVariant::String));
       metadataKeys()->append(QGStreamerMetaDataKey(QMediaMetaData::ContributingArtist, GST_TAG_PERFORMER, QVariant::String));
-
-#if GST_CHECK_VERSION(0,10,19)
       metadataKeys()->append(QGStreamerMetaDataKey(QMediaMetaData::Composer, GST_TAG_COMPOSER, QVariant::String));
-#endif
 
       // metadataKeys()->append(QGStreamerMetaDataKey(QMediaMetaData::Conductor, 0, QVariant::String));
       // metadataKeys()->append(QGStreamerMetaDataKey(QMediaMetaData::Lyrics, 0, QVariant::String));
@@ -175,7 +164,6 @@ static const QGStreamerMetaDataKeys *qt_gstreamerMetaDataKeys()
 
       // metadataKeys()->append(QGStreamerMetaDataKey(QMediaMetaData::Writer, 0, QVariant::String));
 
-#if GST_CHECK_VERSION(0,10,30)
       // Photos
       metadataKeys()->append(QGStreamerMetaDataKey(QMediaMetaData::CameraManufacturer, GST_TAG_DEVICE_MANUFACTURER, QVariant::String));
       metadataKeys()->append(QGStreamerMetaDataKey(QMediaMetaData::CameraModel, GST_TAG_DEVICE_MODEL, QVariant::String));
@@ -192,7 +180,6 @@ static const QGStreamerMetaDataKeys *qt_gstreamerMetaDataKeys()
       metadataKeys()->append(QGStreamerMetaDataKey(QMediaMetaData::GPSTrack, GST_TAG_GEO_LOCATION_MOVEMENT_DIRECTION, QVariant::Double));
       metadataKeys()->append(QGStreamerMetaDataKey(QMediaMetaData::GPSSpeed, GST_TAG_GEO_LOCATION_MOVEMENT_SPEED, QVariant::Double));
       metadataKeys()->append(QGStreamerMetaDataKey(QMediaMetaData::GPSImgDirection, GST_TAG_GEO_LOCATION_CAPTURE_DIRECTION, QVariant::Double));
-#endif
    }
 
    return metadataKeys();
@@ -205,7 +192,6 @@ CameraBinMetaData::CameraBinMetaData(QObject *parent)
 
 QVariant CameraBinMetaData::metaData(const QString &key) const
 {
-#if GST_CHECK_VERSION(0,10,30)
    if (key == QMediaMetaData::Orientation) {
       return fromGStreamerOrientation(m_values.value(QByteArray(GST_TAG_IMAGE_ORIENTATION)));
 
@@ -213,13 +199,13 @@ QVariant CameraBinMetaData::metaData(const QString &key) const
       const double metersPerSec = m_values.value(QByteArray(GST_TAG_GEO_LOCATION_MOVEMENT_SPEED)).toDouble();
       return (metersPerSec * 3600) / 1000;
    }
-#endif
 
    for (const QGStreamerMetaDataKey &metadataKey : *qt_gstreamerMetaDataKeys()) {
       if (metadataKey.qtName == key) {
          return m_values.value(QByteArray::fromRawData(metadataKey.gstName, qstrlen(metadataKey.gstName)));
       }
    }
+
    return QVariant();
 }
 

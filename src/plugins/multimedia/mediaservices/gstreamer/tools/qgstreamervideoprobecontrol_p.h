@@ -57,11 +57,7 @@ class QGstreamerVideoProbeControl
    QVideoFrame m_pendingFrame;
    QMutex m_frameMutex;
 
-#if GST_CHECK_VERSION(1,0,0)
    GstVideoInfo m_videoInfo;
-#else
-   int m_bytesPerLine;
-#endif
 
    bool m_flushing;
    bool m_frameProbed; // true if at least one frame was probed

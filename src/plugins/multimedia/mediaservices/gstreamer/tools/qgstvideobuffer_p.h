@@ -30,7 +30,6 @@
 #include <gst/gst.h>
 #include <gst/video/video.h>
 
-#if GST_CHECK_VERSION(1,0,0)
 class QGstVideoBuffer : public QAbstractPlanarVideoBuffer
 {
  public:
@@ -49,11 +48,7 @@ class QGstVideoBuffer : public QAbstractVideoBuffer
 
    MapMode mapMode() const override;
 
-#if GST_CHECK_VERSION(1,0,0)
    int map(MapMode mode, int *numBytes, int bytesPerLine[4], uchar *data[4]) override;
-#else
-   uchar *map(MapMode mode, int *numBytes, int *bytesPerLine) override;
-#endif
 
    void unmap() override;
 
@@ -62,16 +57,11 @@ class QGstVideoBuffer : public QAbstractVideoBuffer
    }
 
  private:
-
-#if GST_CHECK_VERSION(1,0,0)
    GstVideoInfo m_videoInfo;
    GstVideoFrame m_frame;
-#else
-   int m_bytesPerLine;
-#endif
+
    GstBuffer *m_buffer;
    MapMode m_mode;
    QVariant m_handle;
 };
 
-#endif

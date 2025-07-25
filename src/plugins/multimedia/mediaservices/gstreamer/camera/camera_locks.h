@@ -54,11 +54,10 @@ class CameraBinLocks  : public QCameraLocksControl
    void timerEvent(QTimerEvent *event);
 #endif
 
- private :
+ private:
    CS_SLOT_1(Private, void updateFocusStatus(QCamera::LockStatus status, QCamera::LockChangeReason reason))
    CS_SLOT_2(updateFocusStatus)
 
- private:
 #if GST_CHECK_VERSION(1, 2, 0)
    bool isExposureLocked() const;
    void lockExposure(QCamera::LockChangeReason reason);

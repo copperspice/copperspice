@@ -211,10 +211,6 @@ class QGstreamerPlayerSession : public QObject, public QGstreamerBusMessageFilte
    static void handleVolumeChange(GObject *o, GParamSpec *p, gpointer d);
    static void handleMutedChange(GObject *o, GParamSpec *p, gpointer d);
 
-#if !GST_CHECK_VERSION(1,0,0)
-   static void insertColorSpaceElement(GstElement *element, gpointer data);
-#endif
-
    static void handleElementAdded(GstBin *bin, GstElement *element, QGstreamerPlayerSession *session);
    static void handleStreamsChange(GstBin *bin, gpointer user_data);
    static GstAutoplugSelectResult handleAutoplugSelect(GstBin *bin, GstPad *pad, GstCaps *caps,
@@ -241,11 +237,6 @@ class QGstreamerPlayerSession : public QObject, public QGstreamerBusMessageFilte
 
    GstElement *m_videoOutputBin;
    GstElement *m_videoIdentity;
-
-#if ! GST_CHECK_VERSION(1,0,0)
-   GstElement *m_colorSpace;
-   bool m_usingColorspaceElement;
-#endif
 
    GstElement *m_pendingVideoSink;
    GstElement *m_nullVideoSink;

@@ -27,10 +27,6 @@
 
 #include <gst/interfaces/photography.h>
 
-#if !GST_CHECK_VERSION(1,0,0)
-typedef GstSceneMode GstPhotographySceneMode;
-#endif
-
 CameraBinExposure::CameraBinExposure(CameraBinSession *session)
    : QCameraExposureControl(session), m_session(session)
 {

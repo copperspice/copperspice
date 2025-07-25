@@ -27,10 +27,6 @@
 
 #include <gst/interfaces/photography.h>
 
-#if !GST_CHECK_VERSION(1,0,0)
-typedef GstFlashMode GstPhotographyFlashMode;
-#endif
-
 CameraBinFlash::CameraBinFlash(CameraBinSession *session)
    : QCameraFlashControl(session), m_session(session)
 {

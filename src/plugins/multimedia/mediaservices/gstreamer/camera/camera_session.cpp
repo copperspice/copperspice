@@ -166,11 +166,7 @@ CameraBinSession::CameraBinSession(GstElementFactory *sourceFactory, QObject *pa
    //post image preview in RGB format
    g_object_set(G_OBJECT(m_camerabin), POST_PREVIEWS_PROPERTY, TRUE, nullptr);
 
-#if GST_CHECK_VERSION(1,0,0)
    GstCaps *previewCaps = gst_caps_new_simple("video/x-raw", "format", G_TYPE_STRING, "RGBx", nullptr);
-#else
-   GstCaps *previewCaps = gst_caps_from_string("video/x-raw-rgb");
-#endif
 
    g_object_set(G_OBJECT(m_camerabin), PREVIEW_CAPS_PROPERTY, previewCaps, nullptr);
    gst_caps_unref(previewCaps);
@@ -427,17 +423,8 @@ void CameraBinSession::setAudioCaptureCaps()
       return;
    }
 
-#if GST_CHECK_VERSION(1,0,0)
    GstStructure *structure = gst_structure_new_empty(QT_GSTREAMER_RAW_AUDIO_MIME);
-#else
-   GstStructure *structure = gst_structure_new(
-                                QT_GSTREAMER_RAW_AUDIO_MIME,
-                                "endianness", G_TYPE_INT, 1234,
-                                "signed", G_TYPE_BOOLEAN, TRUE,
-                                "width", G_TYPE_INT, 16,
-                                "depth", G_TYPE_INT, 16,
-                                nullptr);
-#endif
+
    if (sampleRate > 0) {
       gst_structure_set(structure, "rate", G_TYPE_INT, sampleRate, nullptr);
    }
@@ -935,42 +922,29 @@ bool CameraBinSession::processSyncMessage(const QGstreamerMessage &message)
    if (gm && GST_MESSAGE_TYPE(gm) == GST_MESSAGE_ELEMENT) {
       const GstStructure *st = gst_message_get_structure(gm);
       const GValue *sampleValue = nullptr;
+
       if (m_captureMode == QCamera::CaptureStillImage
             && gst_structure_has_name(st, "preview-image")
-#if GST_CHECK_VERSION(1,0,0)
             && gst_structure_has_field_typed(st, "sample", GST_TYPE_SAMPLE)
             && (sampleValue = gst_structure_get_value(st, "sample"))) {
          GstSample *const sample = gst_value_get_sample(sampleValue);
          GstCaps *const previewCaps = gst_sample_get_caps(sample);
          GstBuffer *const buffer = gst_sample_get_buffer(sample);
-#else
-            &&gst_structure_has_field_typed(st, "buffer", GST_TYPE_BUFFER)
-            &&(sampleValue = gst_structure_get_value(st, "buffer"))) {
-         GstBuffer *const buffer = gst_value_get_buffer(sampleValue);
-#endif
 
          QImage image;
-#if GST_CHECK_VERSION(1,0,0)
+
          GstVideoInfo previewInfo;
          if (gst_video_info_from_caps(&previewInfo, previewCaps)) {
             image = QGstUtils::bufferToImage(buffer, previewInfo);
          }
          gst_sample_unref(sample);
-#else
-         image = QGstUtils::bufferToImage(buffer);
-         gst_buffer_unref(buffer);
-#endif
+
          if (!image.isNull()) {
             static QMetaMethod exposedSignal = QMetaMethod::fromSignal(&CameraBinSession::imageExposed);
-            exposedSignal.invoke(this,
-                                 Qt::QueuedConnection,
-                                 Q_ARG(int, m_requestId));
+            exposedSignal.invoke(this, Qt::QueuedConnection, Q_ARG(int, m_requestId));
 
             static QMetaMethod capturedSignal = QMetaMethod::fromSignal(&CameraBinSession::imageCaptured);
-            capturedSignal.invoke(this,
-                                  Qt::QueuedConnection,
-                                  Q_ARG(int, m_requestId),
-                                  Q_ARG(QImage, image));
+            capturedSignal.invoke(this, Qt::QueuedConnection, Q_ARG(int, m_requestId), Q_ARG(QImage, image));
          }
          return true;
       }
@@ -1265,11 +1239,8 @@ QList< QPair<int, int> > CameraBinSession::supportedFrameRates(const QSize &fram
       gst_structure_remove_all_fields(structure);
       gst_structure_set_value(structure, "framerate", &rate);
    }
-#if GST_CHECK_VERSION(1,0,0)
+
    caps = gst_caps_simplify(caps);
-#else
-   gst_caps_do_simplify(caps);
-#endif
 
    for (uint i = 0; i < gst_caps_get_size(caps); i++) {
       GstStructure *structure = gst_caps_get_structure(caps, i);
@@ -1381,11 +1352,7 @@ QList<QSize> CameraBinSession::supportedResolutions(QPair<int, int> rate,
       gst_structure_set_value(structure, "height", &h);
    }
 
-#if GST_CHECK_VERSION(1,0,0)
    caps = gst_caps_simplify(caps);
-#else
-   gst_caps_do_simplify(caps);
-#endif
 
    for (uint i = 0; i < gst_caps_get_size(caps); i++) {
       GstStructure *structure = gst_caps_get_structure(caps, i);
@@ -1514,29 +1481,21 @@ void CameraBinSession::elementAdded(GstBin *, GstElement *element, CameraBinSess
    if (GST_IS_BIN(element)) {
       g_signal_connect(G_OBJECT(element), "element-added",  G_CALLBACK(elementAdded), session);
       g_signal_connect(G_OBJECT(element), "element-removed",  G_CALLBACK(elementRemoved), session);
+
    } else if (!factory) {
       // no-op
-#if GST_CHECK_VERSION(0,10,31)
+
    } else if (gst_element_factory_list_is_type(factory, GST_ELEMENT_FACTORY_TYPE_AUDIO_ENCODER)) {
-#else
-   } else if (strstr(gst_element_factory_get_klass(factory), "Encoder/Audio") != nullptr) {
-#endif
+
       session->m_audioEncoder = element;
-
       session->m_audioEncodeControl->applySettings(element);
-#if GST_CHECK_VERSION(0,10,31)
-   } else if (gst_element_factory_list_is_type(factory, GST_ELEMENT_FACTORY_TYPE_VIDEO_ENCODER)) {
-#else
-   } else if (strstr(gst_element_factory_get_klass(factory), "Encoder/Video") != nullptr) {
-#endif
-      session->m_videoEncoder = element;
 
+   } else if (gst_element_factory_list_is_type(factory, GST_ELEMENT_FACTORY_TYPE_VIDEO_ENCODER)) {
+
+      session->m_videoEncoder = element;
       session->m_videoEncodeControl->applySettings(element);
-#if GST_CHECK_VERSION(0,10,31)
+
    } else if (gst_element_factory_list_is_type(factory, GST_ELEMENT_FACTORY_TYPE_MUXER)) {
-#else
-   } else if (strstr(gst_element_factory_get_klass(factory), "Muxer") != nullptr) {
-#endif
       session->m_muxer = element;
    }
 }
@@ -1551,4 +1510,3 @@ void CameraBinSession::elementRemoved(GstBin *, GstElement *element, CameraBinSe
       session->m_muxer = nullptr;
    }
 }
-

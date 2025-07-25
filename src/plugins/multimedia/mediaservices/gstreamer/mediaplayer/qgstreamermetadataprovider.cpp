@@ -67,10 +67,7 @@ static const QGstreamerMetaDataKeyLookup *qt_gstreamerMetaDataKeys()
 
       // Music
       metadataKeys.insert(GST_TAG_ALBUM,         QMediaMetaData::AlbumTitle);
-
-#if GST_CHECK_VERSION(0, 10, 25)
       metadataKeys.insert(GST_TAG_ALBUM_ARTIST,  QMediaMetaData::AlbumArtist);
-#endif
 
       metadataKeys.insert(GST_TAG_ARTIST,        QMediaMetaData::ContributingArtist);
       //metadataKeys.insert(0,                   QMediaMetaData::Conductor);

@@ -142,22 +142,13 @@ QGstreamerBusHelper::QGstreamerBusHelper(GstBus *bus, QObject *parent)
 {
    d = new QGstreamerBusHelperPrivate(this, bus);
 
-#if GST_CHECK_VERSION(1,0,0)
    gst_bus_set_sync_handler(bus, (GstBusSyncHandler)syncGstBusFilter, d, nullptr);
-#else
-   gst_bus_set_sync_handler(bus, (GstBusSyncHandler)syncGstBusFilter, d);
-#endif
-
    gst_object_ref(GST_OBJECT(bus));
 }
 
 QGstreamerBusHelper::~QGstreamerBusHelper()
 {
-#if GST_CHECK_VERSION(1,0,0)
    gst_bus_set_sync_handler(d->bus(), nullptr, nullptr, nullptr);
-#else
-   gst_bus_set_sync_handler(d->bus(), nullptr, nullptr);
-#endif
    gst_object_unref(GST_OBJECT(d->bus()));
 }
 

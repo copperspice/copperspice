@@ -32,12 +32,6 @@
 
 #ifdef HAVE_GST_PHOTOGRAPHY
 # include <gst/interfaces/photography.h>
-
-# if !GST_CHECK_VERSION(1,0,0)
-typedef GstWhiteBalanceMode GstPhotographyWhiteBalanceMode;
-typedef GstColourToneMode GstPhotographyColorToneMode;
-# endif
-
 #endif
 
 #ifdef USE_V4L

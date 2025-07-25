@@ -76,16 +76,8 @@ QMultimedia::SupportEstimate QGstreamerPlayerServicePlugin::hasSupport(const QSt
 
 static bool isDecoderOrDemuxer(GstElementFactory *factory)
 {
-#if GST_CHECK_VERSION(0, 10, 31)
    return gst_element_factory_list_is_type(factory, GST_ELEMENT_FACTORY_TYPE_DEMUXER)
-      || gst_element_factory_list_is_type(factory, GST_ELEMENT_FACTORY_TYPE_DECODER);
-
-#else
-   return (factory
-         && (qstrcmp(factory->details.klass,   "Codec/Decoder/Audio") == 0
-            || qstrcmp(factory->details.klass, "Codec/Decoder/Video") == 0
-            || qstrcmp(factory->details.klass, "Codec/Demux") == 0 ));
-#endif
+         || gst_element_factory_list_is_type(factory, GST_ELEMENT_FACTORY_TYPE_DECODER);
 }
 
 void QGstreamerPlayerServicePlugin::updateSupportedMimeTypes() const
@@ -97,4 +89,3 @@ QStringList QGstreamerPlayerServicePlugin::supportedMimeTypes() const
 {
    return QStringList();
 }
-
