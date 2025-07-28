@@ -24,8 +24,8 @@
 #ifndef AVFCAMERAEXPOSURECONTROL_H
 #define AVFCAMERAEXPOSURECONTROL_H
 
-#include <qcameraexposurecontrol.h>
 #include <qcameraexposure.h>
+#include <qcameraexposurecontrol.h>
 #include <qglobal.h>
 
 class AVFCameraSession;

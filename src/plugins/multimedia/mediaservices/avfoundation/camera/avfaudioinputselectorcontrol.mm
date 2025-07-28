@@ -21,8 +21,9 @@
 *
 ***********************************************************************/
 
-#include "avfaudioinputselectorcontrol.h"
-#include "avfcameraservice.h"
+#include <avfaudioinputselectorcontrol.h>
+
+#include <avfcameraservice.h>
 
 #import <AVFoundation/AVFoundation.h>
 

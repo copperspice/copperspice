@@ -25,8 +25,8 @@
 #define AVFMEDIAASSETWRITER_H
 
 #include <avfcamerautility.h>
-#include <qglobal.h>
 #include <qatomic.h>
+#include <qglobal.h>
 
 #include <AVFoundation/AVFoundation.h>
 

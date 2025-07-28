@@ -22,16 +22,17 @@
 ***********************************************************************/
 
 #include <avfcameraviewfindersettingscontrol.h>
+
 #include <avfcamerarenderercontrol.h>
-#include <avfcamerautility.h>
-#include <avfcamerasession.h>
 #include <avfcameraservice.h>
+#include <avfcamerasession.h>
+#include <avfcamerautility.h>
 #include <qabstractvideosurface.h>
-#include <qvariant.h>
-#include <qsysinfo.h>
-#include <qvector.h>
 #include <qdebug.h>
 #include <qlist.h>
+#include <qsysinfo.h>
+#include <qvariant.h>
+#include <qvector.h>
 
 #include <qmultimediautils_p.h>
 

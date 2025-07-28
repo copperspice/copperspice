@@ -21,13 +21,14 @@
 *
 ***********************************************************************/
 
-#include "avfaudioinputselectorcontrol.h"
-#include "avfmediarecordercontrol_ios.h"
-#include "avfcamerarenderercontrol.h"
-#include "avfmediaassetwriter.h"
-#include "avfcameraservice.h"
-#include "avfcamerasession.h"
-#include "avfmediacontainercontrol.h"
+#include <avfmediaassetwriter.h>
+
+#include <avfaudioinputselectorcontrol.h>
+#include <avfcamerarenderercontrol.h>
+#include <avfcameraservice.h>
+#include <avfcamerasession.h>
+#include <avfmediacontainercontrol.h>
+#include <avfmediarecordercontrol_ios.h>
 #include <qdebug.h>
 #include <qmetaobject.h>
 #include <qsysinfo.h>

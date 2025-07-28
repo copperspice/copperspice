@@ -21,15 +21,16 @@
 *
 ***********************************************************************/
 
-#include "avfmediarecordercontrol_ios.h"
-#include "avfcamerarenderercontrol.h"
-#include "avfcamerasession.h"
-#include "avfcameracontrol.h"
-#include "avfcameraservice.h"
-#include "avfaudioencodersettingscontrol.h"
-#include "avfvideoencodersettingscontrol.h"
-#include "avfmediacontainercontrol.h"
-#include "avfcamerautility.h"
+#include <avfmediarecordercontrol_ios.h>
+
+#include <avfaudioencodersettingscontrol.h>
+#include <avfcameracontrol.h>
+#include <avfcamerarenderercontrol.h>
+#include <avfcameraservice.h>
+#include <avfcamerasession.h>
+#include <avfcamerautility.h>
+#include <avfmediacontainercontrol.h>
+#include <avfvideoencodersettingscontrol.h>
 #include <qdebug.h>
 
 namespace {

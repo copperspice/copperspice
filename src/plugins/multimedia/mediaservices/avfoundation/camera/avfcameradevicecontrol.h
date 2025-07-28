@@ -24,8 +24,8 @@
 #ifndef AVFCAMERADEVICECONTROL_H
 #define AVFCAMERADEVICECONTROL_H
 
-#include <qvideodeviceselectorcontrol.h>
 #include <qstringlist.h>
+#include <qvideodeviceselectorcontrol.h>
 
 #import <AVFoundation/AVFoundation.h>
 

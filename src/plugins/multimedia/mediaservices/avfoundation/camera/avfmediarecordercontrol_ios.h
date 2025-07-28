@@ -24,9 +24,9 @@
 #ifndef AVFMEDIARECORDERCONTROL_IOS_H
 #define AVFMEDIARECORDERCONTROL_IOS_H
 
+#include <avfcamerautility.h>
 #include <avfmediaassetwriter.h>
 #include <avfstoragelocation.h>
-#include <avfcamerautility.h>
 #include <qglobal.h>
 #include <qmediarecordercontrol.h>
 #include <qurl.h>

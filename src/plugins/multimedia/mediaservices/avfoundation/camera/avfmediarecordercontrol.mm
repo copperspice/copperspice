@@ -21,18 +21,19 @@
 *
 ***********************************************************************/
 
-#include <avfmediarecordercontrol.h>
-#include <avfcamerasession.h>
-#include <avfcameraservice.h>
-#include <avfcameracontrol.h>
-#include <avfaudioinputselectorcontrol.h>
 #include <avfaudioencodersettingscontrol.h>
-#include <avfvideoencodersettingscontrol.h>
+
+#include <avfaudioinputselectorcontrol.h>
+#include <avfcameracontrol.h>
+#include <avfcameraservice.h>
+#include <avfcamerasession.h>
 #include <avfmediacontainercontrol.h>
-#include <qurl.h>
-#include <qfileinfo.h>
+#include <avfmediarecordercontrol.h>
+#include <avfvideoencodersettingscontrol.h>
 #include <qcameracontrol.h>
 #include <qdebug.h>
+#include <qfileinfo.h>
+#include <qurl.h>
 
 @interface AVFMediaRecorderDelegate : NSObject <AVCaptureFileOutputRecordingDelegate>
 {

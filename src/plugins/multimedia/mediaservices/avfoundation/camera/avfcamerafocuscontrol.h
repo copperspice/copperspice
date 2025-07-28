@@ -24,9 +24,9 @@
 #ifndef AVFCAMERAFOCUSCONTROL_H
 #define AVFCAMERAFOCUSCONTROL_H
 
-#include <qscopedpointer.h>
-#include <qglobal.h>
 #include <qcamerafocuscontrol.h>
+#include <qglobal.h>
+#include <qscopedpointer.h>
 
 @class AVCaptureDevice;
 

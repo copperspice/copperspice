@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#include "avfcameraflashcontrol.h"
-#include "avfcamerautility.h"
-#include "avfcamerasession.h"
-#include "avfcameraservice.h"
+#include <avfcameraflashcontrol.h>
 
+#include <avfcamerautility.h>
+#include <avfcamerasession.h>
+#include <avfcameraservice.h>
 #include <qdebug.h>
 
 #include <AVFoundation/AVFoundation.h>

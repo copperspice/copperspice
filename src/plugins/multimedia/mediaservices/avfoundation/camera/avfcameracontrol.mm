@@ -21,9 +21,10 @@
 *
 ***********************************************************************/
 
-#include "avfcameracontrol.h"
-#include "avfcamerasession.h"
-#include "avfcameraservice.h"
+#include <avfcameracontrol.h>
+
+#include <avfcameraservice.h>
+#include <avfcamerasession.h>
 #include <qdebug.h>
 
 AVFCameraControl::AVFCameraControl(AVFCameraService *service, QObject *parent)

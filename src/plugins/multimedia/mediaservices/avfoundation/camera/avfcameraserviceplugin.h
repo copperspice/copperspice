@@ -25,6 +25,7 @@
 #define AVFSERVICEPLUGIN_H
 
 #include <qmediaservice_provider_plugin.h>
+
 #include <qmap.h>
 
 class AVFServicePlugin : public QMediaServiceProviderPlugin, public QMediaServiceSupportedDevicesInterface,

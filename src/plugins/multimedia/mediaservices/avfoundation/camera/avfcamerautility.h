@@ -24,12 +24,12 @@
 #ifndef AVFCAMERAUTILITY_H
 #define AVFCAMERAUTILITY_H
 
-#include <qsysinfo.h>
-#include <qglobal.h>
-#include <qvector.h>
 #include <qdebug.h>
-#include <qsize.h>
+#include <qglobal.h>
 #include <qpair.h>
+#include <qsize.h>
+#include <qsysinfo.h>
+#include <qvector.h>
 
 #include <AVFoundation/AVFoundation.h>
 

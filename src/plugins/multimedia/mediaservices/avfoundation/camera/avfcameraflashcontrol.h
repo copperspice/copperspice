@@ -24,8 +24,8 @@
 #ifndef AVFCAMERAFLASHCONTROL_H
 #define AVFCAMERAFLASHCONTROL_H
 
-#include <qcameraflashcontrol.h>
 #include <qcamera.h>
+#include <qcameraflashcontrol.h>
 #include <qlist.h>
 
 class AVFCameraService;

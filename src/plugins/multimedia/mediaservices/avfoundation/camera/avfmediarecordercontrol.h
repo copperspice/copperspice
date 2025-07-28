@@ -24,10 +24,10 @@
 #ifndef AVFMEDIARECORDERCONTROL_H
 #define AVFMEDIARECORDERCONTROL_H
 
-#include <avfstoragelocation.h>
 #include <avfcamerautility.h>
-#include <qurl.h>
+#include <avfstoragelocation.h>
 #include <qmediarecordercontrol.h>
+#include <qurl.h>
 
 #import <AVFoundation/AVFoundation.h>
 

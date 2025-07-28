@@ -24,12 +24,11 @@
 #ifndef AVFIMAGEENCODERCONTROL_H
 #define AVFIMAGEENCODERCONTROL_H
 
-#include <qmediaencodersettings.h>
-#include <qimageencodercontrol.h>
-
 #include <qglobal.h>
-#include <qstring.h>
+#include <qimageencodercontrol.h>
 #include <qlist.h>
+#include <qmediaencodersettings.h>
+#include <qstring.h>
 
 @class AVCaptureDeviceFormat;
 

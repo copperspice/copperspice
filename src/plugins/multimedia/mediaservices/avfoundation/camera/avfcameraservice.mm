@@ -21,32 +21,32 @@
 *
 ***********************************************************************/
 
+#include <avfcameraservice.h>
+
+#include <avfaudioencodersettingscontrol.h>
+#include <avfaudioinputselectorcontrol.h>
+#include <avfcameracontrol.h>
+#include <avfcameradevicecontrol.h>
+#include <avfcameraexposurecontrol.h>
+#include <avfcameraflashcontrol.h>
+#include <avfcamerafocuscontrol.h>
+#include <avfcamerainfocontrol.h>
+#include <avfcamerametadatacontrol.h>
+#include <avfcamerarenderercontrol.h>
+#include <avfcamerasession.h>
+#include <avfcameraviewfindersettingscontrol.h>
+#include <avfimagecapturecontrol.h>
+#include <avfimagecapturecontrol.h>
+#include <avfimageencodercontrol.h>
+#include <avfmediacontainercontrol.h>
+#include <avfmediarecordercontrol.h>
+#include <avfmediarecordercontrol.h>
+#include <avfmediavideoprobecontrol.h>
+#include <avfvideoencodersettingscontrol.h>
 #include <qdebug.h>
 #include <qmediaplaylist.h>
 #include <qsysinfo.h>
 #include <qvariant.h>
-
-#include "avfcameraservice.h"
-#include "avfcameracontrol.h"
-#include "avfcamerainfocontrol.h"
-#include "avfcamerasession.h"
-#include "avfcameradevicecontrol.h"
-#include "avfaudioinputselectorcontrol.h"
-#include "avfcamerametadatacontrol.h"
-#include "avfmediarecordercontrol.h"
-#include "avfimagecapturecontrol.h"
-#include "avfcamerarenderercontrol.h"
-#include "avfmediarecordercontrol.h"
-#include "avfimagecapturecontrol.h"
-#include "avfmediavideoprobecontrol.h"
-#include "avfcamerafocuscontrol.h"
-#include "avfcameraexposurecontrol.h"
-#include "avfcameraviewfindersettingscontrol.h"
-#include "avfimageencodercontrol.h"
-#include "avfcameraflashcontrol.h"
-#include "avfaudioencodersettingscontrol.h"
-#include "avfvideoencodersettingscontrol.h"
-#include "avfmediacontainercontrol.h"
 
 #include <qmediaplaylistnavigator_p.h>
 

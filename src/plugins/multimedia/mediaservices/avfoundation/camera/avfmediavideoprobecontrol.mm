@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <avfmediavideoprobecontrol.h>
+
 #include <qvideoframe.h>
 
 AVFMediaVideoProbeControl::AVFMediaVideoProbeControl(QObject *parent) :

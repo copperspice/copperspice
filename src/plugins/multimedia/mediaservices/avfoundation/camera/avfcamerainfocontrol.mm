@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <avfcamerainfocontrol.h>
+
 #include <avfcamerasession.h>
 
 AVFCameraInfoControl::AVFCameraInfoControl(QObject *parent)

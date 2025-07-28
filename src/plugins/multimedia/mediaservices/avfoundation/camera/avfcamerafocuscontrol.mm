@@ -21,11 +21,11 @@
 *
 ***********************************************************************/
 
-#include "avfcamerafocuscontrol.h"
-#include "avfcamerautility.h"
-#include "avfcameraservice.h"
-#include "avfcamerasession.h"
+#include <avfcamerafocuscontrol.h>
 
+#include <avfcameraservice.h>
+#include <avfcamerasession.h>
+#include <avfcamerautility.h>
 #include <qdebug.h>
 
 #include <AVFoundation/AVFoundation.h>

@@ -24,8 +24,8 @@
 #ifndef AVFCAMERASESSION_H
 #define AVFCAMERASESSION_H
 
-#include <qmutex.h>
 #include <qcamera.h>
+#include <qmutex.h>
 #include <qvideoframe.h>
 
 #import <AVFoundation/AVFoundation.h>

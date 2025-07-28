@@ -24,8 +24,8 @@
 #ifndef AVFCAMERACONTROL_H
 #define AVFCAMERACONTROL_H
 
-#include <qobject.h>
 #include <qcameracontrol.h>
+#include <qobject.h>
 
 class AVFCameraSession;
 class AVFCameraService;

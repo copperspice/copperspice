@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <avfstoragelocation.h>
+
 #include <qstandardpaths.h>
 
 AVFStorageLocation::AVFStorageLocation()

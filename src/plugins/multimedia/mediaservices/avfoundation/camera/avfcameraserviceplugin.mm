@@ -22,10 +22,12 @@
 ***********************************************************************/
 
 #include <avfcameraserviceplugin.h>
+
 #include <avfcameraservice.h>
 #include <avfcamerasession.h>
 #include <qdebug.h>
 #include <qmediaservice_provider_plugin.h>
+
 #include <string.h>
 
 CS_PLUGIN_REGISTER(AVFServicePlugin)

@@ -21,9 +21,10 @@
 *
 ***********************************************************************/
 
-#include "avfcamerametadatacontrol.h"
-#include "avfcamerasession.h"
-#include "avfcameraservice.h"
+#include <avfcamerametadatacontrol.h>
+
+#include <avfcameraservice.h>
+#include <avfcamerasession.h>
 
 // metadata support is not implemented yet
 

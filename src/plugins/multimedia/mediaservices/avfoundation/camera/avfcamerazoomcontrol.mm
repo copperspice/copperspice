@@ -21,14 +21,15 @@
 *
 ***********************************************************************/
 
-#include "avfcamerazoomcontrol.h"
-#include "avfcameraservice.h"
-#include "avfcamerautility.h"
-#include "avfcamerasession.h"
-#include "avfcameracontrol.h"
-#include <qsysinfo.h>
-#include <qglobal.h>
+#include <avfcamerazoomcontrol.h>
+
+#include <avfcameracontrol.h>
+#include <avfcameraservice.h>
+#include <avfcamerasession.h>
+#include <avfcamerautility.h>
 #include <qdebug.h>
+#include <qglobal.h>
+#include <qsysinfo.h>
 
 AVFCameraZoomControl::AVFCameraZoomControl(AVFCameraService *service)
     : m_session(service->session()), m_maxZoomFactor(1.), m_zoomFactor(1.), m_requestedZoomFactor(1.)

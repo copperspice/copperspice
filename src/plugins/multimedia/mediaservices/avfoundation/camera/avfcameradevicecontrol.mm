@@ -21,9 +21,10 @@
 *
 ***********************************************************************/
 
-#include "avfcameradevicecontrol.h"
-#include "avfcameraservice.h"
-#include "avfcamerasession.h"
+#include <avfcameradevicecontrol.h>
+
+#include <avfcameraservice.h>
+#include <avfcamerasession.h>
 
 AVFCameraDeviceControl::AVFCameraDeviceControl(AVFCameraService *service, QObject *parent)
    : QVideoDeviceSelectorControl(parent)

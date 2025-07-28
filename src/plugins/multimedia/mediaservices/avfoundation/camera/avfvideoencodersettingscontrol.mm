@@ -21,12 +21,12 @@
 *
 ***********************************************************************/
 
-#include "avfvideoencodersettingscontrol.h"
+#include <avfvideoencodersettingscontrol.h>
 
-#include "avfcameraservice.h"
-#include "avfcamerautility.h"
-#include "avfcamerasession.h"
-#include "avfcamerarenderercontrol.h"
+#include <avfcamerarenderercontrol.h>
+#include <avfcameraservice.h>
+#include <avfcamerasession.h>
+#include <avfcamerautility.h>
 
 #include <AVFoundation/AVFoundation.h>
 

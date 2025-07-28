@@ -21,10 +21,10 @@
 *
 ***********************************************************************/
 
-#include "avfaudioencodersettingscontrol.h"
+#include <avfaudioencodersettingscontrol.h>
 
-#include "avfcameraservice.h"
-#include "avfcamerasession.h"
+#include <avfcameraservice.h>
+#include <avfcamerasession.h>
 
 #include <AVFoundation/AVFoundation.h>
 #include <CoreAudio/CoreAudioTypes.h>

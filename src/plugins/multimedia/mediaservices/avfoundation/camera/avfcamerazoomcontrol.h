@@ -24,8 +24,8 @@
 #ifndef AVFCAMERAZOOMCONTROL_H
 #define AVFCAMERAZOOMCONTROL_H
 
-#include <qcamerazoomcontrol.h>
 #include <qcamera.h>
+#include <qcamerazoomcontrol.h>
 
 #include <AVFoundation/AVFoundation.h>
 

@@ -26,7 +26,6 @@
 
 #include <qmetadatawritercontrol.h>
 
-
 class AVFCameraService;
 
 class AVFCameraMetaDataControl : public QMetaDataWriterControl

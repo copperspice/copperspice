@@ -24,8 +24,8 @@
 #ifndef AVFSTORAGE_H
 #define AVFSTORAGE_H
 
-#include <qdir.h>
 #include <qcamera.h>
+#include <qdir.h>
 
 class AVFStorageLocation
 {

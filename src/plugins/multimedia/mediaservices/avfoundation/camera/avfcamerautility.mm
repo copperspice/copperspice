@@ -23,9 +23,9 @@
 
 #include <avfcamerautility.h>
 
-#include <qvector.h>
 #include <qdebug.h>
 #include <qpair.h>
+#include <qvector.h>
 
 #include <qmultimediautils_p.h>
 

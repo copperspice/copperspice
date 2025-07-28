@@ -21,16 +21,17 @@
 *
 ***********************************************************************/
 
-#include "avfimagecapturecontrol.h"
-#include "avfcameraservice.h"
-#include "avfcamerautility.h"
-#include "avfcameracontrol.h"
-#include <qurl.h>
-#include <qfile.h>
+#include <avfimagecapturecontrol.h>
+
+#include <avfcameracontrol.h>
+#include <avfcameraservice.h>
+#include <avfcamerautility.h>
 #include <qbuffer.h>
-#include <qtconcurrentrun.h>
 #include <qdebug.h>
+#include <qfile.h>
 #include <qimagereader.h>
+#include <qtconcurrentrun.h>
+#include <qurl.h>
 
 #include <qvideoframe_p.h>
 

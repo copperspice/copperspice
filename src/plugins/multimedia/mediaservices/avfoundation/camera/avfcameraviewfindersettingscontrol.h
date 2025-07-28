@@ -24,12 +24,12 @@
 #ifndef AVFCAMERAVIEWFINDERSETTINGSCONTROL_H
 #define AVFCAMERAVIEWFINDERSETTINGSCONTROL_H
 
-#include <qcameraviewfindersettingscontrol.h>
 #include <qcameraviewfindersettings.h>
-#include <qvideoframe.h>
-#include <qpointer.h>
+#include <qcameraviewfindersettingscontrol.h>
 #include <qglobal.h>
+#include <qpointer.h>
 #include <qsize.h>
+#include <qvideoframe.h>
 
 @class AVCaptureDevice;
 @class AVCaptureVideoDataOutput;

@@ -24,11 +24,11 @@
 #ifndef AVFIMAGECAPTURECONTROL_H
 #define AVFIMAGECAPTURECONTROL_H
 
-#include <qqueue.h>
-#include <qsemaphore.h>
-#include <qcameraimagecapturecontrol.h>
 #include <avfcamerasession.h>
 #include <avfstoragelocation.h>
+#include <qcameraimagecapturecontrol.h>
+#include <qqueue.h>
+#include <qsemaphore.h>
 
 #import <AVFoundation/AVFoundation.h>
 

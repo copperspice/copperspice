@@ -21,20 +21,21 @@
 *
 ***********************************************************************/
 
-#include "avfcamerasession.h"
-#include "avfcameraservice.h"
-#include "avfcameracontrol.h"
-#include "avfcamerarenderercontrol.h"
-#include "avfcameradevicecontrol.h"
-#include "avfaudioinputselectorcontrol.h"
-#include "avfmediavideoprobecontrol.h"
-#include "avfcameraviewfindersettingscontrol.h"
-#include "avfimageencodercontrol.h"
-#include "avfcamerautility.h"
+#include <avfcamerasession.h>
+
+#include <avfaudioinputselectorcontrol.h>
+#include <avfcameracontrol.h>
+#include <avfcameradevicecontrol.h>
+#include <avfcamerarenderercontrol.h>
+#include <avfcameraservice.h>
+#include <avfcamerautility.h>
+#include <avfcameraviewfindersettingscontrol.h>
+#include <avfimageencodercontrol.h>
+#include <avfmediavideoprobecontrol.h>
 #include <qdatetime.h>
-#include <qurl.h>
-#include <qelapsedtimer.h>
 #include <qdebug.h>
+#include <qelapsedtimer.h>
+#include <qurl.h>
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <Foundation/Foundation.h>

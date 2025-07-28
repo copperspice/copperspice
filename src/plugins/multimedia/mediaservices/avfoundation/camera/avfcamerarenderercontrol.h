@@ -24,9 +24,9 @@
 #ifndef AVFCAMERARENDERERCONTROL_H
 #define AVFCAMERARENDERERCONTROL_H
 
-#include <qvideorenderercontrol.h>
-#include <qvideoframe.h>
 #include <qmutex.h>
+#include <qvideoframe.h>
+#include <qvideorenderercontrol.h>
 
 #import <AVFoundation/AVFoundation.h>
 
