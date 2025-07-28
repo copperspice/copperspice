@@ -21,7 +21,6 @@
 *
 ***********************************************************************/
 
-#include <avfcameradebug.h>
 #include <avfmediarecordercontrol.h>
 #include <avfcamerasession.h>
 #include <avfcameraservice.h>

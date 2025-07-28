@@ -21,7 +21,6 @@
 *
 ***********************************************************************/
 
-#include "avfcameradebug.h"
 #include "avfimagecapturecontrol.h"
 #include "avfcameraservice.h"
 #include "avfcamerautility.h"

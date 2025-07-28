@@ -23,7 +23,6 @@
 
 #include <avfcamerautility.h>
 
-#include <avfcameradebug.h>
 #include <qvector.h>
 #include <qdebug.h>
 #include <qpair.h>

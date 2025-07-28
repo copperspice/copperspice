@@ -27,7 +27,6 @@
 #include "avfmediaassetwriter.h"
 #include "avfcameraservice.h"
 #include "avfcamerasession.h"
-#include "avfcameradebug.h"
 #include "avfmediacontainercontrol.h"
 #include <qdebug.h>
 #include <qmetaobject.h>

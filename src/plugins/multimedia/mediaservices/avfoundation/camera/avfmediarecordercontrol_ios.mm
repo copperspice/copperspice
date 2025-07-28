@@ -26,7 +26,6 @@
 #include "avfcamerasession.h"
 #include "avfcameracontrol.h"
 #include "avfcameraservice.h"
-#include "avfcameradebug.h"
 #include "avfaudioencodersettingscontrol.h"
 #include "avfvideoencodersettingscontrol.h"
 #include "avfmediacontainercontrol.h"

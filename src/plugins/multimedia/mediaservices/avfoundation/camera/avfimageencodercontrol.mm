@@ -27,7 +27,6 @@
 #include "avfcamerautility.h"
 #include "avfcamerasession.h"
 #include "avfcameraservice.h"
-#include "avfcameradebug.h"
 #include "avfcameracontrol.h"
 #include <qmediaencodersettings.h>
 #include <qsysinfo.h>

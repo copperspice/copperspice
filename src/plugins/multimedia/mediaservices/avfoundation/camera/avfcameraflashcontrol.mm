@@ -25,7 +25,6 @@
 #include "avfcamerautility.h"
 #include "avfcamerasession.h"
 #include "avfcameraservice.h"
-#include "avfcameradebug.h"
 
 #include <qdebug.h>
 

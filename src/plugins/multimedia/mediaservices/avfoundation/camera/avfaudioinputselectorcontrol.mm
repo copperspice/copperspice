@@ -21,7 +21,6 @@
 *
 ***********************************************************************/
 
-#include "avfcameradebug.h"
 #include "avfaudioinputselectorcontrol.h"
 #include "avfcameraservice.h"
 

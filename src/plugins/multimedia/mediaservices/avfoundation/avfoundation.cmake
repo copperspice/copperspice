@@ -1,5 +1,4 @@
 list(APPEND MULTIMEDIA_PRIVATE_INCLUDES
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameradebug.h
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraserviceplugin.h
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameracontrol.h
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerametadatacontrol.h

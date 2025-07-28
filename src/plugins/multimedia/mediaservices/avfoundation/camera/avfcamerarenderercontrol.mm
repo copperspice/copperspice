@@ -25,7 +25,6 @@
 #include "avfcamerarenderercontrol.h"
 #include "avfcamerasession.h"
 #include "avfcameraservice.h"
-#include "avfcameradebug.h"
 #include <qabstractvideosurface.h>
 #include <qabstractvideobuffer.h>
 #include <qdebug.h>
