@@ -67,7 +67,10 @@ QList<QCameraViewfinderSettings> AVFCameraViewfinderSettingsControl2::supportedV
 
     AVCaptureDevice *captureDevice = m_service->session()->videoCaptureDevice();
     if (!captureDevice) {
-        qDebugCamera() << Q_FUNC_INFO << "no capture device found";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "no capture device found";
+#endif
+
         return supportedSettings;
     }
 
@@ -79,7 +82,9 @@ QList<QCameraViewfinderSettings> AVFCameraViewfinderSettingsControl2::supportedV
         pixelFormats << QVideoFrame::Format_Invalid; // The default value.
 
         if (!captureDevice.formats || !captureDevice.formats.count) {
-            qDebugCamera() << Q_FUNC_INFO << "no capture device formats found";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+            qDebug() << Q_FUNC_INFO << "no capture device formats found";
+#endif
             return supportedSettings;
         }
 
@@ -121,7 +126,9 @@ QCameraViewfinderSettings AVFCameraViewfinderSettingsControl2::viewfinderSetting
 
     AVCaptureDevice *captureDevice = m_service->session()->videoCaptureDevice();
     if (! captureDevice) {
-        qDebugCamera() << Q_FUNC_INFO << "no capture device found";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "no capture device found";
+#endif
         return settings;
     }
 
@@ -131,14 +138,19 @@ QCameraViewfinderSettings AVFCameraViewfinderSettingsControl2::viewfinderSetting
     }
 
      if (!captureDevice.activeFormat) {
-         qDebugCamera() << Q_FUNC_INFO << "no active capture device format";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+         qDebug() << Q_FUNC_INFO << "no active capture device format";
+#endif
          return settings;
      }
 
      const QSize res(qt_device_format_resolution(captureDevice.activeFormat));
      const QSize par(qt_device_format_pixel_aspect_ratio(captureDevice.activeFormat));
+
      if (res.isNull() || !res.isValid() || par.isNull() || !par.isValid()) {
-         qDebugCamera() << Q_FUNC_INFO << "failed to obtain resolution/pixel aspect ratio";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+         qDebug() << Q_FUNC_INFO << "failed to obtain resolution/pixel aspect ratio";
+#endif
          return settings;
      }
 
@@ -244,8 +256,11 @@ AVCaptureDeviceFormat *AVFCameraViewfinderSettingsControl2::findBestFormatMatch(
 
         // No resolution requested, what about framerates?
         if (!qt_framerates_sane(settings)) {
-            qDebugCamera() << Q_FUNC_INFO << "invalid framerate requested (min/max):"
-                           << settings.minimumFrameRate() << settings.maximumFrameRate();
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+            qDebug() << Q_FUNC_INFO << "invalid framerate requested (min/max):"
+                  << settings.minimumFrameRate() << settings.maximumFrameRate();
+#endif
+
             return nil;
         }
 
@@ -268,8 +283,11 @@ QVector<QVideoFrame::PixelFormat> AVFCameraViewfinderSettingsControl2::viewfinde
     QVector<QVideoFrame::PixelFormat> qtFormats;
 
     AVCaptureVideoDataOutput *videoOutput = m_service->videoOutput() ? m_service->videoOutput()->videoDataOutput() : nullptr;
+
     if (!videoOutput) {
-        qDebugCamera() << Q_FUNC_INFO << "no video output found";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "no video output found";
+#endif
         return qtFormats;
     }
 
@@ -344,7 +362,10 @@ bool AVFCameraViewfinderSettingsControl2::applySettings(const QCameraViewfinderS
     if (match) {
         activeFormatChanged = qt_set_active_format(captureDevice, match, false);
     } else {
-        qDebugCamera() << Q_FUNC_INFO << "matching device format not found";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "matching device format not found";
+#endif
+
         // We still can update the pixel format at least.
     }
 
@@ -425,12 +446,18 @@ bool AVFCameraViewfinderSettingsControl::isViewfinderParameterSupported(Viewfind
 QVariant AVFCameraViewfinderSettingsControl::viewfinderParameter(ViewfinderParameter parameter) const
 {
     if (!isViewfinderParameterSupported(parameter)) {
-        qDebugCamera() << Q_FUNC_INFO << "parameter is not supported";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "parameter is not supported";
+#endif
+
         return QVariant();
     }
 
     if (!initSettingsControl()) {
-        qDebugCamera() << Q_FUNC_INFO << "initialization failed";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "initialization failed";
+#endif
+
         return QVariant();
     }
 
@@ -452,7 +479,10 @@ QVariant AVFCameraViewfinderSettingsControl::viewfinderParameter(ViewfinderParam
 void AVFCameraViewfinderSettingsControl::setViewfinderParameter(ViewfinderParameter parameter, const QVariant &value)
 {
     if (! isViewfinderParameterSupported(parameter)) {
-        qDebugCamera() << Q_FUNC_INFO << "parameter is not supported";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "parameter is not supported";
+#endif
+
         return;
     }
 
@@ -471,18 +501,27 @@ void AVFCameraViewfinderSettingsControl::setViewfinderParameter(ViewfinderParame
 void AVFCameraViewfinderSettingsControl::setResolution(const QVariant &newValue)
 {
     if (!newValue.canConvert<QSize>()) {
-        qDebugCamera() << Q_FUNC_INFO << "QSize type expected";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "QSize type expected";
+#endif
+
         return;
     }
 
     if (!initSettingsControl()) {
-        qDebugCamera() << Q_FUNC_INFO << "initialization failed";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "initialization failed";
+#endif
+
         return;
     }
 
     const QSize res(newValue.toSize());
     if (res.isNull() || !res.isValid()) {
-        qDebugCamera() << Q_FUNC_INFO << "invalid resolution:" << res;
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "invalid resolution:" << res;
+#endif
+
         return;
     }
 
@@ -494,18 +533,27 @@ void AVFCameraViewfinderSettingsControl::setResolution(const QVariant &newValue)
 void AVFCameraViewfinderSettingsControl::setAspectRatio(const QVariant &newValue)
 {
     if (!newValue.canConvert<QSize>()) {
-        qDebugCamera() << Q_FUNC_INFO << "QSize type expected";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "QSize type expected";
+#endif
+
         return;
     }
 
     if (!initSettingsControl()) {
-        qDebugCamera() << Q_FUNC_INFO << "initialization failed";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "initialization failed";
+#endif
+
         return;
     }
 
     const QSize par(newValue.value<QSize>());
     if (par.isNull() || !par.isValid()) {
-        qDebugCamera() << Q_FUNC_INFO << "invalid pixel aspect ratio:" << par;
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+       qDebug() << Q_FUNC_INFO << "invalid pixel aspect ratio:" << par;
+#endif
+
         return;
     }
 
@@ -517,12 +565,18 @@ void AVFCameraViewfinderSettingsControl::setAspectRatio(const QVariant &newValue
 void AVFCameraViewfinderSettingsControl::setFrameRate(const QVariant &newValue, bool max)
 {
     if (!newValue.canConvert<qreal>()) {
-        qDebugCamera() << Q_FUNC_INFO << "qreal type expected";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "qreal type expected";
+#endif
+
         return;
     }
 
     if (!initSettingsControl()) {
-        qDebugCamera() << Q_FUNC_INFO << "initialization failed";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "initialization failed";
+#endif
+
         return;
     }
 
@@ -535,13 +589,19 @@ void AVFCameraViewfinderSettingsControl::setFrameRate(const QVariant &newValue, 
 void AVFCameraViewfinderSettingsControl::setPixelFormat(const QVariant &newValue)
 {
     if (!newValue.canConvert<QVideoFrame::PixelFormat>()) {
-        qDebugCamera() << Q_FUNC_INFO
-                       << "QVideoFrame::PixelFormat type expected";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO
+              << "QVideoFrame::PixelFormat type expected";
+#endif
+
         return;
     }
 
     if (! initSettingsControl()) {
-        qDebugCamera() << Q_FUNC_INFO << "initialization failed";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "initialization failed";
+#endif
+
         return;
     }
 

@@ -30,6 +30,7 @@
 #include <qfile.h>
 #include <qbuffer.h>
 #include <qtconcurrentrun.h>
+#include <qdebug.h>
 #include <qimagereader.h>
 
 #include <qvideoframe_p.h>
@@ -72,7 +73,9 @@ void AVFImageCaptureControl::updateReadyStatus()
 {
     if (m_ready != isReadyForCapture()) {
         m_ready = !m_ready;
-        qDebugCamera() << "ReadyToCapture status changed:" << m_ready;
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << "ReadyToCapture status changed:" << m_ready;
+#endif
         emit readyForCaptureChanged(m_ready);
     }
 }
@@ -92,7 +95,9 @@ int AVFImageCaptureControl::capture(const QString &fileName)
     QString actualFileName = m_storageLocation.generateFileName(fileName,
                  QCamera::CaptureStillImage, "img_", "jpg");
 
-    qDebugCamera() << "Capture image to" << actualFileName;
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+    qDebug() << "Capture image to" << actualFileName;
+#endif
 
     CaptureRequest request = { m_lastCaptureId, new QSemaphore };
     m_requestsMutex.lock();
@@ -113,14 +118,19 @@ int AVFImageCaptureControl::capture(const QString &fileName)
             messageParts << QString::fromUtf8([[error localizedRecoverySuggestion] UTF8String]);
 
             QString errorMessage = messageParts.join(" ");
-            qDebugCamera() << "Image capture failed:" << errorMessage;
+
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+            qDebug() << "Image capture failed:" << errorMessage;
+#endif
 
             QMetaObject::invokeMethod(this, "error", Qt::QueuedConnection,
                                       Q_ARG(int, request.captureId),
                                       Q_ARG(int, QCameraImageCapture::ResourceError),
                                       Q_ARG(QString, errorMessage));
         } else {
-            qDebugCamera() << "Image capture completed:" << actualFileName;
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+            qDebug() << "Image capture completed:" << actualFileName;
+#endif
 
             NSData *nsJpgData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageSampleBuffer];
             QByteArray jpgData = QByteArray::fromRawData((const char *)[nsJpgData bytes], [nsJpgData length]);
@@ -184,7 +194,6 @@ void AVFImageCaptureControl::cancelCapture()
 void AVFImageCaptureControl::updateCaptureConnection()
 {
     if (m_cameraControl->captureMode().testFlag(QCamera::CaptureStillImage)) {
-        qDebugCamera() << Q_FUNC_INFO;
         AVCaptureSession *captureSession = m_session->captureSession();
 
         if (![captureSession.outputs containsObject:m_stillImageOutput]) {

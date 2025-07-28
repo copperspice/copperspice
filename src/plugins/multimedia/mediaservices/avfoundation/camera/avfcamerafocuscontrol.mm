@@ -89,8 +89,9 @@ void AVFCameraFocusControl::setFocusMode(QCameraFocus::FocusModes mode)
             m_focusMode = mode;
             Q_EMIT focusModeChanged(m_focusMode);
         } else {
-            qDebugCamera() << Q_FUNC_INFO
-                           << "focus mode not supported";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+            qDebug() << Q_FUNC_INFO << "Focus mode not supported";
+#endif
         }
         return;
     }
@@ -98,15 +99,20 @@ void AVFCameraFocusControl::setFocusMode(QCameraFocus::FocusModes mode)
     if (isFocusModeSupported(mode)) {
         const AVFConfigurationLock lock(captureDevice);
         if (!lock) {
-            qDebugCamera() << Q_FUNC_INFO
-                           << "failed to lock for configuration";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+            qDebug() << Q_FUNC_INFO << "Failed to lock for configuration";
+#endif
+
             return;
         }
 
         captureDevice.focusMode = avf_focus_mode(mode);
         m_focusMode = mode;
     } else {
-        qDebugCamera() << Q_FUNC_INFO << "focus mode not supported";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "Focus mode not supported";
+#endif
+
         return;
     }
 
@@ -147,7 +153,10 @@ void AVFCameraFocusControl::setFocusPointMode(QCameraFocus::FocusPointMode mode)
     if (isFocusPointModeSupported(mode)) {
         const AVFConfigurationLock lock(captureDevice);
         if (!lock) {
-            qDebugCamera() << Q_FUNC_INFO << "failed to lock for configuration";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+           qDebug() << Q_FUNC_INFO << "Failed to lock for configuration";
+#endif
+
             return;
         }
 
@@ -170,7 +179,9 @@ void AVFCameraFocusControl::setFocusPointMode(QCameraFocus::FocusPointMode mode)
         }
         m_focusPointMode = mode;
     } else {
-        qDebugCamera() << Q_FUNC_INFO << "focus point mode is not supported";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "Focus point mode is not supported";
+#endif
         return;
     }
 
@@ -200,7 +211,10 @@ void AVFCameraFocusControl::setCustomFocusPoint(const QPointF &point)
         return;
 
     if (!QRectF(0.f, 0.f, 1.f, 1.f).contains(point)) {
-        qDebugCamera() << Q_FUNC_INFO << "invalid focus point (out of range)";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "Invalid focus point (out of range)";
+#endif
+
         return;
     }
 
@@ -214,7 +228,9 @@ void AVFCameraFocusControl::setCustomFocusPoint(const QPointF &point)
     if ([captureDevice isFocusPointOfInterestSupported]) {
         const AVFConfigurationLock lock(captureDevice);
         if (!lock) {
-            qDebugCamera() << Q_FUNC_INFO << "failed to lock for configuration";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+            qDebug() << Q_FUNC_INFO << "Failed to lock for configuration";
+#endif
             return;
         }
 
@@ -224,7 +240,9 @@ void AVFCameraFocusControl::setCustomFocusPoint(const QPointF &point)
         if (m_focusMode != QCameraFocus::ContinuousFocus)
             [captureDevice setFocusMode:AVCaptureFocusModeAutoFocus];
     } else {
-        qDebugCamera() << Q_FUNC_INFO << "focus point of interest not supported";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "Focus point of interest not supported";
+#endif
         return;
     }
 }
@@ -242,7 +260,9 @@ void AVFCameraFocusControl::cameraStateChanged()
 
     AVCaptureDevice *captureDevice = m_session->videoCaptureDevice();
     if (!captureDevice) {
-        qDebugCamera() << Q_FUNC_INFO << "capture device is nil in 'active' state";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "Capture device is a nullptr in 'Active' state";
+#endif
         return;
     }
 
@@ -250,13 +270,17 @@ void AVFCameraFocusControl::cameraStateChanged()
     if (m_customFocusPoint != m_actualFocusPoint
         && m_focusPointMode == QCameraFocus::FocusPointCustom) {
         if (![captureDevice isFocusPointOfInterestSupported]) {
-            qDebugCamera() << Q_FUNC_INFO
-                           << "focus point of interest not supported";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+            qDebug() << Q_FUNC_INFO << "Focus point of interest not supported";
+#endif
             return;
         }
 
         if (!lock) {
-            qDebugCamera() << Q_FUNC_INFO << "failed to lock for configuration";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+            qDebug() << Q_FUNC_INFO << "Failed to lock for configuration";
+#endif
+
             return;
         }
 
@@ -269,12 +293,16 @@ void AVFCameraFocusControl::cameraStateChanged()
         const AVCaptureFocusMode avMode = avf_focus_mode(m_focusMode);
         if (captureDevice.focusMode != avMode) {
             if (![captureDevice isFocusModeSupported:avMode]) {
-                qDebugCamera() << Q_FUNC_INFO << "focus mode not supported";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+                qDebug() << Q_FUNC_INFO << "Focus mode not supported";
+#endif
                 return;
             }
 
             if (!lock) {
-                qDebugCamera() << Q_FUNC_INFO << "failed to lock for configuration";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+                qDebug() << Q_FUNC_INFO << "Failed to lock for configuration";
+#endif
                 return;
             }
 
@@ -282,5 +310,3 @@ void AVFCameraFocusControl::cameraStateChanged()
         }
     }
 }
-
-

@@ -25,6 +25,7 @@
 #include "avfcameracontrol.h"
 #include "avfcamerasession.h"
 #include "avfcameraservice.h"
+#include <qdebug.h>
 
 AVFCameraControl::AVFCameraControl(AVFCameraService *service, QObject *parent)
    : QCameraControl(parent), m_session(service->session()), m_state(QCamera::UnloadedState),
@@ -71,7 +72,11 @@ void AVFCameraControl::updateStatus()
     QCamera::Status newStatus = status();
 
     if (m_lastStatus != newStatus) {
-        qDebugCamera() << "Camera status changed: " << m_lastStatus << " -> " << newStatus;
+
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << "Camera status changed: " << m_lastStatus << " -> " << newStatus;
+#endif
+
         m_lastStatus = newStatus;
         Q_EMIT statusChanged(m_lastStatus);
     }

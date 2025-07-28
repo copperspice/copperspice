@@ -29,6 +29,7 @@
 #include "avfcamerasession.h"
 #include "avfcameradebug.h"
 #include "avfmediacontainercontrol.h"
+#include <qdebug.h>
 #include <qmetaobject.h>
 #include <qsysinfo.h>
 
@@ -99,7 +100,10 @@ enum WriterState
     Q_ASSERT(fileURL);
 
     if (!qt_camera_service_isValid(service)) {
-        qDebugCamera() << Q_FUNC_INFO << "invalid camera service";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "invalid camera service";
+#endif
+
         return false;
     }
 
@@ -109,19 +113,28 @@ enum WriterState
 
     m_writerQueue.reset(dispatch_queue_create("asset-writer-queue", DISPATCH_QUEUE_SERIAL));
     if (!m_writerQueue) {
-        qDebugCamera() << Q_FUNC_INFO << "failed to create an asset writer's queue";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "failed to create an asset writer's queue";
+#endif
+
         return false;
     }
 
     m_videoQueue.reset(dispatch_queue_create("video-output-queue", DISPATCH_QUEUE_SERIAL));
     if (!m_videoQueue) {
-        qDebugCamera() << Q_FUNC_INFO << "failed to create video queue";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "failed to create video queue";
+#endif
+
         return false;
     }
     dispatch_set_target_queue(m_videoQueue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0));
     m_audioQueue.reset(dispatch_queue_create("audio-output-queue", DISPATCH_QUEUE_SERIAL));
     if (!m_audioQueue) {
-        qDebugCamera() << Q_FUNC_INFO << "failed to create audio queue";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "failed to create audio queue";
+#endif
+
         // But we still can write video!
     }
 
@@ -129,7 +142,10 @@ enum WriterState
                                                fileType:m_service->mediaContainerControl()->fileType()
                                                error:nil]);
     if (!m_assetWriter) {
-        qDebugCamera() << Q_FUNC_INFO << "failed to create asset writer";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "failed to create asset writer";
+#endif
+
         return false;
     }
 
@@ -300,7 +316,10 @@ enum WriterState
         return;
 
     if (!CMSampleBufferDataIsReady(sampleBuffer)) {
-        qDebugCamera() << Q_FUNC_INFO << "sample buffer is not ready, skipping.";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "sample buffer is not ready, skipping.";
+#endif
+
         return;
     }
 
@@ -367,7 +386,10 @@ enum WriterState
     if (m_audioOutput && [captureSession canAddOutput:m_audioOutput]) {
         [captureSession addOutput:m_audioOutput];
     } else {
-        qDebugCamera() << Q_FUNC_INFO << "failed to add audio output";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "failed to add audio output";
+#endif
+
         [captureSession removeInput:m_audioInput];
         m_audioCaptureDevice = 0;
         m_audioInput.reset();
@@ -388,14 +410,20 @@ enum WriterState
                                                           outputSettings:m_videoSettings
                                                           sourceFormatHint:m_service->session()->videoCaptureDevice().activeFormat.formatDescription]);
     if (!m_cameraWriterInput) {
-        qDebugCamera() << Q_FUNC_INFO << "failed to create camera writer input";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "failed to create camera writer input";
+#endif
+
         return false;
     }
 
     if ([m_assetWriter canAddInput:m_cameraWriterInput]) {
         [m_assetWriter addInput:m_cameraWriterInput];
     } else {
-        qDebugCamera() << Q_FUNC_INFO << "failed to add camera writer input";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "failed to add camera writer input";
+#endif
+
         m_cameraWriterInput.reset();
         return false;
     }
@@ -408,13 +436,20 @@ enum WriterState
                                                              outputSettings:m_audioSettings
                                                              sourceFormatHint:sourceFormat]);
         if (!m_audioWriterInput) {
-            qDebugCamera() << Q_FUNC_INFO << "failed to create audio writer input";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+            qDebug() << Q_FUNC_INFO << "failed to create audio writer input";
+#endif
+
             // But we still can record video.
+
         } else if ([m_assetWriter canAddInput:m_audioWriterInput]) {
             [m_assetWriter addInput:m_audioWriterInput];
             m_audioWriterInput.data().expectsMediaDataInRealTime = YES;
         } else {
-            qDebugCamera() << Q_FUNC_INFO << "failed to add audio writer input";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+            qDebug() << Q_FUNC_INFO << "failed to add audio writer input";
+#endif
+
             m_audioWriterInput.reset();
             // We can (still) write video though ...
         }

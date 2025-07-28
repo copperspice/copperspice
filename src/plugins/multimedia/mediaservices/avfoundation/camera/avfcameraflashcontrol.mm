@@ -52,8 +52,12 @@ void AVFCameraFlashControl::setFlashMode(QCameraExposure::FlashModes mode)
     if (m_flashMode == mode)
         return;
 
-    if (m_session->state() == QCamera::ActiveState && !isFlashModeSupported(mode)) {
-        qDebugCamera() << Q_FUNC_INFO << "unsupported mode" << mode;
+    if (m_session->state() == QCamera::ActiveState && ! isFlashModeSupported(mode)) {
+
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "Unsupported mode" << mode;
+#endif
+
         return;
     }
 
@@ -122,8 +126,12 @@ void AVFCameraFlashControl::cameraStateChanged(QCamera::State newState)
     } else if (newState == QCamera::ActiveState) {
         m_supportedModes = QCameraExposure::FlashOff;
         AVCaptureDevice *captureDevice = m_session->videoCaptureDevice();
+
         if (!captureDevice) {
-            qDebugCamera() << Q_FUNC_INFO << "no capture device in 'Active' state";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+            qDebug() << Q_FUNC_INFO << "No capture device in 'Active' state";
+#endif
+
             Q_EMIT flashReady(false);
             return;
         }
@@ -148,12 +156,19 @@ bool AVFCameraFlashControl::applyFlashSettings()
 
     AVCaptureDevice *captureDevice = m_session->videoCaptureDevice();
     if (!captureDevice) {
-        qDebugCamera() << Q_FUNC_INFO << "no capture device found";
+
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "No capture device found";
+#endif
+
         return false;
     }
 
     if (!isFlashModeSupported(m_flashMode)) {
-        qDebugCamera() << Q_FUNC_INFO << "unsupported mode" << m_flashMode;
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "Unsupported mode" << m_flashMode;
+#endif
+
         return false;
     }
 
@@ -167,26 +182,36 @@ bool AVFCameraFlashControl::applyFlashSettings()
 
     if (m_flashMode != QCameraExposure::FlashVideoLight) {
         if (captureDevice.torchMode != AVCaptureTorchModeOff) {
+
 #ifdef Q_OS_IOS
             if (![captureDevice isTorchAvailable]) {
-                qDebugCamera() << Q_FUNC_INFO << "torch is not available at the moment";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+                qDebug() << Q_FUNC_INFO << "Torch is not available at the moment";
+#endif
                 return false;
             }
 #endif
             captureDevice.torchMode = AVCaptureTorchModeOff;
         }
+
 #ifdef Q_OS_IOS
         if (![captureDevice isFlashAvailable]) {
             // We'd like to switch flash (into some mode), but it's not available:
-            qDebugCamera() << Q_FUNC_INFO << "flash is not available at the moment";
+
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+            qDebug() << Q_FUNC_INFO << "Flash is not available at the moment";
+#endif
             return false;
         }
 #endif
+
     } else {
         if (captureDevice.flashMode != AVCaptureFlashModeOff) {
 #ifdef Q_OS_IOS
             if (![captureDevice isFlashAvailable]) {
-                qDebugCamera() << Q_FUNC_INFO << "flash is not available at the moment";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+                qDebug() << Q_FUNC_INFO << "Flash is not available at the moment";
+#endif
                 return false;
             }
 #endif
@@ -195,7 +220,10 @@ bool AVFCameraFlashControl::applyFlashSettings()
 
 #ifdef Q_OS_IOS
         if (![captureDevice isTorchAvailable]) {
-            qDebugCamera() << Q_FUNC_INFO << "torch is not available at the moment";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+            qDebug() << Q_FUNC_INFO << "Torch is not available at the moment";
+#endif
+
             return false;
         }
 #endif

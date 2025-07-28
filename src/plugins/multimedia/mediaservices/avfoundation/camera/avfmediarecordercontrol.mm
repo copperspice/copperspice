@@ -33,6 +33,7 @@
 #include <qurl.h>
 #include <qfileinfo.h>
 #include <qcameracontrol.h>
+#include <qdebug.h>
 
 @interface AVFMediaRecorderDelegate : NSObject <AVCaptureFileOutputRecordingDelegate>
 {
@@ -188,7 +189,10 @@ void AVFMediaRecorderControl::updateStatus()
     QMediaRecorder::Status newStatus = status();
 
     if (m_lastStatus != newStatus) {
-        qDebugCamera() << "Camera recorder status changed: " << m_lastStatus << " -> " << newStatus;
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << "Camera recorder status changed: " << m_lastStatus << " -> " << newStatus;
+#endif
+
         m_lastStatus = newStatus;
         Q_EMIT statusChanged(m_lastStatus);
     }
@@ -245,7 +249,9 @@ void AVFMediaRecorderControl::setState(QMediaRecorder::State state)
     if (m_state == state)
         return;
 
-    qDebugCamera() << Q_FUNC_INFO << m_state << " -> " << state;
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+    qDebug() << Q_FUNC_INFO << m_state << " -> " << state;
+#endif
 
     switch (state) {
     case QMediaRecorder::RecordingState:
@@ -262,7 +268,9 @@ void AVFMediaRecorderControl::setState(QMediaRecorder::State state)
                                                            QLatin1String("clip_"),
                                                            extension));
 
-            qDebugCamera() << "Video capture location:" << actualLocation.toString();
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+            qDebug() << "Video capture location:" << actualLocation.toString();
+#endif
 
             applySettings();
 

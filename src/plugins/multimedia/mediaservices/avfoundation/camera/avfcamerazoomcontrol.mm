@@ -107,8 +107,12 @@ void AVFCameraZoomControl::cameraStateChanged()
 
     AVCaptureDevice *captureDevice = m_session->videoCaptureDevice();
     if (! captureDevice || !captureDevice.activeFormat) {
-        qDebugCamera() << Q_FUNC_INFO << "camera state is active, but"
+
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "camera state is active, but"
                        << "video capture device and/or active format is nil";
+#endif
+
         return;
     }
 
@@ -155,7 +159,10 @@ void AVFCameraZoomControl::zoomToRequestedDigital()
 
     const AVFConfigurationLock lock(captureDevice);
     if (! lock) {
-        qDebugCamera() << Q_FUNC_INFO << "failed to lock for configuration";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "failed to lock for configuration";
+#endif
+
         return;
     }
 

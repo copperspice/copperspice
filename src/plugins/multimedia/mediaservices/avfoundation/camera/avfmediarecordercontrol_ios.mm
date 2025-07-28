@@ -73,14 +73,21 @@ AVFMediaRecorderControlIOS::AVFMediaRecorderControlIOS(AVFCameraService *service
     Q_ASSERT(service);
 
     m_writer.reset([[AVFMediaAssetWriter alloc] initWithDelegate:this]);
+
     if (!m_writer) {
-        qDebugCamera() << Q_FUNC_INFO << "failed to create an asset writer";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "Failed to create an asset writer";
+#endif
+
         return;
     }
 
     AVFCameraControl *cameraControl = m_service->cameraControl();
     if (!cameraControl) {
-        qDebugCamera() << Q_FUNC_INFO << "camera control is nil";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "Camera control is invalid (nullptr)";
+#endif
+
         return;
     }
 
@@ -183,7 +190,10 @@ void AVFMediaRecorderControlIOS::setState(QMediaRecorder::State state)
              && m_service->session()->captureSession());
 
     if (!m_writer) {
-        qDebugCamera() << Q_FUNC_INFO << "Invalid recorder";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+        qDebug() << Q_FUNC_INFO << "Invalid recorder";
+#endif
+
         return;
     }
 
@@ -197,13 +207,19 @@ void AVFMediaRecorderControlIOS::setState(QMediaRecorder::State state)
         Q_ASSERT(cameraControl);
 
         if (!(cameraControl->captureMode() & QCamera::CaptureVideo)) {
-            qDebugCamera() << Q_FUNC_INFO << "wrong capture mode, CaptureVideo expected";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+            qDebug() << Q_FUNC_INFO << "Incorrect capture mode, CaptureVideo expected";
+#endif
+
             Q_EMIT error(QMediaRecorder::ResourceError, tr("Failed to start recording"));
             return;
         }
 
         if (cameraControl->status() != QCamera::ActiveStatus) {
-            qDebugCamera() << Q_FUNC_INFO << "can not start record while camera is not active";
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+            qDebug() << Q_FUNC_INFO << "Unable to start recording while camera is not active";
+#endif
+
             Q_EMIT error(QMediaRecorder::ResourceError, tr("Failed to start recording"));
             return;
         }
@@ -299,13 +315,11 @@ void AVFMediaRecorderControlIOS::setState(QMediaRecorder::State state)
 void AVFMediaRecorderControlIOS::setMuted(bool muted)
 {
     (void) muted;
-    qDebugCamera() << Q_FUNC_INFO << "not implemented";
 }
 
 void AVFMediaRecorderControlIOS::setVolume(qreal volume)
 {
     (void) volume;
-    qDebugCamera() << Q_FUNC_INFO << "not implemented";
 }
 
 void AVFMediaRecorderControlIOS::assetWriterStarted()

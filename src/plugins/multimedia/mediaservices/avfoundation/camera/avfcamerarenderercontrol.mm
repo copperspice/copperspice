@@ -28,6 +28,7 @@
 #include "avfcameradebug.h"
 #include <qabstractvideosurface.h>
 #include <qabstractvideobuffer.h>
+#include <qdebug.h>
 #include <qvideosurfaceformat.h>
 
 #include <qabstractvideobuffer_p.h>
@@ -367,7 +368,9 @@ void AVFCameraRendererControl::handleViewfinderFrame()
                 qWarning() << "Failed to start viewfinder m_surface, format:" << format;
 
             } else {
-                qDebugCamera() << "Viewfinder started: " << format;
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+                qDebug() << "Viewfinder started: " << format;
+#endif
             }
         }
 
