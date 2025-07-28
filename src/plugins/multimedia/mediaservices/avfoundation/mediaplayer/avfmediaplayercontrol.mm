@@ -23,6 +23,7 @@
 
 #include <avfmediaplayercontrol.h>
 #include <avfmediaplayersession.h>
+#include <qdebug.h>
 
 AVFMediaPlayerControl::AVFMediaPlayerControl(QObject *parent)
    : QMediaPlayerControl(parent)
@@ -31,9 +32,6 @@ AVFMediaPlayerControl::AVFMediaPlayerControl(QObject *parent)
 
 AVFMediaPlayerControl::~AVFMediaPlayerControl()
 {
-#ifdef QT_DEBUG_AVF
-   qDebug() << Q_FUNC_INFO;
-#endif
 }
 
 void AVFMediaPlayerControl::setSession(AVFMediaPlayerSession *session)

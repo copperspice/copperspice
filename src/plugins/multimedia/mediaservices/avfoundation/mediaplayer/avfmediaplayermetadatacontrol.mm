@@ -23,6 +23,7 @@
 
 #include "avfmediaplayermetadatacontrol.h"
 #include "avfmediaplayersession.h"
+#include <qdebug.h>
 
 #include <qmediametadata.h>
 
@@ -36,9 +37,6 @@ AVFMediaPlayerMetaDataControl::AVFMediaPlayerMetaDataControl(AVFMediaPlayerSessi
 
 AVFMediaPlayerMetaDataControl::~AVFMediaPlayerMetaDataControl()
 {
-#ifdef QT_DEBUG_AVF
-   qDebug() << Q_FUNC_INFO;
-#endif
 }
 
 bool AVFMediaPlayerMetaDataControl::isMetaDataAvailable() const
@@ -98,10 +96,6 @@ static QString itemKey(AVMetadataItem *item)
 
 void AVFMediaPlayerMetaDataControl::updateTags()
 {
-#ifdef QT_DEBUG_AVF
-   qDebug() << Q_FUNC_INFO;
-#endif
-
    AVAsset *currentAsset = (AVAsset *)m_session->currentAssetHandle();
 
    // Don't read the tags from the same asset more than once

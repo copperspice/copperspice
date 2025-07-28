@@ -28,10 +28,6 @@
 #include <QOpenGLShaderProgram>
 #include <QOffscreenSurface>
 
-#ifdef QT_DEBUG_AVF
-#include <qdebug.h>
-#endif
-
 #import <CoreVideo/CVBase.h>
 #import <AVFoundation/AVFoundation.h>
 
@@ -48,11 +44,8 @@ AVFVideoFrameRenderer::AVFVideoFrameRenderer(QAbstractVideoSurface *surface, QOb
 
 AVFVideoFrameRenderer::~AVFVideoFrameRenderer()
 {
-#ifdef QT_DEBUG_AVF
-   qDebug() << Q_FUNC_INFO;
-#endif
-
    [m_videoOutput release]; // sending to nil is fine
+
    if (m_textureCache) {
       CFRelease(m_textureCache);
    }
@@ -95,9 +88,7 @@ CVPixelBufferRef AVFVideoFrameRenderer::copyPixelBufferFromLayer(AVPlayerLayer *
 {
    //Is layer valid
    if (!layer) {
-#ifdef QT_DEBUG_AVF
-      qWarning("copyPixelBufferFromLayer: invalid layer");
-#endif
+      qWarning("copyPixelBufferFromLayer() Invalid layer");
       return 0;
    }
 
@@ -118,10 +109,9 @@ CVPixelBufferRef AVFVideoFrameRenderer::copyPixelBufferFromLayer(AVPlayerLayer *
    CVPixelBufferRef pixelBuffer = [m_videoOutput copyPixelBufferForItemTime: currentCMFrameTime
                                                          itemTimeForDisplay: nil];
    if (!pixelBuffer) {
-#ifdef QT_DEBUG_AVF
-      qWarning("copyPixelBufferForItemTime returned nil");
+      qWarning("copyPixelBufferFromLayer() pixelBuffer is invalid (nil)");
       CMTimeShow(currentCMFrameTime);
-#endif
+
       return 0;
    }
 
@@ -149,9 +139,7 @@ CVOGLTextureRef AVFVideoFrameRenderer::createCacheTextureFromLayer(AVPlayerLayer
          &texture);
 
    if (!texture || err) {
-#ifdef QT_DEBUG_AVF
-      qWarning("CVOGLTextureCacheCreateTextureFromImage failed (error: %d)", err);
-#endif
+      qWarning("createCacheTextureFromLayer() CreateTextureFromImage failed (error: %d)", err);
    }
 
    CVPixelBufferRelease(pixelBuffer);
@@ -171,9 +159,8 @@ QImage AVFVideoFrameRenderer::renderLayerToImage(AVPlayerLayer *layer)
 
    OSType pixelFormat = CVPixelBufferGetPixelFormatType(pixelBuffer);
    if (pixelFormat != kCVPixelFormatType_32BGRA) {
-#ifdef QT_DEBUG_AVF
-      qWarning("CVPixelBuffer format is not BGRA32 (got: %d)", static_cast<quint32>(pixelFormat));
-#endif
+      qWarning("renderLayerToImage() Expected CVPixelBuffer format to be BGRA32, received %d", static_cast<quint32>(pixelFormat));
+
       return QImage();
    }
 
@@ -212,16 +199,14 @@ void AVFVideoFrameRenderer::initRenderer()
       if (shareContext) {
          m_glContext->setShareContext(shareContext);
          m_isContextShared = true;
+
       } else {
-#ifdef QT_DEBUG_AVF
-         qWarning("failed to get Render Thread context");
-#endif
+         qWarning("initRenderer() Failed to receive Render Thread context");
          m_isContextShared = false;
       }
+
       if (!m_glContext->create()) {
-#ifdef QT_DEBUG_AVF
-         qWarning("failed to create QOpenGLContext");
-#endif
+         qWarning("initRenderer() Failed to create QOpenGLContext");
          return;
       }
    }
@@ -241,9 +226,7 @@ void AVFVideoFrameRenderer::initRenderer()
             [EAGLContext currentContext],
             NULL, &m_textureCache);
       if (err) {
-#ifdef QT_DEBUG_AVF
-         qWarning("Error at CVOGLTextureCacheCreate %d", err);
-#endif
+         qWarning("initRenderer() Error at CVOGLTextureCacheCreate %d", err);
       }
    }
 

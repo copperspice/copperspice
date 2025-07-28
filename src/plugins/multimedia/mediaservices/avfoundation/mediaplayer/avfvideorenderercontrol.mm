@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include "avfvideorenderercontrol.h"
+
 #include "avfdisplaylink.h"
 
 #if defined(Q_OS_IOS)
@@ -32,10 +33,10 @@
 
 #include <qabstractvideobuffer.h>
 #include <qabstractvideosurface.h>
+#include <qdebug.h>
 #include <qvideosurfaceformat.h>
 
 #include <qimagevideobuffer_p.h>
-#include <qdebug.h>
 
 #import <AVFoundation/AVFoundation.h>
 
@@ -111,9 +112,6 @@ AVFVideoRendererControl::AVFVideoRendererControl(QObject *parent)
 
 AVFVideoRendererControl::~AVFVideoRendererControl()
 {
-#ifdef QT_DEBUG_AVF
-   qDebug() << Q_FUNC_INFO;
-#endif
    m_displayLink->stop();
    [(AVPlayerLayer *)m_playerLayer release];
 }
@@ -125,7 +123,7 @@ QAbstractVideoSurface *AVFVideoRendererControl::surface() const
 
 void AVFVideoRendererControl::setSurface(QAbstractVideoSurface *surface)
 {
-#ifdef QT_DEBUG_AVF
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
    qDebug() << "Set video surface" << surface;
 #endif
 

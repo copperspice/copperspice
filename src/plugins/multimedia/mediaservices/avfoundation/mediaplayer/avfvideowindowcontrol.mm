@@ -172,7 +172,10 @@ void AVFVideoWindowControl::setLayer(void *playerLayer)
    }
 
    if (!m_winId) {
-      qDebug("AVFVideoWindowControl: No video window");
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
+      qDebug("AVFVideoWindowControl::setLayer() No video window");
+#endif
+
       return;
    }
 

@@ -24,12 +24,9 @@
 #include <avfvideoframerenderer.h>
 
 #include <qabstractvideosurface.h>
+#include <qdebug.h>
 #include <qopengl_framebufferobject.h>
 #include <qwindow.h>
-
-#ifdef QT_DEBUG_AVF
-#include <qdebug.h>
-#endif
 
 #import <CoreVideo/CVBase.h>
 #import <AVFoundation/AVFoundation.h>
@@ -44,11 +41,8 @@ AVFVideoFrameRenderer::AVFVideoFrameRenderer(QAbstractVideoSurface *surface, QOb
 
 AVFVideoFrameRenderer::~AVFVideoFrameRenderer()
 {
-#ifdef QT_DEBUG_AVF
-   qDebug() << Q_FUNC_INFO;
-#endif
-
    [m_videoLayerRenderer release];
+
    delete m_fbo[0];
    delete m_fbo[1];
    delete m_offscreenSurface;
@@ -105,7 +99,6 @@ QImage AVFVideoFrameRenderer::renderLayerToImage(AVPlayerLayer *layer)
 
 QOpenGLFramebufferObject *AVFVideoFrameRenderer::initRenderer(AVPlayerLayer *layer)
 {
-
    //Get size from AVPlayerLayer
    m_targetSize = QSize(layer.bounds.size.width, layer.bounds.size.height);
 
@@ -131,14 +124,14 @@ QOpenGLFramebufferObject *AVFVideoFrameRenderer::initRenderer(AVPlayerLayer *lay
       if (shareContext) {
          m_glContext->setShareContext(shareContext);
          m_isContextShared = true;
+
       } else {
-#ifdef QT_DEBUG_AVF
-         qWarning("failed to get Render Thread context");
-#endif
+         qWarning("Failed to get Render Thread context");
          m_isContextShared = false;
       }
+
       if (!m_glContext->create()) {
-         qWarning("failed to create QOpenGLContext");
+         qWarning("Failed to create QOpenGLContext");
          return nullptr;
       }
    }

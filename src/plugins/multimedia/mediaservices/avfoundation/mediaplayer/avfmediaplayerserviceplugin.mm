@@ -23,8 +23,8 @@
 
 #include <avfmediaplayerserviceplugin.h>
 
-#include <qdebug.h>
 #include <avfmediaplayerservice.h>
+#include <qdebug.h>
 
 #import <AVFoundation/AVFoundation.h>
 
@@ -81,7 +81,8 @@ void AVFMediaPlayerServicePlugin::buildSupportedTypes()
    for (NSString * mimeType in mimeTypes) {
       m_supportedMimeTypes.append(QString::fromUtf8([mimeType UTF8String]));
    }
-#ifdef QT_DEBUG_AVF
+
+#if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
    qDebug() << "AVFMediaPlayerServicePlugin::buildSupportedTypes";
    qDebug() << "Supported Types: " << m_supportedMimeTypes;
 #endif

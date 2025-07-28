@@ -24,10 +24,7 @@
 #include <avfdisplaylink.h>
 
 #include <qcoreapplication.h>
-
-#ifdef QT_DEBUG_AVF
 #include <qdebug.h>
-#endif
 
 #if defined(Q_OS_IOS)
 #import <QuartzCore/CADisplayLink.h>
@@ -127,10 +124,6 @@ AVFDisplayLink::AVFDisplayLink(QObject *parent)
 
 AVFDisplayLink::~AVFDisplayLink()
 {
-#ifdef QT_DEBUG_AVF
-   qDebug() << Q_FUNC_INFO;
-#endif
-
    if (m_displayLink) {
       stop();
 #if defined(Q_OS_IOS)
