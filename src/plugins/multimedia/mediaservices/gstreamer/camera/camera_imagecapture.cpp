@@ -33,9 +33,12 @@
 #include <qmediametadata.h>
 
 #include <qgstvideobuffer_p.h>
-#include <qvideosurfacegstsink_p.h>
 #include <qgstutils_p.h>
+#include <qgstvideorenderersink_p.h>
 
+#include <gst/gst.h>
+
+using QVideoSurfaceGstSink = QGstVideoRendererSink;
 //#define DEBUG_CAPTURE
 
 #define IMAGE_DONE_SIGNAL "image-done"

@@ -25,10 +25,14 @@
 #define QGSTREAMERVIDEORENDERER_H
 
 #include <qvideorenderercontrol.h>
-#include <qvideosurfacegstsink_p.h>
 #include <qabstractvideosurface.h>
 
 #include <qgstreamervideorendererinterface_p.h>
+#include <qgstvideorenderersink_p.h>
+
+#include <gst/gst.h>
+
+using QVideoSurfaceGstSink = QGstVideoRendererSink;
 
 class QGstreamerVideoRenderer : public QVideoRendererControl, public QGstreamerVideoRendererInterface
 {

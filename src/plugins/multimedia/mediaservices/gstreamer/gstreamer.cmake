@@ -45,12 +45,9 @@ list(APPEND MULTIMEDIA_PRIVATE_INCLUDES
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideooverlay_p.h
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideowindow_p.h
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideorenderer_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstbufferpoolinterface_p.h
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorendererplugin_p.h
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorenderersink_p.h
    ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideobuffer_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qvideosurfacegstsink_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/gstvideoconnector_p.h
 )
 
 if(WITH_MULTIMEDIA AND GStreamer_FOUND)
@@ -86,21 +83,11 @@ if(WITH_MULTIMEDIA AND GStreamer_FOUND)
       ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/audiodecoder/qgstreameraudiodecoderserviceplugin.cpp
    )
 
-   if (GSTREAMER_ABI_VERSION VERSION_EQUAL "0.10")
-
-      target_sources(CsMultimedia_gst_audiodecoder
-         PRIVATE
-         ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qvideosurfacegstsink.cpp
-      )
-
-   else()
-      target_sources(CsMultimedia_gst_audiodecoder
-         PRIVATE
-         ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorendererplugin.cpp
-         ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorenderersink.cpp
-      )
-
-   endif()
+   target_sources(CsMultimedia_gst_audiodecoder
+      PRIVATE
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorendererplugin.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorenderersink.cpp
+   )
 
    target_link_libraries(CsMultimedia_gst_audiodecoder
       CsCore
@@ -115,12 +102,6 @@ if(WITH_MULTIMEDIA AND GStreamer_FOUND)
       ${GLIB2_LIBRARIES}
       ${GOBJECT2_LIBRARIES}
    )
-
-   if (GSTREAMER_ABI_VERSION VERSION_EQUAL "0.10")
-      target_link_libraries(CsMultimedia_gst_audiodecoder
-         ${GSTREAMER_INTERFACES_LIBRARIES}
-      )
-   endif()
 
    target_include_directories(
       CsMultimedia_gst_audiodecoder
@@ -166,20 +147,10 @@ if(WITH_MULTIMEDIA AND GStreamer_FOUND)
       ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreameraudioinputselector.cpp
    )
 
-   if (GSTREAMER_ABI_VERSION VERSION_EQUAL "0.10")
-
-      target_sources(CsMultimedia_gst_camerabin
-         PRIVATE
-         ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qvideosurfacegstsink.cpp
-      )
-
-   else()
-      target_sources(CsMultimedia_gst_camerabin
-         PRIVATE
-         ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorenderersink.cpp
-      )
-
-   endif()
+   target_sources(CsMultimedia_gst_camerabin
+      PRIVATE
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorenderersink.cpp
+   )
 
    target_link_libraries(CsMultimedia_gst_camerabin
       CsCore
@@ -192,14 +163,6 @@ if(WITH_MULTIMEDIA AND GStreamer_FOUND)
       ${GLIB2_LIBRARIES}
       ${GOBJECT2_LIBRARIES}
    )
-
-   if (GSTREAMER_ABI_VERSION VERSION_EQUAL "0.10")
-      target_link_libraries(CsMultimedia_gst_camerabin
-      ${GSTREAMER_LIBRARIES}
-      ${GSTREAMER_BASE_LIBRARIES}
-      ${GSTREAMER_INTERFACES_LIBRARIES}
-   )
-   endif()
 
    target_include_directories(
       CsMultimedia_gst_camerabin
@@ -231,22 +194,11 @@ if(WITH_MULTIMEDIA AND GStreamer_FOUND)
       ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerplayersession.cpp
    )
 
-   if (GSTREAMER_ABI_VERSION VERSION_EQUAL "0.10")
-
-      target_sources(CsMultimedia_gst_mediaplayer
-         PRIVATE
-         ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qvideosurfacegstsink.cpp
-         ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstbufferpoolinterface.cpp
-         ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/gstvideoconnector.cpp
-      )
-
-   else()
-      target_sources(CsMultimedia_gst_mediaplayer
-         PRIVATE
-         ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorendererplugin.cpp
-         ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorenderersink.cpp
-      )
-   endif()
+   target_sources(CsMultimedia_gst_mediaplayer
+      PRIVATE
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorendererplugin.cpp
+      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorenderersink.cpp
+   )
 
    target_link_libraries(CsMultimedia_gst_mediaplayer
       CsCore
@@ -261,12 +213,6 @@ if(WITH_MULTIMEDIA AND GStreamer_FOUND)
       ${GLIB2_LIBRARIES}
       ${GOBJECT2_LIBRARIES}
    )
-
-   if (GSTREAMER_ABI_VERSION VERSION_EQUAL "0.10")
-      target_link_libraries(CsMultimedia_gst_mediaplayer
-         ${GSTREAMER_INTERFACES_LIBRARIES}
-      )
-   endif()
 
    target_include_directories(
       CsMultimedia_gst_mediaplayer

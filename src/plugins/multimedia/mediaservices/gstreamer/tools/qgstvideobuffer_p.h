@@ -35,14 +35,6 @@ class QGstVideoBuffer : public QAbstractPlanarVideoBuffer
  public:
    QGstVideoBuffer(GstBuffer *buffer, const GstVideoInfo &info);
    QGstVideoBuffer(GstBuffer *buffer, const GstVideoInfo &info, HandleType handleType, const QVariant &handle);
-#else
-
-class QGstVideoBuffer : public QAbstractVideoBuffer
-{
- public:
-   QGstVideoBuffer(GstBuffer *buffer, int bytesPerLine);
-   QGstVideoBuffer(GstBuffer *buffer, int bytesPerLine, HandleType handleType, const QVariant &handle);
-#endif
 
    ~QGstVideoBuffer();
 
@@ -65,3 +57,4 @@ class QGstVideoBuffer : public QAbstractVideoBuffer
    QVariant m_handle;
 };
 
+#endif

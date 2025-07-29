@@ -22,7 +22,6 @@
 ***********************************************************************/
 
 #include <qgstreamervideorenderer_p.h>
-#include <qvideosurfacegstsink_p.h>
 #include <qgstutils_p.h>
 #include <qabstractvideosurface.h>
 #include <qdebug.h>
