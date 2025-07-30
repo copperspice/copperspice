@@ -446,8 +446,6 @@ QVector<QGstUtils::CameraInfo> QGstUtils::enumerateCameras(GstElementFactory *fa
    QFileInfoList entries = devDir.entryInfoList(QStringList() << "video*");
 
    for (const QFileInfo &entryInfo : entries) {
-      // qDebug() << "Try" << entryInfo.filePath();
-
       int fd = qt_safe_open(entryInfo.filePath().toLatin1().constData(), O_RDWR );
       if (fd == -1) {
          continue;
@@ -482,8 +480,6 @@ QVector<QGstUtils::CameraInfo> QGstUtils::enumerateCameras(GstElementFactory *fa
                name = entryInfo.fileName();
             }
          }
-         //qDebug() << "found camera: " << name;
-
 
          CameraInfo device = {
             entryInfo.absoluteFilePath(),

@@ -65,7 +65,7 @@ QAbstractVideoSurface *QGstreamerVideoRenderer::surface() const
 void QGstreamerVideoRenderer::setSurface(QAbstractVideoSurface *surface)
 {
    if (m_surface != surface) {
-      //qDebug() << Q_FUNC_INFO << surface;
+
       if (m_videoSink) {
          gst_object_unref(GST_OBJECT(m_videoSink));
       }
@@ -94,8 +94,6 @@ void QGstreamerVideoRenderer::setSurface(QAbstractVideoSurface *surface)
 
 void QGstreamerVideoRenderer::handleFormatChange()
 {
-   //qDebug() << "Supported formats list has changed, reload video output";
-
    if (m_videoSink) {
       gst_object_unref(GST_OBJECT(m_videoSink));
    }

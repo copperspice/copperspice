@@ -31,8 +31,6 @@
 #include <policy/resource-set.h>
 #endif
 
-// #define DEBUG_RESOURCE_POLICY
-
 CamerabinResourcePolicy::CamerabinResourcePolicy(QObject *parent)
    : QObject(parent), m_resourceSet(NoResources), m_releasingResources(false), m_canCapture(false)
 {
@@ -81,8 +79,8 @@ void CamerabinResourcePolicy::setResourceSet(CamerabinResourcePolicy::ResourceSe
    CamerabinResourcePolicy::ResourceSet oldSet = m_resourceSet;
    m_resourceSet = set;
 
-#ifdef DEBUG_RESOURCE_POLICY
-   qDebug() << Q_FUNC_INFO << set;
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+   qDebug("CamerabinResourcePolicy::setResourceSet() Set");
 #endif
 
 #ifdef HAVE_RESOURCE_POLICY
@@ -185,9 +183,6 @@ void CamerabinResourcePolicy::handleResourcesGranted()
 void CamerabinResourcePolicy::handleResourcesReleased()
 {
 #ifdef HAVE_RESOURCE_POLICY
-#ifdef DEBUG_RESOURCE_POLICY
-   qDebug() << Q_FUNC_INFO;
-#endif
    m_releasingResources = false;
 #endif
    updateCanCapture();

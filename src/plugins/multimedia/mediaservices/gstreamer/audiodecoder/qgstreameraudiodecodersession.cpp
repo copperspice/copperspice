@@ -161,14 +161,12 @@ bool QGstreamerAudioDecoderSession::processBusMessage(const QGstreamerMessage &m
 
                gst_message_parse_state_changed(gm, &oldState, &newState, &pending);
 
-#if defined(CS_SHOW_DEBUG_PLATFORM_MEDIA)
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
                QStringList states;
                states << "GST_STATE_VOID_PENDING" <<  "GST_STATE_NULL" << "GST_STATE_READY" << "GST_STATE_PAUSED" << "GST_STATE_PLAYING";
 
-               qDebug() << QString("state changed: old: %1  new: %2  pending: %3") \
-                  .formatArg(states[oldState]) \
-                  .formatArg(states[newState]) \
-                  .formatArg(states[pending]) << "internal" << m_state;
+               qDebug() << QString("State changed, old: %1  new: %2  pending: %3")
+                  .formatArg(states[oldState]).formatArg(states[newState]).formatArg(states[pending]) << "internal" << m_state;
 #endif
 
                QAudioDecoder::State prevState = m_state;
@@ -237,7 +235,7 @@ bool QGstreamerAudioDecoderSession::processBusMessage(const QGstreamerMessage &m
             }
             break;
 
-#if defined(CS_SHOW_DEBUG_PLATFORM_MEDIA)
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
             case GST_MESSAGE_INFO: {
                GError *err;
                gchar *debug;

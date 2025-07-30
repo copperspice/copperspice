@@ -44,9 +44,6 @@
 #include <gst/gstvalue.h>
 #include <gst/base/gstbasesrc.h>
 
-// #define DEBUG_PLAYBIN
-// #define DEBUG_VO_BIN_DUMP
-
 static bool usePlaybinVolume()
 {
    static enum { Yes, No, Unknown } status = Unknown;
@@ -253,10 +250,6 @@ void QGstreamerPlayerSession::loadFromStream(const QNetworkRequest &request, QIO
 {
 #if defined(HAVE_GST_APPSRC)
 
-#ifdef DEBUG_PLAYBIN
-   qDebug() << Q_FUNC_INFO;
-#endif
-
    m_request = request;
    m_duration = -1;
    m_lastPosition = 0;
@@ -289,9 +282,10 @@ void QGstreamerPlayerSession::loadFromStream(const QNetworkRequest &request, QIO
 
 void QGstreamerPlayerSession::loadFromUri(const QNetworkRequest &request)
 {
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << Q_FUNC_INFO << request.url();
 #endif
+
    m_request = request;
    m_duration = -1;
    m_lastPosition = 0;
@@ -341,9 +335,10 @@ qreal QGstreamerPlayerSession::playbackRate() const
 
 void QGstreamerPlayerSession::setPlaybackRate(qreal rate)
 {
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << Q_FUNC_INFO << rate;
 #endif
+
    if (!qFuzzyCompare(m_playbackRate, rate)) {
       m_playbackRate = rate;
       if (m_playbin && m_seekable) {
@@ -387,7 +382,7 @@ QMediaTimeRange QGstreamerPlayerSession::availablePlaybackRanges() const
       ranges.addInterval(0, duration());
    }
 
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << ranges;
 #endif
 
@@ -422,7 +417,7 @@ int QGstreamerPlayerSession::activeStream(QMediaStreamsControl::StreamType strea
 
 void QGstreamerPlayerSession::setActiveStream(QMediaStreamsControl::StreamType streamType, int streamNumber)
 {
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << Q_FUNC_INFO << streamType << streamNumber;
 #endif
 
@@ -473,8 +468,8 @@ static GstPadProbeReturn block_pad_cb(GstPad *pad, GstPadProbeInfo *info, gpoint
 
 void QGstreamerPlayerSession::updateVideoRenderer()
 {
-#ifdef DEBUG_PLAYBIN
-   qDebug() << "Video sink has chaged, reload video output";
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+   qDebug() << "Video sink has changed, reload video output";
 #endif
 
    if (m_videoOutput) {
@@ -484,10 +479,6 @@ void QGstreamerPlayerSession::updateVideoRenderer()
 
 void QGstreamerPlayerSession::setVideoRenderer(QObject *videoOutput)
 {
-#ifdef DEBUG_PLAYBIN
-   qDebug() << Q_FUNC_INFO;
-#endif
-
    if (m_videoOutput != videoOutput) {
       if (m_videoOutput) {
          disconnect(m_videoOutput, SIGNAL(sinkChanged()),      this, SLOT(updateVideoRenderer()));
@@ -509,9 +500,8 @@ void QGstreamerPlayerSession::setVideoRenderer(QObject *videoOutput)
    QGstreamerVideoRendererInterface *renderer = dynamic_cast<QGstreamerVideoRendererInterface *>(videoOutput);
    m_renderer = renderer;
 
-#ifdef DEBUG_VO_BIN_DUMP
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    gst_debug_bin_to_dot_file_with_ts(GST_BIN(m_playbin), GstDebugGraphDetails(GST_DEBUG_GRAPH_SHOW_ALL), "playbin_set");
-   // GST_DEBUG_GRAPH_SHOW_MEDIA_TYPE | GST_DEBUG_GRAPH_SHOW_NON_DEFAULT_PARAMS | GST_DEBUG_GRAPH_SHOW_STATES
 #endif
 
    GstElement *videoSink = nullptr;
@@ -523,7 +513,7 @@ void QGstreamerPlayerSession::setVideoRenderer(QObject *videoOutput)
       videoSink = m_nullVideoSink;
    }
 
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << "Set video output:" << videoOutput;
    qDebug() << "Current sink:" << (m_videoSink ? GST_ELEMENT_NAME(m_videoSink) : "") <<  m_videoSink
       << "pending:" << (m_pendingVideoSink ? GST_ELEMENT_NAME(m_pendingVideoSink) : "") << m_pendingVideoSink
@@ -531,18 +521,21 @@ void QGstreamerPlayerSession::setVideoRenderer(QObject *videoOutput)
 #endif
 
    if (m_pendingVideoSink == videoSink || (m_pendingVideoSink == nullptr && m_videoSink == videoSink)) {
-#ifdef DEBUG_PLAYBIN
+
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
       qDebug() << "Video sink has not changed, skip video output reconfiguration";
 #endif
+
       return;
    }
 
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << "Reconfigure video output";
 #endif
 
    if (m_state == QMediaPlayer::StoppedState) {
-#ifdef DEBUG_PLAYBIN
+
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
       qDebug() << "The pipeline has not started yet, pending state:" << m_pendingState;
 #endif
       //the pipeline has not started yet
@@ -587,7 +580,8 @@ void QGstreamerPlayerSession::setVideoRenderer(QObject *videoOutput)
 
    } else {
       if (m_pendingVideoSink) {
-#ifdef DEBUG_PLAYBIN
+
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
          qDebug() << "already waiting for pad to be blocked, just change the pending sink";
 #endif
          m_pendingVideoSink = videoSink;
@@ -596,8 +590,8 @@ void QGstreamerPlayerSession::setVideoRenderer(QObject *videoOutput)
 
       m_pendingVideoSink = videoSink;
 
-#ifdef DEBUG_PLAYBIN
-      qDebug() << "Blocking the video output pad...";
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+      qDebug() << "Blocking the video output pad";
 #endif
 
       //block pads, async to avoid locking in paused state
@@ -612,7 +606,7 @@ void QGstreamerPlayerSession::setVideoRenderer(QObject *videoOutput)
       //while the sink is paused. The pad will be blocked as soon as the current
       //buffer is processed.
       if (m_state == QMediaPlayer::PausedState) {
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
          qDebug() << "Starting video output to avoid blocking in paused state...";
 #endif
          gst_element_set_state(m_videoSink, GST_STATE_PLAYING);
@@ -626,7 +620,7 @@ void QGstreamerPlayerSession::finishVideoOutputChange()
       return;
    }
 
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << "finishVideoOutputChange" << m_pendingVideoSink;
 #endif
 
@@ -644,7 +638,10 @@ void QGstreamerPlayerSession::finishVideoOutputChange()
    }
 
    if (m_pendingVideoSink == m_videoSink) {
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
       qDebug() << "Abort, no change";
+#endif
+
       //video output was change back to the current one,
       //no need to torment the pipeline, just unblock the pad
 
@@ -680,8 +677,8 @@ void QGstreamerPlayerSession::finishVideoOutputChange()
       qWarning() << "Linking video output element failed";
    }
 
-#ifdef DEBUG_PLAYBIN
-   qDebug() << "notify the video connector it has to emit a new segment message...";
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+   qDebug() << "notify the video connector it has to emit a new segment message";
 #endif
 
    GstState state = GST_STATE_VOID_PENDING;
@@ -719,7 +716,7 @@ void QGstreamerPlayerSession::finishVideoOutputChange()
 
    gst_object_unref(GST_OBJECT(srcPad));
 
-#ifdef DEBUG_VO_BIN_DUMP
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    gst_debug_bin_to_dot_file_with_ts(GST_BIN(m_playbin),
       GstDebugGraphDetails(GST_DEBUG_GRAPH_SHOW_ALL), "playbin_finish");
 #endif
@@ -737,10 +734,6 @@ bool QGstreamerPlayerSession::isSeekable() const
 
 bool QGstreamerPlayerSession::play()
 {
-#ifdef DEBUG_PLAYBIN
-   qDebug() << Q_FUNC_INFO;
-#endif
-
    m_everPlayed = false;
    if (m_playbin) {
       m_pendingState = QMediaPlayer::PlayingState;
@@ -763,9 +756,6 @@ bool QGstreamerPlayerSession::play()
 
 bool QGstreamerPlayerSession::pause()
 {
-#ifdef DEBUG_PLAYBIN
-   qDebug() << Q_FUNC_INFO;
-#endif
    if (m_playbin) {
       m_pendingState = QMediaPlayer::PausedState;
       if (m_pendingVideoSink != nullptr) {
@@ -791,9 +781,6 @@ bool QGstreamerPlayerSession::pause()
 
 void QGstreamerPlayerSession::stop()
 {
-#ifdef DEBUG_PLAYBIN
-   qDebug() << Q_FUNC_INFO;
-#endif
    m_everPlayed = false;
    if (m_playbin) {
 
@@ -820,9 +807,10 @@ void QGstreamerPlayerSession::stop()
 
 bool QGstreamerPlayerSession::seek(qint64 ms)
 {
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << Q_FUNC_INFO << ms;
 #endif
+
    //seek locks when the video output sink is changing and pad is blocked
    if (m_playbin && !m_pendingVideoSink && m_state != QMediaPlayer::StoppedState && m_seekable) {
       ms = qMax(ms, qint64(0));
@@ -847,7 +835,7 @@ bool QGstreamerPlayerSession::seek(qint64 ms)
 
 void QGstreamerPlayerSession::setVolume(int volume)
 {
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << Q_FUNC_INFO << volume;
 #endif
 
@@ -864,9 +852,10 @@ void QGstreamerPlayerSession::setVolume(int volume)
 
 void QGstreamerPlayerSession::setMuted(bool muted)
 {
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << Q_FUNC_INFO << muted;
 #endif
+
    if (m_muted != muted) {
       m_muted = muted;
 
@@ -881,9 +870,10 @@ void QGstreamerPlayerSession::setMuted(bool muted)
 
 void QGstreamerPlayerSession::setSeekable(bool seekable)
 {
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << Q_FUNC_INFO << seekable;
 #endif
+
    if (seekable != m_seekable) {
       m_seekable = seekable;
       emit seekableChanged(m_seekable);
@@ -912,7 +902,7 @@ bool QGstreamerPlayerSession::processBusMessage(const QGstreamerMessage &message
          updateDuration();
       }
 
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
       if (m_sourceType == MMSSrc && qstrcmp(GST_OBJECT_NAME(GST_MESSAGE_SRC(gm)), "source") == 0) {
          qDebug() << "Message from MMSSrc: " << GST_MESSAGE_TYPE(gm);
       } else if (m_sourceType == RTSPSrc && qstrcmp(GST_OBJECT_NAME(GST_MESSAGE_SRC(gm)), "source") == 0) {
@@ -938,14 +928,12 @@ bool QGstreamerPlayerSession::processBusMessage(const QGstreamerMessage &message
 
                gst_message_parse_state_changed(gm, &oldState, &newState, &pending);
 
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
                QStringList states;
                states << "GST_STATE_VOID_PENDING" <<  "GST_STATE_NULL" << "GST_STATE_READY" << "GST_STATE_PAUSED" << "GST_STATE_PLAYING";
 
-               qDebug() << QString("state changed: old: %1  new: %2  pending: %3") \
-                  .formatArg(states[oldState]) \
-                  .formatArg(states[newState]) \
-                  .formatArg(states[pending]);
+               qDebug() << QString("state changed: old: %1  new: %2  pending: %3")
+                  .formatArg(states[oldState]).formatArg(states[newState]).formatArg(states[pending]);
 #endif
 
                switch (newState) {
@@ -1047,7 +1035,7 @@ bool QGstreamerPlayerSession::processBusMessage(const QGstreamerMessage &message
             }
             break;
             case GST_MESSAGE_INFO:
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
             {
                GError *err;
                gchar *debug;
@@ -1259,7 +1247,6 @@ void QGstreamerPlayerSession::getStreamsInfo()
             streamProperties[QMediaMetaData::Language] = QString::fromUtf8(languageCode);
          }
 
-         //qDebug() << "language for setream" << i << QString::fromUtf8(languageCode);
          g_free (languageCode);
          gst_tag_list_free(tags);
       }
@@ -1287,9 +1274,6 @@ void QGstreamerPlayerSession::getStreamsInfo()
 
 void QGstreamerPlayerSession::updateVideoResolutionTag()
 {
-#ifdef DEBUG_PLAYBIN
-   qDebug() << Q_FUNC_INFO;
-#endif
    QSize size;
    QSize aspectRatio;
    GstPad *pad = gst_element_get_static_pad(m_videoIdentity, "src");
@@ -1365,7 +1349,8 @@ void QGstreamerPlayerSession::updateDuration()
       QTimer::singleShot(delay, this, SLOT(updateDuration()));
       m_durationQueries--;
    }
-#ifdef DEBUG_PLAYBIN
+
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << Q_FUNC_INFO << m_duration;
 #endif
 }
@@ -1380,7 +1365,7 @@ void QGstreamerPlayerSession::playbinNotifySource(GObject *o, GParamSpec *p, gpo
       return;
    }
 
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << "Playbin source added:" << G_OBJECT_CLASS_NAME(G_OBJECT_GET_CLASS(source));
 #endif
 
@@ -1453,7 +1438,7 @@ void QGstreamerPlayerSession::playbinNotifySource(GObject *o, GParamSpec *p, gpo
       self->m_isLiveSource = gst_base_src_is_live(GST_BASE_SRC(source));
    }
 
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    if (self->m_isLiveSource) {
       qDebug() << "Current source is a live source";
    } else {
@@ -1489,9 +1474,11 @@ void QGstreamerPlayerSession::updateVolume()
 
    if (m_volume != int(volume * 100 + 0.5)) {
       m_volume = int(volume * 100 + 0.5);
-#ifdef DEBUG_PLAYBIN
+
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
       qDebug() << Q_FUNC_INFO << m_volume;
 #endif
+
       emit volumeChanged(m_volume);
    }
 }
@@ -1511,9 +1498,11 @@ void QGstreamerPlayerSession::updateMuted()
    g_object_get(G_OBJECT(m_playbin), "mute", &muted, nullptr);
    if (m_muted != muted) {
       m_muted = muted;
-#ifdef DEBUG_PLAYBIN
+
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
       qDebug() << Q_FUNC_INFO << m_muted;
 #endif
+
       emit mutedStateChanged(muted);
    }
 }
@@ -1582,9 +1571,6 @@ void QGstreamerPlayerSession::handleStreamsChange(GstBin *bin, gpointer user_dat
 //doing proper operations when detecting an invalidMedia: change media status before signal the erorr
 void QGstreamerPlayerSession::processInvalidMedia(QMediaPlayer::Error errorCode, const QString &errorString)
 {
-#ifdef DEBUG_PLAYBIN
-   qDebug() << Q_FUNC_INFO;
-#endif
    if (m_isPlaylist) {
       stop();
       emit error(int(QMediaPlayer::MediaIsPlaylist), tr("Media is loaded as a playlist"));
@@ -1597,9 +1583,10 @@ void QGstreamerPlayerSession::processInvalidMedia(QMediaPlayer::Error errorCode,
 
 void QGstreamerPlayerSession::showPrerollFrames(bool enabled)
 {
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << Q_FUNC_INFO << enabled;
 #endif
+
    if (enabled != m_displayPrerolledFrame && m_videoSink &&
       g_object_class_find_property(G_OBJECT_GET_CLASS(m_videoSink), "show-preroll-frame") != nullptr) {
 

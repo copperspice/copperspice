@@ -33,8 +33,7 @@
 #include <camera_imageencoder.h>
 #include <camera_resourcepolicy.h>
 
-// #define CAMEABIN_DEBUG 1
-#define ENUM_NAME(c,e,v) (c::staticMetaObject.enumerator(c::staticMetaObject.indexOfEnumerator(e)).valueToKey((v)))
+#define ENUM_NAME(c,e,v) (c::staticMetaObject().enumerator(c::staticMetaObject().indexOfEnumerator(e)).valueToKey((v)))
 
 CameraBinControl::CameraBinControl(CameraBinSession *session)
    : QCameraControl(session), m_session(session), m_state(QCamera::UnloadedState), m_reloadPending(false)
@@ -83,9 +82,10 @@ bool CameraBinControl::isCaptureModeSupported(QCamera::CaptureModes mode) const
 
 void CameraBinControl::setState(QCamera::State state)
 {
-#ifdef CAMEABIN_DEBUG
-   qDebug() << Q_FUNC_INFO << ENUM_NAME(QCamera, "State", state);
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+   qDebug() << "CameraBinControl::setState()" << ENUM_NAME(QCamera, "State", state);
 #endif
+
    if (m_state != state) {
       m_state = state;
 
@@ -94,9 +94,11 @@ void CameraBinControl::setState(QCamera::State state)
       if (state == QCamera::LoadedState &&
             m_session->status() == QCamera::ActiveStatus &&
             m_session->isBusy()) {
-#ifdef CAMEABIN_DEBUG
-         qDebug() << Q_FUNC_INFO << "Camera is busy, QCamera::stop() is delayed";
+
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+         qDebug("CameraBinControl::setState() Camera is busy, QCamera::stop() is delayed");
 #endif
+
          emit stateChanged(m_state);
          return;
       }
@@ -126,10 +128,11 @@ void CameraBinControl::setState(QCamera::State state)
             if (m_session->isReady()) {
                m_session->setState(state);
             } else {
-#ifdef CAMEABIN_DEBUG
-               qDebug() << "Camera session is not ready yet, postpone activating";
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+               qDebug("CameraBinControl::setState() Camera session is not ready yet, postpone activating");
 #endif
             }
+
          } else {
             m_session->setState(state);
          }
@@ -151,9 +154,10 @@ QCamera::Status CameraBinControl::status() const
 
 void CameraBinControl::reloadLater()
 {
-#ifdef CAMEABIN_DEBUG
-   qDebug() << "CameraBinControl: reload pipeline requested" << ENUM_NAME(QCamera, "State", m_state);
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+   qDebug() << "CameraBinControl::reloadLater() Reload pipeline requested" << ENUM_NAME(QCamera, "State", m_state);
 #endif
+
    if (!m_reloadPending && m_state == QCamera::ActiveState) {
       m_reloadPending = true;
 
@@ -166,16 +170,17 @@ void CameraBinControl::reloadLater()
 
 void CameraBinControl::handleResourcesLost()
 {
-#ifdef CAMEABIN_DEBUG
-   qDebug() << Q_FUNC_INFO << ENUM_NAME(QCamera, "State", m_state);
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+   qDebug() << "CameraBinControl::handleResourcesLost()" << ENUM_NAME(QCamera, "State", m_state);
 #endif
+
    m_session->setState(QCamera::UnloadedState);
 }
 
 void CameraBinControl::handleResourcesGranted()
 {
-#ifdef CAMEABIN_DEBUG
-   qDebug() << Q_FUNC_INFO << ENUM_NAME(QCamera, "State", m_state);
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+   qDebug() << "CameraBinControl::handleResourcesLost()" << ENUM_NAME(QCamera, "State", m_state);
 #endif
 
    //camera will be started soon by delayedReload()
@@ -213,9 +218,10 @@ void CameraBinControl::handleCameraError(int errorCode, const QString &errorStri
 
 void CameraBinControl::delayedReload()
 {
-#ifdef CAMEABIN_DEBUG
-   qDebug() << "CameraBinControl: reload pipeline";
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+   qDebug("CameraBinControl::delayedReload() Reload pipeline");
 #endif
+
    if (m_reloadPending) {
       m_reloadPending = false;
       if (m_state == QCamera::ActiveState &&

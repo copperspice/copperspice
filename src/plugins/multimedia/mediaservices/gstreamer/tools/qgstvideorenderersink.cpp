@@ -38,8 +38,6 @@
 
 #include <gst/video/video.h>
 
-// #define DEBUG_VIDEO_SURFACE_SINK
-
 QGstDefaultVideoRenderer::QGstDefaultVideoRenderer()
    : m_flushed(true)
 {
@@ -537,7 +535,7 @@ gboolean QGstVideoRendererSink::set_caps(GstBaseSink *base, GstCaps *caps)
 {
    VO_SINK(base);
 
-#ifdef DEBUG_VIDEO_SURFACE_SINK
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << "set_caps:";
    qDebug() << caps;
 #endif

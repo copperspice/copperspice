@@ -62,8 +62,6 @@
 #include <gst/gsttagsetter.h>
 #include <gst/gstversion.h>
 
-// #define CAMERABIN_DEBUG 1
-// #define CAMERABIN_DEBUG_DUMP_BIN 1
 
 #define ENUM_NAME(c,e,v) (c::staticMetaObject.enumerator(c::staticMetaObject.indexOfEnumerator(e)).valueToKey((v)))
 
@@ -257,9 +255,11 @@ bool CameraBinSession::setupCameraBin()
       }
 
       m_viewfinderElement = m_viewfinderInterface ? m_viewfinderInterface->videoSink() : nullptr;
-#if CAMERABIN_DEBUG
-      qDebug() << Q_FUNC_INFO << "Viewfinder changed, reconfigure.";
+
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+      qDebug("CameraBinSession::setupCameraBin() Viewfinder changed, reconfigure");
 #endif
+
       m_viewfinderHasChanged = false;
       if (!m_viewfinderElement) {
          if (m_pendingState == QCamera::ActiveState) {
@@ -443,9 +443,6 @@ void CameraBinSession::setAudioCaptureCaps()
 
 GstElement *CameraBinSession::buildCameraSource()
 {
-#if CAMERABIN_DEBUG
-   qDebug() << Q_FUNC_INFO;
-#endif
    if (!m_inputDeviceHasChanged) {
       return m_cameraSrc;
    }
@@ -466,9 +463,11 @@ GstElement *CameraBinSession::buildCameraSource()
    }
 
    if (m_cameraSrc && !m_inputDevice.isEmpty()) {
-#if CAMERABIN_DEBUG
-      qDebug() << "set camera device" << m_inputDevice;
+
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+      qDebug() << "Set camera device" << m_inputDevice;
 #endif
+
       m_usingWrapperCameraBinSrc = qstrcmp(qt_gst_element_get_factory_name(m_cameraSrc), "wrappercamerabinsrc") == 0;
 
       if (g_object_class_find_property(G_OBJECT_GET_CLASS(m_cameraSrc), "video-source")) {
@@ -551,8 +550,8 @@ void CameraBinSession::captureImage(int requestId, const QString &fileName)
 
    m_requestId = requestId;
 
-#if CAMERABIN_DEBUG
-   qDebug() << Q_FUNC_INFO << m_requestId << fileName << "actual file name:" << actualFileName;
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+   qDebug() << "CameraBinSession::captureImage()" << m_requestId << fileName << "Actual file name:" << actualFileName;
 #endif
 
    g_object_set(G_OBJECT(m_camerabin), FILENAME_PROPERTY, actualFileName.toUtf8().constData(), nullptr);
@@ -719,8 +718,8 @@ void CameraBinSession::setState(QCamera::State newState)
    m_pendingState = newState;
    emit pendingStateChanged(m_pendingState);
 
-#if CAMERABIN_DEBUG
-   qDebug() << Q_FUNC_INFO << newState;
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+   qDebug() << "CameraBinSession::setState()" << newState;
 #endif
 
    setStateHelper(newState);
@@ -984,10 +983,9 @@ bool CameraBinSession::processBusMessage(const QGstreamerMessage &message)
             setError(int(QMediaRecorder::ResourceError), message);
          }
 
-#ifdef CAMERABIN_DEBUG_DUMP_BIN
-         _gst_debug_bin_to_dot_file_with_ts(GST_BIN(m_camerabin),
-                                            GstDebugGraphDetails(GST_DEBUG_GRAPH_SHOW_ALL /* GST_DEBUG_GRAPH_SHOW_MEDIA_TYPE | GST_DEBUG_GRAPH_SHOW_NON_DEFAULT_PARAMS | GST_DEBUG_GRAPH_SHOW_STATES*/),
-                                            "camerabin_error");
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+         gst_debug_bin_to_dot_file_with_ts(GST_BIN(m_camerabin),
+               GstDebugGraphDetails(GST_DEBUG_GRAPH_SHOW_ALL), "camerabin_error");
 #endif
 
 
@@ -1030,22 +1028,17 @@ bool CameraBinSession::processBusMessage(const QGstreamerMessage &message)
 
                gst_message_parse_state_changed(gm, &oldState, &newState, &pending);
 
-
-#if CAMERABIN_DEBUG
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
                QStringList states;
                states << "GST_STATE_VOID_PENDING" <<  "GST_STATE_NULL" << "GST_STATE_READY" << "GST_STATE_PAUSED" << "GST_STATE_PLAYING";
 
-
-               qDebug() << QString("state changed: old: %1  new: %2  pending: %3") \
-                        .formatArg(states[oldState]) \
-                        .formatArg(states[newState]) \
-                        .formatArg(states[pending]);
+               qDebug() << QString("state changed: old: %1  new: %2  pending: %3")
+                     .formatArg(states[oldState]).formatArg(states[newState]).formatArg(states[pending]);
 #endif
 
-#ifdef CAMERABIN_DEBUG_DUMP_BIN
-               _gst_debug_bin_to_dot_file_with_ts(GST_BIN(m_camerabin),
-                                                  GstDebugGraphDetails(GST_DEBUG_GRAPH_SHOW_ALL /*GST_DEBUG_GRAPH_SHOW_MEDIA_TYPE | GST_DEBUG_GRAPH_SHOW_NON_DEFAULT_PARAMS | GST_DEBUG_GRAPH_SHOW_STATES*/),
-                                                  "camerabin");
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+               gst_debug_bin_to_dot_file_with_ts(GST_BIN(m_camerabin),
+                     GstDebugGraphDetails(GST_DEBUG_GRAPH_SHOW_ALL), "camerabin");
 #endif
 
                switch (newState) {
@@ -1250,7 +1243,7 @@ QList< QPair<int, int> > CameraBinSession::supportedFrameRates(const QSize &fram
 
    std::sort(res.begin(), res.end(), rateLessThan);
 
-#if CAMERABIN_DEBUG
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << "Supported rates:" << caps;
    qDebug() << res;
 #endif
@@ -1308,7 +1301,7 @@ QList<QSize> CameraBinSession::supportedResolutions(QPair<int, int> rate,
 
    GstCaps *supportedCaps = this->supportedCaps(mode);
 
-#if CAMERABIN_DEBUG
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << "Source caps:" << supportedCaps;
 #endif
 
@@ -1426,7 +1419,7 @@ QList<QSize> CameraBinSession::supportedResolutions(QPair<int, int> rate,
       }
    }
 
-#if CAMERABIN_DEBUG
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << "Supported resolutions:" << gst_caps_to_string(caps);
    qDebug() << res;
 #endif

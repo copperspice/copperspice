@@ -39,7 +39,6 @@
 #include <gst/gst.h>
 
 using QVideoSurfaceGstSink = QGstVideoRendererSink;
-//#define DEBUG_CAPTURE
 
 #define IMAGE_DONE_SIGNAL "image-done"
 
@@ -240,14 +239,14 @@ bool CameraBinImageCapture::processBusMessage(const QGstreamerMessage &message)
             //metadata event probe is installed before jpeg encoder
             //to emit metadata available signal as soon as possible.
 
-#ifdef DEBUG_CAPTURE
-            qDebug() << "install metadata probe";
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+            qDebug("CameraBinImageCapture::processBusMessage() Install metadata probe");
 #endif
 
             gst_pad_add_probe(sinkpad, GST_PAD_PROBE_TYPE_EVENT_DOWNSTREAM, encoderEventProbe, this, nullptr);
 
-#ifdef DEBUG_CAPTURE
-            qDebug() << "install uncompressed buffer probe";
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+            qDebug("CameraBinImageCapture::processBusMessage() Install uncompressed buffer probe");
 #endif
             m_encoderProbe.addProbeToPad(sinkpad, true);
 
@@ -263,8 +262,8 @@ bool CameraBinImageCapture::processBusMessage(const QGstreamerMessage &message)
 
             GstPad *srcpad = gst_element_get_static_pad(element, "src");
 
-#ifdef DEBUG_CAPTURE
-            qDebug() << "install jpeg buffer probe";
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+            qDebug("CameraBinImageCapture::processBusMessage() Install jpeg buffer probe");
 #endif
 
             m_muxerProbe.addProbeToPad(srcpad);
@@ -280,8 +279,8 @@ bool CameraBinImageCapture::processBusMessage(const QGstreamerMessage &message)
          if (gst_structure_has_name (structure, "image-done")) {
             const gchar *fileName = gst_structure_get_string (structure, "filename");
 
-#ifdef DEBUG_CAPTURE
-            qDebug() << "Image saved" << fileName;
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+            qDebug() << "CameraBinImageCapture::processBusMessage() Image saved" << fileName;
 #endif
 
             if (m_session->captureDestinationControl()->captureDestination() & QCameraImageCapture::CaptureToFile) {
@@ -289,8 +288,8 @@ bool CameraBinImageCapture::processBusMessage(const QGstreamerMessage &message)
 
             } else {
 
-#ifdef DEBUG_CAPTURE
-               qDebug() << Q_FUNC_INFO << "Dropped saving file" << fileName;
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+               qDebug() << "CameraBinImageCapture::processBusMessage() Dropped saving file" << fileName;
 #endif
                // camerabin creates an empty file when captured buffer is dropped, remove it
                QFileInfo info(QString::fromUtf8(fileName));

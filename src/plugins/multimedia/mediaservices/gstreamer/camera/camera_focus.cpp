@@ -31,8 +31,6 @@
 
 #include <gst/interfaces/photography.h>
 
-//#define CAMERABIN_DEBUG 1
-
 CameraBinFocus::CameraBinFocus(CameraBinSession *session)
    : QCameraFocusControl(session),
      QGstreamerBufferProbe(ProbeBuffers),
@@ -276,11 +274,8 @@ void CameraBinFocus::handleFocusMessage(GstMessage *gm)
 
 void CameraBinFocus::_q_setFocusStatus(QCamera::LockStatus status, QCamera::LockChangeReason reason)
 {
-#ifdef CAMERABIN_DEBUG
-   qDebug() << Q_FUNC_INFO << "Current:"
-            << m_focusStatus
-            << "New:"
-            << status << reason;
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
+   qDebug() << "CameraBinFocus::setFocusStatus() Current:" << m_focusStatus << "New:" << status << reason;
 #endif
 
    if (m_focusStatus != status) {

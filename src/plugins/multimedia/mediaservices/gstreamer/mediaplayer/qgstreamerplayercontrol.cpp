@@ -38,8 +38,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-// #define DEBUG_PLAYBIN
-
 QGstreamerPlayerControl::QGstreamerPlayerControl(QGstreamerPlayerSession *session, QObject *parent)
    : QMediaPlayerControl(parent), m_session(session), m_userRequestedState(QMediaPlayer::StoppedState)
    , m_currentState(QMediaPlayer::StoppedState), m_mediaStatus(QMediaPlayer::NoMedia), m_bufferProgress(-1)
@@ -144,7 +142,7 @@ void QGstreamerPlayerControl::setPlaybackRate(qreal rate)
 
 void QGstreamerPlayerControl::setPosition(qint64 pos)
 {
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << Q_FUNC_INFO << pos / 1000.0;
 #endif
 
@@ -178,10 +176,6 @@ void QGstreamerPlayerControl::setPosition(qint64 pos)
 
 void QGstreamerPlayerControl::play()
 {
-#ifdef DEBUG_PLAYBIN
-   qDebug() << Q_FUNC_INFO;
-#endif
-
    // m_userRequestedState is needed to know that we need to resume playback when resource-policy
    // regranted the resources after lost, since m_currentState will become paused when resources are lost
 
@@ -191,9 +185,6 @@ void QGstreamerPlayerControl::play()
 
 void QGstreamerPlayerControl::pause()
 {
-#ifdef DEBUG_PLAYBIN
-   qDebug() << Q_FUNC_INFO;
-#endif
    m_userRequestedState = QMediaPlayer::PausedState;
 
    playOrPause(QMediaPlayer::PausedState);
@@ -278,10 +269,6 @@ void QGstreamerPlayerControl::playOrPause(QMediaPlayer::State newState)
 
 void QGstreamerPlayerControl::stop()
 {
-#ifdef DEBUG_PLAYBIN
-   qDebug() << Q_FUNC_INFO;
-#endif
-
    m_userRequestedState = QMediaPlayer::StoppedState;
 
    pushState();
@@ -324,10 +311,6 @@ const QIODevice *QGstreamerPlayerControl::mediaStream() const
 
 void QGstreamerPlayerControl::setMedia(const QMediaContent &content, QIODevice *stream)
 {
-#ifdef DEBUG_PLAYBIN
-   qDebug() << Q_FUNC_INFO;
-#endif
-
    pushState();
 
    m_currentState = QMediaPlayer::StoppedState;
@@ -521,7 +504,7 @@ void QGstreamerPlayerControl::setBufferProgress(int progress)
       return;
    }
 
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << Q_FUNC_INFO << progress;
 #endif
 
@@ -618,7 +601,7 @@ void QGstreamerPlayerControl::popAndNotifyState()
 
       if (m_mediaStatus != oldMediaStatus) {
 
-#ifdef DEBUG_PLAYBIN
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
          qDebug() << "Media status changed:" << m_mediaStatus;
 #endif
 
@@ -626,7 +609,8 @@ void QGstreamerPlayerControl::popAndNotifyState()
       }
 
       if (m_currentState != oldState) {
-#ifdef DEBUG_PLAYBIN
+
+#if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
          qDebug() << "State changed:" << m_currentState;
 #endif
 
