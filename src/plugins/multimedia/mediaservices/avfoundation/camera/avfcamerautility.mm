@@ -420,39 +420,46 @@ void qt_set_framerate_limits(AVCaptureConnection *videoConnection, qreal minFPS,
 
     if (minFPS < 0. || maxFPS < 0. || (maxFPS && maxFPS < minFPS)) {
 #if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
-        qDebug() << Q_FUNC_INFO << "Invalid framerates (min, max):" << minFPS << maxFPS;
+      qDebug() << "Invalid framerates (min, max):" << minFPS << maxFPS;
 #endif
 
         return;
     }
 
     CMTime minDuration = kCMTimeInvalid;
-    if (maxFPS > 0.) {
-        if (!videoConnection.supportsVideoMinFrameDuration)
+
+   if (maxFPS > 0.) {
+
+      if (! videoConnection.supportsVideoMinFrameDuration) {
 #if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
-            qDebug() << Q_FUNC_INFO << "Maximum framerate is not supported";
+         qDebug() << "Maximum framerate is not supported";
 #endif
 
-        else
-            minDuration = CMTimeMake(1, maxFPS);
-    }
-    if (videoConnection.supportsVideoMinFrameDuration)
-        videoConnection.videoMinFrameDuration = minDuration;
+      } else {
+         minDuration = CMTimeMake(1, maxFPS);
+      }
+   }
 
-        CMTime maxDuration = kCMTimeInvalid;
-        if (minFPS > 0.) {
-            if (!videoConnection.supportsVideoMaxFrameDuration)
+   if (videoConnection.supportsVideoMinFrameDuration) {
+      videoConnection.videoMinFrameDuration = minDuration;
+   }
+
+   CMTime maxDuration = kCMTimeInvalid;
+
+   if (minFPS > 0.) {
+      if (! videoConnection.supportsVideoMaxFrameDuration) {
 #if defined(CS_SHOW_DEBUG_PLUGINS_AVF)
-                qDebug() << Q_FUNC_INFO << "Minimum framerate is not supported";
+         qDebug() << Q_FUNC_INFO << "Minimum framerate is not supported";
 #endif
 
-            else
-                maxDuration = CMTimeMake(1, minFPS);
-        }
-        if (videoConnection.supportsVideoMaxFrameDuration)
-            videoConnection.videoMaxFrameDuration = maxDuration;
+      } else {
+         maxDuration = CMTimeMake(1, minFPS);
+      }
+   }
 
-
+   if (videoConnection.supportsVideoMaxFrameDuration) {
+      videoConnection.videoMaxFrameDuration = maxDuration;
+   }
 }
 
 CMTime qt_adjusted_frame_duration(AVFrameRateRange *range, qreal fps)
