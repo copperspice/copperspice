@@ -74,4 +74,3 @@ QStringList QGstreamerAudioDecoderServicePlugin::supportedMimeTypes() const
 {
    return QStringList();
 }
-

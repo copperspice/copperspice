@@ -47,4 +47,3 @@ void CameraBinViewfinderSettings2::setViewfinderSettings(const QCameraViewfinder
 {
    m_session->setViewfinderSettings(settings);
 }
-

@@ -60,11 +60,11 @@ class QGstreamerVideoRenderer : public QVideoRendererControl, public QGstreamerV
    CS_SIGNAL_2(readyChanged, isReady)
 
  private:
-   CS_SLOT_1(Private, void handleFormatChange())
-   CS_SLOT_2(handleFormatChange)
-
    QVideoSurfaceGstSink *m_videoSink;
    QPointer<QAbstractVideoSurface> m_surface;
+
+   CS_SLOT_1(Private, void handleFormatChange())
+   CS_SLOT_2(handleFormatChange)
 };
 
 #endif

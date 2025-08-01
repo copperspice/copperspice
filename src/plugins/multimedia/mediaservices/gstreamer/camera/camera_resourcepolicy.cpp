@@ -185,6 +185,7 @@ void CamerabinResourcePolicy::handleResourcesReleased()
 #ifdef HAVE_RESOURCE_POLICY
    m_releasingResources = false;
 #endif
+
    updateCanCapture();
 }
 
@@ -218,4 +219,3 @@ void CamerabinResourcePolicy::updateCanCapture()
       emit canCaptureChanged();
    }
 }
-

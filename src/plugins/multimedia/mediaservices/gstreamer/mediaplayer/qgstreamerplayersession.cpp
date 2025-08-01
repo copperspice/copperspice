@@ -535,6 +535,7 @@ void QGstreamerPlayerSession::setVideoRenderer(QObject *videoOutput)
 #if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
       qDebug() << "The pipeline has not started yet, pending state:" << m_pendingState;
 #endif
+
       //the pipeline has not started yet
       flushVideoProbes();
       m_pendingVideoSink = nullptr;
@@ -864,7 +865,6 @@ void QGstreamerPlayerSession::setMuted(bool muted)
    }
 }
 
-
 void QGstreamerPlayerSession::setSeekable(bool seekable)
 {
 #if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
@@ -1031,6 +1031,7 @@ bool QGstreamerPlayerSession::processBusMessage(const QGstreamerMessage &message
                g_free (debug);
             }
             break;
+
             case GST_MESSAGE_INFO:
 #if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
             {
@@ -1043,6 +1044,7 @@ bool QGstreamerPlayerSession::processBusMessage(const QGstreamerMessage &message
             }
 #endif
             break;
+
             case GST_MESSAGE_BUFFERING:
             case GST_MESSAGE_STATE_DIRTY:
             case GST_MESSAGE_STEP_DONE:
@@ -1350,6 +1352,7 @@ void QGstreamerPlayerSession::updateDuration()
 #if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)
    qDebug() << Q_FUNC_INFO << m_duration;
 #endif
+
 }
 
 void QGstreamerPlayerSession::playbinNotifySource(GObject *o, GParamSpec *p, gpointer d)
@@ -1739,5 +1742,3 @@ void QGstreamerPlayerSession::playlistTypeFindFunction(GstTypeFind *find, gpoint
       length >>= 1;
    }
 }
-
-

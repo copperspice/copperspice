@@ -51,5 +51,3 @@ void QGstreamerAudioDecoderService::releaseControl(QMediaControl *control)
 {
    (void) control;
 }
-
-

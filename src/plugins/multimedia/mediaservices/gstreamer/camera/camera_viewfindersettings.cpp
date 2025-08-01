@@ -98,4 +98,3 @@ void CameraBinViewfinderSettings::setViewfinderParameter(ViewfinderParameter par
 
    m_session->setViewfinderSettings(settings);
 }
-

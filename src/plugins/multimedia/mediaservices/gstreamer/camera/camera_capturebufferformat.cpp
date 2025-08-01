@@ -51,4 +51,3 @@ void CameraBinCaptureBufferFormat::setBufferFormat(QVideoFrame::PixelFormat form
       emit bufferFormatChanged(format);
    }
 }
-

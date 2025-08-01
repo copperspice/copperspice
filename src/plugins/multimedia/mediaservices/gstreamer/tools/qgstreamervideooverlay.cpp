@@ -394,4 +394,3 @@ void QGstreamerVideoOverlay::setSaturation(int saturation)
 
    m_saturation = saturation;
 }
-

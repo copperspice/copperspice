@@ -68,6 +68,14 @@ class CameraBinControl : public QCameraControl
    CS_SLOT_2(setViewfinderColorSpaceConversion)
 
  private:
+   void updateSupportedResolutions(const QString &device);
+
+   CameraBinSession *m_session;
+   QCamera::State m_state;
+   CamerabinResourcePolicy *m_resourcePolicy;
+
+   bool m_reloadPending;
+
    CS_SLOT_1(Private, void delayedReload())
    CS_SLOT_2(delayedReload)
 
@@ -82,14 +90,6 @@ class CameraBinControl : public QCameraControl
 
    CS_SLOT_1(Private, void handleCameraError(int error, const QString &errorString))
    CS_SLOT_2(handleCameraError)
-
-   void updateSupportedResolutions(const QString &device);
-
-   CameraBinSession *m_session;
-   QCamera::State m_state;
-   CamerabinResourcePolicy *m_resourcePolicy;
-
-   bool m_reloadPending;
 };
 
 #endif

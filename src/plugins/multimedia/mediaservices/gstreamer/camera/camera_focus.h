@@ -37,9 +37,7 @@
 
 class CameraBinSession;
 
-class CameraBinFocus
-   : public QCameraFocusControl, QGstreamerBufferProbe
-
+class CameraBinFocus : public QCameraFocusControl, QGstreamerBufferProbe
 {
    CS_OBJECT(CameraBinFocus)
 
@@ -80,15 +78,6 @@ class CameraBinFocus
    void timerEvent(QTimerEvent *event);
 
  private:
-   CS_SLOT_1(Private, void _q_setFocusStatus(QCamera::LockStatus status, QCamera::LockChangeReason reason))
-   CS_SLOT_2(_q_setFocusStatus)
-
-   CS_SLOT_1(Private, void _q_handleCameraStatusChange(QCamera::Status status))
-   CS_SLOT_2(_q_handleCameraStatusChange)
-
-   CS_SLOT_1(Private, void _q_updateFaces())
-   CS_SLOT_2(_q_updateFaces)
-
    void resetFocusPoint();
    void updateRegionOfInterest(const QRectF &rectangle);
    void updateRegionOfInterest(const QVector<QRect> &rectangles);
@@ -108,6 +97,15 @@ class CameraBinFocus
    QVector<QRect> m_faceFocusRects;
    QBasicTimer m_faceResetTimer;
    mutable QMutex m_mutex;
+
+   CS_SLOT_1(Private, void _q_setFocusStatus(QCamera::LockStatus status, QCamera::LockChangeReason reason))
+   CS_SLOT_2(_q_setFocusStatus)
+
+   CS_SLOT_1(Private, void _q_handleCameraStatusChange(QCamera::Status status))
+   CS_SLOT_2(_q_handleCameraStatusChange)
+
+   CS_SLOT_1(Private, void _q_updateFaces())
+   CS_SLOT_2(_q_updateFaces)
 };
 
 #endif

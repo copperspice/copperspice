@@ -66,4 +66,3 @@ void CameraBinImageEncoder::setImageSettings(const QImageEncoderSettings &settin
    m_settings = settings;
    emit settingsChanged();
 }
-

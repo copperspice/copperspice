@@ -449,6 +449,7 @@ QVector<QGstUtils::CameraInfo> QGstUtils::enumerateCameras(GstElementFactory *fa
 
    for (const QFileInfo &entryInfo : entries) {
       int fd = qt_safe_open(entryInfo.filePath().toLatin1().constData(), O_RDWR );
+
       if (fd == -1) {
          continue;
       }
@@ -1092,5 +1093,6 @@ QDebug operator <<(QDebug debug, GstCaps *caps)
       debug = debug << string;
       g_free(string);
    }
+
    return debug;
 }

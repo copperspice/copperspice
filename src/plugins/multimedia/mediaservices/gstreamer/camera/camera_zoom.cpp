@@ -92,4 +92,3 @@ void CameraBinZoom::zoomTo(qreal optical, qreal digital)
       emit currentDigitalZoomChanged(digital);
    }
 }
-

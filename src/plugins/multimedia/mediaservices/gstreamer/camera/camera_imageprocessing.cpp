@@ -408,4 +408,3 @@ void CameraBinImageProcessing::unlockWhiteBalance()
    }
 }
 #endif
-

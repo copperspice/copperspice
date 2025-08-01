@@ -100,4 +100,3 @@ void QGstVideoBuffer::unmap()
 
    m_mode = NotMapped;
 }
-

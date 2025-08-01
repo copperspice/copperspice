@@ -618,4 +618,3 @@ void QGstreamerPlayerControl::popAndNotifyState()
       }
    }
 }
-

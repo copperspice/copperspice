@@ -55,9 +55,6 @@ class CameraBinImageCapture : public QCameraImageCaptureControl, public QGstream
    bool processBusMessage(const QGstreamerMessage &message) override;
 
  private:
-   CS_SLOT_1(Private, void updateState())
-   CS_SLOT_2(updateState)
-
    static GstPadProbeReturn encoderEventProbe(GstPad *, GstPadProbeInfo *info, gpointer user_data);
 
    class EncoderProbe : public QGstreamerBufferProbe
@@ -101,6 +98,9 @@ class CameraBinImageCapture : public QCameraImageCaptureControl, public QGstream
 
    int m_requestId;
    bool m_ready;
+
+   CS_SLOT_1(Private, void updateState())
+   CS_SLOT_2(updateState)
 };
 
 #endif

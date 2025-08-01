@@ -42,7 +42,6 @@ class CameraBinV4LImageProcessing : public QCameraImageProcessingControl
    QVariant parameter(ProcessingParameter parameter) const;
    void setParameter(ProcessingParameter parameter, const QVariant &value);
 
- public :
    CS_SLOT_1(Public, void updateParametersInfo(QCamera::Status cameraStatus))
    CS_SLOT_2(updateParametersInfo)
 
@@ -62,7 +61,7 @@ class CameraBinV4LImageProcessing : public QCameraImageProcessingControl
       qint32 sourceValue, const SourceParameterValueInfo &sourceValueInfo);
    static qint32 sourceImageProcessingParameterValue(
       qreal scaledValue, const SourceParameterValueInfo &valueRange);
- private:
+
    CameraBinSession *m_session;
    QMap<ProcessingParameter, SourceParameterValueInfo> m_parametersInfo;
 };

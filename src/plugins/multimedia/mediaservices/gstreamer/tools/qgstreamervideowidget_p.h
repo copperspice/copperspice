@@ -32,9 +32,8 @@
 
 class QGstreamerVideoWidget;
 
-class QGstreamerVideoWidgetControl
-   : public QVideoWidgetControl, public QGstreamerVideoRendererInterface
-   , public QGstreamerSyncMessageFilter, public QGstreamerBusMessageFilter
+class QGstreamerVideoWidgetControl : public QVideoWidgetControl, public QGstreamerVideoRendererInterface,
+      public QGstreamerSyncMessageFilter, public QGstreamerBusMessageFilter
 {
    CS_OBJECT_MULTIPLE(QGstreamerVideoWidgetControl, QVideoWidgetControl)
 

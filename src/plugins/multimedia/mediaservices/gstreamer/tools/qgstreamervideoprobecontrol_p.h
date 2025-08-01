@@ -34,8 +34,7 @@
 #include <gst/gst.h>
 #include <gst/video/video.h>
 
-class QGstreamerVideoProbeControl
-   : public QMediaVideoProbeControl, public QGstreamerBufferProbe, public QSharedData
+class QGstreamerVideoProbeControl : public QMediaVideoProbeControl, public QGstreamerBufferProbe, public QSharedData
 {
    CS_OBJECT(QGstreamerVideoProbeControl)
 

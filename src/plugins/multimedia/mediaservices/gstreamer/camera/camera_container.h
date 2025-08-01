@@ -60,7 +60,6 @@ class CameraBinContainer : public QMediaContainerControl
    GstEncodingContainerProfile *createProfile();
 #endif
 
- public:
    CS_SIGNAL_1(Public, void settingsChanged())
    CS_SIGNAL_2(settingsChanged)
 

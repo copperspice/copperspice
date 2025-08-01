@@ -164,4 +164,3 @@ void QGstreamerMetaDataProvider::updateTags()
       emit metaDataChanged();
    }
 }
-

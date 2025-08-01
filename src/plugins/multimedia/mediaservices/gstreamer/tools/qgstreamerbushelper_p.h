@@ -42,7 +42,6 @@ class QGstreamerSyncMessageFilter
 #define QGstreamerSyncMessageFilter_iid "com.copperspice.CS.gstreamerSyncMessageFilter/1.0"
 CS_DECLARE_INTERFACE(QGstreamerSyncMessageFilter, QGstreamerSyncMessageFilter_iid)
 
-
 class QGstreamerBusMessageFilter
 {
  public:
@@ -56,7 +55,6 @@ CS_DECLARE_INTERFACE(QGstreamerBusMessageFilter, QGstreamerBusMessageFilter_iid)
 class QGstreamerBusHelper : public QObject
 {
    CS_OBJECT(QGstreamerBusHelper)
-   friend class QGstreamerBusHelperPrivate;
 
  public:
    QGstreamerBusHelper(GstBus *bus, QObject *parent = nullptr);
@@ -70,6 +68,8 @@ class QGstreamerBusHelper : public QObject
 
  private:
    QGstreamerBusHelperPrivate *d;
+
+   friend class QGstreamerBusHelperPrivate;
 };
 
 #endif

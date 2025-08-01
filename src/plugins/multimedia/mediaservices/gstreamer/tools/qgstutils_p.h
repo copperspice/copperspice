@@ -36,11 +36,11 @@
 #include <gst/gst.h>
 #include <gst/video/video.h>
 
-# define QT_GSTREAMER_PLAYBIN_ELEMENT_NAME "playbin"
-# define QT_GSTREAMER_CAMERABIN_ELEMENT_NAME "camerabin"
-# define QT_GSTREAMER_COLORCONVERSION_ELEMENT_NAME "videoconvert"
-# define QT_GSTREAMER_RAW_AUDIO_MIME "audio/x-raw"
-# define QT_GSTREAMER_VIDEOOVERLAY_INTERFACE_NAME "GstVideoOverlay"
+#define QT_GSTREAMER_PLAYBIN_ELEMENT_NAME "playbin"
+#define QT_GSTREAMER_CAMERABIN_ELEMENT_NAME "camerabin"
+#define QT_GSTREAMER_COLORCONVERSION_ELEMENT_NAME "videoconvert"
+#define QT_GSTREAMER_RAW_AUDIO_MIME "audio/x-raw"
+#define QT_GSTREAMER_VIDEOOVERLAY_INTERFACE_NAME "GstVideoOverlay"
 
 class QByteArray;
 class QImage;

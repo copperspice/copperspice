@@ -985,7 +985,6 @@ bool CameraBinSession::processBusMessage(const QGstreamerMessage &message)
                GstDebugGraphDetails(GST_DEBUG_GRAPH_SHOW_ALL), "camerabin_error");
 #endif
 
-
          if (err) {
             g_error_free (err);
          }

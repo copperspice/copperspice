@@ -270,4 +270,3 @@ void CameraBinControl::setViewfinderColorSpaceConversion(bool enabled)
 
    g_object_set(G_OBJECT(m_session->cameraBin()), "flags", flags, NULL);
 }
-

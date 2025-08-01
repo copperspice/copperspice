@@ -52,33 +52,38 @@ class CamerabinResourcePolicy : public QObject
 
    bool canCapture() const;
 
- public:
    CS_SIGNAL_1(Public, void resourcesDenied())
    CS_SIGNAL_2(resourcesDenied)
+
    CS_SIGNAL_1(Public, void resourcesGranted())
    CS_SIGNAL_2(resourcesGranted)
+
    CS_SIGNAL_1(Public, void resourcesLost())
    CS_SIGNAL_2(resourcesLost)
+
    CS_SIGNAL_1(Public, void canCaptureChanged())
    CS_SIGNAL_2(canCaptureChanged)
-
- private :
-   CS_SLOT_1(Private, void handleResourcesLost())
-   CS_SLOT_2(handleResourcesLost)
-   CS_SLOT_1(Private, void handleResourcesGranted())
-   CS_SLOT_2(handleResourcesGranted)
-   CS_SLOT_1(Private, void handleResourcesReleased())
-   CS_SLOT_2(handleResourcesReleased)
-   CS_SLOT_1(Private, void resourcesAvailable())
-   CS_SLOT_2(resourcesAvailable)
-   CS_SLOT_1(Private, void updateCanCapture())
-   CS_SLOT_2(updateCanCapture)
 
  private:
    ResourceSet m_resourceSet;
    ResourcePolicy::ResourceSet *m_resource;
    bool m_releasingResources;
    bool m_canCapture;
+
+   CS_SLOT_1(Private, void handleResourcesLost())
+   CS_SLOT_2(handleResourcesLost)
+
+   CS_SLOT_1(Private, void handleResourcesGranted())
+   CS_SLOT_2(handleResourcesGranted)
+
+   CS_SLOT_1(Private, void handleResourcesReleased())
+   CS_SLOT_2(handleResourcesReleased)
+
+   CS_SLOT_1(Private, void resourcesAvailable())
+   CS_SLOT_2(resourcesAvailable)
+
+   CS_SLOT_1(Private, void updateCanCapture())
+   CS_SLOT_2(updateCanCapture)
 };
 
 #endif

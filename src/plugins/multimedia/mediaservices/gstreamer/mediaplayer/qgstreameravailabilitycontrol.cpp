@@ -41,4 +41,3 @@ QMultimedia::AvailabilityStatus QGStreamerAvailabilityControl::availability() co
 {
    return m_resources->isAvailable() ? QMultimedia::Available : QMultimedia::Busy;
 }
-

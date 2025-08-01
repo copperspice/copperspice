@@ -69,7 +69,6 @@ QGstreamerPlayerService::QGstreamerPlayerService(QObject *parent)
       m_videoWindow = nullptr;
    }
 
-
    m_videoWidget = new QGstreamerVideoWidgetControl(this);
 
    // If the GStreamer video sink is not available, don't provide the video widget control since
@@ -187,4 +186,3 @@ void QGstreamerPlayerService::decreaseVideoRef()
       m_control->resources()->setVideoEnabled(false);
    }
 }
-

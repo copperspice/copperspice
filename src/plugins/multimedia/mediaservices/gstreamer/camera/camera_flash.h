@@ -35,6 +35,7 @@ class CameraBinSession;
 class Q_MULTIMEDIA_EXPORT CameraBinFlash : public QCameraFlashControl
 {
    CS_OBJECT(CameraBinFlash)
+
  public:
    CameraBinFlash(CameraBinSession *session);
    virtual ~CameraBinFlash();

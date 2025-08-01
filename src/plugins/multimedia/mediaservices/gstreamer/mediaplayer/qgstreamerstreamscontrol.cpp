@@ -70,4 +70,3 @@ void QGstreamerStreamsControl::setActive(int streamNumber, bool state)
       }
    }
 }
-

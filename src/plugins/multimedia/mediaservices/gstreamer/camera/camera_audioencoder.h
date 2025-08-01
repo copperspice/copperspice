@@ -78,13 +78,12 @@ class CameraBinAudioEncoder : public QAudioEncoderSettingsControl
    CS_SIGNAL_2(settingsChanged)
 
  private:
+   QAudioEncoderSettings m_actualAudioSettings;
+   QAudioEncoderSettings m_audioSettings;
 
 #ifdef HAVE_GST_ENCODING_PROFILES
    QGstCodecsInfo m_codecs;
 #endif
-
-   QAudioEncoderSettings m_actualAudioSettings;
-   QAudioEncoderSettings m_audioSettings;
 };
 
 #endif

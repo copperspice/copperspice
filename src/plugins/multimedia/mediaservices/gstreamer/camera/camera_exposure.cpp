@@ -50,8 +50,7 @@ bool CameraBinExposure::isParameterSupported(ExposureParameter parameter) const
    }
 }
 
-QVariantList CameraBinExposure::supportedParameterRange(ExposureParameter parameter,
-      bool *continuous) const
+QVariantList CameraBinExposure::supportedParameterRange(ExposureParameter parameter, bool *continuous) const
 {
    if (continuous) {
       *continuous = false;
@@ -65,12 +64,15 @@ QVariantList CameraBinExposure::supportedParameterRange(ExposureParameter parame
          }
          res << -2.0 << 2.0;
          break;
+
       case QCameraExposureControl::ISO:
          res << 100 << 200 << 400;
          break;
+
       case QCameraExposureControl::Aperture:
          res << 2.8;
          break;
+
       default:
          break;
    }
@@ -91,19 +93,23 @@ QVariant CameraBinExposure::actualValue(ExposureParameter parameter) const
          gst_photography_get_ev_compensation(m_session->photography(), &ev);
          return QVariant(ev);
       }
+
       case QCameraExposureControl::ISO: {
          guint isoSpeed = 0;
          gst_photography_get_iso_speed(m_session->photography(), &isoSpeed);
          return QVariant(isoSpeed);
       }
+
       case QCameraExposureControl::Aperture:
          return QVariant(2.8);
+
       case QCameraExposureControl::ShutterSpeed: {
          guint32 shutterSpeed = 0;
          gst_photography_get_exposure(m_session->photography(), &shutterSpeed);
 
          return QVariant(shutterSpeed / 1000000.0);
       }
+
       case QCameraExposureControl::ExposureMode: {
          GstPhotographySceneMode sceneMode;
          gst_photography_get_scene_mode(m_session->photography(), &sceneMode);
@@ -119,6 +125,7 @@ QVariant CameraBinExposure::actualValue(ExposureParameter parameter) const
                return QVariant::fromValue(QCameraExposure::ExposureManual);
             case GST_PHOTOGRAPHY_SCENE_MODE_LANDSCAPE:
                return QVariant::fromValue(QCameraExposure::ExposureLandscape);
+
 #if GST_CHECK_VERSION(1, 2, 0)
             case GST_PHOTOGRAPHY_SCENE_MODE_SNOW:
                return QVariant::fromValue(QCameraExposure::ExposureSnow);
@@ -150,8 +157,10 @@ QVariant CameraBinExposure::actualValue(ExposureParameter parameter) const
                return QVariant::fromValue(QCameraExposure::ExposureAuto);
          }
       }
+
       case QCameraExposureControl::MeteringMode:
          return QCameraExposure::MeteringMatrix;
+
       default:
          return QVariant();
    }
@@ -165,15 +174,19 @@ bool CameraBinExposure::setValue(ExposureParameter parameter, const QVariant &va
       case QCameraExposureControl::ExposureCompensation:
          gst_photography_set_ev_compensation(m_session->photography(), value.toReal());
          break;
+
       case QCameraExposureControl::ISO:
          gst_photography_set_iso_speed(m_session->photography(), value.toInt());
          break;
+
       case QCameraExposureControl::Aperture:
          gst_photography_set_aperture(m_session->photography(), guint(value.toReal() * 1000000));
          break;
+
       case QCameraExposureControl::ShutterSpeed:
          gst_photography_set_exposure(m_session->photography(), guint(value.toReal() * 1000000));
          break;
+
       case QCameraExposureControl::ExposureMode: {
          QCameraExposure::ExposureMode mode = value.value<QCameraExposure::ExposureMode>();
          GstPhotographySceneMode sceneMode;
@@ -184,52 +197,68 @@ bool CameraBinExposure::setValue(ExposureParameter parameter, const QVariant &va
             case QCameraExposure::ExposureManual:
                sceneMode = GST_PHOTOGRAPHY_SCENE_MODE_MANUAL;
                break;
+
             case QCameraExposure::ExposurePortrait:
                sceneMode = GST_PHOTOGRAPHY_SCENE_MODE_PORTRAIT;
                break;
+
             case QCameraExposure::ExposureSports:
                sceneMode = GST_PHOTOGRAPHY_SCENE_MODE_SPORT;
                break;
+
             case QCameraExposure::ExposureNight:
                sceneMode = GST_PHOTOGRAPHY_SCENE_MODE_NIGHT;
                break;
+
             case QCameraExposure::ExposureAuto:
                sceneMode = GST_PHOTOGRAPHY_SCENE_MODE_AUTO;
                break;
+
             case QCameraExposure::ExposureLandscape:
                sceneMode = GST_PHOTOGRAPHY_SCENE_MODE_LANDSCAPE;
                break;
+
 #if GST_CHECK_VERSION(1, 2, 0)
             case QCameraExposure::ExposureSnow:
                sceneMode = GST_PHOTOGRAPHY_SCENE_MODE_SNOW;
                break;
+
             case QCameraExposure::ExposureBeach:
                sceneMode = GST_PHOTOGRAPHY_SCENE_MODE_BEACH;
                break;
+
             case QCameraExposure::ExposureAction:
                sceneMode = GST_PHOTOGRAPHY_SCENE_MODE_ACTION;
                break;
+
             case QCameraExposure::ExposureNightPortrait:
                sceneMode = GST_PHOTOGRAPHY_SCENE_MODE_NIGHT_PORTRAIT;
                break;
+
             case QCameraExposure::ExposureTheatre:
                sceneMode = GST_PHOTOGRAPHY_SCENE_MODE_THEATRE;
                break;
+
             case QCameraExposure::ExposureSunset:
                sceneMode = GST_PHOTOGRAPHY_SCENE_MODE_SUNSET;
                break;
+
             case QCameraExposure::ExposureSteadyPhoto:
                sceneMode = GST_PHOTOGRAPHY_SCENE_MODE_STEADY_PHOTO;
                break;
+
             case QCameraExposure::ExposureFireworks:
                sceneMode = GST_PHOTOGRAPHY_SCENE_MODE_FIREWORKS;
                break;
+
             case QCameraExposure::ExposureParty:
                sceneMode = GST_PHOTOGRAPHY_SCENE_MODE_PARTY;
                break;
+
             case QCameraExposure::ExposureCandlelight:
                sceneMode = GST_PHOTOGRAPHY_SCENE_MODE_CANDLELIGHT;
                break;
+
             case QCameraExposure::ExposureBarcode:
                sceneMode = GST_PHOTOGRAPHY_SCENE_MODE_BARCODE;
                break;
@@ -241,6 +270,7 @@ bool CameraBinExposure::setValue(ExposureParameter parameter, const QVariant &va
          gst_photography_set_scene_mode(m_session->photography(), sceneMode);
          break;
       }
+
       default:
          return false;
    }

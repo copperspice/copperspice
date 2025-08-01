@@ -30,9 +30,7 @@
 #include <qgstreamerbufferprobe_p.h>
 #include <qgstreamerbushelper_p.h>
 
-class QGstreamerVideoOverlay
-   : public QObject, public QGstreamerSyncMessageFilter
-   , public QGstreamerBusMessageFilter, private QGstreamerBufferProbe
+class QGstreamerVideoOverlay : public QObject, public QGstreamerSyncMessageFilter, public QGstreamerBusMessageFilter, private QGstreamerBufferProbe
 {
    CS_OBJECT_MULTIPLE(QGstreamerVideoOverlay, QObject)
 

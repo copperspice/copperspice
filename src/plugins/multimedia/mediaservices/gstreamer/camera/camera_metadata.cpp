@@ -263,4 +263,3 @@ QStringList CameraBinMetaData::availableMetaData() const
 
    return res;
 }
-

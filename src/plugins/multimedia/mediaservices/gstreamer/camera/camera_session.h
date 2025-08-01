@@ -251,12 +251,6 @@ class CameraBinSession : public QObject, public QGstreamerBusMessageFilter, publ
    int m_requestId;
 
  private:
-   CS_SLOT_1(Private, void handleViewfinderChange())
-   CS_SLOT_2(handleViewfinderChange)
-
-   CS_SLOT_1(Private, void setupCaptureResolution())
-   CS_SLOT_2(setupCaptureResolution)
-
    void load();
    void unload();
    void start();
@@ -352,6 +346,12 @@ class CameraBinSession : public QObject, public QGstreamerBusMessageFilter, publ
    GstElement *m_audioEncoder;
    GstElement *m_videoEncoder;
    GstElement *m_muxer;
+
+   CS_SLOT_1(Private, void handleViewfinderChange())
+   CS_SLOT_2(handleViewfinderChange)
+
+   CS_SLOT_1(Private, void setupCaptureResolution())
+   CS_SLOT_2(setupCaptureResolution)
 };
 
 #endif

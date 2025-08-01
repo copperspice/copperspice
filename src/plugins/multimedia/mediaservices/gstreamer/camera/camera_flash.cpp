@@ -97,4 +97,3 @@ bool CameraBinFlash::isFlashReady() const
 {
    return true;
 }
-

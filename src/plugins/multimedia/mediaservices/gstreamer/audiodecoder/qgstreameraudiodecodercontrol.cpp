@@ -116,5 +116,3 @@ qint64 QGstreamerAudioDecoderControl::duration() const
 {
    return m_session->duration();
 }
-
-

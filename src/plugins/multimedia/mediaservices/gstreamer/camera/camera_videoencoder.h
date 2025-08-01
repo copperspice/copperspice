@@ -71,7 +71,6 @@ class CameraBinVideoEncoder : public QVideoEncoderSettingsControl
 
    void applySettings(GstElement *encoder);
 
- public:
    CS_SIGNAL_1(Public, void settingsChanged())
    CS_SIGNAL_2(settingsChanged)
 
