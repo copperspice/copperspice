@@ -21,13 +21,26 @@
 *
 ***********************************************************************/
 
-#include <camera_session.h>
-#include <camera_control.h>
-#include <camera_recorder.h>
-#include <camera_container.h>
 #include <camera_audioencoder.h>
-#include <camera_videoencoder.h>
+#include <camera_capturebufferformat.h>
+#include <camera_capturedestination.h>
+#include <camera_container.h>
+#include <camera_control.h>
 #include <camera_imageencoder.h>
+#include <camera_imageprocessing.h>
+#include <camera_recorder.h>
+#include <camera_session.h>
+#include <camera_videoencoder.h>
+#include <camera_viewfindersettings.h>
+#include <camera_zoom.h>
+#include <qcoreapplication.h>
+#include <qdatetime.h>
+#include <qdebug.h>
+#include <qdesktopservices.h>
+#include <qimage.h>
+#include <qmediarecorder.h>
+#include <qmetaobject.h>
+#include <qvideosurfaceformat.h>
 
 #ifdef HAVE_GST_PHOTOGRAPHY
 #include <camera_exposure.h>
@@ -36,32 +49,16 @@
 #include <camera_locks.h>
 #endif
 
-#include <camera_zoom.h>
-#include <camera_imageprocessing.h>
-#include <camera_viewfindersettings.h>
-#include <camera_capturedestination.h>
-#include <camera_capturebufferformat.h>
-
-#include <qdebug.h>
-#include <qcoreapplication.h>
-#include <qmetaobject.h>
-#include <qdesktopservices.h>
-#include <qimage.h>
-#include <qdatetime.h>
-#include <qmediarecorder.h>
-#include <qvideosurfaceformat.h>
-
 #include <qgstreamerbushelper_p.h>
 #include <qgstreamervideorendererinterface_p.h>
 #include <qgstutils_p.h>
 
-#ifdef HAVE_GST_PHOTOGRAPHY
-#include <gst/interfaces/photography.h>
-#endif
-
 #include <gst/gsttagsetter.h>
 #include <gst/gstversion.h>
 
+#ifdef HAVE_GST_PHOTOGRAPHY
+#include <gst/interfaces/photography.h>
+#endif
 
 #define ENUM_NAME(c,e,v) (c::staticMetaObject.enumerator(c::staticMetaObject.indexOfEnumerator(e)).valueToKey((v)))
 

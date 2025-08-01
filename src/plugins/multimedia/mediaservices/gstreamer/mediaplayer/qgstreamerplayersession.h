@@ -24,14 +24,13 @@
 #ifndef QGSTREAMERPLAYERSESSION_H
 #define QGSTREAMERPLAYERSESSION_H
 
-#include <qobject.h>
-#include <qmutex.h>
-#include <qnetwork_request.h>
+#include <qaudioformat.h>
 #include <qgstreamerplayercontrol.h>
-
 #include <qmediaplayer.h>
 #include <qmediastreamscontrol.h>
-#include <qaudioformat.h>
+#include <qmutex.h>
+#include <qnetwork_request.h>
+#include <qobject.h>
 
 #include <qgstreamerbushelper_p.h>
 
@@ -41,11 +40,11 @@
 
 #include <gst/gst.h>
 
+class QGstreamerAudioProbeControl;
 class QGstreamerBusHelper;
 class QGstreamerMessage;
-class QGstreamerVideoRendererInterface;
 class QGstreamerVideoProbeControl;
-class QGstreamerAudioProbeControl;
+class QGstreamerVideoRendererInterface;
 
 typedef enum {
    GST_AUTOPLUG_SELECT_TRY,

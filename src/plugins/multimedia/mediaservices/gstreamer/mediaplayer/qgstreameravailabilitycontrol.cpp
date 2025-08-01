@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qgstreameravailabilitycontrol.h>
+
 #include <qmediaresourceset_p.h>
 
 QGStreamerAvailabilityControl::QGStreamerAvailabilityControl(QMediaPlayerResourceSetInterface *resources, QObject *parent)

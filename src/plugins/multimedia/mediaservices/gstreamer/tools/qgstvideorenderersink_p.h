@@ -24,19 +24,19 @@
 #ifndef QGSTVIDEORENDERERSINK_P_H
 #define QGSTVIDEORENDERERSINK_P_H
 
-#include <gst/video/gstvideosink.h>
-#include <gst/video/video.h>
-
+#include <qabstractvideobuffer.h>
 #include <qlist.h>
 #include <qmutex.h>
-#include <qqueue.h>
 #include <qpointer.h>
-#include <qwaitcondition.h>
-#include <qvideosurfaceformat.h>
+#include <qqueue.h>
 #include <qvideoframe.h>
-#include <qabstractvideobuffer.h>
+#include <qvideosurfaceformat.h>
+#include <qwaitcondition.h>
 
 #include <qgstvideorendererplugin_p.h>
+
+#include <gst/video/gstvideosink.h>
+#include <gst/video/video.h>
 
 class QAbstractVideoSurface;
 

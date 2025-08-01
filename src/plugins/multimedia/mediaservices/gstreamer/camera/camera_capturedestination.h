@@ -24,8 +24,8 @@
 #ifndef CAMERABINCAPTUREDESTINATION_H
 #define CAMERABINCAPTUREDESTINATION_H
 
-#include <qcameraimagecapture.h>
 #include <qcameracapturedestinationcontrol.h>
+#include <qcameraimagecapture.h>
 
 class CameraBinSession;
 

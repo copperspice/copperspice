@@ -25,9 +25,9 @@
 #define CAMERA_SESSION_H
 
 #include <qcamera.h>
+#include <qdir.h>
 #include <qmediarecordercontrol.h>
 #include <qurl.h>
-#include <qdir.h>
 
 #include <qgstreamerbushelper_p.h>
 #include <qgstreamerbufferprobe_p.h>
@@ -38,24 +38,24 @@
 #include <gst/interfaces/photography.h>
 #endif
 
-class QGstreamerMessage;
-class QGstreamerBusHelper;
-class CameraBinControl;
 class CameraBinAudioEncoder;
-class CameraBinVideoEncoder;
-class CameraBinImageEncoder;
-class CameraBinRecorder;
+class CameraBinCaptureBufferFormat;
+class CameraBinCaptureDestination;
 class CameraBinContainer;
+class CameraBinControl;
 class CameraBinExposure;
 class CameraBinFlash;
 class CameraBinFocus;
+class CameraBinImageEncoder;
 class CameraBinImageProcessing;
 class CameraBinLocks;
-class CameraBinZoom;
-class CameraBinCaptureDestination;
-class CameraBinCaptureBufferFormat;
-class QGstreamerVideoRendererInterface;
+class CameraBinRecorder;
+class CameraBinVideoEncoder;
 class CameraBinViewfinderSettings;
+class CameraBinZoom;
+class QGstreamerBusHelper;
+class QGstreamerMessage;
+class QGstreamerVideoRendererInterface;
 
 class QGstreamerElementFactory
 {

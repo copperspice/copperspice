@@ -23,7 +23,6 @@
 
 #include <camera_flash.h>
 #include <camera_session.h>
-#include <qdebug.h>
 
 #include <gst/interfaces/photography.h>
 

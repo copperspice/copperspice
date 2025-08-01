@@ -24,7 +24,6 @@
 #include <qgstreamervideoinputdevicecontrol_p.h>
 
 #include <qdir.h>
-#include <qdebug.h>
 
 #include <qgstutils_p.h>
 

@@ -25,8 +25,8 @@
 #define CAMERABINMEDIACONTAINERCONTROL_H
 
 #include <qmediacontainercontrol.h>
-#include <qstringlist.h>
 #include <qset.h>
+#include <qstringlist.h>
 
 #include <gst/gst.h>
 #include <gst/pbutils/pbutils.h>

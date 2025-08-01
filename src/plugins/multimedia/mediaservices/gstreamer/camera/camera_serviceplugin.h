@@ -25,6 +25,7 @@
 #define CAMERA_SERVICEPLUGIN_H
 
 #include <qmediaservice_provider_plugin.h>
+
 #include <qgstreamervideoinputdevicecontrol_p.h>
 
 #include <gst/gst.h>

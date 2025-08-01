@@ -21,12 +21,10 @@
 *
 ***********************************************************************/
 
-#include <qdebug.h>
-#include <qdir.h>
-#include <qdebug.h>
-#include <qstring.h>
 #include <qgstreamerplayerserviceplugin.h>
+
 #include <qgstreamerplayerservice.h>
+#include <qstringlist.h>
 
 #include <qgstutils_p.h>
 

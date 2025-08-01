@@ -24,21 +24,19 @@
 #ifndef QGSTREAMERPLAYERCONTROL_H
 #define QGSTREAMERPLAYERCONTROL_H
 
+#include <qmediaplayer.h>
+#include <qmediaplayercontrol.h>
 #include <qobject.h>
 #include <qstack.h>
 
-#include <qmediaplayercontrol.h>
-#include <qmediaplayer.h>
-
 #include <limits.h>
 
+class QGstreamerPlayerService;
+class QGstreamerPlayerSession;
 class QMediaPlayerResourceSetInterface;
 class QMediaPlaylist;
 class QMediaPlaylistNavigator;
 class QSocketNotifier;
-
-class QGstreamerPlayerSession;
-class QGstreamerPlayerService;
 
 class QGstreamerPlayerControl : public QMediaPlayerControl
 {

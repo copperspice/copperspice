@@ -26,7 +26,6 @@
 #include <qdir.h>
 #include <qsocketnotifier.h>
 #include <qurl.h>
-#include <qdebug.h>
 
 #include <qgstreameraudiodecodersession.h>
 

@@ -24,26 +24,24 @@
 #ifndef QGSTREAMERPLAYERSERVICE_H
 #define QGSTREAMERPLAYERSERVICE_H
 
-#include <qobject.h>
 #include <qiodevice.h>
-
 #include <qmediaservice.h>
+#include <qobject.h>
 
+class QGStreamerAvailabilityControl;
+class QGstreamerAudioProbeControl;
+class QGstreamerMetaData;
+class QGstreamerMetaDataProvider;
+class QGstreamerPlayerControl;
+class QGstreamerPlayerSession;
+class QGstreamerStreamsControl;
+class QGstreamerVideoProbeControl;
+class QGstreamerVideoRenderer;
+class QGstreamerVideoWidgetControl;
+class QGstreamerVideoWindow;
 class QMediaPlayerControl;
 class QMediaPlaylist;
 class QMediaPlaylistNavigator;
-
-class QGstreamerMetaData;
-class QGstreamerPlayerControl;
-class QGstreamerPlayerSession;
-class QGstreamerMetaDataProvider;
-class QGstreamerStreamsControl;
-class QGstreamerVideoRenderer;
-class QGstreamerVideoWindow;
-class QGstreamerVideoWidgetControl;
-class QGStreamerAvailabilityControl;
-class QGstreamerAudioProbeControl;
-class QGstreamerVideoProbeControl;
 
 class QGstreamerPlayerService : public QMediaService
 {

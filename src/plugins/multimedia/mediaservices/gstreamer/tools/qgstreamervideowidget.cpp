@@ -24,7 +24,6 @@
 #include <qgstreamervideowidget_p.h>
 
 #include <qcoreevent.h>
-#include <qdebug.h>
 #include <qpainter.h>
 
 class QGstreamerVideoWidget : public QWidget

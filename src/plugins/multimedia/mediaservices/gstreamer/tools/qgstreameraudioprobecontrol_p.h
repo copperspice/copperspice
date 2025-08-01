@@ -24,10 +24,11 @@
 #ifndef QGSTREAMERAUDIOPROBECONTROL_H
 #define QGSTREAMERAUDIOPROBECONTROL_H
 
+#include <qaudiobuffer.h>
 #include <qmediaaudioprobecontrol.h>
 #include <qmutex.h>
-#include <qaudiobuffer.h>
 #include <qshareddata.h>
+
 #include <qgstreamerbufferprobe_p.h>
 
 #include <gst/gst.h>

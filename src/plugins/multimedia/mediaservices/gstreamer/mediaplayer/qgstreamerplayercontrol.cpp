@@ -23,11 +23,11 @@
 
 #include <qgstreamerplayercontrol.h>
 
+#include <qdebug.h>
 #include <qdir.h>
+#include <qgstreamerplayersession.h>
 #include <qsocketnotifier.h>
 #include <qurl.h>
-#include <qdebug.h>
-#include <qgstreamerplayersession.h>
 
 #include <qmediaplaylistnavigator_p.h>
 #include <qmediaresourcepolicy_p.h>

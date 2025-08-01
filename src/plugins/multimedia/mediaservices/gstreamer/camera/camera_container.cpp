@@ -23,7 +23,6 @@
 
 #include <camera_container.h>
 #include <qregularexpression.h>
-#include <qdebug.h>
 
 CameraBinContainer::CameraBinContainer(QObject *parent)
    : QMediaContainerControl(parent)

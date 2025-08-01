@@ -21,16 +21,24 @@
 *
 ***********************************************************************/
 
+#include <camera_audioencoder.h>
+#include <camera_capturebufferformat.h>
+#include <camera_capturedestination.h>
+#include <camera_container.h>
+#include <camera_control.h>
+#include <camera_imagecapture.h>
+#include <camera_imageencoder.h>
+#include <camera_imageprocessing.h>
+#include <camera_infocontrol.h>
+#include <camera_metadata.h>
+#include <camera_recorder.h>
 #include <camera_service.h>
 #include <camera_session.h>
-#include <camera_recorder.h>
-#include <camera_container.h>
-#include <camera_audioencoder.h>
 #include <camera_videoencoder.h>
-#include <camera_imageencoder.h>
-#include <camera_control.h>
-#include <camera_metadata.h>
-#include <camera_infocontrol.h>
+#include <camera_viewfindersettings.h>
+#include <camera_viewfindersettings2.h>
+#include <camera_zoom.h>
+#include <qprocess.h>
 
 #ifdef HAVE_GST_PHOTOGRAPHY
 #include <camera_exposure.h>
@@ -39,23 +47,13 @@
 #include <camera_locks.h>
 #endif
 
-#include <camera_imagecapture.h>
-#include <camera_imageprocessing.h>
-#include <camera_capturebufferformat.h>
-#include <camera_capturedestination.h>
-#include <camera_viewfindersettings.h>
-#include <camera_viewfindersettings2.h>
-#include <camera_zoom.h>
-#include <qdebug.h>
-#include <qprocess.h>
-
-#include <qgstreamerbushelper_p.h>
-#include <qgstutils_p.h>
 #include <qgstreameraudioinputselector_p.h>
+#include <qgstreamerbushelper_p.h>
 #include <qgstreamervideoinputdevicecontrol_p.h>
+#include <qgstreamervideorenderer_p.h>
 #include <qgstreamervideowidget_p.h>
 #include <qgstreamervideowindow_p.h>
-#include <qgstreamervideorenderer_p.h>
+#include <qgstutils_p.h>
 #include <qmediaserviceprovider_p.h>
 
 CameraBinService::CameraBinService(GstElementFactory *sourceFactory, QObject *parent)

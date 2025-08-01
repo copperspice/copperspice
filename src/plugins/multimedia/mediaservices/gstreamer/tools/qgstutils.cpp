@@ -23,17 +23,19 @@
 
 #include <qgstutils_p.h>
 
-#include <qdatetime.h>
-#include <qdir.h>
-#include <qbytearray.h>
-#include <qvariant.h>
-#include <qsize.h>
-#include <qset.h>
-#include <qstringlist.h>
-#include <qimage.h>
 #include <qaudioformat.h>
+#include <qbytearray.h>
+#include <qdatetime.h>
+#include <qdebug.h>
+#include <qdir.h>
 #include <qelapsedtimer.h>
+#include <qimage.h>
+#include <qset.h>
+#include <qsize.h>
+#include <qstringlist.h>
+#include <qvariant.h>
 #include <qvideosurfaceformat.h>
+
 #include <qmultimediautils_p.h>
 
 #include <gst/audio/audio.h>

@@ -21,12 +21,11 @@
 *
 ***********************************************************************/
 
-#include <qvariant.h>
-#include <qdebug.h>
-
 #include <qgstreameraudiodecoderservice.h>
+
 #include <qgstreameraudiodecodercontrol.h>
 #include <qgstreameraudiodecodersession.h>
+#include <qvariant.h>
 
 QGstreamerAudioDecoderService::QGstreamerAudioDecoderService(QObject *parent)
    : QMediaService(parent)

@@ -21,30 +21,28 @@
 *
 ***********************************************************************/
 
-#include <qdebug.h>
+#include <qgstreamerplayerservice.h>
+
+#include <qgstreameravailabilitycontrol.h>
+#include <qgstreamermetadataprovider.h>
+#include <qgstreamerplayercontrol.h>
+#include <qgstreamerplayersession.h>
+#include <qgstreamerstreamscontrol.h>
+#include <qmediaplaylist.h>
 #include <qvariant.h>
 #include <qwidget.h>
 
-#include <qgstreamerplayerservice.h>
-#include <qgstreamerplayercontrol.h>
-#include <qgstreamerplayersession.h>
-#include <qgstreamermetadataprovider.h>
-#include <qgstreameravailabilitycontrol.h>
-#include <qgstreamerstreamscontrol.h>
-#include <qmediaplaylist.h>
-
+#include <qgstreameraudioprobecontrol_p.h>
+#include <qgstreamervideoprobecontrol_p.h>
+#include <qgstreamervideorenderer_p.h>
 #include <qgstreamervideowidget_p.h>
 #include <qgstreamervideowindow_p.h>
-#include <qgstreamervideorenderer_p.h>
+#include <qmediaplaylistnavigator_p.h>
+#include <qmediaresourceset_p.h>
 
 #if defined(HAVE_MIR) && defined (__arm__)
 #include <qgstreamermirtexturerenderer_p.h>
 #endif
-
-#include <qgstreameraudioprobecontrol_p.h>
-#include <qgstreamervideoprobecontrol_p.h>
-#include <qmediaplaylistnavigator_p.h>
-#include <qmediaresourceset_p.h>
 
 QGstreamerPlayerService::QGstreamerPlayerService(QObject *parent)
    : QMediaService(parent), m_audioProbeControl(nullptr), m_videoProbeControl(nullptr), m_videoOutput(nullptr),

@@ -24,11 +24,11 @@
 #ifndef QGSTREAMERPLAYERSESSION_H
 #define QGSTREAMERPLAYERSESSION_H
 
-#include <qobject.h>
-#include <qmutex.h>
 #include <qaudiodecoder.h>
-
 #include <qgstreameraudiodecodercontrol.h>
+#include <qmutex.h>
+#include <qobject.h>
+
 #include <qgstreamerbushelper_p.h>
 
 #if defined(HAVE_GST_APPSRC)

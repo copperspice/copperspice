@@ -25,8 +25,8 @@
 #define CAMERABINIMAGEENCODE_H
 
 #include <qimageencodercontrol.h>
-#include <qstringlist.h>
 #include <qmap.h>
+#include <qstringlist.h>
 
 #include <gst/gst.h>
 

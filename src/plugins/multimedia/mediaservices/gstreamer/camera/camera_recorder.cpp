@@ -22,11 +22,12 @@
 ***********************************************************************/
 
 #include <camera_recorder.h>
+
+#include <camera_audioencoder.h>
+#include <camera_container.h>
 #include <camera_control.h>
 #include <camera_resourcepolicy.h>
-#include <camera_audioencoder.h>
 #include <camera_videoencoder.h>
-#include <camera_container.h>
 #include <qdebug.h>
 
 CameraBinRecorder::CameraBinRecorder(CameraBinSession *session)

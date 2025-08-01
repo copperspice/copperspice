@@ -23,7 +23,6 @@
 
 #include <qgstreamervideowindow_p.h>
 
-#include <qdebug.h>
 #include <qgstutils_p.h>
 
 QGstreamerVideoWindow::QGstreamerVideoWindow(QObject *parent, const QByteArray &elementName)

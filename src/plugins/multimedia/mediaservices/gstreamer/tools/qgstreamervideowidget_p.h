@@ -26,9 +26,9 @@
 
 #include <qvideowidgetcontrol.h>
 
-#include <qgstreamervideorendererinterface_p.h>
 #include <qgstreamerbushelper_p.h>
 #include <qgstreamervideooverlay_p.h>
+#include <qgstreamervideorendererinterface_p.h>
 
 class QGstreamerVideoWidget;
 

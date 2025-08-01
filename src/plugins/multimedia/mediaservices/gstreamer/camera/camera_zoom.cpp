@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#include <camera_zoom.h>
 #include <camera_session.h>
+#include <camera_zoom.h>
 
 #define ZOOM_PROPERTY "zoom"
 #define MAX_ZOOM_PROPERTY "max-zoom"

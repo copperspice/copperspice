@@ -24,8 +24,8 @@
 #ifndef QGSTREAMERAVAILABILITYCONTROL_H
 #define QGSTREAMERAVAILABILITYCONTROL_H
 
-#include <QObject>
 #include <qmediaavailabilitycontrol.h>
+#include <qobject.h>
 
 class QMediaPlayerResourceSetInterface;
 

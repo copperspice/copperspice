@@ -24,8 +24,8 @@
 #ifndef CAMERABINRECORDERCONTROL_H
 #define CAMERABINRECORDERCONTROL_H
 
-#include <qmediarecordercontrol.h>
 #include <camera_session.h>
+#include <qmediarecordercontrol.h>
 
 #ifdef HAVE_GST_ENCODING_PROFILES
 #include <gst/pbutils/encoding-profile.h>

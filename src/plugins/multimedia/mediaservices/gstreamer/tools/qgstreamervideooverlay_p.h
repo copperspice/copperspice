@@ -24,10 +24,11 @@
 #ifndef QGSTREAMERVIDEOOVERLAY_P_H
 #define QGSTREAMERVIDEOOVERLAY_P_H
 
-#include <qgstreamerbushelper_p.h>
-#include <qgstreamerbufferprobe_p.h>
-#include <qwindowdefs.h>
 #include <qsize.h>
+#include <qwindowdefs.h>
+
+#include <qgstreamerbufferprobe_p.h>
+#include <qgstreamerbushelper_p.h>
 
 class QGstreamerVideoOverlay
    : public QObject, public QGstreamerSyncMessageFilter

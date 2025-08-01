@@ -21,19 +21,20 @@
 *
 ***********************************************************************/
 
-#include <qbuffer.h>
 #include <camera_imagecapture.h>
-#include <camera_control.h>
-#include <camera_capturedestination.h>
+
 #include <camera_capturebufferformat.h>
-#include <camera_session.h>
+#include <camera_capturedestination.h>
+#include <camera_control.h>
 #include <camera_resourcepolicy.h>
+#include <camera_session.h>
+#include <qbuffer.h>
 #include <qdebug.h>
 #include <qimagereader.h>
 #include <qmediametadata.h>
 
-#include <qgstvideobuffer_p.h>
 #include <qgstutils_p.h>
+#include <qgstvideobuffer_p.h>
 #include <qgstvideorenderersink_p.h>
 
 #include <gst/gst.h>

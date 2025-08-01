@@ -24,7 +24,6 @@
 #include <camera_videoencoder.h>
 #include <camera_session.h>
 #include <camera_container.h>
-#include <qdebug.h>
 
 #include <qgstutils_p.h>
 

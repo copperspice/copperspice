@@ -23,7 +23,6 @@
 
 #include <camera_audioencoder.h>
 #include <camera_container.h>
-#include <qdebug.h>
 
 #include <qgstutils_p.h>
 

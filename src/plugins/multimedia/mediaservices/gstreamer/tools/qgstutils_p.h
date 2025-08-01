@@ -42,10 +42,10 @@
 # define QT_GSTREAMER_RAW_AUDIO_MIME "audio/x-raw"
 # define QT_GSTREAMER_VIDEOOVERLAY_INTERFACE_NAME "GstVideoOverlay"
 
-class QSize;
-class QVariant;
 class QByteArray;
 class QImage;
+class QSize;
+class QVariant;
 class QVideoSurfaceFormat;
 
 namespace QGstUtils {

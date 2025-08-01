@@ -24,9 +24,9 @@
 #ifndef QGSTVIDEORENDERERPLUGIN_P_H
 #define QGSTVIDEORENDERERPLUGIN_P_H
 
+#include <qabstractvideobuffer.h>
 #include <qobject.h>
 #include <qplugin.h>
-#include <qabstractvideobuffer.h>
 #include <qvideosurfaceformat.h>
 
 #include <gst/gst.h>

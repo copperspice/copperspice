@@ -25,9 +25,8 @@
 
 #include <qdebug.h>
 #include <qdir.h>
-#include <qdebug.h>
-#include <qstring.h>
 #include <qgstreameraudiodecoderservice.h>
+#include <qstring.h>
 
 #include <qgstutils_p.h>
 

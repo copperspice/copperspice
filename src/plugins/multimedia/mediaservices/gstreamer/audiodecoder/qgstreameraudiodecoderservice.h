@@ -24,9 +24,9 @@
 #ifndef QGSTREAMERAUDIODECODERSERVICE_H
 #define QGSTREAMERAUDIODECODERSERVICE_H
 
-#include <qobject.h>
 #include <qiodevice.h>
 #include <qmediaservice.h>
+#include <qobject.h>
 
 class QGstreamerAudioDecoderControl;
 class QGstreamerAudioDecoderSession;

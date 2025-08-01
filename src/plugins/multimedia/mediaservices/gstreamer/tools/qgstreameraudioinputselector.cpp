@@ -24,7 +24,6 @@
 #include <qgstreameraudioinputselector_p.h>
 
 #include <qdir.h>
-#include <qdebug.h>
 
 #include <gst/gst.h>
 

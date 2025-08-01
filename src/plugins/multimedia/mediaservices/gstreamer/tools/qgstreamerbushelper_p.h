@@ -25,9 +25,12 @@
 #define QGSTREAMERBUSHELPER_P_H
 
 #include <qobject.h>
+
 #include <qgstreamermessage_p.h>
 
 #include <gst/gst.h>
+
+class QGstreamerBusHelperPrivate;
 
 class QGstreamerSyncMessageFilter
 {
@@ -49,9 +52,6 @@ class QGstreamerBusMessageFilter
 
 #define QGstreamerBusMessageFilter_iid "com.copperspice.CS.gstreamerBusMessagefilter/1.0"
 CS_DECLARE_INTERFACE(QGstreamerBusMessageFilter, QGstreamerBusMessageFilter_iid)
-
-
-class QGstreamerBusHelperPrivate;
 
 class QGstreamerBusHelper : public QObject
 {

@@ -26,8 +26,8 @@
 
 #include <qmediaplayercontrol.h>
 #include <qmediaservice_provider_plugin.h>
-#include <qset.h>
 #include <qobject.h>
+#include <qset.h>
 
 class QGstreamerPlayerServicePlugin : public QMediaServiceProviderPlugin, public QMediaServiceFeaturesInterface,
      public QMediaServiceSupportedFormatsInterface

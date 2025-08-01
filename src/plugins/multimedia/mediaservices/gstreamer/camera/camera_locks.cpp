@@ -21,12 +21,11 @@
 *
 ***********************************************************************/
 
-#include <camera_locks.h>
-#include <camera_session.h>
 #include <camera_focus.h>
 #include <camera_imageprocessing.h>
+#include <camera_locks.h>
+#include <camera_session.h>
 #include <qcoreevent.h>
-#include <qdebug.h>
 
 #include <gst/interfaces/photography.h>
 

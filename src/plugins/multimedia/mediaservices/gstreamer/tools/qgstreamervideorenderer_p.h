@@ -24,8 +24,8 @@
 #ifndef QGSTREAMERVIDEORENDERER_H
 #define QGSTREAMERVIDEORENDERER_H
 
-#include <qvideorenderercontrol.h>
 #include <qabstractvideosurface.h>
+#include <qvideorenderercontrol.h>
 
 #include <qgstreamervideorendererinterface_p.h>
 #include <qgstvideorenderersink_p.h>

@@ -24,12 +24,12 @@
 #ifndef QGSTREAMERPLAYERCONTROL_H
 #define QGSTREAMERPLAYERCONTROL_H
 
-#include <qobject.h>
-#include <qstack.h>
-#include <qaudioformat.h>
 #include <qaudiobuffer.h>
 #include <qaudiodecoder.h>
 #include <qaudiodecodercontrol.h>
+#include <qaudioformat.h>
+#include <qobject.h>
+#include <qstack.h>
 
 #include <limits.h>
 

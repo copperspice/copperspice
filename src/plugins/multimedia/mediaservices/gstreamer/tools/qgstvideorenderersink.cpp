@@ -23,8 +23,8 @@
 
 #include <qgstvideorenderersink_p.h>
 
-#include <qalgorithms.h>
 #include <qabstractvideosurface.h>
+#include <qalgorithms.h>
 #include <qcoreapplication.h>
 #include <qdebug.h>
 #include <qevent.h>
@@ -33,8 +33,8 @@
 #include <qvideoframe.h>
 
 #include <qfactoryloader_p.h>
-#include <qgstvideobuffer_p.h>
 #include <qgstutils_p.h>
+#include <qgstvideobuffer_p.h>
 
 #include <gst/video/video.h>
 

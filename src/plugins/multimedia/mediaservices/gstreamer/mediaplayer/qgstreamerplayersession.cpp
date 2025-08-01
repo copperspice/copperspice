@@ -23,22 +23,19 @@
 
 #include <qgstreamerplayersession.h>
 
-#include <qmediametadata.h>
 #include <qdatetime.h>
 #include <qdebug.h>
-#include <qsize.h>
-#include <qtimer.h>
-#include <qdebug.h>
 #include <qdir.h>
+#include <qmediametadata.h>
+#include <qsize.h>
 #include <qstandardpaths.h>
+#include <qtimer.h>
 
-#include <qgstreamerbushelper_p.h>
+#include <playlistfileparser_p.h>
 #include <qgstreameraudioprobecontrol_p.h>
+#include <qgstreamerbushelper_p.h>
 #include <qgstreamervideoprobecontrol_p.h>
 #include <qgstreamervideorendererinterface_p.h>
-
-#include <qgstutils_p.h>
-#include <playlistfileparser_p.h>
 #include <qgstutils_p.h>
 
 #include <gst/gstvalue.h>

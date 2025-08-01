@@ -22,9 +22,10 @@
 ***********************************************************************/
 
 #include <qgstreamervideorenderer_p.h>
-#include <qgstutils_p.h>
+
 #include <qabstractvideosurface.h>
-#include <qdebug.h>
+
+#include <qgstutils_p.h>
 
 #include <gst/gst.h>
 

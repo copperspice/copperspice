@@ -24,8 +24,8 @@
 #ifndef QGSTREAMERVIDEOINPUTDEVICECONTROL_H
 #define QGSTREAMERVIDEOINPUTDEVICECONTROL_H
 
-#include <qvideodeviceselectorcontrol.h>
 #include <qstringlist.h>
+#include <qvideodeviceselectorcontrol.h>
 
 #include <gst/gst.h>
 #include <qcamera.h>
