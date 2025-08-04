@@ -30,7 +30,8 @@
 # define QT_DEBUG
 #endif
 
-// ** (1) uncomment or pass any of the following defines in the CS build files
+// ** (1) uncomment any of the following defines to enable debug messages
+
 
 // #define CS_SHOW_DEBUG_CORE
 // #define CS_SHOW_DEBUG_CORE_OSX
@@ -54,7 +55,6 @@
 // #define CS_SHOW_DEBUG_OPENGL
 
 // #define CS_SHOW_DEBUG_PLATFORM
-// #define CS_SHOW_DEBUG_PLATFORM_MEDIA
 // #define CS_SHOW_DEBUG_PLATFORM_PASTEBOARD
 // #define CS_SHOW_DEBUG_PLATFORM_WINDOW
 
@@ -67,9 +67,47 @@
 
 
 // ** (2) uncomment or pass the following define in the CS build files
-
 // #define CS_DISABLE_ASSERT
+
+
+// **
+// ** (3) for full debugging define CS_TEST_DEBUG
+
+#if defined(CS_TEST_DEBUG)
+
+#define CS_SHOW_DEBUG_CORE
+#define CS_SHOW_DEBUG_CORE_OSX
+#define CS_SHOW_DEBUG_CORE_IO
+#define CS_SHOW_DEBUG_CORE_PLUGIN
+#define CS_SHOW_DEBUG_CORE_SEMAPHORE
+#define CS_SHOW_DEBUG_CORE_STATEMACHINE
+
+#define CS_SHOW_DEBUG_GUI
+#define CS_SHOW_DEBUG_GUI_DPI
+#define CS_SHOW_DEBUG_GUI_GRAPHICSVIEW
+#define CS_SHOW_DEBUG_GUI_IMAGE
+#define CS_SHOW_DEBUG_GUI_OPENGL
+#define CS_SHOW_DEBUG_GUI_PAINTING
+#define CS_SHOW_DEBUG_GUI_STYLES
+#define CS_SHOW_DEBUG_GUI_TEXT
+#define CS_SHOW_DEBUG_GUI_WIDGETS
+
+#define CS_SHOW_DEBUG_MULTIMEDIA
+#define CS_SHOW_DEBUG_NETWORK
+#define CS_SHOW_DEBUG_OPENGL
+
+#define CS_SHOW_DEBUG_PLATFORM
+#define CS_SHOW_DEBUG_PLATFORM_PASTEBOARD
+#define CS_SHOW_DEBUG_PLATFORM_WINDOW
+
+#define CS_SHOW_DEBUG_PLUGINS_AVF
+#define CS_SHOW_DEBUG_PLUGINS_GSTREAMER
+
+#define CS_SHOW_DEBUG_SQL
+#define CS_SHOW_DEBUG_SVG
+#define CS_SHOW_DEBUG_XML
 
 #endif
 
 
+#endif
