@@ -364,15 +364,14 @@ if (PostgreSQL_FOUND AND CMAKE_SYSTEM_NAME MATCHES "Windows" AND NOT MSVC)
       if (EXISTS "${fname}/pthread.h")
          # Postgres bug
 
-         message(WARNING "")
-         message(WARNING "------------------------------------------------------------")
-         message(WARNING "WARNING WARNING")
-         message(WARNING "The '${fname}' directory contains a file called pthread.h")
-         message(WARNING "")
-         message(WARNING "A conflict exists between pthread.h and the standard library ")
-         message(WARNING "Rename or remove pthread.h in order to build the CsSqlPsql plugin")
-         message(WARNING "------------------------------------------------------------")
-         message(WARNING "")
+         message(WARNING
+         " \n \n"
+         " -----------------------------------------------------------------\n"
+         " * WARNING *\n \n"
+         " The directory '${fname}' contains the file pthread.h\n \n"
+         " A conflict exists between pthread.h and the standard library.\n"
+         " Rename or remove pthread.h in order to build the CsSqlPsql plugin\n"
+         " -----------------------------------------------------------------\n")
 
          # force to not found
          set(PostgreSQL_FOUND false)
@@ -384,15 +383,15 @@ if (PostgreSQL_FOUND AND CMAKE_SYSTEM_NAME MATCHES "Windows" AND NOT MSVC)
       if (EXISTS "${fname}/semaphore.h" AND PostgreSQL_FOUND)
          # Postgres bug
 
-         message(WARNING "")
-         message(WARNING "------------------------------------------------------------")
-         message(WARNING "WARNING WARNING")
-         message(WARNING "The '${fname}' directory contains a file called semaphore.h")
-         message(WARNING "")
-         message(WARNING "A conflict exists between semaphore.h and the standard library ")
-         message(WARNING "Rename or remove semaphore.h in order to build the CsSqlPsql plugin")
-         message(WARNING "------------------------------------------------------------")
-         message(WARNING "")
+
+        message(WARNING
+         " \n \n"
+         " -----------------------------------------------------------------\n"
+         " * WARNING *\n \n"
+         " The directory '${fname}' contains the file semaphore.h\n \n"
+         " A conflict exists between semaphore.h and the standard library.\n"
+         " Rename or remove semaphore.h in order to build the CsSqlPsql plugin\n"
+         " -----------------------------------------------------------------\n")
 
          # force to not found
          set(PostgreSQL_FOUND false)
