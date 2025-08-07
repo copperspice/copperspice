@@ -23,6 +23,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_dataoffer_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_decoration_factory_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_decoration_plugin_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_display_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_dnd_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_extended_surface_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_inputcontext_p.h
@@ -80,6 +81,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_dataoffer.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_decoration_factory.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_decoration_plugin.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_display.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_dnd.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_extended_surface.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_inputcontext.cpp
