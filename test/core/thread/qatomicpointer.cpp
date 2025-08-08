@@ -32,7 +32,7 @@ TEST_CASE("QAtomicPointer traits", "[qatomicpointer]")
    REQUIRE(std::has_virtual_destructor_v<QAtomicPointer<int>> == false);
 }
 
-TEST_CASE("QAtomicPointer copy_assign", "[qatomic_pointer]")
+TEST_CASE("QAtomicPointer copy_assign", "[qatomicpointer]")
 {
    QAtomicPointer<int> atomic1(new int(17));
    QAtomicPointer<int> atomic2 = new int(17);
@@ -48,7 +48,7 @@ TEST_CASE("QAtomicPointer copy_assign", "[qatomic_pointer]")
    delete atomic2.load();
 }
 
-TEST_CASE("QAtomicPointer load", "[qatomic_pointer]")
+TEST_CASE("QAtomicPointer load", "[qatomicpointer]")
 {
    QAtomicPointer<int> atomic1(new int(17));
    QAtomicPointer<int> atomic2 = new int(17);
@@ -62,7 +62,7 @@ TEST_CASE("QAtomicPointer load", "[qatomic_pointer]")
    delete atomic2.load();
 }
 
-TEST_CASE("QAtomicPointer increment_decrement", "[qatomic_pointer]")
+TEST_CASE("QAtomicPointer increment_decrement", "[qatomicpointer]")
 {
    int array[3] = {5, 10, 15};
 

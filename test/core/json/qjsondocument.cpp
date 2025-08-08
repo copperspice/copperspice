@@ -33,7 +33,7 @@ TEST_CASE("QJsonDocument traits", "[qjsondocument]")
    REQUIRE(std::has_virtual_destructor_v<QJsonDocument> == false);
 }
 
-TEST_CASE("QJsonDocument values", "[qjson]")
+TEST_CASE("QJsonDocument values", "[qjsondocument]")
 {
    QJsonObject object;
    QJsonValue  value;
@@ -118,7 +118,7 @@ TEST_CASE("QJsonDocument values", "[qjson]")
    }
 }
 
-TEST_CASE("QJsonDocument large_numbers", "[qjson]")
+TEST_CASE("QJsonDocument large_numbers", "[qjsondocument]")
 {
    qint64 numbers[] = {
       -1, 0, 1,
@@ -148,4 +148,3 @@ TEST_CASE("QJsonDocument large_numbers", "[qjson]")
    QJsonArray arrayB = json.array();
    REQUIRE(arrayA.size() == arrayB.size());
 }
-

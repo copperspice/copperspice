@@ -24,7 +24,7 @@
 
 #include <cs_catch2.h>
 
-TEST_CASE("QFileInfoList traits", "[qfileiinfolist]")
+TEST_CASE("QFileInfoList traits", "[qfileinfolist]")
 {
    REQUIRE(std::is_copy_constructible_v<QFileInfoList> == true);
    REQUIRE(std::is_move_constructible_v<QFileInfoList> == true);

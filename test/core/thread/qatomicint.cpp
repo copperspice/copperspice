@@ -32,7 +32,7 @@ TEST_CASE("QAtomicInt traits", "[qatomicint]")
    REQUIRE(std::has_virtual_destructor_v<QAtomicInt> == false);
 }
 
-TEST_CASE("QAtomicInt copy_assign", "[qatomic_int]")
+TEST_CASE("QAtomicInt copy_assign", "[qatomicint]")
 {
    QAtomicInt atomic1(17);
    atomic1 = 42;
@@ -44,7 +44,7 @@ TEST_CASE("QAtomicInt copy_assign", "[qatomic_int]")
    REQUIRE(atomic2.load() == 42);
 }
 
-TEST_CASE("QAtomicInt constructor", "[qatomic_int]")
+TEST_CASE("QAtomicInt constructor", "[qatomicint]")
 {
    QAtomicInt atomic1(17);
    QAtomicInt atomic2 = 17;
@@ -55,7 +55,7 @@ TEST_CASE("QAtomicInt constructor", "[qatomic_int]")
    REQUIRE(atomic3.load() == 17);
 }
 
-TEST_CASE("QAtomicInt ref", "[qatomic_int]")
+TEST_CASE("QAtomicInt ref", "[qatomicint]")
 {
    QAtomicInt atomic = -2;
 
@@ -69,7 +69,7 @@ TEST_CASE("QAtomicInt ref", "[qatomic_int]")
    REQUIRE(atomic.load() == 1);
 }
 
-TEST_CASE("QAtomicInt deref", "[qatomic_int]")
+TEST_CASE("QAtomicInt deref", "[qatomicint]")
 {
    QAtomicInt atomic = 2;
 
