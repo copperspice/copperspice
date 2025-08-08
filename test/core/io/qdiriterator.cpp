@@ -73,8 +73,8 @@ TEST_CASE("QDirIterator hasNext", "[qdiriterator]")
       REQUIRE(found.contains("file1.txt") == false);
       REQUIRE(found.contains("file2.txt") == false);
 
-      CHECK(found.contains(".") == true);
-      CHECK(found.contains("..") == true);
+      REQUIRE(found.contains(".") == true);
+      REQUIRE(found.contains("..") == true);
    }
 
    {
@@ -122,7 +122,7 @@ TEST_CASE("QDirIterator hasNext", "[qdiriterator]")
    }
 }
 
-TEST_CASE("QDirIterator name_filter", "[QDirIterator]")
+TEST_CASE("QDirIterator name_filter", "[qdiriterator]")
 {
    QTemporaryDir dir;
    QString path = dir.path();

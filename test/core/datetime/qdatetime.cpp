@@ -227,7 +227,7 @@ TEST_CASE("QDateTime fromString", "[qdatetime]")
    {
       dt = QDateTime(QDate(2015, 11, 30), QTime(18, 30, 40));
 
-      QDateTime result = QDateTime::fromString(QString("2015-11-30T18:30:40"), Qt::ISODate);
+      QDateTime result = QDateTime::fromString("2015-11-30T18:30:40", Qt::ISODate);
 
       REQUIRE(result == dt);
    }
@@ -235,7 +235,7 @@ TEST_CASE("QDateTime fromString", "[qdatetime]")
    {
       dt = QDateTime(QDate(2015, 11, 30), QTime(18, 30, 40));
 
-      QDateTime result = QDateTime::fromString(QString("2015-11-30T18:30:40"), "yyyy-MM-ddThh:mm:ss");
+      QDateTime result = QDateTime::fromString("2015-11-30T18:30:40", "yyyy-MM-ddThh:mm:ss");
 
       REQUIRE(result == dt);
    }
