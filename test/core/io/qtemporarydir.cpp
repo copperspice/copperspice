@@ -32,7 +32,7 @@ TEST_CASE("QTemporaryDir traits", "[qtemporarydir]")
    REQUIRE(std::has_virtual_destructor_v<QTemporaryDir> == false);
 }
 
-TEST_CASE("QTemporaryDir auto_remove", "[qtemporarydir]")
+TEST_CASE("QTemporaryDir auto_remove_a", "[qtemporarydir]")
 {
    QTemporaryDir tmpDir;
 
@@ -43,14 +43,72 @@ TEST_CASE("QTemporaryDir auto_remove", "[qtemporarydir]")
    REQUIRE(tmpDir.autoRemove() == true);
 }
 
+TEST_CASE("QTemporaryDir auto_remove_b", "[qtemporarydir]")
+{
+   QString path;
+
+   {
+      QTemporaryDir tmpDir;
+      tmpDir.setAutoRemove(false);
+
+      REQUIRE(tmpDir.isValid());
+
+      path = tmpDir.path();
+      bool ok = QDir(path).exists();
+
+      REQUIRE(ok == true);
+   }
+
+   REQUIRE(QDir(path).exists() == true);    // directory still exists
+   REQUIRE(QDir().rmdir(path) == true);     // cleanup manually
+}
+
 TEST_CASE("QTemporaryDir constructor", "[qtemporarydir]")
 {
    QTemporaryDir tmpDir;
    QString tmpPath = QDir::tempPath();
 
+   REQUIRE(tmpDir.isValid() == true);
+   REQUIRE(QDir(tmpDir.path()).exists() == true);
+
    REQUIRE(tmpDir.path().left(tmpPath.size()) == tmpPath);
    REQUIRE(QFileInfo(tmpDir.path()).isDir() == true);
    REQUIRE(tmpDir.errorString() == QString());
+}
+
+TEST_CASE("QTemporaryDir custom_name", "[qtemporarydir]")
+{
+   QTemporaryDir tmpDir(QDir::tempPath() + "/customXXXXXX");
+   QString path = tmpDir.path();
+
+   REQUIRE(tmpDir.isValid() == true);
+   REQUIRE(path.contains("custom") == true);
+}
+
+TEST_CASE("QTemporaryDir destructor", "[qtemporarydir]")
+{
+   QString path;
+
+   {
+      QTemporaryDir tmpDir;
+
+      REQUIRE(tmpDir.isValid() == true);
+
+      path = tmpDir.path();
+      bool ok = QDir(path).exists();
+
+      REQUIRE(ok == true);
+   }
+
+   bool ok = QDir(path).exists();
+   REQUIRE(ok == false);
+}
+
+TEST_CASE("QTemporaryDir errors", "[qtemporarydir]")
+{
+   QTemporaryDir tmpDir("/nonexistent_path/XXXXXX");
+
+   REQUIRE(tmpDir.isValid() == false);
 }
 
 TEST_CASE("QTemporaryDir remove", "[qtemporarydir]")
