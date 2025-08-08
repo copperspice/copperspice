@@ -115,3 +115,17 @@ TEST_CASE("QPair stream", "[qpair]")
    REQUIRE(pair2.first == 10);
    REQUIRE(pair2.second == 20);
 }
+
+TEST_CASE("QPair swap", "[qpair]")
+{
+   QPair<int, int> pair1 = qMakePair(65, 42);
+   QPair<int, int> pair2 = qMakePair(17, 85);
+
+   pair1.swap(pair2);
+
+   REQUIRE(pair1.first  == 17);
+   REQUIRE(pair1.second == 85);
+
+   REQUIRE(pair2.first  == 65);
+   REQUIRE(pair2.second == 42);
+}
