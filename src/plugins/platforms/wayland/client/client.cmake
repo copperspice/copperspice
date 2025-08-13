@@ -38,6 +38,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_subsurface_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_toplevel_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_touch_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_window_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_windowmanager_integration_p.h
 
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_eventdispatcher_p.h
@@ -95,6 +96,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_subsurface.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_toplevel.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_touch.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_window.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_windowmanager_integration.cpp
 
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_eventdispatcher.cpp
