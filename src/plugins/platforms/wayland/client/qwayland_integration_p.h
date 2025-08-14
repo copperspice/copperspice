@@ -28,24 +28,68 @@
 
 namespace QtWaylandClient {
 
+class QWaylandBuffer;
+class QWaylandClientBufferIntegration;
+class QWaylandDisplay;
+class QWaylandInputDevice;
+class QWaylandInputDeviceIntegration;
+class QWaylandServerBufferIntegration;
+class QWaylandShellIntegration;
+
 class Q_WAYLAND_CLIENT_EXPORT QWaylandIntegration : public QPlatformIntegration
 {
  public:
    QWaylandIntegration();
    ~QWaylandIntegration();
 
+#ifndef QT_NO_ACCESSIBILITY
+   QPlatformAccessibility *accessibility() const override;
+#endif
+
+#ifndef QT_NO_OPENGL
+   QPlatformOpenGLContext *createPlatformOpenGLContext(QOpenGLContext *context) const override;
+#endif
+
+   virtual QWaylandClientBufferIntegration *clientBufferIntegration() const;
+
    QAbstractEventDispatcher *createEventDispatcher() const override;
    QPlatformBackingStore *createPlatformBackingStore(QWindow *window) const override;
    QPlatformTheme *createPlatformTheme(const QString &name) const override;
    QPlatformWindow *createPlatformWindow(QWindow *window) const override;
 
+   QPlatformClipboard *clipboard() const override;
+
+   QPlatformDrag *drag() const override;
+   QWaylandDisplay *display() const;
+
+   QPlatformFontDatabase *fontDatabase() const override;
+
+   void initialize() override;
+
+   QPlatformNativeInterface *nativeInterface() const override;
+
    QStringList themeNames() const override;
+   virtual QWaylandServerBufferIntegration *serverBufferIntegration() const;
+
+ protected:
+   QWaylandClientBufferIntegration *m_clientBufferIntegration;
+   QWaylandServerBufferIntegration *m_serverBufferIntegration;
 
  private:
-   QPlatformClipboard *mClipboard;
-   QPlatformDrag *mDrag;
-   QPlatformFontDatabase *mFontDb;
-   QPlatformNativeInterface *mNativeInterface;
+   void initializeClientBufferIntegration();
+   void initializeServerBufferIntegration();
+   bool m_clientBufferIntegrationInitialized;
+   bool m_serverBufferIntegrationInitialized;
+
+#ifndef QT_NO_ACCESSIBILITY
+   QPlatformAccessibility *m_accessibility;
+#endif
+
+   QPlatformClipboard *m_clipboard;
+   QPlatformDrag *m_drag;
+   QPlatformFontDatabase *m_fontDb;
+   QWaylandDisplay *m_display;
+   QPlatformNativeInterface *m_nativeInterface;
 };
 
 }
