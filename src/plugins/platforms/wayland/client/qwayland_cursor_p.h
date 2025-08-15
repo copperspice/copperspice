@@ -24,8 +24,11 @@
 #ifndef QWAYLAND_CURSOR_H
 #define QWAYLAND_CURSOR_H
 
+#include <qcursor.h>
 #include <qmap.h>
+#include <qpoint.h>
 #include <qplatform_cursor.h>
+#include <qwindow.h>
 
 struct wl_cursor;
 struct wl_cursor_image;
@@ -34,6 +37,7 @@ struct wl_cursor_theme;
 namespace QtWaylandClient {
 
 class QWaylandBuffer;
+class QWaylandDisplay;
 class QWaylandScreen;
 
 class Q_WAYLAND_CLIENT_EXPORT QWaylandCursor : public QPlatformCursor
@@ -84,9 +88,10 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandCursor : public QPlatformCursor
       ResizeSouthWestCursor
    };
 
-   struct wl_cursor *requestCursor(WaylandCursor shape);
    void initCursorMap();
+   wl_cursor *requestCursor(WaylandCursor shape);
 
+   QWaylandDisplay *mDisplay;
    struct wl_cursor_theme *mCursorTheme;
    QPoint mLastPos;
 

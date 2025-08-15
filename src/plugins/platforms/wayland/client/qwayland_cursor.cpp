@@ -28,9 +28,15 @@
 
 #include <wayland-cursor.h>
 
+#include <qwayland_buffer_p.h>
+#include <qwayland_display_p.h>
+#include <qwayland_screen_p.h>
+#include <qwayland_shm_backingstore_p.h>
+
 namespace QtWaylandClient {
 
 QWaylandCursor::QWaylandCursor(QWaylandScreen *screen)
+   : mDisplay(screen->display())
 {
    // TODO: Make wl_cursor_theme_load arguments configurable here
    QByteArray cursorTheme = qgetenv("XCURSOR_THEME");
@@ -47,13 +53,14 @@ QWaylandCursor::QWaylandCursor(QWaylandScreen *screen)
       cursorSize = 32;
    }
 
-   mCursorTheme = nullptr;
+   mCursorTheme = wl_cursor_theme_load(cursorTheme.constData(), cursorSize, mDisplay->shm());
 
 #if defined(CS_SHOW_DEBUG_PLATFORM)
    if (mCursorTheme == nullptr) {
       qDebug() << "Unable to load theme" << cursorTheme;
    }
 #endif
+
    initCursorMap();
 }
 
@@ -67,6 +74,12 @@ QWaylandCursor::~QWaylandCursor()
 struct wl_cursor_image *QWaylandCursor::cursorImage(Qt::CursorShape newShape)
 {
    struct wl_cursor *waylandCursor = nullptr;
+
+   // hide cursor
+   if (newShape == Qt::BlankCursor) {
+      mDisplay->setCursor(nullptr, nullptr, 1);
+      return nullptr;
+   }
 
    if (newShape < Qt::BitmapCursor) {
       waylandCursor = requestCursor((WaylandCursor)newShape);
@@ -105,12 +118,13 @@ struct wl_cursor_image *QWaylandCursor::cursorImage(Qt::CursorShape newShape)
 QSharedPointer<QWaylandBuffer> QWaylandCursor::cursorBitmapImage(const QCursor *cursor)
 {
    if (cursor->shape() != Qt::BitmapCursor) {
-      return QSharedPointer<QWaylandBuffer>();
+      return QSharedPointer<QWaylandShmBuffer>();
    }
 
    const QImage &img = cursor->pixmap().toImage();
 
-   QSharedPointer<QWaylandBuffer> buffer;
+   QSharedPointer<QWaylandShmBuffer> buffer(new QWaylandShmBuffer(mDisplay, img.size(), img.format()));
+   memcpy(buffer->image()->bits(), img.bits(), img.byteCount());
 
    return buffer;
 }
