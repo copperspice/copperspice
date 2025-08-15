@@ -27,12 +27,16 @@
 #include <qwayland_data_device_p.h>
 #include <qwayland_data_devicemanager_p.h>
 #include <qwayland_dataoffer_p.h>
+#include <qwayland_display_p.h>
+#include <qwayland_inputdevice_p.h>
+#include <qwayland_window_p.h>
 
 #ifndef QT_NO_DRAGANDDROP
 
 namespace QtWaylandClient {
 
 QWaylandDrag::QWaylandDrag(QWaylandDisplay *display)
+   : m_display(display)
 {
 }
 
@@ -57,6 +61,8 @@ void QWaylandDrag::startDrag()
 void QWaylandDrag::cancel()
 {
    QBasicDrag::cancel();
+
+   m_display->currentInputDevice()->dataDevice()->cancelDrag();
 }
 
 void QWaylandDrag::move(const QPoint &globalPos)
@@ -78,14 +84,22 @@ void QWaylandDrag::updateTarget(const QString &mimeType)
 {
    setCanDrop(! mimeType.isEmpty());
 
-   // pending implementation
+   if (canDrop()) {
+      updateCursor(defaultAction(drag()->supportedActions(), m_display->currentInputDevice()->modifiers()));
+   } else {
+      updateCursor(Qt::IgnoreAction);
+   }
 }
 
 void QWaylandDrag::setResponse(const QPlatformDragQtResponse &response)
 {
    setCanDrop(response.isAccepted());
 
-   // pending implementation
+   if (canDrop()) {
+      updateCursor(defaultAction(drag()->supportedActions(), m_display->currentInputDevice()->modifiers()));
+   } else {
+      updateCursor(Qt::IgnoreAction);
+   }
 }
 
 void QWaylandDrag::finishDrag(const QPlatformDropQtResponse &response)
