@@ -26,9 +26,13 @@
 #include <qwayland_abstract_decoration_p.h>
 
 #include <qimage.h>
+#include <qwindow.h>
 
+#include <qwayland_inputdevice_p.h>
+#include <qwayland_screen_p.h>
 #include <qwayland_shellsurface_p.h>
 #include <qwayland_toplevel_p.h>
+#include <qwayland_window_p.h>
 
 namespace QtWaylandClient {
 
@@ -88,7 +92,13 @@ static QRegion marginsRegion(const QSize &size, const QMargins &margins)
 
 void QWaylandAbstractDecoration::setWaylandWindow(QWaylandWindow *window)
 {
-   // pending implementation
+   Q_D(QWaylandAbstractDecoration);
+
+   // double initialization is probably not great
+   Q_ASSERT(! d->m_window && ! d->m_wayland_window);
+
+   d->m_window = window->window();
+   d->m_wayland_window = window;
 }
 
 const QImage &QWaylandAbstractDecoration::contentImage()
@@ -120,14 +130,20 @@ void QWaylandAbstractDecoration::startResize(QWaylandInputDevice *inputDevice, e
 {
    Q_D(QWaylandAbstractDecoration);
 
-   // pending implementation
+   if (isLeftClicked(buttons)) {
+      d->m_wayland_window->topLevel()->resize(inputDevice, resize);
+      inputDevice->removeMouseButtonFromState(Qt::LeftButton);
+   }
 }
 
 void QWaylandAbstractDecoration::startMove(QWaylandInputDevice *inputDevice, Qt::MouseButtons buttons)
 {
    Q_D(QWaylandAbstractDecoration);
 
-   // pending implementation
+   if (isLeftClicked(buttons)) {
+      d->m_wayland_window->topLevel()->move(inputDevice);
+      inputDevice->removeMouseButtonFromState(Qt::LeftButton);
+   }
 }
 
 bool QWaylandAbstractDecoration::isLeftClicked(Qt::MouseButtons newMouseButtonState)
