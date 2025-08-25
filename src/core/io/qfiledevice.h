@@ -102,7 +102,7 @@ class Q_CORE_EXPORT QFileDevice : public QIODevice
    virtual QFileDevice::Permissions permissions() const;
    virtual bool setPermissions(QFileDevice::Permissions permissionSpec);
 
-   QDateTime fileTime(QFileDevice::FileTimeType type);
+   QDateTime fileTime(QFileDevice::FileTimeType type) const;
    bool setFileTime(const QDateTime &newTime, QFileDevice::FileTimeType type);
 
    uchar *map(qint64 offset, qint64 size, MemoryMapFlags flags = NoOptions);

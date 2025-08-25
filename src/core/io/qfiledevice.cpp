@@ -481,7 +481,7 @@ bool QFileDevice::setPermissions(QFileDevice::Permissions permissions)
    return false;
 }
 
-QDateTime QFileDevice::fileTime(QFileDevice::FileTimeType type)
+QDateTime QFileDevice::fileTime(QFileDevice::FileTimeType type) const
 {
    Q_D(const QFileDevice);
 
