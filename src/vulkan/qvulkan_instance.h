@@ -35,6 +35,15 @@
 class QVulkanDeviceFunctions;
 class QVulkanFunctions;
 
+namespace vk_cs
+{
+   using namespace vk;
+
+#if (VK_VERSION_1_3 && VK_HEADER_VERSION >= 300) || (VK_VERSION_1_4)
+   using namespace vk::detail;
+#endif
+}
+
 // equivalent to VkExtensionProperties, with a QString instead of char array
 struct QVulkanExtensionProperties
 {
@@ -55,12 +64,12 @@ struct QVulkanLayerProperties
 using QVulkanLayer [[deprecated("Replace with QVulkanLayerProperties")]] = QVulkanLayerProperties;
 
 template <typename T>
-using QDynamicUniqueHandle = vk::UniqueHandle<T, vk::DispatchLoaderDynamic>;
+using QDynamicUniqueHandle = vk::UniqueHandle<T, vk_cs::DispatchLoaderDynamic>;
 
 template <typename T, typename U>
-QDynamicUniqueHandle<T> cs_makeDynamicUnique(U object, const vk::DispatchLoaderDynamic &dld)
+QDynamicUniqueHandle<T> cs_makeDynamicUnique(U object, const vk_cs::DispatchLoaderDynamic &dld)
 {
-   return QDynamicUniqueHandle<T>(object, typename vk::UniqueHandleTraits<T, vk::DispatchLoaderDynamic>::deleter(nullptr, dld));
+   return QDynamicUniqueHandle<T>(object, typename vk::UniqueHandleTraits<T, vk_cs::DispatchLoaderDynamic>::deleter(nullptr, dld));
 }
 
 class Q_VULKAN_EXPORT QVulkanInstance
@@ -117,11 +126,11 @@ class Q_VULKAN_EXPORT QVulkanInstance
       return m_vkInstance.get();
    }
 
-   const vk::DynamicLoader &dynamicLoader() const {
+   const vk_cs::DynamicLoader &dynamicLoader() const {
       return m_dl;
    }
 
-   const vk::DispatchLoaderDynamic &dispatchLoader() const {
+   const vk_cs::DispatchLoaderDynamic &dispatchLoader() const {
       return m_dld;
    }
 
@@ -131,6 +140,11 @@ class Q_VULKAN_EXPORT QVulkanInstance
    QSet<QString> supportedExtensionSet() const;
    QSet<QString> supportedLayerSet() const;
    static QStringList filterStringList(QStringList input, QSet<QString> validStrings);
+
+#if (VK_VERSION_1_3 && VK_HEADER_VERSION >= 303) || (VK_VERSION_1_4)
+   static VkBool32 debugCallback(vk::DebugReportFlagsEXT flags, vk::DebugReportObjectTypeEXT objectType,
+      uint64_t object, size_t location, int32_t messageCode, const char *pLayerPrefix, const char *pMessage, void *pUserData);
+#endif
 
    static VkBool32 debugCallback(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType,
       uint64_t object, size_t location, int32_t messageCode, const char *pLayerPrefix, const char *pMessage, void *pUserData);
@@ -143,8 +157,8 @@ class Q_VULKAN_EXPORT QVulkanInstance
    QStringList m_layers;
    QStringList m_extensions;
 
-   vk::DynamicLoader m_dl;
-   vk::DispatchLoaderDynamic m_dld;
+   vk_cs::DynamicLoader m_dl;
+   vk_cs::DispatchLoaderDynamic m_dld;
 
    QDynamicUniqueHandle<vk::Instance> m_vkInstance;
    QDynamicUniqueHandle<vk::DebugReportCallbackEXT> m_debugCallback;

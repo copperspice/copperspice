@@ -268,11 +268,11 @@ bool QVulkanWindow::initialize()
    return true;
 }
 
-std::pair<vk::UniqueHandle<vk::Device, vk::DispatchLoaderDynamic>, QVector<vk::Queue>>
-QVulkanWindow::createLogicalDevice(std::pair<const vk::QueueFamilyProperties &, uint32_t> deviceProperties, QStringList extensions)
+std::pair<vk::UniqueHandle<vk::Device, vk_cs::DispatchLoaderDynamic>, QVector<vk::Queue>>
+   QVulkanWindow::createLogicalDevice(std::pair<const vk::QueueFamilyProperties &, uint32_t> deviceProperties, QStringList extensions)
 {
    auto instance = vulkanInstance();
-   vk::UniqueHandle<vk::Device, vk::DispatchLoaderDynamic> device;
+   vk::UniqueHandle<vk::Device, vk_cs::DispatchLoaderDynamic> device;
 
    auto &physicalDevice   = m_physicalDevices[m_physicalDeviceIndex];
    auto &[properties, id] = deviceProperties;
@@ -411,7 +411,7 @@ bool QVulkanWindow::populatePhysicalDevices() const
    }
 
    for (auto &item : devices) {
-      properties.append(item.getProperties(instance->dispatchLoader()));
+      properties.append(VkPhysicalDeviceProperties(item.getProperties(instance->dispatchLoader())));
    }
 
    m_physicalDevices = devices;

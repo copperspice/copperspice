@@ -23,7 +23,7 @@
 
 #include <qvulkan_device_functions.h>
 
-QVulkanDeviceFunctions::QVulkanDeviceFunctions(vk::Instance instance, vk::Device device, vk::DispatchLoaderDynamic dld)
+QVulkanDeviceFunctions::QVulkanDeviceFunctions(vk::Instance instance, vk::Device device, vk_cs::DispatchLoaderDynamic dld)
    : m_device(device), m_dld(std::move(dld))
 {
    m_dld.init(instance, device);

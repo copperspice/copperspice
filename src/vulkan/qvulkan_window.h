@@ -108,7 +108,7 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
       std::optional<QDynamicUniqueHandle<vk::CommandBuffer>> commandBuffer;
    };
 
-   std::pair<vk::UniqueHandle<vk::Device, vk::DispatchLoaderDynamic>, QVector<vk::Queue>>
+   std::pair<vk::UniqueHandle<vk::Device, vk_cs::DispatchLoaderDynamic>, QVector<vk::Queue>>
       createLogicalDevice(std::pair<const vk::QueueFamilyProperties &, uint32_t> deviceProperties, QStringList extensions);
 
    void startFrame();
@@ -134,15 +134,15 @@ class Q_VULKAN_EXPORT QVulkanWindow: public QWindow
    QSize m_swapChainImageSize;
 
    bool m_singleDevice;
-   vk::UniqueHandle<vk::Device, vk::DispatchLoaderDynamic> m_graphicsDevice;
-   vk::UniqueHandle<vk::Device, vk::DispatchLoaderDynamic> m_transferDevice;
+   vk::UniqueHandle<vk::Device, vk_cs::DispatchLoaderDynamic> m_graphicsDevice;
+   vk::UniqueHandle<vk::Device, vk_cs::DispatchLoaderDynamic> m_transferDevice;
    QVector<vk::Queue> m_graphicsQueues;
    QVector<vk::Queue> m_transferQueues;
    uint32_t m_graphicsCommandQueueFamily;
    uint32_t m_transferCommandQueueFamily;
    VulkanFlags m_vulkanFlags;
-   mutable vk::UniqueHandle<vk::RenderPass, vk::DispatchLoaderDynamic> m_renderPass;
-   vk::UniqueHandle<vk::CommandPool, vk::DispatchLoaderDynamic> m_graphicsPool;
+   mutable vk::UniqueHandle<vk::RenderPass, vk_cs::DispatchLoaderDynamic> m_renderPass;
+   vk::UniqueHandle<vk::CommandPool, vk_cs::DispatchLoaderDynamic> m_graphicsPool;
 
    vk::Image m_currentImage;
 

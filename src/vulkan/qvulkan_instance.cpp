@@ -145,6 +145,16 @@ static QString debugFlagsToString(VkDebugReportFlagsEXT flags)
    return retval;
 }
 
+#if (VK_VERSION_1_3 && VK_HEADER_VERSION >= 303) || (VK_VERSION_1_4)
+   VkBool32 QVulkanInstance::debugCallback(vk::DebugReportFlagsEXT flags, vk::DebugReportObjectTypeEXT objectType,
+      uint64_t object, size_t location, int32_t messageCode, const char *pLayerPrefix, const char *pMessage, void *pUserData)
+   {
+      return debugCallback(VkDebugReportFlagsEXT(flags), VkDebugReportObjectTypeEXT(objectType), object, location,
+          messageCode, pLayerPrefix, pMessage, pUserData);
+   }
+#endif
+
+
 VkBool32 QVulkanInstance::debugCallback(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objectType, uint64_t object,
    size_t location, int32_t messageCode, const char *pLayerPrefix, const char *pMessage, void *pUserData)
 {

@@ -28,6 +28,15 @@
 
 #include <vulkan/vulkan.hpp>
 
+namespace vk_cs
+{
+   using namespace vk;
+
+#if (VK_VERSION_1_3 && VK_HEADER_VERSION >= 300) || (VK_VERSION_1_4)
+   using namespace vk::detail;
+#endif
+}
+
 class Q_VULKAN_EXPORT QVulkanDeviceFunctions
 {
  public:
@@ -296,7 +305,7 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
 
    VkResult vkWaitForFences(VkDevice device, uint32_t fenceCount, const VkFence *pFences, VkBool32 waitAll, uint64_t timeout);
 
-   const vk::DispatchLoaderDynamic& dynamicLoader() const {
+   const vk_cs::DispatchLoaderDynamic &dynamicLoader() const {
       return m_dld;
    }
 
@@ -305,10 +314,10 @@ class Q_VULKAN_EXPORT QVulkanDeviceFunctions
    };
 
  private:
-   QVulkanDeviceFunctions(vk::Instance instance, vk::Device device, vk::DispatchLoaderDynamic dld);
+   QVulkanDeviceFunctions(vk::Instance instance, vk::Device device, vk_cs::DispatchLoaderDynamic dld);
 
    vk::Device m_device;
-   vk::DispatchLoaderDynamic m_dld;
+   vk_cs::DispatchLoaderDynamic m_dld;
 
    friend class QVulkanInstance;
 };
