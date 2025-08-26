@@ -23,17 +23,20 @@
 
 #include <qwayland_subsurface_p.h>
 
+#include <qwayland_window_p.h>
+
 namespace QtWaylandClient {
 
 QWaylandSubSurface::QWaylandSubSurface(QWaylandWindow *window, QWaylandWindow *parent, ::wl_subsurface *sub_surface)
-   : QtWayland::wl_subsurface(sub_surface), m_window(nullptr), m_parent(parent)
+   : QtWayland::wl_subsurface(sub_surface), m_window(window), m_parent(parent)
 {
-   // pending implementation
+   m_parent->m_children.append(this);
    set_desync();
 }
 
 QWaylandSubSurface::~QWaylandSubSurface()
 {
+   m_parent->m_children.removeOne(this);
    destroy();
 }
 
