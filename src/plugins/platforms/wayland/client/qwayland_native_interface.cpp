@@ -27,8 +27,10 @@
 
 #include <qapplication_p.h>
 #include <qwayland_clientbuffer_integration_p.h>
-#include <qwayland_extended_surface_p.h>
+#include <qwayland_display_p.h>
 #include <qwayland_integration_p.h>
+#include <qwayland_screen_p.h>
+#include <qwayland_window_p.h>
 
 namespace QtWaylandClient {
 
@@ -41,6 +43,10 @@ void *QWaylandNativeInterface::nativeResourceForIntegration(const QByteArray &re
 {
    QByteArray lowerCaseResource = resourceString.toLower();
 
+   if (lowerCaseResource == "display" || lowerCaseResource == "wl_display" || lowerCaseResource == "nativedisplay") {
+      return m_integration->display()->wl_display();
+   }
+
    // pending implementation
 
    return nullptr;
@@ -49,6 +55,10 @@ void *QWaylandNativeInterface::nativeResourceForIntegration(const QByteArray &re
 void *QWaylandNativeInterface::nativeResourceForWindow(const QByteArray &resourceString, QWindow *window)
 {
    QByteArray lowerCaseResource = resourceString.toLower();
+
+   if (lowerCaseResource == "display") {
+      return m_integration->display()->wl_display();
+   }
 
    // pending implementation
 
@@ -59,7 +69,9 @@ void *QWaylandNativeInterface::nativeResourceForScreen(const QByteArray &resourc
 {
    QByteArray lowerCaseResource = resourceString.toLower();
 
-   // pending implementation
+   if (lowerCaseResource == "output") {
+      return ((QWaylandScreen *)screen->handle())->output();
+   }
 
    return nullptr;
 }
@@ -77,21 +89,26 @@ void *QWaylandNativeInterface::nativeResourceForContext(const QByteArray &resour
 
 QVariantMap QWaylandNativeInterface::windowProperties(QPlatformWindow *window) const
 {
-   return QVariantMap();
+   QWaylandWindow *waylandWindow = static_cast<QWaylandWindow *>(window);
+   return waylandWindow->properties();
 }
 
 QVariant QWaylandNativeInterface::windowProperty(QPlatformWindow *window, const QString &name) const
 {
-   return QVariant();
+   QWaylandWindow *waylandWindow = static_cast<QWaylandWindow *>(window);
+   return waylandWindow->property(name);
 }
 
 QVariant QWaylandNativeInterface::windowProperty(QPlatformWindow *window, const QString &name, const QVariant &defaultValue) const
 {
-   return QVariant();
+   QWaylandWindow *waylandWindow = static_cast<QWaylandWindow *>(window);
+   return waylandWindow->property(name, defaultValue);
 }
 
 void QWaylandNativeInterface::setWindowProperty(QPlatformWindow *window, const QString &name, const QVariant &value)
 {
+   QWaylandWindow *wlWindow = static_cast<QWaylandWindow *>(window);
+   wlWindow->sendProperty(name, value);
 }
 
 void QWaylandNativeInterface::emitWindowPropertyChanged(QPlatformWindow *window, const QString &name)

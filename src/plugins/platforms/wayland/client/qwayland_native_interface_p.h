@@ -27,11 +27,11 @@
 #include <qhash.h>
 #include <qplatform_nativeinterface.h>
 #include <qvariant.h>
+#include <qplatform_window.h>
 
 namespace QtWaylandClient {
 
 class QWaylandIntegration;
-class QWaylandScreen;
 
 class Q_WAYLAND_CLIENT_EXPORT QWaylandNativeInterface : public QPlatformNativeInterface
 {
