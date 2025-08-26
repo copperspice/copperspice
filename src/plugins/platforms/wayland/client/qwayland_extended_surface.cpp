@@ -27,9 +27,15 @@
 #include <qplatform_nativeinterface.h>
 #include <qwindowsysteminterface.h>
 
+#include <qwayland_display_p.h>
+#include <qwayland_native_interface_p.h>
+#include <qwayland_window_p.h>
+
 namespace QtWaylandClient {
 
 QWaylandExtendedSurface::QWaylandExtendedSurface(QWaylandWindow *window)
+   : QtWayland::qt_extended_surface(window->display()->windowExtension()->get_extended_surface(window->object())),
+     m_window(window)
 {
 }
 
@@ -88,7 +94,7 @@ void QWaylandExtendedSurface::extended_surface_set_generic_property(const QStrin
    QDataStream ds(data);
    ds >> variantValue;
 
-   // pending implementation
+   m_window->setProperty(name, variantValue);
 }
 
 void QWaylandExtendedSurface::extended_surface_close()
