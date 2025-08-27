@@ -23,10 +23,13 @@
 
 #include <qwayland_key_extension_p.h>
 
+#include <qwayland_display_p.h>
+#include <qwayland_inputdevice_p.h>
+#include <qwayland_window_p.h>
 namespace QtWaylandClient {
 
 QWaylandKeyExtension::QWaylandKeyExtension(QWaylandDisplay *display, uint32_t id)
-   : m_display(nullptr)
+   : QtWayland::qt_key_extension(display->wl_registry(), id, 2), m_display(display)
 {
 }
 

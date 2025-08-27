@@ -24,8 +24,9 @@
 #ifndef QWAYLAND_KEY_EXTENSION_H
 #define QWAYLAND_KEY_EXTENSION_H
 
-#include <qwayland-qtkey-extension.h>
 #include <qwindowsysteminterface.h>
+
+#include <qwayland-qtkey-extension.h>
 
 namespace QtWaylandClient {
 
