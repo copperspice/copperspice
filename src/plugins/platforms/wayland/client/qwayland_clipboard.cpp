@@ -26,12 +26,15 @@
 #include <qwayland_data_device_p.h>
 #include <qwayland_data_source_p.h>
 #include <qwayland_dataoffer_p.h>
+#include <qwayland_display_p.h>
+#include <qwayland_inputdevice_p.h>
 
 #ifndef QT_NO_DRAGANDDROP
 
 namespace QtWaylandClient {
 
 QWaylandClipboard::QWaylandClipboard(QWaylandDisplay *display)
+   : m_display(display)
 {
 }
 
@@ -56,12 +59,20 @@ void QWaylandClipboard::setMimeData(QMimeData *data, QClipboard::Mode mode)
       return;
    }
 
+   QWaylandInputDevice *inputDevice = m_display->currentInputDevice();
+
+   if (inputDevice == nullptr|| inputDevice->dataDevice() == nullptr) {
+      return;
+   }
+
    static const QString plain = "text/plain";
    static const QString utf8  = "text/plain;charset=utf-8";
 
    if (data != nullptr && data->hasFormat(plain) && ! data->hasFormat(utf8)) {
       data->setData(utf8, data->data(plain));
    }
+
+   inputDevice->dataDevice()->setSelectionSource(data ? new QWaylandDataSource(m_display->dndSelectionHandler(), data) : nullptr);
 
    emitChanged(mode);
 }
@@ -76,8 +87,14 @@ bool QWaylandClipboard::ownsMode(QClipboard::Mode mode) const
    if (mode != QClipboard::Clipboard) {
       return false;
    }
-   // pending implementation
-   return false;
+
+   QWaylandInputDevice *inputDevice = m_display->currentInputDevice();
+
+   if (inputDevice == nullptr || inputDevice->dataDevice() == nullptr) {
+      return false;
+   }
+
+   return inputDevice->dataDevice()->selectionSource() != nullptr;
 }
 
 }

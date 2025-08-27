@@ -47,7 +47,7 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandClipboard : public QPlatformClipboard
    bool ownsMode(QClipboard::Mode mode) const override;
 
  private:
-   QWaylandDisplay *mDisplay;
+   QWaylandDisplay *m_display;
    QMimeData m_emptyData;
 };
 
