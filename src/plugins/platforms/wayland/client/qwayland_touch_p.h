@@ -43,29 +43,29 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandTouchExtension : public QtWayland::qt_touc
  private:
    void registerDevice(int caps);
 
+   void sendTouchEvent();
+
    void touch_extension_touch(uint32_t time, uint32_t id, uint32_t state, int32_t x, int32_t y,
          int32_t normalized_x, int32_t normalized_y, int32_t width, int32_t height,
          uint32_t pressure, int32_t velocity_x, int32_t velocity_y, uint32_t flags, struct wl_array *rawdata) override;
 
    void touch_extension_configure(uint32_t flags) override;
 
-   void sendTouchEvent();
+   QList<QWindowSystemInterface::TouchPoint> m_touchPoints;
+   QList<QWindowSystemInterface::TouchPoint> m_prevTouchPoints;
 
-   QList<QWindowSystemInterface::TouchPoint> mTouchPoints;
-   QList<QWindowSystemInterface::TouchPoint> mPrevTouchPoints;
+   QWaylandDisplay *m_display;
+   QTouchDevice *m_touchDevice;
+   QWindow *m_targetWindow;
+   QWaylandInputDevice *m_inputDevice;
 
-   QWaylandDisplay *mDisplay;
-   QTouchDevice *mTouchDevice;
-   QWindow *mTargetWindow;
-   QWaylandInputDevice *mInputDevice;
+   QPointF m_lastMouseLocal;
+   QPointF m_lastMouseGlobal;
 
-   QPointF mLastMouseLocal;
-   QPointF mLastMouseGlobal;
-
-   uint32_t mTimestamp;
-   uint32_t mFlags;
-   int mPointsLeft;
-   int mMouseSourceId;
+   uint32_t m_timestamp;
+   uint32_t m_flags;
+   int m_pointsLeft;
+   int m_mouseSourceId;
 };
 
 }

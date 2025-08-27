@@ -23,22 +23,26 @@
 
 #include <qwayland_touch_p.h>
 
+#include <qwayland_display_p.h>
+#include <qwayland_inputdevice_p.h>
+#include <qwayland_window_p.h>
 
 namespace QtWaylandClient {
 
 QWaylandTouchExtension::QWaylandTouchExtension(QWaylandDisplay *display, uint32_t id)
-   : mDisplay(display), mTouchDevice(nullptr), mTargetWindow(nullptr), mInputDevice(nullptr),
-     mTimestamp(0), mFlags(0), mPointsLeft(0), mMouseSourceId(-1)
+   : QtWayland::qt_touch_extension(display->wl_registry(), id, 1),
+     m_display(display), m_touchDevice(nullptr), m_targetWindow(nullptr), m_inputDevice(nullptr),
+     m_timestamp(0), m_flags(0), m_pointsLeft(0), m_mouseSourceId(-1)
 {
 }
 
 void QWaylandTouchExtension::registerDevice(int caps)
 {
-   mTouchDevice = new QTouchDevice;
-   mTouchDevice->setType(QTouchDevice::TouchScreen);
-   mTouchDevice->setCapabilities(QTouchDevice::Capabilities(caps));
+   m_touchDevice = new QTouchDevice;
+   m_touchDevice->setType(QTouchDevice::TouchScreen);
+   m_touchDevice->setCapabilities(QTouchDevice::Capabilities(caps));
 
-   QWindowSystemInterface::registerTouchDevice(mTouchDevice);
+   QWindowSystemInterface::registerTouchDevice(m_touchDevice);
 }
 
 static inline qreal fromFixed(int f)
@@ -50,67 +54,77 @@ void QWaylandTouchExtension::touch_extension_touch(uint32_t time, uint32_t id, u
       int32_t normalized_x, int32_t normalized_y, int32_t width, int32_t height, uint32_t pressure,
       int32_t velocity_x, int32_t velocity_y, uint32_t flags, wl_array *rawdata)
 {
+   if (m_inputDevice == nullptr) {
+      QList<QWaylandInputDevice *> inputDevices = m_display->inputDevices();
+
+      if (inputDevices.isEmpty()) {
+         qWarning("QWaylandTouchExtension::touch_extension_touch() No input devices");
+         return;
+      }
+
+      m_inputDevice = inputDevices.first();
+   }
+
    // pending implementation
 }
 
 void QWaylandTouchExtension::sendTouchEvent()
 {
    // Copy all points which are in the previous list but not in the current list
-   for (int i = 0; i < mPrevTouchPoints.count(); ++i) {
-      const QWindowSystemInterface::TouchPoint &prevPoint(mPrevTouchPoints.at(i));
-
-      if (prevPoint.state == Qt::TouchPointReleased) {
+   for (const auto &previousItem : m_prevTouchPoints) {
+      if (previousItem.state == Qt::TouchPointReleased) {
          continue;
       }
 
       bool found = false;
 
-      for (int j = 0; j < mTouchPoints.count(); ++j)
-         if (mTouchPoints.at(j).id == prevPoint.id) {
+      for (const auto &item : m_touchPoints) {
+         if (item.id == previousItem.id) {
             found = true;
             break;
          }
+      }
 
       if (! found) {
-         QWindowSystemInterface::TouchPoint p = prevPoint;
+         QWindowSystemInterface::TouchPoint p = previousItem;
          p.state = Qt::TouchPointStationary;
-         mTouchPoints.append(p);
+         m_touchPoints.append(p);
       }
    }
 
-   if (mTouchPoints.isEmpty()) {
-      mPrevTouchPoints.clear();
+   if (m_touchPoints.isEmpty()) {
+      m_prevTouchPoints.clear();
       return;
    }
 
-   QWindowSystemInterface::handleTouchEvent(mTargetWindow, mTimestamp, mTouchDevice, mTouchPoints);
+   QWindowSystemInterface::handleTouchEvent(m_targetWindow, m_timestamp, m_touchDevice, m_touchPoints);
 
    Qt::TouchPointStates states = nullptr;
 
-   for (int i = 0; i < mTouchPoints.count(); ++i) {
-      states |= mTouchPoints.at(i).state;
+   for (const auto &item : m_touchPoints) {
+      states |= item.state;
    }
 
-   if (mFlags & QT_TOUCH_EXTENSION_FLAGS_MOUSE_FROM_TOUCH) {
+   if (m_flags & QT_TOUCH_EXTENSION_FLAGS_MOUSE_FROM_TOUCH) {
       if (states == Qt::TouchPointPressed) {
-         mMouseSourceId = mTouchPoints.first().id;
+         m_mouseSourceId = m_touchPoints.first().id;
       }
 
-      for (int i = 0; i < mTouchPoints.count(); ++i) {
-         const QWindowSystemInterface::TouchPoint &tp(mTouchPoints.at(i));
+      for (int i = 0; i < m_touchPoints.count(); ++i) {
+         const QWindowSystemInterface::TouchPoint &tp(m_touchPoints.at(i));
 
-         if (tp.id == mMouseSourceId) {
+         if (tp.id == m_mouseSourceId) {
             Qt::MouseButtons buttons = tp.state == Qt::TouchPointReleased ? Qt::NoButton : Qt::LeftButton;
-            mLastMouseGlobal = tp.area.center();
+            m_lastMouseGlobal = tp.area.center();
 
-            QPoint globalPoint = mLastMouseGlobal.toPoint();
-            QPointF delta = mLastMouseGlobal - globalPoint;
+            QPoint globalPoint = m_lastMouseGlobal.toPoint();
+            QPointF delta = m_lastMouseGlobal - globalPoint;
 
-            mLastMouseLocal = mTargetWindow->mapFromGlobal(globalPoint) + delta;
-            QWindowSystemInterface::handleMouseEvent(mTargetWindow, mTimestamp, mLastMouseLocal, mLastMouseGlobal, buttons);
+            m_lastMouseLocal = m_targetWindow->mapFromGlobal(globalPoint) + delta;
+            QWindowSystemInterface::handleMouseEvent(m_targetWindow, m_timestamp, m_lastMouseLocal, m_lastMouseGlobal, buttons);
 
             if (buttons == Qt::NoButton) {
-               mMouseSourceId = -1;
+               m_mouseSourceId = -1;
             }
 
             break;
@@ -118,27 +132,27 @@ void QWaylandTouchExtension::sendTouchEvent()
       }
    }
 
-   mPrevTouchPoints = mTouchPoints;
-   mTouchPoints.clear();
+   m_prevTouchPoints = m_touchPoints;
+   m_touchPoints.clear();
 
    if (states == Qt::TouchPointReleased) {
-      mPrevTouchPoints.clear();
+      m_prevTouchPoints.clear();
    }
 }
 
 void QWaylandTouchExtension::touchCanceled()
 {
-   mTouchPoints.clear();
-   mPrevTouchPoints.clear();
+   m_touchPoints.clear();
+   m_prevTouchPoints.clear();
 
-   if (mMouseSourceId != -1) {
-      QWindowSystemInterface::handleMouseEvent(mTargetWindow, mTimestamp, mLastMouseLocal, mLastMouseGlobal, Qt::NoButton);
+   if (m_mouseSourceId != -1) {
+      QWindowSystemInterface::handleMouseEvent(m_targetWindow, m_timestamp, m_lastMouseLocal, m_lastMouseGlobal, Qt::NoButton);
    }
 }
 
 void QWaylandTouchExtension::touch_extension_configure(uint32_t flags)
 {
-   mFlags = flags;
+   m_flags = flags;
 }
 
 }
