@@ -33,6 +33,9 @@
 #include <wayland-client.h>
 
 #include <qwayland_abstract_decoration_p.h>
+#include <qwayland_display_p.h>
+#include <qwayland_screen_p.h>
+#include <qwayland_window_p.h>
 
 #include <errno.h>
 #include <sys/mman.h>
@@ -40,7 +43,7 @@
 namespace QtWaylandClient {
 
 QWaylandShmBuffer::QWaylandShmBuffer(QWaylandDisplay *display, const QSize &size, QImage::Format format, int scale)
-   : mShmPool(nullptr), mMarginsImage(nullptr)
+   : m_shmPool(nullptr), m_marginsImage(nullptr)
 {
    int stride = size.width() * 4;
    int alloc  = stride * size.height();
@@ -72,89 +75,111 @@ QWaylandShmBuffer::QWaylandShmBuffer(QWaylandDisplay *display, const QSize &size
 
 QWaylandShmBuffer::~QWaylandShmBuffer()
 {
-   delete mMarginsImage;
+   delete m_marginsImage;
 
-   if (mImage.constBits()) {
-      munmap((void *) mImage.constBits(), mImage.byteCount());
+   if (m_image.constBits()) {
+      munmap((void *) m_image.constBits(), m_image.byteCount());
    }
 
-   if (mShmPool) {
-      wl_shm_pool_destroy(mShmPool);
+   if (m_shmPool) {
+      wl_shm_pool_destroy(m_shmPool);
    }
 }
 
 QImage *QWaylandShmBuffer::imageInsideMargins(const QMargins &marginsIn)
 {
-   QMargins margins = marginsIn * int(mImage.devicePixelRatio());
+   QMargins margins = marginsIn * int(m_image.devicePixelRatio());
 
-   if (! margins.isNull() && margins != mMargins) {
-      if (mMarginsImage) {
-         delete mMarginsImage;
+   if (! margins.isNull() && margins != m_margins) {
+      if (m_marginsImage) {
+         delete m_marginsImage;
       }
 
-      uchar *bits     = const_cast < uchar * > (mImage.constBits());
-      uchar *b_s_data = bits + margins.top() * mImage.bytesPerLine() + margins.left() * 4;
-      int b_s_width   = mImage.size().width() - margins.left() - margins.right();
-      int b_s_height  = mImage.size().height() - margins.top() - margins.bottom();
+      uchar *bits     = const_cast < uchar * > (m_image.constBits());
+      uchar *b_s_data = bits + margins.top() * m_image.bytesPerLine() + margins.left() * 4;
+      int b_s_width   = m_image.size().width() - margins.left() - margins.right();
+      int b_s_height  = m_image.size().height() - margins.top() - margins.bottom();
 
-      mMarginsImage   = new QImage(b_s_data, b_s_width, b_s_height, mImage.bytesPerLine(), mImage.format());
-      mMarginsImage->setDevicePixelRatio(mImage.devicePixelRatio());
+      m_marginsImage  = new QImage(b_s_data, b_s_width, b_s_height, m_image.bytesPerLine(), m_image.format());
+      m_marginsImage->setDevicePixelRatio(m_image.devicePixelRatio());
    }
 
    if (margins.isNull()) {
-      delete mMarginsImage;
-      mMarginsImage = nullptr;
+      delete m_marginsImage;
+      m_marginsImage = nullptr;
    }
 
-   mMargins = margins;
+   m_margins = margins;
 
-   if (! mMarginsImage) {
-      return &mImage;
+   if (! m_marginsImage) {
+      return &m_image;
    }
 
-   return mMarginsImage;
+   return m_marginsImage;
 }
 
 // **
 QWaylandShmBackingStore::QWaylandShmBackingStore(QWindow *window)
-   : QPlatformBackingStore(window), mPainting(false), mPendingFlush(false),
-     mFrontBuffer(nullptr), mBackBuffer(nullptr)
+   : QPlatformBackingStore(window), m_painting(false), m_pendingFlush(false),
+     m_display(QWaylandScreen::waylandScreenFromWindow(window)->display()),
+     m_frontBuffer(nullptr), m_backBuffer(nullptr)
 {
 }
 
 QWaylandShmBackingStore::~QWaylandShmBackingStore()
 {
-   qDeleteAll(mBuffers);
+   if (QWaylandWindow *w = waylandWindow()) {
+      w->setBackingStore(nullptr);
+   }
+   qDeleteAll(m_buffers);
 }
 
 void QWaylandShmBackingStore::beginPaint(const QRegion &region)
 {
-   mPainting = true;
+   m_painting = true;
    ensureSize();
 
-   // pending implementation
+   waylandWindow()->setCanResize(false);
+
+   if (m_backBuffer->image()->hasAlphaChannel()) {
+      QPainter p(paintDevice());
+      p.setCompositionMode(QPainter::CompositionMode_Source);
+
+      const QColor blank = Qt::transparent;
+
+      for (const QRect &rect : region.rects()) {
+         p.fillRect(rect, blank);
+      }
+   }
 }
 
 QImage *QWaylandShmBackingStore::contentSurface() const
 {
-   return windowDecoration() ? mBackBuffer->imageInsideMargins(windowDecorationMargins()) : mBackBuffer->image();
+   return windowDecoration() ? m_backBuffer->imageInsideMargins(windowDecorationMargins()) : m_backBuffer->image();
 }
 
 QImage *QWaylandShmBackingStore::entireSurface() const
 {
-   return mBackBuffer->image();
+   return m_backBuffer->image();
 }
 
 void QWaylandShmBackingStore::endPaint()
 {
-   mPainting = false;
+   m_painting = false;
 
-   // pending implementation
+   if (m_pendingFlush) {
+      flush(window(), m_pendingRegion, QPoint());
+   }
+
+   waylandWindow()->setCanResize(true);
 }
 
 void QWaylandShmBackingStore::ensureSize()
 {
-   // pending implementation
+   waylandWindow()->setBackingStore(this);
+   waylandWindow()->createDecoration();
+
+   resize(m_requestedSize);
 }
 
 void QWaylandShmBackingStore::flush(QWindow *window, const QRegion &region, const QPoint &offset)
@@ -169,37 +194,38 @@ void QWaylandShmBackingStore::flush(QWindow *window, const QRegion &region, cons
    (void) window;
    (void) offset;
 
-   if (mPainting) {
-      mPendingRegion |= region;
-      mPendingFlush = true;
+   if (m_painting) {
+      m_pendingRegion |= region;
+      m_pendingFlush = true;
 
       return;
    }
 
-   mPendingFlush  = false;
-   mPendingRegion = QRegion();
+   m_pendingFlush  = false;
+   m_pendingRegion = QRegion();
+
    if (windowDecoration() && windowDecoration()->isDirty()) {
       updateDecorations();
    }
 
-   mFrontBuffer = mBackBuffer;
+   m_frontBuffer = m_backBuffer;
 
    // pending implementation
 }
 
 QWaylandShmBuffer *QWaylandShmBackingStore::getBuffer(const QSize &size)
 {
-   auto tmpBuffers = mBuffers;
+   auto tmpBuffers = m_buffers;
 
    for (QWaylandShmBuffer *b : tmpBuffers) {
       if (! b->busy()) {
          if (b->size() == size) {
             return b;
          } else {
-            mBuffers.removeOne(b);
+            m_buffers.removeOne(b);
 
-            if (mBackBuffer == b) {
-               mBackBuffer = nullptr;
+            if (m_backBuffer == b) {
+               m_backBuffer = nullptr;
             }
 
             delete b;
@@ -220,12 +246,21 @@ QPaintDevice *QWaylandShmBackingStore::paintDevice()
 void QWaylandShmBackingStore::resize(const QSize &size)
 {
    QMargins margins = windowDecorationMargins();
+   int scale = waylandWindow()->scale();
 
-   // pending implementation
+   QSize sizeWithMargins = (size + QSize(margins.left() + margins.right(), margins.top() + margins.bottom())) * scale;
+
+   QWaylandShmBuffer *buffer = getBuffer(sizeWithMargins);
+
+   while (! buffer) {
+      m_display->blockingReadEvents();
+      buffer = getBuffer(sizeWithMargins);
+   }
+
    int oldSize = 0;
 
-   if (mBackBuffer != nullptr) {
-      oldSize = mBackBuffer->image()->byteCount();
+   if (m_backBuffer != nullptr) {
+      oldSize = m_backBuffer->image()->byteCount();
    }
 
    // pending implementation
@@ -233,7 +268,7 @@ void QWaylandShmBackingStore::resize(const QSize &size)
 
 void QWaylandShmBackingStore::resize(const QSize &size, const QRegion &)
 {
-   mRequestedSize = size;
+   m_requestedSize = size;
 }
 
 void QWaylandShmBackingStore::updateDecorations()
@@ -242,8 +277,8 @@ void QWaylandShmBackingStore::updateDecorations()
    decorationPainter.setCompositionMode(QPainter::CompositionMode_Source);
    QImage sourceImage = windowDecoration()->contentImage();
 
-   qreal dp = sourceImage.devicePixelRatio();
-   int dpWidth = int(sourceImage.width() / dp);
+   qreal dp     = sourceImage.devicePixelRatio();
+   int dpWidth  = int(sourceImage.width() / dp);
    int dpHeight = int(sourceImage.height() / dp);
 
    QMatrix sourceMatrix;
@@ -278,16 +313,12 @@ void QWaylandShmBackingStore::updateDecorations()
 
 QWaylandWindow *QWaylandShmBackingStore::waylandWindow() const
 {
-   // pending implementation
-
-   return nullptr;
+   return static_cast<QWaylandWindow *>(window()->handle());
 }
 
 QWaylandAbstractDecoration *QWaylandShmBackingStore::windowDecoration() const
 {
-   // pending implementation
-
-   return nullptr;
+   return waylandWindow()->decoration();
 }
 
 QMargins QWaylandShmBackingStore::windowDecorationMargins() const

@@ -45,25 +45,25 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandShmBuffer : public QWaylandBuffer
    ~QWaylandShmBuffer();
 
    QSize size() const override {
-      return mImage.size();
+      return m_image.size();
    }
 
    int scale() const override {
-      return int(mImage.devicePixelRatio());
+      return int(m_image.devicePixelRatio());
    }
 
    QImage *image() {
-      return &mImage;
+      return &m_image;
    }
 
    QImage *imageInsideMargins(const QMargins &margins);
 
  private:
-   struct wl_shm_pool *mShmPool;
+   struct wl_shm_pool *m_shmPool;
 
-   QImage mImage;
-   QMargins mMargins;
-   QImage *mMarginsImage;
+   QImage m_image;
+   QMargins m_margins;
+   QImage *m_marginsImage;
 };
 
 class Q_WAYLAND_CLIENT_EXPORT QWaylandShmBackingStore : public QPlatformBackingStore
@@ -103,18 +103,19 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandShmBackingStore : public QPlatformBackingS
    QWaylandShmBuffer *getBuffer(const QSize &size);
    void updateDecorations();
 
-   bool mPainting;
-   bool mPendingFlush;
+   bool m_painting;
+   bool m_pendingFlush;
 
-   QLinkedList<QWaylandShmBuffer *> mBuffers;
-   QWaylandShmBuffer *mFrontBuffer;
-   QWaylandShmBuffer *mBackBuffer;
+   QWaylandDisplay *m_display;
+   QLinkedList<QWaylandShmBuffer *> m_buffers;
+   QWaylandShmBuffer *m_frontBuffer;
+   QWaylandShmBuffer *m_backBuffer;
 
-   QMutex mMutex;
-   QRegion mPendingRegion;
-   QSize mRequestedSize;
+   QMutex m_mutex;
+   QRegion m_pendingRegion;
+   QSize m_requestedSize;
 
-   Qt::WindowFlags mCurrentWindowFlags;
+   Qt::WindowFlags m_currentWindowFlags;
 };
 
 }
