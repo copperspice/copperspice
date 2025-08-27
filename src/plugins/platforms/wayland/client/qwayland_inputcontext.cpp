@@ -24,6 +24,10 @@
 #include <qplatform_window.h>
 #include <qwindow.h>
 
+#include <qwayland_display_p.h>
+#include <qwayland_inputdevice_p.h>
+#include <qwayland_window_p.h>
+
 #ifndef QT_NO_WAYLAND_XKB
 #include <xkbcommon/xkbcommon.h>
 #endif
@@ -94,12 +98,12 @@ void QWaylandTextInput::reset()
 
 void QWaylandTextInput::updateState()
 {
-   if (! QGuiApplication::focusObject()) {
+   if (QApplication::focusObject() == nullptr) {
       return;
    }
 
    QInputMethodQueryEvent event(Qt::ImQueryAll);
-   QCoreApplication::sendEvent(QGuiApplication::focusObject(), &event);
+   QCoreApplication::sendEvent(QApplication::focusObject(), &event);
 
    const QString &text = event.value(Qt::ImSurroundingText).toString();
    const int cursor = event.value(Qt::ImCursorPosition).toInt();
@@ -114,27 +118,27 @@ void QWaylandTextInput::text_input_preedit_string(uint32_t serial, const QString
 {
    (void) serial;
 
-   if (! QGuiApplication::focusObject()) {
+   if (QApplication::focusObject() == nullptr) {
       return;
    }
 
    m_commit = commit;
    QList<QInputMethodEvent::Attribute> attributes;
    QInputMethodEvent event(text, attributes);
-   QCoreApplication::sendEvent(QGuiApplication::focusObject(), &event);
+   QCoreApplication::sendEvent(QApplication::focusObject(), &event);
 }
 
 void QWaylandTextInput::text_input_commit_string(uint32_t serial, const QString &text)
 {
    (void) serial;
 
-   if (! QGuiApplication::focusObject()) {
+   if (QApplication::focusObject() == nullptr) {
       return;
    }
 
    QInputMethodEvent event;
    event.setCommitString(text);
-   QCoreApplication::sendEvent(QGuiApplication::focusObject(), &event);
+   QCoreApplication::sendEvent(QApplication::focusObject(), &event);
 
    m_commit = QString();
 }
@@ -158,24 +162,23 @@ void QWaylandTextInput::text_input_keysym(uint32_t serial, uint32_t time, uint32
    (void) time;
    (void) modifiers;
 
-   if (! QGuiApplication::focusObject()) {
+   if (QApplication::focusObject() == nullptr) {
       return;
    }
 
-   // TODO: Convert modifiers to Qt::KeyboardModifiers.
+   // TODO: Convert modifiers to Qt::KeyboardModifiers
    QKeyEvent event(toQEventType(state), toQtKey(sym), Qt::NoModifier);
    QCoreApplication::sendEvent(qGuiApp->focusWindow(), &event);
 }
 
 QWaylandInputContext::QWaylandInputContext(QWaylandDisplay *display)
-   : mTextInput()
+   : m_display(display), m_textInput()
 {
 }
 
 bool QWaylandInputContext::isValid() const
 {
-   // pending implementation
-   return false;
+   return m_display->textInputManager() != nullptr;
 }
 
 void QWaylandInputContext::reset()
@@ -184,7 +187,7 @@ void QWaylandInputContext::reset()
       return;
    }
 
-   mTextInput->reset();
+   m_textInput->reset();
 }
 
 void QWaylandInputContext::commit()
@@ -193,15 +196,16 @@ void QWaylandInputContext::commit()
       return;
    }
 
-   if (! QGuiApplication::focusObject()) {
+   if (QApplication::focusObject() == nullptr) {
       return;
    }
 
    QInputMethodEvent event;
-   event.setCommitString(mTextInput->commitString());
-   QCoreApplication::sendEvent(QGuiApplication::focusObject(), &event);
+   event.setCommitString(m_textInput->commitString());
 
-   mTextInput->reset();
+   QCoreApplication::sendEvent(QApplication::focusObject(), &event);
+
+   m_textInput->reset();
 }
 
 void QWaylandInputContext::update(Qt::InputMethodQueries queries)
@@ -212,7 +216,7 @@ void QWaylandInputContext::update(Qt::InputMethodQueries queries)
       return;
    }
 
-   mTextInput->updateState();
+   m_textInput->updateState();
 }
 
 void QWaylandInputContext::invokeAction(QInputMethod::Action, int cursorPosition)
@@ -221,7 +225,7 @@ void QWaylandInputContext::invokeAction(QInputMethod::Action, int cursorPosition
       return;
    }
 
-   mTextInput->invoke_action(0, cursorPosition);
+   m_textInput->invoke_action(0, cursorPosition);
 }
 
 void QWaylandInputContext::showInputPanel()
@@ -230,7 +234,7 @@ void QWaylandInputContext::showInputPanel()
       return;
    }
 
-   mTextInput->show_input_panel();
+   m_textInput->show_input_panel();
 }
 
 void QWaylandInputContext::hideInputPanel()
@@ -239,7 +243,7 @@ void QWaylandInputContext::hideInputPanel()
       return;
    }
 
-   mTextInput->hide_input_panel();
+   m_textInput->hide_input_panel();
 }
 
 bool QWaylandInputContext::isInputPanelVisible() const
@@ -254,21 +258,24 @@ void QWaylandInputContext::setFocusObject(QObject *object)
    }
 
    if (object == nullptr) {
-      // pending implementation
+      m_textInput->deactivate(m_display->defaultInputDevice()->wl_seat());
       return;
    }
 
-   QWindow *window = QGuiApplication::focusWindow();
+   QWindow *window = QApplication::focusWindow();
 
    if (window == nullptr || window->handle() == nullptr) {
       return;
    }
 
+   struct ::wl_surface *surface = static_cast<QWaylandWindow *>(window->handle())->object();
+
+   m_textInput->activate(m_display->defaultInputDevice()->wl_seat(), surface);
 }
 
 bool QWaylandInputContext::ensureTextInput()
 {
-   if (mTextInput) {
+   if (m_textInput != nullptr) {
       return true;
    }
 
@@ -276,7 +283,7 @@ bool QWaylandInputContext::ensureTextInput()
       return false;
    }
 
-   // pending implementation
+   m_textInput.reset(new QWaylandTextInput(m_display->textInputManager()->create_text_input()));
 
    return true;
 }

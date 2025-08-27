@@ -77,7 +77,8 @@ class QWaylandInputContext : public QPlatformInputContext
  private:
    bool ensureTextInput();
 
-   QScopedPointer<QWaylandTextInput> mTextInput;
+   QWaylandDisplay *m_display;
+   QScopedPointer<QWaylandTextInput> m_textInput;
 };
 
 }
