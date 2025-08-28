@@ -33,7 +33,6 @@ target_sources(uic${TOOLS_SUFFIX}
    ${CMAKE_CURRENT_SOURCE_DIR}/customwidgetsinfo.h
    ${CMAKE_CURRENT_SOURCE_DIR}/databaseinfo.h
    ${CMAKE_CURRENT_SOURCE_DIR}/driver.h
-   ${CMAKE_CURRENT_SOURCE_DIR}/globaldefs.h
    ${CMAKE_CURRENT_SOURCE_DIR}/option.h
    ${CMAKE_CURRENT_SOURCE_DIR}/qclass_lib_map.h
    ${CMAKE_CURRENT_SOURCE_DIR}/treewalker.h

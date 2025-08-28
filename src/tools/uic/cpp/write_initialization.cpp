@@ -25,7 +25,7 @@
 
 #include <databaseinfo.h>
 #include <driver.h>
-#include <globaldefs.h>
+
 #include <ui4.h>
 #include <uic.h>
 #include <utils.h>
