@@ -322,4 +322,4 @@ void WriteIncludes::activateScripts()
    }
 }
 
-} // namespace CPP
+}   // namespace

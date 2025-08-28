@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef CPPWRITEICONDECLARATION_H
-#define CPPWRITEICONDECLARATION_H
+#ifndef WRITE_ICONDECLARATION_H
+#define WRITE_ICONDECLARATION_H
 
 #include <qtextstream.h>
 
@@ -50,6 +50,6 @@ class WriteIconDeclaration : public TreeWalker
    const Option &option;
 };
 
-} // namespace CPP
+}   // namespace
 
 #endif

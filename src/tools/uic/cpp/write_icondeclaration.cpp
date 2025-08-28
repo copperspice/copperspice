@@ -57,5 +57,5 @@ void WriteIconDeclaration::acceptImage(DomImage *image)
    output << option.indent << option.indent << name << "_ID,\n";
 }
 
-} // namespace CPP
+}   // namespace
 

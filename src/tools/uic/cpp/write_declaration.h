@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef CPPWRITEDECLARATION_H
-#define CPPWRITEDECLARATION_H
+#ifndef WRITE_DECLARATION_H
+#define WRITE_DECLARATION_H
 
 #include <treewalker.h>
 
@@ -54,6 +54,6 @@ struct WriteDeclaration : public TreeWalker {
    const bool m_activateScripts;
 };
 
-} // namespace CPP
+}  // namespace
 
 #endif

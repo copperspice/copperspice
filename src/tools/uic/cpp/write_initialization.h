@@ -376,6 +376,6 @@ struct WriteInitialization : public TreeWalker
    bool m_firstThemeIcon;
 };
 
-} // namespace CPP
+}   // namespace
 
 #endif

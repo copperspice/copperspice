@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef CPPEXTRACTIMAGES_H
-#define CPPEXTRACTIMAGES_H
+#ifndef EXTRACT_IMAGES_H
+#define EXTRACT_IMAGES_H
 
 #include <qdir.h>
 
@@ -52,6 +52,6 @@ class ExtractImages : public TreeWalker
    QDir m_imagesDir;
 };
 
-} // namespace CPP
+}   // namespace
 
 #endif

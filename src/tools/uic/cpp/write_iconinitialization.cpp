@@ -94,5 +94,4 @@ void WriteIconInitialization::acceptImage(DomImage *image)
    }
 }
 
-} // namespace
-
+}   // namespace

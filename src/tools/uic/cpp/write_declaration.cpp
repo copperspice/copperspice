@@ -264,5 +264,4 @@ void WriteDeclaration::acceptButtonGroup(const DomButtonGroup *buttonGroup)
    TreeWalker::acceptButtonGroup(buttonGroup);
 }
 
-} // namespace CPP
-
+}   // namespace

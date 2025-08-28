@@ -189,4 +189,4 @@ void WriteIconData::writeImage(QIODevice &output, DomImage *image)
    output.write(array.constData(), array.size());
 }
 
-}
+}   // namespace

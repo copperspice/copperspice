@@ -135,4 +135,4 @@ void ExtractImages::acceptImage(DomImage *image)
    f.close();
 }
 
-} // namespace CPP
+}   // namespace

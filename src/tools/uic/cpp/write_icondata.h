@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef CPPWRITEICONDATA_H
-#define CPPWRITEICONDATA_H
+#ifndef WRITE_ICONDATA_H
+#define WRITE_ICONDATA_H
 
 #include <qiodevice.h>
 #include <qstring.h>
@@ -55,6 +55,6 @@ class WriteIconData : public TreeWalker
    const Option &option;
 };
 
-} // namespace CPP
+}   // namespace
 
 #endif

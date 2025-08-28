@@ -3081,4 +3081,4 @@ void WriteInitialization::Item::addChild(Item *child)
    }
 }
 
-} // namespace CPP
+}   // namespace

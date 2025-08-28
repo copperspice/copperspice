@@ -21,8 +21,8 @@
 *
 ***********************************************************************/
 
-#ifndef CPPWRITEINCLUDES_H
-#define CPPWRITEINCLUDES_H
+#ifndef WRITE_INCLUDES_H
+#define WRITE_INCLUDES_H
 
 #include <qhash.h>
 #include <qmap.h>
@@ -87,6 +87,6 @@ struct WriteIncludes : public TreeWalker {
    bool m_laidOut;
 };
 
-} // namespace CPP
+}   // namespace
 
-#endif // CPPWRITEINCLUDES_H
+#endif
