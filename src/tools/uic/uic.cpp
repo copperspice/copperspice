@@ -33,15 +33,8 @@
 #include <ui4.h>
 #include <validator.h>
 
-#ifdef QT_UIC_CPP_GENERATOR
 #include <write_declaration.h>
 #include <write_includes.h>
-#endif
-
-#ifdef QT_UIC_JAVA_GENERATOR
-#include <javawritedeclaration.h>
-#include <javawriteincludes.h>
-#endif
 
 Uic::Uic(Driver *d)
    : drv(d), out(d->output()), opt(d->option()), externalPix(true)
@@ -161,11 +154,6 @@ DomUI *Uic::parseUiFile(QXmlStreamReader &reader)
 
 bool Uic::write(QIODevice *in)
 {
-   if (option().generator == Option::JavaGenerator) {
-      // the Java generator ignores header protection
-      opt.headerProtection = false;
-   }
-
    DomUI *ui = nullptr;
 
    {
@@ -190,39 +178,18 @@ bool Uic::write(QIODevice *in)
    QString language = ui->attributeLanguage();
    bool rtn = false;
 
-   if (option().generator == Option::JavaGenerator) {
-
-#ifdef QT_UIC_JAVA_GENERATOR
-      if (language.toLower() != "jambi") {
-         fprintf(stderr, "Uic: File is not a 'jambi' form\n");
-         return false;
-      }
-
-      rtn = jwrite(ui);
-#else
-      fprintf(stderr, "Uic: option to generate java code not compiled in\n");
-#endif
-
-   } else {
-
-#ifdef QT_UIC_CPP_GENERATOR
-      if (! language.isEmpty() && language.toLower() != "c++") {
-         fprintf(stderr, "Uic: File is not a C++ ui file, language = %s\n", csPrintable(language));
-         return false;
-      }
-
-      rtn = write(ui);
-#else
-      fprintf(stderr, "Uic: option to generate cpp code not compiled into this program\n");
-#endif
+   if (! language.isEmpty() && language.toLower() != "c++") {
+      fprintf(stderr, "Uic: File is not a C++ ui file, language = %s\n", csPrintable(language));
+      return false;
    }
+
+   rtn = write(ui);
 
    delete ui;
 
    return rtn;
 }
 
-#ifdef QT_UIC_CPP_GENERATOR
 bool Uic::write(DomUI *ui)
 {
    using namespace CPP;
@@ -261,40 +228,6 @@ bool Uic::write(DomUI *ui)
 
    return true;
 }
-#endif
-
-#ifdef QT_UIC_JAVA_GENERATOR
-bool Uic::jwrite(DomUI *ui)
-{
-   using namespace Java;
-
-   if (! ui || ! ui->elementWidget()) {
-      return false;
-   }
-
-   if (opt.copyrightHeader) {
-      writeCopyrightHeader(ui);
-   }
-
-   pixFunction = ui->elementPixmapFunction();
-   if (pixFunction == "QPixmap::fromMimeSource") {
-      pixFunction = "qPixmapFromMimeSource";
-   }
-
-   externalPix = ui->elementImages() == 0;
-
-   info.acceptUI(ui);
-   cWidgetsInfo.acceptUI(ui);
-   WriteIncludes(this).acceptUI(ui);
-
-   Validator(this).acceptUI(ui);
-   WriteDeclaration(this).acceptUI(ui);
-
-   return true;
-}
-#endif
-
-#ifdef QT_UIC_CPP_GENERATOR
 
 void Uic::writeHeaderProtectionStart()
 {
@@ -308,8 +241,6 @@ void Uic::writeHeaderProtectionEnd()
    QString h = drv->headerFileName();
    out << "#endif // " << h << "\n";
 }
-
-#endif
 
 bool Uic::isMainWindow(const QString &className) const
 {

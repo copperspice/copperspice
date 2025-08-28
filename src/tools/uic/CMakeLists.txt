@@ -3,7 +3,6 @@ add_executable(CopperSpice::uic ALIAS uic${TOOLS_SUFFIX})
 
 add_definitions(
    -DQT_UIC
-   -DQT_UIC_CPP_GENERATOR
 )
 
 set(EXTRA_UIC_LIBS

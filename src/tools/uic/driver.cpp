@@ -280,14 +280,7 @@ bool Driver::uic(const QString &fileName, DomUI *ui, QTextStream *out)
    }
 
    Uic tool(this);
-   bool retval = false;
-
-#ifdef QT_UIC_CPP_GENERATOR
-   retval = tool.write(ui);
-#else
-   (void) ui;
-   fprintf(stderr, "Uic: option to generate cpp code not compiled in [%s:%d]\n", __FILE__, __LINE__);
-#endif
+   bool retval = tool.write(ui);
 
    m_output = oldOutput;
 

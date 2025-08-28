@@ -49,7 +49,6 @@ void showHelp(const char *appName)
       "  -tr <func>                use func() for i18n\n"
       "  -p, -no-protection        disable header protection\n"
       "  -n, -no-implicit-includes disable generation of #include-directives\n"
-      "  -g <name>                 change generator\n"
       "\n", appName);
 }
 
@@ -107,16 +106,7 @@ int runUic(int argc, char *argv[])
 
          driver.option().translateFunction = QString::fromUtf8(argv[arg]);
 
-      } else if (opt == "-g" || opt == "-generator") {
-         ++arg;
 
-         if (! argv[arg]) {
-            showHelp(argv[0]);
-            return 1;
-         }
-
-         QString name = QString::fromUtf8(argv[arg]).toLower();
-         driver.option().generator = (name == "java") ? Option::JavaGenerator : Option::CppGenerator;
 
       } else if (! fileName) {
          fileName = argv[arg];
