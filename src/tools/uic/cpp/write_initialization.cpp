@@ -43,8 +43,8 @@ QString whatsThisDefineC     = "QT_NO_WHATSTHIS";
 QString statusTipDefineC     = "QT_NO_STATUSTIP";
 QString shortcutDefineC      = "QT_NO_SHORTCUT";
 
-// fix an enumeration name, was "BottomToolBarArea" instead of "Qt::BottomToolBarArea"
-void fixQtEnumerationName(QString &name)
+// change "BottomToolBarArea" to "Qt::BottomToolBarArea"
+static void addEnumPrefix(QString &name)
 {
    static const QString prefix("Qt::");
 
@@ -73,7 +73,7 @@ QString toolBarAreaStringFromDOMAttributes(const CPP::WriteInitialization::DomPr
 
       case DomProperty::Enum: {
          QString area = pstyle->elementEnum();
-         fixQtEnumerationName(area);
+         addEnumPrefix(area);
          area += ", ";
          return area;
       }
