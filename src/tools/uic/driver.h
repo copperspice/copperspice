@@ -120,9 +120,7 @@ class Driver
    QHash<DomLayout *, QString> m_layouts;
    QHash<DomActionGroup *, QString> m_actionGroups;
 
-   typedef QHash<const DomButtonGroup *, QString> ButtonGroupNameHash;
-   ButtonGroupNameHash m_buttonGroups;
-
+   QHash<const DomButtonGroup *, QString> m_buttonGroups;
    QHash<DomAction *, QString> m_actions;
    QHash<QString, bool> m_nameRepository;
    QHash<QString, bool> m_pixmaps;

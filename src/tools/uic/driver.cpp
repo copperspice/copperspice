@@ -109,7 +109,7 @@ QString Driver::findOrInsertAction(DomAction *ui_action)
 
 QString Driver::findOrInsertButtonGroup(const DomButtonGroup *ui_group)
 {
-   ButtonGroupNameHash::iterator iter = m_buttonGroups.find(ui_group);
+   auto iter = m_buttonGroups.find(ui_group);
 
    if (iter == m_buttonGroups.end()) {
       iter = m_buttonGroups.insert(ui_group, unique(ui_group->attributeName(), "QButtonGroup"));
@@ -121,7 +121,7 @@ QString Driver::findOrInsertButtonGroup(const DomButtonGroup *ui_group)
 // Find a group by its non-uniqified name
 const DomButtonGroup *Driver::findButtonGroup(const QString &attributeName) const
 {
-   const ButtonGroupNameHash::const_iterator cend = m_buttonGroups.constEnd();
+   auto cend = m_buttonGroups.constEnd();
 
    for (auto iter = m_buttonGroups.constBegin(); iter != cend; ++iter)  {
       if (iter.key()->attributeName() == attributeName) {

@@ -157,7 +157,7 @@ void WriteIncludes::insertIncludeForClass(const QString &className, QString head
       }
 
       // Known class
-      const StringMap::const_iterator iter = m_classToHeader.constFind(className);
+      const auto iter = m_classToHeader.constFind(className);
 
       if (iter != m_classToHeader.constEnd()) {
          header = iter.value();
@@ -275,7 +275,7 @@ void WriteIncludes::acceptInclude(DomInclude *node)
 
 void WriteIncludes::insertInclude(const QString &header, bool global)
 {
-   OrderedSet &includes = global ?  m_globalIncludes : m_localIncludes;
+   QMap<QString, bool> &includes = global ?  m_globalIncludes : m_localIncludes;
    if (includes.contains(header)) {
       return;
    }
@@ -286,19 +286,19 @@ void WriteIncludes::insertInclude(const QString &header, bool global)
    m_includeBaseNames.insert(lowerBaseName);
 }
 
-void WriteIncludes::writeHeaders(const OrderedSet &headers, bool global)
+void WriteIncludes::writeHeaders(const QMap<QString, bool> &headers, bool global)
 {
    const QChar openingQuote = global ? QChar('<') : QChar('"');
    const QChar closingQuote = global ? QChar('>') : QChar('"');
 
    // Check for the old headers 'qslider.h' and replace by 'QtGui/QSlider'
-   const OrderedSet::const_iterator cend = headers.constEnd();
 
-   for (OrderedSet::const_iterator sit = headers.constBegin(); sit != cend; ++sit) {
-      const StringMap::const_iterator hit = m_oldHeaderToNewHeader.constFind(sit.key());
+   for (auto s_iter = headers.cbegin(); s_iter != headers.cend(); ++s_iter) {
 
-      const bool mapped     =  hit != m_oldHeaderToNewHeader.constEnd();
-      const  QString header =  mapped ? hit.value() : sit.key();
+      const auto h_iter = m_oldHeaderToNewHeader.constFind(s_iter.key());
+
+      const bool mapped    = h_iter != m_oldHeaderToNewHeader.cend();
+      const QString header = mapped ? h_iter.value() : s_iter.key();
 
       if (! header.trimmed().isEmpty()) {
          m_output << "#include " << openingQuote << header << closingQuote << '\n';
