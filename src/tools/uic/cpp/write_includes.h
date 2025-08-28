@@ -24,14 +24,15 @@
 #ifndef CPPWRITEINCLUDES_H
 #define CPPWRITEINCLUDES_H
 
-#include <treewalker.h>
-
 #include <qhash.h>
 #include <qmap.h>
 #include <qset.h>
 #include <qstring.h>
 
+#include <treewalker.h>
+
 class QTextStream;
+
 class Driver;
 class Uic;
 

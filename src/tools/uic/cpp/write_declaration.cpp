@@ -23,6 +23,9 @@
 
 #include <write_declaration.h>
 
+#include <qdebug.h>
+#include <qtextstream.h>
+
 #include <customwidgetsinfo.h>
 #include <databaseinfo.h>
 #include <driver.h>
@@ -33,8 +36,6 @@
 #include <write_iconinitialization.h>
 #include <write_initialization.h>
 
-#include <qdebug.h>
-#include <qtextstream.h>
 
 namespace {
 

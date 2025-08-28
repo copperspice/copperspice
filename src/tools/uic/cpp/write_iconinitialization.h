@@ -24,10 +24,11 @@
 #ifndef CPPWRITEICONINITIALIZATION_H
 #define CPPWRITEICONINITIALIZATION_H
 
-#include <treewalker.h>
 
 #include <qstring.h>
 #include <qtextstream.h>
+
+#include <treewalker.h>
 
 class Driver;
 class Uic;

@@ -27,6 +27,7 @@
 #include <treewalker.h>
 
 class QTextStream;
+
 class Driver;
 class Uic;
 

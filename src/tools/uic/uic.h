@@ -24,24 +24,25 @@
 #ifndef UIC_H
 #define UIC_H
 
-#include <customwidgetsinfo.h>
-#include <databaseinfo.h>
 #include <qhash.h>
 #include <qstack.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qxmlstreamreader.h>
 
-class QTextStream;
-class QIODevice;
+#include <customwidgetsinfo.h>
+#include <databaseinfo.h>
 
-class Driver;
-class DomUI;
-class DomWidget;
-class DomSpacer;
+class QIODevice;
+class QTextStream;
+
+class DomItem;
 class DomLayout;
 class DomLayoutItem;
-class DomItem;
+class DomSpacer;
+class DomUI;
+class DomWidget;
+class Driver;
 
 struct Option;
 

@@ -24,11 +24,11 @@
 #ifndef CPPWRITEICONDATA_H
 #define CPPWRITEICONDATA_H
 
-#include <treewalker.h>
-
 #include <qiodevice.h>
 #include <qstring.h>
 #include <qtextstream.h>
+
+#include <treewalker.h>
 
 class Driver;
 class Uic;

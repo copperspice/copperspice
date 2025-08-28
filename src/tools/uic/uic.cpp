@@ -23,16 +23,16 @@
 
 #include <uic.h>
 
-#include <driver.h>
-#include <option.h>
 #include <qfileinfo.h>
 #include <qregularexpression.h>
 #include <qtextstream.h>
 #include <qxmlstreamreader.h>
+
+#include <driver.h>
+#include <option.h>
 #include <treewalker.h>
 #include <ui4.h>
 #include <validator.h>
-
 #include <write_declaration.h>
 #include <write_includes.h>
 

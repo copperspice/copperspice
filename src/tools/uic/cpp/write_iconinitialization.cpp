@@ -23,14 +23,14 @@
 
 #include <write_iconinitialization.h>
 
+#include <qstring.h>
+#include <qtextstream.h>
+
 #include <driver.h>
 #include <ui4.h>
 #include <uic.h>
 #include <utils.h>
 #include <write_icondata.h>
-
-#include <qstring.h>
-#include <qtextstream.h>
 
 namespace CPP {
 

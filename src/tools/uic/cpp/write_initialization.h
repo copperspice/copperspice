@@ -24,8 +24,6 @@
 #ifndef WRITE_INITIALIZATION_H
 #define WRITE_INITIALIZATION_H
 
-#include <treewalker.h>
-
 #include <qhash.h>
 #include <qmap.h>
 #include <qpair.h>
@@ -33,13 +31,15 @@
 #include <qstack.h>
 #include <qtextstream.h>
 
-class Driver;
-class Uic;
+#include <treewalker.h>
+
 class DomBrush;
 class DomFont;
 class DomResourceIcon;
 class DomSizePolicy;
 class DomStringList;
+class Driver;
+class Uic;
 
 struct Option;
 

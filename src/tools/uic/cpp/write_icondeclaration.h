@@ -24,9 +24,9 @@
 #ifndef CPPWRITEICONDECLARATION_H
 #define CPPWRITEICONDECLARATION_H
 
-#include <treewalker.h>
-
 #include <qtextstream.h>
+
+#include <treewalker.h>
 
 class Driver;
 class Uic;

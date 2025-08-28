@@ -24,14 +24,14 @@
 #ifndef CPPEXTRACTIMAGES_H
 #define CPPEXTRACTIMAGES_H
 
+#include <qdir.h>
+
 #include <treewalker.h>
 
-#include <qdir.h>
+class QTextStream;
 
 class Driver;
 class Uic;
-
-class QTextStream;
 
 struct Option;
 

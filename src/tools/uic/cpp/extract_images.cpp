@@ -23,18 +23,18 @@
 
 #include <extract_images.h>
 
-#include <driver.h>
-#include <ui4.h>
-#include <uic.h>
-#include <utils.h>
-#include <write_icondata.h>
-
 #include <qdatastream.h>
 #include <qdir.h>
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qtextcodec.h>
 #include <qtextstream.h>
+
+#include <driver.h>
+#include <ui4.h>
+#include <uic.h>
+#include <utils.h>
+#include <write_icondata.h>
 
 namespace CPP {
 

@@ -23,11 +23,11 @@
 
 #include <write_icondeclaration.h>
 
+#include <qtextstream.h>
+
 #include <driver.h>
 #include <ui4.h>
 #include <uic.h>
-
-#include <qtextstream.h>
 
 namespace CPP {
 

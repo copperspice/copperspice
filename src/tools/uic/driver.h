@@ -24,20 +24,21 @@
 #ifndef DRIVER_H
 #define DRIVER_H
 
-#include <option.h>
 #include <qhash.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qtextstream.h>
 
-class DomUI;
-class DomWidget;
-class DomSpacer;
+#include <option.h>
+
+class DomAction;
+class DomActionGroup;
+class DomButtonGroup;
 class DomLayout;
 class DomLayoutItem;
-class DomActionGroup;
-class DomAction;
-class DomButtonGroup;
+class DomSpacer;
+class DomUI;
+class DomWidget;
 
 class Driver
 {

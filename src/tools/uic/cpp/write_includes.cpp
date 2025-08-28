@@ -23,14 +23,14 @@
 
 #include <write_includes.h>
 
+#include <qfileinfo.h>
+#include <qstring.h>
+#include <qtextstream.h>
+
 #include <databaseinfo.h>
 #include <driver.h>
 #include <ui4.h>
 #include <uic.h>
-
-#include <qfileinfo.h>
-#include <qstring.h>
-#include <qtextstream.h>
 
 #include <stdio.h>
 
