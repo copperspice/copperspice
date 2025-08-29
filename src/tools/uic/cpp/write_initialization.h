@@ -316,15 +316,15 @@ struct WriteInitialization : public TreeWalker
    QHash<QString, DomImage *> m_registeredImages;
    QHash<QString, DomAction *> m_registeredActions;
 
-   typedef QHash<uint, QString> ColorBrushHash;
+   using ColorBrushHash = QHash<uint, QString>;
    ColorBrushHash m_colorBrushHash;
 
    // Map from font properties to  font variable name for reuse
    // Map from size policy to  variable for reuse
 
-   typedef QMap<FontHandle, QString> FontPropertiesNameMap;
-   typedef QMap<IconHandle, QString> IconPropertiesNameMap;
-   typedef QMap<SizePolicyHandle, QString> SizePolicyNameMap;
+   using FontPropertiesNameMap = QMap<FontHandle, QString>;
+   using IconPropertiesNameMap = QMap<IconHandle, QString>;
+   using SizePolicyNameMap     = QMap<SizePolicyHandle, QString>;
 
    FontPropertiesNameMap m_fontPropertiesNameMap;
    IconPropertiesNameMap m_iconPropertiesNameMap;

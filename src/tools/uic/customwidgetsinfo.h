@@ -59,7 +59,8 @@ class CustomWidgetsInfo : public TreeWalker
    bool isCustomWidgetContainer(const QString &className) const;
 
  private:
-   typedef QMap<QString, DomCustomWidget *> NameCustomWidgetMap;
+
+   using NameCustomWidgetMap = QMap<QString, DomCustomWidget*>;
    NameCustomWidgetMap m_customWidgets;
 };
 
