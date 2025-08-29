@@ -868,12 +868,10 @@ void WriteInitialization::acceptWidget(DomWidget *node)
       autoTrOutput(plabelString, pageDefaultString) << m_indent << parentWidget << "->setItemText("
          << parentWidget << "->indexOf(" << varName << "), " << autoTrCall(plabelString, pageDefaultString) << ");\n";
 
-#ifndef QT_NO_TOOLTIP
       if (DomProperty *ptoolTip = attributes.value("toolTip")) {
          autoTrOutput(ptoolTip->elementString()) << m_indent << parentWidget << "->setItemToolTip("
             << parentWidget << "->indexOf(" << varName << "), " << autoTrCall(ptoolTip->elementString()) << ");\n";
       }
-#endif
 
    } else if (m_uic->customWidgetsInfo()->extends(parentClass, "QTabWidget")) {
 
@@ -892,20 +890,15 @@ void WriteInitialization::acceptWidget(DomWidget *node)
       autoTrOutput(ptitleString, pageDefaultString) << m_indent << parentWidget << "->setTabText("
          << parentWidget << "->indexOf(" << varName << "), " << autoTrCall(ptitleString, pageDefaultString) << ");\n";
 
-#ifndef QT_NO_TOOLTIP
       if (const DomProperty *ptoolTip = attributes.value("toolTip")) {
          autoTrOutput(ptoolTip->elementString()) << m_indent << parentWidget << "->setTabToolTip("
             << parentWidget << "->indexOf(" << varName << "), " << autoTrCall(ptoolTip->elementString()) << ");\n";
       }
-#endif
 
-#ifndef QT_NO_WHATSTHIS
       if (const DomProperty *pwhatsThis = attributes.value("whatsThis")) {
          autoTrOutput(pwhatsThis->elementString()) << m_indent << parentWidget << "->setTabWhatsThis("
             << parentWidget << "->indexOf(" << varName << "), " << autoTrCall(pwhatsThis->elementString()) << ");\n";
       }
-#endif
-
    }
 
    // Special handling for qtableview/qtreeview fake header attributes

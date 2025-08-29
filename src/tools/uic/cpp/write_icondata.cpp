@@ -67,7 +67,6 @@ static QByteArray transformImageData(QString data)
 
 static QByteArray unzipXPM(QString data, ulong &length)
 {
-#ifndef QT_NO_COMPRESS
    const int lengthOffset = 4;
    QByteArray ba(lengthOffset, ' ');
 
@@ -80,15 +79,8 @@ static QByteArray unzipXPM(QString data, ulong &length)
    ba.append(transformImageData(data));
 
    QByteArray baunzip = qUncompress(ba);
+
    return baunzip;
-
-#else
-   (void) data;
-   (void) length;
-
-   return QByteArray();
-#endif
-
 }
 
 WriteIconData::WriteIconData(Uic *uic)
