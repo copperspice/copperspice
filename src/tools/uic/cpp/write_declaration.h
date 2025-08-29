@@ -36,7 +36,7 @@ struct Option;
 namespace CPP {
 
 struct WriteDeclaration : public TreeWalker {
-   WriteDeclaration(Uic *uic, bool activateScripts);
+   WriteDeclaration(Uic *uic);
 
    void acceptUI(DomUI *node) override;
    void acceptWidget(DomWidget *node) override;
@@ -51,7 +51,6 @@ struct WriteDeclaration : public TreeWalker {
    Driver *m_driver;
    QTextStream &m_output;
    const Option &m_option;
-   const bool m_activateScripts;
 };
 
 }  // namespace

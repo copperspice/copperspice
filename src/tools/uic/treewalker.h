@@ -58,7 +58,6 @@ class DomRect;
 class DomResource;
 class DomResourcePixmap;
 class DomResources;
-class DomScript;
 class DomSize;
 class DomSizePolicy;
 class DomSpacer;
@@ -95,9 +94,7 @@ struct TreeWalker {
    virtual void acceptTime(DomTime *time);
    virtual void acceptDateTime(DomDateTime *dateTime);
    virtual void acceptProperty(DomProperty *property);
-   typedef QList<DomScript *> DomScripts;
    typedef QList<DomWidget *> DomWidgets;
-   virtual void acceptWidgetScripts(const DomScripts &, DomWidget *node, const  DomWidgets &childWidgets);
    virtual void acceptImages(DomImages *images);
    virtual void acceptImage(DomImage *image);
    virtual void acceptIncludes(DomIncludes *includes);

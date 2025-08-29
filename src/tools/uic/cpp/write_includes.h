@@ -46,7 +46,6 @@ struct WriteIncludes : public TreeWalker {
    void acceptLayout(DomLayout *node) override;
    void acceptSpacer(DomSpacer *node) override;
    void acceptProperty(DomProperty *node) override;
-   void acceptWidgetScripts(const DomScripts &, DomWidget *, const DomWidgets &) override;
 
    // custom widgets
    void acceptCustomWidgets(DomCustomWidgets *node) override;
@@ -56,10 +55,6 @@ struct WriteIncludes : public TreeWalker {
    void acceptIncludes(DomIncludes *node) override;
    void acceptInclude(DomInclude *node) override;
 
-   bool scriptsActivated() const {
-      return m_scriptsActivated;
-   }
-
  private:
    void add(const QString &className, bool determineHeader = true, const QString &header = QString(), bool global = false);
 
@@ -67,7 +62,6 @@ struct WriteIncludes : public TreeWalker {
    void insertInclude(const QString &header, bool global);
    void writeHeaders(const QMap<QString, bool> &headers, bool global);
    QString headerForClassName(const QString &className) const;
-   void activateScripts();
 
    const Uic *m_uic;
    QTextStream &m_output;
@@ -81,7 +75,6 @@ struct WriteIncludes : public TreeWalker {
    QMap<QString, QString> m_classToHeader;
    QMap<QString, QString> m_oldHeaderToNewHeader;
 
-   bool m_scriptsActivated;
    bool m_laidOut;
 };
 

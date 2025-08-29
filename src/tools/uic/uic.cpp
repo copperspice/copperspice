@@ -220,7 +220,7 @@ bool Uic::write(DomUI *ui)
    writeIncludes.acceptUI(ui);
 
    Validator(this).acceptUI(ui);
-   WriteDeclaration(this, writeIncludes.scriptsActivated()).acceptUI(ui);
+   WriteDeclaration(this).acceptUI(ui);
 
    if (opt.headerProtection) {
       writeHeaderProtectionEnd();

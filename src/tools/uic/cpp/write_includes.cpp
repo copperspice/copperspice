@@ -58,7 +58,7 @@ static inline QString modifyHeader(const QString &name, const QString &header)
 namespace CPP {
 
 WriteIncludes::WriteIncludes(Uic *uic)
-   : m_uic(uic), m_output(uic->output()), m_scriptsActivated(false), m_laidOut(false)
+   : m_uic(uic), m_output(uic->output()), m_laidOut(false)
 {
    const QString namespaceDelimiter = "::";
 
@@ -82,7 +82,6 @@ WriteIncludes::WriteIncludes(Uic *uic)
 
 void WriteIncludes::acceptUI(DomUI *node)
 {
-   m_scriptsActivated = false;
    m_laidOut = false;
 
    m_localIncludes.clear();
@@ -229,11 +228,6 @@ void WriteIncludes::acceptCustomWidget(DomCustomWidget *node)
       return;
    }
 
-   if (const DomScript *domScript = node->elementScript())
-      if (! domScript->text().isEmpty()) {
-         activateScripts();
-      }
-
    if (! node->elementHeader() || node->elementHeader()->text().isEmpty()) {
       // no header specified
       add(className, false);
@@ -306,20 +300,5 @@ void WriteIncludes::writeHeaders(const QMap<QString, bool> &headers, bool global
    }
 }
 
-void WriteIncludes::acceptWidgetScripts(const DomScripts &scripts, DomWidget *, const  DomWidgets &)
-{
-   if (! scripts.empty()) {
-      activateScripts();
-   }
-}
-
-void WriteIncludes::activateScripts()
-{
-   if (! m_scriptsActivated) {
-      add("QScriptEngine");
-      add("QDebug");
-      m_scriptsActivated = true;
-   }
-}
 
 }   // namespace

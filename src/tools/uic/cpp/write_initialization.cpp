@@ -143,12 +143,6 @@ void writeSetter(const QString &indent, const QString &varName, const QString &s
    str << indent << varName << "->" << setter << '(' << v << ");\n";
 }
 
-void writeSetupUIScriptVariableDeclarations(const QString &indent, QTextStream &str)
-{
-   str << indent << "ScriptContext scriptContext;\n"
-       << indent << "QWidgetList childWidgets;\n";
-}
-
 static inline bool iconHasStatePixmaps(const DomResourceIcon *i)
 {
    return i->hasElementNormalOff()   || i->hasElementNormalOn() ||
@@ -552,7 +546,7 @@ static bool needsTranslation(const DomElement *element)
    return ! element->hasAttributeNotr() || ! toBool(element->attributeNotr());
 }
 
-WriteInitialization::WriteInitialization(Uic *uic, bool activateScripts)
+WriteInitialization::WriteInitialization(Uic *uic)
    : m_uic(uic), m_driver(uic->driver()), m_output(uic->output()), m_option(uic->option()),
      m_indent(m_option.indent + m_option.indent),
      m_dindent(m_indent + m_option.indent), m_stdsetdef(true),
@@ -560,8 +554,7 @@ WriteInitialization::WriteInitialization(Uic *uic, bool activateScripts)
      m_delayedOut(&m_delayedInitialization, QIODevice::WriteOnly),
      m_refreshOut(&m_refreshInitialization, QIODevice::WriteOnly),
      m_actionOut(&m_delayedActionInitialization, QIODevice::WriteOnly),
-     m_activateScripts(activateScripts), m_layoutWidget(false),
-     m_firstThemeIcon(true)
+     m_layoutWidget(false), m_firstThemeIcon(true)
 {
 }
 
@@ -604,10 +597,6 @@ void WriteInitialization::acceptUI(DomUI *node)
 
    m_output << m_option.indent << "void " << "setupUi(" << widgetClassName << " *" << varName << ")\n"
       << m_option.indent << "{\n";
-
-   if (m_activateScripts) {
-      writeSetupUIScriptVariableDeclarations(m_indent, m_output);
-   }
 
    for (const auto &connection : m_uic->databaseInfo()->connections()) {
       if (connection == "(default)") {
@@ -2838,54 +2827,6 @@ void WriteInitialization::acceptImage(DomImage *image)
    }
 
    m_registeredImages.insert(image->attributeName(), image);
-}
-
-void WriteInitialization::acceptWidgetScripts(const DomScripts &widgetScripts, DomWidget *node,
-   const  DomWidgets &childWidgets)
-{
-   // Add the per-class custom scripts to the per-widget ones.
-   DomScripts scripts(widgetScripts);
-
-   if (DomScript *customWidgetScript = m_uic->customWidgetsInfo()->customWidgetScript(node->attributeClass())) {
-      scripts.push_front(customWidgetScript);
-   }
-
-   if (scripts.empty()) {
-      return;
-   }
-
-   // concatenate script snippets
-   QString script;
-
-   for (const DomScript *domScript : scripts) {
-      const QString snippet = domScript->text();
-
-      if (!snippet.isEmpty()) {
-         script += snippet.trimmed();
-         script += '\n';
-      }
-   }
-
-   if (script.isEmpty()) {
-      return;
-   }
-
-   // Build the list of children and insert call
-   m_output << m_indent << "childWidgets.clear();\n";
-
-   if (! childWidgets.empty()) {
-      m_output << m_indent <<  "childWidgets";
-
-      for (DomWidget *child : childWidgets) {
-         m_output << " << " << m_driver->findOrInsertWidget(child);
-      }
-
-      m_output << ";\n";
-   }
-
-   m_output << m_indent << "scriptContext.run(QString::fromUtf8("
-      << fixString(script, m_dindent) << "), "
-      << m_driver->findOrInsertWidget(node) << ", childWidgets);\n";
 }
 
 static void generateMultiDirectiveBegin(QTextStream &outputStream, const QSet<QString> &directives)

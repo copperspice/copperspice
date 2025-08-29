@@ -30,7 +30,6 @@
 #include <treewalker.h>
 
 class Driver;
-class DomScript;
 
 class CustomWidgetsInfo : public TreeWalker
 {
@@ -53,8 +52,6 @@ class CustomWidgetsInfo : public TreeWalker
    DomCustomWidget *customWidget(const QString &name) const {
       return m_customWidgets.value(name);
    }
-
-   DomScript *customWidgetScript(const QString &name) const;
 
    QString customWidgetAddPageMethod(const QString &name) const;
    QString realClassName(const QString &className) const;

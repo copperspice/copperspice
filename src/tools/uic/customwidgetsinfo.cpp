@@ -100,20 +100,6 @@ QString CustomWidgetsInfo::realClassName(const QString &className) const
    return className;
 }
 
-DomScript *CustomWidgetsInfo::customWidgetScript(const QString &name) const
-{
-   if (m_customWidgets.empty()) {
-      return nullptr;
-   }
-
-   const NameCustomWidgetMap::const_iterator iter = m_customWidgets.constFind(name);
-   if (iter == m_customWidgets.constEnd()) {
-      return nullptr;
-   }
-
-   return iter.value()->elementScript();
-}
-
 QString CustomWidgetsInfo::customWidgetAddPageMethod(const QString &name) const
 {
    if (DomCustomWidget *dcw = m_customWidgets.value(name, nullptr)) {

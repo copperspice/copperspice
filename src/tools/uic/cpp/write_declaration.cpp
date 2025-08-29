@@ -72,46 +72,12 @@ void closeNameSpaces(const QStringList &namespaceList, QTextStream &output)
    }
 }
 
-void writeScriptContextClass(const QString &indent, QTextStream &str)
-{
-   str << indent << "class ScriptContext\n"
-      << indent << "{\n"
-      << indent << "public:\n"
-      << indent << "    void run(const QString &script, QWidget *widget, const QWidgetList &childWidgets)\n"
-      << indent << "    {\n"
-      << indent << "        QScriptValue widgetObject =  scriptEngine.newQObject(widget);\n"
-      << indent << "        QScriptValue childWidgetArray = scriptEngine.newArray (childWidgets.size());\n"
-      << indent << "        for (int i = 0; i < childWidgets.size(); i++)\n"
-      << indent << "               childWidgetArray.setProperty(i, scriptEngine.newQObject(childWidgets[i]));\n"
-      << indent << "        QScriptContext *ctx = scriptEngine.pushContext();\n"
-      << indent << "        ctx ->activationObject().setProperty(\"widget\", widgetObject);\n"
-      << indent << "        ctx ->activationObject().setProperty(\"childWidgets\", childWidgetArray);\n\n"
-      << indent << "        scriptEngine.evaluate(script);\n"
-      << indent << "        if (scriptEngine.hasUncaughtException ()) {\n"
-      << indent <<
-      "            qWarning() << \"An exception occurred at line \" << scriptEngine.uncaughtExceptionLineNumber()\n"
-      << indent <<
-      "                       << \" of the script for \" << widget->objectName() << \": \" << engineError() << '\\n'\n"
-      << indent << "                       << script;\n"
-      << indent << "        }\n\n"
-      << indent << "        scriptEngine.popContext();\n"
-      << indent << "    }\n\n"
-      << indent << "private:\n"
-      << indent << "    QString engineError()\n"
-      << indent << "    {\n"
-      << indent << "        QScriptValue error = scriptEngine.evaluate(\"Error\");\n"
-      << indent << "        return error.toString();\n"
-      << indent << "    }\n\n"
-      << indent << "    QScriptEngine scriptEngine;\n"
-      << indent << "};\n\n";
-}
 }
 
 namespace CPP {
 
-WriteDeclaration::WriteDeclaration(Uic *uic, bool activateScripts)
-   : m_uic(uic), m_driver(uic->driver()), m_output(uic->output()), m_option(uic->option()),
-     m_activateScripts(activateScripts)
+WriteDeclaration::WriteDeclaration(Uic *uic)
+   : m_uic(uic), m_driver(uic->driver()), m_output(uic->output()), m_option(uic->option())
 {
 }
 
@@ -163,7 +129,7 @@ void WriteDeclaration::acceptUI(DomUI *node)
 
    m_output << "\n";
 
-   WriteInitialization(m_uic, m_activateScripts).acceptUI(node);
+   WriteInitialization(m_uic).acceptUI(node);
 
    if (node->elementImages()) {
       if (m_option.extractImages) {
@@ -181,11 +147,6 @@ void WriteDeclaration::acceptUI(DomUI *node)
 
          WriteIconInitialization(m_uic).acceptUI(node);
       }
-   }
-
-   if (m_activateScripts) {
-      m_output << "\nprivate:\n\n";
-      writeScriptContextClass(m_option.indent, m_output);
    }
 
    m_output << "};\n\n";

@@ -113,12 +113,11 @@ struct WriteInitialization : public TreeWalker
    using DomPropertyList = QList<DomProperty *>;
    using DomPropertyMap  = QHash<QString, DomProperty *>;
 
-   WriteInitialization(Uic *uic, bool activateScripts);
+   WriteInitialization(Uic *uic);
 
    // widgets
    void acceptUI(DomUI *node) override;
    void acceptWidget(DomWidget *node) override;
-   void acceptWidgetScripts(const DomScripts &, DomWidget *node, const  DomWidgets &childWidgets) override;
 
    void acceptLayout(DomLayout *node) override;
    void acceptSpacer(DomSpacer *node) override;
@@ -370,7 +369,6 @@ struct WriteInitialization : public TreeWalker
 
    QString m_delayedActionInitialization;
    QTextStream m_actionOut;
-   const bool m_activateScripts;
 
    bool m_layoutWidget;
    bool m_firstThemeIcon;
