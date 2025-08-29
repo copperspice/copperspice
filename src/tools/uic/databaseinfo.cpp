@@ -52,7 +52,7 @@ void DatabaseInfo::acceptWidget(DomWidget *node)
 
    DomProperty *db = properties.value("database", nullptr);
 
-   if (db && db->elementStringList()) {
+   if (db != nullptr && db->elementStringList()) {
       QStringList info = db->elementStringList()->elementString();
 
       QString connection = info.size() > 0 ? info.at(0) : QString();

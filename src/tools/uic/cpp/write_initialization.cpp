@@ -59,7 +59,7 @@ QString toolBarAreaStringFromDOMAttributes(const CPP::WriteInitialization::DomPr
 {
    const DomProperty *pstyle = attributes.value("toolBarArea");
 
-   if (! pstyle) {
+   if (pstyle == nullptr) {
       return QString();
    }
 
@@ -422,7 +422,7 @@ WriteInitialization::LayoutDefaultHandler::LayoutDefaultHandler()
 
 void WriteInitialization::LayoutDefaultHandler::acceptLayoutDefault(DomLayoutDefault *node)
 {
-   if (! node) {
+   if (node == nullptr) {
       return;
    }
 
@@ -439,7 +439,7 @@ void WriteInitialization::LayoutDefaultHandler::acceptLayoutDefault(DomLayoutDef
 
 void WriteInitialization::LayoutDefaultHandler::acceptLayoutFunction(DomLayoutFunction *node)
 {
-   if (!node) {
+   if (node == nullptr) {
       return;
    }
 
@@ -539,7 +539,7 @@ void WriteInitialization::LayoutDefaultHandler::writeProperties(const QString &i
 template <class DomElement>
 static bool needsTranslation(const DomElement *element)
 {
-   if (! element) {
+   if (element == nullptr) {
       return false;
    }
 
@@ -981,7 +981,7 @@ void WriteInitialization::addButtonGroup(const DomWidget *buttonNode, const QStr
    // Look up the button group name as specified in the attribute and find the uniquified name
    const DomProperty *prop = attributes.value("buttonGroup");
 
-   if (! prop) {
+   if (prop == nullptr) {
       return;
    }
 
@@ -1177,7 +1177,7 @@ void WriteInitialization::acceptLayoutItem(DomLayoutItem *node)
 
    DomLayout *layout = m_layoutChain.top();
 
-   if (! layout) {
+   if (layout == nullptr) {
       return;
    }
 
@@ -2015,7 +2015,7 @@ QString WriteInitialization::domColor2QString(const DomColor *c)
 
 void WriteInitialization::writeColorGroup(DomColorGroup *colorGroup, const QString &group, const QString &paletteName)
 {
-   if (! colorGroup) {
+   if (colorGroup == nullptr) {
       return;
    }
 
@@ -2695,7 +2695,7 @@ QString WriteInitialization::trCall(DomString *str, const QString &defaultString
    QString value = defaultString;
    QString comment;
 
-   if (str) {
+   if (str != nullptr) {
       value   = toString(str);
       comment = str->attributeComment();
    }
@@ -2707,11 +2707,11 @@ QString WriteInitialization::noTrCall(DomString *str, const QString &defaultStri
 {
    QString value = defaultString;
 
-   if (!str && defaultString.isEmpty()) {
+   if (str == nullptr && defaultString.isEmpty()) {
       return QString();
    }
 
-   if (str) {
+   if (str != nullptr) {
       value = str->text();
    }
 
@@ -2724,7 +2724,7 @@ QString WriteInitialization::noTrCall(DomString *str, const QString &defaultStri
 
 QString WriteInitialization::autoTrCall(DomString *str, const QString &defaultString) const
 {
-   if ((!str && !defaultString.isEmpty()) || needsTranslation(str)) {
+   if ((str == nullptr && ! defaultString.isEmpty()) || needsTranslation(str)) {
       return trCall(str, defaultString);
    }
 
@@ -2743,7 +2743,7 @@ QTextStream &WriteInitialization::autoTrOutput(const DomProperty *property)
 
 QTextStream &WriteInitialization::autoTrOutput(const DomString *str, const QString &defaultString)
 {
-   if ((!str && !defaultString.isEmpty()) || needsTranslation(str)) {
+   if ((str == nullptr && ! defaultString.isEmpty()) || needsTranslation(str)) {
       return m_refreshOut;
    }
 
