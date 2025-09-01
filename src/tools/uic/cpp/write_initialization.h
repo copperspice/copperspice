@@ -158,9 +158,10 @@ struct WriteInitialization : public TreeWalker
    };
 
  private:
-   enum { WritePropertyIgnoreMargin     = 1,
-          WritePropertyIgnoreSpacing    = 2,
-          WritePropertyIgnoreObjectName = 4
+   enum {
+      WritePropertyIgnoreMargin     = 1,
+      WritePropertyIgnoreSpacing    = 2,
+      WritePropertyIgnoreObjectName = 4
    };
 
    static QString domColor2QString(const DomColor *c);
@@ -346,8 +347,17 @@ struct WriteInitialization : public TreeWalker
          const QString &propertyName, const QString &setter, int defaultStyleValue,
          bool suppressDefault, QTextStream &str) const;
 
-      enum Properties { Margin, Spacing, NumProperties };
-      enum StateFlags { HasDefaultValue = 1, HasDefaultFunction = 2};
+      enum Properties {
+         Margin,
+         Spacing,
+         NumProperties
+      };
+
+      enum StateFlags {
+         HasDefaultValue = 1,
+         HasDefaultFunction = 2
+      };
+
       unsigned m_state[NumProperties];
       int m_defaultValues[NumProperties];
       QString m_functions[NumProperties];
