@@ -36,43 +36,30 @@
 #include <write_iconinitialization.h>
 #include <write_initialization.h>
 
+#include <ranges>
 
 namespace {
 
 void openNameSpaces(const QStringList &namespaceList, QTextStream &output)
 {
-   if (namespaceList.empty()) {
-      return;
-   }
-
-   const QStringList::const_iterator cend = namespaceList.constEnd();
-
-   for (QStringList::const_iterator it = namespaceList.constBegin(); it != cend; ++it) {
-      if (!it->isEmpty()) {
-         output << "namespace " << *it << " {\n";
+   for (const QString &item : namespaceList) {
+      if (! item.isEmpty()) {
+         output << "namespace " << item << " {\n";
       }
    }
 }
 
 void closeNameSpaces(const QStringList &namespaceList, QTextStream &output)
 {
-   if (namespaceList.empty()) {
-      return;
-   }
+   for (const QString &item : namespaceList | std::views::reverse) {
 
-   QListIterator<QString> it(namespaceList);
-   it.toBack();
-
-   while (it.hasPrevious()) {
-      const QString ns = it.previous();
-
-      if (!ns.isEmpty()) {
-         output << "}  // namespace " << ns << "\n";
+      if (! item.isEmpty()) {
+         output << "}  // namespace " << item << "\n";
       }
    }
 }
 
-}
+}  // namespace
 
 namespace CPP {
 
@@ -90,20 +77,20 @@ void WriteDeclaration::acceptUI(DomUI *node)
    QString widgetClassName = node->elementWidget()->attributeClass();
 
    QString exportMacro = node->elementExportMacro();
-   if (!exportMacro.isEmpty()) {
+   if (! exportMacro.isEmpty()) {
       exportMacro.append(' ');
    }
 
    QStringList namespaceList = qualifiedClassName.split("::");
 
-   if (namespaceList.count()) {
+   if (! namespaceList.isEmpty()) {
       className = namespaceList.last();
       namespaceList.removeLast();
    }
 
    openNameSpaces(namespaceList, m_output);
 
-   if (namespaceList.count()) {
+   if (! namespaceList.isEmpty()) {
       m_output << "\n";
    }
 
@@ -112,14 +99,11 @@ void WriteDeclaration::acceptUI(DomUI *node)
             << "public:\n";
 
    const QStringList connections = m_uic->databaseInfo()->connections();
-   for (int i = 0; i < connections.size(); ++i) {
-      const QString connection = connections.at(i);
 
-      if (connection == "(default)") {
-         continue;
+   for (const QString &item : connections) {
+      if (item != "(default)") {
+         m_output << m_option.indent << "QSqlDatabase " << item << "Connection;\n";
       }
-
-      m_output << m_option.indent << "QSqlDatabase " << connection << "Connection;\n";
    }
 
    TreeWalker::acceptWidget(node->elementWidget());
@@ -153,11 +137,11 @@ void WriteDeclaration::acceptUI(DomUI *node)
 
    closeNameSpaces(namespaceList, m_output);
 
-   if (namespaceList.count()) {
+   if (! namespaceList.isEmpty()) {
       m_output << "\n";
    }
 
-   if (m_option.generateNamespace && !m_option.prefix.isEmpty()) {
+   if (m_option.generateNamespace && ! m_option.prefix.isEmpty()) {
       namespaceList.append("Ui");
       openNameSpaces(namespaceList, m_output);
 
@@ -166,7 +150,7 @@ void WriteDeclaration::acceptUI(DomUI *node)
 
       closeNameSpaces(namespaceList, m_output);
 
-      if (namespaceList.count()) {
+      if (! namespaceList.isEmpty()) {
          m_output << "\n";
       }
    }
@@ -180,8 +164,8 @@ void WriteDeclaration::acceptWidget(DomWidget *node)
       className = node->attributeClass();
    }
 
-   m_output << m_option.indent << m_uic->customWidgetsInfo()->realClassName(className) << " *" <<
-      m_driver->findOrInsertWidget(node) << ";\n";
+   m_output << m_option.indent << m_uic->customWidgetsInfo()->realClassName(className) << " *"
+      << m_driver->findOrInsertWidget(node) << ";\n";
 
    TreeWalker::acceptWidget(node);
 }

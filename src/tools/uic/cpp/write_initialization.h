@@ -219,7 +219,8 @@ struct WriteInitialization : public TreeWalker
       }
 
     private:
-      struct ItemData {
+      struct ItemData
+      {
          ItemData()
             : policy(DontGenerate)
          { }
@@ -245,6 +246,7 @@ struct WriteInitialization : public TreeWalker
 
       const QString m_itemClassName;
       const QString m_indent;
+
       QTextStream &m_setupUiStream;
       QTextStream &m_retranslateUiStream;
       Driver *m_driver;
@@ -297,11 +299,11 @@ struct WriteInitialization : public TreeWalker
    QString m_dindent;
    bool m_stdsetdef;
 
-   struct Buddy {
+   struct Buddy
+   {
       Buddy(const QString &oN, const QString &b)
          : objName(oN), buddy(b)
-      {
-      }
+      { }
 
       QString objName;
       QString buddy;
@@ -313,6 +315,7 @@ struct WriteInitialization : public TreeWalker
    QList<Buddy> m_buddies;
 
    QSet<QString> m_buttonGroups;
+
    QHash<QString, DomWidget *> m_registeredWidgets;
    QHash<QString, DomImage *> m_registeredImages;
    QHash<QString, DomAction *> m_registeredActions;

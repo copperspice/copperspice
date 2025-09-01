@@ -68,9 +68,8 @@ class DomUI;
 class DomWidget;
 
 struct TreeWalker {
-   virtual ~TreeWalker()
-   {
-   }
+   TreeWalker() = default;
+   virtual ~TreeWalker() = default;
 
    virtual void acceptUI(DomUI *ui);
    virtual void acceptLayoutDefault(DomLayoutDefault *layoutDefault);

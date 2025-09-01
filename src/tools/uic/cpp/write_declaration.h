@@ -35,7 +35,8 @@ struct Option;
 
 namespace CPP {
 
-struct WriteDeclaration : public TreeWalker {
+struct WriteDeclaration : public TreeWalker
+{
    WriteDeclaration(Uic *uic);
 
    void acceptUI(DomUI *node) override;
@@ -50,6 +51,7 @@ struct WriteDeclaration : public TreeWalker {
    Uic *m_uic;
    Driver *m_driver;
    QTextStream &m_output;
+
    const Option &m_option;
 };
 

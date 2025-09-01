@@ -123,7 +123,7 @@ void TreeWalker::acceptWidget(DomWidget *widget)
 
 void TreeWalker::acceptSpacer(DomSpacer *spacer)
 {
-   for (auto item :  spacer->elementProperty()) {
+   for (auto item : spacer->elementProperty()) {
       acceptProperty(item);
    }
 }

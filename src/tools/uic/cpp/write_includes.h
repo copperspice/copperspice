@@ -68,8 +68,8 @@ struct WriteIncludes : public TreeWalker {
 
    QMap<QString, bool> m_localIncludes;
    QMap<QString, bool> m_globalIncludes;
-   QSet<QString> m_includeBaseNames;
 
+   QSet<QString> m_includeBaseNames;
    QSet<QString> m_knownClasses;
 
    QMap<QString, QString> m_classToHeader;

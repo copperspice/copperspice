@@ -96,18 +96,18 @@ int runUic(int argc, char *argv[])
             showHelp(argv[0]);
             return 1;
          }
+
          driver.option().postfix = QString::fromUtf8(argv[arg]);
 
       } else if (opt == "-tr" || opt == "-translate") {
          ++arg;
-         if (!argv[arg]) {
+
+         if (! argv[arg]) {
             showHelp(argv[0]);
             return 1;
          }
 
          driver.option().translateFunction = QString::fromUtf8(argv[arg]);
-
-
 
       } else if (! fileName) {
          fileName = argv[arg];

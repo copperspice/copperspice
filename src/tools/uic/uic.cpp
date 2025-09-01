@@ -56,6 +56,7 @@ bool Uic::printDependencies()
 
    } else {
       f.setFileName(fileName);
+
       if (! f.open(QIODevice::ReadOnly)) {
          return false;
       }
@@ -72,9 +73,9 @@ bool Uic::printDependencies()
       }
    }
 
-   if (DomIncludes *includes = ui->elementIncludes()) {
-      for (DomInclude *incl : includes->elementInclude()) {
-         QString file = incl->text();
+   if (DomIncludes *item = ui->elementIncludes()) {
+      for (DomInclude *domInc : item->elementInclude()) {
+         QString file = domInc->text();
 
          if (file.isEmpty()) {
             continue;
@@ -84,10 +85,10 @@ bool Uic::printDependencies()
       }
    }
 
-   if (DomCustomWidgets *customWidgets = ui->elementCustomWidgets()) {
-      for (DomCustomWidget *customWidget : customWidgets->elementCustomWidget()) {
+   if (DomCustomWidgets *item = ui->elementCustomWidgets()) {
+      for (DomCustomWidget *widgetItem : item->elementCustomWidget()) {
 
-         if (DomHeader *header = customWidget->elementHeader()) {
+         if (DomHeader *header = widgetItem->elementHeader()) {
             QString file = header->text();
 
             if (file.isEmpty()) {
@@ -108,7 +109,7 @@ void Uic::writeCopyrightHeader(DomUI *ui)
 {
    QString comment = ui->elementComment();
 
-   if (comment.size()) {
+   if (! comment.isEmpty()) {
       out << "/*\n" << comment << "\n*/\n\n";
    }
 
@@ -254,22 +255,22 @@ bool Uic::isToolBar(const QString &className) const
 
 bool Uic::isButton(const QString &className) const
 {
-   return customWidgetsInfo()->extends(className, "QRadioButton")
-        || customWidgetsInfo()->extends(className, "QToolButton")
-        || customWidgetsInfo()->extends(className, "QCheckBox")
-        || customWidgetsInfo()->extends(className, "QPushButton")
-        || customWidgetsInfo()->extends(className, "QCommandLinkButton");
+   return customWidgetsInfo()->extends(className, "QRadioButton") ||
+          customWidgetsInfo()->extends(className, "QToolButton")  ||
+          customWidgetsInfo()->extends(className, "QCheckBox")    ||
+          customWidgetsInfo()->extends(className, "QPushButton")  ||
+          customWidgetsInfo()->extends(className, "QCommandLinkButton");
 }
 
 bool Uic::isContainer(const QString &className) const
 {
-   return customWidgetsInfo()->extends(className, "QStackedWidget")
-        || customWidgetsInfo()->extends(className, "QToolBox")
-        || customWidgetsInfo()->extends(className, "QTabWidget")
-        || customWidgetsInfo()->extends(className, "QScrollArea")
-        || customWidgetsInfo()->extends(className, "QMdiArea")
-        || customWidgetsInfo()->extends(className, "QWizard")
-        || customWidgetsInfo()->extends(className, "QDockWidget");
+   return customWidgetsInfo()->extends(className, "QStackedWidget") ||
+          customWidgetsInfo()->extends(className, "QToolBox")       ||
+          customWidgetsInfo()->extends(className, "QTabWidget")     ||
+          customWidgetsInfo()->extends(className, "QScrollArea")    ||
+          customWidgetsInfo()->extends(className, "QMdiArea")       ||
+          customWidgetsInfo()->extends(className, "QWizard")        ||
+          customWidgetsInfo()->extends(className, "QDockWidget");
 }
 
 bool Uic::isCustomWidgetContainer(const QString &className) const

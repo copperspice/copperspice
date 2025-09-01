@@ -425,6 +425,7 @@ class QDESIGNER_UILIB_EXPORT DomUI
    QString m_comment;
    QString m_exportMacro;
    QString m_class;
+
    DomWidget *m_widget;
    DomLayoutDefault *m_layoutDefault;
    DomLayoutFunction *m_layoutFunction;
@@ -1122,6 +1123,7 @@ class QDESIGNER_UILIB_EXPORT DomImage
    // child element data
    uint m_children;
    DomImageData *m_data;
+
    enum Child {
       Data = 1
    };
@@ -1449,8 +1451,9 @@ class QDESIGNER_UILIB_EXPORT DomCustomWidget
    DomSize *m_sizeHint;
    QString m_addPageMethod;
    int m_container;
-   DomSizePolicyData *m_sizePolicy;
    QString m_pixmap;
+
+   DomSizePolicyData *m_sizePolicy;
    DomProperties *m_properties;
    DomSlots *m_slots;
    DomPropertySpecifications *m_propertyspecifications;

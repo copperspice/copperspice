@@ -138,7 +138,9 @@ void DomUI::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomUI) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
 
          case QXmlStreamReader::StartElement: {
@@ -254,7 +256,7 @@ void DomUI::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -357,7 +359,7 @@ void DomUI::write(QXmlStreamWriter &writer, const QString &tagName) const
       m_buttonGroups->write(writer, "buttongroups");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -709,9 +711,10 @@ DomIncludes::~DomIncludes()
 
 void DomIncludes::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
-      switch (reader.readNext()) {
+   bool finished = false;
 
+   while (! finished && ! reader.hasError()) {
+      switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
 
@@ -745,12 +748,11 @@ void DomIncludes::write(QXmlStreamWriter &writer, const QString &tagName) const
 {
    writer.writeStartElement(tagName.isEmpty() ? QString("includes") : tagName.toLower());
 
-   for (int i = 0; i < m_include.size(); ++i) {
-      DomInclude *v = m_include[i];
-      v->write(writer, "include");
+   for (DomInclude *item : m_include) {
+      item->write(writer, "include");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -803,7 +805,9 @@ void DomInclude::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomInclude) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -816,7 +820,7 @@ void DomInclude::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -839,7 +843,7 @@ void DomInclude::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeAttribute("impldecl", attributeImpldecl());
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -882,7 +886,9 @@ void DomResources::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomResources) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -902,7 +908,7 @@ void DomResources::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -921,12 +927,11 @@ void DomResources::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeAttribute("name", attributeName());
    }
 
-   for (int i = 0; i < m_include.size(); ++i) {
-      DomResource *v = m_include[i];
-      v->write(writer, "include");
+   for (DomResource *item : m_include) {
+      item->write(writer, "include");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -970,7 +975,9 @@ void DomResource::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomResource) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -983,7 +990,7 @@ void DomResource::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -1002,7 +1009,7 @@ void DomResource::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeAttribute("location", attributeLocation());
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -1064,7 +1071,9 @@ void DomActionGroup::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomActionGroup) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -1104,7 +1113,7 @@ void DomActionGroup::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -1123,27 +1132,23 @@ void DomActionGroup::write(QXmlStreamWriter &writer, const QString &tagName) con
       writer.writeAttribute("name", attributeName());
    }
 
-   for (int i = 0; i < m_action.size(); ++i) {
-      DomAction *v = m_action[i];
-      v->write(writer, "action");
+   for (DomAction *item : m_action) {
+      item->write(writer, "action");
    }
 
-   for (int i = 0; i < m_actionGroup.size(); ++i) {
-      DomActionGroup *v = m_actionGroup[i];
-      v->write(writer, "actiongroup");
+   for (DomActionGroup *item : m_actionGroup) {
+      item->write(writer, "actiongroup");
    }
 
-   for (int i = 0; i < m_property.size(); ++i) {
-      DomProperty *v = m_property[i];
-      v->write(writer, "property");
+   for (DomProperty *item : m_property) {
+      item->write(writer, "property");
    }
 
-   for (int i = 0; i < m_attribute.size(); ++i) {
-      DomProperty *v = m_attribute[i];
-      v->write(writer, "attribute");
+   for (DomProperty *item : m_attribute) {
+      item->write(writer, "attribute");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -1224,10 +1229,13 @@ void DomAction::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomAction) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
+
             if (tag == "property") {
                DomProperty *v = new DomProperty();
                v->read(reader);
@@ -1250,7 +1258,7 @@ void DomAction::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -1273,17 +1281,15 @@ void DomAction::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeAttribute("menu", attributeMenu());
    }
 
-   for (int i = 0; i < m_property.size(); ++i) {
-      DomProperty *v = m_property[i];
-      v->write(writer, "property");
+   for (DomProperty *item : m_property) {
+      item->write(writer, "property");
    }
 
-   for (int i = 0; i < m_attribute.size(); ++i) {
-      DomProperty *v = m_attribute[i];
-      v->write(writer, "attribute");
+   for (DomProperty *item : m_property) {
+      item->write(writer, "attribute");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -1304,7 +1310,6 @@ void DomAction::setElementAttribute(const QList<DomProperty *> &a)
 
 void DomActionRef::clear(bool clear_all)
 {
-
    if (clear_all) {
       m_text.clear();
       m_has_attr_name = false;
@@ -1335,7 +1340,9 @@ void DomActionRef::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomActionRef) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -1348,7 +1355,7 @@ void DomActionRef::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -1367,7 +1374,7 @@ void DomActionRef::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeAttribute("name", attributeName());
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -1417,7 +1424,9 @@ void DomButtonGroup::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomButtonGroup) " + name.toString());
    }
 
-   for (bool finished = false; ! finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -1444,7 +1453,7 @@ void DomButtonGroup::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -1463,17 +1472,15 @@ void DomButtonGroup::write(QXmlStreamWriter &writer, const QString &tagName) con
       writer.writeAttribute("name", attributeName());
    }
 
-   for (int i = 0; i < m_property.size(); ++i) {
-      DomProperty *v = m_property[i];
-      v->write(writer, "property");
+   for (DomProperty *item : m_property) {
+      item->write(writer, "property");
    }
 
-   for (int i = 0; i < m_attribute.size(); ++i) {
-      DomProperty *v = m_attribute[i];
-      v->write(writer, "attribute");
+   for (DomProperty *item : m_attribute) {
+      item->write(writer, "attribute");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -1517,7 +1524,9 @@ DomButtonGroups::~DomButtonGroups()
 
 void DomButtonGroups::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -1537,7 +1546,7 @@ void DomButtonGroups::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -1552,12 +1561,11 @@ void DomButtonGroups::write(QXmlStreamWriter &writer, const QString &tagName) co
 {
    writer.writeStartElement(tagName.isEmpty() ? QString("buttongroups") : tagName.toLower());
 
-   for (int i = 0; i < m_buttonGroup.size(); ++i) {
-      DomButtonGroup *v = m_buttonGroup[i];
-      v->write(writer, "buttongroup");
+   for (DomButtonGroup *item : m_buttonGroup) {
+      item->write(writer, "buttongroup");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -1595,7 +1603,9 @@ DomImages::~DomImages()
 
 void DomImages::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -1630,12 +1640,11 @@ void DomImages::write(QXmlStreamWriter &writer, const QString &tagName) const
 {
    writer.writeStartElement(tagName.isEmpty() ? QString("images") : tagName.toLower());
 
-   for (int i = 0; i < m_image.size(); ++i) {
-      DomImage *v = m_image[i];
-      v->write(writer, "image");
+   for (DomImage *item : m_image) {
+      item->write(writer, "image");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -1685,7 +1694,9 @@ void DomImage::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomImage) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -1704,7 +1715,7 @@ void DomImage::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -1797,7 +1808,9 @@ void DomImageData::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomImageData) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -1810,7 +1823,7 @@ void DomImageData::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -1833,7 +1846,7 @@ void DomImageData::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeAttribute("length", QString::number(attributeLength()));
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -1865,7 +1878,9 @@ DomCustomWidgets::~DomCustomWidgets()
 
 void DomCustomWidgets::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -1885,7 +1900,7 @@ void DomCustomWidgets::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -1900,12 +1915,11 @@ void DomCustomWidgets::write(QXmlStreamWriter &writer, const QString &tagName) c
 {
    writer.writeStartElement(tagName.isEmpty() ? QString("customwidgets") : tagName.toLower());
 
-   for (int i = 0; i < m_customWidget.size(); ++i) {
-      DomCustomWidget *v = m_customWidget[i];
-      v->write(writer, "customwidget");
+   for (DomCustomWidget *item : m_customWidget) {
+      item->write(writer, "customwidget");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -1920,7 +1934,6 @@ void DomCustomWidgets::setElementCustomWidget(const QList<DomCustomWidget *> &a)
 
 void DomHeader::clear(bool clear_all)
 {
-
    if (clear_all) {
       m_text.clear();
       m_has_attr_location = false;
@@ -1951,7 +1964,9 @@ void DomHeader::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomHeader) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -1964,7 +1979,7 @@ void DomHeader::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -2037,7 +2052,9 @@ DomCustomWidget::~DomCustomWidget()
 
 void DomCustomWidget::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -2117,7 +2134,7 @@ void DomCustomWidget::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -2176,7 +2193,7 @@ void DomCustomWidget::write(QXmlStreamWriter &writer, const QString &tagName) co
       m_propertyspecifications->write(writer, "propertyspecifications");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -2395,7 +2412,9 @@ DomProperties::~DomProperties()
 
 void DomProperties::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -2430,10 +2449,10 @@ void DomProperties::write(QXmlStreamWriter &writer, const QString &tagName) cons
 {
    writer.writeStartElement(tagName.isEmpty() ? QString("properties") : tagName.toLower());
 
-   for (int i = 0; i < m_property.size(); ++i) {
-      DomPropertyData *v = m_property[i];
-      v->write(writer, "property");
+   for (DomPropertyData *item : m_property) {
+      item->write(writer, "property");
    }
+
    if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
@@ -2479,7 +2498,9 @@ void DomPropertyData::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomPropertyData) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -2492,7 +2513,7 @@ void DomPropertyData::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -2542,7 +2563,9 @@ DomSizePolicyData::~DomSizePolicyData()
 
 void DomSizePolicyData::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -2565,7 +2588,7 @@ void DomSizePolicyData::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -2588,7 +2611,7 @@ void DomSizePolicyData::write(QXmlStreamWriter &writer, const QString &tagName) 
       writer.writeTextElement("verdata", QString::number(m_verData));
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -2659,7 +2682,9 @@ void DomLayoutDefault::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomLayoutDefault) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -2672,7 +2697,7 @@ void DomLayoutDefault::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -2695,7 +2720,7 @@ void DomLayoutDefault::write(QXmlStreamWriter &writer, const QString &tagName) c
       writer.writeAttribute("margin", QString::number(attributeMargin()));
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -2741,7 +2766,9 @@ void DomLayoutFunction::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomLayoutFunction) " + name.toString());
    }
 
-   for (bool finished = false; !finished && ! reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -2754,7 +2781,7 @@ void DomLayoutFunction::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -2777,7 +2804,7 @@ void DomLayoutFunction::write(QXmlStreamWriter &writer, const QString &tagName) 
       writer.writeAttribute("margin", attributeMargin());
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -2807,7 +2834,9 @@ DomTabStops::~DomTabStops()
 
 void DomTabStops::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -2825,7 +2854,7 @@ void DomTabStops::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -2840,12 +2869,11 @@ void DomTabStops::write(QXmlStreamWriter &writer, const QString &tagName) const
 {
    writer.writeStartElement(tagName.isEmpty() ? QString("tabstops") : tagName.toLower());
 
-   for (int i = 0; i < m_tabStop.size(); ++i) {
-      QString v = m_tabStop[i];
-      writer.writeTextElement("tabstop", v);
+   for (const QString &item : m_tabStop) {
+      writer.writeTextElement("tabstop", item);
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -2949,7 +2977,9 @@ void DomLayout::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomLayout) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -2983,7 +3013,7 @@ void DomLayout::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -3026,22 +3056,19 @@ void DomLayout::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeAttribute("columnminimumwidth", attributeColumnMinimumWidth());
    }
 
-   for (int i = 0; i < m_property.size(); ++i) {
-      DomProperty *v = m_property[i];
-      v->write(writer, "property");
+   for (DomProperty *item : m_property) {
+      item->write(writer, "property");
    }
 
-   for (int i = 0; i < m_attribute.size(); ++i) {
-      DomProperty *v = m_attribute[i];
-      v->write(writer, "attribute");
+   for (DomProperty *item : m_attribute) {
+      item->write(writer, "attribute");
    }
 
-   for (int i = 0; i < m_item.size(); ++i) {
-      DomLayoutItem *v = m_item[i];
-      v->write(writer, "item");
+   for (DomLayoutItem *item : m_item) {
+      item->write(writer, "item");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -3149,7 +3176,9 @@ void DomLayoutItem::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomLayoutItem) " + name.toString());
    }
 
-   for (bool finished = false; ! finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -3183,7 +3212,7 @@ void DomLayoutItem::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -3246,7 +3275,7 @@ void DomLayoutItem::write(QXmlStreamWriter &writer, const QString &tagName) cons
          break;
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -3320,7 +3349,9 @@ DomRow::~DomRow()
 
 void DomRow::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -3355,11 +3386,11 @@ void DomRow::write(QXmlStreamWriter &writer, const QString &tagName) const
 {
    writer.writeStartElement(tagName.isEmpty() ? QString("row") : tagName.toLower());
 
-   for (int i = 0; i < m_property.size(); ++i) {
-      DomProperty *v = m_property[i];
-      v->write(writer, "property");
+   for (DomProperty *item : m_property) {
+      item->write(writer, "property");
    }
-   if (!m_text.isEmpty()) {
+
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -3397,10 +3428,13 @@ DomColumn::~DomColumn()
 
 void DomColumn::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && ! reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
+
             if (tag == "property") {
                DomProperty *v = new DomProperty();
                v->read(reader);
@@ -3416,7 +3450,7 @@ void DomColumn::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -3431,12 +3465,11 @@ void DomColumn::write(QXmlStreamWriter &writer, const QString &tagName) const
 {
    writer.writeStartElement(tagName.isEmpty() ? QString("column") : tagName.toLower());
 
-   for (int i = 0; i < m_property.size(); ++i) {
-      DomProperty *v = m_property[i];
-      v->write(writer, "property");
+   for (DomProperty *item : m_property) {
+      item->write(writer, "property");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -3481,6 +3514,7 @@ DomItem::~DomItem()
 {
    qDeleteAll(m_property);
    m_property.clear();
+
    qDeleteAll(m_item);
    m_item.clear();
 }
@@ -3501,7 +3535,9 @@ void DomItem::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomItem) " + name.toString());
    }
 
-   for (bool finished = false; !finished && ! reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -3528,7 +3564,7 @@ void DomItem::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -3551,17 +3587,15 @@ void DomItem::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeAttribute("column", QString::number(attributeColumn()));
    }
 
-   for (int i = 0; i < m_property.size(); ++i) {
-      DomProperty *v = m_property[i];
-      v->write(writer, "property");
+   for (DomProperty *item : m_property) {
+      item->write(writer, "property");
    }
 
-   for (int i = 0; i < m_item.size(); ++i) {
-      DomItem *v = m_item[i];
-      v->write(writer, "item");
+   for (DomItem *item : m_item) {
+      item->write(writer, "item");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -3583,40 +3617,40 @@ void DomItem::setElementItem(const QList<DomItem *> &a)
 void DomWidget::clear(bool clear_all)
 {
    m_class.clear();
-   qDeleteAll(m_property);
 
+   qDeleteAll(m_property);
    m_property.clear();
 
    qDeleteAll(m_widgetData);
-
    m_widgetData.clear();
+
    qDeleteAll(m_attribute);
-
    m_attribute.clear();
+
    qDeleteAll(m_row);
-
    m_row.clear();
+
    qDeleteAll(m_column);
-
    m_column.clear();
+
    qDeleteAll(m_item);
-
    m_item.clear();
+
    qDeleteAll(m_layout);
-
    m_layout.clear();
+
    qDeleteAll(m_widget);
-
    m_widget.clear();
+
    qDeleteAll(m_action);
-
    m_action.clear();
+
    qDeleteAll(m_actionGroup);
-
    m_actionGroup.clear();
-   qDeleteAll(m_addAction);
 
+   qDeleteAll(m_addAction);
    m_addAction.clear();
+
    m_zOrder.clear();
 
    if (clear_all) {
@@ -3642,40 +3676,40 @@ DomWidget::DomWidget()
 DomWidget::~DomWidget()
 {
    m_class.clear();
-   qDeleteAll(m_property);
 
+   qDeleteAll(m_property);
    m_property.clear();
 
    qDeleteAll(m_widgetData);
-
    m_widgetData.clear();
+
    qDeleteAll(m_attribute);
-
    m_attribute.clear();
+
    qDeleteAll(m_row);
-
    m_row.clear();
+
    qDeleteAll(m_column);
-
    m_column.clear();
+
    qDeleteAll(m_item);
-
    m_item.clear();
+
    qDeleteAll(m_layout);
-
    m_layout.clear();
+
    qDeleteAll(m_widget);
-
    m_widget.clear();
+
    qDeleteAll(m_action);
-
    m_action.clear();
+
    qDeleteAll(m_actionGroup);
-
    m_actionGroup.clear();
-   qDeleteAll(m_addAction);
 
+   qDeleteAll(m_addAction);
    m_addAction.clear();
+
    m_zOrder.clear();
 }
 
@@ -3701,7 +3735,9 @@ void DomWidget::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomWidget) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -3752,36 +3788,42 @@ void DomWidget::read(QXmlStreamReader &reader)
                m_item.append(v);
                continue;
             }
+
             if (tag == "layout") {
                DomLayout *v = new DomLayout();
                v->read(reader);
                m_layout.append(v);
                continue;
             }
+
             if (tag == "widget") {
                DomWidget *v = new DomWidget();
                v->read(reader);
                m_widget.append(v);
                continue;
             }
+
             if (tag == "action") {
                DomAction *v = new DomAction();
                v->read(reader);
                m_action.append(v);
                continue;
             }
+
             if (tag == "actiongroup") {
                DomActionGroup *v = new DomActionGroup();
                v->read(reader);
                m_actionGroup.append(v);
                continue;
             }
+
             if (tag == "addaction") {
                DomActionRef *v = new DomActionRef();
                v->read(reader);
                m_addAction.append(v);
                continue;
             }
+
             if (tag == "zorder") {
                m_zOrder.append(reader.readElementText());
                continue;
@@ -3795,7 +3837,7 @@ void DomWidget::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -3822,71 +3864,59 @@ void DomWidget::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeAttribute("native", (attributeNative() ? QString("true") : QString("false")));
    }
 
-   for (int i = 0; i < m_class.size(); ++i) {
-      QString v = m_class[i];
-      writer.writeTextElement("class", v);
+   for (const QString &item : m_class) {
+      writer.writeTextElement("class", item);
    }
 
-   for (int i = 0; i < m_property.size(); ++i) {
-      DomProperty *v = m_property[i];
-      v->write(writer, "property");
+   for (DomProperty *item : m_property) {
+      item->write(writer, "property");
    }
 
-   for (int i = 0; i < m_widgetData.size(); ++i) {
-      DomWidgetData *v = m_widgetData[i];
-      v->write(writer, "widgetdata");
+   for (DomWidgetData * item : m_widgetData) {
+      item->write(writer, "widgetdata");
    }
 
-   for (int i = 0; i < m_attribute.size(); ++i) {
-      DomProperty *v = m_attribute[i];
-      v->write(writer, "attribute");
+   for (DomProperty *item : m_attribute) {
+      item->write(writer, "attribute");
    }
 
-   for (int i = 0; i < m_row.size(); ++i) {
-      DomRow *v = m_row[i];
-      v->write(writer, "row");
+   for (DomRow *item : m_row) {
+      item->write(writer, "row");
    }
 
-   for (int i = 0; i < m_column.size(); ++i) {
-      DomColumn *v = m_column[i];
-      v->write(writer, "column");
+   for (DomColumn *item : m_column) {
+      item->write(writer, "column");
    }
 
-   for (int i = 0; i < m_item.size(); ++i) {
-      DomItem *v = m_item[i];
-      v->write(writer, "item");
+   for (DomItem *item : m_item) {
+      item->write(writer, "item");
    }
 
-   for (int i = 0; i < m_layout.size(); ++i) {
-      DomLayout *v = m_layout[i];
-      v->write(writer, "layout");
+   for (DomLayout *item : m_layout) {
+      item->write(writer, "layout");
    }
 
-   for (int i = 0; i < m_widget.size(); ++i) {
-      DomWidget *v = m_widget[i];
-      v->write(writer, "widget");
+   for (DomWidget *item : m_widget) {
+      item->write(writer, "widget");
    }
 
-   for (int i = 0; i < m_action.size(); ++i) {
-      DomAction *v = m_action[i];
-      v->write(writer, "action");
+   for (DomAction *item : m_action) {
+      item->write(writer, "action");
    }
 
-   for (int i = 0; i < m_actionGroup.size(); ++i) {
-      DomActionGroup *v = m_actionGroup[i];
-      v->write(writer, "actiongroup");
+   for (DomActionGroup *item : m_actionGroup) {
+      item->write(writer, "actiongroup");
    }
 
-   for (int i = 0; i < m_addAction.size(); ++i) {
-      DomActionRef *v = m_addAction[i];
-      v->write(writer, "addaction");
+   for (DomActionRef *item : m_addAction) {
+      item->write(writer, "addaction");
    }
 
-   for (int i = 0; i < m_zOrder.size(); ++i) {
-      QString v = m_zOrder[i];
-      writer.writeTextElement("zorder", v);
+   for (const QString &item : m_zOrder) {
+      writer.writeTextElement("zorder", item);
    }
-   if (!m_text.isEmpty()) {
+
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -4000,6 +4030,7 @@ void DomSpacer::read(QXmlStreamReader &reader)
 {
    for (const QXmlStreamAttribute &attribute : reader.attributes()) {
       QStringView name = attribute.name();
+
       if (name == "name") {
          setAttributeName(attribute.value().toString());
          continue;
@@ -4007,10 +4038,13 @@ void DomSpacer::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomSpacer) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
+
             if (tag == "property") {
                DomProperty *v = new DomProperty();
                v->read(reader);
@@ -4045,12 +4079,11 @@ void DomSpacer::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeAttribute("name", attributeName());
    }
 
-   for (int i = 0; i < m_property.size(); ++i) {
-      DomProperty *v = m_property[i];
-      v->write(writer, "property");
+   for (DomProperty *item : m_property) {
+      item->write(writer, "property");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -4095,6 +4128,7 @@ void DomColor::read(QXmlStreamReader &reader)
 {
    for (const QXmlStreamAttribute &attribute : reader.attributes()) {
       QStringView name = attribute.name();
+
       if (name == "alpha") {
          setAttributeAlpha(attribute.value().toString().toInteger<int>());
          continue;
@@ -4102,7 +4136,9 @@ void DomColor::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomColor) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -4130,7 +4166,7 @@ void DomColor::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -4161,7 +4197,7 @@ void DomColor::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeTextElement("blue", QString::number(m_blue));
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -4239,7 +4275,9 @@ void DomGradientStop::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomGradientStop) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -4259,7 +4297,7 @@ void DomGradientStop::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -4282,7 +4320,7 @@ void DomGradientStop::write(QXmlStreamWriter &writer, const QString &tagName) co
       m_color->write(writer, "color");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -4451,7 +4489,9 @@ void DomGradient::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomGradient) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -4471,7 +4511,7 @@ void DomGradient::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -4538,12 +4578,11 @@ void DomGradient::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeAttribute("coordinatemode", attributeCoordinateMode());
    }
 
-   for (int i = 0; i < m_gradientStop.size(); ++i) {
-      DomGradientStop *v = m_gradientStop[i];
-      v->write(writer, "gradientstop");
+   for (DomGradientStop *item : m_gradientStop) {
+      item->write(writer, "gradientstop");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -4602,7 +4641,9 @@ void DomBrush::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomBrush) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -4636,7 +4677,7 @@ void DomBrush::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -4684,7 +4725,7 @@ void DomBrush::write(QXmlStreamWriter &writer, const QString &tagName) const
          break;
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -4770,7 +4811,9 @@ void DomColorRole::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomColorRole) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -4813,7 +4856,7 @@ void DomColorRole::write(QXmlStreamWriter &writer, const QString &tagName) const
       m_brush->write(writer, "brush");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -4871,7 +4914,9 @@ DomColorGroup::~DomColorGroup()
 
 void DomColorGroup::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; ! finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -4898,7 +4943,7 @@ void DomColorGroup::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -4913,14 +4958,12 @@ void DomColorGroup::write(QXmlStreamWriter &writer, const QString &tagName) cons
 {
    writer.writeStartElement(tagName.isEmpty() ? QString("colorgroup") : tagName.toLower());
 
-   for (int i = 0; i < m_colorRole.size(); ++i) {
-      DomColorRole *v = m_colorRole[i];
-      v->write(writer, "colorrole");
+   for (DomColorRole *item : m_colorRole) {
+      item->write(writer, "colorrole");
    }
 
-   for (int i = 0; i < m_color.size(); ++i) {
-      DomColor *v = m_color[i];
-      v->write(writer, "color");
+   for (DomColor *item : m_color) {
+      item->write(writer, "color");
    }
 
    if (! m_text.isEmpty()) {
@@ -4975,7 +5018,9 @@ DomPalette::~DomPalette()
 
 void DomPalette::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -5009,7 +5054,7 @@ void DomPalette::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -5036,7 +5081,7 @@ void DomPalette::write(QXmlStreamWriter &writer, const QString &tagName) const
       m_disabled->write(writer, "disabled");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -5145,7 +5190,9 @@ DomFont::~DomFont()
 
 void DomFont::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -5208,7 +5255,7 @@ void DomFont::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -5404,7 +5451,9 @@ DomPoint::~DomPoint()
 
 void DomPoint::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -5427,7 +5476,7 @@ void DomPoint::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -5450,7 +5499,7 @@ void DomPoint::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeTextElement("y", QString::number(m_y));
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -5507,7 +5556,9 @@ DomRect::~DomRect()
 
 void DomRect::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; ! finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -5540,7 +5591,7 @@ void DomRect::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -5571,7 +5622,7 @@ void DomRect::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeTextElement("height", QString::number(m_height));
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -5662,7 +5713,9 @@ void DomLocale::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute (DomLocale) " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -5698,7 +5751,7 @@ void DomLocale::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeAttribute("country", attributeCountry());
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -5751,7 +5804,9 @@ void DomSizePolicy::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -5823,7 +5878,7 @@ void DomSizePolicy::write(QXmlStreamWriter &writer, const QString &tagName) cons
       writer.writeTextElement("verstretch", QString::number(m_verStretch));
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -5898,7 +5953,9 @@ DomSize::~DomSize()
 
 void DomSize::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -5921,7 +5978,7 @@ void DomSize::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -5944,7 +6001,7 @@ void DomSize::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeTextElement("height", QString::number(m_height));
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -5999,7 +6056,9 @@ DomDate::~DomDate()
 
 void DomDate::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -6027,7 +6086,7 @@ void DomDate::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -6054,7 +6113,7 @@ void DomDate::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeTextElement("day", QString::number(m_day));
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -6120,7 +6179,9 @@ DomTime::~DomTime()
 
 void DomTime::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -6148,7 +6209,7 @@ void DomTime::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -6175,7 +6236,7 @@ void DomTime::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeTextElement("second", QString::number(m_second));
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -6247,7 +6308,9 @@ DomDateTime::~DomDateTime()
 
 void DomDateTime::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -6329,7 +6392,7 @@ void DomDateTime::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeTextElement("day", QString::number(m_day));
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -6452,7 +6515,9 @@ void DomStringList::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -6470,7 +6535,7 @@ void DomStringList::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -6497,12 +6562,11 @@ void DomStringList::write(QXmlStreamWriter &writer, const QString &tagName) cons
         writer.writeAttribute("extracomment", attributeExtraComment());
    }
 
-   for (int i = 0; i < m_string.size(); ++i) {
-      QString v = m_string[i];
-      writer.writeTextElement("string", v);
+   for (const QString &item : m_string) {
+      writer.writeTextElement("string", item);
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -6556,7 +6620,9 @@ void DomResourcePixmap::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -6569,7 +6635,7 @@ void DomResourcePixmap::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -6671,7 +6737,9 @@ void DomResourceIcon::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -6740,7 +6808,7 @@ void DomResourceIcon::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -6795,7 +6863,7 @@ void DomResourceIcon::write(QXmlStreamWriter &writer, const QString &tagName) co
       m_selectedOn->write(writer, "selectedon");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -7026,10 +7094,10 @@ void DomString::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute " + name.toString());
    }
 
-   for (bool finished = false; ! finished && ! reader.hasError();) {
+   bool finished = false;
 
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
-
          case QXmlStreamReader::StartElement:  {
             const QString tag = reader.name().toString().toLower();
             reader.raiseError("Unexpected element " + tag);
@@ -7069,7 +7137,7 @@ void DomString::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeAttribute("extracomment", attributeExtraComment());
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -7100,7 +7168,9 @@ DomPointF::~DomPointF()
 
 void DomPointF::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -7124,7 +7194,7 @@ void DomPointF::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -7147,7 +7217,7 @@ void DomPointF::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeTextElement("y", QString::number(m_y, 'f', 15));
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -7204,7 +7274,9 @@ DomRectF::~DomRectF()
 
 void DomRectF::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -7236,7 +7308,7 @@ void DomRectF::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -7267,7 +7339,7 @@ void DomRectF::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeTextElement("height", QString::number(m_height, 'f', 15));
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -7342,7 +7414,9 @@ DomSizeF::~DomSizeF()
 
 void DomSizeF::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -7365,7 +7439,7 @@ void DomSizeF::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -7388,7 +7462,7 @@ void DomSizeF::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeTextElement("height", QString::number(m_height, 'f', 15));
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -7419,7 +7493,6 @@ void DomSizeF::clearElementHeight()
 
 void DomChar::clear(bool clear_all)
 {
-
    if (clear_all) {
       m_text.clear();
    }
@@ -7440,7 +7513,9 @@ DomChar::~DomChar()
 
 void DomChar::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -7458,7 +7533,7 @@ void DomChar::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -7477,7 +7552,7 @@ void DomChar::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeTextElement("unicode", QString::number(m_unicode));
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -7520,7 +7595,9 @@ DomUrl::~DomUrl()
 
 void DomUrl::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -7540,7 +7617,7 @@ void DomUrl::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -7559,7 +7636,7 @@ void DomUrl::write(QXmlStreamWriter &writer, const QString &tagName) const
       m_string->write(writer, "string");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -7729,7 +7806,9 @@ void DomProperty::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -7948,7 +8027,7 @@ void DomProperty::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -8144,6 +8223,7 @@ void DomProperty::write(QXmlStreamWriter &writer, const QString &tagName) const
          }
          break;
       }
+
       case RectF: {
          DomRectF *v = elementRectF();
          if (v != nullptr) {
@@ -8613,7 +8693,9 @@ DomConnections::~DomConnections()
 
 void DomConnections::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -8633,7 +8715,7 @@ void DomConnections::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -8648,12 +8730,11 @@ void DomConnections::write(QXmlStreamWriter &writer, const QString &tagName) con
 {
    writer.writeStartElement(tagName.isEmpty() ? QString("connections") : tagName.toLower());
 
-   for (int i = 0; i < m_connection.size(); ++i) {
-      DomConnection *v = m_connection[i];
-      v->write(writer, "connection");
+   for (DomConnection *item : m_connection) {
+      item->write(writer, "connection");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -8691,7 +8772,9 @@ DomConnection::~DomConnection()
 
 void DomConnection::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -8731,7 +8814,7 @@ void DomConnection::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -8766,7 +8849,7 @@ void DomConnection::write(QXmlStreamWriter &writer, const QString &tagName) cons
       m_hints->write(writer, "hints");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -8864,7 +8947,9 @@ DomConnectionHints::~DomConnectionHints()
 
 void DomConnectionHints::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -8884,7 +8969,7 @@ void DomConnectionHints::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -8899,12 +8984,11 @@ void DomConnectionHints::write(QXmlStreamWriter &writer, const QString &tagName)
 {
    writer.writeStartElement(tagName.isEmpty() ? QString("connectionhints") : tagName.toLower());
 
-   for (int i = 0; i < m_hint.size(); ++i) {
-      DomConnectionHint *v = m_hint[i];
-      v->write(writer, "hint");
+   for (DomConnectionHint *item : m_hint) {
+      item->write(writer, "hint");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -8953,7 +9037,9 @@ void DomConnectionHint::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute " + name.toString());
    }
 
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -8974,7 +9060,7 @@ void DomConnectionHint::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -9001,7 +9087,7 @@ void DomConnectionHint::write(QXmlStreamWriter &writer, const QString &tagName) 
       writer.writeTextElement("y", QString::number(m_y));
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -9055,10 +9141,13 @@ DomWidgetData::~DomWidgetData()
 
 void DomWidgetData::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
+
             if (tag == "property") {
                DomProperty *v = new DomProperty();
                v->read(reader);
@@ -9074,7 +9163,7 @@ void DomWidgetData::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -9089,12 +9178,11 @@ void DomWidgetData::write(QXmlStreamWriter &writer, const QString &tagName) cons
 {
    writer.writeStartElement(tagName.isEmpty() ? QString("widgetdata") : tagName.toLower());
 
-   for (int i = 0; i < m_property.size(); ++i) {
-      DomProperty *v = m_property[i];
-      v->write(writer, "property");
+   for (DomProperty *item : m_property) {
+      item->write(writer, "property");
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -9132,7 +9220,9 @@ DomDesignerData::~DomDesignerData()
 
 void DomDesignerData::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement : {
             const QString tag = reader.name().toString().toLower();
@@ -9152,7 +9242,7 @@ void DomDesignerData::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -9167,11 +9257,11 @@ void DomDesignerData::write(QXmlStreamWriter &writer, const QString &tagName) co
 {
    writer.writeStartElement(tagName.isEmpty() ? QString("designerdata") : tagName.toLower());
 
-   for (int i = 0; i < m_property.size(); ++i) {
-      DomProperty *v = m_property[i];
-      v->write(writer, "property");
+   for (DomProperty *item : m_property) {
+      item->write(writer, "property");
    }
-   if (!m_text.isEmpty()) {
+
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -9209,7 +9299,9 @@ DomSlots::~DomSlots()
 
 void DomSlots::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -9231,7 +9323,7 @@ void DomSlots::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -9246,17 +9338,15 @@ void DomSlots::write(QXmlStreamWriter &writer, const QString &tagName) const
 {
    writer.writeStartElement(tagName.isEmpty() ? QString("slots") : tagName.toLower());
 
-   for (int i = 0; i < m_signal.size(); ++i) {
-      QString v = m_signal[i];
-      writer.writeTextElement("signal", v);
+   for (const QString &item : m_signal) {
+      writer.writeTextElement("signal", item);
    }
 
-   for (int i = 0; i < m_slot.size(); ++i) {
-      QString v = m_slot[i];
-      writer.writeTextElement("slot", v);
+   for (const QString &item : m_slot) {
+      writer.writeTextElement("slot", item);
    }
 
-   if (!m_text.isEmpty()) {
+   if (! m_text.isEmpty()) {
       writer.writeCharacters(m_text);
    }
 
@@ -9300,7 +9390,9 @@ DomPropertySpecifications::~DomPropertySpecifications()
 
 void DomPropertySpecifications::read(QXmlStreamReader &reader)
 {
-   for (bool finished = false; !finished && !reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -9320,7 +9412,7 @@ void DomPropertySpecifications::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
@@ -9335,9 +9427,8 @@ void DomPropertySpecifications::write(QXmlStreamWriter &writer, const QString &t
 {
    writer.writeStartElement(tagName.isEmpty() ? QString("propertyspecifications") : tagName.toLower());
 
-   for (int i = 0; i < m_stringpropertyspecification.size(); ++i) {
-      DomStringPropertySpecification *v = m_stringpropertyspecification[i];
-      v->write(writer, "stringpropertyspecification");
+   for (DomStringPropertySpecification *item : m_stringpropertyspecification) {
+      item->write(writer, "stringpropertyspecification");
    }
 
    if (! m_text.isEmpty()) {
@@ -9405,7 +9496,9 @@ void DomStringPropertySpecification::read(QXmlStreamReader &reader)
       reader.raiseError("Unexpected attribute " + name.toString());
    }
 
-   for (bool finished = false; ! finished && ! reader.hasError();) {
+   bool finished = false;
+
+   while (! finished && ! reader.hasError()) {
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
@@ -9418,7 +9511,7 @@ void DomStringPropertySpecification::read(QXmlStreamReader &reader)
             break;
 
          case QXmlStreamReader::Characters:
-            if (!reader.isWhitespace()) {
+            if (! reader.isWhitespace()) {
                m_text.append(reader.text().toString());
             }
             break;
