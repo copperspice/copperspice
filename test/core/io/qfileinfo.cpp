@@ -172,10 +172,9 @@ TEST_CASE("QFileInfo permissions_flags", "[qfileinfo]")
    REQUIRE(fi.isExecutable() == false);
 }
 
-#ifndef Q_OS_WIN
-
 TEST_CASE("QFileInfo symbolic_link", "[qfileinfo]")
 {
+#ifndef Q_OS_WIN
    QTemporaryFile tmpFile;
    tmpFile.open();
 
@@ -198,6 +197,5 @@ TEST_CASE("QFileInfo symbolic_link", "[qfileinfo]")
    REQUIRE(linkInfo.symLinkTarget() == QFileInfo(fName).absoluteFilePath());
 
    QFile::remove(symlink);
-}
-
 #endif
+}
