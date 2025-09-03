@@ -36,19 +36,31 @@ TEST_CASE("QVector append", "[qvector]")
 {
    QVector<QString> v = { "watermelon", "apple", "pear", "grapefruit" };
 
+   //
    v.append("quince");
 
-   REQUIRE(v.contains("quince"));
+   REQUIRE(v.contains("quince") == true);
    REQUIRE(v.at(4) == "quince");
    REQUIRE(v[4] == "quince");
+
    REQUIRE(v.length() == 5);
 
+   //
    v.push_back("orange");
 
-   REQUIRE(v.contains("orange"));
+   REQUIRE(v.contains("orange") == true);
    REQUIRE(v.at(5) == "orange");
    REQUIRE(v[5] == "orange");
+
    REQUIRE(v.length() == 6);
+
+   //
+   v.append(QVector<QString>{ "grape", "cherry" });
+
+   REQUIRE(v == QVector<QString>{ "watermelon", "apple", "pear", "grapefruit", "quince", "orange", "grape", "cherry" });
+   REQUIRE(v.at(7) == "cherry");
+
+   REQUIRE(v.length() == 8);
 }
 
 TEST_CASE("QVector clear", "[qvector]")
@@ -57,14 +69,23 @@ TEST_CASE("QVector clear", "[qvector]")
 
    v.clear();
 
+   REQUIRE(v.isEmpty() == true);
    REQUIRE(v.size() == 0);
 }
 
 TEST_CASE("QVector constructor", "[qvector]")
 {
    {
-      QVector<int> v(5);
+      QVector<int> v;
 
+      REQUIRE(v.isEmpty() == true);
+      REQUIRE(v.size() == 0);
+   }
+
+   {
+      QVector<int> v(5);               //  uses size_type constructor
+
+      REQUIRE(v.isEmpty() == false);
       REQUIRE(v.size() == 5);
 
       for (int value : v) {
@@ -73,18 +94,31 @@ TEST_CASE("QVector constructor", "[qvector]")
    }
 
    {
+      QVector<int> v{5};               //  uses an initializer list
+
+      REQUIRE(v.isEmpty() == false);
+      REQUIRE(v.size() == 1);
+
+      for (int value : v) {
+         REQUIRE(value == 5);
+      }
+   }
+
+   {
       QVector<int> v(4, 7);
 
+      REQUIRE(v.isEmpty() == false);
       REQUIRE(v.size() == 4);
 
-      for (int val : v) {
-         REQUIRE(val == 7);
+      for (int value : v) {
+         REQUIRE(value == 7);
       }
    }
 
    {
       QVector<QString> v { "apple", "banana", "cherry" };
 
+      REQUIRE(v.isEmpty() == false);
       REQUIRE(v.size() == 3);
 
       REQUIRE(v.at(0) == "apple");
@@ -97,8 +131,8 @@ TEST_CASE("QVector contains_a", "[qvector]")
 {
    QVector<QString> v = { "watermelon", "apple", "pear", "grapefruit" };
 
-   REQUIRE(v.contains("pear"));
-   REQUIRE(! v.contains("orange"));
+   REQUIRE(v.contains("pear")   == true);
+   REQUIRE(v.contains("orange") == false);
 }
 
 TEST_CASE("QVector contains_b", "[qvector]")
@@ -173,17 +207,25 @@ TEST_CASE("QVector comparison", "[qvector]")
 {
    QVector<QString> v1 = { "watermelon", "apple", "pear", "grapefruit" };
    QVector<QString> v2 = { "watermelon", "apple", "pear", "grapefruit" };
+   QVector<QString> v3 = { "orange", "pineapple", "quince", "blackberry" };
 
    REQUIRE(v1 == v2);
    REQUIRE(! (v1 != v2));
+
+   REQUIRE(v1 != v3);
 }
 
 TEST_CASE("QVector empty", "[qvector]")
 {
    QVector<QString> v;
 
-   REQUIRE(v.isEmpty());
+   REQUIRE(v.empty() == true);
    REQUIRE(v.size() == 0);
+
+   v.append("apple");
+
+   REQUIRE(v.empty() == false);
+   REQUIRE(v.size() == 1);
 }
 
 TEST_CASE("QVector erase", "[qvector]")
@@ -192,13 +234,44 @@ TEST_CASE("QVector erase", "[qvector]")
 
    v.erase(v.begin() + 1);
 
-   REQUIRE(! v.contains("apple"));
+   REQUIRE(v.contains("apple") == false);
 
    REQUIRE(v.contains("watermelon"));
    REQUIRE(v.contains("pear"));
    REQUIRE(v.contains("grapefruit"));
 
    REQUIRE(v.length() == 3);
+}
+
+TEST_CASE("QVector fill", "[qvector]")
+{
+   QVector<int> v;
+
+   //
+   v.fill(7, 5);
+
+   REQUIRE(v.size() == 5);
+
+   for (int value : v) {
+      REQUIRE(value == 7);
+   }
+
+   //
+   v = QVector<int>{1, 2, 3};
+   v.fill(9);
+
+   REQUIRE(v.size() == 3);
+
+   for (int value : v) {
+      REQUIRE(value == 9);
+   }
+
+   //
+   v = QVector<int>();
+   v.fill(42, 0);
+
+   REQUIRE(v.isEmpty() == true);
+   REQUIRE(v.size() == 0);
 }
 
 TEST_CASE("QVector indexOf_a", "[qvector]")
@@ -244,12 +317,99 @@ TEST_CASE("QVector insert", "[qvector]")
    REQUIRE(v.length() == 5);
 }
 
+TEST_CASE("QVector iterators", "[qvector]")
+{
+   QVector<int> v{ 10, 20, 30, 40 };
+
+   //
+   auto iter = v.cbegin();
+   REQUIRE(*iter == 10);
+
+   ++iter;
+   REQUIRE(*iter == 20);
+
+   //
+   auto r_iter = v.crbegin();
+   REQUIRE(*r_iter == 40);
+
+   ++r_iter;
+   REQUIRE(*r_iter == 30);
+}
+
 TEST_CASE("QVector length", "[qvector]")
 {
    QVector<QString> v = { "watermelon", "apple", "pear", "grapefruit" };
 
    REQUIRE(v.length() == 4);
    REQUIRE(v.size() == 4);
+}
+
+TEST_CASE("QVector mid", "[qvector]")
+{
+   QVector<int> v1{ 10, 20, 30, 40, 50 };
+
+   {
+      QVector<int> v2 = v1.mid(2);
+      REQUIRE(v2 == QVector<int>{30, 40, 50});
+   }
+
+   {
+      QVector<int> v2 = v1.mid(1, 3);
+      REQUIRE(v2 == QVector<int>{20, 30, 40});
+   }
+
+   {
+      QVector<int> v2 = v1.mid(3, 10);
+      REQUIRE(v2 == QVector<int>{40, 50});
+   }
+
+   {
+      QVector<int> v2 = v1.mid(10);
+      REQUIRE(v2.isEmpty() == true);
+   }
+}
+
+TEST_CASE("QVector move", "[qvector]")
+{
+
+   QVector<QString> v = { "watermelon", "apple", "pear", "grapefruit" };
+
+   //
+   v.move(0, 2);
+
+   REQUIRE(v == QVector<QString>{ "apple", "pear", "watermelon", "grapefruit" });
+
+   //
+   v.move(3, 1);
+
+   REQUIRE(v == QVector<QString>{ "apple", "grapefruit", "pear", "watermelon" });
+
+   //
+   v.move(2, 2);
+
+   REQUIRE(v == QVector<QString>{ "apple", "grapefruit", "pear", "watermelon" });
+}
+
+TEST_CASE("QVector operator", "[qvector]")
+{
+   QVector<int> v1 { 10, 20, 30 };
+   QVector<int> v2 { 40, 50 };
+
+   //
+   v1 += v2;
+
+   REQUIRE(v1 == QVector<int>{ 10, 20, 30, 40, 50 });
+
+   //
+   v1 += 200;
+
+   REQUIRE(v1 == QVector<int>{ 10, 20, 30, 40, 50, 200 });
+
+   //
+   QVector<int> v3;
+   v1 += v3;
+
+   REQUIRE(v1 == QVector<int>{ 10, 20, 30, 40, 50, 200 });
 }
 
 TEST_CASE("QVector position", "[qvector]")
@@ -269,12 +429,44 @@ TEST_CASE("QVector prepend", "[qvector]")
 
    v.prepend("quince");
 
-   REQUIRE(v.contains("quince"));
+   REQUIRE(v.contains("quince") == true);
    REQUIRE(v.at(0) == "quince");
    REQUIRE(v[0] == "quince");
    REQUIRE(v.front() == "quince");
 
    REQUIRE(v.length() == 5);
+}
+
+TEST_CASE("QVector pop push", "[qvector]")
+{
+   //
+   QVector<int> v { 2 };
+   v.pop_front();
+
+   REQUIRE(v.isEmpty() == true);
+
+   //
+   v = { 2, 3, 4 };
+   v.push_front(1);
+
+   REQUIRE(v.front() == 1);
+   REQUIRE(v == QVector<int>{ 1, 2, 3, 4 });
+
+   //
+   v.pop_front();
+
+   REQUIRE(v == QVector<int>{ 2, 3, 4 });
+
+   //
+   v.pop_back();
+
+   REQUIRE(v == QVector<int>{ 2, 3 });
+
+   //
+   v.push_back(5);
+
+   REQUIRE(v == QVector<int>{ 2, 3, 5 });
+
 }
 
 TEST_CASE("QVector remove", "[qvector]")
@@ -293,6 +485,24 @@ TEST_CASE("QVector remove", "[qvector]")
    REQUIRE(v.length() == 2);
 }
 
+TEST_CASE("QVector remove_all", "[qvector]")
+{
+   QVector<QString> v = { "watermelon", "apple", "pear", "grapefruit", "apple" };
+
+   //
+   int howMany = v.removeAll("apple");
+
+   REQUIRE(howMany == 2);
+   REQUIRE(v.contains("apple") == false);
+   REQUIRE(v.length() == 3);
+
+   //
+   howMany = v.removeAll("cherry");
+
+   REQUIRE(howMany == 0);
+   REQUIRE(v.length() == 3);
+}
+
 TEST_CASE("QVector remove_at", "[qvector]")
 {
    QVector<QString> v = { "watermelon", "apple", "pear", "grapefruit" };
@@ -303,7 +513,30 @@ TEST_CASE("QVector remove_at", "[qvector]")
    REQUIRE(v.length() == 3);
 }
 
-TEST_CASE("QVector remove_one", "[qvector]")
+
+TEST_CASE("QVector removeFirst removeLast", "[qvector]")
+{
+   QVector<QString> v = { "watermelon", "apple", "pear", "grapefruit" };
+
+   //
+   v.removeFirst();
+   v.removeLast();
+
+   REQUIRE(v == QVector<QString>{"apple", "pear"});
+
+   //
+   v = { "grapefruit" };
+   v.removeFirst();
+
+   REQUIRE(v.isEmpty() == true);
+
+   v = { "apple" };
+   v.removeLast();
+
+   REQUIRE(v.isEmpty() == true);
+}
+
+TEST_CASE("QVector removeOne", "[qvector]")
 {
    QVector<QString> v = { "watermelon", "apple", "pear", "grapefruit" };
 
@@ -311,6 +544,12 @@ TEST_CASE("QVector remove_one", "[qvector]")
 
    REQUIRE(v.contains("pear") == false);
    REQUIRE(v.length() == 3);
+
+   //
+   bool retval = v.removeOne("quince");
+
+   REQUIRE(retval == false);
+   REQUIRE(v == QVector<QString>{ "watermelon", "apple", "grapefruit" });
 }
 
 TEST_CASE("QVector replace", "[qvector]")
@@ -326,6 +565,7 @@ TEST_CASE("QVector replace", "[qvector]")
       REQUIRE(v.contains("watermelon") == true);
       REQUIRE(v.contains("grapefruit") == true);
 
+      REQUIRE(v == QVector<QString>{ "watermelon", "cherry", "pear", "grapefruit" });
       REQUIRE(v.length() == 4);
    }
 
@@ -347,7 +587,9 @@ TEST_CASE("QVector reserve", "[qvector]")
    REQUIRE(v.size() == 4);
 
    v.reserve(10);
+
    REQUIRE(v.capacity() == 10);
+   REQUIRE(v.size() == 4);
 }
 
 TEST_CASE("QVector resize", "[qvector]")
@@ -385,7 +627,7 @@ TEST_CASE("QVector sort", "[qvector]")
    REQUIRE(v[4] == 42);
 }
 
-TEST_CASE("QVector startsWith_endsWith", "[qvector]")
+TEST_CASE("QVector startsWith endsWith", "[qvector]")
 {
    QVector<QString> v;
 
@@ -406,8 +648,63 @@ TEST_CASE("QVector takeAt", "[qvector]")
 {
    QVector<QString> v = { "watermelon", "apple", "pear", "grapefruit" };
 
-   QString value = v.takeAt(2);
+   {
+      QString value = v.takeAt(2);
 
-   REQUIRE(value == "pear");
-   REQUIRE(v.length() == 3);
+      REQUIRE(value == "pear");
+      REQUIRE(v.length() == 3);
+   }
+
+   {
+      QString value = v.takeAt(0);
+
+      REQUIRE(value == "watermelon");
+      REQUIRE(v == QVector<QString>{"apple", "grapefruit"});
+   }
+}
+
+TEST_CASE("QVector takeFirst takeLast", "[qvector]")
+{
+   QVector<QString> v = { "watermelon", "apple", "pear", "grapefruit" };
+
+   {
+      QString value = v.takeFirst();
+
+      REQUIRE(value == "watermelon");
+      REQUIRE(v == QVector<QString>{ "apple", "pear", "grapefruit" });
+   }
+
+   {
+      QString value = v.takeLast();
+
+      REQUIRE(value == "grapefruit");
+      REQUIRE(v == QVector<QString>{ "apple", "pear"});
+   }
+
+   {
+      v = { "apple" };
+
+      REQUIRE(v.takeFirst() == "apple");
+      REQUIRE(v.isEmpty() == true);
+   }
+
+   {
+       v = { "pear" };
+
+      REQUIRE(v.takeLast() == "pear");
+      REQUIRE(v.isEmpty() == true);
+   }
+}
+
+
+TEST_CASE("QVector value", "[qvector]")
+{
+   QVector<QString> v = { "watermelon", "apple", "pear", "grapefruit" };
+
+   REQUIRE(v.value(0) == "watermelon");
+   REQUIRE(v.value(2) == "pear");
+
+   REQUIRE(v.value(10) == QString());
+
+   REQUIRE(v.value(10, "default_fruit") == "default_fruit");
 }
