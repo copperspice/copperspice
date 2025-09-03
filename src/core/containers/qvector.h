@@ -567,6 +567,10 @@ inline void QVector<T>::insert(size_type pos, size_type count, const T &value)
 template <typename T>
 QVector<T> QVector<T>::mid(size_type pos, size_type length) const
 {
+   if (pos >= size()) {
+      return QVector<T>();
+   }
+
    if (length < 0 || pos + length > size()) {
       length = size() - pos;
    }
