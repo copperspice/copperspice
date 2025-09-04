@@ -90,11 +90,11 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandDisplay : public QObject, public QtWayland
    void addRegistryListener(RegistryListener listener, void *data);
 
    QtWayland::wl_compositor *compositor() {
-      return &mCompositor;
+      return &m_compositor;
    }
 
    int compositorVersion() const {
-      return mCompositorVersion;
+      return m_compositorVersion;
    }
 
    QWaylandClientBufferIntegration *clientBufferIntegration() const;
@@ -115,13 +115,13 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandDisplay : public QObject, public QtWayland
    QWaylandInputDevice *defaultInputDevice() const;
 
    QWaylandDataDeviceManager *dndSelectionHandler() const {
-      return mDndSelectionHandler.data();
+      return m_dndSelectionHandler.data();
    }
 
    void forceRoundTrip();
 
    QList<RegistryGlobal> globals() const {
-      return mGlobals;
+      return m_globals;
    }
 
    void handleWindowActivated(QWaylandWindow *window);
@@ -130,20 +130,24 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandDisplay : public QObject, public QtWayland
    void handleScreenInitialized(QWaylandScreen *screen);
    void handleWindowDestroyed(QWaylandWindow *window);
 
+   QWaylandHardwareIntegration *hardwareIntegration() const {
+      return m_hardwareIntegration.data();
+   }
+
    bool hasRegistryGlobal(const QString &interfaceName);
 
    QList<QWaylandInputDevice *> inputDevices() const {
-      return mInputDevices;
+      return m_inputDevices;
    }
 
    bool isWindowActivated(const QWaylandWindow *window);
 
    uint32_t lastInputSerial() const {
-      return mLastInputSerial;
+      return m_lastInputSerial;
    }
 
    QWaylandInputDevice *lastInputDevice() const {
-      return mLastInputDevice;
+      return m_lastInputDevice;
    }
 
    QWaylandWindow *lastInputWindow() const;
@@ -151,7 +155,7 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandDisplay : public QObject, public QtWayland
    QWaylandScreen *screenForOutput(struct wl_output *output) const;
 
    QList<QWaylandScreen *> screens() const {
-      return mScreens;
+      return m_screens;
    }
 
    void setCursor(struct wl_buffer *buffer, struct wl_cursor_image *image, qreal ratio);
@@ -162,25 +166,25 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandDisplay : public QObject, public QtWayland
    QWaylandShellIntegration *shellIntegration() const;
 
    struct wl_shm *shm() const {
-      return mShm;
+      return m_shm;
    }
 
    bool supportsWindowDecoration() const;
 
    QWaylandTouchExtension *touchExtension() const {
-      return mTouchExtension.data();
+      return m_touchExtension.data();
    }
 
    QtWayland::wl_text_input_manager *textInputManager() const {
-      return mTextInputManager.data();
+      return m_textInputManager.data();
    }
 
    struct wl_display *wl_display() const {
-      return mDisplay;
+      return m_display;
    }
 
    const struct wl_compositor *wl_compositor() const {
-      return mCompositor.object();
+      return m_compositor.object();
    }
 
    struct ::wl_registry *wl_registry() {
@@ -190,7 +194,7 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandDisplay : public QObject, public QtWayland
    QWaylandWindowManagerIntegration *windowManagerIntegration() const;
 
    QtWayland::qt_surface_extension *windowExtension() const {
-      return mWindowExtension.data();
+      return m_windowExtension.data();
    }
 
    CS_SLOT_1(Public, void blockingReadEvents())
@@ -215,41 +219,40 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandDisplay : public QObject, public QtWayland
 
    void waitForScreens();
 
-   int mFd;
-   int mWritableNotificationFd;
-   int mCompositorVersion;
+   int m_compositorVersion;
 
-   uint32_t mLastInputSerial;
+   uint32_t m_lastInputSerial;
 
-   QtWayland::wl_compositor mCompositor;
+   QtWayland::wl_compositor m_compositor;
 
-   QSocketNotifier *mReadNotifier;
-   QWaylandInputDevice *mLastInputDevice;
-   QWaylandIntegration *mWaylandIntegration;
+   QSocketNotifier *m_readNotifier;
+   QWaylandInputDevice *m_lastInputDevice;
+   QWaylandIntegration *m_waylandIntegration;
 
-   QList<QWaylandScreen *> mScreens;
-   QList<QWaylandInputDevice *> mInputDevices;
-   QList<Listener> mRegistryListeners;
+   QList<QWaylandScreen *> m_screens;
+   QList<QWaylandInputDevice *> m_inputDevices;
+   QList<Listener> m_registryListeners;
 
-   QScopedPointer<QWaylandDataDeviceManager> mDndSelectionHandler;
-   QScopedPointer<QtWayland::qt_surface_extension> mWindowExtension;
-   QScopedPointer<QtWayland::wl_subcompositor> mSubCompositor;
-   QScopedPointer<QWaylandTouchExtension> mTouchExtension;
-   QScopedPointer<QWaylandKeyExtension> mKeyExtension;
-   QScopedPointer<QWaylandWindowManagerIntegration> mWindowManagerIntegration;
-   QScopedPointer<QtWayland::wl_text_input_manager> mTextInputManager;
+   QScopedPointer<QWaylandDataDeviceManager> m_dndSelectionHandler;
+   QScopedPointer<QtWayland::qt_surface_extension> m_windowExtension;
+   QScopedPointer<QtWayland::wl_subcompositor> m_subCompositor;
+   QScopedPointer<QWaylandTouchExtension> m_touchExtension;
+   QScopedPointer<QWaylandKeyExtension> m_keyExtension;
+   QScopedPointer<QWaylandWindowManagerIntegration> m_windowManagerIntegration;
+   QScopedPointer<QtWayland::wl_text_input_manager> m_textInputManager;
+   QScopedPointer<QWaylandHardwareIntegration> m_hardwareIntegration;
 
-   QList<RegistryGlobal> mGlobals;
+   QList<RegistryGlobal> m_globals;
 
-   QPointer<QWaylandWindow> mLastInputWindow;
-   QPointer<QWaylandWindow> mLastKeyboardFocus;
-   QVector<QWaylandWindow *> mActiveWindows;
+   QPointer<QWaylandWindow> m_lastInputWindow;
+   QPointer<QWaylandWindow> m_lastKeyboardFocus;
+   QVector<QWaylandWindow *> m_activeWindows;
 
-   QList<QWaylandScreen *> mWaitingScreens;
+   QList<QWaylandScreen *> m_waitingScreens;
 
-   struct wl_display *mDisplay;
-   struct wl_shm *mShm;
-   struct wl_callback *mSyncCallback;
+   struct wl_display *m_display;
+   struct wl_shm *m_shm;
+   struct wl_callback *m_syncCallback;
 
    static const wl_callback_listener syncCallbackListener;
 };

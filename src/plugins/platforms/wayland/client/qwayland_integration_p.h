@@ -53,6 +53,7 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandIntegration : public QPlatformIntegration
    virtual QWaylandClientBufferIntegration *clientBufferIntegration() const;
 
    QAbstractEventDispatcher *createEventDispatcher() const override;
+   QWaylandInputDevice *createInputDevice(QWaylandDisplay *display, int version, uint32_t id);
    QPlatformBackingStore *createPlatformBackingStore(QWindow *window) const override;
    QPlatformTheme *createPlatformTheme(const QString &name) const override;
    QPlatformWindow *createPlatformWindow(QWindow *window) const override;
@@ -60,6 +61,11 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandIntegration : public QPlatformIntegration
    QPlatformClipboard *clipboard() const override;
 
    QPlatformDrag *drag() const override;
+
+   void destroyPlatformScreen(QPlatformScreen *screen) {
+      QPlatformIntegration::destroyScreen(screen);
+   }
+
    QWaylandDisplay *display() const;
 
    QPlatformFontDatabase *fontDatabase() const override;
@@ -68,18 +74,24 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandIntegration : public QPlatformIntegration
 
    QPlatformNativeInterface *nativeInterface() const override;
 
-   QStringList themeNames() const override;
    virtual QWaylandServerBufferIntegration *serverBufferIntegration() const;
+   virtual QWaylandShellIntegration *shellIntegration() const;
+
+   QStringList themeNames() const override;
 
  protected:
    QWaylandClientBufferIntegration *m_clientBufferIntegration;
    QWaylandServerBufferIntegration *m_serverBufferIntegration;
+   QWaylandShellIntegration *m_shellIntegration;
+   QWaylandInputDeviceIntegration *m_inputDeviceIntegration;
 
  private:
    void initializeClientBufferIntegration();
    void initializeServerBufferIntegration();
+   void initializeShellIntegration();
    bool m_clientBufferIntegrationInitialized;
    bool m_serverBufferIntegrationInitialized;
+   bool m_shellIntegrationInitialized;
 
 #ifndef QT_NO_ACCESSIBILITY
    QPlatformAccessibility *m_accessibility;

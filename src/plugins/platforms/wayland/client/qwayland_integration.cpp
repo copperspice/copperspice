@@ -43,6 +43,7 @@
 #include <qwayland_clipboard_p.h>
 #include <qwayland_display_p.h>
 #include <qwayland_dnd_p.h>
+#include <qwayland_hardware_integration_p.h>
 #include <qwayland_inputcontext_p.h>
 #include <qwayland_inputdevice_integration_p.h>
 #include <qwayland_inputdevice_integrationfactory_p.h>
@@ -89,8 +90,8 @@ class GenericWaylandTheme: public QGenericUnixTheme
 };
 
 QWaylandIntegration::QWaylandIntegration()
-   : m_clientBufferIntegration(nullptr), m_serverBufferIntegration(nullptr),
-     m_clientBufferIntegrationInitialized(false), m_serverBufferIntegrationInitialized(false),
+   : m_clientBufferIntegration(nullptr), m_serverBufferIntegration(nullptr), m_shellIntegration(nullptr), m_inputDeviceIntegration(nullptr),
+     m_clientBufferIntegrationInitialized(false), m_serverBufferIntegrationInitialized(false), m_shellIntegrationInitialized(false),
 
 #ifndef QT_NO_ACCESSIBILITY
      m_accessibility(new QPlatformAccessibility()),
@@ -156,12 +157,21 @@ QWaylandClientBufferIntegration *QWaylandIntegration::clientBufferIntegration() 
       const_cast<QWaylandIntegration *>(this)->initializeClientBufferIntegration();
    }
 
-   return m_clientBufferIntegration && m_clientBufferIntegration->isValid() ? m_clientBufferIntegration : nullptr;
+   return m_clientBufferIntegration != nullptr && m_clientBufferIntegration->isValid() ? m_clientBufferIntegration : nullptr;
 }
 
 QAbstractEventDispatcher *QWaylandIntegration::createEventDispatcher() const
 {
    return createUnixEventDispatcher();
+}
+
+QWaylandInputDevice *QWaylandIntegration::createInputDevice(QWaylandDisplay *display, int version, uint32_t id)
+{
+   if (m_inputDeviceIntegration != nullptr) {
+      return m_inputDeviceIntegration->createInputDevice(display, version, id);
+   }
+
+   return new QWaylandInputDevice(display, version, id);
 }
 
 QPlatformBackingStore *QWaylandIntegration::createPlatformBackingStore(QWindow *window) const
@@ -215,6 +225,15 @@ QWaylandServerBufferIntegration *QWaylandIntegration::serverBufferIntegration() 
    return m_serverBufferIntegration;
 }
 
+QWaylandShellIntegration *QWaylandIntegration::shellIntegration() const
+{
+   if (m_shellIntegrationInitialized) {
+      const_cast<QWaylandIntegration *>(this)->initializeShellIntegration();
+   }
+
+   return m_shellIntegration;
+}
+
 void QWaylandIntegration::initializeClientBufferIntegration()
 {
    m_clientBufferIntegrationInitialized = true;
@@ -241,5 +260,9 @@ void QWaylandIntegration::initializeServerBufferIntegration()
    }
 }
 
+void QWaylandIntegration::initializeShellIntegration()
+{
+   // pending implementation
+}
 }
 
