@@ -57,7 +57,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_clientbuffer_integration_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_clientbuffer_integrationfactory_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_clientbuffer_integrationplugin_p.h
-
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_hardware_integration_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_serverbuffer_integration_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_serverbuffer_integrationfactory_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_serverbuffer_integrationplugin_p.h
@@ -114,7 +114,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_clientbuffer_integration.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_clientbuffer_integrationfactory.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_clientbuffer_integrationplugin.cpp
-
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_hardware_integration.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_serverbuffer_integration.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_serverbuffer_integrationfactory.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_serverbuffer_integrationplugin.cpp
