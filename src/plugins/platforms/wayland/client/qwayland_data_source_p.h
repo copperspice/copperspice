@@ -35,7 +35,6 @@ class QMimeData;
 namespace QtWaylandClient {
 
 class QWaylandDataDeviceManager;
-class QWaylandDisplay;
 
 class Q_WAYLAND_CLIENT_EXPORT QWaylandDataSource : public QObject, public QtWayland::wl_data_source
 {

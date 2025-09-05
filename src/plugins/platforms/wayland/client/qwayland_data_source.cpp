@@ -27,6 +27,8 @@
 #include <qwayland_mimehelper.h>
 
 #include <qwayland_data_devicemanager_p.h>
+#include <qwayland_dataoffer_p.h>
+#include <qwayland_inputdevice_p.h>
 
 #include <unistd.h>
 

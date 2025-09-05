@@ -28,6 +28,7 @@
 #include <qapplication_p.h>
 #include <qcore_unix_p.h>
 #include <qwayland_data_devicemanager_p.h>
+#include <qwayland_display_p.h>
 
 #ifndef QT_NO_DRAGANDDROP
 
@@ -39,7 +40,7 @@ static QString utf8Text()
 }
 
 QWaylandDataOffer::QWaylandDataOffer(QWaylandDisplay *display, struct ::wl_data_offer *offer)
-   : QtWayland::wl_data_offer(offer)
+   : QtWayland::wl_data_offer(offer), m_mimeData(new QWaylandMimeData(this, display))
 {
 }
 
@@ -56,16 +57,16 @@ QString QWaylandDataOffer::firstFormat() const
 
 QMimeData *QWaylandDataOffer::mimeData()
 {
-   return nullptr;
+   return m_mimeData.data();
 }
 
 void QWaylandDataOffer::data_offer_offer(const QString &mime_type)
 {
-   // pending implementation
+   m_mimeData->appendFormat(mime_type);
 }
 
 QWaylandMimeData::QWaylandMimeData(QWaylandDataOffer *dataOffer, QWaylandDisplay *display)
-   : QInternalMimeData(), m_dataOffer(dataOffer), m_display(nullptr)
+   : QInternalMimeData(), m_dataOffer(dataOffer), m_display(display)
 {
 }
 
@@ -123,6 +124,7 @@ QVariant QWaylandMimeData::retrieveData_sys(const QString &mimeType, QVariant::T
    }
 
    m_dataOffer->receive(mime, pipefd[1]);
+   wl_display_flush(m_display->wl_display());
 
    close(pipefd[1]);
 

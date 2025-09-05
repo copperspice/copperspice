@@ -23,12 +23,21 @@
 
 #include <qwayland_data_devicemanager_p.h>
 
+#include <qwayland_data_device_p.h>
+#include <qwayland_dataoffer_p.h>
+#include <qwayland_display_p.h>
+#include <qwayland_inputdevice_p.h>
 namespace QtWaylandClient {
 
 QWaylandDataDeviceManager::QWaylandDataDeviceManager(QWaylandDisplay *display, uint32_t id)
-   : wl_data_device_manager(nullptr, id, 1)
+   : wl_data_device_manager(display->wl_registry(), id, 1), m_display(display)
 {
-   // pending implementation
+   // Create transfer devices for all input devices
+   QList<QWaylandInputDevice *> inputDevices = m_display->inputDevices();
+
+   for (int i = 0; i < inputDevices.size(); i++) {
+      inputDevices.at(i)->setDataDevice(getDataDevice(inputDevices.at(i)));
+   }
 }
 
 QWaylandDataDeviceManager::~QWaylandDataDeviceManager()
@@ -38,12 +47,12 @@ QWaylandDataDeviceManager::~QWaylandDataDeviceManager()
 
 QWaylandDataDevice *QWaylandDataDeviceManager::getDataDevice(QWaylandInputDevice *inputDevice)
 {
-   return nullptr;
+   return new QWaylandDataDevice(this, inputDevice);
 }
 
 QWaylandDisplay *QWaylandDataDeviceManager::display() const
 {
-   return nullptr;
+   return m_display;
 }
 
 }
