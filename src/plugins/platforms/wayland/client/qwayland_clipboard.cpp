@@ -48,7 +48,21 @@ QMimeData *QWaylandClipboard::mimeData(QClipboard::Mode mode)
       return &m_emptyData;
    }
 
-   // pending implementation
+   QWaylandInputDevice *inputDevice = m_display->currentInputDevice();
+
+   if (inputDevice == nullptr || inputDevice->dataDevice() == nullptr) {
+      return &m_emptyData;
+   }
+
+   QWaylandDataSource *source = inputDevice->dataDevice()->selectionSource();
+
+   if (source != nullptr) {
+      return source->mimeData();
+   }
+
+   if (inputDevice->dataDevice()->selectionOffer()) {
+      return inputDevice->dataDevice()->selectionOffer()->mimeData();
+   }
 
    return &m_emptyData;
 }

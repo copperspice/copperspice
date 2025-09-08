@@ -51,8 +51,11 @@ QWaylandDataOffer::~QWaylandDataOffer()
 
 QString QWaylandDataOffer::firstFormat() const
 {
-   // pending implementation
-   return QString();
+   if (m_mimeData->formats().isEmpty()) {
+      return QString();
+   }
+
+   return m_mimeData->formats().first();
 }
 
 QMimeData *QWaylandDataOffer::mimeData()
