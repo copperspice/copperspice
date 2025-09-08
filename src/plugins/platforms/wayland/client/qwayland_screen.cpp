@@ -28,13 +28,15 @@
 #include <qwindowsysteminterface.h>
 
 #include <qwayland_cursor_p.h>
+#include <qwayland_display_p.h>
+#include <qwayland_window_p.h>
 
 namespace QtWaylandClient {
 
 QWaylandScreen::QWaylandScreen(QWaylandDisplay *waylandDisplay, int version, uint32_t id)
-   : QtWayland::wl_output(nullptr, id, qMin(version, 2)),
+   : QtWayland::wl_output(waylandDisplay->wl_registry(), id, qMin(version, 2)),
      m_outputId(id), m_scale(1), m_depth(32), m_refreshRate(60000), m_transform(-1), m_initialized(false),
-     m_format(QImage::Format_ARGB32_Premultiplied),
+     m_waylandDisplay(waylandDisplay), m_format(QImage::Format_ARGB32_Premultiplied),
      m_outputName(QString("Screen%1").formatArg(id)), m_orientation(Qt::PrimaryOrientation),
      m_waylandCursor(nullptr)
 {
@@ -69,7 +71,7 @@ qreal QWaylandScreen::devicePixelRatio() const
 
 QWaylandDisplay *QWaylandScreen::display() const
 {
-   return nullptr;
+   return m_waylandDisplay;
 }
 
 QImage::Format QWaylandScreen::format() const

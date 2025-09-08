@@ -61,11 +61,11 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandShellSurface : public QObject
    virtual void propagateSizeHints() {
    }
 
-   virtual QWaylandTopLevel *topLevel() {
-      return nullptr;
+   virtual void setWindowGeometry(QRect) {
    }
 
-   virtual void setWindowGeometry(QRect) {
+   virtual QWaylandTopLevel *topLevel() {
+      return nullptr;
    }
 
    inline QWaylandWindow *window() {

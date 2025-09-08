@@ -91,12 +91,12 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandCursor : public QPlatformCursor
    void initCursorMap();
    wl_cursor *requestCursor(WaylandCursor shape);
 
-   QWaylandDisplay *mDisplay;
-   struct wl_cursor_theme *mCursorTheme;
-   QPoint mLastPos;
+   QWaylandDisplay *m_display;
+   struct wl_cursor_theme *m_cursorTheme;
+   QPoint m_lastPos;
 
-   QMap<WaylandCursor, wl_cursor *> mCursors;
-   QMultiMap<WaylandCursor, QByteArray> mCursorNamesMap;
+   QMap<WaylandCursor, wl_cursor *> m_cursors;
+   QMultiMap<WaylandCursor, QByteArray> m_cursorNamesMap;
 };
 
 }

@@ -96,6 +96,7 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandScreen : public QPlatformScreen, QtWayland
 
    bool m_initialized;
 
+   QWaylandDisplay *m_waylandDisplay;
    QRect m_geometry;
 
    QImage::Format m_format;
