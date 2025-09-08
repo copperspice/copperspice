@@ -94,7 +94,7 @@ void QWaylandAbstractDecoration::setWaylandWindow(QWaylandWindow *window)
 {
    Q_D(QWaylandAbstractDecoration);
 
-   // double initialization is probably not great
+   // detect double initialization
    Q_ASSERT(! d->m_window && ! d->m_wayland_window);
 
    d->m_window = window->window();
@@ -106,9 +106,25 @@ const QImage &QWaylandAbstractDecoration::contentImage()
    Q_D(QWaylandAbstractDecoration);
 
    if (d->m_isDirty) {
-      // Update the decoration backingstore
+      // update the decoration backingstore
 
-      // pending implementation
+      const int scale = waylandWindow()->scale();
+      const QSize imageSize = window()->frameGeometry().size() * scale;
+
+      d->m_decorationContentImage = QImage(imageSize, QImage::Format_ARGB32_Premultiplied);
+      d->m_decorationContentImage.setDevicePixelRatio(scale);
+      d->m_decorationContentImage.fill(Qt::transparent);
+
+      this->paint(&d->m_decorationContentImage);
+
+      //
+      QRegion damage = marginsRegion(window()->geometry().size(), window()->frameMargins());
+
+      for (QRect item : damage.rects()) {
+         waylandWindow()->damage(item);
+      }
+
+      d->m_isDirty = false;
    }
 
    return d->m_decorationContentImage;

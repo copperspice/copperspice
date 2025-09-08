@@ -266,12 +266,27 @@ void QWaylandDisplay::handleWindowActivated(QWaylandWindow *window)
       return;
    }
 
-   // pending implementation
+   m_activeWindows.append(window);
+   requestWaylandSync();
+
+   if (auto *item = window->decoration()) {
+      item->update();
+   }
 }
 
 void QWaylandDisplay::handleWindowDeactivated(QWaylandWindow *window)
 {
-   // pending implementation
+   Q_ASSERT(! m_activeWindows.empty());
+
+   if (m_activeWindows.last() == window) {
+      requestWaylandSync();
+   }
+
+   m_activeWindows.removeOne(window);
+
+   if (auto *item = window->decoration()) {
+      item->update();
+   }
 }
 
 void QWaylandDisplay::handleWaylandSync()

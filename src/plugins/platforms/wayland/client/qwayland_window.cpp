@@ -383,7 +383,7 @@ qreal QWaylandWindow::devicePixelRatio() const
 
 QMargins QWaylandWindow::frameMargins() const
 {
-   if (m_windowDecoration) {
+   if (m_windowDecoration != nullptr) {
       return m_windowDecoration->margins();
    }
 
@@ -451,7 +451,7 @@ void QWaylandWindow::handleExpose(QRegion exposeRegion)
 
 void QWaylandWindow::handleMouse(QWaylandInputDevice *inputDevice, const QWaylandPointerEvent &e)
 {
-   if (m_windowDecoration) {
+   if (m_windowDecoration != nullptr) {
       handleMouseEventWithDecoration(inputDevice, e);
 
    } else {
@@ -540,7 +540,7 @@ void QWaylandWindow::handleMouseEventWithDecoration(QWaylandInputDevice *inputDe
 
 void QWaylandWindow::handleMouseLeave(QWaylandInputDevice *inputDevice)
 {
-   if (m_windowDecoration) {
+   if (m_windowDecoration != nullptr) {
       if (m_mouseEventsInContentArea) {
          QWindowSystemInterface::handleLeaveEvent(window());
       }
@@ -850,7 +850,7 @@ void QWaylandWindow::setWindowIcon(const QIcon &icon)
 {
    m_windowIcon = icon;
 
-   if (m_windowDecoration && window()->isVisible()) {
+   if (m_windowDecoration != nullptr && window()->isVisible()) {
       m_windowDecoration->update();
    }
 }
