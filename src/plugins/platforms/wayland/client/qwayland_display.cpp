@@ -178,9 +178,12 @@ struct ::wl_region *QWaylandDisplay::createRegion(const QRegion &qregion)
 
 ::wl_subsurface *QWaylandDisplay::createSubSurface(QWaylandWindow *window, QWaylandWindow *parent)
 {
-   // pending implementation
+   if (m_subCompositor == nullptr) {
+      // unable to create subsurface, may not be supported by the compositor
+      return nullptr;
+   }
 
-   return nullptr;
+   return m_subCompositor->get_subsurface(window->object(), parent->object());
 }
 
 uint32_t QWaylandDisplay::currentTimeMillisec()

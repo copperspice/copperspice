@@ -83,7 +83,7 @@ void QWaylandExtendedSurface::setContentOrientationMask(Qt::ScreenOrientations m
 
 void QWaylandExtendedSurface::extended_surface_onscreen_visibility(int32_t visibility)
 {
-   // pending implementation
+   m_window->window()->setVisibility(static_cast<QWindow::Visibility>(visibility));
 }
 
 void QWaylandExtendedSurface::extended_surface_set_generic_property(const QString &name, wl_array *value)
@@ -99,7 +99,7 @@ void QWaylandExtendedSurface::extended_surface_set_generic_property(const QStrin
 
 void QWaylandExtendedSurface::extended_surface_close()
 {
-   // pending implementation
+   QWindowSystemInterface::handleCloseEvent(m_window->window());
 }
 
 Qt::WindowFlags QWaylandExtendedSurface::setWindowFlags(Qt::WindowFlags flags)
