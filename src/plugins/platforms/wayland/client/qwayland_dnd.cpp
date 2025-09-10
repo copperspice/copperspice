@@ -55,7 +55,9 @@ QMimeData *QWaylandDrag::platformDropData()
 
 void QWaylandDrag::startDrag()
 {
-   // pending implementation
+   QBasicDrag::startDrag();
+   QWaylandWindow *icon = static_cast<QWaylandWindow *>(shapedPixmapWindow()->handle());
+   m_display->currentInputDevice()->dataDevice()->startDrag(drag()->mimeData(), icon);
 }
 
 void QWaylandDrag::cancel()
@@ -77,7 +79,7 @@ void QWaylandDrag::drop(const QPoint &globalPos)
 
 void QWaylandDrag::endDrag()
 {
-   // pending implementation
+   m_display->currentInputDevice()->handleEndDrag();
 }
 
 void QWaylandDrag::updateTarget(const QString &mimeType)

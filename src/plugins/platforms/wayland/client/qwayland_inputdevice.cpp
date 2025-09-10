@@ -32,6 +32,7 @@
 #include <qwayland_cursor_p.h>
 #include <qwayland_data_device_p.h>
 #include <qwayland_data_devicemanager_p.h>
+#include <qwayland_display_p.h>
 #include <qwayland_integration_p.h>
 #include <qwayland_screen_p.h>
 #include <qwayland_shm_backingstore_p.h>
@@ -74,7 +75,11 @@ QWaylandInputDevice::QWaylandInputDevice(QWaylandDisplay *display, int version, 
      m_keyboard(nullptr), m_pointer(nullptr), m_touch(nullptr),
      m_wl_display(nullptr), m_wl_pointerSurface(nullptr)
 {
-   // pending implementation
+#ifndef QT_NO_DRAGANDDROP
+   if (m_display->dndSelectionHandler()) {
+      m_dataDevice = m_display->dndSelectionHandler()->getDataDevice(this);
+   }
+#endif
 }
 
 QWaylandInputDevice::~QWaylandInputDevice()
