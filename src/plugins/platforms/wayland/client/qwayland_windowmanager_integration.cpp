@@ -31,6 +31,7 @@
 #include <qtevents.h>
 #include <qurl.h>
 
+#include <qwayland_display_p.h>
 #include <stdint.h>
 
 namespace QtWaylandClient {
@@ -48,14 +49,14 @@ class QWaylandWindowManagerIntegrationPrivate
 };
 
 QWaylandWindowManagerIntegrationPrivate::QWaylandWindowManagerIntegrationPrivate(QWaylandDisplay *waylandDisplay)
-   : m_blockPropertyUpdates(false), m_showIsFullScreen(false)
+   : m_blockPropertyUpdates(false), m_showIsFullScreen(false), m_waylandDisplay(waylandDisplay)
 {
 }
 
-QWaylandWindowManagerIntegration::QWaylandWindowManagerIntegration(QWaylandDisplay *waylandDisplay)
-   : d_ptr(new QWaylandWindowManagerIntegrationPrivate(waylandDisplay))
+QWaylandWindowManagerIntegration::QWaylandWindowManagerIntegration(QWaylandDisplay *display)
+   : d_ptr(new QWaylandWindowManagerIntegrationPrivate(display))
 {
-   // pending implementation
+   display->addRegistryListener(&wlHandleListenerGlobal, this);
 }
 
 QWaylandWindowManagerIntegration::~QWaylandWindowManagerIntegration()
@@ -86,7 +87,7 @@ void QWaylandWindowManagerIntegration::windowmanager_hints(int32_t showIsFullScr
 
 void QWaylandWindowManagerIntegration::windowmanager_quit()
 {
-   QGuiApplication::quit();
+   QApplication::quit();
 }
 
 void QWaylandWindowManagerIntegration::openUrl_helper(const QUrl &url)
