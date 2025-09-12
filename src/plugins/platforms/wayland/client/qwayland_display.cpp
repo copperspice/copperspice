@@ -250,7 +250,28 @@ void QWaylandDisplay::forceRoundTrip()
 
 void QWaylandDisplay::handleKeyboardFocusChanged(QWaylandInputDevice *inputDevice)
 {
-   // pending implementation
+   QWaylandWindow *keyboardFocus = inputDevice->keyboardFocus();
+
+   if (m_lastKeyboardFocus == keyboardFocus) {
+      return;
+   }
+
+   QWaylandShellIntegration *shell = m_waylandIntegration->getShellIntegration();
+
+   if (shell != nullptr) {
+      shell->handleKeyboardFocusChanged(keyboardFocus, m_lastKeyboardFocus);
+
+    } else {
+      if (keyboardFocus != nullptr) {
+         handleWindowActivated(keyboardFocus);
+      }
+
+      if (m_lastKeyboardFocus != nullptr) {
+         handleWindowDeactivated(m_lastKeyboardFocus);
+      }
+   }
+
+   m_lastKeyboardFocus = keyboardFocus;
 }
 
 void QWaylandDisplay::handleWindowDestroyed(QWaylandWindow *window)

@@ -37,6 +37,7 @@
 #include <qwayland_screen_p.h>
 #include <qwayland_shm_backingstore_p.h>
 #include <qwayland_touch_p.h>
+#include <qwayland_window_p.h>
 
 #include <unistd.h>
 #include <sys/mman.h>
@@ -454,7 +455,10 @@ void QWaylandInputDevice::Keyboard::keyboard_enter(uint32_t time, struct wl_surf
       return;
    }
 
-   // pending implementation
+   QWaylandWindow *window = QWaylandWindow::fromWlSurface(surface);
+   m_focus = window;
+
+   m_parent->m_display->handleKeyboardFocusChanged(m_parent);
 }
 
 void QWaylandInputDevice::Keyboard::keyboard_leave(uint32_t time, struct wl_surface *surface)
@@ -462,7 +466,15 @@ void QWaylandInputDevice::Keyboard::keyboard_leave(uint32_t time, struct wl_surf
    (void) time;
    (void) surface;
 
-   // pending implementation
+   if (surface != nullptr) {
+      QWaylandWindow *window = QWaylandWindow::fromWlSurface(surface);
+      window->unfocus();
+   }
+
+   m_focus = nullptr;
+   m_parent->m_display->handleKeyboardFocusChanged(m_parent);
+
+   m_repeatTimer.stop();
 }
 
 void QWaylandInputDevice::Keyboard::keyboard_key(uint32_t serial, uint32_t time, uint32_t key, uint32_t state)
@@ -641,7 +653,12 @@ void QWaylandInputDevice::Pointer::pointer_button(uint32_t serial, uint32_t time
 
 void QWaylandInputDevice::Pointer::releaseButtons()
 {
-   // pending implementation
+   m_buttons = Qt::NoButton;
+   MotionEvent e(m_parent->m_time, m_surfacePos, m_globalPos, m_buttons, m_parent->modifiers());
+
+   if (m_focus != nullptr) {
+      m_focus->handleMouse(m_parent, e);
+   }
 }
 
 void QWaylandInputDevice::Pointer::pointer_axis(uint32_t time, uint32_t axis, int32_t value)

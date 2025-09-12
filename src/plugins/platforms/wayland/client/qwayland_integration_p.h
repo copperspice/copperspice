@@ -70,6 +70,10 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandIntegration : public QPlatformIntegration
 
    QPlatformFontDatabase *fontDatabase() const override;
 
+   QWaylandShellIntegration *getShellIntegration() const {
+      return m_shellIntegration;
+   }
+
    void initialize() override;
 
    QPlatformNativeInterface *nativeInterface() const override;

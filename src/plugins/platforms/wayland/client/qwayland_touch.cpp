@@ -65,7 +65,72 @@ void QWaylandTouchExtension::touch_extension_touch(uint32_t time, uint32_t id, u
       m_inputDevice = inputDevices.first();
    }
 
-   // pending implementation
+   QWaylandWindow *win = m_inputDevice->touchFocus();
+
+   if (win == nullptr) {
+      win = m_inputDevice->pointerFocus();
+   }
+
+   if (win == nullptr) {
+      win = m_inputDevice->keyboardFocus();
+   }
+
+   if (win == nullptr || win->window() == nullptr) {
+      qWarning("QWaylandTouchExtension::touch_extension_touch() No pointer focus");
+      return;
+   }
+
+   m_targetWindow = win->window();
+
+   QWindowSystemInterface::TouchPoint tp;
+   tp.id    = id;
+   tp.state = Qt::TouchPointState(int(state & 0xFFFF));
+
+   int sentPointCount = state >> 16;
+
+   if (m_pointsLeft == 0) {
+      Q_ASSERT(sentPointCount > 0);
+      m_pointsLeft = sentPointCount;
+   }
+
+   tp.flags = QTouchEvent::TouchPoint::InfoFlags(int(flags & 0xFFFF));
+
+   if (m_touchDevice == nullptr) {
+      registerDevice(flags >> 16);
+   }
+
+   tp.area = QRectF(0, 0, fromFixed(width), fromFixed(height));
+
+   // have surface-relative coords, need a (virtual) screen position
+   QPointF relPos = QPointF(fromFixed(x), fromFixed(y));
+   QPointF delta = relPos - relPos.toPoint();
+   tp.area.moveCenter(m_targetWindow->mapToGlobal(relPos.toPoint()) + delta);
+
+   tp.normalPosition.setX(fromFixed(normalized_x));
+   tp.normalPosition.setY(fromFixed(normalized_y));
+   tp.pressure = pressure / 255.0;
+   tp.velocity.setX(fromFixed(velocity_x));
+   tp.velocity.setY(fromFixed(velocity_y));
+
+   if (rawdata != nullptr) {
+      const int rawPosCount = rawdata->size / sizeof(float) / 2;
+      float *p = static_cast < float * > (rawdata->data);
+
+      for (int i = 0; i < rawPosCount; ++i) {
+         float x = *p++;
+         float y = *p++;
+         tp.rawPositions.append(QPointF(x, y));
+      }
+   }
+
+   m_touchPoints.append(tp);
+   m_timestamp = time;
+
+   --m_pointsLeft;
+
+   if (m_pointsLeft == 0) {
+      sendTouchEvent();
+   }
 }
 
 void QWaylandTouchExtension::sendTouchEvent()
