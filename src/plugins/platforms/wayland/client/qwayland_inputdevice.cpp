@@ -318,7 +318,9 @@ void QWaylandInputDevice::setCursor(struct wl_buffer *buffer, const QPoint &hotS
       m_pointer->set_cursor(m_pointer->m_enterSerial, m_wl_pointerSurface, hotSpot.x(), hotSpot.y());
       wl_surface_attach(m_wl_pointerSurface, buffer, 0, 0);
 
-      // pending implementation
+      if (m_display->compositorVersion() >= 3) {
+         wl_surface_set_buffer_scale(m_wl_pointerSurface, ratio);
+      }
 
       wl_surface_damage(m_wl_pointerSurface, 0, 0, size.width(), size.height());
       wl_surface_commit(m_wl_pointerSurface);
