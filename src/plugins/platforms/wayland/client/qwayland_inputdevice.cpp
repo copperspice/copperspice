@@ -754,25 +754,24 @@ void QWaylandInputDevice::Touch::releasePoints()
 void QWaylandInputDevice::Touch::touch_frame()
 {
    // copy all points which are in the previous but not in the current list, as stationary.
-   for (int i = 0; i < m_prevTouchPoints.count(); ++i) {
-      const QWindowSystemInterface::TouchPoint &prevPoint(m_prevTouchPoints.at(i));
-
-      if (prevPoint.state == Qt::TouchPointReleased) {
+   for (const auto &previous_item : m_prevTouchPoints) {
+      if (previous_item.state == Qt::TouchPointReleased) {
          continue;
       }
 
       bool found = false;
 
-      for (int j = 0; j < m_touchPoints.count(); ++j)
-         if (m_touchPoints.at(j).id == prevPoint.id) {
+      for (const auto &item : m_touchPoints) {
+         if (item.id == previous_item.id) {
             found = true;
             break;
          }
+      }
 
       if (! found) {
-         QWindowSystemInterface::TouchPoint p = prevPoint;
-         p.state = Qt::TouchPointStationary;
-         m_touchPoints.append(p);
+         QWindowSystemInterface::TouchPoint newPoint = previous_item;
+         newPoint.state = Qt::TouchPointStationary;
+         m_touchPoints.append(newPoint);
       }
    }
 
