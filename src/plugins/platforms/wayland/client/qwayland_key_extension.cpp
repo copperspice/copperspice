@@ -38,7 +38,26 @@ void QWaylandKeyExtension::key_extension_qtkey(struct wl_surface *surface, uint3
       uint32_t key, uint32_t modifiers, uint32_t nativeScanCode, uint32_t nativeVirtualKey,
       uint32_t nativeModifiers, const QString &text, uint32_t autorep, uint32_t count)
 {
-   // pending implementation
+   QList<QWaylandInputDevice *> inputDevices = m_display->inputDevices();
+
+   if (surface == nullptr && inputDevices.isEmpty()) {
+      qWarning("QWaylandKeyExtension::key_extension_qtkey() No input device");
+      return;
+   }
+
+   QWaylandInputDevice *dev = inputDevices.first();
+   QWaylandWindow *win = surface ? QWaylandWindow::fromWlSurface(surface) : dev->keyboardFocus();
+
+   if (win == nullptr || win->window() == nullptr) {
+      qWarning("QWaylandKeyExtension::key_extension_qtkey() No keyboard focus");
+      return;
+   }
+
+   QWindow *window = win->window();
+
+   QWindowSystemInterface::handleExtendedKeyEvent(window, time, QEvent::Type(type), key,
+         Qt::KeyboardModifiers(modifiers), nativeScanCode, nativeVirtualKey, nativeModifiers,
+         text, autorep, count);
 }
 
 }
