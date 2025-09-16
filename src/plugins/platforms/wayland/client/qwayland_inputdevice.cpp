@@ -176,16 +176,16 @@ QWaylandInputDevice::Touch *QWaylandInputDevice::createTouch(QWaylandInputDevice
 
 void QWaylandInputDevice::handleWindowDestroyed(QWaylandWindow *window)
 {
-   if (m_pointer && window == m_pointer->m_focus) {
+   if (m_pointer != nullptr && window == m_pointer->m_focus) {
       m_pointer->m_focus = nullptr;
    }
 
-   if (m_keyboard && window == m_keyboard->m_focus) {
+   if (m_keyboard != nullptr && window == m_keyboard->m_focus) {
       m_keyboard->m_focus = nullptr;
       m_keyboard->stopRepeat();
    }
 
-   if (m_touch && window == m_touch->m_focus) {
+   if (m_touch != nullptr && window == m_touch->m_focus) {
       m_touch->m_focus = nullptr;
    }
 }
@@ -208,7 +208,8 @@ void QWaylandInputDevice::setDataDevice(QWaylandDataDevice *device)
 
 QWaylandDataDevice *QWaylandInputDevice::dataDevice() const
 {
-   Q_ASSERT(m_dataDevice);
+   Q_ASSERT(m_dataDevice != nullptr);
+
    return m_dataDevice;
 }
 
@@ -363,7 +364,7 @@ QWaylandInputDevice::Keyboard::~Keyboard()
 #ifndef QT_NO_WAYLAND_XKB
 bool QWaylandInputDevice::Keyboard::createDefaultKeyMap()
 {
-   if (m_xkbContext && m_xkbMap && m_xkbState) {
+   if (m_xkbContext != nullptr && m_xkbMap != nullptr && m_xkbState != nullptr) {
       return true;
    }
 
@@ -376,15 +377,15 @@ bool QWaylandInputDevice::Keyboard::createDefaultKeyMap()
 
    m_xkbContext = xkb_context_new(xkb_context_flags(0));
 
-   if (m_xkbContext) {
+   if (m_xkbContext != nullptr) {
       m_xkbMap = xkb_map_new_from_names(m_xkbContext, &names, xkb_map_compile_flags(0));
 
-      if (m_xkbMap) {
+      if (m_xkbMap != nullptr) {
          m_xkbState = xkb_state_new(m_xkbMap);
       }
    }
 
-   if (! m_xkbContext || ! m_xkbMap || ! m_xkbState) {
+   if (m_xkbContext == nullptr || m_xkbMap == nullptr || m_xkbState == nullptr) {
       qWarning("QWaylandInputDevice::Keyboard::createDefaultKeyMap()  Call to xkb_map_new_from_names() failed, no key input");
       return false;
    }
@@ -394,15 +395,15 @@ bool QWaylandInputDevice::Keyboard::createDefaultKeyMap()
 
 void QWaylandInputDevice::Keyboard::releaseKeyMap()
 {
-   if (m_xkbState) {
+   if (m_xkbState != nullptr) {
       xkb_state_unref(m_xkbState);
    }
 
-   if (m_xkbMap) {
+   if (m_xkbMap != nullptr) {
       xkb_map_unref(m_xkbMap);
    }
 
-   if (m_xkbContext) {
+   if (m_xkbContext != nullptr) {
       xkb_context_unref(m_xkbContext);
    }
 }

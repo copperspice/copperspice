@@ -27,6 +27,7 @@
 #include <qwayland_dataoffer_p.h>
 #include <qwayland_display_p.h>
 #include <qwayland_inputdevice_p.h>
+
 namespace QtWaylandClient {
 
 QWaylandDataDeviceManager::QWaylandDataDeviceManager(QWaylandDisplay *display, uint32_t id)

@@ -220,8 +220,8 @@ void QWaylandDisplay::flushRequests()
 
 void QWaylandDisplay::forceRoundTrip()
 {
-   // wl_display_roundtrip() works on the main queue only,
-   // since we use a separate one, reimplement it here
+   // wl_display_roundtrip() works on the main queue only
+   // this method works on any queue
 
    int retval = 0;
    bool done  = false;
@@ -243,7 +243,7 @@ void QWaylandDisplay::forceRoundTrip()
       }
    }
 
-   if (retval == -1 && ! done) {
+   if (! done && retval == -1) {
       wl_callback_destroy(callback);
    }
 }

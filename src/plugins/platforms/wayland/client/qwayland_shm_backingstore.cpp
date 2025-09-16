@@ -217,18 +217,19 @@ QWaylandShmBuffer *QWaylandShmBackingStore::getBuffer(const QSize &size)
 {
    auto tmpBuffers = m_buffers;
 
-   for (QWaylandShmBuffer *b : tmpBuffers) {
-      if (! b->busy()) {
-         if (b->size() == size) {
-            return b;
-         } else {
-            m_buffers.removeOne(b);
+   for (QWaylandShmBuffer *item : tmpBuffers) {
+      if (! item->busy()) {
+         if (item->size() == size) {
+            return item;
 
-            if (m_backBuffer == b) {
+         } else {
+            m_buffers.removeOne(item);
+
+            if (m_backBuffer == item) {
                m_backBuffer = nullptr;
             }
 
-            delete b;
+            delete item;
          }
       }
    }
@@ -250,11 +251,11 @@ void QWaylandShmBackingStore::resize(const QSize &size)
 
    QSize sizeWithMargins = (size + QSize(margins.left() + margins.right(), margins.top() + margins.bottom())) * scale;
 
-   QWaylandShmBuffer *buffer = getBuffer(sizeWithMargins);
+   QWaylandShmBuffer *newBuffer = getBuffer(sizeWithMargins);
 
-   while (! buffer) {
+   while (newBuffer == nullptr) {
       m_display->blockingReadEvents();
-      buffer = getBuffer(sizeWithMargins);
+      newBuffer = getBuffer(sizeWithMargins);
    }
 
    int oldSize = 0;
@@ -284,7 +285,7 @@ void QWaylandShmBackingStore::updateDecorations()
    QMatrix sourceMatrix;
    sourceMatrix.scale(dp, dp);
 
-   QRect target; // needs to be in device independent pixels
+   QRect target;  // device independent pixels
 
    // top
    target.setX(0);

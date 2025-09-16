@@ -26,6 +26,7 @@
 #include <qwayland_display_p.h>
 #include <qwayland_inputdevice_p.h>
 #include <qwayland_window_p.h>
+
 namespace QtWaylandClient {
 
 QWaylandKeyExtension::QWaylandKeyExtension(QWaylandDisplay *display, uint32_t id)

@@ -177,7 +177,7 @@ wl_cursor *QWaylandCursor::requestCursor(WaylandCursor shape)
 
    // If the cursor has not been loaded already, load it
    if (cursor == nullptr) {
-      if (! m_cursorTheme) {
+      if (m_cursorTheme == nullptr) {
          return nullptr;
       }
 

@@ -48,8 +48,8 @@ class QWaylandWindowManagerIntegrationPrivate
    QHash<QWindow *, QVariantMap> m_queuedProperties;
 };
 
-QWaylandWindowManagerIntegrationPrivate::QWaylandWindowManagerIntegrationPrivate(QWaylandDisplay *waylandDisplay)
-   : m_blockPropertyUpdates(false), m_showIsFullScreen(false), m_waylandDisplay(waylandDisplay)
+QWaylandWindowManagerIntegrationPrivate::QWaylandWindowManagerIntegrationPrivate(QWaylandDisplay *display)
+   : m_blockPropertyUpdates(false), m_showIsFullScreen(false), m_waylandDisplay(display)
 {
 }
 
