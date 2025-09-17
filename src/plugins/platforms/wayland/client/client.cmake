@@ -30,17 +30,20 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_inputdevice_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_integration_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_key_extension_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_mimehelper.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_native_interface_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_popup_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_screen_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_shellsurface_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_shm_backingstore_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_shm_formathelper.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_shm_window_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_subsurface_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_toplevel_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_touch_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_window_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_windowmanager_integration_p.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_xkb.h
 
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_eventdispatcher_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_fontdatabase_p.h
@@ -49,10 +52,6 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qunix_eventdispatcher_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontconfig_database_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontengine_multifontconfig_p.h
-
-      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/shared/qwayland_mimehelper.h
-      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/shared/qwayland_shm_formathelper.h
-      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/shared/qwayland_xkb.h
 
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_clientbuffer_integration_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_clientbuffer_integrationfactory_p.h
@@ -90,6 +89,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_inputdevice.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_integration.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_key_extension.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_mimehelper.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_native_interface.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_screen.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_shellsurface.cpp
@@ -100,6 +100,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_touch.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_window.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_windowmanager_integration.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/qwayland_xkb.cpp
 
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_eventdispatcher.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qgenericunix_services.cpp
@@ -107,9 +108,6 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qunix_eventdispatcher.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontconfig_database.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/unix_generic/qfontengine_multifontconfig.cpp
-
-      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/shared/qwayland_mimehelper.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/shared/qwayland_xkb.cpp
 
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_clientbuffer_integration.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/client/hardwareintegration/qwayland_clientbuffer_integrationfactory.cpp
