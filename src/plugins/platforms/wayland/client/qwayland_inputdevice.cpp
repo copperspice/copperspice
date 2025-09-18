@@ -482,7 +482,62 @@ void QWaylandInputDevice::Keyboard::keyboard_leave(uint32_t time, struct wl_surf
 
 void QWaylandInputDevice::Keyboard::keyboard_key(uint32_t serial, uint32_t time, uint32_t key, uint32_t state)
 {
-   // pending implementation
+   QWaylandWindow *window = m_focus;
+   uint32_t code = key + 8;
+   bool isDown   = state != 0;
+
+   QEvent::Type type = isDown ? QEvent::KeyPress : QEvent::KeyRelease;
+   QString text;
+
+   int qtkey = key + 8;           // some compositors substract 8
+   m_parent->m_serial = serial;
+
+   if (window == nullptr) {
+      // destroyed the keyboard focus surface, server did not get the message yet
+      return;
+   }
+
+   if (isDown) {
+      m_parent->m_display->setLastInputDevice(m_parent, serial, window);
+   }
+
+   if (! createDefaultKeyMap()) {
+      return;
+   }
+
+   const xkb_keysym_t sym = xkb_state_key_get_one_sym(m_xkbState, code);
+   Qt::KeyboardModifiers modifiers = m_parent->modifiers();
+
+   uint utf32 = xkb_keysym_to_utf32(sym);
+
+   if (utf32) {
+      text = QChar32(static_cast<char32_t>(utf32));
+   }
+
+   qtkey = QWaylandXkb::keysymToQtKey(sym, modifiers, text);
+
+   // map control + letter to proper text
+   if (utf32 >= 'A' && utf32 <= '~' && (modifiers & Qt::ControlModifier)) {
+      utf32 &= ~0x60;
+      text = QChar32(static_cast<char32_t>(utf32));
+   }
+
+   QWindowSystemInterface::handleExtendedKeyEvent(window->window(), time, type, qtkey,
+         modifiers, code, sym, m_nativeModifiers, text);
+
+   if (state == WL_KEYBOARD_KEY_STATE_PRESSED && xkb_keymap_key_repeats(m_xkbMap, code)) {
+      m_repeatKey  = qtkey;
+      m_repeatCode = code;
+      m_repeatTime = time;
+      m_repeatText = text;
+      m_repeatSym  = sym;
+
+      m_repeatTimer.setInterval(400);
+      m_repeatTimer.start();
+
+   } else if (m_repeatCode == code) {
+      m_repeatTimer.stop();
+   }
 }
 
 Qt::KeyboardModifiers QWaylandInputDevice::Keyboard::modifiers() const
@@ -490,7 +545,7 @@ Qt::KeyboardModifiers QWaylandInputDevice::Keyboard::modifiers() const
    Qt::KeyboardModifiers retval = Qt::NoModifier;
 
 #ifndef QT_NO_WAYLAND_XKB
-   if (! m_xkbState) {
+   if (m_xkbState == nullptr) {
       return retval;
    }
 
@@ -502,7 +557,14 @@ Qt::KeyboardModifiers QWaylandInputDevice::Keyboard::modifiers() const
 
 void QWaylandInputDevice::Keyboard::repeatKey()
 {
-   // pending implementation
+   m_repeatTimer.setInterval(25);
+
+   QWindowSystemInterface::handleExtendedKeyEvent(m_focus->window(), m_repeatTime, QEvent::KeyRelease, m_repeatKey,
+         modifiers(), m_repeatCode, m_repeatSym, m_nativeModifiers, m_repeatText, true);
+
+   QWindowSystemInterface::handleExtendedKeyEvent(m_focus->window(),
+         m_repeatTime, QEvent::KeyPress, m_repeatKey, modifiers(), m_repeatCode,
+         m_repeatSym, m_nativeModifiers, m_repeatText, true);
 }
 
 void QWaylandInputDevice::Keyboard::keyboard_modifiers(uint32_t serial,
