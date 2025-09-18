@@ -605,24 +605,41 @@ QWaylandInputDevice::Pointer::~Pointer()
    }
 }
 
-void QWaylandInputDevice::Pointer::pointer_enter(uint32_t serial, struct wl_surface *surface,
-      wl_fixed_t sx, wl_fixed_t sy)
+void QWaylandInputDevice::Pointer::pointer_enter(uint32_t serial, struct wl_surface *surface, wl_fixed_t sx, wl_fixed_t sy)
 {
-   if (! surface) {
-      return;
-   }
-
-   // pending implementation
-}
-
-void QWaylandInputDevice::Pointer::pointer_leave(uint32_t time, struct wl_surface *surface)
-{
-   // The event may arrive after destroying the window, indicated by a null surface.
    if (surface == nullptr) {
       return;
    }
 
-   // pending implementation
+   QWaylandWindow *window = QWaylandWindow::fromWlSurface(surface);
+   window->window()->setCursor(window->window()->cursor());
+
+   m_focus = window;
+   m_surfacePos = QPointF(wl_fixed_to_double(sx), wl_fixed_to_double(sy));
+   m_globalPos = window->window()->mapToGlobal(m_surfacePos.toPoint());
+
+   m_parent->m_serial = serial;
+   m_enterSerial      = serial;
+
+   QWaylandWindow *grab = QWaylandWindow::mouseGrab();
+
+   if (grab == nullptr) {
+      EnterEvent event(m_surfacePos, m_globalPos);
+      window->handleMouse(m_parent, event);
+   }
+}
+
+void QWaylandInputDevice::Pointer::pointer_leave(uint32_t time, struct wl_surface *surface)
+{
+   // event may arrive after destroying the window, indicated by a null surface.
+   if (surface == nullptr) {
+      return;
+   }
+
+   if (! QWaylandWindow::mouseGrab()) {
+      QWaylandWindow *window = QWaylandWindow::fromWlSurface(surface);
+      window->handleMouseLeave(m_parent);
+   }
 
    m_focus   = nullptr;
    m_buttons = Qt::NoButton;
@@ -632,13 +649,45 @@ void QWaylandInputDevice::Pointer::pointer_leave(uint32_t time, struct wl_surfac
 
 void QWaylandInputDevice::Pointer::pointer_motion(uint32_t time, wl_fixed_t surface_x, wl_fixed_t surface_y)
 {
-   // pending implementation
+   QWaylandWindow *window = m_focus;
+
+   if (window == nullptr) {
+      // destroyed the pointer focus surface, but the server did not get the message yet
+      return;
+   }
+
+   QPointF pos(wl_fixed_to_double(surface_x), wl_fixed_to_double(surface_y));
+   QPointF delta  = pos - pos.toPoint();
+   QPointF global = window->window()->mapToGlobal(pos.toPoint());
+
+   global += delta;
+
+   m_surfacePos = pos;
+   m_globalPos  = global;
+
+   m_parent->m_time = time;
+
+   QWaylandWindow *grab = QWaylandWindow::mouseGrab();
+
+   if (grab != nullptr && grab != window) {
+      // can not know the true position since we are getting events for another surface,
+      // just set it outside of the window boundaries
+
+      pos    = QPointF(-1, -1);
+      global = grab->window()->mapToGlobal(pos.toPoint());
+
+      MotionEvent e(time, pos, global, m_buttons, m_parent->modifiers());
+      grab->handleMouse(m_parent, e);
+
+   } else {
+      MotionEvent e(time, m_surfacePos, m_globalPos, m_buttons, m_parent->modifiers());
+      window->handleMouse(m_parent, e);
+   }
 }
 
-void QWaylandInputDevice::Pointer::pointer_button(uint32_t serial, uint32_t time,
-      uint32_t button, uint32_t state)
+void QWaylandInputDevice::Pointer::pointer_button(uint32_t serial, uint32_t time, uint32_t button, uint32_t state)
 {
-   // pending implementation
+   QWaylandWindow *window = m_focus;
 
    Qt::MouseButton qt_button;
 
@@ -713,23 +762,69 @@ void QWaylandInputDevice::Pointer::pointer_button(uint32_t serial, uint32_t time
          return; // invalid button number
    }
 
-   // pending implementation
+   if (state) {
+      m_buttons |= qt_button;
+   } else {
+      m_buttons &= ~qt_button;
+   }
+
+   m_parent->m_time   = time;
+   m_parent->m_serial = serial;
+
+   if (state) {
+      m_parent->m_display->setLastInputDevice(m_parent, serial, window);
+   }
+
+   QWaylandWindow *grab = QWaylandWindow::mouseGrab();
+
+   if (grab != nullptr && grab != m_focus) {
+      QPointF pos    = QPointF(-1, -1);
+      QPointF global = grab->window()->mapToGlobal(pos.toPoint());
+
+      MotionEvent event(time, pos, global, m_buttons, m_parent->modifiers());
+      grab->handleMouse(m_parent, event);
+
+   } else if (window) {
+      MotionEvent event(time, m_surfacePos, m_globalPos, m_buttons, m_parent->modifiers());
+      window->handleMouse(m_parent, event);
+   }
 }
 
 void QWaylandInputDevice::Pointer::releaseButtons()
 {
    m_buttons = Qt::NoButton;
-   MotionEvent e(m_parent->m_time, m_surfacePos, m_globalPos, m_buttons, m_parent->modifiers());
+   MotionEvent event(m_parent->m_time, m_surfacePos, m_globalPos, m_buttons, m_parent->modifiers());
 
    if (m_focus != nullptr) {
-      m_focus->handleMouse(m_parent, e);
+      m_focus->handleMouse(m_parent, event);
    }
 }
 
 void QWaylandInputDevice::Pointer::pointer_axis(uint32_t time, uint32_t axis, int32_t value)
 {
+   QWaylandWindow *window = m_focus;
 
-   // pending implementation
+   QPoint pixelDelta;
+   QPoint angleDelta;
+
+   if (window == nullptr) {
+      // destroyed the pointer focus surface, server did not get the message yet
+      return;
+   }
+
+   // normalize value and inverse axis
+   int valueDelta = wl_fixed_to_int(value) * -12;
+
+   if (axis == WL_POINTER_AXIS_HORIZONTAL_SCROLL) {
+      pixelDelta = QPoint();
+      angleDelta.setX(valueDelta);
+   } else {
+      pixelDelta = QPoint();
+      angleDelta.setY(valueDelta);
+   }
+
+   WheelEvent event(time, m_surfacePos, m_globalPos, pixelDelta, angleDelta);
+   window->handleMouse(m_parent, event);
 }
 
 // ** begin QWaylandInputDevice::Touch
