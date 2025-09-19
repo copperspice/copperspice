@@ -116,7 +116,23 @@ void QWaylandInputDevice::handleTouchPoint(int id, double x, double y, Qt::Touch
       }
 
    if (! coordsOk) {
-      // pending implementation
+      QWaylandWindow *win = m_touch->m_focus;
+
+      if (win == nullptr && m_pointer != nullptr) {
+         win = m_pointer->m_focus;
+      }
+
+      if (win == nullptr && m_keyboard != nullptr) {
+         win = m_keyboard->m_focus;
+      }
+
+      if (win == nullptr || win->window() == nullptr) {
+         return;
+      }
+
+      tp.area = QRectF(0, 0, 8, 8);
+      QMargins margins = win->frameMargins();
+      tp.area.moveCenter(win->window()->mapToGlobal(QPoint(x - margins.left(), y - margins.top())));
    }
 
    tp.state = state;
@@ -853,7 +869,9 @@ void QWaylandInputDevice::Touch::touch_down(uint32_t serial, uint32_t time, stru
    m_parent->m_time   = time;
    m_parent->m_serial = serial;
 
-   // pending implementation
+   m_focus = QWaylandWindow::fromWlSurface(surface);
+   m_parent->m_display->setLastInputDevice(m_parent, serial, m_focus);
+   m_parent->handleTouchPoint(id, wl_fixed_to_double(x), wl_fixed_to_double(y), Qt::TouchPointPressed);
 }
 
 void QWaylandInputDevice::Touch::touch_up(uint32_t serial, uint32_t time, int32_t id)
@@ -884,8 +902,13 @@ void QWaylandInputDevice::Touch::touch_cancel()
    m_prevTouchPoints.clear();
    m_touchPoints.clear();
 
-   // pending implementation
+   QWaylandTouchExtension *touchExt = m_parent->m_display->touchExtension();
 
+   if (touchExt != nullptr) {
+      touchExt->touchCanceled();
+   }
+
+   QWindowSystemInterface::handleTouchCancelEvent(nullptr, m_parent->m_touchDevice);
 }
 
 bool QWaylandInputDevice::Touch::allTouchPointsReleased()
@@ -939,7 +962,34 @@ void QWaylandInputDevice::Touch::touch_frame()
       return;
    }
 
-   // pending implementation
+   QWindow *window = nullptr;
+
+   if (m_focus != nullptr) {
+      const QWindowSystemInterface::TouchPoint &tp = m_touchPoints.last();
+
+      // when the touch event is received global pos is calculated including the margins
+      // now adjust to get the correct local pos
+
+      window = m_focus->window();
+      QMargins margins = window->frameMargins();
+
+      QPoint p = tp.area.center().toPoint();
+      QPointF localPos(window->mapFromGlobal(QPoint(p.x() + margins.left(), p.y() + margins.top())));
+
+      if (m_focus->touchDragDecoration(m_parent, localPos, tp.area.center(), tp.state, m_parent->modifiers())) {
+         return;
+      }
+   }
+
+   QWindowSystemInterface::handleTouchEvent(window, m_parent->m_touchDevice, m_touchPoints);
+
+   if (allTouchPointsReleased()) {
+      m_prevTouchPoints.clear();
+   } else {
+      m_prevTouchPoints = m_touchPoints;
+   }
+
+   m_touchPoints.clear();
 }
 
 }
