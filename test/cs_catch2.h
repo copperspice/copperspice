@@ -25,6 +25,8 @@
 #include <qdatetime.h>
 #include <qlocale.h>
 #include <qmargins.h>
+#include <qpoint.h>
+#include <qrect.h>
 #include <qstring8.h>
 #include <qstring16.h>
 #include <qtime.h>
@@ -87,6 +89,42 @@ namespace Catch {
       static std::string convert(const QMargins &value) {
          QString retval = QString8("%1 %2 %3 %4")
                .formatArgs(value.left(), value.top(), value.right(), value.bottom());
+         return retval.toStdString();
+      }
+   };
+
+   template <>
+   struct StringMaker<QPoint> {
+      static std::string convert(const QPoint &value) {
+         QString retval = QString8("{ %1, %2 }")
+               .formatArgs(value.x(), value.y());
+         return retval.toStdString();
+      }
+   };
+
+   template <>
+   struct StringMaker<QPointF> {
+      static std::string convert(const QPointF &value) {
+         QString retval = QString8("{ %1, %2 }")
+               .formatArgs(value.x(), value.y());
+         return retval.toStdString();
+      }
+   };
+
+   template <>
+   struct StringMaker<QRect> {
+      static std::string convert(const QRect &value) {
+         QString retval = QString8("{ %1, %2, %3, %4 }")
+               .formatArgs(value.left(), value.top(), value.width(), value.height());
+         return retval.toStdString();
+      }
+   };
+
+   template <>
+   struct StringMaker<QRectF> {
+      static std::string convert(const QRectF &value) {
+         QString retval = QString8("{ %1, %2, %3, %4 }")
+               .formatArgs(value.left(), value.top(), value.width(), value.height());
          return retval.toStdString();
       }
    };
