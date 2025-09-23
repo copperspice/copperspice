@@ -132,11 +132,12 @@ TEST_CASE("QDateTime comparison", "[qdatetime]")
 
    {
       dt1 = QDateTime();
+
       REQUIRE(dt1.isValid() == false);
 
       dt2 = QDate(1970, 1, 1).startOfDay();
-      REQUIRE(dt2.isValid() == true);
 
+      REQUIRE(dt2.isValid() == true);
       REQUIRE(dt1 != dt2);
    }
 }
@@ -147,16 +148,22 @@ TEST_CASE("QDateTime currentDateTime", "[qdatetime]")
 
    {
       dt = QDateTime::currentDateTime();
+
+      REQUIRE(dt.isValid() == true);
       REQUIRE(dt.timeZone() == QTimeZone::systemTimeZone());
    }
 
    {
       dt = QDateTime::currentDateTime(QTimeZone("America/New_York"));
+
+      REQUIRE(dt.isValid() == true);
       REQUIRE(dt.timeZone() == QTimeZone("America/New_York"));
    }
 
    {
       dt = QDateTime::currentDateTimeUtc();
+
+      REQUIRE(dt.isValid() == true);
       REQUIRE(dt.timeZone() == QTimeZone::utc());
    }
 }
