@@ -49,6 +49,8 @@ TEST_CASE("QSet clear", "[qset]")
 {
    QSet<QString> set = { "watermelon", "apple", "pear", "grapefruit" };
 
+   REQUIRE(set.size() == 4);
+
    set.clear();
 
    REQUIRE(set.size() == 0);
@@ -56,7 +58,9 @@ TEST_CASE("QSet clear", "[qset]")
 
 TEST_CASE("QSet contains_a", "[qset]")
 {
-   QSet<QString> set = { "watermelon", "apple", "pear", "grapefruit" };
+   QSet<QString> set = { "watermelon", "apple", "pear", "grapefruit", "pear" };
+
+   REQUIRE(set.size() == 4);
 
    REQUIRE(set.contains("pear")  == true);
    REQUIRE(set.contains("mango") == false);
@@ -70,22 +74,46 @@ TEST_CASE("QSet contains_b", "[qset]")
    REQUIRE(set1.contains(set1) == true);
    REQUIRE(set1.contains(set2) == false);
 
+   //
    set1.insert("orange");
    set1.insert("grape");
 
+   REQUIRE(set1.size() == 6);
    REQUIRE(set1.contains(set2) == true);
+
+   //
+   set1.insert("orange");
+
+   REQUIRE(set1.size() == 6);
+   REQUIRE(set1.contains(set2) == true);
+}
+
+TEST_CASE("QSet copy_assign", "[qset]")
+{
+   QSet<QString> set_a = { "watermelon", "apple", "pear", "grapefruit", "pear" };
+   QSet<QString> set_b = set_a;
+   QSet<QString> set_c;
+
+   REQUIRE(set_b.size() == 4);
+   REQUIRE(set_a == set_b);
+
+   //
+   set_c = set_a;
+
+   REQUIRE(set_c.size() == 4);
+   REQUIRE(set_a == set_c);
 }
 
 TEST_CASE("QSet duplicate", "[qset]")
 {
    QSet<QString> set = { "watermelon", "apple", "pear", "grapefruit" };
 
-   REQUIRE(set.contains("apple"));
+   REQUIRE(set.contains("apple") == true);
    REQUIRE(set.size() == 4);
 
    set.insert("apple");
 
-   REQUIRE(set.contains("apple"));
+   REQUIRE(set.contains("apple") == true);
    REQUIRE(set.size() == 4);
 }
 
@@ -113,13 +141,26 @@ TEST_CASE("QSet erase", "[qset]")
    auto iter = set.find("apple");
    set.erase(iter);
 
-   REQUIRE(! set.contains("apple"));
-
-   REQUIRE(set.contains("watermelon"));
-   REQUIRE(set.contains("pear"));
-   REQUIRE(set.contains("grapefruit"));
-
    REQUIRE(set.size() == 3);
+
+   REQUIRE(set.contains("apple")      == false);
+
+   REQUIRE(set.contains("watermelon") == true);
+   REQUIRE(set.contains("pear")       == true);
+   REQUIRE(set.contains("grapefruit") == true);
+}
+
+TEST_CASE("QSet interation", "[qset]")
+{
+   QSet<QString> set{ "watermelon", "apple", "pear" };
+
+   auto iter = set.begin();
+   REQUIRE(iter != set.end());
+
+   ++iter;
+
+   REQUIRE(iter != set.end());
+   REQUIRE(set.contains(*iter) == true);
 }
 
 TEST_CASE("QSet intersect", "[qset]")
@@ -134,11 +175,12 @@ TEST_CASE("QSet intersect", "[qset]")
       QSet<QString> result = setA.intersect(setB);
 
       REQUIRE(result.size() == 2);
-      REQUIRE(result.contains("banana"));
-      REQUIRE(result.contains("cherry"));
 
-      REQUIRE(result.contains("apple") == false);
-      REQUIRE(result.contains("date")  == false);
+      REQUIRE(result.contains("banana") == true);
+      REQUIRE(result.contains("cherry") == true);
+
+      REQUIRE(result.contains("apple")  == false);
+      REQUIRE(result.contains("date")   == false);
 
       REQUIRE(result == setA);
 
@@ -191,8 +233,14 @@ TEST_CASE("QSet intersect", "[qset]")
       setE &= setB;
 
       REQUIRE(setE.size() == 2);
-      REQUIRE(setE.contains("date"));
-      REQUIRE(setE.contains("cherry"));
+      REQUIRE(setE.contains("date")   == true);
+      REQUIRE(setE.contains("cherry") == true);
+   }
+
+   {
+      QSet<QString> result = setA.intersect(setA);
+
+      REQUIRE(result == setA);
    }
 }
 
@@ -202,15 +250,26 @@ TEST_CASE("QSet insert", "[qset]")
 
    set.insert("mango");
 
-   REQUIRE(set.contains("mango"));
    REQUIRE(set.size() == 5);
+   REQUIRE(set.contains("mango") == true);
+
+   //
+   set << "quince" << "peach";
+
+   REQUIRE(set.size() == 7);
+   REQUIRE(set.contains("peach") == true);
 }
 
-TEST_CASE("QSet length", "[qset]")
+TEST_CASE("QSet move", "[qset]")
 {
-   QSet<QString> set = { "watermelon", "apple", "pear", "grapefruit" };
+   QSet<QString> set_a{ "watermelon", "apple", "pear"};
+   QSet<QString> set_b = std::move(set_a);
 
-   REQUIRE(set.size() == 4);
+   REQUIRE(set_a.size() == 0);
+   REQUIRE(set_b.size() == 3);
+
+   REQUIRE(set_a.contains("watermelon") == false);
+   REQUIRE(set_b.contains("watermelon") == true);
 }
 
 TEST_CASE("QSet remove", "[qset]")
@@ -219,13 +278,24 @@ TEST_CASE("QSet remove", "[qset]")
 
    set.remove("pear");
 
-   REQUIRE(! set.contains("pear"));
+   REQUIRE(set.size() == 3);
 
-   REQUIRE(set.contains("watermelon"));
-   REQUIRE(set.contains("apple"));
-   REQUIRE(set.contains("grapefruit"));
+   REQUIRE(set.contains("pear")       == false);
+   REQUIRE(set.contains("watermelon") == true);
+   REQUIRE(set.contains("apple")      == true);
+   REQUIRE(set.contains("grapefruit") == true);
+
+   //
+   set.remove("grape");
 
    REQUIRE(set.size() == 3);
+}
+
+TEST_CASE("QSet size", "[qset]")
+{
+   QSet<QString> set = { "watermelon", "apple", "pear", "grapefruit" };
+
+   REQUIRE(set.size()   == 4);
 }
 
 TEST_CASE("QSet swap", "[qset]")
@@ -235,8 +305,28 @@ TEST_CASE("QSet swap", "[qset]")
 
    set1.swap(set2);
 
-   REQUIRE(set1.contains("orange"));
-   REQUIRE(! set2.contains("orange"));
+   REQUIRE(set1.contains("orange") == true);
+   REQUIRE(set2.contains("orange") == false);
+}
+
+TEST_CASE("QSet subtract", "[qset]")
+{
+   QSet<QString> setA = { "watermelon", "apple", "pear", "grapefruit" };
+   QSet<QString> setB = { "grape", "orange", "pear"};
+
+   {
+      QSet<QString> result = setA.subtract(setB);
+
+      REQUIRE(result.size() == 3);
+
+      REQUIRE(result.contains("watermelon") == true);
+      REQUIRE(result.contains("apple")      == true);
+      REQUIRE(result.contains("pear")       == false);
+      REQUIRE(result.contains("grapefruit") == true);
+
+      REQUIRE(result.contains("grape")      == false);
+      REQUIRE(result.contains("orange")     == false);
+   }
 }
 
 TEST_CASE("QSet toList", "[qset]")
@@ -246,12 +336,25 @@ TEST_CASE("QSet toList", "[qset]")
     SECTION("Convert to QList") {
         QList<QString> list = set.toList();
 
+        REQUIRE(set.size()  == 4);
         REQUIRE(list.size() == 4);
 
-        REQUIRE(list.contains("watermelon"));
-        REQUIRE(list.contains("apple"));
-        REQUIRE(list.contains("pear"));
-        REQUIRE(list.contains("grapefruit"));
+        REQUIRE(list.contains("watermelon")  == true);
+        REQUIRE(list.contains("apple")       == true);
+        REQUIRE(list.contains("pear")        == true);
+        REQUIRE(list.contains("grapefruit")  == true);
+    }
+
+    SECTION("Convert to QList using values") {
+        QList<QString> list = set.values();
+
+        REQUIRE(set.size()  == 4);
+        REQUIRE(list.size() == 4);
+
+        REQUIRE(list.contains("watermelon")  == true);
+        REQUIRE(list.contains("apple")       == true);
+        REQUIRE(list.contains("pear")        == true);
+        REQUIRE(list.contains("grapefruit")  == true);
     }
 
     SECTION("Modify QList") {
@@ -260,10 +363,10 @@ TEST_CASE("QSet toList", "[qset]")
 
         REQUIRE(list.size() == 3);
         REQUIRE(list.contains("apple") == true);
-        REQUIRE(list.contains("pear") == false);
+        REQUIRE(list.contains("pear")  == false);
 
         REQUIRE(set.size() == 4);
-        REQUIRE(set.contains("pear") == true);
+        REQUIRE(set.contains("pear")   == true);
     }
 }
 
@@ -276,13 +379,14 @@ TEST_CASE("QSet unite", "[qset]")
       QSet<QString> result = setA.unite(setB);
 
       REQUIRE(result.size() == 6);
+
       REQUIRE(result.contains("watermelon") == true);
-      REQUIRE(result.contains("apple") == true);
-      REQUIRE(result.contains("pear") == true);
+      REQUIRE(result.contains("apple")      == true);
+      REQUIRE(result.contains("pear")       == true);
       REQUIRE(result.contains("grapefruit") == true);
 
-      REQUIRE(result.contains("grape") == true);
-      REQUIRE(result.contains("orange") == true);
+      REQUIRE(result.contains("grape")      == true);
+      REQUIRE(result.contains("orange")     == true);
    }
 
    {
@@ -298,7 +402,13 @@ TEST_CASE("QSet unite", "[qset]")
       QSet<QString> result = setA.unite(setB).unite(setC);
 
       REQUIRE(result.size() == 7);
-      REQUIRE(result.contains("peach"));
-      REQUIRE(result.contains("apple"));
+      REQUIRE(result.contains("peach") == true);
+      REQUIRE(result.contains("apple") == true);
+   }
+
+   {
+      QSet<QString> result = setA.unite(setA);
+
+      REQUIRE(result == setA);
    }
 }
