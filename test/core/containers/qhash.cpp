@@ -32,6 +32,17 @@ TEST_CASE("QHash traits", "[qhash]")
    REQUIRE(std::has_virtual_destructor_v<QHash<int, int>> == false);
 }
 
+TEST_CASE("QHash assign", "[qhash]")
+{
+   QHash<int, double> hash { {1, 15.8}, {2, 26.2} };
+
+   hash = hash;
+
+   REQUIRE(hash.size() == 2);
+   REQUIRE(hash.value(1) == 15.8);
+   REQUIRE(hash.value(2) == 26.2);
+}
+
 TEST_CASE("QHash clear", "[qhash]")
 {
    QHash<int, QString> hash = { { 1, "watermelon"},
@@ -42,6 +53,9 @@ TEST_CASE("QHash clear", "[qhash]")
    hash.clear();
 
    REQUIRE(hash.size() == 0);
+   REQUIRE(hash.isEmpty() == true);
+
+   REQUIRE(hash.count() == 0);
 }
 
 TEST_CASE("QHash contains", "[qhash]")
@@ -51,8 +65,13 @@ TEST_CASE("QHash contains", "[qhash]")
                                 { 3, "pear"},
                                 { 4, "grapefruit"} };
 
-   REQUIRE(hash.contains(2));
-   REQUIRE(! hash.contains(9));
+   REQUIRE(hash.size() == 4);
+   REQUIRE(hash.isEmpty() == false);
+
+   REQUIRE(hash.count() == 4);
+
+   REQUIRE(hash.contains(2) == true);
+   REQUIRE(hash.contains(9) == false);
 }
 
 TEST_CASE("QHash count", "[qhash]")
@@ -62,15 +81,20 @@ TEST_CASE("QHash count", "[qhash]")
                                 { 3, "pear"},
                                 { 4, "grapefruit"} };
 
+   REQUIRE(hash.size()  == 4);
+   REQUIRE(hash.isEmpty() == false);
+
    REQUIRE(hash.count() == 4);
-   REQUIRE(hash.size() == 4);
 }
 
 TEST_CASE("QHash empty", "[qhash]")
 {
    QHash<int, QString> hash;
 
-   REQUIRE(hash.isEmpty());
+   REQUIRE(hash.size() == 0);
+   REQUIRE(hash.isEmpty() == true);
+
+   REQUIRE(hash.count() == 0);
 }
 
 TEST_CASE("QHash erase", "[qhash]")
@@ -84,29 +108,40 @@ TEST_CASE("QHash erase", "[qhash]")
       auto iter = hash.find(2);
       hash.erase(iter);
 
-      REQUIRE(hash.value(2) == "");
+      REQUIRE(hash.size()  == 3);
+      REQUIRE(hash.count() == 3);
 
       REQUIRE(hash.value(1) == "watermelon");
+      REQUIRE(hash.value(2) == "");
       REQUIRE(hash.value(3) == "pear");
       REQUIRE(hash.value(4) == "grapefruit");
 
-      REQUIRE(hash.size() == 3);
+      REQUIRE(hash.value(8) == "");
+      REQUIRE(hash.value(8, "na") == "na");
+
+      REQUIRE(hash[1] == "watermelon");
+      REQUIRE(hash[3] == "pear");
+      REQUIRE(hash[4] == "grapefruit");
    }
 
    SECTION ("key") {
-      auto count = hash.erase(2);
+      auto removed = hash.erase(2);
 
-      REQUIRE(hash.value(2) == "");
-      REQUIRE(count == 1);
+      REQUIRE(hash.size() == 3);
+      REQUIRE(removed == 1);
 
       REQUIRE(hash.value(1) == "watermelon");
+      REQUIRE(hash.value(2) == "");
       REQUIRE(hash.value(3) == "pear");
       REQUIRE(hash.value(4) == "grapefruit");
 
-      REQUIRE(hash.size() == 3);
+      //
+      removed = hash.erase(2);
 
-      count = hash.erase(2);
-      REQUIRE(count == 0);
+      REQUIRE(hash.size() == 3);
+      REQUIRE(hash.isEmpty() == false);
+
+      REQUIRE(removed == 0);
    }
 }
 
@@ -134,6 +169,38 @@ TEST_CASE("QHash comparison", "[qhash]")
    }
 }
 
+TEST_CASE("QHash copy_move_constructor", "[qhash]")
+{
+   QHash<QString, int> hash_a = { { "watermelon", 10},
+                                  { "apple",      20},
+                                  { "pear",       30},
+                                  { "grapefruit", 40} };
+
+   QHash<QString, int> hash_b = hash_a;
+
+   REQUIRE(hash_a.size() == 4);
+   REQUIRE(hash_b.size() == 4);
+
+   REQUIRE(hash_b["watermelon"] == 10);
+   REQUIRE(hash_b["grapefruit"] == 40);
+
+   //
+   QHash<QString, int> hash_c = std::move(hash_a);
+
+   REQUIRE(hash_a.size() == 0);
+   REQUIRE(hash_b.size() == 4);
+   REQUIRE(hash_c.size() == 4);
+
+   REQUIRE(hash_a["watermelon"] == 0);
+   REQUIRE(hash_a["grapefruit"] == 0);
+
+   REQUIRE(hash_b["watermelon"] == 10);
+   REQUIRE(hash_b["grapefruit"] == 40);
+
+   REQUIRE(hash_c["watermelon"] == 10);
+   REQUIRE(hash_c["grapefruit"] == 40);
+}
+
 TEST_CASE("QHash equal_range", "[qhash]")
 {
    QHash<int, QString> hash = { { 1, "watermelon"},
@@ -157,8 +224,14 @@ TEST_CASE("QHash insert_copy", "[qhash]")
 
    hash.insert( {6, "mango"} );
 
-   REQUIRE(hash.value(6) == "mango");
    REQUIRE(hash.size() == 5);
+   REQUIRE(hash.value(6) == "mango");
+
+   //
+   hash.insert(3, "orange");
+
+   REQUIRE(hash.size() == 5);
+   REQUIRE(hash[3] == "orange");
 }
 
 TEST_CASE("QHash insert_move", "[qhash]")
@@ -170,8 +243,34 @@ TEST_CASE("QHash insert_move", "[qhash]")
    hash.insert(3, QMakeUnique<QString>("pear"));
    hash.insert(4, QMakeUnique<QString>("grapefruit"));
 
-   REQUIRE(*(hash[3]) == "pear");
    REQUIRE(hash.size() == 4);
+   REQUIRE(*(hash[3]) == "pear");
+}
+
+TEST_CASE("QHash lookup", "[qhash]")
+{
+   QHash<QString, int> hash = { { "watermelon", 10 },
+                                { "apple",      20 },
+                                { "pear",       30 },
+                                { "grapefruit", 40 } };
+
+   //
+   QList<QString> keys = hash.keys();
+
+   REQUIRE(keys.size() == 4);
+   REQUIRE(keys.contains("apple"));
+
+   //
+   QList<int> values = hash.values();
+
+   REQUIRE(values.size() == 4);
+   REQUIRE(values.contains(30) == true);
+
+   //
+   hash.insert("", 50);
+
+   REQUIRE(hash.contains(""));
+   REQUIRE(hash.value("") == 50);
 }
 
 TEST_CASE("QHash operator_bracket", "[qhash]")
@@ -181,11 +280,30 @@ TEST_CASE("QHash operator_bracket", "[qhash]")
                                 { 3, "pear"},
                                 { 4, "grapefruit"} };
 
+   REQUIRE(hash.size() == 4);
+
    REQUIRE(hash[4] == "grapefruit");
    REQUIRE(hash[5] == "");
 
+   //
+   REQUIRE(hash.size() == 5);
+
    REQUIRE(hash.contains(5) == true);
+   REQUIRE(hash.value(5) == "");
    REQUIRE(hash[5] == "");
+
+   //
+   hash[7] = "quince";
+
+   REQUIRE(hash.size() == 6);
+
+   REQUIRE(hash.contains(7) == true);
+   REQUIRE(hash.value(7) == "quince");
+   REQUIRE(hash[7] == "quince");
+
+   // will not add another element
+   REQUIRE(hash.contains(6) == false);
+   REQUIRE(hash.value(6) == "");
 }
 
 TEST_CASE("QHash remove", "[qhash]")
@@ -195,15 +313,30 @@ TEST_CASE("QHash remove", "[qhash]")
                                 { 3, "pear"},
                                 { 4, "grapefruit"} };
 
+   REQUIRE(hash.size() == 4);
+
+   //
    hash.remove(3);
 
-   REQUIRE(hash.value(3) == "");
+   REQUIRE(hash.size() == 3);
 
    REQUIRE(hash.value(1) == "watermelon");
    REQUIRE(hash.value(2) == "apple");
+   REQUIRE(hash.value(3) == "");
    REQUIRE(hash.value(4) == "grapefruit");
 
+   //
+   hash.insert(10, "orange");
+
+   REQUIRE(hash.size() == 4);
+
+   REQUIRE(hash.remove(10)   == 1);
+   REQUIRE(hash.contains(10) == false);
+
    REQUIRE(hash.size() == 3);
+
+   //
+   REQUIRE(hash.remove(10) == 0);
 }
 
 TEST_CASE("QHash swap", "[qhash]")
