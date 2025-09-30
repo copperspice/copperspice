@@ -26,8 +26,6 @@
 #ifndef QWAYLAND_XKB_H
 #define QWAYLAND_XKB_H
 
-#ifndef QT_NO_WAYLAND_XKB
-
 #include <qnamespace.h>
 #include <qstring.h>
 
@@ -39,7 +37,5 @@ class QWaylandXkb
    static int keysymToQtKey(xkb_keysym_t keysym, Qt::KeyboardModifiers &modifiers, const QString &text);
    static Qt::KeyboardModifiers modifiers(struct xkb_state *state);
 };
-
-#endif // QT_NO_WAYLAND_XKB
 
 #endif

@@ -353,20 +353,14 @@ void QWaylandInputDevice::setCursor(const QSharedPointer<QWaylandBuffer> &buffer
 
 QWaylandInputDevice::Keyboard::Keyboard(QWaylandInputDevice *p)
    : m_repeatKey(0), m_nativeModifiers(0), m_repeatCode(0), m_repeatTime(0),
-     m_parent(p), m_focus(nullptr)
-
-#ifndef QT_NO_WAYLAND_XKB
-     , m_xkbContext(nullptr), m_xkbMap(nullptr), m_xkbState(nullptr)
-#endif
+     m_parent(p), m_focus(nullptr), m_xkbContext(nullptr), m_xkbMap(nullptr), m_xkbState(nullptr)
 {
    connect(&m_repeatTimer, &QTimer::timeout, this, &QWaylandInputDevice::Keyboard::repeatKey);
 }
 
 QWaylandInputDevice::Keyboard::~Keyboard()
 {
-#ifndef QT_NO_WAYLAND_XKB
    releaseKeyMap();
-#endif
 
    if (m_focus != nullptr) {
       QWindowSystemInterface::handleWindowActivated(nullptr);
@@ -379,7 +373,6 @@ QWaylandInputDevice::Keyboard::~Keyboard()
    }
 }
 
-#ifndef QT_NO_WAYLAND_XKB
 bool QWaylandInputDevice::Keyboard::createDefaultKeyMap()
 {
    if (m_xkbContext != nullptr && m_xkbMap != nullptr && m_xkbState != nullptr) {
@@ -425,7 +418,6 @@ void QWaylandInputDevice::Keyboard::releaseKeyMap()
       xkb_context_unref(m_xkbContext);
    }
 }
-#endif
 
 void QWaylandInputDevice::Keyboard::stopRepeat()
 {
@@ -434,8 +426,6 @@ void QWaylandInputDevice::Keyboard::stopRepeat()
 
 void QWaylandInputDevice::Keyboard::keyboard_keymap(uint32_t format, int32_t fd, uint32_t size)
 {
-#ifndef QT_NO_WAYLAND_XKB
-
    if (format != WL_KEYBOARD_KEYMAP_FORMAT_XKB_V1) {
       close(fd);
       return;
@@ -458,11 +448,6 @@ void QWaylandInputDevice::Keyboard::keyboard_keymap(uint32_t format, int32_t fd,
    close(fd);
 
    m_xkbState = xkb_state_new(m_xkbMap);
-#else
-   (void) format;
-   (void) fd;
-   (void) size;
-#endif
 }
 
 void QWaylandInputDevice::Keyboard::keyboard_enter(uint32_t time, struct wl_surface *surface, struct wl_array *keys)
@@ -560,13 +545,11 @@ Qt::KeyboardModifiers QWaylandInputDevice::Keyboard::modifiers() const
 {
    Qt::KeyboardModifiers retval = Qt::NoModifier;
 
-#ifndef QT_NO_WAYLAND_XKB
    if (m_xkbState == nullptr) {
       return retval;
    }
 
    retval = QWaylandXkb::modifiers(m_xkbState);
-#endif
 
    return retval;
 }
@@ -588,21 +571,11 @@ void QWaylandInputDevice::Keyboard::keyboard_modifiers(uint32_t serial,
 {
    (void) serial;
 
-#ifndef QT_NO_WAYLAND_XKB
-
    if (m_xkbState) {
       xkb_state_update_mask(m_xkbState, mods_depressed, mods_latched, mods_locked, 0, 0, group);
    }
 
    m_nativeModifiers = mods_depressed | mods_latched | mods_locked;
-
-#else
-   (void) serial;
-   (void) mods_depressed;
-   (void) mods_latched;
-   (void) mods_locked;
-   (void) group;
-#endif
 }
 
 // ** begin QWaylandInputDevice::Pointer

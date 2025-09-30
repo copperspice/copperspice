@@ -27,8 +27,6 @@
 
 #include <qstring.h>
 
-#ifndef QT_NO_WAYLAND_XKB
-
 #include <xkbcommon/xkbcommon-keysyms.h>
 
 static const uint32_t KeyTbl[] = {
@@ -200,5 +198,3 @@ Qt::KeyboardModifiers QWaylandXkb::modifiers(struct xkb_state *state)
 
    return modifiers;
 }
-
-#endif // QT_NO_WAYLAND_XKB

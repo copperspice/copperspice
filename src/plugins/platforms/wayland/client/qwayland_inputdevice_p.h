@@ -35,10 +35,8 @@
 #include <wayland-client.h>
 #include <wayland-cursor.h>
 
-#ifndef QT_NO_WAYLAND_XKB
 #include <xkbcommon/xkbcommon.h>
 #include <xkbcommon/xkbcommon-keysyms.h>
-#endif
 
 namespace QtWaylandClient {
 
@@ -163,23 +161,18 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandInputDevice::Keyboard : public QObject, pu
    QString m_repeatText;
    QTimer m_repeatTimer;
 
-#ifndef QT_NO_WAYLAND_XKB
    xkb_context *m_xkbContext;
    xkb_keymap  *m_xkbMap;
    xkb_state   *m_xkbState;
 
    xkb_keysym_t m_repeatSym;
-#endif
 
  private:
    CS_SLOT_1(Private, void repeatKey())
    CS_SLOT_2(repeatKey)
 
-#ifndef QT_NO_WAYLAND_XKB
    bool createDefaultKeyMap();
    void releaseKeyMap();
-#endif
-
 };
 
 class Q_WAYLAND_CLIENT_EXPORT QWaylandInputDevice::Pointer : public QtWayland::wl_pointer

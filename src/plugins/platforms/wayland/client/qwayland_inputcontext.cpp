@@ -28,16 +28,12 @@
 #include <qwayland_inputdevice_p.h>
 #include <qwayland_window_p.h>
 
-#ifndef QT_NO_WAYLAND_XKB
 #include <xkbcommon/xkbcommon.h>
-#endif
 
 namespace QtWaylandClient {
 
 static Qt::Key toQtKey(uint32_t sym)
 {
-#ifndef QT_NO_WAYLAND_XKB
-
    switch (static_cast < xkb_keysym_t > (sym)) {
       case XKB_KEY_BackSpace:
          return Qt::Key_Backspace;
@@ -60,11 +56,6 @@ static Qt::Key toQtKey(uint32_t sym)
       default:
          return Qt::Key_unknown;
    }
-
-#else
-   (void) sym;
-   return Qt::Key_unknown;
-#endif
 }
 
 static QEvent::Type toQEventType(uint32_t state)
