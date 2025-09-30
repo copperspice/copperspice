@@ -536,7 +536,7 @@ if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
 
       find_package(X11 COMPONENTS ICE SM Xcursor Xext Xfixes Xi Xinerama Xrandr Xrender)
       set_package_properties(X11 PROPERTIES
-         PURPOSE "Required for X11/X.Org integration support"
+         PURPOSE "Required for the X11 disply plugin"
          DESCRIPTION "Open source implementation of the X Window System"
          URL "https://www.x.org"
          TYPE REQUIRED
@@ -545,9 +545,17 @@ if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
       find_package(XCB COMPONENTS xcb xcb-image xcb-icccm xcb-sync xcb-xfixes xcb-shm xcb-randr
                    xcb-shape xcb-keysyms xcb-xinerama xcb-xkb xcb-render xcb-render-util xcb-glx)
       set_package_properties(XCB PROPERTIES
-         PURPOSE "Required for XCB/X.Org integration support"
+         PURPOSE "Required for XCB integration support"
          DESCRIPTION "Open source implementation of the XCB Interface for the X11 Window System"
          URL "https://xcb.freedesktop.org"
+         TYPE REQUIRED
+      )
+
+      find_package(XKBCommon_X11)
+      set_package_properties(XKBCommon_X11 PROPERTIES
+         PURPOSE "Required for XKB X11 integration support"
+         DESCRIPTION "Keyboard library"
+         URL "https://xkbcommon.org"
          TYPE REQUIRED
       )
 
@@ -561,15 +569,7 @@ if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
 
       find_package(XKBCommon)
       set_package_properties(XKBCommon PROPERTIES
-         PURPOSE "Required for XKB integration support"
-         DESCRIPTION "Keyboard library"
-         URL "https://xkbcommon.org"
-         TYPE REQUIRED
-      )
-
-      find_package(XKBCommon_X11)
-      set_package_properties(XKBCommon_X11 PROPERTIES
-         PURPOSE "Required for XKB X11 integration support"
+         PURPOSE "Required for XKB integration support for X11 and Wayland"
          DESCRIPTION "Keyboard library"
          URL "https://xkbcommon.org"
          TYPE REQUIRED
@@ -577,7 +577,7 @@ if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
 
       find_package(Wayland 1.18)
       set_package_properties(Wayland PROPERTIES
-         PURPOSE "Required to build the Wayland display plugin"
+         PURPOSE "Required for the Wayland display plugin"
          DESCRIPTION "Libraries for the Wayland display protocol"
          URL "https://gitlab.freedesktop.org/wayland/wayland"
          TYPE RECOMMENDED

@@ -112,8 +112,8 @@ if(BUILD_PLATFORMS_XCB_PLUGIN)
       ${X11_X11_LIB}
       ${X11_Xi_LIB}
       ${X11_XCB_LIB}
-      ${XKBCOMMON_LIB}
-      ${XKBCOMMON_X11_LIB}
+      XKBCommon::XKBCommon
+      XKBCommon::XKBCommon_X11
    )
 
    target_include_directories(CsXcbSupport

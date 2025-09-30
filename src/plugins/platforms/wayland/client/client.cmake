@@ -177,7 +177,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       Wayland::Client
       Wayland::Cursor
       ${FONTCONFIG_LIBRARIES}
-      ${XKBCOMMON_LIB}
+      XKBCommon::XKBCommon
    )
 
    if(GTK2_FOUND)
