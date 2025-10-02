@@ -118,9 +118,6 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandInputDevice : public QObject, public QtWay
 
    struct wl_display *m_wl_display;
    struct wl_surface *m_wl_pointerSurface;
-
-   friend class QWaylandTouchExtension;
-   friend class QWaylandQtKeyExtension;
 };
 
 inline uint32_t QWaylandInputDevice::serial() const
