@@ -66,7 +66,7 @@ class GenericWaylandTheme: public QGenericUnixTheme
    static QStringList themeNames() {
       QStringList result;
 
-      if (QGuiApplication::desktopSettingsAware()) {
+      if (QApplication::desktopSettingsAware()) {
          const QByteArray desktopEnvironment = QApplicationPrivate::platformIntegration()->services()->desktopEnvironment();
 
          if (desktopEnvironment == "KDE") {

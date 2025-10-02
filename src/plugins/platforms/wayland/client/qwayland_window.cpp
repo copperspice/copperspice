@@ -74,17 +74,15 @@ QWaylandWindow::~QWaylandWindow()
       reset(false);
    }
 
-   QList<QWaylandInputDevice *> inputDevices = m_display->inputDevices();
-
-   for (int i = 0; i < inputDevices.size(); ++i) {
-      inputDevices.at(i)->handleWindowDestroyed(this);
+   for (auto item : m_display->inputDevices()) {
+      item->handleWindowDestroyed(this);
    }
 
    const QWindow *parent = window();
 
-   for (QWindow *w : QGuiApplication::topLevelWindows()) {
-      if (w->transientParent() == parent) {
-         QWindowSystemInterface::handleCloseEvent(w);
+   for (QWindow *item : QApplication::topLevelWindows()) {
+      if (item->transientParent() == parent) {
+         QWindowSystemInterface::handleCloseEvent(item);
       }
    }
 

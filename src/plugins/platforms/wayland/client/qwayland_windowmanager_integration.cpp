@@ -23,8 +23,8 @@
 
 #include <qwayland_windowmanager_integration_p.h>
 
+#include <qapplication.h>
 #include <qevent.h>
-#include <qguiapplication.h>
 #include <qhash.h>
 #include <qplatform_nativeinterface.h>
 #include <qplatform_window.h>
@@ -32,6 +32,7 @@
 #include <qurl.h>
 
 #include <qwayland_display_p.h>
+
 #include <stdint.h>
 
 namespace QtWaylandClient {

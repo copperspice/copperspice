@@ -95,12 +95,12 @@ QWaylandDisplay::~QWaylandDisplay(void)
    qDeleteAll(m_inputDevices);
    m_inputDevices.clear();
 
-   for (QWaylandScreen *screen : m_screens) {
-      m_waylandIntegration->platform_destroyScreen(screen);
+   for (QWaylandScreen *item : m_screens) {
+      m_waylandIntegration->platform_destroyScreen(item);
    }
 
-   for (QWaylandScreen *screen : m_waitingScreens) {
-      delete screen;
+   for (QWaylandScreen *item : m_waitingScreens) {
+      delete item;
    }
 
    m_screens.clear();
@@ -335,8 +335,8 @@ void QWaylandDisplay::handleScreenInitialized(QWaylandScreen *screen)
 
 bool QWaylandDisplay::hasRegistryGlobal(const QString &interfaceName)
 {
-   for (const RegistryGlobal &global : m_globals) {
-      if (global.interface == interfaceName) {
+   for (const RegistryGlobal &item : m_globals) {
+      if (item.interface == interfaceName) {
          return true;
       }
    }
@@ -414,10 +414,11 @@ void QWaylandDisplay::registry_global_remove(uint32_t id)
       if (global.id == id) {
          if (global.interface == "wl_output") {
 
-            for (QWaylandScreen *screen : m_waitingScreens) {
-               if (screen->outputId() == id) {
-                  m_waitingScreens.removeOne(screen);
-                  delete screen;
+            for (QWaylandScreen *item : m_waitingScreens) {
+               if (item->outputId() == id) {
+                  m_waitingScreens.removeOne(item);
+                  delete item;
+
                   break;
                }
             }

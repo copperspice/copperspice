@@ -314,7 +314,6 @@ void QWaylandInputDevice::setCursor(struct wl_buffer *buffer, struct wl_cursor_i
 void QWaylandInputDevice::setCursor(struct wl_buffer *buffer, const QPoint &hotSpot, const QSize &size, qreal ratio)
 {
    if (m_caps & WL_SEAT_CAPABILITY_POINTER) {
-
       bool force = m_pointer->m_enterSerial > m_pointer->m_cursorSerial;
 
       if (! force && m_pointer->m_cursorBuffer == buffer) {

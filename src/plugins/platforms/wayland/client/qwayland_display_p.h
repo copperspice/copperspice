@@ -250,8 +250,8 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandDisplay : public QObject, public QtWayland
 
    QList<QWaylandScreen *> m_waitingScreens;
 
-   struct wl_display *m_display;
-   struct wl_shm *m_shm;
+   struct wl_display  *m_display;
+   struct wl_shm      *m_shm;
    struct wl_callback *m_syncCallback;
 
    static const wl_callback_listener syncCallbackListener;

@@ -183,8 +183,8 @@ wl_cursor *QWaylandCursor::requestCursor(WaylandCursor shape)
 
       QList<QByteArray> cursorNames = m_cursorNamesMap.values(shape);
 
-      for (const QByteArray &name : cursorNames) {
-         cursor = wl_cursor_theme_get_cursor(m_cursorTheme, name.constData());
+      for (const QByteArray &item : cursorNames) {
+         cursor = wl_cursor_theme_get_cursor(m_cursorTheme, item.constData());
 
          if (cursor != nullptr) {
             m_cursors.insert(shape, cursor);
