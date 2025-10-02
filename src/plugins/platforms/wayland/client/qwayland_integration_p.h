@@ -62,7 +62,7 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandIntegration : public QPlatformIntegration
 
    QPlatformDrag *drag() const override;
 
-   void destroyPlatformScreen(QPlatformScreen *screen) {
+   void platform_destroyScreen(QPlatformScreen *screen) {
       QPlatformIntegration::destroyScreen(screen);
    }
 
@@ -77,6 +77,10 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandIntegration : public QPlatformIntegration
    void initialize() override;
 
    QPlatformNativeInterface *nativeInterface() const override;
+
+   void platform_screenAdded(QPlatformScreen *screen, bool isPrimary = false) {
+      QPlatformIntegration::screenAdded(screen, isPrimary);
+   }
 
    virtual QWaylandServerBufferIntegration *serverBufferIntegration() const;
    virtual QWaylandShellIntegration *shellIntegration() const;

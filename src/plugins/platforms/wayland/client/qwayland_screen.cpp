@@ -52,6 +52,7 @@ void QWaylandScreen::init()
    m_waylandCursor = new QWaylandCursor(this);
 
    m_initialized = true;
+   m_waylandDisplay->handleScreenInitialized(this);
 }
 
 QPlatformCursor *QWaylandScreen::cursor() const

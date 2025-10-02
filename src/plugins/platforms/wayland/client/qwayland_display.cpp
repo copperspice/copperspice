@@ -96,7 +96,7 @@ QWaylandDisplay::~QWaylandDisplay(void)
    m_inputDevices.clear();
 
    for (QWaylandScreen *screen : m_screens) {
-      m_waylandIntegration->destroyPlatformScreen(screen);
+      m_waylandIntegration->platform_destroyScreen(screen);
    }
 
    for (QWaylandScreen *screen : m_waitingScreens) {
@@ -312,13 +312,25 @@ void QWaylandDisplay::handleWindowDeactivated(QWaylandWindow *window)
 
 void QWaylandDisplay::handleWaylandSync()
 {
+   // callback used to set the window activation because we may get an activate/deactivate
+   // pair, and the latter one would be lost in the QWindowSystemInterface queue, if we issue the
+   // handleWindowActivated() calls immediately.
 
-   // pending implementation
+   QWindow *lastActiveWindow = m_activeWindows.empty() ? nullptr : m_activeWindows.last()->window();
+
+   if (lastActiveWindow != QApplication::focusWindow()) {
+      QWindowSystemInterface::handleWindowActivated(lastActiveWindow);
+   }
 }
 
 void QWaylandDisplay::handleScreenInitialized(QWaylandScreen *screen)
 {
-   // pending implementation
+   if (! m_waitingScreens.removeOne(screen)) {
+      return;
+   }
+
+   m_screens.append(screen);
+   m_waylandIntegration->platform_screenAdded(screen);
 }
 
 bool QWaylandDisplay::hasRegistryGlobal(const QString &interfaceName)
@@ -410,8 +422,14 @@ void QWaylandDisplay::registry_global_remove(uint32_t id)
                }
             }
 
-            // pending implementation
+            for (QWaylandScreen *item : m_screens) {
+               if (item->outputId() == id) {
+                  m_screens.removeOne(item);
+                  m_waylandIntegration->platform_destroyScreen(item);
 
+                  break;
+               }
+            }
          }
 
          m_globals.removeAt(i);
