@@ -155,7 +155,16 @@ void QWaylandInputDevice::seat_capabilities(uint32_t caps)
       m_keyboard = nullptr;
    }
 
-   // pending implementation
+   if (m_caps & WL_SEAT_CAPABILITY_POINTER && ! m_pointer) {
+      m_pointer = createPointer(this);
+      m_pointer->init(get_pointer());
+
+      m_wl_pointerSurface = m_display->createSurface(this);
+
+   } else if (! (m_caps & WL_SEAT_CAPABILITY_POINTER) && m_pointer) {
+      delete m_pointer;
+      m_pointer = nullptr;
+   }
 
    if (m_caps & WL_SEAT_CAPABILITY_TOUCH && m_touch == nullptr) {
       m_touch = createTouch(this);
