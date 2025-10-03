@@ -70,11 +70,11 @@ class WheelEvent : public QWaylandPointerEvent
 
 // **
 QWaylandInputDevice::QWaylandInputDevice(QWaylandDisplay *display, int version, uint32_t id)
-   : QtWayland::wl_seat(nullptr, id, qMin(version, 3)),
+   : QtWayland::wl_seat(display->wl_registry(), id, qMin(version, 3)),
      m_version(qMin(version, 3)), m_caps(0), m_time(0), m_serial(0),
-     m_display(nullptr), m_dataDevice(nullptr), m_touchDevice(nullptr),
+     m_display(display), m_dataDevice(nullptr), m_touchDevice(nullptr),
      m_keyboard(nullptr), m_pointer(nullptr), m_touch(nullptr),
-     m_wl_display(nullptr), m_wl_pointerSurface(nullptr)
+     m_wl_display(display->wl_display()), m_wl_pointerSurface(nullptr)
 {
 #ifndef QT_NO_DRAGANDDROP
    if (m_display->dndSelectionHandler()) {
