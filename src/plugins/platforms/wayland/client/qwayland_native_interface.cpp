@@ -47,7 +47,17 @@ void *QWaylandNativeInterface::nativeResourceForIntegration(const QByteArray &re
       return m_integration->display()->wl_display();
    }
 
-   // pending implementation
+   if (lowerCaseResource == "compositor") {
+      return const_cast<wl_compositor *>(m_integration->display()->wl_compositor());
+   }
+
+   if (lowerCaseResource == "server_buffer_integration") {
+      return m_integration->serverBufferIntegration();
+   }
+
+   if (lowerCaseResource == "egldisplay" && m_integration->clientBufferIntegration()) {
+      return m_integration->clientBufferIntegration()->nativeResource(QWaylandClientBufferIntegration::EglDisplay);
+   }
 
    return nullptr;
 }
@@ -60,7 +70,17 @@ void *QWaylandNativeInterface::nativeResourceForWindow(const QByteArray &resourc
       return m_integration->display()->wl_display();
    }
 
-   // pending implementation
+   if (lowerCaseResource == "compositor") {
+      return const_cast<wl_compositor *>(m_integration->display()->wl_compositor());
+   }
+
+   if (lowerCaseResource == "surface") {
+      return ((QWaylandWindow *)window->handle())->object();
+   }
+
+   if (lowerCaseResource == "egldisplay" && m_integration->clientBufferIntegration()) {
+      return m_integration->clientBufferIntegration()->nativeResource(QWaylandClientBufferIntegration::EglDisplay);
+   }
 
    return nullptr;
 }
@@ -81,7 +101,17 @@ void *QWaylandNativeInterface::nativeResourceForContext(const QByteArray &resour
 {
    QByteArray lowerCaseResource = resource.toLower();
 
-   // pending implementation
+   if (lowerCaseResource == "eglconfig" && m_integration->clientBufferIntegration()) {
+      return m_integration->clientBufferIntegration()->nativeResourceForContext(QWaylandClientBufferIntegration::EglConfig, context->handle());
+   }
+
+   if (lowerCaseResource == "eglcontext" && m_integration->clientBufferIntegration()) {
+      return m_integration->clientBufferIntegration()->nativeResourceForContext(QWaylandClientBufferIntegration::EglContext, context->handle());
+   }
+
+   if (lowerCaseResource == "egldisplay" && m_integration->clientBufferIntegration()) {
+      return m_integration->clientBufferIntegration()->nativeResourceForContext(QWaylandClientBufferIntegration::EglDisplay, context->handle());
+   }
 
    return nullptr;
 }
