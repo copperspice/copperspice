@@ -70,7 +70,12 @@ QWaylandShmBuffer::QWaylandShmBuffer(QWaylandDisplay *display, const QSize &size
       return;
    }
 
-   // pending implementation
+   wl_shm_format wl_format = QWaylandShmFormatHelper::fromQImageFormat(format);
+   m_image = QImage(data, size.width(), size.height(), stride, format);
+   m_image.setDevicePixelRatio(qreal(scale));
+
+   m_shmPool = wl_shm_create_pool(display->shm(), fd, alloc);
+   init(wl_shm_pool_create_buffer(m_shmPool, 0, size.width(), size.height(), stride, wl_format));
 }
 
 QWaylandShmBuffer::~QWaylandShmBuffer()
@@ -210,7 +215,16 @@ void QWaylandShmBackingStore::flush(QWindow *window, const QRegion &region, cons
 
    m_frontBuffer = m_backBuffer;
 
-   // pending implementation
+   QMargins margins = windowDecorationMargins();
+
+   waylandWindow()->attachOffset(m_frontBuffer);
+   m_frontBuffer->setBusy();
+
+   for (const QRect &item : region.rects()) {
+      waylandWindow()->damage(item.translated(margins.left(), margins.top()));
+   }
+
+   waylandWindow()->commit();
 }
 
 QWaylandShmBuffer *QWaylandShmBackingStore::getBuffer(const QSize &size)
@@ -234,7 +248,16 @@ QWaylandShmBuffer *QWaylandShmBackingStore::getBuffer(const QSize &size)
       }
    }
 
-   // pending implementation
+   static const int MAX_BUFFERS = 5;
+
+   if (m_buffers.count() < MAX_BUFFERS) {
+      QImage::Format format = QPlatformScreen::platformScreenForWindow(window())->format();
+
+      QWaylandShmBuffer *newBuffer = new QWaylandShmBuffer(m_display, size, format, waylandWindow()->scale());
+      m_buffers.prepend(newBuffer);
+
+      return newBuffer;
+   }
 
    return nullptr;
 }
@@ -264,7 +287,21 @@ void QWaylandShmBackingStore::resize(const QSize &size)
       oldSize = m_backBuffer->image()->byteCount();
    }
 
-   // pending implementation
+   if (m_backBuffer != nullptr && m_backBuffer != newBuffer && oldSize == newBuffer->image()->byteCount()) {
+      memcpy(newBuffer->image()->bits(), m_backBuffer->image()->constBits(), newBuffer->image()->byteCount());
+   }
+
+   m_backBuffer = newBuffer;
+
+   // ensure the new buffer is at the beginning of the list so the next time around getBuffer() will pick it if possible
+   if (m_buffers.first() != newBuffer) {
+      m_buffers.removeOne(newBuffer);
+      m_buffers.prepend(newBuffer);
+   }
+
+   if (windowDecoration() && window()->isVisible()) {
+      windowDecoration()->update();
+   }
 }
 
 void QWaylandShmBackingStore::resize(const QSize &size, const QRegion &)
