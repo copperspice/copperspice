@@ -26,6 +26,8 @@
 
 #include <qpoint.h>
 
+#include <numeric>
+
 class QDataStream;
 class QDebug;
 
@@ -42,6 +44,7 @@ class Q_CORE_EXPORT QLine
       : pt1(QPoint(x1, y1)), pt2(QPoint(x2, y2))
    { }
 
+   inline QPoint center() const;
    inline bool isNull() const;
 
    inline QPoint p1() const;
@@ -77,6 +80,11 @@ class Q_CORE_EXPORT QLine
    QPoint pt2;
 };
 
+inline QPoint QLine::center() const
+{
+   return QPoint( std::midpoint(pt1.x(), pt2.x()), std::midpoint(pt1.y(), pt2.y()) );
+}
+
 inline bool QLine::isNull() const
 {
    return pt1 == pt2;
@@ -108,8 +116,7 @@ inline QPoint QLine::p1() const
 }
 
 inline QPoint QLine::p2() const
-{
-   return pt2;
+{   return pt2;
 }
 
 inline int QLine::dx() const
@@ -201,9 +208,15 @@ class Q_CORE_EXPORT QLineF
    {
    }
 
-   static QLineF fromPolar(qreal length, qreal angle);
+   qreal angle() const;
+   qreal angle(const QLineF &lineF) const;
 
+   qreal angleTo(const QLineF &lineF) const;
+
+   inline QPointF center() const;
    bool isNull() const;
+
+   qreal length() const;
 
    inline QPointF p1() const;
    inline QPointF p2() const;
@@ -217,20 +230,12 @@ class Q_CORE_EXPORT QLineF
    inline qreal dx() const;
    inline qreal dy() const;
 
-   qreal length() const;
    inline void setLength(qreal length);
-
-   qreal angle() const;
-   qreal angle(const QLineF &lineF) const;
-
-   qreal angleTo(const QLineF &lineF) const;
 
    void setAngle(qreal angle);
 
-   QLineF unitVector() const;
    inline QLineF normalVector() const;
 
-   // TODO: rename intersects() or intersection() and rename IntersectType IntersectionType
    IntersectType intersect(const QLineF &lineF, QPointF *intersectionPoint) const;
 
    inline QPointF pointAt(qreal pos) const;
@@ -245,16 +250,26 @@ class Q_CORE_EXPORT QLineF
    inline void setPoints(const QPointF &point1, const QPointF &point2);
    inline void setLine(qreal x1, qreal y1, qreal x2, qreal y2);
 
+   inline QLine toLine() const;
+
+   QLineF unitVector() const;
+
    inline bool operator==(const QLineF &lineF) const;
    bool operator!=(const QLineF &lineF) const {
       return !(*this == lineF);
    }
 
-   inline QLine toLine() const;
+   static QLineF fromPolar(qreal length, qreal angle);
 
  private:
-   QPointF pt1, pt2;
+   QPointF pt1;
+   QPointF pt2;
 };
+
+inline QPointF QLineF::center() const
+{
+   return QPointF( std::midpoint(pt1.x(), pt2.x()), std::midpoint(pt1.y(), pt2.y()) );
+}
 
 inline qreal QLineF::x1() const
 {
