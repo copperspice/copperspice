@@ -35,6 +35,7 @@ class Q_CORE_EXPORT QPoint
    QPoint();
    QPoint(int xPos, int yPos);
 
+   static inline int dotProduct(const QPoint &p1, const QPoint &p2);
    inline bool isNull() const;
 
    inline int x() const;
@@ -88,6 +89,11 @@ inline QPoint::QPoint(int xPos, int yPos)
 {
    xp = xPos;
    yp = yPos;
+}
+
+inline int QPoint::dotProduct(const QPoint &p1, const QPoint &p2)
+{
+   return (p1.x() * p2.x()) + (p1.y() * p2.y());
 }
 
 inline bool QPoint::isNull() const
@@ -236,14 +242,15 @@ class Q_CORE_EXPORT QPointF
    QPointF(const QPoint &point);
    QPointF(qreal xPos, qreal yPos);
 
-   qreal manhattanLength() const;
-
+   static inline qreal dotProduct(const QPointF &p1, const QPointF &p2);
    inline bool isNull() const;
 
    inline qreal x() const;
    inline qreal y() const;
    inline void setX(qreal xPos);
    inline void setY(qreal yPos);
+
+   qreal manhattanLength() const;
 
    inline qreal &rx();
    inline qreal &ry();
@@ -287,6 +294,11 @@ inline QPointF::QPointF(qreal xPos, qreal yPos)
 inline QPointF::QPointF(const QPoint &p)
    : xp(p.x()), yp(p.y())
 { }
+
+inline qreal QPointF::dotProduct(const QPointF &p1, const QPointF &p2)
+{
+   return (p1.x() * p2.x()) + (p1.y() * p2.y());
+}
 
 inline bool QPointF::isNull() const
 {
