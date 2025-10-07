@@ -213,6 +213,8 @@ class QVector
    void insert(size_type pos, const T &value);
    void insert(size_type pos, size_type count, const T &value);
 
+   void insert(size_type pos, T &&value);
+
    const_reference constLast() const {
       Q_ASSERT(! isEmpty());
       return m_data.back();
@@ -264,6 +266,10 @@ class QVector
 
    void prepend(const T &value) {
       insert(m_data.begin(), 1, value);
+   }
+
+   void prepend(T &&value) {
+      insert(m_data.begin(), 1, std::move(value));
    }
 
    void push_back(const T &value) {
@@ -320,7 +326,7 @@ class QVector
       return false;
    }
 
-   void replace(size_type i, const T &value);
+   void replace(size_type pos, const T &value);
 
    void reserve(size_type size) {
       m_data.reserve(size);
@@ -333,6 +339,10 @@ class QVector
    size_type size() const {
       // returns unsigned, must convert to signed
       return static_cast<size_type>(m_data.size());
+   }
+
+   void shrink_to_fit() {
+      m_data.shrink_to_fit();
    }
 
    void squeeze() {
@@ -450,6 +460,10 @@ class QVector
       return m_data.insert(pos, begin, end);
    }
 
+   iterator insert(iterator before, T &&value) {
+      return m_data.insert(before, std::move(value));
+   }
+
    // operators
    QVector<T> &operator=(const QVector<T> &other) = default;
    QVector<T> &operator=(QVector<T> &&other)      = default;
@@ -558,6 +572,14 @@ inline void QVector<T>::insert(size_type pos, const T &value)
 }
 
 template <typename T>
+inline void QVector<T>::insert(size_type pos, T &&value)
+{
+   Q_ASSERT_X(pos >= 0 && pos <= size(), "QVector<T>::insert", "index out of range");
+   m_data.insert(m_data.begin() + pos, std::move(value));
+
+}
+
+template <typename T>
 inline void QVector<T>::insert(size_type pos, size_type count, const T &value)
 {
    Q_ASSERT_X(pos >= 0 && pos <= size(), "QVector<T>::insert", "index out of range");
@@ -616,10 +638,10 @@ typename QVector<T>::size_type QVector<T>::removeAll(const T &value)
 }
 
 template <typename T>
-inline void QVector<T>::replace(size_type i, const T &value)
+inline void QVector<T>::replace(size_type pos, const T &value)
 {
-   Q_ASSERT_X(i >= 0 && i < size(), "QVector<T>::replace", "index out of range");
-   m_data[i] = value;
+   Q_ASSERT_X(pos >= 0 && pos < size(), "QVector<T>::replace", "index out of range");
+   m_data[pos] = value;
 }
 
 template <typename T>
