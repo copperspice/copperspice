@@ -33,21 +33,86 @@ TEST_CASE("QPoint traits", "[qpoint]")
    REQUIRE(std::has_virtual_destructor_v<QPoint> == false);
 }
 
+TEST_CASE("QPoint comparison", "[qpoint]")
+{
+   QPoint data_a(5, 5);
+   QPoint data_b(5, 5);
+
+   REQUIRE(data_a == data_b);
+   REQUIRE((data_a != data_b) == false);
+
+   //
+   data_b = QPoint(5, 20);
+
+   REQUIRE(data_a != data_b);
+   REQUIRE((data_a == data_b) == false);
+}
+
 TEST_CASE("QPoint constructor", "[qpoint]")
 {
    QPoint data(75, 125);
 
-   REQUIRE(! data.isNull());
+   REQUIRE(data.isNull() == false);
 
    REQUIRE(data.x() == 75);
    REQUIRE(data.y() == 125);
+
+   //
+   data = QPoint(5, -50);
+
+   REQUIRE(data.isNull() == false);
+
+   REQUIRE(data.x() ==  5);
+   REQUIRE(data.y() == -50);
 }
 
-TEST_CASE("QPoint empty", "[qpoint")
+TEST_CASE("QPoint copy_assign", "[qpoint]")
+{
+   QPoint data_a(43, 72);
+   QPoint data_b(data_a);
+
+   REQUIRE(data_b.x() == 43);
+   REQUIRE(data_b.y() == 72);
+
+   //
+   data_b = data_a;
+
+   REQUIRE(data_a == data_b);
+   REQUIRE(data_b == data_a);
+}
+
+TEST_CASE("QPoint dotProduct", "[qpoint]")
+{
+   QPoint data_a(3, 4);
+   QPoint data_b(5, 6);
+
+   REQUIRE(QPoint::dotProduct(data_a, data_b) == (3*5 + 4*6));
+
+   //
+   data_a = QPoint(-2, 5);
+   data_b = QPoint(4, -3);
+
+   REQUIRE(QPoint::dotProduct(data_a, data_b) == (-2*4 + 5*(-3)));
+}
+
+TEST_CASE("QPoint isNull", "[qpoint")
 {
    QPoint data;
 
-   REQUIRE(data.isNull());
+   REQUIRE(data.isNull() == true);
+
+   REQUIRE(data.x() == 0);
+   REQUIRE(data.y() == 0);
+
+   //
+   data = QPoint(0, 0);
+
+   REQUIRE(data.isNull() == true);
+
+   //
+   data = QPoint(10, 0);
+
+   REQUIRE(data.isNull() == false);
 }
 
 TEST_CASE("QPoint manhattanLength", "[qpoint]")
@@ -93,21 +158,33 @@ TEST_CASE("QPoint manhattanLength", "[qpoint]")
 
 TEST_CASE("QPoint math", "[qpoint]")
 {
-   QPoint data1(50, 125);
-   QPoint data2(10, 20);
+   QPoint data_a(50, 125);
+   QPoint data_b(10, 20);
 
    SECTION("plus") {
-      data1 += data2;
+      data_a += data_b;
 
-      REQUIRE(data1.x()  == 60);
-      REQUIRE(data1.y() == 145);
+      REQUIRE(data_a.x() == 60);
+      REQUIRE(data_a.y() == 145);
+
+      //
+      QPoint result = data_a + data_b;
+
+      REQUIRE(result.x() == 70);
+      REQUIRE(result.y() == 165);
    }
 
    SECTION("minus") {
-      data1 -= data2;
+      data_a -= data_b;
 
-      REQUIRE(data1.x()  == 40);
-      REQUIRE(data1.y() == 105);
+      REQUIRE(data_a.x() == 40);
+      REQUIRE(data_a.y() == 105);
+
+      //
+      QPoint result = data_a - data_b;
+
+      REQUIRE(result.x() == 30);
+      REQUIRE(result.y() == 85);
    }
 }
 
@@ -135,6 +212,10 @@ TEST_CASE("QPoint multiply", "[qpoint]")
       REQUIRE(data.x() == 3);      // rounded up
       REQUIRE(data.y() == 5);
    }
+
+   {
+      REQUIRE(data * 4 == QPoint(12, 20));
+   }
 }
 
 TEST_CASE("QPoint divide", "[qpoint]")
@@ -161,6 +242,10 @@ TEST_CASE("QPoint divide", "[qpoint]")
       REQUIRE(data.x() == -2);      // rounded up
       REQUIRE(data.y() == -5);
    }
+
+   {
+      REQUIRE(data / 2 == QPoint(-1, -2));
+   }
 }
 
 TEST_CASE("QPoint rx_ry", "[qpoint")
@@ -169,20 +254,20 @@ TEST_CASE("QPoint rx_ry", "[qpoint")
 
    {
       QPoint data2(data1);
-
       ++data2.rx();
-      REQUIRE(data2.x() == data1.x() + 1);
+
+      REQUIRE(data2.x() == 0);
    }
 
    {
       QPoint data2(data1);
-
       ++data2.ry();
-      REQUIRE(data2.y() == data1.y() + 1);
+
+      REQUIRE(data2.y() == 1);
    }
 }
 
-TEST_CASE("QPoint set_get", "[qpoint")
+TEST_CASE("QPoint set", "[qpoint")
 {
    QPoint data;
 
@@ -214,6 +299,3 @@ TEST_CASE("QPoint set_get", "[qpoint")
       REQUIRE(data.y() ==  maxValue);
    }
 }
-
-
-
