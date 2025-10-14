@@ -41,6 +41,11 @@ class Q_CORE_EXPORT QBitArray
    {
    }
 
+   QBitArray(QBitArray &&other)
+      : d(std::move(other.d))
+   {
+   }
+
    QBitArray &operator=(const QBitArray &other) {
       d = other.d;
       return *this;
@@ -51,20 +56,32 @@ class Q_CORE_EXPORT QBitArray
       return *this;
    }
 
-   void swap(QBitArray &other) {
-      qSwap(d, other.d);
-   }
-
-   int size() const {
-      return (d.size() << 3) - *d.constData();
-   }
+   bool at(int i) const;
 
    int count() const {
       return (d.size() << 3) - *d.constData();
    }
 
    int count(bool on) const;
-   // TODO: Store the number of set bits separately
+
+   void clear() {
+      d.clear();
+   }
+
+   void detach() {
+      d.detach();
+   }
+
+   QByteArray::DataPtr &data_ptr() {
+      return d.data_ptr();
+   }
+
+   inline bool fill(bool value, int size = -1);
+   void fill(bool value, int begin, int end);
+
+   bool isDetached() const {
+      return d.isDetached();
+   }
 
    bool isEmpty() const {
       return d.isEmpty();
@@ -76,25 +93,26 @@ class Q_CORE_EXPORT QBitArray
 
    void resize(int size);
 
-   void detach() {
-      d.detach();
-   }
-
-   bool isDetached() const {
-      return d.isDetached();
-   }
-
-   void clear() {
-      d.clear();
-   }
-
    bool testBit(int i) const;
    void setBit(int i);
    void setBit(int i, bool value);
    void clearBit(int i);
    bool toggleBit(int i);
 
-   bool at(int i) const;
+   int size() const {
+      return (d.size() << 3) - *d.constData();
+   }
+
+   void swap(QBitArray &other) {
+      qSwap(d, other.d);
+   }
+
+   void truncate(int pos) {
+      if (pos < size()) {
+         resize(pos);
+      }
+   }
+
    QBitRef operator[](int i);
    bool operator[](int i) const;
    QBitRef operator[](uint i);
@@ -111,19 +129,6 @@ class Q_CORE_EXPORT QBitArray
 
    bool operator!=(const QBitArray &other) const {
       return d != other.d;
-   }
-
-   inline bool fill(bool value, int size = -1);
-   void fill(bool value, int begin, int end);
-
-   void truncate(int pos) {
-      if (pos < size()) {
-         resize(pos);
-      }
-   }
-
-   QByteArray::DataPtr &data_ptr() {
-      return d.data_ptr();
    }
 
    static uint hash(const QBitArray &bitArray, uint seed = 0);
