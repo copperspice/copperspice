@@ -392,23 +392,6 @@ QEasingCurve::~QEasingCurve()
    delete d_ptr;
 }
 
-QEasingCurve &QEasingCurve::operator=(const QEasingCurve &other)
-{
-   // ### non-atomic, requires malloc on shallow copy
-   if (d_ptr->config) {
-      delete d_ptr->config;
-      d_ptr->config = nullptr;
-   }
-
-   *d_ptr = *other.d_ptr;
-
-   if (other.d_ptr->config) {
-      d_ptr->config = other.d_ptr->config->copy();
-   }
-
-   return *this;
-}
-
 bool QEasingCurve::operator==(const QEasingCurve &other) const
 {
    bool res = d_ptr->func == other.d_ptr->func

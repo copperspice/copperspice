@@ -54,12 +54,30 @@ class Q_CORE_EXPORT QEasingCurve
 
    CORE_CS_ENUM(Type)
 
-   QEasingCurve(Type type = Linear);
+   QEasingCurve(Type type = Type::Linear);
    QEasingCurve(const QEasingCurve &other);
+
+   QEasingCurve(QEasingCurve &&other)
+      : d_ptr(other.d_ptr)
+   {
+      other.d_ptr = nullptr;
+   }
 
    ~QEasingCurve();
 
-   QEasingCurve &operator=(const QEasingCurve &other);
+   QEasingCurve &operator=(const QEasingCurve &other) {
+      if (this != &other) {
+         QEasingCurve tmp(other);
+         swap(tmp);
+      }
+
+      return *this;
+   }
+
+   QEasingCurve &operator=(QEasingCurve &&other) {
+      swap(other);
+      return *this;
+   }
 
    bool operator==(const QEasingCurve &other) const;
    bool operator!=(const QEasingCurve &other) const {
@@ -74,6 +92,10 @@ class Q_CORE_EXPORT QEasingCurve
 
    qreal overshoot() const;
    void setOvershoot(qreal overshoot);
+
+   void swap(QEasingCurve &other) {
+      qSwap(d_ptr, other.d_ptr);
+   }
 
    Type type() const;
    void setType(Type type);
