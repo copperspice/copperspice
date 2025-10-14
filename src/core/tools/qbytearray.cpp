@@ -823,6 +823,28 @@ QByteArray &QByteArray::insert(int i, const QByteArray &ba)
    return qbytearray_insert(this, i, copy.d->data(), copy.d->size);
 }
 
+QByteArray &QByteArray::insert(int i, int count, char ch)
+{
+   if (i < 0 || count <= 0) {
+      return *this;
+   }
+
+   int oldsize = size();
+   resize(qMax(i, oldsize) + count);
+
+   char *dst = data();
+
+   if (i > oldsize) {
+      ::memset(dst + oldsize, 0x20, i - oldsize);
+   } else {
+      ::memmove(dst + i + count, dst + i, oldsize - i);
+   }
+
+   memset(dst + i, ch, count);
+
+   return *this;
+}
+
 QByteArray &QByteArray::insert(int i, const char *str)
 {
    return qbytearray_insert(this, i, str, qstrlen(str));

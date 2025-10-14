@@ -179,6 +179,7 @@ class Q_CORE_EXPORT QByteArray
    inline char at(int i) const;
 
    QByteArray &append(char ch);
+   inline QByteArray &append(int count, char ch);
    QByteArray &append(const char *str);
    QByteArray &append(const char *str, int len);
    QByteArray &append(const QByteArray &value);
@@ -188,6 +189,13 @@ class Q_CORE_EXPORT QByteArray
    inline const char *constData() const;
 
    void chop(int n);
+
+   QByteArray chopped(int n) const {
+      QByteArray tmp(*this);
+      tmp.chop(n);
+
+      return tmp;
+   }
 
    inline bool contains(char ch) const;
    inline bool contains(const char *str) const;
@@ -228,6 +236,7 @@ class Q_CORE_EXPORT QByteArray
    int indexOf(const QByteArray &value, int from = 0) const;
 
    QByteArray &insert(int i, char ch);
+   QByteArray &insert(int i, int count, char ch);
    QByteArray &insert(int i, const char *str);
    QByteArray &insert(int i, const char *str, int len);
    QByteArray &insert(int i, const QByteArray &value);
@@ -256,6 +265,7 @@ class Q_CORE_EXPORT QByteArray
    inline void push_front(const QByteArray &value);
 
    QByteArray &prepend(char ch);
+   inline QByteArray &prepend(int count, char ch);
    QByteArray &prepend(const char *str);
    QByteArray &prepend(const char *str, int len);
    QByteArray &prepend(const QByteArray &value);
@@ -592,6 +602,16 @@ class Q_CORE_EXPORT QByteRef
 
    friend class QByteArray;
 };
+
+inline QByteArray &QByteArray::append(int count, char ch)
+{
+   return insert(d->size, count, ch);
+}
+
+inline QByteArray &QByteArray::prepend(int count, char ch)
+{
+   return insert(0, count, ch);
+}
 
 inline QByteRef QByteArray::operator[](int i)
 {
