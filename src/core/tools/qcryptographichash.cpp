@@ -405,3 +405,56 @@ QByteArray QCryptographicHash::hash(const QByteArray &data, Algorithm method)
    hash.addData(data);
    return hash.result();
 }
+
+int QCryptographicHash::hashLength(Algorithm method)
+{
+   switch (method) {
+      case Sha1:
+         return 20;
+
+      case Md4:
+         return 16;
+
+      case Md5:
+         return 16;
+
+      // sha 2
+      case Sha224:
+         return 28;
+
+      case Sha256:
+         return 32;
+
+      case Sha384:
+         return 48;
+
+      case Sha512:
+         return 64;
+
+      // keccak
+      case Keccak_224:
+         return 28;
+
+      case Keccak_256:
+         return 32;
+
+      case Keccak_384:
+         return 48;
+
+      case Keccak_512:
+         return 64;
+
+      // sha 3
+      case Sha3_224:
+         return 28;
+
+      case Sha3_256:
+         return 32;
+
+      case Sha3_384:
+         return 48;
+
+      case Sha3_512:
+         return 64;
+   }
+}

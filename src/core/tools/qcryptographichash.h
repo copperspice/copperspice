@@ -66,7 +66,7 @@ class Q_CORE_EXPORT QCryptographicHash
    QByteArray result() const;
 
    static QByteArray hash(const QByteArray &data, Algorithm method);
-
+   static int hashLength(Algorithm method);
  private:
    QCryptographicHashPrivate *d;
 };
