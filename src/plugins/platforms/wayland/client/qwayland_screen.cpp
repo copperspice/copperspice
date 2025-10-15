@@ -213,6 +213,14 @@ QList<QPlatformScreen *> QWaylandScreen::virtualSiblings() const
 {
    QList<QPlatformScreen *> retval;
 
+   const QList<QWaylandScreen *> screens = m_waylandDisplay->screens();
+
+   for (QWaylandScreen *item : screens) {
+      if (item->screen()) {
+         retval.append(item);
+      }
+   }
+
    return retval;
 }
 
