@@ -514,9 +514,7 @@ void QWaylandDisplay::setLastInputDevice(QWaylandInputDevice *device, uint32_t s
 
 QWaylandShellIntegration *QWaylandDisplay::shellIntegration() const
 {
-   // pending implementation
-
-   return nullptr;
+   return m_waylandIntegration->shellIntegration();
 }
 
 void QWaylandDisplay::waitForScreens()
