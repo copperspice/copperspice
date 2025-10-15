@@ -75,6 +75,7 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandIntegration : public QPlatformIntegration
    }
 
    void initialize() override;
+   QPlatformInputContext *inputContext() const override;
 
    QPlatformNativeInterface *nativeInterface() const override;
 
@@ -97,6 +98,8 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandIntegration : public QPlatformIntegration
    void initializeClientBufferIntegration();
    void initializeServerBufferIntegration();
    void initializeShellIntegration();
+   void initializeInputDeviceIntegration();
+
    bool m_clientBufferIntegrationInitialized;
    bool m_serverBufferIntegrationInitialized;
    bool m_shellIntegrationInitialized;
@@ -110,6 +113,8 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandIntegration : public QPlatformIntegration
    QPlatformFontDatabase *m_fontDb;
    QWaylandDisplay *m_display;
    QPlatformNativeInterface *m_nativeInterface;
+
+   QScopedPointer<QPlatformInputContext> m_inputContext;
 };
 
 }

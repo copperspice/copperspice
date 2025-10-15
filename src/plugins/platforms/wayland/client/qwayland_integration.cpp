@@ -99,9 +99,20 @@ QWaylandIntegration::QWaylandIntegration()
 
      m_fontDb(new QGenericUnixFontDatabase()), m_nativeInterface(new QWaylandNativeInterface(this))
 {
+   initializeInputDeviceIntegration();
+
    m_display   = new QWaylandDisplay(this);
    m_clipboard = new QWaylandClipboard(m_display);
    m_drag      = new QWaylandDrag(m_display);
+
+   QString icStr = QPlatformInputContextFactory::requested();
+
+   if (icStr.isEmpty()) {
+      m_inputContext.reset(new QWaylandInputContext(m_display));
+
+   } else {
+      m_inputContext.reset(QPlatformInputContextFactory::create(icStr));
+   }
 }
 
 QWaylandIntegration::~QWaylandIntegration()
@@ -186,9 +197,13 @@ QPlatformTheme *QWaylandIntegration::createPlatformTheme(const QString &name) co
 
 QPlatformWindow *QWaylandIntegration::createPlatformWindow(QWindow *window) const
 {
-   // pending implementation
+   if ((window->surfaceType() == QWindow::OpenGLSurface || window->surfaceType() == QWindow::RasterGLSurface)
+         && m_display->clientBufferIntegration()) {
+      return m_display->clientBufferIntegration()->createEglWindow(window);
+   }
 
-   return nullptr;
+   return new QWaylandShmWindow(window);
+
 }
 
 QWaylandDisplay *QWaylandIntegration::display() const
@@ -204,6 +219,11 @@ QPlatformDrag *QWaylandIntegration::drag() const
 QPlatformFontDatabase *QWaylandIntegration::fontDatabase() const
 {
    return m_fontDb;
+}
+
+QPlatformInputContext *QWaylandIntegration::inputContext() const
+{
+   return m_inputContext.data();
 }
 
 QPlatformNativeInterface *QWaylandIntegration::nativeInterface() const
@@ -264,5 +284,28 @@ void QWaylandIntegration::initializeShellIntegration()
 {
    // pending implementation
 }
+
+void QWaylandIntegration::initializeInputDeviceIntegration()
+{
+   QByteArray integrationName = qgetenv("QT_WAYLAND_INPUTDEVICE_INTEGRATION");
+   QString targetKey = QString::fromUtf8(integrationName);
+
+   if (targetKey.isEmpty()) {
+      return;
+   }
+
+   QStringList keys = QWaylandInputDeviceIntegrationFactory::keys();
+
+   if (keys.contains(targetKey)) {
+      m_inputDeviceIntegration = QWaylandInputDeviceIntegrationFactory::create(targetKey, QStringList());
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+      qDebug("Using input device integration: %s", csPrintable(targetKey));
+#endif
+
+   } else {
+      qWarning("Wayland input device integration %s was not found, using default", csPrintable(targetKey));
+   }
 }
 
+}
