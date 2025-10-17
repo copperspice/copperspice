@@ -221,6 +221,33 @@ QPlatformFontDatabase *QWaylandIntegration::fontDatabase() const
    return m_fontDb;
 }
 
+bool QWaylandIntegration::hasCapability(QPlatformIntegration::Capability cap) const
+{
+   switch (cap) {
+      case ThreadedPixmaps:
+         return true;
+
+      case OpenGL:
+         return m_display->clientBufferIntegration();
+
+      case ThreadedOpenGL:
+         return m_display->clientBufferIntegration() && m_display->clientBufferIntegration()->supportsThreadedOpenGL();
+
+      case BufferQueueingOpenGL:
+         return true;
+
+      case MultipleWindows:
+      case NonFullScreenWindows:
+         return true;
+
+      case RasterGLSurface:
+         return true;
+
+      default:
+         return QPlatformIntegration::hasCapability(cap);
+   }
+}
+
 QPlatformInputContext *QWaylandIntegration::inputContext() const
 {
    return m_inputContext.data();
@@ -229,6 +256,28 @@ QPlatformInputContext *QWaylandIntegration::inputContext() const
 QPlatformNativeInterface *QWaylandIntegration::nativeInterface() const
 {
    return m_nativeInterface;
+}
+
+QVariant QWaylandIntegration::styleHint(StyleHint hint) const
+{
+   if (hint == ShowIsFullScreen && m_display->windowManagerIntegration()) {
+      return m_display->windowManagerIntegration()->showIsFullScreen();
+   }
+
+   switch (hint) {
+      case QPlatformIntegration::FontSmoothingGamma:
+         return 1.0;
+
+      default:
+         break;
+   }
+
+   return QPlatformIntegration::styleHint(hint);
+}
+
+QPlatformServices *QWaylandIntegration::services() const
+{
+   return m_display->windowManagerIntegration();
 }
 
 QStringList QWaylandIntegration::themeNames() const

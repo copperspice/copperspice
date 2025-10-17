@@ -74,14 +74,20 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandIntegration : public QPlatformIntegration
       return m_shellIntegration;
    }
 
+   bool hasCapability(QPlatformIntegration::Capability cap) const override;
+
    void initialize() override;
    QPlatformInputContext *inputContext() const override;
 
    QPlatformNativeInterface *nativeInterface() const override;
 
+   QVariant styleHint(StyleHint hint) const override;
+
    void platform_screenAdded(QPlatformScreen *screen, bool isPrimary = false) {
       QPlatformIntegration::screenAdded(screen, isPrimary);
    }
+
+   QPlatformServices *services() const override;
 
    virtual QWaylandServerBufferIntegration *serverBufferIntegration() const;
    virtual QWaylandShellIntegration *shellIntegration() const;
