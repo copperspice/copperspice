@@ -320,10 +320,30 @@ void QWaylandIntegration::initializeServerBufferIntegration()
 {
    m_serverBufferIntegrationInitialized = true;
 
-   // pending implementation
+   QString targetKey;
 
+   bool disableHardwareIntegration = ! qgetenv("QT_WAYLAND_DISABLE_HW_INTEGRATION").isNull();
+   disableHardwareIntegration = disableHardwareIntegration || ! m_display->hardwareIntegration();
+
+   if (disableHardwareIntegration) {
+      QByteArray serverBufferIntegrationName = qgetenv("QT_WAYLAND_SERVER_BUFFER_INTEGRATION");
+      QString targetKey = QString::fromUtf8(serverBufferIntegrationName);
+   } else {
+      targetKey = m_display->hardwareIntegration()->serverBufferIntegration();
+   }
+
+   if (targetKey.isEmpty()) {
+      qWarning("Unable to  determine which server buffer integration to use");
+      return;
+   }
+
+   QStringList keys = QWaylandServerBufferIntegrationFactory::keys();
+
+   if (keys.contains(targetKey)) {
+      m_serverBufferIntegration = QWaylandServerBufferIntegrationFactory::create(targetKey, QStringList());
+   }
    if (m_serverBufferIntegration == nullptr) {
-      qWarning("Unable to load server buffer integration\n");
+      qWarning("Unable to load server buffer integration: %s\n", csPrintable(targetKey));
    } else {
       m_serverBufferIntegration->initialize(m_display);
    }
