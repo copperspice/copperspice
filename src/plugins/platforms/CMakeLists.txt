@@ -44,6 +44,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
    add_subdirectory(wayland/scanner)
 
    include(wayland/client/client.cmake)
+   include(wayland/wayland_egl.cmake)
 
    macro_generate_misc_private("${PLATFORMS_WAYLAND_PRIVATE_INCLUDES}"     QtGui/private/platforms)
 endif()
