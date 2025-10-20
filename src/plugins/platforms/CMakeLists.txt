@@ -45,6 +45,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
 
    include(wayland/client/client.cmake)
    include(wayland/wayland_egl.cmake)
+   include(wayland/wayland_bradient.cmake)
 
    macro_generate_misc_private("${PLATFORMS_WAYLAND_PRIVATE_INCLUDES}"     QtGui/private/platforms)
 endif()
