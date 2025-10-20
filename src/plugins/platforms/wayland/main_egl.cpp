@@ -1,0 +1,52 @@
+/***********************************************************************
+*
+* Copyright (c) 2012-2025 Barbara Geller
+* Copyright (c) 2012-2025 Ansel Sermersheim
+*
+* Copyright (c) 2015 The Qt Company Ltd.
+* Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software. You can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* https://www.gnu.org/licenses/
+*
+***********************************************************************/
+
+#include <qwayland_egl_clientbuffer_integration.h>
+
+#include <qwayland_clientbuffer_integrationplugin_p.h>
+
+namespace QtWaylandClient {
+
+class QWaylandEglClientBufferPlugin : public QWaylandClientBufferIntegrationPlugin
+{
+   CS_OBJECT(QWaylandEglClientBufferPlugin)
+
+   CS_PLUGIN_IID(QWaylandClientBufferIntegrationFactoryInterface_ID)
+   CS_PLUGIN_KEY("wayland-egl")
+
+ public:
+   QWaylandClientBufferIntegration *create(const QString &system, const QStringList &parameters) override;
+};
+
+CS_PLUGIN_REGISTER(QWaylandEglClientBufferPlugin)
+
+QWaylandClientBufferIntegration *QWaylandEglClientBufferPlugin::create(const QString &system, const QStringList &)
+{
+   if (! system.compare("wayland-egl", Qt::CaseInsensitive)) {
+      return new QWaylandEglClientBufferIntegration();
+   }
+
+   return nullptr;
+}
+
+}
