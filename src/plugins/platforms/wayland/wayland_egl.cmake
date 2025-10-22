@@ -10,6 +10,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
    list(APPEND PLATFORMS_WAYLAND_EGL_PRIVATE_INCLUDES
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_clientbuffer_integration.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_forward.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_window.h
    )
 
    target_sources(CsGuiWayland_Egl
@@ -17,6 +18,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/main_egl.cpp
 
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_clientbuffer_integration.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_window.cpp
    )
 
    macro_generate_misc_private("${PLATFORMS_WAYLAND_EGL_PRIVATE_INCLUDES}" QtGui/private/platforms)
