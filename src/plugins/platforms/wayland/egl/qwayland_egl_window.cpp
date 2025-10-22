@@ -63,6 +63,25 @@ QWaylandEglWindow::~QWaylandEglWindow()
    delete m_contentFBO;
 }
 
+GLuint QWaylandEglWindow::contentFBO() const
+{
+   if (decoration() == nullptr) {
+      return 0;
+   }
+
+   if (m_resize || ! m_contentFBO) {
+      QOpenGLFramebufferObject *old = m_contentFBO;
+
+      QSize fboSize = geometry().size() * scale();
+      m_contentFBO = new QOpenGLFramebufferObject(fboSize.width(), fboSize.height(), QOpenGLFramebufferObject::CombinedDepthStencil);
+
+      delete old;
+      m_resize = false;
+   }
+
+   return m_contentFBO->handle();
+}
+
 QRect QWaylandEglWindow::contentsRect() const
 {
    QRect r    = geometry();

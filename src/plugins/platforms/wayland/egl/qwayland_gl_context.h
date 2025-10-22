@@ -21,51 +21,41 @@
 *
 ***********************************************************************/
 
-#ifndef QWAYLAND_EGL_WINDOW_H
-#define QWAYLAND_EGL_WINDOW_H
+#ifndef QWAYLAND_GL_CONTEXT_H
+#define QWAYLAND_GL_CONTEXT_H
 
-#include <qwayland_egl_clientbuffer_integration.h>
+#include <qplatform_openglcontext.h>
 #include <qwayland_egl_forward.h>
-
-#include <qwayland_window_p.h>
-
-class QOpenGLFramebufferObject;
+#include <qplatform_surface.h>
+#include <qsurfaceformat.h>
+#include <qwayland_display_p.h>
 
 namespace QtWaylandClient {
 
-class QWaylandGLContext;
-
-class QWaylandEglWindow : public QWaylandWindow
+class QWaylandGLContext : public QPlatformOpenGLContext
 {
  public:
-   QWaylandEglWindow(QWindow *window);
-   ~QWaylandEglWindow();
+   QWaylandGLContext(EGLDisplay eglDisplay, QWaylandDisplay *display, const QSurfaceFormat &format, QPlatformOpenGLContext *share);
+   ~QWaylandGLContext();
 
-   GLuint contentFBO() const;
+   GLuint defaultFramebufferObject(QPlatformSurface *surface) const override;
+   void doneCurrent() override;
 
-   QRect contentsRect() const;
+   QSurfaceFormat format() const override {
+      return m_format;
+   }
 
-   EGLSurface eglSurface() const;
-   QSurfaceFormat format() const override;
+   void (*getProcAddress(const QByteArray &procName)) () override;
 
-   void setGeometry(const QRect &rect) override;
-   void setVisible(bool visible) override;
-
-   WindowType windowType() const override;
+   bool makeCurrent(QPlatformSurface *surface) override;
+   void swapBuffers(QPlatformSurface *surface) override;
 
  private:
-   struct wl_egl_window *m_waylandEglWindow;
-
-   EGLSurface m_eglSurface;
-   EGLConfig m_eglConfig;
-
-   QWaylandEglClientBufferIntegration *m_clientBufferIntegration;
-   const QWaylandWindow *m_parentWindow;
-
-   mutable bool m_resize;
-   mutable QOpenGLFramebufferObject *m_contentFBO;
+   bool m_useNativeDefaultFbo;
+   uint m_api;
 
    QSurfaceFormat m_format;
+   QWaylandDisplay *m_display;
 };
 
 }
