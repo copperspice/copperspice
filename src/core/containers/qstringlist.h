@@ -92,9 +92,8 @@ class QStringList : public QList<QString>
    Q_CORE_EXPORT QStringList filter(const QRegularExpression8 &rx) const;
 
    int Q_CORE_EXPORT indexOf(const QRegularExpression8 &rx, int from = 0) const;
+
    int Q_CORE_EXPORT lastIndexOf(const QRegularExpression8 &rx, int from = -1) const;
-   int Q_CORE_EXPORT indexOf(QRegularExpression8 &rx, int from = 0) const;
-   int Q_CORE_EXPORT lastIndexOf(QRegularExpression8 &rx, int from = -1) const;
 
    Q_CORE_EXPORT QStringList &replaceInStrings(const QRegularExpression8 &rx, const QString &after);
 
