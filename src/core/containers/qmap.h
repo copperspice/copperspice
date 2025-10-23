@@ -437,8 +437,6 @@ class QMap
       return m_data.upper_bound(key);
    }
 
-   QList<Key> uniqueKeys() const;
-
    QMap<Key, Val, C> &unite(const QMap<Key, Val, C> &other) {
       m_data.insert(other.m_data.begin(), other.m_data.end());
       return *this;
@@ -578,24 +576,6 @@ QList<Key> QMap<Key, Val, C>::keys(const Val &value) const
       }
 
       ++iter;
-   }
-
-   return retval;
-}
-
-template <class Key, class Val, class C>
-QList<Key> QMap<Key, Val, C>::uniqueKeys() const
-{
-   QList<Key> retval;
-   retval.reserve(size());
-
-   for (const auto &item : m_data) {
-
-      if (! retval.empty() && retval.last() == item.first) {
-         continue;
-      }
-
-      retval.append(item.first);
    }
 
    return retval;
