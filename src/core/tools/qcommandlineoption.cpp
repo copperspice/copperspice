@@ -80,6 +80,12 @@ QCommandLineOption::~QCommandLineOption()
 {
 }
 
+QCommandLineOption::QCommandLineOption(QCommandLineOption &&other)
+   : d(new QCommandLineOptionPrivate)
+{
+   qSwap(d, other.d);
+}
+
 QCommandLineOption &QCommandLineOption::operator=(const QCommandLineOption &other)
 {
    d = other.d;

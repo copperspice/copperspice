@@ -44,6 +44,8 @@ class Q_CORE_EXPORT QCommandLineOption
 
    QCommandLineOption(const QCommandLineOption &other);
 
+   QCommandLineOption(QCommandLineOption &&other);
+
    ~QCommandLineOption();
 
    QCommandLineOption &operator=(const QCommandLineOption &other);
