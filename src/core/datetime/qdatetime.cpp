@@ -644,6 +644,7 @@ QString QDate::toString(Qt::DateFormat format) const
          return toStringTextDate(*this);
 
       case Qt::ISODate:
+      case Qt::ISODateWithMs:
          return toStringIsoDate(jd);
    }
 }
@@ -881,9 +882,16 @@ QString QTime::toString(Qt::DateFormat format) const
       case Qt::DefaultLocaleLongDate:
          return QLocale().toString(*this, QLocale::LongFormat);
 
+      case Qt::ISODateWithMs: {
+         QString result = QString("%1:%2:%3.%4");
+
+         return result.formatArg(hour(), 2, 10, '0').formatArg(minute(), 2, 10, '0').formatArg(second(), 2, 10, '0').formatArg(msec(), 3, 10, '0');
+      }
+
       case Qt::RFC2822Date:
       case Qt::ISODate:
       case Qt::TextDate:
+         [[fallthrough]];
 
       default:
          QString result = QString("%1:%2:%3");
@@ -1039,7 +1047,9 @@ static QTime fromIsoTimeString(QStringView string, Qt::DateFormat format, bool *
       }
    }
 
-   if (format == Qt::ISODate && hour == 24 && minute == 0 && second == 0 && msec == 0) {
+   bool isISODate = (format == Qt::ISODate || format == Qt::ISODateWithMs);
+
+   if (isISODate && hour == 24 && minute == 0 && second == 0 && msec == 0) {
       if (isMidnight24) {
          *isMidnight24 = true;
       }
@@ -1075,7 +1085,10 @@ QTime QTime::fromString(const QString &string, Qt::DateFormat format)
          return rfcDateImpl(string).time;
 
       case Qt::ISODate:
+      case Qt::ISODateWithMs:
       case Qt::TextDate:
+         [[fallthrough]];
+
       default:
          return fromIsoTimeString(string, format, nullptr);
    }
@@ -1949,7 +1962,8 @@ QString QDateTime::toString(Qt::DateFormat format) const
          return retval;
       }
 
-      case Qt::ISODate: {
+      case Qt::ISODate:
+      case Qt::ISODateWithMs: {
          const QPair<QDate, QTime> p = d->getDateTime();
          const QDate &dt = p.first;
          const QTime &tm = p.second;
@@ -1961,7 +1975,7 @@ QString QDateTime::toString(Qt::DateFormat format) const
          }
 
          retval += 'T';
-         retval += tm.toString(Qt::ISODate);
+         retval += tm.toString(format);
 
          if (! d->m_tzUserDefined) {
             // defaulted time zone
@@ -2309,7 +2323,8 @@ QDateTime QDateTime::fromString(const QString &string, Qt::DateFormat format)
          return dateTime;
       }
 
-      case Qt::ISODate: {
+      case Qt::ISODate:
+      case Qt::ISODateWithMs: {
          const int size = string.size();
 
          if (size < 10) {
@@ -2372,7 +2387,8 @@ QDateTime QDateTime::fromString(const QString &string, Qt::DateFormat format)
          // ISO 8601 (section 4.2.3) says 24:00 is equivalent to 00:00 the next day
 
          bool isMidnight24 = false;
-         QTime time = fromIsoTimeString(isoString, Qt::ISODate, &isMidnight24);
+
+         QTime time = fromIsoTimeString(isoString, format, &isMidnight24);
 
          if (! time.isValid()) {
             return QDateTime();

@@ -1195,7 +1195,8 @@ class Q_CORE_EXPORT Qt
       SystemLocaleLongDate,
       DefaultLocaleShortDate,
       DefaultLocaleLongDate,
-      RFC2822Date                    // RFC 2822 (+ 850 and 1036 during parsing)
+      RFC2822Date,                   // RFC 2822 (+ 850 and 1036 during parsing)
+      ISODateWithMs
    };
 
    CORE_CS_ENUM(TimeSpec)
