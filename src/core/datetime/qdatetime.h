@@ -200,6 +200,10 @@ class Q_CORE_EXPORT QTime
 
    bool isValid() const;
 
+   constexpr int msecsSinceStartOfDay() const {
+      return mds == NullTime ? 0 : mds;
+   }
+
    int restart();
 
    bool setHMS(int h, int m, int s, int ms = 0);
@@ -210,12 +214,8 @@ class Q_CORE_EXPORT QTime
 
    auto operator<=>(const QTime &other) const = default;
 
-   static QTime fromMSecsSinceStartOfDay(int msecs) {
+   static constexpr QTime fromMSecsSinceStartOfDay(int msecs) {
       return QTime(msecs);
-   }
-
-   int msecsSinceStartOfDay() const {
-      return mds == NullTime ? 0 : mds;
    }
 
    static QTime currentTime();
