@@ -42,189 +42,6 @@ template <typename Key, typename Val, typename Hash, typename KeyEqual>
 class QHash
 {
  public:
-
-   class iterator
-   {
-    public:
-      using iterator_category = std::forward_iterator_tag;
-
-      using pointer           = Val *;
-      using reference         = Val &;
-
-      using difference_type   = typename std::unordered_map<Key, Val, Hash, KeyEqual>::difference_type;
-      using size_type         = typename std::unordered_map<Key, Val, Hash, KeyEqual>::difference_type;
-      using value_type        = Val;
-
-      iterator() = default;
-
-      iterator(typename std::unordered_map<Key, Val, Hash, KeyEqual>::iterator iter)
-         : m_iter(std::move(iter)) {
-      }
-
-      const Key &key() const {
-         return m_iter->first;
-      }
-
-      Val &value() const {
-         return m_iter->second;
-      }
-
-      std::pair<const Key, Val> &pair() const {
-         return *m_iter;
-      }
-
-      // operators
-      Val &operator*() const {
-         return value();
-      }
-
-      Val *operator->() const {
-         return &value();
-      }
-
-      bool operator==(iterator other) const {
-         return m_iter == other.m_iter;
-      }
-
-      bool operator!=(iterator other) const {
-         return m_iter != other.m_iter;
-      }
-
-      iterator &operator+=(size_type n) {
-         std::advance(m_iter, n);
-         return *this;
-      }
-
-      iterator &operator-=(size_type n) {
-         std::advance(m_iter, -n);
-         return *this;
-      }
-
-      iterator operator+(size_type n) const {
-         auto tmp = m_iter;
-         std::advance(tmp, n);
-         return tmp;
-      }
-
-      iterator operator-(size_type n) const {
-         auto tmp = m_iter;
-         std::advance(tmp, -n);
-         return tmp;
-      }
-
-      iterator &operator++() {
-         ++m_iter;
-         return *this;
-      }
-
-      iterator operator++(int) {
-         return m_iter++;
-      }
-
-      friend class QHash<Key, Val, Hash, KeyEqual>;
-
-    private:
-      typename std::unordered_map<Key, Val, Hash, KeyEqual>::iterator m_iter;
-   };
-
-   class const_iterator
-   {
-    public:
-      using iterator_category = std::forward_iterator_tag;
-
-      using pointer           = const Val *;
-      using reference         = const Val &;
-
-      using difference_type   = typename std::unordered_map<Key, Val, Hash, KeyEqual>::difference_type;
-      using size_type         = typename std::unordered_map<Key, Val, Hash, KeyEqual>::difference_type;
-      using value_type        = Val;
-
-      const_iterator() = default;
-
-      const_iterator(typename std::unordered_map<Key, Val, Hash, KeyEqual>::const_iterator iter)
-         : m_iter(std::move(iter)) {
-      }
-
-      const_iterator(iterator other)
-         : m_iter(std::move(other.m_iter)) {
-      }
-
-      const Key &key() const {
-         return m_iter->first;
-      }
-
-      const Val &value() const {
-         return m_iter->second;
-      }
-
-      const std::pair<const Key, Val> &pair() const {
-         return *m_iter;
-      }
-
-      // operators
-      const Val &operator*() const {
-         return value();
-      }
-
-      const Val *operator->() const {
-         return &value();
-      }
-
-      bool operator==(const_iterator other) const {
-         return m_iter == other.m_iter;
-      }
-
-      bool operator!=(const_iterator other) const {
-         return m_iter != other.m_iter;
-      }
-
-      const_iterator &operator+=(size_type n) {
-         std::advance(m_iter, n);
-         return *this;
-      }
-
-      const_iterator &operator-=(size_type n) {
-         std::advance(m_iter, -n);
-         return *this;
-      }
-
-      const_iterator operator+(size_type n) const {
-         auto tmp = m_iter;
-         std::advance(tmp, n);
-         return tmp;
-      }
-
-      const_iterator operator-(size_type n) const {
-         auto tmp = m_iter;
-         std::advance(tmp, -n);
-         return tmp;
-      }
-
-      const_iterator &operator++() {
-         ++m_iter;
-         return *this;
-      }
-
-      const_iterator operator++(int) {
-         return m_iter++;
-      }
-
-      friend class QHash<Key, Val, Hash, KeyEqual>;
-
-      // free functions
-      friend bool operator==(iterator iter1, const_iterator iter2) {
-         return iter2.operator==(iter1);
-      }
-
-      friend bool operator!=(iterator iter1, const_iterator iter2) {
-         return iter2.operator!=(iter1);
-      }
-
-    private:
-      typename std::unordered_map<Key, Val, Hash, KeyEqual>::const_iterator m_iter;
-
-   };
-
    using difference_type = typename std::unordered_map<Key, Val, Hash, KeyEqual>::difference_type;
    using pointer         = Val *;
    using reference       = Val &;
@@ -240,10 +57,12 @@ class QHash
 
    static constexpr int bucket_count = 1;
 
-   // iterator and const_iterator are classes
-
    using const_pointer   = const Val *;
    using const_reference = const Val &;
+
+   // stl
+   class iterator;
+   class const_iterator;
 
    // java
    using Java_Iterator        = QHashIterator<Key, Val, Hash, KeyEqual>;
@@ -475,6 +294,188 @@ class QHash
    const_iterator constEnd() const {
       return m_data.end();
    }
+
+   class iterator
+   {
+    public:
+      using iterator_category = std::forward_iterator_tag;
+
+      using pointer           = Val *;
+      using reference         = Val &;
+
+      using difference_type   = typename std::unordered_map<Key, Val, Hash, KeyEqual>::difference_type;
+      using size_type         = typename std::unordered_map<Key, Val, Hash, KeyEqual>::difference_type;
+      using value_type        = Val;
+
+      iterator() = default;
+
+      iterator(typename std::unordered_map<Key, Val, Hash, KeyEqual>::iterator iter)
+         : m_iter(std::move(iter)) {
+      }
+
+      const Key &key() const {
+         return m_iter->first;
+      }
+
+      Val &value() const {
+         return m_iter->second;
+      }
+
+      std::pair<const Key, Val> &pair() const {
+         return *m_iter;
+      }
+
+      // operators
+      Val &operator*() const {
+         return value();
+      }
+
+      Val *operator->() const {
+         return &value();
+      }
+
+      bool operator==(iterator other) const {
+         return m_iter == other.m_iter;
+      }
+
+      bool operator!=(iterator other) const {
+         return m_iter != other.m_iter;
+      }
+
+      iterator &operator+=(size_type n) {
+         std::advance(m_iter, n);
+         return *this;
+      }
+
+      iterator &operator-=(size_type n) {
+         std::advance(m_iter, -n);
+         return *this;
+      }
+
+      iterator operator+(size_type n) const {
+         auto tmp = m_iter;
+         std::advance(tmp, n);
+         return tmp;
+      }
+
+      iterator operator-(size_type n) const {
+         auto tmp = m_iter;
+         std::advance(tmp, -n);
+         return tmp;
+      }
+
+      iterator &operator++() {
+         ++m_iter;
+         return *this;
+      }
+
+      iterator operator++(int) {
+         return m_iter++;
+      }
+
+      friend class QHash<Key, Val, Hash, KeyEqual>;
+
+    private:
+      typename std::unordered_map<Key, Val, Hash, KeyEqual>::iterator m_iter;
+   };
+
+   class const_iterator
+   {
+    public:
+      using iterator_category = std::forward_iterator_tag;
+
+      using pointer           = const Val *;
+      using reference         = const Val &;
+
+      using difference_type   = typename std::unordered_map<Key, Val, Hash, KeyEqual>::difference_type;
+      using size_type         = typename std::unordered_map<Key, Val, Hash, KeyEqual>::difference_type;
+      using value_type        = Val;
+
+      const_iterator() = default;
+
+      const_iterator(typename std::unordered_map<Key, Val, Hash, KeyEqual>::const_iterator iter)
+         : m_iter(std::move(iter)) {
+      }
+
+      const_iterator(iterator other)
+         : m_iter(std::move(other.m_iter)) {
+      }
+
+      const Key &key() const {
+         return m_iter->first;
+      }
+
+      const Val &value() const {
+         return m_iter->second;
+      }
+
+      const std::pair<const Key, Val> &pair() const {
+         return *m_iter;
+      }
+
+      // operators
+      const Val &operator*() const {
+         return value();
+      }
+
+      const Val *operator->() const {
+         return &value();
+      }
+
+      bool operator==(const_iterator other) const {
+         return m_iter == other.m_iter;
+      }
+
+      bool operator!=(const_iterator other) const {
+         return m_iter != other.m_iter;
+      }
+
+      const_iterator &operator+=(size_type n) {
+         std::advance(m_iter, n);
+         return *this;
+      }
+
+      const_iterator &operator-=(size_type n) {
+         std::advance(m_iter, -n);
+         return *this;
+      }
+
+      const_iterator operator+(size_type n) const {
+         auto tmp = m_iter;
+         std::advance(tmp, n);
+         return tmp;
+      }
+
+      const_iterator operator-(size_type n) const {
+         auto tmp = m_iter;
+         std::advance(tmp, -n);
+         return tmp;
+      }
+
+      const_iterator &operator++() {
+         ++m_iter;
+         return *this;
+      }
+
+      const_iterator operator++(int) {
+         return m_iter++;
+      }
+
+      friend class QHash<Key, Val, Hash, KeyEqual>;
+
+      // free functions
+      friend bool operator==(iterator iter1, const_iterator iter2) {
+         return iter2.operator==(iter1);
+      }
+
+      friend bool operator!=(iterator iter1, const_iterator iter2) {
+         return iter2.operator!=(iter1);
+      }
+
+    private:
+      typename std::unordered_map<Key, Val, Hash, KeyEqual>::const_iterator m_iter;
+
+   };
 
  private:
    std::unordered_map<Key, Val, Hash, KeyEqual> m_data;
