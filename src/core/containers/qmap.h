@@ -41,205 +41,6 @@ template <typename Key, typename Val, typename C>
 class QMap
 {
  public:
-   class iterator
-   {
-    public:
-      using iterator_category = std::bidirectional_iterator_tag;
-
-      using pointer           = Val *;
-      using reference         = Val &;
-
-      using difference_type   = typename std::map<Key, Val, C>::difference_type;
-      using size_type         = typename std::map<Key, Val, C>::difference_type;
-      using value_type        = Val;
-
-      iterator() = default;
-
-      iterator(typename std::map<Key, Val, C>::iterator iter)
-         : m_iter(std::move(iter)) {
-      }
-
-      const Key &key() const {
-         return m_iter->first;
-      }
-
-      Val &value() const {
-         return m_iter->second;
-      }
-
-      std::pair<const Key, Val> &pair() const {
-         return *m_iter;
-      }
-
-      // operators
-      Val &operator*() const {
-         return value();
-      }
-
-      Val *operator->() const {
-         return &value();
-      }
-
-      bool operator==(iterator other) const {
-         return m_iter == other.m_iter;
-      }
-
-      bool operator!=(iterator other) const {
-         return m_iter != other.m_iter;
-      }
-
-      iterator &operator+=(size_type n) {
-         std::advance(m_iter, n);
-         return *this;
-      }
-
-      iterator &operator-=(size_type n) {
-         std::advance(m_iter, -n);
-         return *this;
-      }
-
-      iterator operator+(size_type n) const {
-         auto tmp = m_iter;
-         std::advance(tmp, n);
-         return tmp;
-      }
-
-      iterator operator-(size_type n) const {
-         auto tmp = m_iter;
-         std::advance(tmp, -n);
-         return tmp;
-      }
-
-      iterator &operator++() {
-         ++m_iter;
-         return *this;
-      }
-
-      iterator operator++(int) {
-         return m_iter++;
-      }
-
-      iterator &operator--() {
-         --m_iter;
-         return *this;
-      }
-
-      iterator operator--(int) {
-         return m_iter--;
-      }
-
-      friend class QMap<Key, Val, C>;
-
-    private:
-      typename std::map<Key, Val, C>::iterator m_iter;
-   };
-
-   class const_iterator
-   {
-    public:
-      using iterator_category = std::bidirectional_iterator_tag;
-
-      using pointer         = const Val *;
-      using reference       = const Val &;
-
-      using difference_type = typename std::map<Key, Val, C>::difference_type;
-      using size_type       = typename std::map<Key, Val, C>::difference_type;
-      using value_type      = Val;
-
-      const_iterator() = default;
-
-      const_iterator(typename std::map<Key, Val, C>::const_iterator iter)
-         : m_iter(std::move(iter)) {
-      }
-
-      const_iterator(iterator iter)
-         : m_iter(std::move(iter.m_iter)) {
-      }
-
-      const Key &key() const {
-         return m_iter->first;
-      }
-
-      const Val &value() const {
-         return m_iter->second;
-      }
-
-      const std::pair<const Key, Val> &pair() const {
-         return *m_iter;
-      }
-
-      // operators
-      const Val &operator*() const {
-         return value();
-      }
-
-      const Val *operator->() const {
-         return &value();
-      }
-
-      bool operator==(const_iterator other) const {
-         return m_iter == other.m_iter;
-      }
-
-      bool operator!=(const_iterator other) const {
-         return m_iter != other.m_iter;
-      }
-
-      const_iterator &operator+=(size_type n) {
-         std::advance(m_iter, n);
-         return *this;
-      }
-
-      const_iterator &operator-=(size_type n) {
-         std::advance(m_iter, -n);
-         return *this;
-      }
-
-      const_iterator operator+(size_type n) const {
-         auto tmp = m_iter;
-         std::advance(tmp, n);
-         return tmp;
-      }
-
-      const_iterator operator-(size_type n) const {
-         auto tmp = m_iter;
-         std::advance(tmp, -n);
-         return tmp;
-      }
-
-      const_iterator &operator++() {
-         ++m_iter;
-         return *this;
-      }
-
-      const_iterator operator++(int) {
-         return m_iter++;
-      }
-
-      const_iterator &operator--() {
-         --m_iter;
-         return *this;
-      }
-
-      const_iterator operator--(int) {
-         return m_iter--;
-      }
-
-      friend class QMap<Key, Val, C>;
-
-      // free functions
-      friend bool operator==(iterator iter1, const_iterator iter2) {
-         return iter2.operator==(iter1);
-      }
-
-      friend bool operator!=(iterator iter1, const_iterator iter2) {
-         return iter2.operator!=(iter1);
-      }
-
-    private:
-      typename std::map<Key, Val, C>::const_iterator m_iter;
-   };
-
    using difference_type = typename std::map<Key, Val, C>::difference_type;
    using pointer         = Val *;
    using reference       = Val &;
@@ -252,10 +53,12 @@ class QMap
 
    using allocator_type  = typename std::map<Key, Val, C>::allocator_type;
 
-   // iterator and const_iterator are classes
-
    using const_pointer   = const Val *;
    using const_reference = const Val &;
+
+   // stl
+   class iterator;
+   class const_iterator;
 
    using reverse_iterator       = std::reverse_iterator<iterator>;
    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
@@ -527,6 +330,205 @@ class QMap
    Val operator[](const Key &key) const {
       return value(key);
    }
+
+   class iterator
+   {
+    public:
+      using iterator_category = std::bidirectional_iterator_tag;
+
+      using pointer           = Val *;
+      using reference         = Val &;
+
+      using difference_type   = typename std::map<Key, Val, C>::difference_type;
+      using size_type         = typename std::map<Key, Val, C>::difference_type;
+      using value_type        = Val;
+
+      iterator() = default;
+
+      iterator(typename std::map<Key, Val, C>::iterator iter)
+         : m_iter(std::move(iter)) {
+      }
+
+      const Key &key() const {
+         return m_iter->first;
+      }
+
+      Val &value() const {
+         return m_iter->second;
+      }
+
+      std::pair<const Key, Val> &pair() const {
+         return *m_iter;
+      }
+
+      // operators
+      Val &operator*() const {
+         return value();
+      }
+
+      Val *operator->() const {
+         return &value();
+      }
+
+      bool operator==(iterator other) const {
+         return m_iter == other.m_iter;
+      }
+
+      bool operator!=(iterator other) const {
+         return m_iter != other.m_iter;
+      }
+
+      iterator &operator+=(size_type n) {
+         std::advance(m_iter, n);
+         return *this;
+      }
+
+      iterator &operator-=(size_type n) {
+         std::advance(m_iter, -n);
+         return *this;
+      }
+
+      iterator operator+(size_type n) const {
+         auto tmp = m_iter;
+         std::advance(tmp, n);
+         return tmp;
+      }
+
+      iterator operator-(size_type n) const {
+         auto tmp = m_iter;
+         std::advance(tmp, -n);
+         return tmp;
+      }
+
+      iterator &operator++() {
+         ++m_iter;
+         return *this;
+      }
+
+      iterator operator++(int) {
+         return m_iter++;
+      }
+
+      iterator &operator--() {
+         --m_iter;
+         return *this;
+      }
+
+      iterator operator--(int) {
+         return m_iter--;
+      }
+
+      friend class QMap<Key, Val, C>;
+
+    private:
+      typename std::map<Key, Val, C>::iterator m_iter;
+   };
+
+   class const_iterator
+   {
+    public:
+      using iterator_category = std::bidirectional_iterator_tag;
+
+      using pointer         = const Val *;
+      using reference       = const Val &;
+
+      using difference_type = typename std::map<Key, Val, C>::difference_type;
+      using size_type       = typename std::map<Key, Val, C>::difference_type;
+      using value_type      = Val;
+
+      const_iterator() = default;
+
+      const_iterator(typename std::map<Key, Val, C>::const_iterator iter)
+         : m_iter(std::move(iter)) {
+      }
+
+      const_iterator(iterator iter)
+         : m_iter(std::move(iter.m_iter)) {
+      }
+
+      const Key &key() const {
+         return m_iter->first;
+      }
+
+      const Val &value() const {
+         return m_iter->second;
+      }
+
+      const std::pair<const Key, Val> &pair() const {
+         return *m_iter;
+      }
+
+      // operators
+      const Val &operator*() const {
+         return value();
+      }
+
+      const Val *operator->() const {
+         return &value();
+      }
+
+      bool operator==(const_iterator other) const {
+         return m_iter == other.m_iter;
+      }
+
+      bool operator!=(const_iterator other) const {
+         return m_iter != other.m_iter;
+      }
+
+      const_iterator &operator+=(size_type n) {
+         std::advance(m_iter, n);
+         return *this;
+      }
+
+      const_iterator &operator-=(size_type n) {
+         std::advance(m_iter, -n);
+         return *this;
+      }
+
+      const_iterator operator+(size_type n) const {
+         auto tmp = m_iter;
+         std::advance(tmp, n);
+         return tmp;
+      }
+
+      const_iterator operator-(size_type n) const {
+         auto tmp = m_iter;
+         std::advance(tmp, -n);
+         return tmp;
+      }
+
+      const_iterator &operator++() {
+         ++m_iter;
+         return *this;
+      }
+
+      const_iterator operator++(int) {
+         return m_iter++;
+      }
+
+      const_iterator &operator--() {
+         --m_iter;
+         return *this;
+      }
+
+      const_iterator operator--(int) {
+         return m_iter--;
+      }
+
+      friend class QMap<Key, Val, C>;
+
+      // free functions
+      friend bool operator==(iterator iter1, const_iterator iter2) {
+         return iter2.operator==(iter1);
+      }
+
+      friend bool operator!=(iterator iter1, const_iterator iter2) {
+         return iter2.operator!=(iter1);
+      }
+
+    private:
+      typename std::map<Key, Val, C>::const_iterator m_iter;
+   };
 
  private:
    std::map<Key, Val, C> m_data;
