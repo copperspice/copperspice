@@ -55,8 +55,6 @@ class QHash
 
    using allocator_type  = typename std::unordered_map<Key, Val, Hash, KeyEqual>::allocator_type;
 
-   static constexpr int bucket_count = 1;
-
    using const_pointer   = const Val *;
    using const_reference = const Val &;
 
@@ -75,7 +73,7 @@ class QHash
 
    QHash(std::initializer_list<std::pair<const Key, Val>> list, const Hash &hash = Hash(),
          const KeyEqual &key = KeyEqual())
-      : m_data(list, bucket_count, hash, key)
+      : m_data(list, 1, hash, key)
    { }
 
    explicit QHash(const Hash &hash, const KeyEqual &key = KeyEqual())

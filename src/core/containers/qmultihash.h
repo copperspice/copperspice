@@ -42,9 +42,6 @@ template <typename Key, typename Val, typename Hash, typename KeyEqual>
 class QMultiHash
 {
  public:
-
-   static constexpr int bucket_count = 1;
-
    using difference_type = typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::difference_type;
    using pointer         = Val *;
    using reference       = Val &;
@@ -75,7 +72,7 @@ class QMultiHash
 
    QMultiHash(std::initializer_list<std::pair<const Key, Val>> list, const Hash &hash = Hash(),
          const KeyEqual &key = KeyEqual())
-      : m_data(list, bucket_count, hash, key)
+      : m_data(list, 1, hash, key)
    { }
 
    explicit QMultiHash(const Hash &hash, const KeyEqual &key = KeyEqual())
