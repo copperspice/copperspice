@@ -468,6 +468,8 @@ class QVector
    QVector<T> &operator=(const QVector<T> &other) = default;
    QVector<T> &operator=(QVector<T> &&other)      = default;
 
+   QVector<T> &operator=(std::initializer_list<T> args);
+
    reference operator[](size_type i);
    const_reference operator[](size_type i) const;
 
@@ -484,8 +486,18 @@ class QVector
       return *this;
    }
 
+   QVector<T> &operator+=(T &&value) {
+      append(std::move(value));
+      return *this;
+   }
+
    QVector<T> &operator<< (const T &value) {
       append(value);
+      return *this;
+   }
+
+   QVector<T> &operator<<(T &&value) {
+      append(std::move(value));
       return *this;
    }
 
@@ -695,6 +707,15 @@ T QVector<T>::value(size_type i, const T &defaultValue) const
 }
 
 // operators
+template <typename T>
+inline QVector<T> &QVector<T>::operator=(std::initializer_list<T> args)
+{
+   QVector<T> tmp(args);
+   tmp.swap(*this);
+
+   return *this;
+}
+
 template <typename T>
 inline typename QVector<T>::const_reference QVector<T>::operator[](size_type i) const
 {
