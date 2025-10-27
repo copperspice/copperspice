@@ -37,10 +37,12 @@ class Q_CORE_EXPORT QUrlQuery
 {
  public:
    QUrlQuery();
-   QUrlQuery(const QUrlQuery &other);
 
    explicit QUrlQuery(const QUrl &url);
    explicit QUrlQuery(const QString &str);
+
+   QUrlQuery(const QUrlQuery &other);
+   QUrlQuery(QUrlQuery &&other);
 
    ~QUrlQuery();
 

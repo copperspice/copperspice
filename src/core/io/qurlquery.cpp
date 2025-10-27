@@ -277,6 +277,11 @@ QUrlQuery::QUrlQuery(const QUrlQuery &other)
 {
 }
 
+QUrlQuery::QUrlQuery(QUrlQuery &&other)
+   : d(std::move(other.d))
+{
+}
+
 QUrlQuery &QUrlQuery::operator =(const QUrlQuery &other)
 {
    d = other.d;
