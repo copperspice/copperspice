@@ -42,72 +42,7 @@ TEST_CASE("QMap clear", "[qmap]")
    map.clear();
 
    REQUIRE(map.size() == 0);
-}
-
-TEST_CASE("QMap contains", "[qmap]")
-{
-   QMap<int, QString> map = { { 1, "watermelon"},
-                              { 2, "apple"},
-                              { 3, "pear"},
-                              { 4, "grapefruit"} };
-
-   REQUIRE(map.contains(2));
-   REQUIRE(! map.contains(9));
-}
-
-TEST_CASE("QMap count", "[qmap]")
-{
-   QMap<int, QString> map = { { 1, "watermelon"},
-                              { 2, "apple"},
-                              { 3, "pear"},
-                              { 4, "grapefruit"} };
-
-   REQUIRE(map.count() == 4);
-   REQUIRE(map.size() == 4);
-}
-
-TEST_CASE("QMap empty", "[qmap]")
-{
-   QMap<int, QString> map;
-
-   REQUIRE(map.isEmpty());
-}
-
-TEST_CASE("QMap erase", "[qmap]")
-{
-   QMap<int, QString> map = { { 1, "watermelon"},
-                              { 2, "apple"},
-                              { 3, "pear"},
-                              { 4, "grapefruit"} };
-
-   SECTION ("iterator") {
-      auto iter = map.find(2);
-      map.erase(iter);
-
-      REQUIRE(map.value(2) == "");
-
-      REQUIRE(map.value(1) == "watermelon");
-      REQUIRE(map.value(3) == "pear");
-      REQUIRE(map.value(4) == "grapefruit");
-
-      REQUIRE(map.size() == 3);
-   }
-
-   SECTION ("key") {
-      auto count = map.erase(2);
-
-      REQUIRE(map.value(2) == "");
-      REQUIRE(count == 1);
-
-      REQUIRE(map.value(1) == "watermelon");
-      REQUIRE(map.value(3) == "pear");
-      REQUIRE(map.value(4) == "grapefruit");
-
-      REQUIRE(map.size() == 3);
-
-      count = map.erase(2);
-      REQUIRE(count == 0);
-   }
+   REQUIRE(map.isEmpty() == true);
 }
 
 TEST_CASE("QMap comparison", "[qmap]")
@@ -134,6 +69,72 @@ TEST_CASE("QMap comparison", "[qmap]")
    }
 }
 
+TEST_CASE("QMap contains", "[qmap]")
+{
+   QMap<int, QString> map = { { 1, "watermelon"},
+                              { 2, "apple"},
+                              { 3, "pear"},
+                              { 4, "grapefruit"} };
+
+   REQUIRE(map.contains(2) == true);
+   REQUIRE(map.contains(9) == false);
+}
+
+TEST_CASE("QMap copy_assign", "[qmap]")
+{
+   QMap<int, QString> map_a = { { 1, "watermelon"},
+                                { 2, "apple"},
+                                { 3, "pear"},
+                                { 4, "grapefruit"} };
+
+   QMap<int, QString> map_b(map_a);
+
+   REQUIRE(map_a.size() == 4);
+   REQUIRE(map_b.size() == 4);
+
+   REQUIRE(map_a.value(1) == "watermelon");
+   REQUIRE(map_a.value(4) == "grapefruit");
+
+   REQUIRE(map_b.value(1) == "watermelon");
+   REQUIRE(map_b.value(4) == "grapefruit");
+
+   REQUIRE(map_a == map_b);
+
+   //
+   QMap<int, QString> map_c;
+   map_c = map_a;
+
+   REQUIRE(map_a.size() == 4);
+   REQUIRE(map_c.size() == 4);
+
+   REQUIRE(map_a.value(1) == "watermelon");
+   REQUIRE(map_a.value(4) == "grapefruit");
+
+   REQUIRE(map_c.value(1) == "watermelon");
+   REQUIRE(map_c.value(4) == "grapefruit");
+
+   REQUIRE(map_a == map_c);
+}
+
+TEST_CASE("QMap count", "[qmap]")
+{
+   QMap<int, QString> map = { { 1, "watermelon"},
+                              { 2, "apple"},
+                              { 3, "pear"},
+                              { 4, "grapefruit"} };
+
+   REQUIRE(map.count() == 4);
+   REQUIRE(map.size()  == 4);
+}
+
+TEST_CASE("QMap empty", "[qmap]")
+{
+   QMap<int, QString> map;
+
+   REQUIRE(map.isEmpty() == true);
+   REQUIRE(map.size() == 0);
+}
+
 TEST_CASE("QMap equal_range", "[qmap]")
 {
    QMap<int, QString> map = { { 1, "watermelon"},
@@ -146,6 +147,43 @@ TEST_CASE("QMap equal_range", "[qmap]")
 
    REQUIRE(data.first  == 2);
    REQUIRE(data.second == "apple");
+}
+
+TEST_CASE("QMap erase", "[qmap]")
+{
+   QMap<int, QString> map = { { 1, "watermelon"},
+                              { 2, "apple"},
+                              { 3, "pear"},
+                              { 4, "grapefruit"} };
+
+   SECTION ("iterator") {
+      auto iter = map.find(2);
+      map.erase(iter);
+
+      REQUIRE(map.size() == 3);
+
+      REQUIRE(map.value(1) == "watermelon");
+      REQUIRE(map.value(2) == QString());
+      REQUIRE(map.value(3) == "pear");
+      REQUIRE(map.value(4) == "grapefruit");
+   }
+
+   SECTION ("key") {
+      auto count = map.erase(2);
+
+      REQUIRE(count == 1);
+      REQUIRE(map.size() == 3);
+
+      REQUIRE(map.value(1) == "watermelon");
+      REQUIRE(map.value(2) == QString());
+      REQUIRE(map.value(3) == "pear");
+      REQUIRE(map.value(4) == "grapefruit");
+
+      //
+      count = map.erase(2);
+
+      REQUIRE(count == 0);
+   }
 }
 
 TEST_CASE("QMap first", "[qmap]")
@@ -168,8 +206,8 @@ TEST_CASE("QMap insert_copy", "[qmap]")
 
    map.insert( {6, "mango"} );
 
-   REQUIRE(map.value(6) == "mango");
    REQUIRE(map.size() == 5);
+   REQUIRE(map.value(6) == "mango");
 }
 
 TEST_CASE("QMap insert_move", "[qmap]")
@@ -181,8 +219,8 @@ TEST_CASE("QMap insert_move", "[qmap]")
    map.insert(3, QMakeUnique<QString>("pear"));
    map.insert(4, QMakeUnique<QString>("grapefruit"));
 
-   REQUIRE(*(map[3]) == "pear");
    REQUIRE(map.size() == 4);
+   REQUIRE(*(map[3]) == "pear");
 }
 
 TEST_CASE("QMap insert_hint", "[qmap]")
@@ -194,15 +232,18 @@ TEST_CASE("QMap insert_hint", "[qmap]")
                               { 6, "grapefruit"} };
 
    auto iter = map.upperBound(4);
-   map.insert( iter, 4, "mango" );
+   map.insert(iter, 4, "mango");
 
    REQUIRE(map.size() == 6);
 
+   REQUIRE(map[3] == "pear");
    REQUIRE(map[4] == "mango");
    REQUIRE(map[5] == "quince");
 
    //
-   map.insert( iter, 4, "peach" );
+   map.insert(iter, 4, "peach");
+
+   REQUIRE(map.size() == 6);
    REQUIRE(map[4] == "peach");
 }
 
@@ -217,6 +258,30 @@ TEST_CASE("QMap last", "[qmap]")
    REQUIRE(map.last() == "grapefruit");
 }
 
+TEST_CASE("QMap move_assign", "[qmap]")
+{
+  QMap<int, QString> map_a = { { 1, "watermelon"},
+                               { 2, "apple"},
+                               { 3, "pear"},
+                               { 4, "grapefruit"} };
+
+   QMap<int, QString> map_b(std::move(map_a));
+
+   REQUIRE(map_b.size() == 4);
+
+   REQUIRE(map_b.value(1) == "watermelon");
+   REQUIRE(map_b.value(4) == "grapefruit");
+
+   //
+   QMap<int, QString> map_c;
+   map_c = std::move(map_b);
+
+   REQUIRE(map_c.size() == 4);
+
+   REQUIRE(map_c.value(1) == "watermelon");
+   REQUIRE(map_c.value(4) == "grapefruit");
+}
+
 TEST_CASE("QMap operator_bracket", "[qmap]")
 {
    QMap<int, QString> map = { { 1, "watermelon"},
@@ -225,11 +290,18 @@ TEST_CASE("QMap operator_bracket", "[qmap]")
                               { 3, "quince"},
                               { 4, "grapefruit"} };
 
+   REQUIRE(map.size() == 4);
+
+   REQUIRE(map[3] == "pear");
    REQUIRE(map[4] == "grapefruit");
-   REQUIRE(map[5] == "");
+
+   // creates new element
+   REQUIRE(map[5] == QString());
+
+   REQUIRE(map.size() == 5);
 
    REQUIRE(map.contains(5) == true);
-   REQUIRE(map[5] == "");
+   REQUIRE(map[5] == QString());
 }
 
 TEST_CASE("QMap remove", "[qmap]")
@@ -239,31 +311,38 @@ TEST_CASE("QMap remove", "[qmap]")
                               { 3, "pear"},
                               { 4, "grapefruit"} };
 
+   REQUIRE(map.size() == 4);
+
    map.remove(3);
 
-   REQUIRE(map.value(3) == "");
+   REQUIRE(map.size() == 3);
 
    REQUIRE(map.value(1) == "watermelon");
    REQUIRE(map.value(2) == "apple");
+   REQUIRE(map.value(3) == QString());
    REQUIRE(map.value(4) == "grapefruit");
-
-   REQUIRE(map.size() == 3);
 }
 
 TEST_CASE("QMap swap", "[qmap]")
 {
-   QMap<int, QString> map1 = { { 1, "watermelon"},
-                               { 2, "apple"},
-                               { 3, "pear"},
-                               { 4, "grapefruit"} };
+   QMap<int, QString> map_a = { { 1, "watermelon"},
+                                { 2, "apple"},
+                                { 3, "pear"},
+                                { 4, "grapefruit"} };
 
-   QMap<int, QString> map2 = { { 1, "grape"},
-                               { 2, "orange"},
-                               { 3, "peach"} };
+   QMap<int, QString> map_b = { { 1, "grape"},
+                                { 2, "orange"},
+                                { 3, "peach"} };
 
-   map1.swap(map2);
+   REQUIRE(map_a.size() == 4);
+   REQUIRE(map_b.size() == 3);
 
-   REQUIRE(map1.value(2) == ("orange"));
-   REQUIRE(map2.contains(4));
+   //
+   map_a.swap(map_b);
+
+   REQUIRE(map_a.size() == 3);
+   REQUIRE(map_b.size() == 4);
+
+   REQUIRE(map_a.value(2) == ("orange"));
+   REQUIRE(map_b.contains(4));
 }
-

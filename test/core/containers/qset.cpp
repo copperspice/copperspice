@@ -32,6 +32,17 @@ TEST_CASE("QSet traits", "[qset]")
    REQUIRE(std::has_virtual_destructor_v<QSet<int>> == false);
 }
 
+TEST_CASE("QSet constructor", "[qset]")
+{
+   QSet<int> set{ 10, 20, 30, 30, 20};
+
+   REQUIRE(set.size() == 3);
+
+   REQUIRE(set.contains(10) == true);
+   REQUIRE(set.contains(20) == true);
+   REQUIRE(set.contains(30) == true);
+}
+
 TEST_CASE("QSet begin_end", "[qset]")
 {
    QSet<QString> setA = { "watermelon", "apple", "pear", "grapefruit" };
@@ -51,6 +62,7 @@ TEST_CASE("QSet clear", "[qset]")
 
    REQUIRE(set.size() == 4);
 
+   //
    set.clear();
 
    REQUIRE(set.size() == 0);
@@ -92,29 +104,26 @@ TEST_CASE("QSet copy_assign", "[qset]")
 {
    QSet<QString> set_a = { "watermelon", "apple", "pear", "grapefruit", "pear" };
    QSet<QString> set_b = set_a;
-   QSet<QString> set_c;
 
    REQUIRE(set_b.size() == 4);
+   REQUIRE(set_b.size() == 4);
+
    REQUIRE(set_a == set_b);
 
+   REQUIRE(set_a.contains("watermelon") == true);
+   REQUIRE(set_b.contains("watermelon") == true);
+
    //
+   QSet<QString> set_c;
    set_c = set_a;
 
+   REQUIRE(set_a.size() == 4);
    REQUIRE(set_c.size() == 4);
+
    REQUIRE(set_a == set_c);
-}
 
-TEST_CASE("QSet duplicate", "[qset]")
-{
-   QSet<QString> set = { "watermelon", "apple", "pear", "grapefruit" };
-
-   REQUIRE(set.contains("apple") == true);
-   REQUIRE(set.size() == 4);
-
-   set.insert("apple");
-
-   REQUIRE(set.contains("apple") == true);
-   REQUIRE(set.size() == 4);
+   REQUIRE(set_a.contains("watermelon") == true);
+   REQUIRE(set_c.contains("watermelon") == true);
 }
 
 TEST_CASE("QSet empty", "[qset]")
@@ -129,9 +138,13 @@ TEST_CASE("QSet comparison", "[qset]")
 {
    QSet<QString> set1 = { "watermelon", "apple", "pear", "grapefruit" };
    QSet<QString> set2 = { "watermelon", "apple", "pear", "grapefruit" };
+   QSet<QString> set3 = { "watermelon", "quince" };
 
    REQUIRE(set1 == set2);
    REQUIRE(! (set1 != set2));
+
+   REQUIRE(!( set1 == set3));
+   REQUIRE(set1 != set3);
 }
 
 TEST_CASE("QSet erase", "[qset]")
@@ -150,11 +163,24 @@ TEST_CASE("QSet erase", "[qset]")
    REQUIRE(set.contains("grapefruit") == true);
 }
 
-TEST_CASE("QSet interation", "[qset]")
+TEST_CASE("QSet fromList", "[qset]")
+{
+   QList<int> list{ 10, 20, 30, 30, 20, 40 };
+   QSet<int> set = QSet<int>::fromList(list);
+
+   REQUIRE(list.size() == 6);
+   REQUIRE(set.size()  == 4);
+
+   REQUIRE(set.contains(30));
+   REQUIRE(set.contains(40));
+}
+
+TEST_CASE("QSet iterators", "[qset]")
 {
    QSet<QString> set{ "watermelon", "apple", "pear" };
 
    auto iter = set.begin();
+
    REQUIRE(iter != set.end());
 
    ++iter;
@@ -202,7 +228,7 @@ TEST_CASE("QSet intersect", "[qset]")
 
    {
       // reset values
-      setA << "apple" << "banana" << "cherry";
+      setA = QSet<QString>{ "apple", "banana", "cherry" };
 
       QSet<QString> result = setA.intersect(QSet<QString>());
 
@@ -213,7 +239,6 @@ TEST_CASE("QSet intersect", "[qset]")
    }
 
    {
-      // reset values
       setA << "apple" << "banana" << "cherry";
 
       QSet<QString> setD = setA;
@@ -242,16 +267,46 @@ TEST_CASE("QSet intersect", "[qset]")
 
       REQUIRE(result == setA);
    }
+
+   {
+      // reset values
+      setA = QSet<QString>{ "apple", "banana", "cherry" };
+
+      QSet<QString> result = setA & setB;
+
+      REQUIRE(result.size() == 2);
+
+      REQUIRE(result.contains("banana") == true);
+      REQUIRE(result.contains("cherry") == true);
+
+      REQUIRE(result != setA);
+   }
 }
 
 TEST_CASE("QSet insert", "[qset]")
 {
    QSet<QString> set = { "watermelon", "apple", "pear", "grapefruit" };
 
+   REQUIRE(set.size() == 4);
+   REQUIRE(set.contains("apple") == true);
+
+   // duplicate
+   set.insert("apple");
+
+   REQUIRE(set.size() == 4);
+   REQUIRE(set.contains("apple") == true);
+
+   //
    set.insert("mango");
 
    REQUIRE(set.size() == 5);
    REQUIRE(set.contains("mango") == true);
+
+   // duplicate
+   auto iter = set.find("mango");
+
+   REQUIRE(set.insert("mango") == iter);
+   REQUIRE(set.size() == 5);
 
    //
    set << "quince" << "peach";
@@ -260,25 +315,34 @@ TEST_CASE("QSet insert", "[qset]")
    REQUIRE(set.contains("peach") == true);
 }
 
-TEST_CASE("QSet move", "[qset]")
+TEST_CASE("QSet move_assign", "[qset]")
 {
-   QSet<QString> set_a{ "watermelon", "apple", "pear"};
-   QSet<QString> set_b = std::move(set_a);
+   QSet<QString> set_a = { "watermelon", "apple", "pear", "grapefruit", "pear" };
+   QSet<QString> set_b(std::move(set_a));
 
-   REQUIRE(set_a.size() == 0);
-   REQUIRE(set_b.size() == 3);
-
-   REQUIRE(set_a.contains("watermelon") == false);
+   REQUIRE(set_b.size() == 4);
    REQUIRE(set_b.contains("watermelon") == true);
+
+   //
+   QSet<QString> set_c;
+   set_c = std::move(set_b);
+
+   REQUIRE(set_c.size() == 4);
+   REQUIRE(set_c.contains("watermelon") == true);
 }
 
 TEST_CASE("QSet remove", "[qset]")
 {
    QSet<QString> set = { "watermelon", "apple", "pear", "grapefruit" };
+   bool ok;
 
-   set.remove("pear");
+   REQUIRE(set.size() == 4);
+
+   //
+   ok = set.remove("pear");
 
    REQUIRE(set.size() == 3);
+   REQUIRE(ok == true);
 
    REQUIRE(set.contains("pear")       == false);
    REQUIRE(set.contains("watermelon") == true);
@@ -286,9 +350,10 @@ TEST_CASE("QSet remove", "[qset]")
    REQUIRE(set.contains("grapefruit") == true);
 
    //
-   set.remove("grape");
+   ok = set.remove("grape");
 
    REQUIRE(set.size() == 3);
+   REQUIRE(ok == false);
 }
 
 TEST_CASE("QSet size", "[qset]")
@@ -296,6 +361,39 @@ TEST_CASE("QSet size", "[qset]")
    QSet<QString> set = { "watermelon", "apple", "pear", "grapefruit" };
 
    REQUIRE(set.size()   == 4);
+}
+
+TEST_CASE("QSet subtract", "[qset]")
+{
+   QSet<QString> setA = { "watermelon", "apple", "pear", "grapefruit" };
+   QSet<QString> setB = { "orange", "pear"};
+
+   {
+      QSet<QString> result = setA.subtract(setB);
+
+      REQUIRE(setA.size()   == 3);
+      REQUIRE(setB.size()   == 2);
+      REQUIRE(result.size() == 3);
+
+      REQUIRE(result.contains("watermelon") == true);
+      REQUIRE(result.contains("apple")      == true);
+      REQUIRE(result.contains("pear")       == false);
+      REQUIRE(result.contains("grapefruit") == true);
+
+      REQUIRE(result.contains("grape")      == false);
+      REQUIRE(result.contains("orange")     == false);
+   }
+
+   {
+      // reset values
+      setA = QSet<QString>{ "watermelon", "apple", "pear", "grapefruit" };
+
+      QSet<QString> result = setA - setB;
+
+      REQUIRE(setA.size()   == 4);
+      REQUIRE(setB.size()   == 2);
+      REQUIRE(result.size() == 3);
+   }
 }
 
 TEST_CASE("QSet swap", "[qset]")
@@ -307,26 +405,6 @@ TEST_CASE("QSet swap", "[qset]")
 
    REQUIRE(set1.contains("orange") == true);
    REQUIRE(set2.contains("orange") == false);
-}
-
-TEST_CASE("QSet subtract", "[qset]")
-{
-   QSet<QString> setA = { "watermelon", "apple", "pear", "grapefruit" };
-   QSet<QString> setB = { "grape", "orange", "pear"};
-
-   {
-      QSet<QString> result = setA.subtract(setB);
-
-      REQUIRE(result.size() == 3);
-
-      REQUIRE(result.contains("watermelon") == true);
-      REQUIRE(result.contains("apple")      == true);
-      REQUIRE(result.contains("pear")       == false);
-      REQUIRE(result.contains("grapefruit") == true);
-
-      REQUIRE(result.contains("grape")      == false);
-      REQUIRE(result.contains("orange")     == false);
-   }
 }
 
 TEST_CASE("QSet toList", "[qset]")
@@ -410,5 +488,20 @@ TEST_CASE("QSet unite", "[qset]")
       QSet<QString> result = setA.unite(setA);
 
       REQUIRE(result == setA);
+   }
+
+   {
+      setA = QSet<QString>{ "watermelon", "apple", "pear", "grapefruit" };
+      QSet<QString> result = setA | setB;
+
+      REQUIRE(result.size() == 6);
+
+      REQUIRE(result.contains("watermelon") == true);
+      REQUIRE(result.contains("apple")      == true);
+      REQUIRE(result.contains("pear")       == true);
+      REQUIRE(result.contains("grapefruit") == true);
+
+      REQUIRE(result.contains("grape")      == true);
+      REQUIRE(result.contains("orange")     == true);
    }
 }

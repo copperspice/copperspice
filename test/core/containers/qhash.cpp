@@ -187,6 +187,8 @@ TEST_CASE("QHash copy_assign", "[qhash]")
    REQUIRE(hash_b["watermelon"] == 10);
    REQUIRE(hash_b["grapefruit"] == 40);
 
+   REQUIRE(hash_a == hash_b);
+
    //
    QHash<QString, int> hash_c;
    hash_c = hash_a;
@@ -199,6 +201,8 @@ TEST_CASE("QHash copy_assign", "[qhash]")
 
    REQUIRE(hash_c["watermelon"] == 10);
    REQUIRE(hash_c["grapefruit"] == 40);
+
+   REQUIRE(hash_a == hash_c);
 }
 
 TEST_CASE("QHash equal_range", "[qhash]")

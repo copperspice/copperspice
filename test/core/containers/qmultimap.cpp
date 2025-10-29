@@ -43,80 +43,12 @@ TEST_CASE("QMultiMap clear", "[qmultimap]")
    map.clear();
 
    REQUIRE(map.size() == 0);
-}
-
-TEST_CASE("QMultiMap contains", "[qmultimap]")
-{
-   QMultiMap<int, QString> map = { { 1, "watermelon"},
-                                   { 2, "apple"},
-                                   { 3, "pear"},
-                                   { 3, "quince"},
-                                   { 4, "grapefruit"} };
-
-   REQUIRE(map.contains(2));
-   REQUIRE(! map.contains(9));
-}
-
-TEST_CASE("QMultiMap count", "[qmultimap]")
-{
-   QMultiMap<int, QString> map = { { 1, "watermelon"},
-                                   { 2, "apple"},
-                                   { 3, "pear"},
-                                   { 3, "quince"},
-                                   { 4, "grapefruit"} };
-
-   REQUIRE(map.count() == 5);
-   REQUIRE(map.size() == 5);
-}
-
-TEST_CASE("QMultiMap empty", "[qmultimap]")
-{
-   QMultiMap<int, QString> map;
-
-   REQUIRE(map.isEmpty());
-}
-
-TEST_CASE("QMultiMap erase", "[qmultimap]")
-{
-   QMultiMap<int, QString> map = { { 1, "watermelon"},
-                                   { 2, "apple"},
-                                   { 3, "pear"},
-                                   { 3, "quince"},
-                                   { 4, "grapefruit"} };
-
-   SECTION ("iterator") {
-      auto iter = map.find(2);
-      map.erase(iter);
-
-      REQUIRE(map.value(2) == "");
-
-      REQUIRE(map.value(1) == "watermelon");
-      REQUIRE(map.value(3) == "quince");
-      REQUIRE(map.value(4) == "grapefruit");
-
-      REQUIRE(map.size() == 4);
-   }
-
-   SECTION ("key") {
-      auto count = map.erase(3);
-
-      REQUIRE(map.value(3) == "");
-      REQUIRE(count == 2);
-
-      REQUIRE(map.value(1) == "watermelon");
-      REQUIRE(map.value(2) == "apple");
-      REQUIRE(map.value(4) == "grapefruit");
-
-      REQUIRE(map.size() == 3);
-
-      count = map.erase(3);
-      REQUIRE(count == 0);
-   }
+   REQUIRE(map.isEmpty() == true);
 }
 
 TEST_CASE("QMultiMap comparison", "[qmultimap]")
 {
-   QMultiMap<int, QString> map1 = { { 1, "watermelon"},
+   QMultiMap<int, QString> map_a = { { 1, "watermelon"},
                                     { 2, "apple"},
                                     { 3, "pear"},
                                     { 3, "quince"},
@@ -128,16 +60,84 @@ TEST_CASE("QMultiMap comparison", "[qmultimap]")
                                     { 3, "quince"},
                                     { 4, "grapefruit"} };
    {
-      REQUIRE(map1 == map2);
-      REQUIRE(! (map1 != map2));
+      REQUIRE(map_a == map2);
+      REQUIRE(! (map_a != map2));
    }
 
    {
       map2.remove(3);
 
-      REQUIRE(! (map1 == map2));
-      REQUIRE(map1 != map2);
+      REQUIRE(! (map_a == map2));
+      REQUIRE(map_a != map2);
    }
+}
+
+TEST_CASE("QMultiMap contains", "[qmultimap]")
+{
+   QMultiMap<int, QString> map = { { 1, "watermelon"},
+                                   { 2, "apple"},
+                                   { 3, "pear"},
+                                   { 3, "quince"},
+                                   { 4, "grapefruit"} };
+
+   REQUIRE(map.contains(2) == true);
+   REQUIRE(map.contains(9) == false);
+}
+
+TEST_CASE("QMultiMap copy_assign", "[qmultimap]")
+{
+   QMultiMap<int, QString> map_a = { { 1, "watermelon"},
+                                     { 2, "apple"},
+                                     { 3, "pear"},
+                                     { 4, "grapefruit"} };
+
+   QMultiMap<int, QString> map_b(map_a);
+
+   REQUIRE(map_a.size() == 4);
+   REQUIRE(map_b.size() == 4);
+
+   REQUIRE(map_a.value(1) == "watermelon");
+   REQUIRE(map_a.value(4) == "grapefruit");
+
+   REQUIRE(map_b.value(1) == "watermelon");
+   REQUIRE(map_b.value(4) == "grapefruit");
+
+   REQUIRE(map_a == map_b);
+
+   //
+   QMultiMap<int, QString> map_c;
+   map_c = map_a;
+
+   REQUIRE(map_a.size() == 4);
+   REQUIRE(map_c.size() == 4);
+
+   REQUIRE(map_a.value(1) == "watermelon");
+   REQUIRE(map_a.value(4) == "grapefruit");
+
+   REQUIRE(map_c.value(1) == "watermelon");
+   REQUIRE(map_c.value(4) == "grapefruit");
+
+   REQUIRE(map_a == map_c);
+}
+
+TEST_CASE("QMultiMap count", "[qmultimap]")
+{
+   QMultiMap<int, QString> map = { { 1, "watermelon"},
+                                   { 2, "apple"},
+                                   { 3, "pear"},
+                                   { 3, "quince"},
+                                   { 4, "grapefruit"} };
+
+   REQUIRE(map.count() == 5);
+   REQUIRE(map.size()  == 5);
+}
+
+TEST_CASE("QMultiMap empty", "[qmultimap]")
+{
+   QMultiMap<int, QString> map;
+
+   REQUIRE(map.isEmpty() == true);
+   REQUIRE(map.size() == 0);
 }
 
 TEST_CASE("QMultiMap equal_range", "[qmultimap]")
@@ -153,6 +153,44 @@ TEST_CASE("QMultiMap equal_range", "[qmultimap]")
 
    REQUIRE(data.first  == 2);
    REQUIRE(data.second == "apple");
+}
+
+TEST_CASE("QMultiMap erase", "[qmultimap]")
+{
+   QMultiMap<int, QString> map = { { 1, "watermelon"},
+                                   { 2, "apple"},
+                                   { 3, "pear"},
+                                   { 3, "quince"},
+                                   { 4, "grapefruit"} };
+
+   SECTION ("iterator") {
+      auto iter = map.find(2);
+      map.erase(iter);
+
+      REQUIRE(map.size() == 4);
+
+      REQUIRE(map.value(1) == "watermelon");
+      REQUIRE(map.value(2) == QString());
+      REQUIRE(map.value(3) == "quince");
+      REQUIRE(map.value(4) == "grapefruit");
+   }
+
+   SECTION ("key") {
+      auto count = map.erase(3);
+
+      REQUIRE(count == 2);
+      REQUIRE(map.size() == 3);
+
+      REQUIRE(map.value(1) == "watermelon");
+      REQUIRE(map.value(2) == "apple");
+      REQUIRE(map.value(3) == QString());
+      REQUIRE(map.value(4) == "grapefruit");
+
+      //
+      count = map.erase(3);
+
+      REQUIRE(count == 0);
+   }
 }
 
 TEST_CASE("QMultiMap first", "[qmultimap]")
@@ -177,8 +215,8 @@ TEST_CASE("QMultiMap insert_copy", "[qmultimap]")
 
    map.insert( {6, "mango"} );
 
-   REQUIRE(map.value(6) == "mango");
    REQUIRE(map.size() == 6);
+   REQUIRE(map.value(6) == "mango");
 }
 
 TEST_CASE("QMultiMap insert_move", "[qmultimap]")
@@ -190,22 +228,8 @@ TEST_CASE("QMultiMap insert_move", "[qmultimap]")
    map.insert(3, QMakeUnique<QString>("pear"));
    map.insert(4, QMakeUnique<QString>("grapefruit"));
 
-   REQUIRE(*(map[3]) == "pear");
    REQUIRE(map.size() == 4);
-}
-
-TEST_CASE("QMultiMap operator_bracket", "[qmultimap]")
-{
-   QMultiMap<int, QString> map = { { 1, "watermelon"},
-                                   { 2, "apple"},
-                                   { 3, "pear"},
-                                   { 4, "grapefruit"} };
-
-   REQUIRE(map[4] == "grapefruit");
-   REQUIRE(map[5] == "");
-
-   REQUIRE(map.contains(5) == true);
-   REQUIRE(map[5] == "");
+   REQUIRE(*(map[3]) == "pear");
 }
 
 TEST_CASE("QMultiMap insert_hint", "[qmultimap]")
@@ -217,12 +241,13 @@ TEST_CASE("QMultiMap insert_hint", "[qmultimap]")
                                    { 5, "grapefruit"} };
 
    auto iter = map.upperBound(3);
-   map.insert( iter, 3, "mango" );
+   map.insert(iter, 3, "mango");
 
    REQUIRE(map.size() == 6);
 
    //
    QList<QString> values = map.values(3);
+
    REQUIRE(values.size() == 4);
 
    REQUIRE(values[0] == "apple");
@@ -243,6 +268,50 @@ TEST_CASE("QMultiMap last", "[qmultimap]")
    REQUIRE(map.last() == "grapefruit");
 }
 
+TEST_CASE("QMultiMap move_assign", "[qmultimap]")
+{
+   QMultiMap<int, QString> map_a = { { 1, "watermelon"},
+                                     { 2, "apple"},
+                                     { 3, "pear"},
+                                     { 3, "quince"},
+                                     { 4, "grapefruit"} };
+
+   QMultiMap<int, QString> map_b(std::move(map_a));
+
+   REQUIRE(map_b.size() == 5);
+
+   REQUIRE(map_b.value(1) == "watermelon");
+   REQUIRE(map_b.value(4) == "grapefruit");
+
+   //
+   QMultiMap<int, QString> map_c;
+   map_c = std::move(map_b);
+
+   REQUIRE(map_c.size() == 5);
+
+   REQUIRE(map_c.value(1) == "watermelon");
+   REQUIRE(map_c.value(4) == "grapefruit");
+}
+
+TEST_CASE("QMultiMap operator_bracket", "[qmultimap]")
+{
+   QMultiMap<int, QString> map = { { 1, "watermelon"},
+                                   { 2, "apple"},
+                                   { 3, "pear"},
+                                   { 4, "grapefruit"} };
+
+   REQUIRE(map.size() == 4);
+   REQUIRE(map[4] == "grapefruit");
+
+   // creates new element
+   REQUIRE(map[5] == QString());
+
+   REQUIRE(map.size() == 5);
+
+   REQUIRE(map.contains(5) == true);
+   REQUIRE(map[5] == QString());
+}
+
 TEST_CASE("QMultiMap remove", "[qmultimap]")
 {
    QMultiMap<int, QString> map = { { 1, "watermelon"},
@@ -251,32 +320,38 @@ TEST_CASE("QMultiMap remove", "[qmultimap]")
                                    { 3, "quince"},
                                    { 4, "grapefruit"} };
 
+   REQUIRE(map.size() == 5);
+
    map.remove(3);
 
-   REQUIRE(map.value(3) == "");
+   REQUIRE(map.size() == 3);
 
    REQUIRE(map.value(1) == "watermelon");
    REQUIRE(map.value(2) == "apple");
+   REQUIRE(map.value(3) == QString());
    REQUIRE(map.value(4) == "grapefruit");
-
-   REQUIRE(map.size() == 3);
 }
 
 TEST_CASE("QMultiMap swap", "[qmultimap]")
 {
-   QMultiMap<int, QString> map1 = { { 1, "watermelon"},
-                                    { 2, "apple"},
-                                    { 3, "pear"},
-                                    { 3, "quince"},
-                                    { 4, "grapefruit"} };
+   QMultiMap<int, QString> map_a = { { 1, "watermelon"},
+                                     { 2, "apple"},
+                                     { 3, "pear"},
+                                     { 3, "quince"},
+                                     { 4, "grapefruit"} };
 
-   QMultiMap<int, QString> map2 = { { 1, "grape"},
-                                    { 2, "orange"},
-                                    { 3, "peach"} };
+   QMultiMap<int, QString> map_b = { { 1, "grape"},
+                                     { 2, "orange"},
+                                     { 3, "peach"} };
 
-   map1.swap(map2);
+   REQUIRE(map_a.size() == 5);
+   REQUIRE(map_b.size() == 3);
 
-   REQUIRE(map1.value(2) == ("orange"));
-   REQUIRE(map2.contains(4));
+   map_a.swap(map_b);
+
+   REQUIRE(map_a.size() == 3);
+   REQUIRE(map_b.size() == 5);
+
+   REQUIRE(map_a.value(2) == ("orange"));
+   REQUIRE(map_b.contains(4) == true);
 }
-
