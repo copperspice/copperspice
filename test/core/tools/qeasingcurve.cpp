@@ -34,14 +34,18 @@ TEST_CASE("QEasingCurve traits", "[qeasingcurve]")
 
 TEST_CASE("QEasingCurve copy_assign", "[qeasingcurve]")
 {
-   QEasingCurve dataA(QEasingCurve::InOutExpo);
-   QEasingCurve dataB = dataA;
+   QEasingCurve data_a(QEasingCurve::InOutExpo);
+   QEasingCurve data_b(data_a);
 
-   QEasingCurve dataC;
-   dataC = dataA;
+   REQUIRE(data_a.type() == data_b.type());
+   REQUIRE(data_a == data_b);
 
-   REQUIRE(dataA.type() == dataB.type());
-   REQUIRE(dataA.type() == dataC.type());
+   //
+   QEasingCurve data_c;
+   data_c = data_a;
+
+   REQUIRE(data_a.type() == data_c.type());
+   REQUIRE(data_a == data_c);
 }
 
 TEST_CASE("QEasingCurve comparison", "[qeasingcurve]")
@@ -52,6 +56,20 @@ TEST_CASE("QEasingCurve comparison", "[qeasingcurve]")
 
    REQUIRE(dataA == dataB);
    REQUIRE(dataA != dataC);
+}
+
+TEST_CASE("QEasingCurve move_assign", "[qeasingcurve]")
+{
+   QEasingCurve data_a(QEasingCurve::InOutExpo);
+   QEasingCurve data_b(std::move(data_a));
+
+   REQUIRE(data_b.type() == QEasingCurve::InOutExpo);
+
+   //
+   QEasingCurve data_c;
+   data_c = std::move(data_b);
+
+   REQUIRE(data_c.type() == QEasingCurve::InOutExpo);
 }
 
 TEST_CASE("QEasingCurve parameters", "[qeasingcurve]")

@@ -64,12 +64,21 @@ TEST_CASE("QPointer destructor", "[qpointer]")
    REQUIRE(p1 == p2);
 }
 
-TEST_CASE("QPointer copy_move_assign", "[qpointer]")
+TEST_CASE("QPointer copy_assign", "[qpointer]")
 {
    QObject *obj = new QObject;
 
    QPointer<QObject> p1;
    QPointer<QObject> p2;
+
+   {
+      p1 = obj;
+      QPointer<QObject> p3(p1);
+
+      REQUIRE(p1 == QPointer<QObject>(obj));
+      REQUIRE(p3 == QPointer<QObject>(obj));
+      REQUIRE(p1 == p3);
+   }
 
    {
       p1 = obj;
@@ -83,6 +92,43 @@ TEST_CASE("QPointer copy_move_assign", "[qpointer]")
    {
       p1 = nullptr;
       p2 = p1;
+
+      REQUIRE(p1 == nullptr);
+      REQUIRE(p2 == nullptr);
+      REQUIRE(p1 == p2);
+   }
+
+   delete obj;
+}
+
+TEST_CASE("QPointer move_assign", "[qpointer]")
+{
+   QObject *obj = new QObject;
+
+   QPointer<QObject> p1;
+   QPointer<QObject> p2;
+
+   {
+      p1 = obj;
+      QPointer<QObject> p3(std::move(p1));
+
+      REQUIRE(p1 == nullptr);
+      REQUIRE(p3 == QPointer<QObject>(obj));
+      REQUIRE(p1 != p3);
+   }
+
+   {
+      p1 = obj;
+      p2 = std::move(p1);
+
+      REQUIRE(p1 == nullptr);
+      REQUIRE(p2 == QPointer<QObject>(obj));
+      REQUIRE(p1 != p2);
+   }
+
+   {
+      p1 = nullptr;
+      p2 = std::move(p1);
 
       REQUIRE(p1 == nullptr);
       REQUIRE(p2 == nullptr);

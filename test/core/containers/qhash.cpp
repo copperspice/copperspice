@@ -169,33 +169,33 @@ TEST_CASE("QHash comparison", "[qhash]")
    }
 }
 
-TEST_CASE("QHash copy_move_constructor", "[qhash]")
+TEST_CASE("QHash copy_assign", "[qhash]")
 {
    QHash<QString, int> hash_a = { { "watermelon", 10},
                                   { "apple",      20},
                                   { "pear",       30},
                                   { "grapefruit", 40} };
 
-   QHash<QString, int> hash_b = hash_a;
+   QHash<QString, int> hash_b(hash_a);
 
    REQUIRE(hash_a.size() == 4);
    REQUIRE(hash_b.size() == 4);
+
+   REQUIRE(hash_a["watermelon"] == 10);
+   REQUIRE(hash_a["grapefruit"] == 40);
 
    REQUIRE(hash_b["watermelon"] == 10);
    REQUIRE(hash_b["grapefruit"] == 40);
 
    //
-   QHash<QString, int> hash_c = std::move(hash_a);
+   QHash<QString, int> hash_c;
+   hash_c = hash_a;
 
-   REQUIRE(hash_a.size() == 0);
-   REQUIRE(hash_b.size() == 4);
+   REQUIRE(hash_a.size() == 4);
    REQUIRE(hash_c.size() == 4);
 
-   REQUIRE(hash_a["watermelon"] == 0);
-   REQUIRE(hash_a["grapefruit"] == 0);
-
-   REQUIRE(hash_b["watermelon"] == 10);
-   REQUIRE(hash_b["grapefruit"] == 40);
+   REQUIRE(hash_a["watermelon"] == 10);
+   REQUIRE(hash_a["grapefruit"] == 40);
 
    REQUIRE(hash_c["watermelon"] == 10);
    REQUIRE(hash_c["grapefruit"] == 40);
@@ -304,6 +304,30 @@ TEST_CASE("QHash operator_bracket", "[qhash]")
    // will not add another element
    REQUIRE(hash.contains(6) == false);
    REQUIRE(hash.value(6) == "");
+}
+
+TEST_CASE("QHash move_assign", "[qhash]")
+{
+   QHash<QString, int> hash_a = { { "watermelon", 10},
+                                  { "apple",      20},
+                                  { "pear",       30},
+                                  { "grapefruit", 40} };
+
+   QHash<QString, int> hash_b = std::move(hash_a);
+
+   REQUIRE(hash_b.size() == 4);
+
+   REQUIRE(hash_b["watermelon"] == 10);
+   REQUIRE(hash_b["grapefruit"] == 40);
+
+   //
+   QHash<QString, int> hash_c;
+   hash_c = std::move(hash_b);
+
+   REQUIRE(hash_c.size() == 4);
+
+   REQUIRE(hash_c["watermelon"] == 10);
+   REQUIRE(hash_c["grapefruit"] == 40);
 }
 
 TEST_CASE("QHash remove", "[qhash]")

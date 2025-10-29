@@ -63,7 +63,7 @@ TEST_CASE("QVersionNumber constructor", "[qversionnumber]")
    }
 }
 
-TEST_CASE("QVersionNumber copy_constructor", "[qversionnumber]")
+TEST_CASE("QVersionNumber copy_assign", "[qversionnumber]")
 {
    QVector<int> segments;
    QVersionNumber result;
@@ -87,6 +87,20 @@ TEST_CASE("QVersionNumber copy_constructor", "[qversionnumber]")
 
       QVersionNumber data1(segments);
       QVersionNumber data2(data1);
+
+      REQUIRE(data2.majorVersion() == result.majorVersion());
+      REQUIRE(data2.minorVersion() == result.minorVersion());
+      REQUIRE(data2.microVersion() == result.microVersion());
+      REQUIRE(data2.segments()     == result.segments());
+   }
+
+   {
+      segments = QVector{4, 5, 6};
+      result   = QVersionNumber(4, 5, 6);
+
+      QVersionNumber data1(segments);
+      QVersionNumber data2;
+      data2 = data1;
 
       REQUIRE(data2.majorVersion() == result.majorVersion());
       REQUIRE(data2.minorVersion() == result.minorVersion());
@@ -165,6 +179,26 @@ TEST_CASE("QVersionNumber empty", "[qversionnumber]")
    REQUIRE(version.microVersion() == 0);
 
    REQUIRE(version.segments() == QVector<int>());
+}
+
+TEST_CASE("QVersionNumber move_assign", "[qversionnumber]")
+{
+   QVersionNumber data1(2, 4, 8);
+
+   //
+   QVersionNumber data2(std::move(data1));
+
+   REQUIRE(data2.majorVersion() == 2);
+   REQUIRE(data2.minorVersion() == 4);
+   REQUIRE(data2.microVersion() == 8);
+
+   //
+   QVersionNumber data3;
+   data3 = std::move(data2);
+
+   REQUIRE(data3.majorVersion() == 2);
+   REQUIRE(data3.minorVersion() == 4);
+   REQUIRE(data3.microVersion() == 8);
 }
 
 TEST_CASE("QVersionNumber prefixOf", "[qversionnumber]")

@@ -48,20 +48,35 @@ TEST_CASE("QCommondLineOption constructor", "[qcommandlineoption]")
    REQUIRE(data.defaultValues().size() == 0);
 }
 
-TEST_CASE("QCommondLineOption copy_constructor", "[qcommandlineoption]")
+TEST_CASE("QCommondLineOption copy_assign", "[qcommandlineoption]")
 {
    QString name = "name";
    QString description = "description";
 
    QCommandLineOption data1(name, description);
+
+   //
    QCommandLineOption data2(data1);
 
-   REQUIRE(data2.names().size() == 1);
-   REQUIRE(data2.names().first() == name);
-   REQUIRE(data2.description() == description);
-   REQUIRE(data2.valueName() == "");
+   REQUIRE(data1.names().size()  == 1);
+   REQUIRE(data1.names().first() == name);
+   REQUIRE(data1.description()   == description);
 
-   REQUIRE(data2.defaultValues().size() == 0);
+   REQUIRE(data2.names().size()  == 1);
+   REQUIRE(data2.names().first() == name);
+   REQUIRE(data2.description()   == description);
+
+   //
+   QCommandLineOption data3("dummy");
+   data3 = data1;
+
+   REQUIRE(data1.names().size()  == 1);
+   REQUIRE(data1.names().first() == name);
+   REQUIRE(data1.description()   == description);
+
+   REQUIRE(data3.names().size()  == 1);
+   REQUIRE(data3.names().first() == name);
+   REQUIRE(data3.description()   == description);
 }
 
 TEST_CASE("QCommondLineOption example", "[qcommandlineoption]")
@@ -70,4 +85,34 @@ TEST_CASE("QCommondLineOption example", "[qcommandlineoption]")
    QCommandLineOption data2(QStringList() << "o" << "output", "Write generated data into <file>.", "file");
 
    REQUIRE(data2.names().size() == 2);
+}
+
+TEST_CASE("QCommondLineOption move_assign", "[qcommandlineoption]")
+{
+   QString name = "name";
+   QString description = "description";
+
+   QCommandLineOption data1(name, description);
+
+   //
+   QCommandLineOption data2(std::move(data1));
+
+   REQUIRE(data1.names().size()  == 0);
+   REQUIRE(data1.description()   == QString());
+
+   REQUIRE(data2.names().size()  == 1);
+   REQUIRE(data2.names().first() == name);
+   REQUIRE(data2.description()   == description);
+
+   //
+   QCommandLineOption data3("dummy");
+   data3 = std::move(data2);
+
+   REQUIRE(data2.names().size()  == 1);
+   REQUIRE(data2.names().first() == "dummy");
+   REQUIRE(data2.description()   == QString());
+
+   REQUIRE(data3.names().size()  == 1);
+   REQUIRE(data3.names().first() == name);
+   REQUIRE(data3.description()   == description);
 }

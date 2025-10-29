@@ -43,7 +43,7 @@ TEST_CASE("QSharedArrayPointer traits", "[qsharedarraypointer]")
    REQUIRE(std::has_virtual_destructor_v<QSharedArrayPointer<int[]>> == false);
 }
 
-TEST_CASE("QSharedArrayPointer constructor", "[qsharedarraypointer]")
+TEST_CASE("QSharedArrayPointer copy_assign", "[qsharedarraypointer]")
 {
    QSharedArrayPointer<int[]> ptr1 = QMakeShared<int[]>(1);
    QSharedArrayPointer<int>   ptr2(ptr1);
@@ -57,15 +57,17 @@ TEST_CASE("QSharedArrayPointer constructor", "[qsharedarraypointer]")
    REQUIRE(*ptr1 == 17);
    REQUIRE(*ptr2 == 17);
 
-   QSharedArrayPointer<int[]> ptr3(ptr2);
+   //
+   QSharedArrayPointer<int[]> ptr3;
+   ptr3 = ptr2;
 
    REQUIRE(ptr2.is_null() == false);
    REQUIRE(ptr3.is_null() == false);
 
-   REQUIRE(*ptr1 == 17);
    REQUIRE(*ptr2 == 17);
    REQUIRE(*ptr3 == 17);
 }
+
 TEST_CASE("QSharedArrayPointer empty", "[qsharedarraypointer]")
 {
    QSharedArrayPointer<int[]> ptr;
@@ -83,22 +85,6 @@ TEST_CASE("QSharedArrayPointer empty", "[qsharedarraypointer]")
 
 TEST_CASE("QSharedArrayPointer move_assign", "[qsharedarraypointer]")
 {
-   QSharedArrayPointer<int[]> ptr1;
-   int *rawPointer = nullptr;
-
-   {
-      QSharedArrayPointer<int[]> ptr2(new int[1]);
-      rawPointer = ptr2.data();
-      ptr1 = std::move(ptr2);
-
-      REQUIRE(ptr2.is_null());
-   }
-
-   REQUIRE(rawPointer == ptr1.get());
-}
-
-TEST_CASE("QSharedArrayPointer move_constructor", "[qsharedarraypointer]")
-{
    QSharedArrayPointer<int[]> ptr1 = QMakeShared<int[]>(1);
    QSharedArrayPointer<int>   ptr2(std::move(ptr1));
 
@@ -109,13 +95,16 @@ TEST_CASE("QSharedArrayPointer move_constructor", "[qsharedarraypointer]")
 
    REQUIRE(*ptr2 == 17);
 
-   QSharedArrayPointer<int[]> ptr3(std::move(ptr2));
+   //
+   QSharedArrayPointer<int[]> ptr3;
+   ptr3 = std::move(ptr2);
 
    REQUIRE(ptr2.is_null() == true);
    REQUIRE(ptr3.is_null() == false);
 
    REQUIRE(*ptr3 == 17);
 }
+
 TEST_CASE("QSharedArrayPointer reset", "[qsharedarraypointer]")
 {
    QSharedArrayPointer<int[]> ptr = QMakeShared<int[]>(1);

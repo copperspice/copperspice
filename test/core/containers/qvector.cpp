@@ -146,45 +146,27 @@ TEST_CASE("QVector contains_b", "[qvector]")
    REQUIRE(v.contains(data2) == true);
 }
 
-TEST_CASE("QVector copy_move_constructor", "[qvector]")
+TEST_CASE("QVector copy_assign", "[qvector]")
 {
    QVector<QString> v1 = { "watermelon", "apple", "pear", "grapefruit" };
 
    {
-      QVector<QString> v2 = v1;
+      QVector<QString> v2(v1);
 
-      REQUIRE(v1 == v2);
       REQUIRE(v1.size() == 4);
       REQUIRE(v2.size() == 4);
-   }
-
-   {
-      QVector<QString> v2(std::move(v1));
-
-      REQUIRE(v1.size() == 0);
-      REQUIRE(v2.size() == 4);
-   }
-}
-
-TEST_CASE("QVector copy_move_assign", "[qvector]")
-{
-   QVector<QString> v1 = { "watermelon", "apple", "pear", "grapefruit" };
-
-   {
-      QVector<QString> v2;
-      v2 = v1;
 
       REQUIRE(v1 == v2);
-      REQUIRE(v1.size() == 4);
-      REQUIRE(v2.size() == 4);
    }
 
    {
-      QVector<QString> v2;
-      v2 = std::move(v1);
+      QVector<QString> v3;
+      v3 = v1;
 
-      REQUIRE(v1.size() == 0);
-      REQUIRE(v2.size() == 4);
+      REQUIRE(v1.size() == 4);
+      REQUIRE(v3.size() == 4);
+
+      REQUIRE(v1 == v3);
    }
 }
 
@@ -371,7 +353,6 @@ TEST_CASE("QVector mid", "[qvector]")
 
 TEST_CASE("QVector move", "[qvector]")
 {
-
    QVector<QString> v = { "watermelon", "apple", "pear", "grapefruit" };
 
    //
@@ -388,6 +369,25 @@ TEST_CASE("QVector move", "[qvector]")
    v.move(2, 2);
 
    REQUIRE(v == QVector<QString>{ "apple", "grapefruit", "pear", "watermelon" });
+}
+
+TEST_CASE("QVector move_assign", "[qvector]")
+{
+   QVector<QString> v1 = { "watermelon", "apple", "pear", "grapefruit" };
+   QVector<QString> v2 = v1;
+
+   //
+   QVector<QString> v3(std::move(v1));
+
+   REQUIRE(v2.size() == 4);
+   REQUIRE(v3 == v2);
+
+   //
+   QVector<QString> v4;
+   v4 = std::move(v3);
+
+   REQUIRE(v4.size() == 4);
+   REQUIRE(v4 == v2);
 }
 
 TEST_CASE("QVector operator", "[qvector]")

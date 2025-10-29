@@ -41,44 +41,42 @@ TEST_CASE("QPair constructor", "[qpair]")
    REQUIRE(pair.second == "");
 }
 
-TEST_CASE("QPair copy_constructor", "[qpair]")
+TEST_CASE("QPair copy_assign", "[qpair]")
 {
    QPair<QString, int> pair1 = {"answer", 42};
    QPair<QString, int> pair2(pair1);
 
+   REQUIRE(pair1.first == "answer");
    REQUIRE(pair2.first == "answer");
+
+   REQUIRE(pair1.second == 42);
    REQUIRE(pair2.second == 42);
+
+   //
+   QPair<QString, int> pair3;
+   pair3 = pair1;
+
+   REQUIRE(pair1.first == "answer");
+   REQUIRE(pair3.first == "answer");
+
+   REQUIRE(pair1.second == 42);
+   REQUIRE(pair3.second == 42);
 }
 
-TEST_CASE("QPair move_constructor", "[qpair]")
+TEST_CASE("QPair move_assign", "[qpair]")
 {
    QPair<QString, int> pair1 = {"answer", 42};
    QPair<QString, int> pair2(std::move(pair1));
 
    REQUIRE(pair2.first == "answer");
    REQUIRE(pair2.second == 42);
-}
 
-TEST_CASE("QPair copy_assign", "[qpair]")
-{
-   QPair<QString, int> pair1 = {"answer", 42};
-   QPair<QString, int> pair2;
+   //
+   QPair<QString, int> pair3;
+   pair3 = std::move(pair2);
 
-   pair2 = pair1;
-
-   REQUIRE(pair2.first == "answer");
-   REQUIRE(pair2.second == 42);
-}
-
-TEST_CASE("QPair move_assign", "[qpair]")
-{
-   QPair<QString, int> pair1 = {"answer", 42};
-
-   QPair<QString, int> pair2;
-   pair2 = std::move(pair1);
-
-   REQUIRE(pair2.first == "answer");
-   REQUIRE(pair2.second == 42);
+   REQUIRE(pair3.first == "answer");
+   REQUIRE(pair3.second == 42);
 }
 
 TEST_CASE("QPair qMakePair_a", "[qpair]")
