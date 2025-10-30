@@ -150,6 +150,7 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qsizef.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtextboundaryfinder.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qtimeline.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/tools/qvarlengtharray.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/tools/qversionnumber.cpp
 
    ${CMAKE_CURRENT_SOURCE_DIR}/xml/qxmlstreamreader.cpp
