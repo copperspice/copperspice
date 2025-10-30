@@ -36,13 +36,23 @@ TEST_CASE("QByteArray append", "[qbytearray]")
 {
    QByteArray str = "A wacky fox and sizeable pig";
 
+   //
    str.append(" went to lunch");
 
    REQUIRE(str == "A wacky fox and sizeable pig went to lunch");
 
-   str.prepend("On Sunday, ");
+   //
+   str.append('.');
 
-   REQUIRE(str == "On Sunday, A wacky fox and sizeable pig went to lunch");
+   REQUIRE(str == "A wacky fox and sizeable pig went to lunch.");
+
+   //
+   QByteArray str_a = "A wacky fox";
+   QByteArray str_b = " took a nap";
+
+   str_a.append(str_b);
+
+   REQUIRE(str_a == "A wacky fox took a nap");
 }
 
 TEST_CASE("QByteArray chop", "[qbytearray]")
@@ -67,23 +77,39 @@ TEST_CASE("QByteArray chop", "[qbytearray]")
 TEST_CASE("QByteArray clear", "[qbytearray]")
 {
    QByteArray str = "A wacky fox and sizeable pig jumped halfway over a blue moon.";
+
+   REQUIRE(str.length()  == 61);
+   REQUIRE(str.size()    == 61);
+
+   REQUIRE(str.isEmpty() == false);
+   REQUIRE(str.isNull()  == false);
+
+   //
    str.clear();
 
-   REQUIRE(str.length() == 0);
-   REQUIRE(str.size() == 0);
+   REQUIRE(str.length()  == 0);
+   REQUIRE(str.size()    == 0);
    REQUIRE(str.isEmpty() == true);
+   REQUIRE(str.isNull()  == true);
 }
 
 TEST_CASE("QByteArray comparisons", "[qbytearray]")
 {
-    QByteArray str1("apple");
-    QByteArray str2("apple");
-    QByteArray str3("banana");
+   QByteArray str1("apple");
+   QByteArray str2("apple");
+   QByteArray str3("banana");
 
-    REQUIRE(str1 == str2);
-    REQUIRE(str1 != str3);
-    REQUIRE(str1 < str3);
-    REQUIRE(str3 > str1);
+   REQUIRE(str1 == str2);
+   REQUIRE(str1 != str3);
+
+   REQUIRE(str1 < str3);
+   REQUIRE(str3 > str1);
+
+   REQUIRE((str1 < str2) == false);
+   REQUIRE((str1 > str2) == false);
+
+   REQUIRE(QByteArray("abc") < QByteArray("abd"));
+   REQUIRE(QByteArray("z")   > QByteArray("a"));
 }
 
 TEST_CASE("QByteArray compress", "[qbytearray]")
@@ -102,7 +128,13 @@ TEST_CASE("QByteArray constructor", "[qbytearray]")
    {
       QByteArray str("grape");
 
-      REQUIRE(str.size() == 5);
+      REQUIRE(str.isEmpty()  == false);
+      REQUIRE(str.isNull()   == false);
+
+      REQUIRE(str.length()   == 5);
+      REQUIRE(str.size()     == 5);
+      REQUIRE(str.capacity() >= 5);
+
       REQUIRE(str == "grape");
    }
 
@@ -110,21 +142,60 @@ TEST_CASE("QByteArray constructor", "[qbytearray]")
    {
       QByteArray str(5, 'x');
 
-      REQUIRE(str.size() == 5);
+      REQUIRE(str.isEmpty()  == false);
+      REQUIRE(str.isNull()   == false);
+
+      REQUIRE(str.length()   == 5);
+      REQUIRE(str.size()     == 5);
+      REQUIRE(str.capacity() >= 5);
+
       REQUIRE(str == "xxxxx");
    }
 
-   SECTION("copy constructor, copy assignment")
-   {
-      QByteArray str1("lemon");
-      QByteArray str2(str1);
+   SECTION("Construct from char*, length") {
+      const char *data = "abcdef";
+      QByteArray str(data, 3);
 
-      QByteArray str3;
-      str3 = str1;
+      REQUIRE(str.isEmpty()  == false);
+      REQUIRE(str.isNull()   == false);
+      REQUIRE(str.size()     == 3);
 
-      REQUIRE(str1 == str2);
-      REQUIRE(str3 == str1);
+      REQUIRE(str == "abc");
    }
+
+   SECTION("Empty array") {
+      QByteArray str("");
+
+      REQUIRE(str.isEmpty()  == true);
+      REQUIRE(str.isNull()   == false);
+
+      REQUIRE(str.length()   == 0);
+      REQUIRE(str.size()     == 0);
+      REQUIRE(str.capacity() >= 0);
+   }
+}
+
+TEST_CASE("QByteArray copy_assign", "[qbytearray]")
+{
+   QByteArray str1("lemon");
+   QByteArray str2(str1);
+
+   QByteArray str3;
+   str3 = str1;
+
+   REQUIRE(str1.isEmpty()  == false);
+   REQUIRE(str1.isNull()   == false);
+
+   REQUIRE(str2.isEmpty()  == false);
+   REQUIRE(str2.isNull()   == false);
+
+   REQUIRE(str3.isEmpty()  == false);
+   REQUIRE(str3.isNull()   == false);
+
+   REQUIRE(str1 == str2);
+   REQUIRE(str3 == str1);
+
+   REQUIRE(! (str1 != str2));
 }
 
 TEST_CASE("QByteArray contains", "[qbytearray]")
@@ -132,17 +203,27 @@ TEST_CASE("QByteArray contains", "[qbytearray]")
    QByteArray str = "A wacky fox and sizeable pig jumped halfway over a blue moon";
 
    REQUIRE(str.contains("jumped") == true);
-   REQUIRE(str.contains("lunch") == false);
+   REQUIRE(str.contains("lunch")  == false);
 }
 
 TEST_CASE("QByteArray conversions", "[qbytearray]")
 {
+   bool ok;
+
    SECTION("a")
    {
-      REQUIRE(QByteArray("42").toInt() == 42);
-      REQUIRE(QByteArray("-123").toLongLong() == -123);
+      int value = QByteArray("x99").toInt(&ok);
+      REQUIRE(value == 0);
+      REQUIRE(ok == false);
 
-      REQUIRE_THAT(QByteArray("3.14").toDouble(), Catch::Matchers::WithinAbs(3.14, 0.0001));
+      REQUIRE(QByteArray("42").toInt(&ok) == 42);
+      REQUIRE(ok == true);
+
+      REQUIRE(QByteArray("-123").toLongLong(&ok) == -123);
+      REQUIRE(ok == true);
+
+      REQUIRE_THAT(QByteArray("3.14").toDouble(&ok), Catch::Matchers::WithinAbs(3.14, 0.0001));
+      REQUIRE(ok == true);
    }
 
    SECTION("b")
@@ -150,6 +231,17 @@ TEST_CASE("QByteArray conversions", "[qbytearray]")
       REQUIRE(QByteArray::number(255, 10) == "255");
       REQUIRE(QByteArray::number(255, 16).toLower() == "ff");
    }
+}
+
+TEST_CASE("QByteArray count", "[qbytearray]")
+{
+   QByteArray str("banana");
+
+   REQUIRE(str.count("a")  == 3);
+   REQUIRE(str.count("na") == 2);
+   REQUIRE(str.count("x")  == 0);
+
+   REQUIRE(str.count() == str.size());
 }
 
 TEST_CASE("QByteArray data", "[qbytearray]")
@@ -184,17 +276,6 @@ TEST_CASE("QByteArray encode_base64", "[qbytearray]")
    REQUIRE(decoded == original);
 }
 
-TEST_CASE("QByteArray count", "[qbytearray]")
-{
-   QByteArray str("banana");
-
-   REQUIRE(str.count("a")  == 3);
-   REQUIRE(str.count("na") == 2);
-   REQUIRE(str.count("x")  == 0);
-
-   REQUIRE(str.count() == str.size());
-}
-
 TEST_CASE("QByteArray encode_hex", "[qbytearray]")
 {
    QByteArray original("ABC");
@@ -223,17 +304,51 @@ TEST_CASE("QByteArray empty", "[qbytearray]")
 {
    QByteArray str;
 
+   REQUIRE(str.isEmpty()  == true);
+   REQUIRE(str.isNull()   == true);
+
+   REQUIRE(str.size()     == 0);
+   REQUIRE(str.capacity() >= 0);
+
+   //
+   str.resize(0);
+
    REQUIRE(str.isEmpty() == true);
-   REQUIRE(str.size() == 0);
+   REQUIRE(str.isNull()  == false);
+
+   REQUIRE(str.size()    == 0);
+}
+
+TEST_CASE("QByteArray index", "[qbytearray]")
+{
+   QByteArray str("A wacky fox and sizeable pig jumped halfway over a blue moon");
+
+   REQUIRE(str.indexOf("fox") == 8);
+   REQUIRE(str.indexOf("cow") == -1);
+
+   REQUIRE(str.lastIndexOf("f") == 39);
 }
 
 TEST_CASE("QByteArray insert", "[qbytearray]")
 {
    QByteArray str("pear melon apple");
 
+   //
    str.insert(5, "water");
 
    REQUIRE(str == "pear watermelon apple");
+
+   //
+   str.insert(0, ">>> ");
+
+   REQUIRE(str == ">>> pear watermelon apple");
+
+   //
+   str.insert(25, '!');
+   REQUIRE(str == ">>> pear watermelon apple!");
+
+   str.insert(28, '?');
+   REQUIRE(str == ">>> pear watermelon apple!  ?");
 }
 
 TEST_CASE("QByteArray left_right", "[qbytearray]")
@@ -260,8 +375,8 @@ TEST_CASE("QByteArray mid", "[qbytearray]")
 {
    QByteArray str("watermelon");
 
-   REQUIRE(str.mid(0, 5) == "water");
-   REQUIRE(str.mid(2, 2) == "te");
+   REQUIRE(str.mid(0,  5) == "water");
+   REQUIRE(str.mid(2,  2) == "te");
    REQUIRE(str.mid(5, 15) == "melon");
 
    REQUIRE(str.mid(5) == "melon");
@@ -272,14 +387,42 @@ TEST_CASE("QByteArray mid", "[qbytearray]")
    REQUIRE(str.mid(2, -1).isEmpty() == false);
 }
 
+TEST_CASE("QByteArray move_assign", "[qbytearray]")
+{
+   QByteArray str1("apple");
+   QByteArray str2(std::move(str1));
+
+   REQUIRE(str1.isEmpty() == true);
+
+   REQUIRE(str2.isEmpty() == false);
+   REQUIRE(str2 == "apple");
+}
+
+TEST_CASE("QByteArray prepend", "[qbytearray]")
+{
+   QByteArray str = "A wacky fox took a nap";
+
+   //
+   str.prepend("On Sunday, ");
+
+   REQUIRE(str == "On Sunday, A wacky fox took a nap");
+
+   //
+   str.prepend('*');
+
+   REQUIRE(str == "*On Sunday, A wacky fox took a nap");
+}
+
 TEST_CASE("QByteArray remove", "[qbytearray]")
 {
    QByteArray str = "pear watermelon apple";
 
+   //
    str.remove(5, 5);
 
    REQUIRE(str == "pear melon apple");
 
+   //
    str.remove('p');
 
    REQUIRE(str == "ear melon ale");
@@ -300,29 +443,57 @@ TEST_CASE("QByteArray replace", "[qbytearray]")
    REQUIRE(str == "A wacky pig took a nap");
 }
 
+TEST_CASE("QByteArray reserve", "[qbytearray]")
+{
+   QByteArray str("A wacky fox went to lunch");
+
+   REQUIRE(str.size() == 25);
+
+   //
+   int oldCapacity = str.capacity();
+   str.reserve(oldCapacity + 30);
+
+   REQUIRE(str.size() == 25);
+   REQUIRE(str.capacity() >= oldCapacity + 30);
+
+   //
+   str.squeeze();
+
+   REQUIRE(str.capacity() == str.size());
+
+   //
+   str = QByteArray("A wacky fox went to lunch");
+   str.reserve(100);
+
+   REQUIRE(str.capacity() >= 100);
+
+   //
+   str.squeeze();
+
+   REQUIRE(str.capacity() == str.size());
+}
+
 TEST_CASE("QByteArray resize", "[qbytearray]")
 {
    QByteArray str("CopperSpice");
 
+   //
    str.resize(15);
 
    REQUIRE(str.size() == 15);
+   REQUIRE(str.length() == 15);
 
    REQUIRE(str[0]  == 'C');
    REQUIRE(str[10] == 'e');
 
-   REQUIRE(str.length() == 15);
-}
+   //
+   str.resize(5);
 
-TEST_CASE("QByteArray search", "[qbytearray]")
-{
-   QByteArray str("A wacky fox and sizeable pig jumped halfway over a blue moon");
+   REQUIRE(str.size() == 5);
+   REQUIRE(str.length() == 5);
 
-   REQUIRE(str.indexOf("fox") == 8);
-   REQUIRE(str.lastIndexOf("f") == 39);
-
-   REQUIRE(str.startsWith("A") == true);
-   REQUIRE(str.endsWith("moon") == true);
+   REQUIRE(str[0] == 'C');
+   REQUIRE(str[4] == 'e');
 }
 
 TEST_CASE("QByteArray simplified", "[qbytearray]")
@@ -341,6 +512,18 @@ TEST_CASE("QByteArray split", "[qbytearray]")
    REQUIRE(parts.size() == 4);
    REQUIRE(parts[0] == "apple");
    REQUIRE(parts[3] == " orange");
+}
+
+TEST_CASE("QByteArray startsWith_endsWith", "[qbytearray]")
+{
+   QByteArray str("A wacky fox and sizeable pig jumped halfway over a blue moon");
+
+   REQUIRE(str.startsWith('A') == true);
+   REQUIRE(str.startsWith("A wacky")  == true);
+   REQUIRE(str.startsWith(QByteArray("A wacky")) == true);
+
+   REQUIRE(str.endsWith("moon") == true);
+   REQUIRE(str.endsWith(QByteArray("blue moon")) == true);
 }
 
 TEST_CASE("QByteArray toLower", "[qbytearray]")

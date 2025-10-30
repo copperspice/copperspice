@@ -32,6 +32,34 @@ TEST_CASE("QEasingCurve traits", "[qeasingcurve]")
    REQUIRE(std::has_virtual_destructor_v<QEasingCurve> == false);
 }
 
+TEST_CASE("QEasingCurve comparison", "[qeasingcurve]")
+{
+   QEasingCurve data_a(QEasingCurve::InOutSine);
+   QEasingCurve data_b(QEasingCurve::InOutSine);
+   QEasingCurve data_c(QEasingCurve::OutElastic);
+
+   REQUIRE(data_a == data_b);
+   REQUIRE(data_a != data_c);
+}
+
+TEST_CASE("QEasingCurve constructor", "[qeasingcurve]")
+{
+   QEasingCurve data;
+
+   REQUIRE(data.amplitude() == 1.0);
+   REQUIRE_THAT(data.overshoot(), Catch::Matchers::WithinAbs(1.70158, 0.0001));
+   REQUIRE(data.period()    == 0.3);
+   REQUIRE(data.type()      == QEasingCurve::Linear);
+
+   //
+   data = QEasingCurve(QEasingCurve::InOutBack);
+
+   REQUIRE(data.amplitude() == 1.0);
+   REQUIRE_THAT(data.overshoot(), Catch::Matchers::WithinAbs(1.70158, 0.0001));
+   REQUIRE(data.period()    == 0.3);
+   REQUIRE(data.type()      == QEasingCurve::InOutBack);
+}
+
 TEST_CASE("QEasingCurve copy_assign", "[qeasingcurve]")
 {
    QEasingCurve data_a(QEasingCurve::InOutExpo);
@@ -46,16 +74,6 @@ TEST_CASE("QEasingCurve copy_assign", "[qeasingcurve]")
 
    REQUIRE(data_a.type() == data_c.type());
    REQUIRE(data_a == data_c);
-}
-
-TEST_CASE("QEasingCurve comparison", "[qeasingcurve]")
-{
-   QEasingCurve dataA(QEasingCurve::InOutSine);
-   QEasingCurve dataB(QEasingCurve::InOutSine);
-   QEasingCurve dataC(QEasingCurve::OutElastic);
-
-   REQUIRE(dataA == dataB);
-   REQUIRE(dataA != dataC);
 }
 
 TEST_CASE("QEasingCurve move_assign", "[qeasingcurve]")
@@ -85,7 +103,21 @@ TEST_CASE("QEasingCurve parameters", "[qeasingcurve]")
    REQUIRE_THAT(data.period(),    Catch::Matchers::WithinAbs(0.3, 0.0001));
 }
 
-TEST_CASE("QEasingCurve type", "[qeasingcurve]")
+TEST_CASE("QEasingCurve swap", "[qeasingcurve]")
+{
+   QEasingCurve data_a(QEasingCurve::InCubic);
+   QEasingCurve data_b(QEasingCurve::OutBounce);
+
+   REQUIRE(data_a.type() == QEasingCurve::InCubic);
+   REQUIRE(data_b.type() == QEasingCurve::OutBounce);
+
+   data_a.swap(data_b);
+
+   REQUIRE(data_a.type() == QEasingCurve::OutBounce);
+   REQUIRE(data_b.type() == QEasingCurve::InCubic);
+}
+
+TEST_CASE("QEasingCurve valueForProgress", "[qeasingcurve]")
 {
    QEasingCurve data;
 
@@ -97,14 +129,20 @@ TEST_CASE("QEasingCurve type", "[qeasingcurve]")
 
    {
       data.setType(QEasingCurve::OutBounce);
+
       REQUIRE(data.type() == QEasingCurve::OutBounce);
+
+      REQUIRE_THAT(data.valueForProgress(0.0), Catch::Matchers::WithinAbs(0.0,    0.0001));
+      REQUIRE_THAT(data.valueForProgress(0.5), Catch::Matchers::WithinAbs(0.7656, 0.0001));
+      REQUIRE_THAT(data.valueForProgress(1.0), Catch::Matchers::WithinAbs(1.0,    0.0001));
    }
 
    {
       data.setType(QEasingCurve::InQuad);
 
       REQUIRE_THAT(data.valueForProgress(0.0), Catch::Matchers::WithinAbs(0.0, 0.0001));
-      REQUIRE_THAT(data.valueForProgress(1.0), Catch::Matchers::WithinAbs(1.0, 0.0001));
       REQUIRE_THAT(data.valueForProgress(0.5), Catch::Matchers::WithinAbs(0.5, 0.0001));
+      REQUIRE_THAT(data.valueForProgress(1.0), Catch::Matchers::WithinAbs(1.0, 0.0001));
+
    }
 }
