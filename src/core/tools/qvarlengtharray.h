@@ -228,6 +228,8 @@ class QVarLengthArray
    }
 
    void resize(int size);
+   void resize(int size, const T &value);
+
    void reserve(int size);
 
    void squeeze();
@@ -448,6 +450,18 @@ template <class T, int Prealloc>
 void QVarLengthArray<T, Prealloc>::resize(int size)
 {
    realloc(size, qMax(size, a));
+}
+
+template <class T, int Prealloc>
+void QVarLengthArray<T, Prealloc>::resize(int size, const T &value)
+{
+   int oldSize = length();
+
+   realloc(size, qMax(size, a));
+
+   if (size > oldSize) {
+      std::fill(begin() + oldSize, end(), value);
+   }
 }
 
 template <class T, int Prealloc>
