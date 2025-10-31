@@ -25,12 +25,15 @@
 #define QWAYLAND_GL_CONTEXT_H
 
 #include <qplatform_openglcontext.h>
-#include <qwayland_egl_forward.h>
 #include <qplatform_surface.h>
 #include <qsurfaceformat.h>
+#include <qwayland_egl_forward.h>
+
 #include <qwayland_display_p.h>
 
 namespace QtWaylandClient {
+
+class DecorationsBlitter;
 
 class QWaylandGLContext : public QPlatformOpenGLContext
 {
@@ -48,11 +51,20 @@ class QWaylandGLContext : public QPlatformOpenGLContext
    void (*getProcAddress(const QByteArray &procName)) () override;
 
    bool makeCurrent(QPlatformSurface *surface) override;
+
+   void setNativeDefaultFbo(bool value) {
+      m_useNativeDefaultFbo = value;
+   }
+
    void swapBuffers(QPlatformSurface *surface) override;
 
  private:
    bool m_useNativeDefaultFbo;
    uint m_api;
+
+   EGLDisplay m_eglDisplay;
+
+   DecorationsBlitter *m_blitter;
 
    QSurfaceFormat m_format;
    QWaylandDisplay *m_display;

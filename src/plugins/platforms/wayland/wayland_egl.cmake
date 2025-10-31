@@ -8,6 +8,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
    )
 
    list(APPEND PLATFORMS_WAYLAND_EGL_PRIVATE_INCLUDES
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_decorations_blitter_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_clientbuffer_integration.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_forward.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_window.h

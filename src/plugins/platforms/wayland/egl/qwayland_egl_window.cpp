@@ -82,6 +82,11 @@ GLuint QWaylandEglWindow::contentFBO() const
    return m_contentFBO->handle();
 }
 
+GLuint QWaylandEglWindow::contentTexture() const
+{
+   return m_contentFBO->texture();
+}
+
 QRect QWaylandEglWindow::contentsRect() const
 {
    QRect r    = geometry();

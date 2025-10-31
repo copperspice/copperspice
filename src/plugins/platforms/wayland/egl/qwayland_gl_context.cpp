@@ -28,12 +28,14 @@
 #include <qwayland_egl_window.h>
 
 #include <qapplication_p.h>
+#include <qwayland_decorations_blitter_p.h>
 #include <qwayland_integration_p.h>
+
 namespace QtWaylandClient {
 
 QWaylandGLContext::QWaylandGLContext(EGLDisplay eglDisplay, QWaylandDisplay *display,
       const QSurfaceFormat &format, QPlatformOpenGLContext *share)
-   : QPlatformOpenGLContext(), m_useNativeDefaultFbo(false), m_display(display)
+   : QPlatformOpenGLContext(), m_useNativeDefaultFbo(false), m_blitter(nullptr), m_display(display)
 {
    QSurfaceFormat fmt = format;
 
@@ -45,6 +47,8 @@ QWaylandGLContext::QWaylandGLContext(EGLDisplay eglDisplay, QWaylandDisplay *dis
 
 QWaylandGLContext::~QWaylandGLContext()
 {
+   delete m_blitter;
+
    // pending implementation
 }
 
@@ -63,7 +67,24 @@ void QWaylandGLContext::swapBuffers(QPlatformSurface *surface)
 {
    QWaylandEglWindow *window = static_cast<QWaylandEglWindow *>(surface);
 
-   // pending implementation
+   EGLSurface eglSurface = window->eglSurface();
+
+   if (window->decoration()) {
+      makeCurrent(surface);
+
+      // need to save & restore all states
+      // applications are usually not prepared for random context state changes in a call to swapBuffers()
+
+
+      if (m_blitter == nullptr) {
+         m_blitter = new DecorationsBlitter(this);
+      }
+
+      m_blitter->blit(window);
+   }
+
+   eglSwapBuffers(m_eglDisplay, eglSurface);
+
    window->setCanResize(true);
 }
 

@@ -42,6 +42,7 @@ class QWaylandEglWindow : public QWaylandWindow
    ~QWaylandEglWindow();
 
    GLuint contentFBO() const;
+   GLuint contentTexture() const;
 
    QRect contentsRect() const;
 
