@@ -11,6 +11,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_decorations_blitter_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_clientbuffer_integration.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_forward.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_stateguard_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_window.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_gl_context.h
    )

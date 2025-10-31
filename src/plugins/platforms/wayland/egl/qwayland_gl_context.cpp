@@ -29,6 +29,7 @@
 
 #include <qapplication_p.h>
 #include <qwayland_decorations_blitter_p.h>
+#include <qwayland_egl_stateguard_p.h>
 #include <qwayland_integration_p.h>
 
 namespace QtWaylandClient {
@@ -74,7 +75,7 @@ void QWaylandGLContext::swapBuffers(QPlatformSurface *surface)
 
       // need to save & restore all states
       // applications are usually not prepared for random context state changes in a call to swapBuffers()
-
+      EGL_StateGuard eglStateGuard;
 
       if (m_blitter == nullptr) {
          m_blitter = new DecorationsBlitter(this);
