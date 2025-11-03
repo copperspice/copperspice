@@ -49,6 +49,8 @@ class QWaylandEglClientBufferIntegration : public QWaylandClientBufferIntegratio
    QWaylandWindow *createEglWindow(QWindow *window) override;
    QPlatformOpenGLContext *createPlatformOpenGLContext(const QSurfaceFormat &glFormat, QPlatformOpenGLContext *share) const override;
 
+   EGLDisplay eglDisplay() const;
+
  private:
    QWaylandDisplay *m_display;
 

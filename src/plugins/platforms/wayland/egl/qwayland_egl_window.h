@@ -41,6 +41,8 @@ class QWaylandEglWindow : public QWaylandWindow
    QWaylandEglWindow(QWindow *window);
    ~QWaylandEglWindow();
 
+   void bindContentFBO();
+
    GLuint contentFBO() const;
    GLuint contentTexture() const;
 
@@ -49,8 +51,12 @@ class QWaylandEglWindow : public QWaylandWindow
    EGLSurface eglSurface() const;
    QSurfaceFormat format() const override;
 
+   void invalidateSurface() override;
+
    void setGeometry(const QRect &rect) override;
    void setVisible(bool visible) override;
+
+   void updateSurface(bool create);
 
    WindowType windowType() const override;
 

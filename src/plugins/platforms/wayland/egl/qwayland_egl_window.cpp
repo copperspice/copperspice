@@ -53,7 +53,8 @@ QWaylandEglWindow::QWaylandEglWindow(QWindow *window)
 QWaylandEglWindow::~QWaylandEglWindow()
 {
    if (m_eglSurface != nullptr) {
-      // pending implementation
+      eglDestroySurface(m_clientBufferIntegration->eglDisplay(), m_eglSurface);
+      m_eglSurface = nullptr;
    }
 
    if (m_waylandEglWindow != nullptr) {
@@ -61,6 +62,14 @@ QWaylandEglWindow::~QWaylandEglWindow()
    }
 
    delete m_contentFBO;
+}
+
+void QWaylandEglWindow::bindContentFBO()
+{
+   if (decoration() != nullptr) {
+      contentFBO();
+      m_contentFBO->bind();
+   }
 }
 
 GLuint QWaylandEglWindow::contentFBO() const
@@ -73,7 +82,7 @@ GLuint QWaylandEglWindow::contentFBO() const
       QOpenGLFramebufferObject *old = m_contentFBO;
 
       QSize fboSize = geometry().size() * scale();
-      m_contentFBO = new QOpenGLFramebufferObject(fboSize.width(), fboSize.height(), QOpenGLFramebufferObject::CombinedDepthStencil);
+      m_contentFBO  = new QOpenGLFramebufferObject(fboSize.width(), fboSize.height(), QOpenGLFramebufferObject::CombinedDepthStencil);
 
       delete old;
       m_resize = false;
@@ -105,6 +114,14 @@ QSurfaceFormat QWaylandEglWindow::format() const
    return m_format;
 }
 
+void QWaylandEglWindow::invalidateSurface()
+{
+   if (m_eglSurface) {
+      eglDestroySurface(m_clientBufferIntegration->eglDisplay(), m_eglSurface);
+      m_eglSurface = nullptr;
+   }
+}
+
 void QWaylandEglWindow::setGeometry(const QRect &rect)
 {
    QWaylandWindow::setGeometry(rect);
@@ -122,6 +139,20 @@ void QWaylandEglWindow::setVisible(bool visible)
 
    if (! visible) {
       invalidateSurface();
+   }
+}
+
+void QWaylandEglWindow::updateSurface(bool create)
+{
+   QMargins margins = frameMargins();
+   QRect rect       = geometry();
+
+   QSize sizeWithMargins = (rect.size() + QSize(margins.left() + margins.right(), margins.top() + margins.bottom())) * scale();
+
+   if (sizeWithMargins.isEmpty()) {
+
+      // pending implementation
+
    }
 }
 

@@ -43,7 +43,11 @@ QWaylandGLContext::QWaylandGLContext(EGLDisplay eglDisplay, QWaylandDisplay *dis
    if (static_cast<QWaylandIntegration *>(QApplicationPrivate::platformIntegration())->display()->supportsWindowDecoration()) {
       fmt.setAlphaBufferSize(8);
    }
+
    // pending implementation
+
+   m_shareEGLContext = share ? static_cast<QWaylandGLContext *>(share)->eglContext() : EGL_NO_CONTEXT;
+   updateGLFormat();
 }
 
 QWaylandGLContext::~QWaylandGLContext()
@@ -63,7 +67,7 @@ GLuint QWaylandGLContext::defaultFramebufferObject(QPlatformSurface *surface) co
 
 void QWaylandGLContext::doneCurrent()
 {
-   // pending implementation
+   eglMakeCurrent(m_eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
 }
 
 EGLConfig QWaylandGLContext::eglConfig() const
@@ -88,7 +92,47 @@ bool QWaylandGLContext::isValid() const
 
 bool QWaylandGLContext::makeCurrent(QPlatformSurface *surface)
 {
-   // pending implementation
+   // constructor calls eglBindAPI() with the correct value
+   // their api says: eglBindAPI() defines the rendering API in the thread it is called from
+   // makeCurrent() can be called from a different thread, not necessarily the one where
+   // *this* context was created
+
+   // make sure to call eglBindAPI() in the correct thread
+   if (eglQueryAPI() != m_api) {
+      eglBindAPI(m_api);
+   }
+
+   QWaylandEglWindow *window = static_cast <QWaylandEglWindow *> (surface);
+   EGLSurface eglSurface = window->eglSurface();
+
+   if ( (eglSurface != EGL_NO_SURFACE) && (eglGetCurrentContext() == m_context) && (eglSurface == eglGetCurrentSurface(EGL_DRAW))) {
+      return true;
+   }
+
+   window->setCanResize(false);
+
+   // Core profiles mandate the use of VAOs when rendering.
+   // A VAO is needed in DecorationsBlitter, however this would require a QOpenGLFunctions_3_2_Core,
+   // which would break when using a lower version context.
+   // Instead, disable decorations for core profiles until subsurfaces are used
+
+   if (m_format.profile() != QSurfaceFormat::CoreProfile && ! window->decoration()) {
+      window->createDecoration();
+   }
+
+   if (eglSurface == EGL_NO_SURFACE) {
+      window->updateSurface(true);
+      eglSurface = window->eglSurface();
+   }
+
+   if (! eglMakeCurrent(m_eglDisplay, eglSurface, eglSurface, m_context)) {
+      qWarning("QWaylandGLContext::makeCurrent() Egl Error: %x\n", eglGetError());
+      window->setCanResize(true);
+      return false;
+   }
+
+   window->bindContentFBO();
+
    return true;
 }
 

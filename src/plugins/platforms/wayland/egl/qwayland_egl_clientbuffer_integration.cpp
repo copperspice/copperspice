@@ -80,4 +80,9 @@ QPlatformOpenGLContext *QWaylandEglClientBufferIntegration::createPlatformOpenGL
    return nullptr;
 }
 
+EGLDisplay QWaylandEglClientBufferIntegration::eglDisplay() const
+{
+   return m_eglDisplay;
+}
+
 }
