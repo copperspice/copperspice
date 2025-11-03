@@ -117,5 +117,82 @@ void QWaylandGLContext::swapBuffers(QPlatformSurface *surface)
    window->setCanResize(true);
 }
 
+void QWaylandGLContext::updateGLFormat()
+{
+   // save & restore state to prevent QOpenGLContext::currentContext() from becoming
+   // unusable after QOpenGLContext::create()
+
+   EGLDisplay prevDisplay = eglGetCurrentDisplay();
+
+   if (prevDisplay == EGL_NO_DISPLAY) {
+      // no context is current
+      prevDisplay = m_eglDisplay;
+   }
+
+   EGLContext prevContext     = eglGetCurrentContext();
+   EGLSurface prevSurfaceDraw = eglGetCurrentSurface(EGL_DRAW);
+   EGLSurface prevSurfaceRead = eglGetCurrentSurface(EGL_READ);
+
+   wl_surface *wlSurface    = m_display->createSurface(nullptr);
+   wl_egl_window *eglWindow = wl_egl_window_create(wlSurface, 1, 1);
+
+   EGLSurface eglSurface = eglCreateWindowSurface(m_eglDisplay, m_config, eglWindow, nullptr);
+
+   if (eglMakeCurrent(m_eglDisplay, eglSurface, eglSurface, m_context)) {
+      if (m_format.renderableType() == QSurfaceFormat::OpenGL || m_format.renderableType() == QSurfaceFormat::OpenGLES) {
+         const GLubyte *versionStr = glGetString(GL_VERSION);
+
+         if (versionStr != nullptr) {
+            QByteArray version = QByteArray(reinterpret_cast<const char *>(versionStr));
+            int major;
+            int minor;
+
+            if (QPlatformOpenGLContext::parseOpenGLVersion(version, major, minor)) {
+               m_format.setMajorVersion(major);
+               m_format.setMinorVersion(minor);
+            }
+         }
+
+         m_format.setProfile(QSurfaceFormat::NoProfile);
+         m_format.setOptions(QSurfaceFormat::FormatOptions());
+
+         if (m_format.renderableType() == QSurfaceFormat::OpenGL) {
+            // check profile and options
+
+            if (m_format.majorVersion() < 3) {
+               m_format.setOption(QSurfaceFormat::DeprecatedFunctions);
+            } else {
+               GLint value = 0;
+               glGetIntegerv(GL_CONTEXT_FLAGS, &value);
+
+               if (! (value & GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT)) {
+                  m_format.setOption(QSurfaceFormat::DeprecatedFunctions);
+               }
+
+               if (value & GL_CONTEXT_FLAG_DEBUG_BIT) {
+                  m_format.setOption(QSurfaceFormat::DebugContext);
+               }
+
+               if (m_format.version() >= std::make_pair(3, 2)) {
+                  value = 0;
+                  glGetIntegerv(GL_CONTEXT_PROFILE_MASK, &value);
+
+                  if (value & GL_CONTEXT_CORE_PROFILE_BIT) {
+                     m_format.setProfile(QSurfaceFormat::CoreProfile);
+                  } else if (value & GL_CONTEXT_COMPATIBILITY_PROFILE_BIT) {
+                     m_format.setProfile(QSurfaceFormat::CompatibilityProfile);
+                  }
+               }
+            }
+         }
+      }
+
+      eglMakeCurrent(prevDisplay, prevSurfaceDraw, prevSurfaceRead, prevContext);
+   }
+
+   eglDestroySurface(m_eglDisplay, eglSurface);
+   wl_egl_window_destroy(eglWindow);
+   wl_surface_destroy(wlSurface);
+}
 
 }

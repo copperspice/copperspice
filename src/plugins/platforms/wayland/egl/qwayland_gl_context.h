@@ -48,6 +48,7 @@ class QWaylandGLContext : public QPlatformOpenGLContext
    EGLContext eglContext() const {
       return m_context;
    }
+
    QSurfaceFormat format() const override {
       return m_format;
    }
@@ -66,6 +67,8 @@ class QWaylandGLContext : public QPlatformOpenGLContext
    void swapBuffers(QPlatformSurface *surface) override;
 
  private:
+   void updateGLFormat();
+
    bool m_useNativeDefaultFbo;
    uint m_api;
 
