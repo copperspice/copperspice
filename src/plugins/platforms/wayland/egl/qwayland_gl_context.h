@@ -44,11 +44,18 @@ class QWaylandGLContext : public QPlatformOpenGLContext
    GLuint defaultFramebufferObject(QPlatformSurface *surface) const override;
    void doneCurrent() override;
 
+   EGLConfig eglConfig() const;
+   EGLContext eglContext() const {
+      return m_context;
+   }
    QSurfaceFormat format() const override {
       return m_format;
    }
 
    void (*getProcAddress(const QByteArray &procName)) () override;
+
+   bool isSharing() const override;
+   bool isValid() const override;
 
    bool makeCurrent(QPlatformSurface *surface) override;
 
@@ -63,6 +70,9 @@ class QWaylandGLContext : public QPlatformOpenGLContext
    uint m_api;
 
    EGLDisplay m_eglDisplay;
+   EGLContext m_context;
+   EGLContext m_shareEGLContext;
+   EGLConfig  m_config;
 
    DecorationsBlitter *m_blitter;
 

@@ -36,7 +36,7 @@ namespace QtWaylandClient {
 
 QWaylandGLContext::QWaylandGLContext(EGLDisplay eglDisplay, QWaylandDisplay *display,
       const QSurfaceFormat &format, QPlatformOpenGLContext *share)
-   : QPlatformOpenGLContext(), m_useNativeDefaultFbo(false), m_blitter(nullptr), m_display(display)
+   : QPlatformOpenGLContext(), m_useNativeDefaultFbo(false), m_eglDisplay(eglDisplay), m_blitter(nullptr), m_display(display)
 {
    QSurfaceFormat fmt = format;
 
@@ -49,8 +49,7 @@ QWaylandGLContext::QWaylandGLContext(EGLDisplay eglDisplay, QWaylandDisplay *dis
 QWaylandGLContext::~QWaylandGLContext()
 {
    delete m_blitter;
-
-   // pending implementation
+   eglDestroyContext(m_eglDisplay, m_context);
 }
 
 bool QWaylandGLContext::makeCurrent(QPlatformSurface *surface)
@@ -98,9 +97,24 @@ GLuint QWaylandGLContext::defaultFramebufferObject(QPlatformSurface *surface) co
    return static_cast<QWaylandEglWindow *>(surface)->contentFBO();
 }
 
+EGLConfig QWaylandGLContext::eglConfig() const
+{
+   return m_config;
+}
+
 void (*QWaylandGLContext::getProcAddress(const QByteArray &procName)) ()
 {
    return eglGetProcAddress(procName.constData());
+}
+
+bool QWaylandGLContext::isSharing() const
+{
+   return m_shareEGLContext != EGL_NO_CONTEXT;
+}
+
+bool QWaylandGLContext::isValid() const
+{
+   return m_context != EGL_NO_CONTEXT;
 }
 
 }
