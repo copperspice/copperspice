@@ -52,15 +52,44 @@ QWaylandGLContext::~QWaylandGLContext()
    eglDestroyContext(m_eglDisplay, m_context);
 }
 
-bool QWaylandGLContext::makeCurrent(QPlatformSurface *surface)
+GLuint QWaylandGLContext::defaultFramebufferObject(QPlatformSurface *surface) const
 {
-   // pending implementation
-   return true;
+   if (m_useNativeDefaultFbo) {
+      return 0;
+   }
+
+   return static_cast<QWaylandEglWindow *>(surface)->contentFBO();
 }
 
 void QWaylandGLContext::doneCurrent()
 {
    // pending implementation
+}
+
+EGLConfig QWaylandGLContext::eglConfig() const
+{
+   return m_config;
+}
+
+void (*QWaylandGLContext::getProcAddress(const QByteArray &procName)) ()
+{
+   return eglGetProcAddress(procName.constData());
+}
+
+bool QWaylandGLContext::isSharing() const
+{
+   return m_shareEGLContext != EGL_NO_CONTEXT;
+}
+
+bool QWaylandGLContext::isValid() const
+{
+   return m_context != EGL_NO_CONTEXT;
+}
+
+bool QWaylandGLContext::makeCurrent(QPlatformSurface *surface)
+{
+   // pending implementation
+   return true;
 }
 
 void QWaylandGLContext::swapBuffers(QPlatformSurface *surface)
@@ -88,33 +117,5 @@ void QWaylandGLContext::swapBuffers(QPlatformSurface *surface)
    window->setCanResize(true);
 }
 
-GLuint QWaylandGLContext::defaultFramebufferObject(QPlatformSurface *surface) const
-{
-   if (m_useNativeDefaultFbo) {
-      return 0;
-   }
-
-   return static_cast<QWaylandEglWindow *>(surface)->contentFBO();
-}
-
-EGLConfig QWaylandGLContext::eglConfig() const
-{
-   return m_config;
-}
-
-void (*QWaylandGLContext::getProcAddress(const QByteArray &procName)) ()
-{
-   return eglGetProcAddress(procName.constData());
-}
-
-bool QWaylandGLContext::isSharing() const
-{
-   return m_shareEGLContext != EGL_NO_CONTEXT;
-}
-
-bool QWaylandGLContext::isValid() const
-{
-   return m_context != EGL_NO_CONTEXT;
-}
 
 }
