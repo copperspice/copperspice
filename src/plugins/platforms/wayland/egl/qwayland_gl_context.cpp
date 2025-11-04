@@ -29,6 +29,7 @@
 
 #include <qapplication_p.h>
 #include <qwayland_decorations_blitter_p.h>
+#include <qwayland_egl_config_p.h>
 #include <qwayland_egl_stateguard_p.h>
 #include <qwayland_integration_p.h>
 
@@ -44,9 +45,86 @@ QWaylandGLContext::QWaylandGLContext(EGLDisplay eglDisplay, QWaylandDisplay *dis
       fmt.setAlphaBufferSize(8);
    }
 
-   // pending implementation
-
+   m_config = q_configFromGLFormat(m_eglDisplay, fmt);
+   m_format = q_glFormatFromConfig(m_eglDisplay, m_config);
    m_shareEGLContext = share ? static_cast<QWaylandGLContext *>(share)->eglContext() : EGL_NO_CONTEXT;
+
+   QVector<EGLint> eglContextAttrs;
+   eglContextAttrs.append(EGL_CONTEXT_CLIENT_VERSION);
+   eglContextAttrs.append(format.majorVersion());
+
+   const bool hasKHRCreateContext = q_hasEglExtension(m_eglDisplay, "EGL_KHR_create_context");
+
+   if (hasKHRCreateContext) {
+      eglContextAttrs.append(EGL_CONTEXT_MINOR_VERSION_KHR);
+      eglContextAttrs.append(format.minorVersion());
+
+      int flags = 0;
+
+      // debug bit is supported for OpenGL and OpenGL ES
+      if (format.testOption(QSurfaceFormat::DebugContext)) {
+         flags |= EGL_CONTEXT_OPENGL_DEBUG_BIT_KHR;
+      }
+
+      // fwdcompat bit is only for OpenGL 3.0 or newer
+      if (m_format.renderableType() == QSurfaceFormat::OpenGL && format.majorVersion() >= 3
+            && ! format.testOption(QSurfaceFormat::DeprecatedFunctions)) {
+         flags |= EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
+      }
+
+      if (flags != 0) {
+         eglContextAttrs.append(EGL_CONTEXT_FLAGS_KHR);
+         eglContextAttrs.append(flags);
+      }
+
+      // profiles are OpenGL only and mandatory in 3.2 or newer
+      if (m_format.renderableType() == QSurfaceFormat::OpenGL) {
+         eglContextAttrs.append(EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR);
+
+         eglContextAttrs.append(format.profile() == QSurfaceFormat::CoreProfile
+            ? EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR
+            : EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT_KHR);
+      }
+   }
+
+   eglContextAttrs.append(EGL_NONE);
+
+   switch (m_format.renderableType()) {
+      case QSurfaceFormat::OpenVG:
+         m_api = EGL_OPENVG_API;
+         break;
+
+#ifdef EGL_VERSION_1_4
+
+      case QSurfaceFormat::OpenGL:
+         m_api = EGL_OPENGL_API;
+         break;
+#endif
+
+      case QSurfaceFormat::OpenGLES:
+         [[fallthrough]];
+
+      default:
+         m_api = EGL_OPENGL_ES_API;
+         break;
+   }
+
+   eglBindAPI(m_api);
+
+   m_context = eglCreateContext(m_eglDisplay, m_config, m_shareEGLContext, eglContextAttrs.constData());
+
+   if (m_context == EGL_NO_CONTEXT) {
+      m_context = eglCreateContext(m_eglDisplay, m_config, EGL_NO_CONTEXT, eglContextAttrs.constData());
+      m_shareEGLContext = EGL_NO_CONTEXT;
+   }
+
+   EGLint error = eglGetError();
+
+   if (error != EGL_SUCCESS) {
+      qWarning("QWaylandGLContext() Failed to create EGLContext, error=%x", error);
+      return;
+   }
+
    updateGLFormat();
 }
 

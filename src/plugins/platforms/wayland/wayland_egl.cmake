@@ -10,6 +10,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
    list(APPEND PLATFORMS_WAYLAND_EGL_PRIVATE_INCLUDES
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_decorations_blitter_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_clientbuffer_integration.h
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_config_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_forward.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_stateguard_p.h
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_window.h
@@ -21,6 +22,7 @@ if(BUILD_PLATFORMS_WAYLAND_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/main_egl.cpp
 
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_clientbuffer_integration.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_config.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_egl_window.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/wayland/egl/qwayland_gl_context.cpp
    )
