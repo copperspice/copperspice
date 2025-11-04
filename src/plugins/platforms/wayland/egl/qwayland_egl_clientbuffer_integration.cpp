@@ -24,11 +24,13 @@
 #include <qwayland_egl_clientbuffer_integration.h>
 
 #include <qdebug.h>
+#include <qwayland_egl_window.h>
+#include <qwayland_gl_context.h>
+
+#include <wayland-client.h>
 
 #include <qwayland_display_p.h>
 #include <qwayland_window_p.h>
-
-#include <wayland-client.h>
 
 namespace QtWaylandClient {
 
@@ -47,7 +49,36 @@ QWaylandEglClientBufferIntegration::~QWaylandEglClientBufferIntegration()
 
 void QWaylandEglClientBufferIntegration::initialize(QWaylandDisplay *display)
 {
-   // pending implementation
+   QByteArray eglPlatform = qgetenv("EGL_PLATFORM");
+
+   if (eglPlatform.isEmpty()) {
+      setenv("EGL_PLATFORM", "wayland", true);
+   }
+
+   m_display = display;
+
+   EGLint major;
+   EGLint minor;
+
+   m_eglDisplay = eglGetDisplay((EGLNativeDisplayType) display->wl_display());
+
+   if (m_eglDisplay == EGL_NO_DISPLAY) {
+      qWarning("EGL not available");
+      return;
+   }
+
+   if (! eglInitialize(m_eglDisplay, &major, &minor)) {
+      qWarning("Failed to initialize EGL display");
+      m_eglDisplay = EGL_NO_DISPLAY;
+      return;
+   }
+
+   m_supportsThreading = true;
+
+   if (! qgetenv("QT_OPENGL_NO_SANITY_CHECK").isEmpty()) {
+      return;
+   }
+
 }
 
 bool QWaylandEglClientBufferIntegration::isValid() const
@@ -67,15 +98,45 @@ bool QWaylandEglClientBufferIntegration::supportsWindowDecoration() const
 
 QWaylandWindow *QWaylandEglClientBufferIntegration::createEglWindow(QWindow *window)
 {
-   // pending implementation
-
-   return nullptr;
+   return new QWaylandEglWindow(window);
 }
 
 QPlatformOpenGLContext *QWaylandEglClientBufferIntegration::createPlatformOpenGLContext(const QSurfaceFormat &glFormat,
       QPlatformOpenGLContext *share) const
 {
-   // pending implementation
+   return new QWaylandGLContext(m_eglDisplay, m_display, glFormat, share);
+}
+
+void *QWaylandEglClientBufferIntegration::nativeResource(NativeResource resource)
+{
+   switch (resource) {
+      case EglDisplay:
+         return m_eglDisplay;
+
+      default:
+         break;
+   }
+
+   return nullptr;
+}
+
+void *QWaylandEglClientBufferIntegration::nativeResourceForContext(NativeResource resource, QPlatformOpenGLContext *context)
+{
+   Q_ASSERT(context != nullptr);
+
+   switch (resource) {
+      case EglConfig:
+         return static_cast<QWaylandGLContext *>(context)->eglConfig();
+
+      case EglContext:
+         return static_cast<QWaylandGLContext *>(context)->eglContext();
+
+      case EglDisplay:
+         return m_eglDisplay;
+
+      default:
+         break;
+   }
 
    return nullptr;
 }

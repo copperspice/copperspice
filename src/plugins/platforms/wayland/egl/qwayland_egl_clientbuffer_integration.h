@@ -49,6 +49,8 @@ class QWaylandEglClientBufferIntegration : public QWaylandClientBufferIntegratio
    QWaylandWindow *createEglWindow(QWindow *window) override;
    QPlatformOpenGLContext *createPlatformOpenGLContext(const QSurfaceFormat &glFormat, QPlatformOpenGLContext *share) const override;
 
+   void *nativeResource(NativeResource resource) override;
+   void *nativeResourceForContext(NativeResource resource, QPlatformOpenGLContext *context) override;
    EGLDisplay eglDisplay() const;
 
  private:
