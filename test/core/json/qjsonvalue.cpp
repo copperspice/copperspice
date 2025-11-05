@@ -33,3 +33,65 @@ TEST_CASE("QJsonValue traits", "[qjsonvalue")
    REQUIRE(std::has_virtual_destructor_v<QJsonValue> == false);
 }
 
+TEST_CASE("QJsonValue constructor", "[qjsonvalue]")
+{
+   QJsonValue data(true);
+
+   REQUIRE(data.isBool()   == true);
+   REQUIRE(data.isDouble() == false);
+   REQUIRE(data.isString() == false);
+   REQUIRE(data.isArray()  == false);
+   REQUIRE(data.isObject() == false);
+
+   REQUIRE(data.type() == QJsonValue::Bool);
+
+   //
+   data = QJsonValue(5.87);
+
+   REQUIRE(data.isBool()   == false);
+   REQUIRE(data.isDouble() == true);
+   REQUIRE(data.isString() == false);
+   REQUIRE(data.isArray()  == false);
+   REQUIRE(data.isObject() == false);
+
+   REQUIRE(data.type() == QJsonValue::Double);
+}
+
+TEST_CASE("QJsonValue copy_assign", "[qjsonvalue]")
+{
+   QJsonValue data_a(QString("MM/dd/yyyy"));
+   QJsonValue data_b(data_a);
+
+   REQUIRE(data_a.isString() == true);
+   REQUIRE(data_b.isString() == true);
+
+   REQUIRE(data_a.toString() == QString("MM/dd/yyyy"));
+   REQUIRE(data_b.toString() == QString("MM/dd/yyyy"));
+
+   //
+   QJsonValue data_c;
+   data_c = data_a;
+
+   REQUIRE(data_a.isString() == true);
+   REQUIRE(data_c.isString() == true);
+
+   REQUIRE(data_a.toString() == QString("MM/dd/yyyy"));
+   REQUIRE(data_c.toString() == QString("MM/dd/yyyy"));
+}
+
+TEST_CASE("QJsonValue move_assign", "[qjsonvalue]")
+{
+   QJsonValue data_a(QString("MM/dd/yyyy"));
+   QJsonValue data_b(std::move(data_a));
+
+   //
+   REQUIRE(data_b.isString() == true);
+   REQUIRE(data_b.toString() == QString("MM/dd/yyyy"));
+
+   //
+   QJsonValue data_c;
+   data_c = std::move(data_b);
+
+   REQUIRE(data_c.isString() == true);
+   REQUIRE(data_c.toString() == QString("MM/dd/yyyy"));
+}
