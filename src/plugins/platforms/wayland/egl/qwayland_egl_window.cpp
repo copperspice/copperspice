@@ -24,8 +24,10 @@
 #include <qwayland_egl_window.h>
 
 #include <qopengl_framebufferobject.h>
+#include <qwindow.h>
 
 #include <qwayland_display_p.h>
+#include <qwayland_egl_config_p.h>
 #include <qwayland_screen_p.h>
 
 namespace QtWaylandClient {
@@ -41,9 +43,8 @@ QWaylandEglWindow::QWaylandEglWindow(QWindow *window)
       fmt.setAlphaBufferSize(8);
    }
 
-
-   // pending implementation
-
+   m_eglConfig = q_configFromGLFormat(m_clientBufferIntegration->eglDisplay(), fmt);
+   m_format    = q_glFormatFromConfig(m_clientBufferIntegration->eglDisplay(), m_eglConfig);
 
    // Do not create anything here. Platform window may belong to a RasterGLSurface window
    // which could have pure raster content. In this case, if the window never becomes
@@ -130,7 +131,7 @@ void QWaylandEglWindow::setGeometry(const QRect &rect)
    // then do not want to create it again. Instead resize the wl_egl_window and the EGLSurface
    // will be created the next time makeCurrent is called.
 
-   // pending implementation
+   updateSurface(false);
 }
 
 void QWaylandEglWindow::setVisible(bool visible)
@@ -149,10 +150,45 @@ void QWaylandEglWindow::updateSurface(bool create)
 
    QSize sizeWithMargins = (rect.size() + QSize(margins.left() + margins.right(), margins.top() + margins.bottom())) * scale();
 
+   // wl_egl_windows must have both width and height > 0
+   // egl on Mesa returns a nullptr if an invalid wl_egl_window is created
+   // not all EGL implementations will do this.
+
+   // handle resizing a valid window to 0x0 by destroying it
+
    if (sizeWithMargins.isEmpty()) {
+      if (m_eglSurface) {
+         eglDestroySurface(m_clientBufferIntegration->eglDisplay(), m_eglSurface);
+         m_eglSurface = nullptr;
+      }
 
-      // pending implementation
+      if (m_waylandEglWindow) {
+         wl_egl_window_destroy(m_waylandEglWindow);
+         m_waylandEglWindow = nullptr;
+      }
 
+      m_offset = QPoint();
+
+   } else {
+      if (m_waylandEglWindow != nullptr) {
+         int current_width, current_height;
+         wl_egl_window_get_attached_size(m_waylandEglWindow, &current_width, &current_height);
+
+         if (current_width != sizeWithMargins.width() || current_height != sizeWithMargins.height()) {
+            wl_egl_window_resize(m_waylandEglWindow, sizeWithMargins.width(), sizeWithMargins.height(), m_offset.x(), m_offset.y());
+            m_offset = QPoint();
+
+            m_resize = true;
+         }
+
+      } else if (create) {
+         m_waylandEglWindow = wl_egl_window_create(object(), sizeWithMargins.width(), sizeWithMargins.height());
+      }
+
+      if (m_eglSurface == nullptr && create) {
+         EGLNativeWindowType eglw = (EGLNativeWindowType)m_waylandEglWindow;
+         m_eglSurface = eglCreateWindowSurface(m_clientBufferIntegration->eglDisplay(), m_eglConfig, eglw, nullptr);
+      }
    }
 }
 
