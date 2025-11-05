@@ -33,3 +33,46 @@ TEST_CASE("QJsonArray traits", "[qjsonoarray]")
    REQUIRE(std::has_virtual_destructor_v<QJsonArray> == false);
 }
 
+TEST_CASE("QJsonArray copy_assign", "[qjsonarray]")
+{
+   QJsonArray data_a;
+   data_a.append(QString("d:/cs_docs/file1.dox"));
+   data_a.append(QString("d:/cs_docs/file2.dox"));
+
+   //
+   QJsonArray data_b(data_a);
+
+   REQUIRE(data_a.count() == 2);
+   REQUIRE(data_b.count() == 2);
+
+   REQUIRE(data_a.contains(QString("d:/cs_docs/file1.dox")) == true);
+   REQUIRE(data_b.contains(QString("d:/cs_docs/file1.dox")) == true);
+
+   //
+   QJsonArray data_c;
+   data_c = data_a;
+
+   REQUIRE(data_a.count() == 2);
+   REQUIRE(data_c.count() == 2);
+
+   REQUIRE(data_a.contains(QString("d:/cs_docs/file1.dox")) == true);
+   REQUIRE(data_c.contains(QString("d:/cs_docs/file1.dox")) == true);
+}
+
+TEST_CASE("QJsonArray move_assign", "[qjsonarray]")
+{
+   QJsonArray data_a;
+   data_a.append(QString("d:/cs_docs/file1.dox"));
+   data_a.append(QString("d:/cs_docs/file2.dox"));
+
+   //
+   QJsonArray data_b(std::move(data_a));
+
+   REQUIRE(data_b.contains(QString("d:/cs_docs/file1.dox")) == true);
+
+   //
+   QJsonArray data_c;
+   data_c = std::move(data_b);
+
+   REQUIRE(data_c.contains(QString("d:/cs_docs/file1.dox")) == true);
+}
