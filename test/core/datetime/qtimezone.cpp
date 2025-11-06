@@ -32,6 +32,22 @@ TEST_CASE("QTimeZone traits", "[qtimezone]")
    REQUIRE(std::has_virtual_destructor_v<QTimeZone> == false);
 }
 
+TEST_CASE("QTimeZone copy_assign", "[qtimezone]")
+{
+   QTimeZone data_a("America/Denver");
+   QTimeZone data_b(data_a);
+
+   REQUIRE(data_a == data_b);
+   REQUIRE(data_b == QTimeZone("America/Denver"));
+
+   //
+   QTimeZone data_c;
+   data_c = data_a;
+
+   REQUIRE(data_a == data_c);
+   REQUIRE(data_c == QTimeZone("America/Denver"));
+}
+
 TEST_CASE("QTimeZone comparison", "[qtimezone]")
 {
    QTimeZone timeZone1("America/Denver");
@@ -197,6 +213,20 @@ TEST_CASE("QTimeZone isValid", "[qtimezone]")
    // default constructor
    QTimeZone timeZone2;
    REQUIRE(timeZone2.isValid() == false);
+}
+
+TEST_CASE("QTimeZone move_assign", "[qtimezone]")
+{
+   QTimeZone data_a("America/Denver");
+   QTimeZone data_b(std::move(data_a));
+
+   REQUIRE(data_b == QTimeZone("America/Denver"));
+
+   //
+   QTimeZone data_c;
+   data_c = std::move(data_b);
+
+   REQUIRE(data_c == QTimeZone("America/Denver"));
 }
 
 TEST_CASE("QTimeZone offset", "[qtimezone]")
