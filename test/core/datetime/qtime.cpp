@@ -66,6 +66,22 @@ TEST_CASE("QTime add_mseconds", "[qtime]")
    }
 }
 
+TEST_CASE("QTime copy_assign", "[qtime]")
+{
+   QTime data_a = QTime(12, 18, 05);
+   QTime data_b(data_a);
+
+   REQUIRE(data_a == data_b);
+   REQUIRE(data_b == QTime(12, 18, 05));
+
+   //
+   QTime data_c;
+   data_c = data_a;
+
+   REQUIRE(data_a == data_c);
+   REQUIRE(data_c == QTime(12, 18, 05));
+}
+
 TEST_CASE("QTime fromString", "[qtime]")
 {
    {
@@ -94,6 +110,20 @@ TEST_CASE("QTime comparison", "[qtime]")
    REQUIRE(time1 <= time2);
 
    REQUIRE((time1 > time2) == false);
+}
+
+TEST_CASE("QTime move_assign", "[qtime]")
+{
+   QTime data_a = QTime(12, 18, 05);
+   QTime data_b(std::move(data_a));
+
+   REQUIRE(data_b == QTime(12, 18, 05));
+
+   //
+   QTime data_c;
+   data_c = std::move(data_a);
+
+   REQUIRE(data_c == QTime(12, 18, 05));
 }
 
 TEST_CASE("QTime msec", "[qtime]")
