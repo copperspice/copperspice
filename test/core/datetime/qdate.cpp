@@ -117,6 +117,22 @@ TEST_CASE("QDate add_years", "[qdate]")
    }
 }
 
+TEST_CASE("QDate copy_assign", "[qdate]")
+{
+   QDate data_a = QDate(2025, 8, 17);
+   QDate data_b(data_a);
+
+   REQUIRE(data_a == data_b);
+   REQUIRE(data_b == QDate(2025, 8, 17));
+
+   //
+   QDate data_c;
+   data_c = data_a;
+
+   REQUIRE(data_a == data_c);
+   REQUIRE(data_c == QDate(2025, 8, 17));
+}
+
 TEST_CASE("QDate currentDate", "[qdate]")
 {
    QDate date = QDate::currentDate();
@@ -226,6 +242,20 @@ TEST_CASE("QDate leap_year", "[qdate]")
    date = QDate(-1, 2, 29);
    REQUIRE(date.isValid() == true);
    REQUIRE(date.isLeapYear(-1) == true);
+}
+
+TEST_CASE("QDate move_assign", "[qdate]")
+{
+   QDate data_a = QDate(2025, 8, 17);
+   QDate data_b(std::move(data_a));
+
+   REQUIRE(data_b == QDate(2025, 8, 17));
+
+   //
+   QDate data_c;
+   data_c = std::move(data_b);
+
+   REQUIRE(data_c == QDate(2025, 8, 17));
 }
 
 TEST_CASE("QDate names", "[qdate]")
