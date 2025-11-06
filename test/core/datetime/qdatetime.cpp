@@ -108,12 +108,18 @@ TEST_CASE("QDateTime add_mseconds", "[qdatetime]")
 
 TEST_CASE("QDateTime copy_assign", "[qdatetime]")
 {
-   QDateTime dt1 = QDateTime(QDate(2019, 8, 17), QTime(14, 20, 0));
-   QDateTime dt2;
+   QDateTime data_a = QDateTime(QDate(2023, 8, 17), QTime(14, 20, 0));
+   QDateTime data_b(data_a);
 
-   dt2 = dt1;
+   REQUIRE(data_a == data_b);
+   REQUIRE(data_b == QDateTime(QDate(2023, 8, 17), QTime(14, 20, 0)));
 
-   REQUIRE(dt1 == dt2);
+   //
+   QDateTime data_c;
+   data_c = data_a;
+
+   REQUIRE(data_a == data_c);
+   REQUIRE(data_c == QDateTime(QDate(2023, 8, 17), QTime(14, 20, 0)));
 }
 
 TEST_CASE("QDateTime comparison", "[qdatetime]")
@@ -246,6 +252,20 @@ TEST_CASE("QDateTime fromString", "[qdatetime]")
 
       REQUIRE(result == dt);
    }
+}
+
+TEST_CASE("QDateTime move_assign", "[qdatetime]")
+{
+   QDateTime data_a = QDateTime(QDate(2024, 8, 1), QTime(14, 20, 0));
+   QDateTime data_b(std::move(data_a));
+
+   REQUIRE(data_b == QDateTime(QDate(2024, 8, 1), QTime(14, 20, 0)));
+
+   //
+   QDateTime data_c;
+   data_c = std::move(data_b);
+
+   REQUIRE(data_c == QDateTime(QDate(2024, 8, 1), QTime(14, 20, 0)));
 }
 
 TEST_CASE("QDateTime msecs_to", "[qdatetime]")
