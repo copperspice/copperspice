@@ -74,6 +74,22 @@ TEST_CASE("QChar u32_constructor", "[qchar]")
    REQUIRE(U'c' != ch);
 }
 
+TEST_CASE("QChar copy_assign", "[qchar]")
+{
+   QChar data_a('W');
+   QChar data_b(data_a);
+
+   REQUIRE(data_a == data_b);
+   REQUIRE(data_b == QChar('W'));
+
+   //
+   QChar data_c;
+   data_c = data_a;
+
+   REQUIRE(data_a == data_c);
+   REQUIRE(data_c == QChar('W'));
+}
+
 TEST_CASE("QChar empty", "[qchar]")
 {
    QChar ch;
@@ -118,4 +134,18 @@ TEST_CASE("QChar is_methods", "[qchar]")
    REQUIRE(! ch.isLetterOrNumber());
    REQUIRE(ch.isPrint());
    REQUIRE(! ch.isUpper());
+}
+
+TEST_CASE("QChar move_assign", "[qchar]")
+{
+   QChar data_a('W');
+   QChar data_b(std::move(data_a));
+
+   REQUIRE(data_b == QChar('W'));
+
+   //
+   QChar data_c;
+   data_c = std::move(data_b);
+
+   REQUIRE(data_c == QChar('W'));
 }
