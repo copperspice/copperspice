@@ -232,6 +232,22 @@ TEST_CASE("QString8 u8_contains", "[qstring]")
    REQUIRE(! str.contains(u8'q'));
 }
 
+TEST_CASE("QString8 copy_assign", "[qstring]")
+{
+   QString data_a("A wacky fox and sizeable pig jumped halfway over a blue moon");
+   QString data_b(data_a);
+
+   REQUIRE(data_a == data_b);
+   REQUIRE(data_b == QString("A wacky fox and sizeable pig jumped halfway over a blue moon"));
+
+   //
+   QString data_c;
+   data_c = data_a;
+
+   REQUIRE(data_a == data_c);
+   REQUIRE(data_c == QString("A wacky fox and sizeable pig jumped halfway over a blue moon"));
+}
+
 TEST_CASE("QString8 count", "[qstring]")
 {
    QString str = "A wacky fox and sizeable pig jumped halfway over a blue moon";
@@ -492,6 +508,20 @@ TEST_CASE("QString8 u32_length", "[qstring]")
 
    REQUIRE(str[0].unicode() == char32_t(33));
    REQUIRE(str[1].unicode() == char32_t(228));
+}
+
+TEST_CASE("QString8 move_assign", "[qstring]")
+{
+   QString data_a("A wacky fox and sizeable pig jumped halfway over a blue moon");
+   QString data_b(std::move(data_a));
+
+   REQUIRE(data_b == QString("A wacky fox and sizeable pig jumped halfway over a blue moon"));
+
+   //
+   QString data_c;
+   data_c = std::move(data_b);
+
+   REQUIRE(data_c == QString("A wacky fox and sizeable pig jumped halfway over a blue moon"));
 }
 
 TEST_CASE("QString8 normalized", "[qstring]")
