@@ -90,18 +90,28 @@ TEST_CASE("QFileInfoList constructor", "[qfileinfolist]")
 TEST_CASE("QFileInfoList copy_assign", "[qfileinfolist]")
 {
    QFileInfoList listA;
+   listA.append(QFileInfo("test_copy.txt"));
+
+   //
    QFileInfoList listB(listA);
 
-   listA.append(QFileInfo("test.txt"));
+   REQUIRE(listA.count() == 1);
+   REQUIRE(listB.count() == 1);
 
+   REQUIRE(listA.at(0).fileName() == "test_copy.txt");
+   REQUIRE(listB.at(0).fileName() == "test_copy.txt");
+
+   //
    QFileInfoList listC;
    listC = listA;
 
    REQUIRE(listA.count() == 1);
-   REQUIRE(listB.count() == 0);
+   REQUIRE(listB.count() == 1);
    REQUIRE(listC.count() == 1);
 
-   REQUIRE(listC.at(0).fileName() == "test.txt");
+   REQUIRE(listA.at(0).fileName() == "test_copy.txt");
+   REQUIRE(listB.at(0).fileName() == "test_copy.txt");
+   REQUIRE(listC.at(0).fileName() == "test_copy.txt");
 }
 
 TEST_CASE("QFileInfoList index_a", "[qfileinfolist]")
@@ -146,6 +156,25 @@ TEST_CASE("QFileInfoList index_b", "[qfileinfolist]")
    REQUIRE(list.indexOf(fileA) == 0);
    REQUIRE(list.indexOf(fileB) == 1);
    REQUIRE(list.indexOf(fileC) == 2);
+}
+
+TEST_CASE("QFileInfoList move_assign", "[qfileinfolist]")
+{
+   QFileInfoList listA;
+   listA.append(QFileInfo("test_copy.txt"));
+
+   //
+   QFileInfoList listB(std::move(listA));
+
+   REQUIRE(listB.count() == 1);
+   REQUIRE(listB.at(0).fileName() == "test_copy.txt");
+
+   //
+   QFileInfoList listC;
+   listC = std::move(listB);
+
+   REQUIRE(listC.count() == 1);
+   REQUIRE(listC.at(0).fileName() == "test_copy.txt");
 }
 
 TEST_CASE("QFileInfoList position", "[qfileinfolist]")
