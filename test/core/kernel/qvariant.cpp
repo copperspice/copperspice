@@ -4101,6 +4101,28 @@ TEST_CASE("QVariant constructor_user_type", "[qvariant]")
    REQUIRE(data3.dataList == QList<int>{8, 17});
 }
 
+TEST_CASE("QVariant copy_assign", "[qvariant]")
+{
+   QVariant data_a = QString("apple");
+   QVariant data_b(data_a);
+
+   REQUIRE(data_a.isValid() == true);
+   REQUIRE(data_b.isValid() == true);
+
+   REQUIRE(data_a == data_b);
+   REQUIRE(data_b == QVariant{QString("apple")});
+
+   //
+   QVariant data_c;
+   data_c = data_a;
+
+   REQUIRE(data_a.isValid() == true);
+   REQUIRE(data_c.isValid() == true);
+
+   REQUIRE(data_a == data_c);
+   REQUIRE(data_c == QVariant{QString("apple")});
+}
+
 TEST_CASE("QVariant copy_constructor_string8", "[qvariant]")
 {
    QVariant data1 = QString("apple");
@@ -4793,6 +4815,22 @@ TEST_CASE("QVariant comparison_string16", "[qvariant]")
    QVariant data2 = QString16("5");
 
    REQUIRE(data1 == data2);
+}
+
+TEST_CASE("QVariant move_assign", "[qvariant]")
+{
+   QVariant data_a = QString("apple");
+   QVariant data_b(std::move(data_a));
+
+   REQUIRE(data_b.isValid() == true);
+   REQUIRE(data_b == QVariant{QString("apple")});
+
+   //
+   QVariant data_c;
+   data_c = std::move(data_b);
+
+   REQUIRE(data_c.isValid() == true);
+   REQUIRE(data_c == QVariant{QString("apple")});
 }
 
 TEST_CASE("QVariant move_operations", "[qvariant]")
