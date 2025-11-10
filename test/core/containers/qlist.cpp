@@ -290,6 +290,20 @@ TEST_CASE("QList move", "[qlist]")
    }
 }
 
+TEST_CASE("QList move_assign", "[qlist]")
+{
+   QList<QString> list_a = { "watermelon", "apple", "pear", "grapefruit" };
+   QList<QString> list_b = std::move(list_a);
+
+   REQUIRE(list_b == QList<QString>{"watermelon", "apple", "pear", "grapefruit"});
+
+   //
+   QList<QString> list_c;
+   list_c = std::move(list_b);
+
+   REQUIRE(list_c == QList<QString>{"watermelon", "apple", "pear", "grapefruit"});
+}
+
 TEST_CASE("QList operators", "[qlist]")
 {
    QList<int> list_a = { 10, 20 };
