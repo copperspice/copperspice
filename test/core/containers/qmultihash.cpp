@@ -58,6 +58,42 @@ TEST_CASE("QMultiHash contains", "[qmultihash]")
    REQUIRE(! hash.contains(9));
 }
 
+TEST_CASE("QMultiHash copy_assign", "[qmultihash]")
+{
+   QMultiHash<QString, int> hash_a = { { "watermelon", 10},
+                                       { "apple",      20},
+                                       { "pear",       30},
+                                       { "grapefruit", 40} };
+
+   QMultiHash<QString, int> hash_b(hash_a);
+
+   REQUIRE(hash_a.size() == 4);
+   REQUIRE(hash_b.size() == 4);
+
+   REQUIRE(hash_a["watermelon"] == 10);
+   REQUIRE(hash_a["grapefruit"] == 40);
+
+   REQUIRE(hash_b["watermelon"] == 10);
+   REQUIRE(hash_b["grapefruit"] == 40);
+
+   REQUIRE(hash_a == hash_b);
+
+   //
+   QMultiHash<QString, int> hash_c;
+   hash_c = hash_a;
+
+   REQUIRE(hash_a.size() == 4);
+   REQUIRE(hash_c.size() == 4);
+
+   REQUIRE(hash_a["watermelon"] == 10);
+   REQUIRE(hash_a["grapefruit"] == 40);
+
+   REQUIRE(hash_c["watermelon"] == 10);
+   REQUIRE(hash_c["grapefruit"] == 40);
+
+   REQUIRE(hash_a == hash_c);
+}
+
 TEST_CASE("QMultiHash count", "[qmultihash]")
 {
    QMultiHash<int, QString> hash = { { 1, "watermelon"},
@@ -179,6 +215,30 @@ TEST_CASE("QMultiHash insert_move", "[qmultihash]")
 
    REQUIRE(*(hash[3]) == "pear");
    REQUIRE(hash.size() == 4);
+}
+
+TEST_CASE("QMultiHash move_assign", "[qmultihash]")
+{
+   QMultiHash<QString, int> hash_a = { { "watermelon", 10},
+                                       { "apple",      20},
+                                       { "pear",       30},
+                                       { "grapefruit", 40} };
+
+   QMultiHash<QString, int> hash_b = std::move(hash_a);
+
+   REQUIRE(hash_b.size() == 4);
+
+   REQUIRE(hash_b["watermelon"] == 10);
+   REQUIRE(hash_b["grapefruit"] == 40);
+
+   //
+   QMultiHash<QString, int> hash_c;
+   hash_c = std::move(hash_b);
+
+   REQUIRE(hash_c.size() == 4);
+
+   REQUIRE(hash_c["watermelon"] == 10);
+   REQUIRE(hash_c["grapefruit"] == 40);
 }
 
 TEST_CASE("QMultiHash operator_bracket", "[qmultihash]")
