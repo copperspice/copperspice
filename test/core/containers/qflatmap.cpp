@@ -55,6 +55,42 @@ TEST_CASE("QFlatMap contains", "[qflatmap]")
    REQUIRE(! map.contains(9));
 }
 
+TEST_CASE("QFlatMap copy_assign", "[qflatmap]")
+{
+   QFlatMap<int, QString> map_a = { { 1, "watermelon"},
+                                    { 2, "apple"},
+                                    { 3, "pear"},
+                                    { 4, "grapefruit"} };
+
+   QFlatMap<int, QString> map_b(map_a);
+
+   REQUIRE(map_a.size() == 4);
+   REQUIRE(map_b.size() == 4);
+
+   REQUIRE(map_a.value(1) == "watermelon");
+   REQUIRE(map_a.value(4) == "grapefruit");
+
+   REQUIRE(map_b.value(1) == "watermelon");
+   REQUIRE(map_b.value(4) == "grapefruit");
+
+   REQUIRE(map_a == map_b);
+
+   //
+   QFlatMap<int, QString> map_c;
+   map_c = map_a;
+
+   REQUIRE(map_a.size() == 4);
+   REQUIRE(map_c.size() == 4);
+
+   REQUIRE(map_a.value(1) == "watermelon");
+   REQUIRE(map_a.value(4) == "grapefruit");
+
+   REQUIRE(map_c.value(1) == "watermelon");
+   REQUIRE(map_c.value(4) == "grapefruit");
+
+   REQUIRE(map_a == map_c);
+}
+
 TEST_CASE("QFlatMap count", "[qflatmap]")
 {
    QFlatMap<int, QString> map = { { 1, "watermelon"},
@@ -217,6 +253,30 @@ TEST_CASE("QFlatMap last", "[qflatmap]")
 
    REQUIRE(map.lastKey() == 4);
    REQUIRE(map.last() == "grapefruit");
+}
+
+TEST_CASE("QFlatMap move_assign", "[qflatmap]")
+{
+   QFlatMap<int, QString> map_a = { { 1, "watermelon"},
+                                    { 2, "apple"},
+                                    { 3, "pear"},
+                                    { 4, "grapefruit"} };
+
+   QFlatMap<int, QString> map_b(std::move(map_a));
+
+   REQUIRE(map_b.size() == 4);
+
+   REQUIRE(map_b.value(1) == "watermelon");
+   REQUIRE(map_b.value(4) == "grapefruit");
+
+   //
+   QFlatMap<int, QString> map_c;
+   map_c = std::move(map_b);
+
+   REQUIRE(map_c.size() == 4);
+
+   REQUIRE(map_c.value(1) == "watermelon");
+   REQUIRE(map_c.value(4) == "grapefruit");
 }
 
 TEST_CASE("QFlatMap remove", "[qflatmap]")
