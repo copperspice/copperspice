@@ -52,6 +52,22 @@ TEST_CASE("QMargin is_null", "[qmargins]")
    REQUIRE(data.isNull());
 }
 
+TEST_CASE("QMargins copy_assign", "[qmargins]")
+{
+   QMargins data_a(25, 14, 100, 50);
+   QMargins data_b(data_a);
+
+   REQUIRE(data_a == data_b);
+   REQUIRE(data_b == QMargins{25, 14, 100, 50});
+
+   //
+   QMargins data_c;
+   data_c = data_a;
+
+   REQUIRE(data_a == data_c);
+   REQUIRE(data_c == QMargins{25, 14, 100, 50});
+}
+
 TEST_CASE("QMargin math", "[qmargins]")
 {
    QMargins data1(25, 14, 100, 50);
@@ -132,6 +148,20 @@ TEST_CASE("QMargin math", "[qmargins]")
       QMargins result2(13, 7, 50, 25);      // rounding for x
       REQUIRE(data4 == result2);
    }
+}
+
+TEST_CASE("QMargins move_assign", "[qmargins]")
+{
+   QMargins data_a(25, 14, 100, 50);
+   QMargins data_b(std::move(data_a));
+
+   REQUIRE(data_b == QMargins{25, 14, 100, 50});
+
+   //
+   QMargins data_c;
+   data_c = std::move(data_b);
+
+   REQUIRE(data_c == QMargins{25, 14, 100, 50});
 }
 
 TEST_CASE("QMargin set", "[qmargins]")

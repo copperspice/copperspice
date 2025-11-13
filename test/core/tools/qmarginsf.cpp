@@ -45,6 +45,22 @@ TEST_CASE("QMarginsF constructor", "[qmarginsf]")
    REQUIRE(data.bottom() == 200);
 }
 
+TEST_CASE("QMarginsF copy_assign", "[qmarginsf]")
+{
+   QMarginsF data_a(25.5, 14, 100.22, 50);
+   QMarginsF data_b(data_a);
+
+   REQUIRE(data_a == data_b);
+   REQUIRE(data_b == QMarginsF{25.5, 14, 100.22, 50});
+
+   //
+   QMarginsF data_c;
+   data_c = data_a;
+
+   REQUIRE(data_a == data_c);
+   REQUIRE(data_c == QMarginsF{25.5, 14, 100.22, 50});
+}
+
 TEST_CASE("QMarginsF is_null", "[qmarginsf]")
 {
    QMarginsF data;
@@ -132,6 +148,20 @@ TEST_CASE("QMarginF math", "[qmarginsf]")
       QMarginsF result2(12.5, 7, 50, 25);
       REQUIRE(data4 == result2);
    }
+}
+
+TEST_CASE("QMarginsF move_assign", "[qmarginsf]")
+{
+   QMarginsF data_a(25.5, 14, 100.22, 50);
+   QMarginsF data_b(std::move(data_a));
+
+   REQUIRE(data_b == QMarginsF{25.5, 14, 100.22, 50});
+
+   //
+   QMarginsF data_c;
+   data_c = std::move(data_b);
+
+   REQUIRE(data_c == QMarginsF{25.5, 14, 100.22, 50});
 }
 
 TEST_CASE("QMarginF set", "[qmarginsf]")
