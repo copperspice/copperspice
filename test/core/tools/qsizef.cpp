@@ -54,6 +54,22 @@ TEST_CASE("QSizeF constructor", "[qsizef]")
    REQUIRE(data.height() == -10 );
 }
 
+TEST_CASE("QSizeF copy_assign", "[qsizef]")
+{
+   QSizeF data_a(10, 20.3);
+   QSizeF data_b(data_a);
+
+   REQUIRE(data_a == data_b);
+   REQUIRE(data_b == QSizeF{10, 20.3});
+
+   //
+   QSizeF data_c;
+   data_c = data_a;
+
+   REQUIRE(data_a == data_c);
+   REQUIRE(data_c == QSizeF{10, 20.3});
+}
+
 TEST_CASE("QSizeF empty", "[qsizef]")
 {
    QSizeF data;
@@ -91,6 +107,20 @@ TEST_CASE("QSizeF bound_expandedTo", "[qsizef]")
    result = data_a.boundedTo(data_b);
 
    REQUIRE(result == QSizeF(53, 35));
+}
+
+TEST_CASE("QSizeF move_assign", "[qsizef]")
+{
+   QSizeF data_a(38.9, 72);
+   QSizeF data_b(std::move(data_a));
+
+   REQUIRE(data_b == QSizeF{38.9, 72});
+
+   //
+   QSizeF data_c;
+   data_c = std::move(data_b);
+
+   REQUIRE(data_c == QSizeF{38.9, 72});
 }
 
 TEST_CASE("QSizeF operators", "[qsizef]")
