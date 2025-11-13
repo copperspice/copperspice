@@ -135,6 +135,22 @@ TEST_CASE("QRectF contains", "[qrectf]")
    REQUIRE(data.contains(QPointF(5, 5)) == false);
 }
 
+TEST_CASE("QRectF copy_assign", "[qrectf]")
+{
+   QRectF data_a(5, 12.7, 10, 90.1);
+   QRectF data_b(data_a);
+
+   REQUIRE(data_a == data_b);
+   REQUIRE(data_b == QRectF{5, 12.7, 10, 90.1});
+
+   //
+   QRectF data_c;
+   data_c = data_a;
+
+   REQUIRE(data_a == data_c);
+   REQUIRE(data_c == QRectF{5, 12.7, 10, 90.1});
+}
+
 TEST_CASE("QRectF empty", "[qrectf]")
 {
    QRectF data;
@@ -220,6 +236,20 @@ TEST_CASE("QRectF margins", "[qrectf]")
 
    REQUIRE(rect_b.right()  == 10 + 20 + 4 + 15);
    REQUIRE(rect_b.bottom() == 50 + 70 + 5 + 9);
+}
+
+TEST_CASE("QRectF move_assign", "[qrectf]")
+{
+   QRectF data_a(5, 12.7, 10, 90.1);
+   QRectF data_b(std::move(data_a));
+
+   REQUIRE(data_b == QRectF{5, 12.7, 10, 90.1});
+
+   //
+   QRectF data_c;
+   data_c = std::move(data_b);
+
+   REQUIRE(data_c == QRectF{5, 12.7, 10, 90.1});
 }
 
 TEST_CASE("QRectF normalize", "[qrectf]")

@@ -144,6 +144,22 @@ TEST_CASE("QRect contains", "[qrect]")
    REQUIRE(data.contains(QPoint(5, 5)) == false);
 }
 
+TEST_CASE("QRect copy_assign", "[qrect]")
+{
+   QRect data_a(10, 30, -5, -9);
+   QRect data_b(data_a);
+
+   REQUIRE(data_a == data_b);
+   REQUIRE(data_b == QRect{10, 30, -5, -9});
+
+   //
+   QRect data_c;
+   data_c = data_a;
+
+   REQUIRE(data_a == data_c);
+   REQUIRE(data_c == QRect{10, 30, -5, -9});
+}
+
 TEST_CASE("QRect empty", "[qrect]")
 {
    QRect data;
@@ -229,6 +245,20 @@ TEST_CASE("QRect margins", "[qrect]")
 
    REQUIRE(rect_b.right()  == 10 + 20 - 1 + 4 + 15);
    REQUIRE(rect_b.bottom() == 50 + 70 - 1 + 5 + 9);
+}
+
+TEST_CASE("QRect move_assign", "[qrect]")
+{
+   QRect data_a(10, 30, -5, -9);
+   QRect data_b(std::move(data_a));
+
+   REQUIRE(data_b == QRect{10, 30, -5, -9});
+
+   //
+   QRect data_c;
+   data_c = std::move(data_b);
+
+   REQUIRE(data_c == QRect{10, 30, -5, -9});
 }
 
 TEST_CASE("QRect normalize", "[qrect]")
