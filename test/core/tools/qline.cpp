@@ -74,14 +74,15 @@ TEST_CASE("QLine copy_assign", "[qline]")
    QLine data_a(10, 20, 30, 40);
    QLine data_b(data_a);
 
-   REQUIRE(data_b == data_a);
+   REQUIRE(data_a == data_b);
+   REQUIRE(data_b == QLine{10, 20, 30, 40});
 
    //
    QLine data_c;
-
    data_c = data_a;
 
-   REQUIRE(data_c == data_a);
+   REQUIRE(data_a == data_c);
+   REQUIRE(data_c == QLine{10, 20, 30, 40});
 }
 
 TEST_CASE("QLine dx_dy", "[qline]")
@@ -154,6 +155,20 @@ TEST_CASE("QLine operators", "[qline]")
 
    REQUIRE(data_a != data_c);
    REQUIRE(data_c != data_a);
+}
+
+TEST_CASE("QLine move_assign", "[qline]")
+{
+   QLine data_a(10, 20, 30, 40);
+   QLine data_b(std::move(data_a));
+
+   REQUIRE(data_b == QLine{10, 20, 30, 40});
+
+   //
+   QLine data_c;
+   data_c = std::move(data_b);
+
+   REQUIRE(data_c == QLine{10, 20, 30, 40});
 }
 
 TEST_CASE("QLine set_p1_p2", "[qline]")

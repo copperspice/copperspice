@@ -109,14 +109,15 @@ TEST_CASE("QLineF copy_assign", "[qlinef]")
    QLineF data_a(10, 20, 30, 40);
    QLineF data_b(data_a);
 
-   REQUIRE(data_b == data_a);
+   REQUIRE(data_a == data_b);
+   REQUIRE(data_b == QLineF{10, 20, 30, 40});
 
    //
    QLineF data_c;
-
    data_c = data_a;
 
-   REQUIRE(data_c == data_a);
+   REQUIRE(data_a == data_c);
+   REQUIRE(data_c == QLineF{10, 20, 30, 40});
 }
 
 TEST_CASE("QLineF dx_dy", "[qlinef]")
@@ -231,6 +232,20 @@ TEST_CASE("QLineF length", "[qlinef]")
 
    REQUIRE(data.p2().x() == 6.0);
    REQUIRE(data.p2().y() == 8.0);
+}
+
+TEST_CASE("QLineF move_assign", "[qlinef]")
+{
+   QLineF data_a(10, 20, 30, 40);
+   QLineF data_b(std::move(data_a));
+
+   REQUIRE(data_b == QLineF{10, 20, 30, 40});
+
+   //
+   QLineF data_c;
+   data_c = std::move(data_b);
+
+   REQUIRE(data_c == QLineF{10, 20, 30, 40});
 }
 
 TEST_CASE("QLineF normalVector", "[qlinef]")
