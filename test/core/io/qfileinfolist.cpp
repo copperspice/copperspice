@@ -74,6 +74,7 @@ TEST_CASE("QFileInfoList comparison", "[qfileinfolist]")
 
    REQUIRE(listA == listB);
 
+   //
    listB.append(QFileInfo("file3.txt"));
 
    REQUIRE(listA != listB);

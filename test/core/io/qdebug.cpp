@@ -158,5 +158,3 @@ TEST_CASE("QDebug operators", "[qdebug]")
       REQUIRE(data.trimmed() == "End of test");
    }
 }
-
-

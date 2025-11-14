@@ -40,10 +40,10 @@ TEST_CASE("QCommondLineOption constructor", "[qcommandlineoption]")
 
    QCommandLineOption data(name, "", value);
 
-   REQUIRE(data.names().size() == 1);
+   REQUIRE(data.names().size()  == 1);
    REQUIRE(data.names().first() == name);
-   REQUIRE(data.description() == "");
-   REQUIRE(data.valueName() == value);
+   REQUIRE(data.description()   == "");
+   REQUIRE(data.valueName()     == value);
 
    REQUIRE(data.defaultValues().size() == 0);
 }

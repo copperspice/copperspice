@@ -128,14 +128,14 @@ TEST_CASE("QLinkedList insert", "[qlinkedlist]")
    list.insert(iter, "mango");
 
    REQUIRE(list.contains("mango") == true);
-   REQUIRE(list.first() == "watermelon");
+   REQUIRE(list.first()  == "watermelon");
    REQUIRE(list.length() == 5);
 
    // part 2
    list.erase(list.begin());
 
    REQUIRE(list.contains("mango") == true);
-   REQUIRE(list.first() == "mango");
+   REQUIRE(list.first()  == "mango");
    REQUIRE(list.length() == 4);
 }
 

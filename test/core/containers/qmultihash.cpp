@@ -18,7 +18,6 @@
 ***********************************************************************/
 
 #include <qmultihash.h>
-#include <qhash.h>
 
 #include <cs_catch2.h>
 
@@ -103,7 +102,7 @@ TEST_CASE("QMultiHash count", "[qmultihash]")
                                      { 4, "grapefruit"} };
 
    REQUIRE(hash.count() == 5);
-   REQUIRE(hash.size() == 5);
+   REQUIRE(hash.size()  == 5);
 }
 
 TEST_CASE("QMultiHash empty", "[qmultihash]")

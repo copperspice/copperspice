@@ -99,7 +99,7 @@ TEST_CASE("QFlatMap count", "[qflatmap]")
                                   { 4, "grapefruit"} };
 
    REQUIRE(map.count() == 4);
-   REQUIRE(map.size() == 4);
+   REQUIRE(map.size()  == 4);
 }
 
 TEST_CASE("QFlatMap empty", "[qflatmap]")
@@ -239,7 +239,7 @@ TEST_CASE("QFlatMap insert_hint", "[qflatmap]")
 
    //
    iter = map.upperBound(4);
-   map.insert( iter, 4, "peach" );
+   map.insert(iter, 4, "peach");
 
    REQUIRE(map[4] == "peach");
 }
