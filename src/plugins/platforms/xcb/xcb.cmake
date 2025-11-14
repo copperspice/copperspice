@@ -15,6 +15,8 @@ if(BUILD_PLATFORMS_XCB_PLUGIN)
       ${CMAKE_CURRENT_SOURCE_DIR}/xcb/qxcb_main.cpp
    )
 
+   include_directories(${XKBCOMMON_INCLUDE_DIR})
+
    target_link_libraries(CsGuiXcb
       PRIVATE
       CsCore
