@@ -78,7 +78,7 @@ TEST_CASE("QStack empty", "[qstack]")
 {
    QStack<QString> stack;
 
-   REQUIRE(stack.isEmpty());
+   REQUIRE(stack.isEmpty() == true);
    REQUIRE(stack.size() == 0);
 }
 
@@ -115,8 +115,8 @@ TEST_CASE("QStack contains", "[qstack]")
    stack.push("pear");
    stack.push("grapefruit");
 
-   REQUIRE(stack.contains("pear"));
-   REQUIRE(! stack.contains("orange"));
+   REQUIRE(stack.contains("pear") == true);
+   REQUIRE(stack.contains("orange") == false);
 }
 
 TEST_CASE("QStack erase", "[qstack]")
@@ -129,11 +129,11 @@ TEST_CASE("QStack erase", "[qstack]")
 
    stack.erase(stack.begin() + 1);
 
-   REQUIRE(! stack.contains("apple"));
+   REQUIRE(stack.contains("apple") == false);
 
-   REQUIRE(stack.contains("watermelon"));
-   REQUIRE(stack.contains("pear"));
-   REQUIRE(stack.contains("grapefruit"));
+   REQUIRE(stack.contains("watermelon") == true);
+   REQUIRE(stack.contains("pear") == true );
+   REQUIRE(stack.contains("grapefruit") == true );
 
    REQUIRE(stack.length() == 3);
 }
@@ -149,11 +149,11 @@ TEST_CASE("QStack remove", "[qstack]")
    stack.removeOne("apple");
    stack.remove(0);
 
-   REQUIRE(! stack.contains("apple"));
-   REQUIRE(! stack.contains("watermelon"));
+   REQUIRE(stack.contains("apple") == false);
+   REQUIRE(stack.contains("watermelon") == false);
 
-   REQUIRE(stack.contains("pear"));
-   REQUIRE(stack.contains("grapefruit"));
+   REQUIRE(stack.contains("pear") == true);
+   REQUIRE(stack.contains("grapefruit") == true);
 
    REQUIRE(stack.length() == 2);
 }
@@ -177,7 +177,7 @@ TEST_CASE("QStack insert", "[qstack]")
 #pragma GCC diagnostic pop
 #endif
 
-   REQUIRE(stack.contains("mango"));
+   REQUIRE(stack.contains("mango") == true);
    REQUIRE(stack[1] == "mango");
    REQUIRE(stack.length() == 5);
 }
@@ -228,10 +228,10 @@ TEST_CASE("QStack toList", "[qstack]")
 
         REQUIRE(list.size() == 4);
 
-        REQUIRE(list.contains("watermelon"));
-        REQUIRE(list.contains("apple"));
-        REQUIRE(list.contains("pear"));
-        REQUIRE(list.contains("grapefruit"));
+        REQUIRE(list.contains("watermelon") == true);
+        REQUIRE(list.contains("apple") == true);
+        REQUIRE(list.contains("pear") == true);
+        REQUIRE(list.contains("grapefruit") == true);
     }
 
     SECTION("Modify QList") {

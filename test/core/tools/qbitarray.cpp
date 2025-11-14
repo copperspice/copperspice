@@ -35,14 +35,14 @@ TEST_CASE("QBitArray traits", "[qbitarray]")
 TEST_CASE("QBitArray at", "[qbitarray]")
 {
    QBitArray data1(3, true);
-   REQUIRE(data1.at(0));
-   REQUIRE(data1.at(1));
-   REQUIRE(data1.at(2));
+   REQUIRE(data1.at(0) == true);
+   REQUIRE(data1.at(1) == true);
+   REQUIRE(data1.at(2) == true);
 
    QBitArray data2(3, false);
-   REQUIRE(! data2.at(0));
-   REQUIRE(! data2.at(1));
-   REQUIRE(! data2.at(2));
+   REQUIRE(data2.at(0) == false);
+   REQUIRE(data2.at(1) == false);
+   REQUIRE(data2.at(2) == false);
 }
 
 TEST_CASE("QBitArray clear", "[qbitarray]")
@@ -52,16 +52,16 @@ TEST_CASE("QBitArray clear", "[qbitarray]")
    QBitArray data(size, true);
    data.clear();
 
-   REQUIRE(data.isEmpty());
-   REQUIRE(data.isNull());
+   REQUIRE(data.isEmpty() == true);
+   REQUIRE(data.isNull()  == true);
 }
 
 TEST_CASE("QBitArray empty", "[qbitarray]")
 {
    QBitArray data;
 
-   REQUIRE(data.isEmpty());
-   REQUIRE(data.isNull());
+   REQUIRE(data.isEmpty() == true);
+   REQUIRE(data.isNull()  == true);
 }
 
 TEST_CASE("QBitArray fill", "[qbitarray]")
@@ -71,8 +71,8 @@ TEST_CASE("QBitArray fill", "[qbitarray]")
    QBitArray data(size, true);
    data.fill(false, 31);
 
-   REQUIRE(! data.isEmpty());
-   REQUIRE(data.isNull() == false);
+   REQUIRE(data.isEmpty() == false);
+   REQUIRE(data.isNull()  == false);
 }
 
 TEST_CASE("QBitArray operator_a", "[qbitarray]")
@@ -85,8 +85,8 @@ TEST_CASE("QBitArray operator_a", "[qbitarray]")
    data2.setBit(1);
    data1 &= data2;
 
-   REQUIRE(data1.testBit(1));
-   REQUIRE(! data1.testBit(size - 1));
+   REQUIRE(data1.testBit(1) == true);
+   REQUIRE(data1.testBit(size - 1) == false);
 }
 
 TEST_CASE("QBitArray operator_b", "[qbitarray]")
@@ -110,14 +110,14 @@ TEST_CASE("QBitArray operator_c", "[qbitarray]")
 TEST_CASE("QBitArray operator_d", "[qbitarray]")
 {
    QBitArray data1(3, true);
-   REQUIRE(data1[0]);
-   REQUIRE(data1[1]);
-   REQUIRE(data1[2]);
+   REQUIRE(data1[0] == true);
+   REQUIRE(data1[1] == true);
+   REQUIRE(data1[2] == true);
 
    QBitArray data2(3, false);
-   REQUIRE(! data2[0]);
-   REQUIRE(! data2[1]);
-   REQUIRE(! data2[2]);
+   REQUIRE(data2[0] == false);
+   REQUIRE(data2[1] == false);
+   REQUIRE(data2[2] == false);
 }
 
 TEST_CASE("QBitArray resize", "[qbitarray]")
@@ -127,7 +127,7 @@ TEST_CASE("QBitArray resize", "[qbitarray]")
    QBitArray data(size, true);
    data.resize(0);
 
-   REQUIRE(data.isEmpty());
+   REQUIRE(data.isEmpty() == true);
    REQUIRE(data.isNull() == false);
 }
 
@@ -138,8 +138,8 @@ TEST_CASE("QBitArray size", "[qbitarray]")
    QBitArray data(size, true);
 
    REQUIRE(data.size() == size);
-   REQUIRE(! data.isEmpty());
-   REQUIRE(data.isNull() == false);
+   REQUIRE(data.isEmpty() == false);
+   REQUIRE(data.isNull()  == false);
 }
 
 TEST_CASE("QBitArray setbit_lowest", "[qbitarray]")
@@ -149,8 +149,8 @@ TEST_CASE("QBitArray setbit_lowest", "[qbitarray]")
    QBitArray data(size, false);
    data.setBit(0);
 
-   REQUIRE(data.testBit(0));
-   REQUIRE(! data.isEmpty());
+   REQUIRE(data.testBit(0) == true);
+   REQUIRE(data.isEmpty() == false);
    REQUIRE(data.isNull() == false);
 }
 
@@ -161,9 +161,9 @@ TEST_CASE("QBitArray setbit_highest", "[qbitarray]")
    QBitArray data(size, false);
    data.setBit(size - 1);
 
-   REQUIRE(data.testBit(size - 1));
-   REQUIRE(! data.isEmpty());
-   REQUIRE(data.isNull() == false);
+   REQUIRE(data.testBit(size - 1) == true);
+   REQUIRE(data.isEmpty() == false);
+   REQUIRE(data.isNull()  == false);
 }
 
 TEST_CASE("QBitArray swap", "[qbitarray]")

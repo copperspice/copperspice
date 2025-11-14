@@ -344,5 +344,5 @@ TEST_CASE("QMap swap", "[qmap]")
    REQUIRE(map_b.size() == 4);
 
    REQUIRE(map_a.value(2) == ("orange"));
-   REQUIRE(map_b.contains(4));
+   REQUIRE(map_b.contains(4) == true);
 }

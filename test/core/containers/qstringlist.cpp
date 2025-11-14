@@ -39,7 +39,7 @@ TEST_CASE("QStringList count", "[qstringlist]")
    REQUIRE(list.count() == 0);
    REQUIRE(list.size() == 0);
    REQUIRE(list.length() == 0);
-   REQUIRE(list.isEmpty());
+   REQUIRE(list.isEmpty() == true);
 }
 
 TEST_CASE("QStringList join", "[qstringlist]")

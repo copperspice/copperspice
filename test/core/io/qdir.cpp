@@ -142,7 +142,7 @@ TEST_CASE("QDir exists", "[qdir]")
 {
    QDir path;
 
-   REQUIRE(path.exists());
+   REQUIRE(path.exists() == true);
 }
 
 TEST_CASE("QDir setPath", "[qdir]")

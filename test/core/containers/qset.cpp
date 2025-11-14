@@ -171,8 +171,8 @@ TEST_CASE("QSet fromList", "[qset]")
    REQUIRE(list.size() == 6);
    REQUIRE(set.size()  == 4);
 
-   REQUIRE(set.contains(30));
-   REQUIRE(set.contains(40));
+   REQUIRE(set.contains(30) == true);
+   REQUIRE(set.contains(40) == true);
 }
 
 TEST_CASE("QSet iterators", "[qset]")

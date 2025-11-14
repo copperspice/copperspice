@@ -47,7 +47,7 @@ TEST_CASE("QSaveFile open", "[qsavefile]")
 TEST_CASE("QSaveFile errors", "[qsavefile]")
 {
    QTemporaryDir tmpDir;
-   REQUIRE(tmpDir.isValid());
+   REQUIRE(tmpDir.isValid() == true);
 
    QString fileName = tmpDir.path() + "/error.txt";
 
@@ -88,7 +88,7 @@ TEST_CASE("QSaveFile fileName", "[qsavefile]")
 TEST_CASE("QSaveFile write", "[qsavefile]")
 {
    QTemporaryDir tmpDir;
-   REQUIRE(tmpDir.isValid());
+   REQUIRE(tmpDir.isValid() == true);
 
    //
    QByteArray data_in("CopperSpice");
@@ -111,19 +111,19 @@ TEST_CASE("QSaveFile write", "[qsavefile]")
 TEST_CASE("QSaveFile write_multiple", "[qsavefile]")
 {
    QTemporaryDir tmpDir;
-   REQUIRE(tmpDir.isValid());
+   REQUIRE(tmpDir.isValid() == true);
 
    //
    QString fileName = tmpDir.path() + "/test.txt";
 
    QSaveFile file_A(fileName);
-   REQUIRE(file_A.open(QIODevice::WriteOnly));
+   REQUIRE(file_A.open(QIODevice::WriteOnly) == true);
 
    REQUIRE(file_A.write("pear\n") > 0);
    REQUIRE(file_A.write("apple\n") > 0);
    REQUIRE(file_A.write("watermelon\n") > 0);
 
-   REQUIRE(file_A.commit());
+   REQUIRE(file_A.commit() == true);
 
    QFile file_B(fileName);
    REQUIRE(file_B.open(QIODevice::ReadOnly) == true);

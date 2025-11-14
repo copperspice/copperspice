@@ -65,7 +65,7 @@ TEST_CASE("QCache remove", "[qcache]")
 {
    QCache<QString, int> cache(50);
 
-   REQUIRE(cache.isEmpty());
+   REQUIRE(cache.isEmpty() == true);
    REQUIRE(cache.count() == 0);
    REQUIRE(cache.totalCost() == 0);
    REQUIRE(cache.maxCost() == 50);

@@ -212,24 +212,24 @@ TEST_CASE("QString8 contains", "[qstring]")
 {
    QString str = "A wacky fox and sizeable pig jumped halfway over a blue moon";
 
-   REQUIRE(str.contains("jumped"));
-   REQUIRE(! str.contains("lunch"));
+   REQUIRE(str.contains("jumped") == true);
+   REQUIRE(str.contains("lunch") == false);
 
-   REQUIRE(str.contains('x'));
-   REQUIRE(! str.contains('q'));
+   REQUIRE(str.contains('x') == true);
+   REQUIRE(str.contains('q') == false);
 
-   REQUIRE(str.contains("jUmpeD", Qt::CaseInsensitive));
+   REQUIRE(str.contains("jUmpeD", Qt::CaseInsensitive) == true);
 }
 
 TEST_CASE("QString8 u8_contains", "[qstring]")
 {
    QString str = u8"A wacky fox and sizeable pig jumped halfway over a blue moon";
 
-   REQUIRE(str.contains(u8"jumped"));
-   REQUIRE(! str.contains(u8"lunch"));
+   REQUIRE(str.contains(u8"jumped") == true);
+   REQUIRE(str.contains(u8"lunch") == false);
 
-   REQUIRE(str.contains(u8'x'));
-   REQUIRE(! str.contains(u8'q'));
+   REQUIRE(str.contains(u8'x') == true);
+   REQUIRE(str.contains(u8'q') == false);
 }
 
 TEST_CASE("QString8 copy_assign", "[qstring]")
@@ -270,7 +270,7 @@ TEST_CASE("QString8 empty", "[qstring]")
 {
    QString str;
 
-   REQUIRE(str.isEmpty());
+   REQUIRE(str.isEmpty() == true);
    REQUIRE(str.constData()[0] == '\0');
 
    REQUIRE(str.constBegin() == str.constEnd());
@@ -284,25 +284,25 @@ TEST_CASE("QString8 ends_with", "[qstring]")
    QString str2 = "APPLE";
 
    {
-      REQUIRE(str1.endsWith('e', Qt::CaseInsensitive));
-      REQUIRE(str1.endsWith('e', Qt::CaseSensitive));
-      REQUIRE(! str1.endsWith('E', Qt::CaseSensitive));
+      REQUIRE(str1.endsWith('e', Qt::CaseInsensitive) == true);
+      REQUIRE(str1.endsWith('e', Qt::CaseSensitive) == true);
+      REQUIRE(str1.endsWith('E', Qt::CaseSensitive) == false);
 
-      REQUIRE(! str1.endsWith('t', Qt::CaseInsensitive));
+      REQUIRE(str1.endsWith('t', Qt::CaseInsensitive) == false);
 
-      REQUIRE(str2.endsWith('e', Qt::CaseInsensitive));
-      REQUIRE(! str2.endsWith('e', Qt::CaseSensitive));
-      REQUIRE(str2.endsWith('E', Qt::CaseSensitive));
+      REQUIRE(str2.endsWith('e', Qt::CaseInsensitive) == true);
+      REQUIRE(str2.endsWith('e', Qt::CaseSensitive) == false);
+      REQUIRE(str2.endsWith('E', Qt::CaseSensitive) == true);
    }
 
    {
-      REQUIRE(str1.endsWith("le", Qt::CaseInsensitive));
-      REQUIRE(str1.endsWith("le", Qt::CaseSensitive));
-      REQUIRE(! str1.endsWith("LE", Qt::CaseSensitive));
+      REQUIRE(str1.endsWith("le", Qt::CaseInsensitive) == true);
+      REQUIRE(str1.endsWith("le", Qt::CaseSensitive) == true);
+      REQUIRE(str1.endsWith("LE", Qt::CaseSensitive) == false);
 
-      REQUIRE(str2.endsWith("le", Qt::CaseInsensitive));
-      REQUIRE(! str2.endsWith("le", Qt::CaseSensitive));
-      REQUIRE(str2.endsWith("LE", Qt::CaseSensitive));
+      REQUIRE(str2.endsWith("le", Qt::CaseInsensitive) == true);
+      REQUIRE(str2.endsWith("le", Qt::CaseSensitive) == false);
+      REQUIRE(str2.endsWith("LE", Qt::CaseSensitive) == true);
    }
 }
 
@@ -760,25 +760,25 @@ TEST_CASE("QString8 starts_with", "[qstring]")
    QString str2 = "APPLE";
 
    {
-      REQUIRE(str1.startsWith('a', Qt::CaseInsensitive));
-      REQUIRE(str1.startsWith('a', Qt::CaseSensitive));
-      REQUIRE(! str1.startsWith('A', Qt::CaseSensitive));
+      REQUIRE(str1.startsWith('a', Qt::CaseInsensitive) == true);
+      REQUIRE(str1.startsWith('a', Qt::CaseSensitive) == true);
+      REQUIRE(str1.startsWith('A', Qt::CaseSensitive) == false);
 
-      REQUIRE(! str1.startsWith('t', Qt::CaseInsensitive));
+      REQUIRE(str1.startsWith('t', Qt::CaseInsensitive) == false);
 
-      REQUIRE(str2.startsWith('a', Qt::CaseInsensitive));
-      REQUIRE(! str2.startsWith('a', Qt::CaseSensitive));
-      REQUIRE(str2.startsWith('A', Qt::CaseSensitive));
+      REQUIRE(str2.startsWith('a', Qt::CaseInsensitive) == true);
+      REQUIRE(str2.startsWith('a', Qt::CaseSensitive) == false);
+      REQUIRE(str2.startsWith('A', Qt::CaseSensitive) == true);
    }
 
    {
-      REQUIRE(str1.startsWith("ap", Qt::CaseInsensitive));
-      REQUIRE(str1.startsWith("ap", Qt::CaseSensitive));
-      REQUIRE(! str1.startsWith("AP", Qt::CaseSensitive));
+      REQUIRE(str1.startsWith("ap", Qt::CaseInsensitive) == true);
+      REQUIRE(str1.startsWith("ap", Qt::CaseSensitive) == true);
+      REQUIRE(str1.startsWith("AP", Qt::CaseSensitive) == false);
 
-      REQUIRE(str2.startsWith("ap", Qt::CaseInsensitive));
-      REQUIRE(! str2.startsWith("ap", Qt::CaseSensitive));
-      REQUIRE(str2.startsWith("AP", Qt::CaseSensitive));
+      REQUIRE(str2.startsWith("ap", Qt::CaseInsensitive) == true);
+      REQUIRE(str2.startsWith("ap", Qt::CaseSensitive) == false);
+      REQUIRE(str2.startsWith("AP", Qt::CaseSensitive) == true);
    }
 }
 

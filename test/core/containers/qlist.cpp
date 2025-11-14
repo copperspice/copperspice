@@ -41,7 +41,7 @@ TEST_CASE("QList append", "[qlist]")
    REQUIRE(list.at(2) == "pear");
    REQUIRE(list[2]    == "pear");
 
-   REQUIRE(list.contains("quince"));
+   REQUIRE(list.contains("quince") == true);
    REQUIRE(list[4]    == "quince");
 
    REQUIRE(list.length() == 5);
@@ -101,7 +101,7 @@ TEST_CASE("QList clear", "[qlist]")
 
    list.clear();
 
-   REQUIRE(list.isEmpty());
+   REQUIRE(list.isEmpty() == true);
    REQUIRE(list.size() == 0);
 }
 
@@ -165,9 +165,9 @@ TEST_CASE("QList erase", "[qlist]")
 
       REQUIRE(list.contains("apple") == false);
 
-      REQUIRE(list.contains("watermelon"));
-      REQUIRE(list.contains("pear"));
-      REQUIRE(list.contains("grapefruit"));
+      REQUIRE(list.contains("watermelon") == true);
+      REQUIRE(list.contains("pear") == true);
+      REQUIRE(list.contains("grapefruit") == true);
 
       REQUIRE(list.length() == 3);
    }
@@ -175,8 +175,8 @@ TEST_CASE("QList erase", "[qlist]")
    {
       list.erase(list.end() - 1);
 
-      REQUIRE(list.contains("watermelon"));
-      REQUIRE(list.contains("pear"));
+      REQUIRE(list.contains("watermelon") == true);
+      REQUIRE(list.contains("pear") == true);
 
       REQUIRE(list.length() == 2);
    }
@@ -186,9 +186,9 @@ TEST_CASE("QList erase", "[qlist]")
 
       list.erase(list.begin() + 2, list.begin() + 5);
 
-      REQUIRE(list.contains("watermelon"));
-      REQUIRE(list.contains("apple"));
-      REQUIRE(list.contains("berry"));
+      REQUIRE(list.contains("watermelon") == true);
+      REQUIRE(list.contains("apple") == true);
+      REQUIRE(list.contains("berry") == true);
 
       REQUIRE(list.length() == 3);
    }
@@ -215,7 +215,7 @@ TEST_CASE("QList insert", "[qlist]")
 
    list.insert(1, "mango");
 
-   REQUIRE(list.contains("mango"));
+   REQUIRE(list.contains("mango") == true);
    REQUIRE(list[1] == "mango");
    REQUIRE(list.length() == 5);
 }
@@ -351,7 +351,7 @@ TEST_CASE("QList prepend", "[qlist]")
 
    list.prepend("quince");
 
-   REQUIRE(list.contains("quince"));
+   REQUIRE(list.contains("quince") == true);
    REQUIRE(list[0] == "quince");
    REQUIRE(list.length() == 5);
 }
@@ -367,8 +367,8 @@ TEST_CASE("QList remove", "[qlist]")
       REQUIRE(list.contains("apple") == false);
       REQUIRE(list.contains("watermelon") == false);
 
-      REQUIRE(list.contains("pear"));
-      REQUIRE(list.contains("grapefruit"));
+      REQUIRE(list.contains("pear") == true);
+      REQUIRE(list.contains("grapefruit") == true);
 
       REQUIRE(list.length() == 2);
    }
@@ -376,7 +376,7 @@ TEST_CASE("QList remove", "[qlist]")
    {
       list.removeAt(1);
 
-      REQUIRE(list.contains("pear"));
+      REQUIRE(list.contains("pear") == true);
       REQUIRE(list.contains("grapefruit") == false);
 
       REQUIRE(list.length() == 1);
@@ -391,7 +391,7 @@ TEST_CASE("QList remove", "[qlist]")
       list.removeFirst();
       list.removeLast();
 
-      REQUIRE(list.contains("apple"));
+      REQUIRE(list.contains("apple") == true);
       REQUIRE(list.length() == 1);
    }
 }

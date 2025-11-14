@@ -54,8 +54,8 @@ TEST_CASE("QMultiHash contains", "[qmultihash]")
                                      { 3, "quince"},
                                      { 4, "grapefruit"} };
 
-   REQUIRE(hash.contains(2));
-   REQUIRE(! hash.contains(9));
+   REQUIRE(hash.contains(2) == true);
+   REQUIRE(hash.contains(9) == false);
 }
 
 TEST_CASE("QMultiHash copy_assign", "[qmultihash]")
@@ -110,7 +110,7 @@ TEST_CASE("QMultiHash empty", "[qmultihash]")
 {
    QMultiHash<int, QString> hash;
 
-   REQUIRE(hash.isEmpty());
+   REQUIRE(hash.isEmpty() == true);
 }
 
 TEST_CASE("QMultiHash erase", "[qmultihash]")
@@ -289,6 +289,6 @@ TEST_CASE("QMultiHash swap", "[qmultihash]")
    hash1.swap(hash2);
 
    REQUIRE(hash1.value(2) == ("orange"));
-   REQUIRE(hash2.contains(4));
+   REQUIRE(hash2.contains(4) == true);
 }
 

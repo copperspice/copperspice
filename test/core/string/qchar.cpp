@@ -101,39 +101,39 @@ TEST_CASE("QChar is_methods", "[qchar]")
 {
    QChar ch = 'B';
 
-   REQUIRE(! ch.isDigit());
-   REQUIRE(! ch.isLower());
-   REQUIRE(! ch.isNumber());
+   REQUIRE(ch.isDigit() == false);
+   REQUIRE(ch.isLower() == false);
+   REQUIRE(ch.isNumber() == false);
 
-   REQUIRE(ch.isHex());
-   REQUIRE(ch.isLetter());
-   REQUIRE(ch.isLetterOrNumber());
-   REQUIRE(ch.isPrint());
-   REQUIRE(ch.isUpper());
+   REQUIRE(ch.isHex() == true );
+   REQUIRE(ch.isLetter() == true);
+   REQUIRE(ch.isLetterOrNumber() == true);
+   REQUIRE(ch.isPrint() == true);
+   REQUIRE(ch.isUpper() == true);
 
    ch = '7';
 
-   REQUIRE(ch.isDigit());
-   REQUIRE(! ch.isLower());
-   REQUIRE(ch.isNumber());
+   REQUIRE(ch.isDigit() == true);
+   REQUIRE(ch.isLower() == false);
+   REQUIRE(ch.isNumber() == true);
 
-   REQUIRE(ch.isHex());
-   REQUIRE(! ch.isLetter());
-   REQUIRE(ch.isLetterOrNumber());
-   REQUIRE(ch.isPrint());
-   REQUIRE(! ch.isUpper());
+   REQUIRE(ch.isHex() == true);
+   REQUIRE(ch.isLetter() == false);
+   REQUIRE(ch.isLetterOrNumber() == true);
+   REQUIRE(ch.isPrint() == true);
+   REQUIRE(ch.isUpper() == false);
 
    ch = '!';
 
-   REQUIRE(! ch.isDigit());
-   REQUIRE(! ch.isLower());
-   REQUIRE(! ch.isNumber());
+   REQUIRE(ch.isDigit() == false);
+   REQUIRE(ch.isLower() == false);
+   REQUIRE(ch.isNumber() == false);
 
-   REQUIRE(! ch.isHex());
-   REQUIRE(! ch.isLetter());
-   REQUIRE(! ch.isLetterOrNumber());
-   REQUIRE(ch.isPrint());
-   REQUIRE(! ch.isUpper());
+   REQUIRE(ch.isHex() == false);
+   REQUIRE(ch.isLetter() == false);
+   REQUIRE(ch.isLetterOrNumber() == false);
+   REQUIRE(ch.isPrint() == true);
+   REQUIRE(ch.isUpper() == false);
 }
 
 TEST_CASE("QChar move_assign", "[qchar]")

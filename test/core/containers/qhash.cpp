@@ -262,7 +262,7 @@ TEST_CASE("QHash lookup", "[qhash]")
    QList<QString> keys = hash.keys();
 
    REQUIRE(keys.size() == 4);
-   REQUIRE(keys.contains("apple"));
+   REQUIRE(keys.contains("apple") == true);
 
    //
    QList<int> values = hash.values();
@@ -273,7 +273,7 @@ TEST_CASE("QHash lookup", "[qhash]")
    //
    hash.insert("", 50);
 
-   REQUIRE(hash.contains(""));
+   REQUIRE(hash.contains("") == true);
    REQUIRE(hash.value("") == 50);
 }
 
@@ -381,5 +381,5 @@ TEST_CASE("QHash swap", "[qhash]")
    hash1.swap(hash2);
 
    REQUIRE(hash1.value(2) == ("orange"));
-   REQUIRE(hash2.contains(4));
+   REQUIRE(hash2.contains(4) == true);
 }

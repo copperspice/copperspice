@@ -84,7 +84,7 @@ TEST_CASE("QFileInfoList constructor", "[qfileinfolist]")
    QFileInfoList list;
 
    REQUIRE(list.count() == 0);
-   REQUIRE(list.isEmpty());
+   REQUIRE(list.isEmpty() == true);
 }
 
 TEST_CASE("QFileInfoList copy_assign", "[qfileinfolist]")

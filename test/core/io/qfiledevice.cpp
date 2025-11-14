@@ -80,7 +80,7 @@ TEST_CASE("QFileDevice read_write", "[qfiledevice]")
    REQUIRE(tmpFile.seek(0) == true);
    REQUIRE(tmpFile.readAll() == data);
 
-   REQUIRE(tmpFile.seek(6));
+   REQUIRE(tmpFile.seek(6) == true);
    REQUIRE(tmpFile.pos() == 6);
    REQUIRE(tmpFile.read(2) == "hi");
 }

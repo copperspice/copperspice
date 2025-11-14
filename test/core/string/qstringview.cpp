@@ -112,7 +112,7 @@ TEST_CASE("QStringView8 constructor", "[qstringview8]")
       QString str = "A wacky fox and sizeable pig";
       QStringView8 view = str;
 
-      REQUIRE(! view.isEmpty());
+      REQUIRE(view.isEmpty() == false);
       REQUIRE(view.size() == str.size());
    }
 
@@ -120,7 +120,7 @@ TEST_CASE("QStringView8 constructor", "[qstringview8]")
       QString str = u8"Apple";
       QStringView view = str;
 
-      REQUIRE(! view.isEmpty());
+      REQUIRE(view.isEmpty() == false);
    }
 }
 
@@ -129,13 +129,13 @@ TEST_CASE("QStringView8 contains", "[qstringview8]")
    QString8 str      = "A wacky fox and sizeable pig jumped halfway over a blue moon";
    QStringView8 view = str;
 
-   REQUIRE(view.contains("jumped"));
-   REQUIRE(! view.contains("lunch"));
+   REQUIRE(view.contains("jumped") == true);
+   REQUIRE(view.contains("lunch")  == false);
 
-   REQUIRE(view.contains('x'));
-   REQUIRE(! view.contains('q'));
+   REQUIRE(view.contains('x') == true);
+   REQUIRE(view.contains('q') == false);
 
-   REQUIRE(view.contains("jUmpeD", Qt::CaseInsensitive));
+   REQUIRE(view.contains("jUmpeD", Qt::CaseInsensitive) == true);
 }
 
 TEST_CASE("QStringView8 conversion", "[qstringview8]")
@@ -169,7 +169,7 @@ TEST_CASE("QStringView8 empty", "[qstringview8]")
 {
    QStringView8 view;
 
-   REQUIRE(view.isEmpty());
+   REQUIRE(view.isEmpty() == true);
    REQUIRE(view.size() == 0);
 
    REQUIRE(view.constBegin() == view.constEnd());
@@ -186,25 +186,25 @@ TEST_CASE("QStringView8 ends_with", "[qstringview8]")
    QStringView8 view2 = str2;
 
    {
-      REQUIRE(view1.endsWith('e', Qt::CaseInsensitive));
-      REQUIRE(view1.endsWith('e', Qt::CaseSensitive));
-      REQUIRE(! view1.endsWith('E', Qt::CaseSensitive));
+      REQUIRE(view1.endsWith('e', Qt::CaseInsensitive) == true);
+      REQUIRE(view1.endsWith('e', Qt::CaseSensitive) == true);
+      REQUIRE(view1.endsWith('E', Qt::CaseSensitive) == false);
 
-      REQUIRE(! view1.endsWith('t', Qt::CaseInsensitive));
+      REQUIRE(view1.endsWith('t', Qt::CaseInsensitive) == false);
 
-      REQUIRE(view2.endsWith('e', Qt::CaseInsensitive));
-      REQUIRE(! view2.endsWith('e', Qt::CaseSensitive));
-      REQUIRE(view2.endsWith('E', Qt::CaseSensitive));
+      REQUIRE(view2.endsWith('e', Qt::CaseInsensitive) == true);
+      REQUIRE(view2.endsWith('e', Qt::CaseSensitive) == false);
+      REQUIRE(view2.endsWith('E', Qt::CaseSensitive) == true);
    }
 
    {
-      REQUIRE(view1.endsWith("le", Qt::CaseInsensitive));
-      REQUIRE(view1.endsWith("le", Qt::CaseSensitive));
-      REQUIRE(! view1.endsWith("LE", Qt::CaseSensitive));
+      REQUIRE(view1.endsWith("le", Qt::CaseInsensitive) == true);
+      REQUIRE(view1.endsWith("le", Qt::CaseSensitive) == true);
+      REQUIRE(view1.endsWith("LE", Qt::CaseSensitive) == false);
 
-      REQUIRE(view2.endsWith("le", Qt::CaseInsensitive));
-      REQUIRE(! view2.endsWith("le", Qt::CaseSensitive));
-      REQUIRE(view2.endsWith("LE", Qt::CaseSensitive));
+      REQUIRE(view2.endsWith("le", Qt::CaseInsensitive) == true);
+      REQUIRE(view2.endsWith("le", Qt::CaseSensitive) == false);
+      REQUIRE(view2.endsWith("LE", Qt::CaseSensitive) == true);
    }
 }
 

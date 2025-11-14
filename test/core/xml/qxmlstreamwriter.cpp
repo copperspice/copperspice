@@ -55,9 +55,9 @@ TEST_CASE("QXmlStreamWriter parse_valid_xml", "[qxmlstreamwriter]")
 
     QString writtenXml = QString::fromUtf8(output);
 
-    REQUIRE(writtenXml.contains("<greeting>"));
-    REQUIRE(writtenXml.contains("<text>Hello, CopperSpice!</text>"));
-    REQUIRE(writtenXml.contains("</greeting>"));
+    REQUIRE(writtenXml.contains("<greeting>") == true);
+    REQUIRE(writtenXml.contains("<text>Hello, CopperSpice!</text>") == true);
+    REQUIRE(writtenXml.contains("</greeting>") == true);
 }
 
 TEST_CASE("QXmlStreamWriter read_write", "[qxmlstreamwriter]")
@@ -82,10 +82,10 @@ TEST_CASE("QXmlStreamWriter read_write", "[qxmlstreamwriter]")
 
     REQUIRE(reader.hasError() == false);
 
-    REQUIRE(reader.readNextStartElement());
+    REQUIRE(reader.readNextStartElement() == true);
     REQUIRE(reader.name() == "data");
 
-    REQUIRE(reader.readNextStartElement());
+    REQUIRE(reader.readNextStartElement() == true);
     REQUIRE(reader.name() == "entry");
 
     REQUIRE(reader.readElementText() == "value");

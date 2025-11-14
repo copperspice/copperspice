@@ -70,7 +70,7 @@ TEST_CASE("QByteArray chop", "[qbytearray]")
    {
       str.chop(100);
 
-      REQUIRE(str.isEmpty());
+      REQUIRE(str.isEmpty() == true);
    }
 }
 

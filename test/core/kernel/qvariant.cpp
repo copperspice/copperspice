@@ -1683,7 +1683,7 @@ TEST_CASE("QVariant constructor_bool", "[qvariant]")
 {
    QVariant data = true;
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::Bool);
    REQUIRE(data.typeName() == "bool");
 
@@ -1799,7 +1799,7 @@ TEST_CASE("QVariant constructor_int", "[qvariant]")
 {
    QVariant data = 17;
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::Int);
    REQUIRE(data.typeName() == "int");
 
@@ -1860,7 +1860,7 @@ TEST_CASE("QVariant constructor_double", "[qvariant]")
 {
    QVariant data = 3.14159;
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::Double);
    REQUIRE(data.typeName() == "double");
 
@@ -1936,7 +1936,7 @@ TEST_CASE("QVariant constructor_bytearray", "[qvariant]")
 
    QVariant data = value;
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::ByteArray);
    REQUIRE(data.typeName() == "QByteArray");
 
@@ -2052,7 +2052,7 @@ TEST_CASE("QVariant constructor_char", "[qvariant]")
 {
    QVariant data = QChar('B');
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::QChar);
    REQUIRE(data.typeName() == "QChar");
 
@@ -2113,7 +2113,7 @@ TEST_CASE("QVariant constructor_string8", "[qvariant]")
 {
    QVariant data = QString("apple");
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::String);
    REQUIRE(data.typeName() == "QString");
 
@@ -2284,7 +2284,7 @@ TEST_CASE("QVariant constructor_string16", "[qvariant]")
 {
    QVariant data = QString16("apple");
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::String16);
    REQUIRE(data.typeName() == "QString16");
 
@@ -2403,7 +2403,7 @@ TEST_CASE("QVariant constructor_stringlist", "[qvariant]")
 
    QVariant data = list;
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::StringList);
    REQUIRE(data.typeName() == "QStringList");
 
@@ -2464,7 +2464,7 @@ TEST_CASE("QVariant constructor_date", "[qvariant]")
 {
    QVariant data = QDate(2021, 4, 1);
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::Date);
    REQUIRE(data.typeName() == "QDate");
 
@@ -2525,7 +2525,7 @@ TEST_CASE("QVariant constructor_time", "[qvariant]")
 {
    QVariant data = QTime(14, 52, 3);
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::Time);
    REQUIRE(data.typeName() == "QTime");
 
@@ -2586,7 +2586,7 @@ TEST_CASE("QVariant constructor_datetime", "[qvariant]")
 {
    QVariant data = QDateTime(QDate(2021, 4, 1), QTime(14, 52, 3));
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::DateTime);
    REQUIRE(data.typeName() == "QDateTime");
 
@@ -2647,7 +2647,7 @@ TEST_CASE("QVariant constructor_locale", "[qvariant]")
 {
    QVariant data = QLocale(QLocale::Dutch, QLocale::Netherlands);
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::Locale);
    REQUIRE(data.typeName() == "QLocale");
 
@@ -2711,7 +2711,7 @@ TEST_CASE("QVariant constructor_list", "[qvariant]")
    QVariant data      = list1;
    QVariantList list2 = data.value<QVariantList>();
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::List);
    REQUIRE(data.typeName() == "QVariantList");
 
@@ -2778,7 +2778,7 @@ TEST_CASE("QVariant constructor_hash", "[qvariant]")
 
    QVariant data = hash1;
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::Hash);
    REQUIRE(data.typeName() == "QVariantHash");
 
@@ -2849,7 +2849,7 @@ TEST_CASE("QVariant constructor_multihash", "[qvariant]")
 
    QVariant data = hash1;
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::MultiHash);
    REQUIRE(data.typeName() == "QVariantMultiHash");
 
@@ -2922,7 +2922,7 @@ TEST_CASE("QVariant constructor_map", "[qvariant]")
    QVariant data    = map1;
    QVariantMap map2 = data.value<QVariantMap>();
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::Map);
    REQUIRE(data.typeName() == "QVariantMap");
 
@@ -2995,7 +2995,7 @@ TEST_CASE("QVariant constructor_multimap", "[qvariant]")
 
    QVariant data = map;
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::MultiMap);
    REQUIRE(data.typeName() == "QVariantMultiMap");
 
@@ -3060,7 +3060,7 @@ TEST_CASE("QVariant constructor_json_value", "[qvariant]")
       QJsonValue value = QJsonValue(9.37);
       QVariant data = value;
 
-      REQUIRE(data.isValid());
+      REQUIRE(data.isValid() == true);
       REQUIRE(data.type() == QVariant::JsonValue);
       REQUIRE(data.typeName() == "QJsonValue");
 
@@ -3121,7 +3121,7 @@ TEST_CASE("QVariant constructor_json_value", "[qvariant]")
       QJsonValue value = QJsonValue(QString("CopperSpice"));
       QVariant data = value;
 
-      REQUIRE(data.isValid());
+      REQUIRE(data.isValid() == true);
       REQUIRE(data.type() == QVariant::JsonValue);
 
       REQUIRE(data.toBool()              == true);
@@ -3212,7 +3212,7 @@ TEST_CASE("QVariant constructor_line", "[qvariant]")
 {
    QVariant data = QLine(6, 12, 0, 3);
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::Line);
    REQUIRE(data.typeName() == "QLine");
 
@@ -3276,7 +3276,7 @@ TEST_CASE("QVariant constructor_linef", "[qvariant]")
 {
    QVariant data = QLineF(6.4, 12.8, 0, 3.2);
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::LineF);
    REQUIRE(data.typeName() == "QLineF");
 
@@ -3340,7 +3340,7 @@ TEST_CASE("QVariant constructor_point", "[qvariant]")
 {
    QVariant data = QPoint(17, 42);
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::Point);
    REQUIRE(data.typeName() == "QPoint");
 
@@ -3404,7 +3404,7 @@ TEST_CASE("QVariant constructor_pointf", "[qvariant]")
 {
    QVariant data = QPointF(17.9, 42.0);
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::PointF);
    REQUIRE(data.typeName() == "QPointF");
 
@@ -3468,7 +3468,7 @@ TEST_CASE("QVariant constructor_rect", "[qvariant]")
 {
    QVariant data = QRect(9, 12, 18, 7);
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::Rect);
    REQUIRE(data.typeName() == "QRect");
 
@@ -3532,7 +3532,7 @@ TEST_CASE("QVariant constructor_rectf", "[qvariant]")
 {
    QVariant data = QRectF(9.7, 12.1, 18.0, 7.4);
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::RectF);
    REQUIRE(data.typeName() == "QRectF");
 
@@ -3596,7 +3596,7 @@ TEST_CASE("QVariant constructor_size", "[qvariant]")
 {
    QVariant data = QSize(9, 12);
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::Size);
    REQUIRE(data.typeName() == "QSize");
 
@@ -3660,7 +3660,7 @@ TEST_CASE("QVariant constructor_sizef", "[qvariant]")
 {
    QVariant data = QSizeF(9.7, 12.1);
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::SizeF);
    REQUIRE(data.typeName() == "QSizeF");
 
@@ -3726,7 +3726,7 @@ TEST_CASE("QVariant constructor_url", "[qvariant]")
 
    QVariant tmpStr(str);
 
-   REQUIRE(tmpStr.isValid());
+   REQUIRE(tmpStr.isValid() == true);
    REQUIRE(tmpStr.type() == QVariant::String);
 
    QUrl url(str);
@@ -3734,7 +3734,7 @@ TEST_CASE("QVariant constructor_url", "[qvariant]")
 
    REQUIRE(tmpStr == data);
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::Url);
    REQUIRE(data.typeName() == "QUrl");
 
@@ -3796,7 +3796,7 @@ TEST_CASE("QVariant constructor_uuid", "[qvariant]")
    QUuid value("{ba80a7c0-d463-e361-78eb-1394049152ba}");
    QVariant data = value;
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::Uuid);
    REQUIRE(data.typeName() == "QUuid");
 
@@ -3861,7 +3861,7 @@ TEST_CASE("QVariant constructor_easing_curve", "[qvariant]")
 
    QVariant data = QVariant::fromValue(curve);
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::EasingCurve);
    REQUIRE(data.typeName() == "QEasingCurve");
 
@@ -3929,7 +3929,7 @@ TEST_CASE("QVariant constructor_regex", "[qvariant]")
 
    QVariant data(regexp);
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::RegularExpression);
    REQUIRE(data.typeName() == "QRegularExpression");
 
@@ -4001,7 +4001,7 @@ TEST_CASE("QVariant constructor_user_type", "[qvariant]")
    QVariant data1 = QVariant::fromValue(input);
    QVariant data2 = data1;
 
-   REQUIRE(data2.isValid());
+   REQUIRE(data2.isValid() == true);
    REQUIRE(data2.userType() == QVariant::typeToTypeId<MyCustomType>());
    REQUIRE(data2.typeName() == "MyCustomType");
 
@@ -4126,11 +4126,10 @@ TEST_CASE("QVariant copy_assign", "[qvariant]")
 TEST_CASE("QVariant copy_constructor_string8", "[qvariant]")
 {
    QVariant data1 = QString("apple");
-
    QVariant data2 = data1;
 
-   REQUIRE(data1.isValid());
-   REQUIRE(data2.isValid());
+   REQUIRE(data1.isValid() == true);
+   REQUIRE(data2.isValid() == true);
 
    data1 = QString("pineapple");
 
@@ -4141,11 +4140,10 @@ TEST_CASE("QVariant copy_constructor_string8", "[qvariant]")
 TEST_CASE("QVariant copy_constructor_string16", "[qvariant]")
 {
    QVariant data1 = QString16("apple");
-
    QVariant data2 = data1;
 
-   REQUIRE(data1.isValid());
-   REQUIRE(data2.isValid());
+   REQUIRE(data1.isValid() == true);
+   REQUIRE(data2.isValid() == true);
 
    data1 = QString16("pineapple");
 
@@ -4160,10 +4158,10 @@ TEST_CASE("QVariant copy_constructor_list", "[qvariant]")
    QVariant data1 = list;
    QVariant data2 = data1;
 
-   REQUIRE(data1.isValid());
+   REQUIRE(data1.isValid() == true);
    REQUIRE(data1.type() == QVariant::List);
 
-   REQUIRE(data2.isValid());
+   REQUIRE(data2.isValid() == true);
    REQUIRE(data2.type() == QVariant::List);
 
    REQUIRE(data1 == data2);
@@ -4754,7 +4752,7 @@ TEST_CASE("QVariant enum_to_variant", "[qvariant]")
    {
       data = QVariant::fromValue(Qt::WheelFocus);
 
-      REQUIRE(data.isValid());
+      REQUIRE(data.isValid() == true);
       REQUIRE(data.type() == QVariant::UserType);
 
       REQUIRE(data.value<Qt::FocusPolicy>() == Qt::WheelFocus);
@@ -4785,7 +4783,7 @@ TEST_CASE("QVariant flag_to_variant", "[qvariant]")
 
    QVariant data = QVariant::fromValue(Qt::AlignLeft | Qt::AlignTop);
 
-   REQUIRE(data.isValid());
+   REQUIRE(data.isValid() == true);
    REQUIRE(data.type() == QVariant::UserType);
 
    REQUIRE(data.value<Qt::Alignment>() == Qt::Alignment(Qt::AlignLeft | Qt::AlignTop));

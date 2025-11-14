@@ -36,7 +36,7 @@ TEST_CASE("QLinkedList empty", "[qlinkedlist]")
 {
    QLinkedList<QString> list;
 
-   REQUIRE(list.isEmpty());
+   REQUIRE(list.isEmpty() == true);
 }
 
 TEST_CASE("QLinkedList length", "[qlinkedlist]")
@@ -60,8 +60,8 @@ TEST_CASE("QLinkedList contains", "[qlinkedlist]")
 {
    QLinkedList<QString> list = { "watermelon", "apple", "pear", "grapefruit" };
 
-   REQUIRE(list.contains("pear"));
-   REQUIRE(! list.contains("orange"));
+   REQUIRE(list.contains("pear") == true);
+   REQUIRE(list.contains("orange") == false);
 }
 
 TEST_CASE("QLinkedList erase", "[qlinkedlist]")
@@ -108,11 +108,11 @@ TEST_CASE("QLinkedList remove", "[qlinkedlist]")
 
    list.removeOne("apple");
 
-   REQUIRE(! list.contains("apple"));
+   REQUIRE(list.contains("apple") == false);
 
-   REQUIRE(list.contains("watermelon"));
-   REQUIRE(list.contains("pear"));
-   REQUIRE(list.contains("grapefruit"));
+   REQUIRE(list.contains("watermelon") == true);
+   REQUIRE(list.contains("pear") == true);
+   REQUIRE(list.contains("grapefruit") == true);
 
    REQUIRE(list.length() == 3);
 }
@@ -127,14 +127,14 @@ TEST_CASE("QLinkedList insert", "[qlinkedlist]")
    // part 1
    list.insert(iter, "mango");
 
-   REQUIRE(list.contains("mango"));
+   REQUIRE(list.contains("mango") == true);
    REQUIRE(list.first() == "watermelon");
    REQUIRE(list.length() == 5);
 
    // part 2
    list.erase(list.begin());
 
-   REQUIRE(list.contains("mango"));
+   REQUIRE(list.contains("mango") == true);
    REQUIRE(list.first() == "mango");
    REQUIRE(list.length() == 4);
 }

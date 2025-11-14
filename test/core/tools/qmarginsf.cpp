@@ -36,7 +36,7 @@ TEST_CASE("QMarginsF constructor", "[qmarginsf]")
 {
    QMarginsF data(5, 10, 100, 200);
 
-   REQUIRE(! data.isNull());
+   REQUIRE(data.isNull() == false);
 
    REQUIRE(data.left()   == 5);
    REQUIRE(data.top()    == 10);
@@ -65,7 +65,7 @@ TEST_CASE("QMarginsF is_null", "[qmarginsf]")
 {
    QMarginsF data;
 
-   REQUIRE(data.isNull());
+   REQUIRE(data.isNull() == true);
 }
 
 TEST_CASE("QMarginF math", "[qmarginsf]")

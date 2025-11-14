@@ -55,11 +55,11 @@ TEST_CASE("QXmlStreamReader parse_valid_xml", "[qxmlstreamreader]")
    QXmlStreamReader reader(xml);
 
    // <root>
-   REQUIRE(reader.readNextStartElement());
+   REQUIRE(reader.readNextStartElement() == true);
    REQUIRE(reader.name() == "root");
 
    // <child>
-   REQUIRE(reader.readNextStartElement());
+   REQUIRE(reader.readNextStartElement() == true);
    REQUIRE(reader.name() == "child");
    REQUIRE(reader.readElementText() == "text");
 
@@ -68,5 +68,5 @@ TEST_CASE("QXmlStreamReader parse_valid_xml", "[qxmlstreamreader]")
    REQUIRE(reader.tokenType() == QXmlStreamReader::EndElement);
    REQUIRE(reader.name() == "root");
 
-   REQUIRE(!reader.hasError());
+   REQUIRE(reader.hasError() == false);
 }

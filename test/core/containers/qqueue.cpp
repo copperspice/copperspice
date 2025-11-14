@@ -105,9 +105,9 @@ TEST_CASE("QQueue erase", "[qqueue]")
 
    REQUIRE(list.contains("apple") == false);
 
-   REQUIRE(list.contains("watermelon"));
-   REQUIRE(list.contains("pear"));
-   REQUIRE(list.contains("grapefruit"));
+   REQUIRE(list.contains("watermelon") == true);
+   REQUIRE(list.contains("pear") == true);
+   REQUIRE(list.contains("grapefruit") == true);
 
    REQUIRE(list.length() == 3);
 }
@@ -123,7 +123,7 @@ TEST_CASE("QQueue insert", "[qqueue]")
 
    list.insert(1, "mango");
 
-   REQUIRE(list.contains("mango"));
+   REQUIRE(list.contains("mango") == true);
    REQUIRE(list[1] == "mango");
    REQUIRE(list.length() == 5);
 }
@@ -155,11 +155,11 @@ TEST_CASE("QQueue remove", "[qqueue]")
    list.removeOne("apple");
    list.remove(0);
 
-   REQUIRE(! list.contains("apple"));
-   REQUIRE(! list.contains("watermelon"));
+   REQUIRE(list.contains("apple") == false);
+   REQUIRE(list.contains("watermelon") == false);
 
-   REQUIRE(list.contains("pear"));
-   REQUIRE(list.contains("grapefruit"));
+   REQUIRE(list.contains("pear") == true);
+   REQUIRE(list.contains("grapefruit") == true);
 
    REQUIRE(list.length() == 2);
 }

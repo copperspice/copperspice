@@ -177,8 +177,8 @@ TEST_CASE("QDate fromJulianDay", "[qdate]")
 
    date = QDate::fromJulianDay(2459765);
 
-   REQUIRE(date.isValid());
-   REQUIRE(! date.isNull());
+   REQUIRE(date.isValid() == true);
+   REQUIRE(date.isNull()  == false);
    REQUIRE(date == QDate(2022, 7, 04));
 }
 

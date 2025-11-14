@@ -63,8 +63,8 @@ TEST_CASE("QTemporaryFile fname_c", "[qtemporaryfile]")
    QTemporaryFile tmpFile;
    tmpFile.open();
 
-   REQUIRE(tmpFile.fileName().contains("CsCoreTestXXXXXX"));
-   REQUIRE(! tmpFile.fileName().endsWith("XXXXXX"));
+   REQUIRE(tmpFile.fileName().contains("CsCoreTestXXXXXX") == true);
+   REQUIRE(tmpFile.fileName().endsWith("XXXXXX") == false);
 
    QCoreApplication::setApplicationName("");
 }
@@ -76,8 +76,8 @@ TEST_CASE("QTemporaryFile fname_d", "[qtemporaryfile]")
    QTemporaryFile tmpFile;
    tmpFile.open();
 
-   REQUIRE(tmpFile.fileName().contains("CsCoreTest"));
-   REQUIRE(! tmpFile.fileName().endsWith("XXXXXX"));
+   REQUIRE(tmpFile.fileName().contains("CsCoreTest") == true);
+   REQUIRE(tmpFile.fileName().endsWith("XXXXXX") == false);
 
    QCoreApplication::setApplicationName("");
 }
@@ -100,7 +100,7 @@ TEST_CASE("QTemporaryFile create_fname_a", "[qtemporaryfile]")
    QRegularExpression regExp("/MyCsCoreTest[A-Za-z]{6}\\.name$");
    QRegularExpressionMatch match = regExp.match(tmpFile.fileName());
 
-   REQUIRE(match.hasMatch());
+   REQUIRE(match.hasMatch() == true);
 }
 
 TEST_CASE("QTemporaryFile create_fname_b", "[qtemporaryfile]")
@@ -111,7 +111,7 @@ TEST_CASE("QTemporaryFile create_fname_b", "[qtemporaryfile]")
    QRegularExpression regExp("/[A-Za-z]{6}\\.log$");
    QRegularExpressionMatch match = regExp.match(tmpFile.fileName());
 
-   REQUIRE(match.hasMatch());
+   REQUIRE(match.hasMatch() == true);
 }
 
 TEST_CASE("QTemporaryFile create_fname_c", "[qtemporaryfile]")
@@ -122,7 +122,7 @@ TEST_CASE("QTemporaryFile create_fname_c", "[qtemporaryfile]")
    QRegularExpression regExp("/tmp[A-Za-z]{6}$");
    QRegularExpressionMatch match = regExp.match(tmpFile.fileName());
 
-   REQUIRE(match.hasMatch());
+   REQUIRE(match.hasMatch() == true);
 }
 
 TEST_CASE("QTemporaryFile create_fname_d", "[qtemporaryfile]")
@@ -133,7 +133,7 @@ TEST_CASE("QTemporaryFile create_fname_d", "[qtemporaryfile]")
    QRegularExpression regExp("/[A-Za-z]{6}$");
    QRegularExpressionMatch match = regExp.match(tmpFile.fileName());
 
-   REQUIRE(match.hasMatch());
+   REQUIRE(match.hasMatch() == true);
 }
 
 TEST_CASE("QTemporaryFile file_template", "[qtemporaryfile]")
@@ -145,7 +145,7 @@ TEST_CASE("QTemporaryFile file_template", "[qtemporaryfile]")
 
    QString result = tmpFile.fileTemplate();
 
-   REQUIRE(result.endsWith("cs_temp.XXXXXX"));
+   REQUIRE(result.endsWith("cs_temp.XXXXXX") == true);
    REQUIRE(tmpFile.autoRemove() == true);
 }
 

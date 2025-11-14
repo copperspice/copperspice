@@ -46,10 +46,10 @@ TEST_CASE("QUrl to_encoded", "[qurl]")
 TEST_CASE("QUrl isValid", "[qurl]")
 {
    QUrl uri("https://www.copperspice.com/style_guide/source_code_style.html");
-   REQUIRE(uri.isValid());
+   REQUIRE(uri.isValid() == true);
 
    uri = QUrl("https://www.copperspice.com/some_random_name");
-   REQUIRE(uri.isValid());
+   REQUIRE(uri.isValid() == true);
 }
 
 TEST_CASE("QUrl scheme", "[qurl]")

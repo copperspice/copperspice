@@ -51,8 +51,8 @@ TEST_CASE("QFlatMap contains", "[qflatmap]")
                                   { 3, "pear"},
                                   { 4, "grapefruit"} };
 
-   REQUIRE(map.contains(2));
-   REQUIRE(! map.contains(9));
+   REQUIRE(map.contains(2) == true);
+   REQUIRE(map.contains(9) == false);
 }
 
 TEST_CASE("QFlatMap copy_assign", "[qflatmap]")
@@ -106,7 +106,7 @@ TEST_CASE("QFlatMap empty", "[qflatmap]")
 {
    QFlatMap<int, QString> map;
 
-   REQUIRE(map.isEmpty());
+   REQUIRE(map.isEmpty() == true);
 }
 
 TEST_CASE("QFlatMap erase", "[qflatmap]")
@@ -311,6 +311,6 @@ TEST_CASE("QFlatMap swap", "[qflatmap]")
    map1.swap(map2);
 
    REQUIRE(map1.value(2) == ("orange"));
-   REQUIRE(map2.contains(4));
+   REQUIRE(map2.contains(4) == true);
 }
 

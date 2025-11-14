@@ -69,7 +69,7 @@ TEST_CASE("QMetaMethod get_methods", "[qmetamethod]")
    {
       QMetaMethod method;
       REQUIRE(method.isValid() == false);
-      REQUIRE(method.name().isEmpty());
+      REQUIRE(method.name().isEmpty() == true);
    }
 
    {
@@ -79,7 +79,7 @@ TEST_CASE("QMetaMethod get_methods", "[qmetamethod]")
       REQUIRE(Ginger_MM::staticMetaObject().methodCount() == 8);
 
       REQUIRE(Ginger_MM::staticMetaObject().indexOfSignal("titleChanged(QString)") == 0);
-      REQUIRE(! method.name().isEmpty());
+      REQUIRE(method.name().isEmpty() == false);
       REQUIRE(method.access() == QMetaMethod::Public);
       REQUIRE(method.methodType() == QMetaMethod::Signal);
    }

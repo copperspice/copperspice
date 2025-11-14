@@ -51,7 +51,7 @@ TEST_CASE("QTemporaryDir auto_remove_b", "[qtemporarydir]")
       QTemporaryDir tmpDir;
       tmpDir.setAutoRemove(false);
 
-      REQUIRE(tmpDir.isValid());
+      REQUIRE(tmpDir.isValid() == true);
 
       path = tmpDir.path();
       bool ok = QDir(path).exists();

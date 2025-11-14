@@ -218,9 +218,9 @@ TEST_CASE("QVector erase", "[qvector]")
 
    REQUIRE(v.contains("apple") == false);
 
-   REQUIRE(v.contains("watermelon"));
-   REQUIRE(v.contains("pear"));
-   REQUIRE(v.contains("grapefruit"));
+   REQUIRE(v.contains("watermelon") == true);
+   REQUIRE(v.contains("pear") == true);
+   REQUIRE(v.contains("grapefruit") == true);
 
    REQUIRE(v.length() == 3);
 }
@@ -294,7 +294,7 @@ TEST_CASE("QVector insert", "[qvector]")
 #pragma GCC diagnostic pop
 #endif
 
-   REQUIRE(v.contains("mango"));
+   REQUIRE(v.contains("mango") == true);
    REQUIRE(v[1] == "mango");
    REQUIRE(v.length() == 5);
 }

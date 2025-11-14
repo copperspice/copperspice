@@ -118,8 +118,8 @@ TEST_CASE("QSettings allkeys", "[qsettings]")
 
       QStringList keys = settings1.allKeys();
 
-      REQUIRE(keys.contains("room_size"));
-      REQUIRE(keys.contains("sofa"));
+      REQUIRE(keys.contains("room_size") == true);
+      REQUIRE(keys.contains("sofa") == true);
 
       REQUIRE(keys.contains("catchTest") == false);
 

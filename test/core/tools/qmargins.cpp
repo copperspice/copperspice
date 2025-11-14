@@ -36,7 +36,7 @@ TEST_CASE("QMargins constructor", "[qmargins]")
 {
    QMargins data(5, 10, 100, 200);
 
-   REQUIRE(! data.isNull());
+   REQUIRE(data.isNull() == false);
 
    REQUIRE(data.left()   == 5);
    REQUIRE(data.top()    == 10);

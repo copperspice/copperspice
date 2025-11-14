@@ -37,11 +37,11 @@ TEST_CASE("QRegularExpression empty", "[qregularexpression]")
    QRegularExpression regExp;
 
    REQUIRE(regExp.captureCount() == -1);
-   REQUIRE(regExp.namedCaptureGroups().isEmpty());
+   REQUIRE(regExp.namedCaptureGroups().isEmpty() == true);
    REQUIRE(regExp.pattern() == "");
 // REQUIRE(regExp.patternErrorOffset() == 0);    // emerald, add soon to CS
 
-   REQUIRE(! regExp.isValid());
+   REQUIRE(regExp.isValid() == false);
 }
 
 TEST_CASE("QRegularExpression match_a", "[qregularexpression]")
@@ -51,9 +51,9 @@ TEST_CASE("QRegularExpression match_a", "[qregularexpression]")
 
    QRegularExpressionMatch match = regExp.match(str);
 
-   REQUIRE(regExp.isValid());
-   REQUIRE(match.hasMatch());
-   REQUIRE(! match.hasPartialMatch());
+   REQUIRE(regExp.isValid() == true);
+   REQUIRE(match.hasMatch() == true);
+   REQUIRE(match.hasPartialMatch() == false);
 
    REQUIRE(regExp.captureCount() == 1);
    REQUIRE(match.captured(0)  == "halfway");
@@ -77,8 +77,8 @@ TEST_CASE("QRegularExpression look_ahead", "[qregularexpression]")
 
    QRegularExpressionMatch match = regExp.match(str);
 
-   REQUIRE(match.hasMatch());
-   REQUIRE(! match.hasPartialMatch());
+   REQUIRE(match.hasMatch() == true);
+   REQUIRE(match.hasPartialMatch() == false);
 
    REQUIRE(match.captured(0) == "fox");
    REQUIRE(match.captured(1) == "o");
