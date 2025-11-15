@@ -283,7 +283,7 @@ TEST_CASE("QVarLengthArray remove", "[qvarlengtharray]")
    REQUIRE(data == (QVarLengthArray<int>{ 40 }));
 }
 
-TEST_CASE("QVarLengthArray reserve", "[qvarlenarray]")
+TEST_CASE("QVarLengthArray reserve", "[qvarlengtharray]")
 {
    QVarLengthArray<int> data;
 
@@ -293,7 +293,7 @@ TEST_CASE("QVarLengthArray reserve", "[qvarlenarray]")
    REQUIRE(data.size() == 0);
 }
 
-TEST_CASE("QVarLengthArray replace", "[qvarlenarray]")
+TEST_CASE("QVarLengthArray replace", "[qvarlengtharray]")
 {
    QVarLengthArray<QString> data = {"apple", "orange", "grape", "strawberry"};
 
@@ -346,7 +346,7 @@ TEST_CASE("QVarLengthArray resize", "[qvarlengtharray]")
    REQUIRE(data[3] == "pear");
 }
 
-TEST_CASE("QVarLengthArray squeeze", "[qvarlenarray]")
+TEST_CASE("QVarLengthArray squeeze", "[qvarlengtharray]")
 {
    QVarLengthArray<QString> data = {"apple", "orange", "grape", "strawberry"};
 

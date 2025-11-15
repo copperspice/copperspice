@@ -68,7 +68,7 @@ TEST_CASE("QMargins copy_assign", "[qmargins]")
    REQUIRE(data_c == QMargins{25, 14, 100, 50});
 }
 
-TEST_CASE("QMargin math", "[qmargins]")
+TEST_CASE("QMargins math", "[qmargins]")
 {
    QMargins data1(25, 14, 100, 50);
    QMargins data2(2, 3, 4, 5);
@@ -164,7 +164,7 @@ TEST_CASE("QMargins move_assign", "[qmargins]")
    REQUIRE(data_c == QMargins{25, 14, 100, 50});
 }
 
-TEST_CASE("QMargin set", "[qmargins]")
+TEST_CASE("QMargins set", "[qmargins]")
 {
    QMargins data;
 

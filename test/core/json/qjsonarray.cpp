@@ -22,7 +22,7 @@
 
 #include <catch2/catch.hpp>
 
-TEST_CASE("QJsonArray traits", "[qjsonoarray]")
+TEST_CASE("QJsonArray traits", "[qjsonarray]")
 {
    REQUIRE(std::is_copy_constructible_v<QJsonArray> == true);
    REQUIRE(std::is_move_constructible_v<QJsonArray> == true);

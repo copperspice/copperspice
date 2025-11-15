@@ -68,7 +68,7 @@ TEST_CASE("QMarginsF is_null", "[qmarginsf]")
    REQUIRE(data.isNull() == true);
 }
 
-TEST_CASE("QMarginF math", "[qmarginsf]")
+TEST_CASE("QMarginsF math", "[qmarginsf]")
 {
    QMarginsF data1(25, 14, 100, 50);
    QMarginsF data2(2, 3, 4, 5);
@@ -164,7 +164,7 @@ TEST_CASE("QMarginsF move_assign", "[qmarginsf]")
    REQUIRE(data_c == QMarginsF{25.5, 14, 100.22, 50});
 }
 
-TEST_CASE("QMarginF set", "[qmarginsf]")
+TEST_CASE("QMarginsF set", "[qmarginsf]")
 {
    QMarginsF data;
 

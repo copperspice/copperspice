@@ -95,7 +95,7 @@ TEST_CASE("QPoint dotProduct", "[qpoint]")
    REQUIRE(QPoint::dotProduct(data_a, data_b) == (-2*4 + 5*(-3)));
 }
 
-TEST_CASE("QPoint isNull", "[qpoint")
+TEST_CASE("QPoint isNull", "[qpoint]")
 {
    QPoint data;
 
@@ -248,7 +248,7 @@ TEST_CASE("QPoint divide", "[qpoint]")
    }
 }
 
-TEST_CASE("QPoint rx_ry", "[qpoint")
+TEST_CASE("QPoint rx_ry", "[qpoint]")
 {
    QPoint data1(-1, 0);
 
@@ -267,7 +267,7 @@ TEST_CASE("QPoint rx_ry", "[qpoint")
    }
 }
 
-TEST_CASE("QPoint set", "[qpoint")
+TEST_CASE("QPoint set", "[qpoint]")
 {
    QPoint data;
 

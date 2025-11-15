@@ -98,7 +98,7 @@ TEST_CASE("QPointF dotProduct", "[qpointf]")
    REQUIRE_THAT(result_1, Catch::Matchers::WithinAbs(result_2, 0.01));
 }
 
-TEST_CASE("QPointF isNull", "[qpoint")
+TEST_CASE("QPointF isNull", "[qpointf]")
 {
    QPointF data;
 
@@ -251,7 +251,7 @@ TEST_CASE("QPointF divide", "[qpointf]")
    }
 }
 
-TEST_CASE("QPointF rx_ry", "[qpoint")
+TEST_CASE("QPointF rx_ry", "[qpointf]")
 {
    QPointF data1(-1, 0);
 
@@ -270,7 +270,7 @@ TEST_CASE("QPointF rx_ry", "[qpoint")
    }
 }
 
-TEST_CASE("QPointF set", "[qpoint")
+TEST_CASE("QPointF set", "[qpointf]")
 {
    QPointF data;
 

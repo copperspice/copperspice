@@ -33,7 +33,7 @@ TEST_CASE("QScopedPointer traits", "[qscopedpointer]")
    REQUIRE(std::has_virtual_destructor_v<QScopedPointer<int>> == false);
 }
 
-TEST_CASE("QScopedPointer comparison", "[qscopedpointer]]")
+TEST_CASE("QScopedPointer comparison", "[qscopedpointer]")
 {
    QScopedPointer<int> ptr1 = nullptr;
 
