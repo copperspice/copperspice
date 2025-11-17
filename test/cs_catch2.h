@@ -24,6 +24,7 @@
 #include <qdate.h>
 #include <qdatetime.h>
 #include <qlocale.h>
+#include <qline.h>
 #include <qmargins.h>
 #include <qpoint.h>
 #include <qrect.h>
@@ -81,6 +82,24 @@ namespace Catch {
    struct StringMaker<QLocale> {
       static std::string convert(const QLocale &value) {
          return value.name().toStdString();
+      }
+   };
+
+   template <>
+   struct StringMaker<QLine> {
+      static std::string convert(const QLine &value) {
+         QString retval = QString8("{ %1, %2, %3, %4 }")
+               .formatArgs(value.x1(), value.y1(), value.x2(), value.y2());
+         return retval.toStdString();
+      }
+   };
+
+   template <>
+   struct StringMaker<QLineF> {
+      static std::string convert(const QLineF &value) {
+         QString retval = QString8("{ %1, %2, %3, %4 }")
+               .formatArgs(value.x1(), value.y1(), value.x2(), value.y2());
+         return retval.toStdString();
       }
    };
 
