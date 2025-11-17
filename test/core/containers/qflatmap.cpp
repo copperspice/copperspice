@@ -210,7 +210,7 @@ TEST_CASE("QFlatMap insert_copy", "[qflatmap]")
 
 TEST_CASE("QFlatMap insert_move", "[qflatmap]")
 {
-   QMap<int, QUniquePointer<QString> > map;
+   QFlatMap<int, QUniquePointer<QString> > map;
 
    map.insert(1, QMakeUnique<QString>("watermelon"));
    map.insert(2, QMakeUnique<QString>("apple"));

@@ -34,14 +34,14 @@ TEST_CASE("QSizeF traits", "[qsizef]")
 
 TEST_CASE("QSizeF constructor", "[qsizef]")
 {
-   QSizeF data(50, 125);
+   QSizeF data(50, 125.5);
 
    REQUIRE(data.isEmpty() == false);
    REQUIRE(data.isNull()  == false);
    REQUIRE(data.isValid() == true);
 
    REQUIRE(data.width()  == 50);
-   REQUIRE(data.height() == 125);
+   REQUIRE(data.height() == 125.5);
 
    //
    data = QSizeF(-25, -10);
@@ -227,23 +227,23 @@ TEST_CASE("QSizeF set", "[qsizef]")
 
 TEST_CASE("QSizeF transpose", "[qsizef]")
 {
-   QSizeF data_a(40, 75);
+   QSizeF data_a(40.1, 75);
 
    //
-   REQUIRE(data_a.width()  == 40);
+   REQUIRE(data_a.width()  == 40.1);
    REQUIRE(data_a.height() == 75);
 
    data_a.transpose();
 
    REQUIRE(data_a.width()  == 75);
-   REQUIRE(data_a.height() == 40);
+   REQUIRE(data_a.height() == 40.1);
 
    //
    QSizeF data_b = data_a.transposed();
 
    REQUIRE(data_a.width()  == 75);
-   REQUIRE(data_a.height() == 40);
+   REQUIRE(data_a.height() == 40.1);
 
-   REQUIRE(data_b.width()  == 40);
+   REQUIRE(data_b.width()  == 40.1);
    REQUIRE(data_b.height() == 75);
 }
