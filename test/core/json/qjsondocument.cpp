@@ -33,6 +33,37 @@ TEST_CASE("QJsonDocument traits", "[qjsondocument]")
    REQUIRE(std::has_virtual_destructor_v<QJsonDocument> == false);
 }
 
+TEST_CASE("QJsonDocument large_numbers", "[qjsondocument]")
+{
+   qint64 numbers[] = {
+      -1, 0, 1,
+      0x8000000000000ll,               // 13 zeros
+      0x40000000000000ll,
+      0x100000000000000ll,             // 14 zeros
+      -0x8000000000000ll,
+      -0x40000000000000ll,
+      -0x100000000000000ll,
+      0x8000000000000ll   - 1,
+      0x40000000000000ll  - 1,
+      0x100000000000000ll - 1,
+      -(0x8000000000000ll   - 1),
+      -(0x40000000000000ll  - 1),
+      -(0x100000000000000ll - 1),
+   };
+
+   QJsonArray arrayA;
+
+   for (int value : numbers) {
+      arrayA.append((double)value);
+   }
+
+   QByteArray input   = QJsonDocument(arrayA).toJson();
+   QJsonDocument json = QJsonDocument::fromJson(input);
+
+   QJsonArray arrayB = json.array();
+   REQUIRE(arrayA.size() == arrayB.size());
+}
+
 TEST_CASE("QJsonDocument values", "[qjsondocument]")
 {
    QJsonObject object;
@@ -116,35 +147,4 @@ TEST_CASE("QJsonDocument values", "[qjsondocument]")
       QJsonObject object3(std::move(object2));
       REQUIRE(object3.count() == 9);
    }
-}
-
-TEST_CASE("QJsonDocument large_numbers", "[qjsondocument]")
-{
-   qint64 numbers[] = {
-      -1, 0, 1,
-      0x8000000000000ll,               // 13 zeros
-      0x40000000000000ll,
-      0x100000000000000ll,             // 14 zeros
-      -0x8000000000000ll,
-      -0x40000000000000ll,
-      -0x100000000000000ll,
-      0x8000000000000ll   - 1,
-      0x40000000000000ll  - 1,
-      0x100000000000000ll - 1,
-      -(0x8000000000000ll   - 1),
-      -(0x40000000000000ll  - 1),
-      -(0x100000000000000ll - 1),
-   };
-
-   QJsonArray arrayA;
-
-   for (int value : numbers) {
-      arrayA.append((double)value);
-   }
-
-   QByteArray input   = QJsonDocument(arrayA).toJson();
-   QJsonDocument json = QJsonDocument::fromJson(input);
-
-   QJsonArray arrayB = json.array();
-   REQUIRE(arrayA.size() == arrayB.size());
 }

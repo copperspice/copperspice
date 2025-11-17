@@ -66,6 +66,18 @@ TEST_CASE("QTime add_mseconds", "[qtime]")
    }
 }
 
+TEST_CASE("QTime comparison", "[qtime]")
+{
+   QTime time1(10, 0, 0);
+   QTime time2(11, 0, 0);
+
+   REQUIRE(time1 <  time2);
+   REQUIRE(time1 != time2);
+   REQUIRE(time1 <= time2);
+
+   REQUIRE((time1 > time2) == false);
+}
+
 TEST_CASE("QTime copy_assign", "[qtime]")
 {
    QTime data_a = QTime(12, 18, 05);
@@ -100,16 +112,12 @@ TEST_CASE("QTime fromString", "[qtime]")
    }
 }
 
-TEST_CASE("QTime comparison", "[qtime]")
+TEST_CASE("QTime is_null", "[qtime]")
 {
-   QTime time1(10, 0, 0);
-   QTime time2(11, 0, 0);
+   QTime time;
 
-   REQUIRE(time1 <  time2);
-   REQUIRE(time1 != time2);
-   REQUIRE(time1 <= time2);
-
-   REQUIRE((time1 > time2) == false);
+   REQUIRE(time.isNull() == true);
+   REQUIRE(time.isValid() == false);
 }
 
 TEST_CASE("QTime move_assign", "[qtime]")
@@ -167,14 +175,6 @@ TEST_CASE("QTime msecs_to", "[qtime]")
       QTime time2;
       REQUIRE(time1.msecsTo(time2) == 0);
    }
-}
-
-TEST_CASE("QTime is_null", "[qtime]")
-{
-   QTime time;
-
-   REQUIRE(time.isNull() == true);
-   REQUIRE(time.isValid() == false);
 }
 
 TEST_CASE("QTime secs_to", "[qtime]")

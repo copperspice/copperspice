@@ -39,14 +39,6 @@ TEST_CASE("QLinkedList empty", "[qlinkedlist]")
    REQUIRE(list.isEmpty() == true);
 }
 
-TEST_CASE("QLinkedList length", "[qlinkedlist]")
-{
-   QLinkedList<QString> list = { "watermelon", "apple", "pear", "grapefruit" };
-
-   REQUIRE(list.length() == 4);
-   REQUIRE(list.size() == 4);
-}
-
 TEST_CASE("QLinkedList clear", "[qlinkedlist]")
 {
    QLinkedList<QString> list = { "watermelon", "apple", "pear", "grapefruit" };
@@ -62,24 +54,6 @@ TEST_CASE("QLinkedList contains", "[qlinkedlist]")
 
    REQUIRE(list.contains("pear") == true);
    REQUIRE(list.contains("orange") == false);
-}
-
-TEST_CASE("QLinkedList erase", "[qlinkedlist]")
-{
-   QLinkedList<QString> list = { "watermelon", "apple", "pear", "grapefruit" };
-
-   auto iter = list.begin();
-   ++iter;
-
-   list.erase(iter);
-
-   REQUIRE(! list.contains("apple"));
-
-   REQUIRE(list.contains("watermelon"));
-   REQUIRE(list.contains("pear"));
-   REQUIRE(list.contains("grapefruit"));
-
-   REQUIRE(list.length() == 3);
 }
 
 TEST_CASE("QLinkedList copy_assign", "[qlinkedlist]")
@@ -102,11 +76,14 @@ TEST_CASE("QLinkedList copy_assign", "[qlinkedlist]")
    REQUIRE(list_c == QLinkedList<QString>{"watermelon", "apple", "pear", "grapefruit"});
 }
 
-TEST_CASE("QLinkedList remove", "[qlinkedlist]")
+TEST_CASE("QLinkedList erase", "[qlinkedlist]")
 {
    QLinkedList<QString> list = { "watermelon", "apple", "pear", "grapefruit" };
 
-   list.removeOne("apple");
+   auto iter = list.begin();
+   ++iter;
+
+   list.erase(iter);
 
    REQUIRE(list.contains("apple") == false);
 
@@ -139,6 +116,14 @@ TEST_CASE("QLinkedList insert", "[qlinkedlist]")
    REQUIRE(list.length() == 4);
 }
 
+TEST_CASE("QLinkedList length", "[qlinkedlist]")
+{
+   QLinkedList<QString> list = { "watermelon", "apple", "pear", "grapefruit" };
+
+   REQUIRE(list.length() == 4);
+   REQUIRE(list.size() == 4);
+}
+
 TEST_CASE("QLinkedList move_assign", "[qlinkedlist]")
 {
    QLinkedList<QString> list_a = { "watermelon", "apple", "pear", "grapefruit" };
@@ -151,6 +136,21 @@ TEST_CASE("QLinkedList move_assign", "[qlinkedlist]")
    list_c = std::move(list_b);
 
    REQUIRE(list_c == QLinkedList<QString>{"watermelon", "apple", "pear", "grapefruit"});
+}
+
+TEST_CASE("QLinkedList remove", "[qlinkedlist]")
+{
+   QLinkedList<QString> list = { "watermelon", "apple", "pear", "grapefruit" };
+
+   list.removeOne("apple");
+
+   REQUIRE(list.contains("apple") == false);
+
+   REQUIRE(list.contains("watermelon") == true);
+   REQUIRE(list.contains("pear") == true);
+   REQUIRE(list.contains("grapefruit") == true);
+
+   REQUIRE(list.length() == 3);
 }
 
 TEST_CASE("QLinkedList position", "[qlinkedlist]")

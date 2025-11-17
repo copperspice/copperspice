@@ -117,6 +117,21 @@ TEST_CASE("QDate add_years", "[qdate]")
    }
 }
 
+TEST_CASE("QDate comparison", "[qdate]")
+{
+   QDate dt1 = QDate(2022, 8, 25);
+   QDate dt2 = QDate(2022, 8, 31);
+
+   REQUIRE(dt1 <  dt2);
+   REQUIRE(dt1 <= dt2);
+   REQUIRE(dt1 <= dt1);
+   REQUIRE(dt1 != dt2);
+
+   REQUIRE(dt2 >  dt1);
+   REQUIRE(dt2 >= dt1);
+   REQUIRE(dt2 >= dt2);
+}
+
 TEST_CASE("QDate copy_assign", "[qdate]")
 {
    QDate data_a = QDate(2025, 8, 17);
@@ -215,6 +230,14 @@ TEST_CASE("QDate get_setDate", "[qdate]")
    }
 }
 
+TEST_CASE("QDate is_null", "[qdate]")
+{
+   QDate date;
+
+   REQUIRE(date.isNull() == true);
+   REQUIRE(date.isValid() == false);
+}
+
 TEST_CASE("QDate leap_year", "[qdate]")
 {
    QDate date;
@@ -283,14 +306,6 @@ TEST_CASE("QDate names", "[qdate]")
       REQUIRE(QDate::longMonthName(2, QDate::StandaloneFormat)   == "Februar");
       REQUIRE(QDate::shortMonthName(10, QDate::StandaloneFormat) == "Okt");
    }
-}
-
-TEST_CASE("QDate is_null", "[qdate]")
-{
-   QDate date;
-
-   REQUIRE(date.isNull() == true);
-   REQUIRE(date.isValid() == false);
 }
 
 TEST_CASE("QDate ofDay", "[qdate]")
@@ -367,21 +382,6 @@ TEST_CASE("QDate ofDay", "[qdate]")
       dt = QDateTime(QDate(2023, 10, 27), QTime(23, 59, 59, 999), QTimeZone("Africa/Cairo"));
       REQUIRE(dt == QDate(2023, 10, 27).endOfDay(QTimeZone("Africa/Cairo")));
    }
-}
-
-TEST_CASE("QDate comparison", "[qdate]")
-{
-   QDate dt1 = QDate(2022, 8, 25);
-   QDate dt2 = QDate(2022, 8, 31);
-
-   REQUIRE(dt1 <  dt2);
-   REQUIRE(dt1 <= dt2);
-   REQUIRE(dt1 <= dt1);
-   REQUIRE(dt1 != dt2);
-
-   REQUIRE(dt2 >  dt1);
-   REQUIRE(dt2 >= dt1);
-   REQUIRE(dt2 >= dt2);
 }
 
 TEST_CASE("QDate fromString", "[qdate]")

@@ -32,6 +32,24 @@ TEST_CASE("QSize traits", "[qsize]")
    REQUIRE(std::has_virtual_destructor_v<QSize> == false);
 }
 
+TEST_CASE("QSize bound_expandedTo", "[qsize]")
+{
+   QSize data_a(53, 60);
+   QSize data_b(80, 35);
+
+   QSize result;
+
+   //
+   result = data_a.expandedTo(data_b);
+
+   REQUIRE(result == QSize(80, 60));
+
+   //
+   result = data_a.boundedTo(data_b);
+
+   REQUIRE(result == QSize(53, 35));
+}
+
 TEST_CASE("QSize constructor", "[qsize]")
 {
    QSize data(50, 125);
@@ -89,24 +107,6 @@ TEST_CASE("QSize empty", "[qsize]")
 
    REQUIRE(QSize(0, 5).isValid() == true);
    REQUIRE(QSize(5, 0).isValid() == true);
-}
-
-TEST_CASE("QSize bound_expandedTo", "[qsize]")
-{
-   QSize data_a(53, 60);
-   QSize data_b(80, 35);
-
-   QSize result;
-
-   //
-   result = data_a.expandedTo(data_b);
-
-   REQUIRE(result == QSize(80, 60));
-
-   //
-   result = data_a.boundedTo(data_b);
-
-   REQUIRE(result == QSize(53, 35));
 }
 
 TEST_CASE("QSize move_assign", "[qsize]")

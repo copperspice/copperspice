@@ -45,6 +45,32 @@ TEST_CASE("QMultiHash clear", "[qmultihash]")
    REQUIRE(hash.size() == 0);
 }
 
+TEST_CASE("QMultiHash comparison", "[qmultihash]")
+{
+   QMultiHash<int, QString> hash1 = { { 1, "watermelon"},
+                                      { 2, "apple"},
+                                      { 3, "pear"},
+                                      { 3, "quince"},
+                                      { 4, "grapefruit"} };
+
+   QMultiHash<int, QString> hash2 = { { 1, "watermelon"},
+                                      { 2, "apple"},
+                                      { 3, "pear"},
+                                      { 3, "quince"},
+                                      { 4, "grapefruit"} };
+   {
+      REQUIRE(hash1 == hash2);
+      REQUIRE(! (hash1 != hash2));
+   }
+
+   {
+      hash2.remove(3);
+
+      REQUIRE(! (hash1 == hash2));
+      REQUIRE(hash1 != hash2);
+   }
+}
+
 TEST_CASE("QMultiHash contains", "[qmultihash]")
 {
    QMultiHash<int, QString> hash = { { 1, "watermelon"},
@@ -145,32 +171,6 @@ TEST_CASE("QMultiHash erase", "[qmultihash]")
 
       count = hash.erase(3);
       REQUIRE(count == 0);
-   }
-}
-
-TEST_CASE("QMultiHash comparison", "[qmultihash]")
-{
-   QMultiHash<int, QString> hash1 = { { 1, "watermelon"},
-                                      { 2, "apple"},
-                                      { 3, "pear"},
-                                      { 3, "quince"},
-                                      { 4, "grapefruit"} };
-
-   QMultiHash<int, QString> hash2 = { { 1, "watermelon"},
-                                      { 2, "apple"},
-                                      { 3, "pear"},
-                                      { 3, "quince"},
-                                      { 4, "grapefruit"} };
-   {
-      REQUIRE(hash1 == hash2);
-      REQUIRE(! (hash1 != hash2));
-   }
-
-   {
-      hash2.remove(3);
-
-      REQUIRE(! (hash1 == hash2));
-      REQUIRE(hash1 != hash2);
    }
 }
 
