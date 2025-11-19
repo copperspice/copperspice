@@ -41,4 +41,30 @@ QWaylandXdgShellIntegration::QWaylandXdgShellIntegration(QWaylandDisplay *displa
    }
 }
 
+QWaylandShellSurface *QWaylandXdgShellIntegration::createShellSurface(QWaylandWindow *window)
+{
+   return m_xdgShell->createXdgSurface(window);
+}
+
+void QWaylandXdgShellIntegration::handleKeyboardFocusChanged(QWaylandWindow *newFocus, QWaylandWindow *oldFocus)
+{
+   if (newFocus != nullptr) {
+      auto *newSurface = dynamic_cast<QWaylandXdgSurface *>(newFocus->shellSurface());
+
+      if (newSurface != nullptr && ! newSurface->isTopLevel()) {
+         m_display->handleWindowActivated(newFocus);
+      }
+   }
+
+   if (oldFocus != nullptr) {
+      auto *oldSurface = dynamic_cast<QWaylandXdgSurface *>(oldFocus->shellSurface());
+
+      if (oldSurface != nullptr) {
+         if (! oldSurface->isTopLevel()) {
+            m_display->handleWindowDeactivated(oldFocus);
+         }
+      }
+   }
+}
+
 }

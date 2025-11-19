@@ -37,6 +37,7 @@ namespace QtWaylandClient {
 
 class QWaylandInputDevice;
 class QWaylandWindow;
+class QWaylandXdgSurface;
 
 class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgShell : public QtWayland::xdg_wm_base
 {
@@ -45,6 +46,8 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgShell : public QtWayland::xdg_wm_base
    QWaylandXdgShell(struct ::wl_registry *registry, uint32_t id);
 
    virtual ~QWaylandXdgShell();
+
+   QWaylandXdgSurface *createXdgSurface(QWaylandWindow *window);
 
  private:
    void xdg_wm_base_ping(uint32_t serial) override;

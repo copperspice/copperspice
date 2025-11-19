@@ -29,6 +29,7 @@
 #include <qwayland_inputdevice_p.h>
 #include <qwayland_screen_p.h>
 #include <qwayland_window_p.h>
+#include <qwayland_xdg_surface_p.h>
 
 namespace QtWaylandClient {
 
@@ -45,6 +46,11 @@ QWaylandXdgShell::QWaylandXdgShell(::wl_registry *registry, uint32_t id)
 QWaylandXdgShell::~QWaylandXdgShell()
 {
    destroy();
+}
+
+QWaylandXdgSurface *QWaylandXdgShell::createXdgSurface(QWaylandWindow *window)
+{
+   return new QWaylandXdgSurface(this, window);
 }
 
 void QWaylandXdgShell::xdg_wm_base_ping(uint32_t serial)

@@ -41,6 +41,9 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgShellIntegration : public QWaylandShell
       return m_xdgShell != nullptr;
    }
 
+   QWaylandShellSurface *createShellSurface(QWaylandWindow *window) override;
+   void handleKeyboardFocusChanged(QWaylandWindow *newFocus, QWaylandWindow *oldFocus) override;
+
  private:
    QWaylandDisplay  *m_display;
    QWaylandXdgShell *m_xdgShell;

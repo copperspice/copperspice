@@ -29,6 +29,7 @@
 #include <qwayland-xdg-shell.h>
 
 #include <qwayland_shellsurface_p.h>
+#include <qwayland_xdg_toplevel_p.h>
 
 class QWindow;
 
@@ -55,6 +56,10 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgSurface : public QWaylandShellSurface, 
 
    bool isExposed() const override;
 
+   bool isTopLevel() const {
+      return m_topLevel != nullptr;
+   }
+
    void setWindowGeometry(QRect rect) override;
 
  protected:
@@ -68,6 +73,8 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgSurface : public QWaylandShellSurface, 
 
    QWaylandWindow *m_window;
    QWaylandXdgShell *m_shell;
+
+   QUniquePointer<QWaylandXdgTopLevel> m_topLevel;
 };
 
 }
