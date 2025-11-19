@@ -42,6 +42,11 @@ QWaylandXdgTopLevel::QWaylandXdgTopLevel(QWaylandXdgSurface *surface, QWaylandWi
 
 QWaylandXdgTopLevel::~QWaylandXdgTopLevel()
 {
+   if (m_applied.states & Qt::WindowActive) {
+      QWaylandWindow *wl_window = m_surface->window();
+      wl_window->display()->handleWindowDeactivated(wl_window);
+   }
+
    if (isInitialized()) {
       destroy();
    }
@@ -50,6 +55,32 @@ QWaylandXdgTopLevel::~QWaylandXdgTopLevel()
 void QWaylandXdgTopLevel::move(QWaylandInputDevice *inputDevice)
 {
    move(inputDevice->wl_seat(), inputDevice->serial());
+}
+
+void QWaylandXdgTopLevel::requestWindowStates(Qt::WindowStates states)
+{
+   Qt::WindowStates changedStates = m_applied.states ^ states;
+
+   if (changedStates & Qt::WindowMaximized) {
+      if (states & Qt::WindowMaximized) {
+         set_maximized();
+      } else {
+         unset_maximized();
+      }
+   }
+
+   if (changedStates & Qt::WindowFullScreen) {
+      if (states & Qt::WindowFullScreen) {
+         set_fullscreen(nullptr);
+      } else {
+         unset_fullscreen();
+      }
+   }
+
+   if (states & Qt::WindowMinimized) {
+      set_minimized();
+      m_surface->window()->handleWindowStatesChanged(states & ~Qt::WindowMinimized);
+   }
 }
 
 void QWaylandXdgTopLevel::resize(QWaylandInputDevice *inputDevice, enum wl_shell_surface_resize edges)
@@ -77,6 +108,11 @@ void QWaylandXdgTopLevel::showWindowMenu(QWaylandInputDevice *inputDevice)
 {
    QPointF menuLocation = inputDevice->cursorPosition().toPoint();
    show_window_menu(inputDevice->wl_seat(), inputDevice->serial(), menuLocation.x(), menuLocation.y());
+}
+
+bool QWaylandXdgTopLevel::wantsDecorations() const
+{
+   return ! (m_pending.states & Qt::WindowFullScreen);
 }
 
 // following two methods are called directly by wayland

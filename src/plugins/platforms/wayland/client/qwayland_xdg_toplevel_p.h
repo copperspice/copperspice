@@ -51,6 +51,8 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgTopLevel : public QWaylandTopLevel, pub
    using QtWayland::xdg_toplevel::move;
    void move(QWaylandInputDevice *inputDevice) override;
 
+   void requestWindowStates(Qt::WindowStates states) override;
+
    using QtWayland::xdg_toplevel::resize;
    void resize(QWaylandInputDevice *inputDevice, enum wl_shell_surface_resize edges) override;
    void resize(QWaylandInputDevice *inputDevice, enum resize_edge edges);
@@ -59,6 +61,8 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgTopLevel : public QWaylandTopLevel, pub
    void setTitle(const QString &title) override;
 
    void showWindowMenu(QWaylandInputDevice *inputDevice) override;
+
+   bool wantsDecorations() const override;
 
  protected:
    void xdg_toplevel_configure(int32_t width, int32_t height, wl_array *states) override;
@@ -69,6 +73,14 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgTopLevel : public QWaylandTopLevel, pub
    QWaylandWindow *m_window;
 
    QSize m_normalSize;
+
+   struct StateData {
+      QSize size = {0, 0};
+      Qt::WindowStates states = Qt::WindowNoState;
+    };
+
+   StateData m_pending;
+   StateData m_applied;
 };
 
 }
