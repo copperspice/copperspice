@@ -25,22 +25,24 @@
 
 #include <qwayland_bradient_decoration.h>
 
+#include <qpalette.h>
+#include <qtextoption.h>
+
+#include <qwayland_window_p.h>
+
 namespace QtWaylandClient {
 
 QWaylandBradientDecoration::QWaylandBradientDecoration()
-   : QWaylandAbstractDecoration(), m_clicking(Button::None), m_factor(1)
+   : QWaylandAbstractDecoration(), m_factor(1), m_clicking(Button::None)
 {
-   // pending implementation
-}
+   QPalette palette;
+   m_foregroundColor = palette.color(QPalette::Active, QPalette::WindowText);
+   m_backgroundColor = palette.color(QPalette::Active, QPalette::Window);
 
-QMargins QWaylandBradientDecoration::margins() const
-{
-   return QMargins(3 * m_factor, 30 * m_factor, 3 * m_factor, 3 * m_factor);
-}
+   QTextOption option(Qt::AlignHCenter | Qt::AlignVCenter);
+   option.setWrapMode(QTextOption::NoWrap);
 
-void QWaylandBradientDecoration::paint(QPaintDevice *device)
-{
-   // pending implementation
+   m_windowTitle.setTextOption(option);
 }
 
 bool QWaylandBradientDecoration::handleMouse(QWaylandInputDevice *inputDevice, const QPointF &local, const QPointF &global,
@@ -54,8 +56,97 @@ bool QWaylandBradientDecoration::handleMouse(QWaylandInputDevice *inputDevice, c
 bool QWaylandBradientDecoration::handleTouch(QWaylandInputDevice *inputDevice, const QPointF &local, const QPointF &global,
       Qt::TouchPointState state, Qt::KeyboardModifiers mods)
 {
+   (void) inputDevice;
+   (void) global;
+   (void) mods;
+
+   bool handled = (state == Qt::TouchPointPressed);
+
+   if (handled) {
+      // pending implementation
+   }
+
+   return handled;
+}
+
+QMargins QWaylandBradientDecoration::margins() const
+{
+   return QMargins(3 * m_factor, 30 * m_factor, 3 * m_factor, 3 * m_factor);
+}
+
+void QWaylandBradientDecoration::paint(QPaintDevice *device)
+{
    // pending implementation
-   return false;
+}
+
+void QWaylandBradientDecoration::processMouseTop(QWaylandInputDevice *inputDevice, const QPointF &local, Qt::MouseButtons b,
+      Qt::KeyboardModifiers mods)
+{
+   (void) mods;
+
+   if (local.y() <= margins().bottom()) {
+      if (local.x() <= margins().left()) {
+         //top left bit
+         waylandWindow()->setMouseCursor(inputDevice, Qt::SizeFDiagCursor);
+         startResize(inputDevice, WL_SHELL_SURFACE_RESIZE_TOP_LEFT, b);
+
+      } else if (local.x() > window()->width() + margins().left()) {
+         //top right bit
+         waylandWindow()->setMouseCursor(inputDevice, Qt::SizeBDiagCursor);
+         startResize(inputDevice, WL_SHELL_SURFACE_RESIZE_TOP_RIGHT, b);
+
+      } else {
+         //top reszie bit
+         waylandWindow()->setMouseCursor(inputDevice, Qt::SplitVCursor);
+         startResize(inputDevice, WL_SHELL_SURFACE_RESIZE_TOP, b);
+      }
+
+   } else {
+      waylandWindow()->restoreMouseCursor(inputDevice);
+      startMove(inputDevice, b);
+   }
+}
+
+void QWaylandBradientDecoration::processMouseBottom(QWaylandInputDevice *inputDevice, const QPointF &local,
+      Qt::MouseButtons b, Qt::KeyboardModifiers mods)
+{
+   (void) mods;
+
+   if (local.x() <= margins().left()) {
+      // bottom left bit
+      waylandWindow()->setMouseCursor(inputDevice, Qt::SizeBDiagCursor);
+      startResize(inputDevice, WL_SHELL_SURFACE_RESIZE_BOTTOM_LEFT, b);
+
+   } else if (local.x() > window()->width() + margins().left()) {
+      // bottom right bit
+      waylandWindow()->setMouseCursor(inputDevice, Qt::SizeFDiagCursor);
+      startResize(inputDevice, WL_SHELL_SURFACE_RESIZE_BOTTOM_RIGHT, b);
+
+   } else {
+      // bottom bit
+      waylandWindow()->setMouseCursor(inputDevice, Qt::SplitVCursor);
+      startResize(inputDevice, WL_SHELL_SURFACE_RESIZE_BOTTOM, b);
+   }
+}
+
+void QWaylandBradientDecoration::processMouseLeft(QWaylandInputDevice *inputDevice, const QPointF &local,
+      Qt::MouseButtons b, Qt::KeyboardModifiers mods)
+{
+   (void) local;
+   (void) mods;
+
+   waylandWindow()->setMouseCursor(inputDevice, Qt::SplitHCursor);
+   startResize(inputDevice, WL_SHELL_SURFACE_RESIZE_LEFT, b);
+}
+
+void QWaylandBradientDecoration::processMouseRight(QWaylandInputDevice *inputDevice, const QPointF &local,
+      Qt::MouseButtons b, Qt::KeyboardModifiers mods)
+{
+   (void) local;
+   (void) mods;
+
+   waylandWindow()->setMouseCursor(inputDevice, Qt::SplitHCursor);
+   startResize(inputDevice, WL_SHELL_SURFACE_RESIZE_RIGHT, b);
 }
 
 }
