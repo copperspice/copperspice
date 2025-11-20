@@ -37,6 +37,7 @@ namespace QtWaylandClient {
 
 class QWaylandInputDevice;
 class QWaylandWindow;
+class QWaylandXdgPopup;
 class QWaylandXdgSurface;
 
 class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgShell : public QtWayland::xdg_wm_base
@@ -49,8 +50,14 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgShell : public QtWayland::xdg_wm_base
 
    QWaylandXdgSurface *createXdgSurface(QWaylandWindow *window);
 
+   QWaylandXdgPopup *getXdgPopup() const {
+      return m_topGrabbingPopup;
+   }
+
  private:
    void xdg_wm_base_ping(uint32_t serial) override;
+
+   QWaylandXdgPopup *m_topGrabbingPopup;
 };
 
 }

@@ -31,6 +31,7 @@
 #include <qwayland-xdg-shell.h>
 
 #include <qwayland_shellsurface_p.h>
+#include <qwayland_xdg_popup_p.h>
 #include <qwayland_xdg_toplevel_p.h>
 
 class QWindow;
@@ -52,6 +53,10 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgSurface : public QWaylandShellSurface, 
 
    bool handleExpose(const QRegion &exposeRegion) override;
 
+   QWaylandXdgPopup *getXdgPopup() const {
+      return m_popup.get();
+   }
+
    QWaylandXdgShell *getXdgShell() const {
       return m_shell;
    }
@@ -72,6 +77,8 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgSurface : public QWaylandShellSurface, 
    void xdg_surface_configure(uint32_t serial) override;
 
  private:
+   QWaylandXdgPopup *createPopup(QWaylandWindow *parent);
+
    bool m_configured;
    uint32_t m_serial;
 
@@ -80,6 +87,7 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgSurface : public QWaylandShellSurface, 
    QWaylandWindow *m_window;
    QWaylandXdgShell *m_shell;
 
+   QUniquePointer<QWaylandXdgPopup> m_popup;
    QUniquePointer<QWaylandXdgTopLevel> m_topLevel;
 };
 

@@ -27,6 +27,7 @@
 #include <qwayland_display_p.h>
 #include <qwayland_screen_p.h>
 #include <qwayland_window_p.h>
+#include <qwayland_xdg_popup_p.h>
 #include <qwayland_xdg_shell_p.h>
 #include <qwayland_xdg_toplevel_p.h>
 #include <qwindow_p.h>
@@ -43,10 +44,23 @@ QWaylandXdgSurface::QWaylandXdgSurface(QWaylandXdgShell *shell, QWaylandWindow *
    auto *transientParent = m_window->transientParent();
 
    if (type == Qt::ToolTip && transientParent) {
-      // pending implementation
+      createPopup(transientParent);
 
    } else if (type == Qt::Popup && transientParent != nullptr && display->lastInputDevice()) {
-      // pending implementation
+
+      QWaylandXdgSurface *parentXdgSurface = static_cast<QWaylandXdgSurface *>(transientParent->shellSurface());
+      QWaylandXdgPopup *popup = m_shell->getXdgPopup();
+
+      if (popup != nullptr) {
+         QWaylandXdgSurface *popupXdgSurface = popup->getXdgSurface();
+
+         if (popupXdgSurface != parentXdgSurface) {
+            transientParent = popupXdgSurface->m_window;
+         }
+      }
+
+      createPopup(transientParent);
+      m_popup->grab(display->lastInputDevice(), display->lastInputSerial());
 
    } else {
       if (transientParent != nullptr) {
@@ -91,6 +105,38 @@ bool QWaylandXdgSurface::handleExpose(const QRegion &exposeRegion)
 bool QWaylandXdgSurface::isExposed() const
 {
    return m_configured || m_serial != 0;
+}
+
+QWaylandXdgPopup *QWaylandXdgSurface::createPopup(QWaylandWindow *parent)
+{
+   if (m_popup != nullptr) {
+      return m_popup.get();
+   }
+
+   auto parentXdgSurface = static_cast<QWaylandXdgSurface *>(parent->shellSurface());
+   auto positioner = new QtWayland::xdg_positioner(m_shell->create_positioner());
+
+   // position is relative to the parent
+   QPoint pos = m_window->geometry().topLeft();
+   pos -= parent->geometry().topLeft();
+
+   if (parent->decoration() != nullptr) {
+      pos.setX(pos.x() + parent->decoration()->margins().left());
+      pos.setY(pos.y() + parent->decoration()->margins().top());
+   }
+
+   positioner->set_anchor_rect(pos.x(), pos.y(), 1, 1);
+   positioner->set_anchor(QtWayland::xdg_positioner::anchor_top_left);
+
+   positioner->set_gravity(QtWayland::xdg_positioner::gravity_bottom_right);
+   positioner->set_size(m_window->geometry().width(), m_window->geometry().height());
+
+   m_popup = QMakeUnique<QWaylandXdgPopup>(this, parentXdgSurface, positioner);
+
+   positioner->destroy();
+   delete positioner;
+
+   return m_popup.get();
 }
 
 void QWaylandXdgSurface::propagateSizeHints()
