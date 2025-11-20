@@ -26,6 +26,8 @@
 
 #include <qrect.h>
 #include <qregion.h>
+#include <quniquepointer.h>
+
 #include <qwayland-xdg-shell.h>
 
 #include <qwayland_shellsurface_p.h>
@@ -59,6 +61,10 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgSurface : public QWaylandShellSurface, 
    bool isTopLevel() const {
       return m_topLevel != nullptr;
    }
+
+   void propagateSizeHints() override;
+
+   QWaylandXdgTopLevel *topLevel() override;
 
    void setWindowGeometry(QRect rect) override;
 
