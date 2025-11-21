@@ -25,21 +25,17 @@
 
 #include <qwayland_xdg_shell_p.h>
 
-#include <qwayland_display_p.h>
-#include <qwayland_inputdevice_p.h>
-#include <qwayland_screen_p.h>
-#include <qwayland_window_p.h>
 #include <qwayland_xdg_surface_p.h>
 
 namespace QtWaylandClient {
 
 QWaylandXdgShell::QWaylandXdgShell(struct ::xdg_wm_base *shell)
-   : QtWayland::xdg_wm_base(shell)
+   : QtWayland::xdg_wm_base(shell), m_topGrabbingPopup(nullptr)
 {
 }
 
 QWaylandXdgShell::QWaylandXdgShell(::wl_registry *registry, uint32_t id)
-   : QtWayland::xdg_wm_base(registry, id, 1)
+   : QtWayland::xdg_wm_base(registry, id, 1), m_topGrabbingPopup(nullptr)
 {
 }
 

@@ -35,7 +35,6 @@ class QWindow;
 
 namespace QtWaylandClient {
 
-class QWaylandInputDevice;
 class QWaylandWindow;
 class QWaylandXdgPopup;
 class QWaylandXdgSurface;
@@ -52,6 +51,10 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgShell : public QtWayland::xdg_wm_base
 
    QWaylandXdgPopup *getXdgPopup() const {
       return m_topGrabbingPopup;
+   }
+
+   void setXdgPopup(QWaylandXdgPopup *newPopUp) {
+      m_topGrabbingPopup = newPopUp;
    }
 
  private:

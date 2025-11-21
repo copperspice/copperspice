@@ -42,12 +42,19 @@ QWaylandXdgPopup::~QWaylandXdgPopup()
       destroy();
    }
 
-   // pending implementation
+   if (m_grabbing) {
+      QWaylandXdgShell *obj = m_xdgSurface->getXdgShell();
+      obj->setXdgPopup(m_parent->getXdgPopup());
+   }
 }
 
 void QWaylandXdgPopup::grab(QWaylandInputDevice *seat, uint serial)
 {
-   // pending implementation
+   QWaylandXdgShell *obj = m_xdgSurface->getXdgShell();
+   obj->setXdgPopup(this);
+
+   xdg_popup::grab(seat->wl_seat(), serial);
+   m_grabbing = true;
 }
 
 // following methdod is called directly by wayland
