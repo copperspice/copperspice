@@ -48,6 +48,8 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgTopLevel : public QWaylandTopLevel, pub
 
    virtual ~QWaylandXdgTopLevel();
 
+   void applyConfigure() override;
+
    using QtWayland::xdg_toplevel::move;
    void move(QWaylandInputDevice *inputDevice) override;
 
@@ -69,6 +71,9 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgTopLevel : public QWaylandTopLevel, pub
    void xdg_toplevel_close() override;
 
  private:
+   bool m_active;
+   bool m_wasActive;
+
    QWaylandXdgSurface *m_surface;
    QWaylandWindow *m_window;
 

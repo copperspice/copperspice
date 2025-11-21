@@ -36,7 +36,9 @@
 namespace QtWaylandClient {
 
 QWaylandXdgTopLevel::QWaylandXdgTopLevel(QWaylandXdgSurface *surface, QWaylandWindow *window)
-   : QtWayland::xdg_toplevel(surface->get_toplevel()), m_surface(surface), m_window(window)
+   : QtWayland::xdg_toplevel(surface->get_toplevel()), m_active(false), m_wasActive(false),
+     m_surface(surface), m_window(window)
+
 {
 }
 
@@ -50,6 +52,45 @@ QWaylandXdgTopLevel::~QWaylandXdgTopLevel()
    if (isInitialized()) {
       destroy();
    }
+}
+
+void QWaylandXdgTopLevel::applyConfigure()
+{
+   QWaylandWindow *wl_window = m_surface->window();
+
+   if (! (m_applied.states & (Qt::WindowMaximized|Qt::WindowFullScreen))) {
+      m_normalSize = wl_window->window()->frameGeometry().size();
+   }
+
+   if ((m_pending.states & Qt::WindowActive) && ! (m_applied.states & Qt::WindowActive)) {
+      wl_window->display()->handleWindowActivated(wl_window);
+   }
+
+   if (! (m_pending.states & Qt::WindowActive) && (m_applied.states & Qt::WindowActive)) {
+      wl_window->display()->handleWindowDeactivated(wl_window);
+   }
+
+   Qt::WindowStates statesWithoutActive = m_pending.states & ~Qt::WindowActive;
+
+   wl_window->handleWindowStatesChanged(statesWithoutActive);
+
+   if (m_pending.size.isEmpty()) {
+      bool normalPending = ! (m_pending.states & (Qt::WindowMaximized|Qt::WindowFullScreen));
+
+      if (normalPending && ! m_normalSize.isEmpty()) {
+         wl_window->resizeApplyConfigure(m_normalSize);
+      }
+
+   } else {
+      wl_window->resizeApplyConfigure(m_pending.size);
+   }
+
+   QSize windowGeometrySize = wl_window->window()->frameGeometry().size();
+
+   QPoint pos = wl_window->window()->framePosition();
+   m_surface->set_window_geometry(pos.x(), pos.y(), windowGeometrySize.width(), windowGeometrySize.height());
+
+   m_applied = m_pending;
 }
 
 void QWaylandXdgTopLevel::move(QWaylandInputDevice *inputDevice)
@@ -118,7 +159,31 @@ bool QWaylandXdgTopLevel::wantsDecorations() const
 // following two methods are called directly by wayland
 void QWaylandXdgTopLevel::xdg_toplevel_configure(int32_t width, int32_t height, wl_array *states)
 {
-   // pending implementation
+   m_pending.size   = QSize(width, height);
+   m_pending.states = Qt::WindowNoState;
+
+   uint32_t *state  = static_cast<uint32_t *>(states->data);
+   size_t numStates = states->size / sizeof(uint32_t);
+
+   for (size_t i = 0; i < numStates; ++i) {
+      switch (state[i]) {
+
+         case XDG_TOPLEVEL_STATE_ACTIVATED:
+            m_pending.states |= Qt::WindowActive;
+            break;
+
+         case XDG_TOPLEVEL_STATE_FULLSCREEN:
+            m_pending.states |= Qt::WindowFullScreen;
+            break;
+
+         case XDG_TOPLEVEL_STATE_MAXIMIZED:
+            m_pending.states |= Qt::WindowMaximized;
+            break;
+
+         default:
+            break;
+      }
+   }
 }
 
 void QWaylandXdgTopLevel::xdg_toplevel_close()
