@@ -94,6 +94,7 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qtemporarydir.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qtemporaryfile.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qurl.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/io/qurlquery.cpp
 
    ${CMAKE_CURRENT_SOURCE_DIR}/json/qjsonarray.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/json/qjsondocument.cpp
