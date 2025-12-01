@@ -540,9 +540,9 @@ inline void QList<T>::move(size_type from, size_type to)
 template <typename T>
 typename QList<T>::size_type QList<T>::removeAll(const T &value)
 {
-   auto iter  = std::remove(m_data.begin(), m_data.end(), value);
-   int retval = m_data.end() - iter;
+   auto iter = std::remove(m_data.begin(), m_data.end(), value);
 
+   size_type retval = m_data.end() - iter;
    m_data.erase(iter, m_data.end());
 
    return retval;

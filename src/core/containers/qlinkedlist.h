@@ -26,6 +26,7 @@
 
 #include <qcontainerfwd.h>
 
+#include <algorithm>
 #include <qassert.h>
 #include <iterator>
 #include <list>
@@ -194,7 +195,7 @@ class QLinkedList
    }
 
    bool startsWith(const T &value) const {
-      return !isEmpty() && m_data.first() == value;
+      return ! isEmpty() && m_data.front() == value;
    }
 
    void swap(QLinkedList<T> &other) {
@@ -360,7 +361,7 @@ typename QLinkedList<T>::size_type QLinkedList<T>::removeAll(const T &value)
 {
    auto iter = std::remove(m_data.begin(), m_data.end(), value);
 
-   size_type retval = m_data.end() - iter;
+   size_type retval = std::distance(iter, m_data.end());
    m_data.erase(iter, m_data.end());
 
    return retval;
