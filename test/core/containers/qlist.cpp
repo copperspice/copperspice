@@ -95,45 +95,37 @@ TEST_CASE("QList begin_end", "[qlist]")
    }
 }
 
+TEST_CASE("QList bits", "[qlist]")
+{
+   QList<bool> list;
+
+   list.append(true);
+   list.append(false);
+   list.append(true);
+
+   REQUIRE(list.size() == 3);
+
+   REQUIRE(list[0] == true);
+   REQUIRE(list[1] == false);
+   REQUIRE(list[2] == true);
+
+   //
+   list[1] = true;
+   REQUIRE(list[1] == true);
+
+   //
+   list.replace(2, false);
+   REQUIRE(list[2] == false);
+}
+
 TEST_CASE("QList clear", "[qlist]")
 {
    QList<QString> list = { "watermelon", "apple", "pear", "grapefruit" };
 
+   REQUIRE(list.isEmpty() == false);
+   REQUIRE(list.size() == 4);
+
    list.clear();
-
-   REQUIRE(list.isEmpty() == true);
-   REQUIRE(list.size() == 0);
-}
-
-TEST_CASE("QList contains", "[qlist]")
-{
-   QList<QString> list = { "watermelon", "apple", "pear", "grapefruit" };
-
-   REQUIRE(list.contains("pear") == true);
-   REQUIRE(list.contains("orange") == false);
-}
-
-TEST_CASE("QList copy_assign", "[qlist]")
-{
-   QList<QString> list_a = { "watermelon", "apple", "pear", "grapefruit" };
-   QList<QString> list_b = list_a;
-
-   REQUIRE(list_a == list_b);
-
-   list_b[0] = "quince";
-
-   REQUIRE(list_a[0] == "watermelon");
-   REQUIRE(list_b[0] == "quince");
-
-   QList<QString> list_c;
-   list_c = list_a;
-
-   REQUIRE(list_c == list_a);
-}
-
-TEST_CASE("QList empty", "[qlist]")
-{
-   QList<QString> list;
 
    REQUIRE(list.isEmpty() == true);
    REQUIRE(list.size() == 0);
@@ -154,6 +146,66 @@ TEST_CASE("QList comparison", "[qlist]")
 
    REQUIRE(list1 == list3);
    REQUIRE(list1 == list4);
+}
+
+TEST_CASE("QList constructor", "[qlist]")
+{
+   QList<int> list_a{15, 30, 45};
+
+   REQUIRE(list_a.size() == 3);
+
+   REQUIRE(list_a[0] == 15);
+   REQUIRE(list_a[1] == 30);
+   REQUIRE(list_a[2] == 45);
+
+   //
+   QList<QList<int>> list_b;
+   list_b.append(QList<int>({15, 30, 45}));
+   list_b.append(QList<int>({55, 82}));
+
+   REQUIRE(list_b.size() == 2);
+
+   REQUIRE(list_b[0].size() == 3);
+   REQUIRE(list_b[1].size() == 2);
+
+   REQUIRE(list_b[1][0] == 55);
+   REQUIRE(list_b[1][1] == 82);
+}
+
+TEST_CASE("QList contains", "[qlist]")
+{
+   QList<QString> list = { "watermelon", "apple", "pear", "grapefruit" };
+
+   REQUIRE(list.contains("pear") == true);
+   REQUIRE(list.contains("orange") == false);
+}
+
+TEST_CASE("QList copy_assign", "[qlist]")
+{
+   QList<QString> list_a = { "watermelon", "apple", "pear", "grapefruit" };
+   QList<QString> list_b = list_a;
+
+   REQUIRE(list_a == list_b);
+
+   REQUIRE(list_a == QList<QString>{"watermelon", "apple", "pear", "grapefruit"});
+   REQUIRE(list_b == QList<QString>{"watermelon", "apple", "pear", "grapefruit"});
+
+   //
+   QList<QString> list_c;
+   list_c = list_a;
+
+   REQUIRE(list_a == list_c);
+
+   REQUIRE(list_a == QList<QString>{"watermelon", "apple", "pear", "grapefruit"});
+   REQUIRE(list_c == QList<QString>{"watermelon", "apple", "pear", "grapefruit"});
+}
+
+TEST_CASE("QList empty", "[qlist]")
+{
+   QList<QString> list;
+
+   REQUIRE(list.isEmpty() == true);
+   REQUIRE(list.size() == 0);
 }
 
 TEST_CASE("QList erase", "[qlist]")
@@ -213,6 +265,8 @@ TEST_CASE("QList insert", "[qlist]")
 {
    QList<QString> list = { "watermelon", "apple", "pear", "grapefruit" };
 
+   REQUIRE(list.length() == 4);
+
    list.insert(1, "mango");
 
    REQUIRE(list.contains("mango") == true);
@@ -246,7 +300,7 @@ TEST_CASE("QList mid", "[qlist]")
    REQUIRE(list_a.mid(3, 10) == list_b);
    REQUIRE(list_a.mid(10).isEmpty() == true);
 
-   //
+   REQUIRE(list_a.mid(15).isEmpty()   == true);
    REQUIRE(list_a.mid(2, 0).isEmpty() == true);
 }
 
@@ -343,6 +397,12 @@ TEST_CASE("QList position", "[qlist]")
 
    REQUIRE(list.front() == "watermelon");
    REQUIRE(list.back()  == "grapefruit");
+
+   REQUIRE(list.startsWith("watermelon") == true);
+   REQUIRE(list.endsWith("grapefruit")   == true);
+
+   REQUIRE(list.startsWith("grape") == false);
+   REQUIRE(list.endsWith("orange")  == false);
 }
 
 TEST_CASE("QList prepend", "[qlist]")
@@ -353,6 +413,7 @@ TEST_CASE("QList prepend", "[qlist]")
 
    REQUIRE(list.contains("quince") == true);
    REQUIRE(list[0] == "quince");
+
    REQUIRE(list.length() == 5);
 }
 
@@ -396,12 +457,78 @@ TEST_CASE("QList remove", "[qlist]")
    }
 }
 
+TEST_CASE("QList removeAll", "[qlist]")
+{
+   QList<int> list = { 5, 12, 3, 10, 5, 1, 0, 6, 5 };
+
+   REQUIRE(list.count() == 9);
+   REQUIRE(list.contains(5) == true);
+
+   //
+   int tally_1 = list.count(5);
+   int tally_2 = list.removeAll(5);
+
+   REQUIRE(tally_1 == 3);
+   REQUIRE(tally_2 == 3);
+
+   REQUIRE(list.count()     == 6);
+   REQUIRE(list.contains(5) == false);
+}
+
 TEST_CASE("QList replace", "[qlist]")
 {
    QList<QString> list = { "watermelon", "apple", "pear" };
    list.replace(1, "quince");
 
    REQUIRE(list == QList<QString>{ "watermelon", "quince", "pear" });
+
+   //
+   list[0] = "grapefruit";
+
+   REQUIRE(list == QList<QString>{"grapefruit", "quince", "pear"});
+}
+
+TEST_CASE("QList stdList", "[qlist]")
+{
+   QList<double> list_a = { 1.2, 0.5, 3.14 };
+
+   //
+   std::list<double> stdlist = list_a.toStdList();
+
+   //
+   QList<double> list_b = QList<double>::fromStdList(stdlist);
+
+   REQUIRE(list_a == list_b);
+}
+
+TEST_CASE("QList set", "[qlist]")
+{
+   QList<double> list_a = { 1.2, 0.5, 3.14 };
+
+   //
+   QSet<double> set = list_a.toSet();
+
+   //
+   QList<double> list_b = QList<double>::fromSet(set);
+
+   REQUIRE(list_b.size() == 3);
+
+   REQUIRE(list_b.contains(1.2)  == true);
+   REQUIRE(list_b.contains(0.5)  == true);
+   REQUIRE(list_b.contains(3.14) == true);
+}
+
+TEST_CASE("QList vector", "[qlist]")
+{
+   QList<double> list_a = { 1.2, 0.5, 3.14 };
+
+   //
+   QVector<double> vector = list_a.toVector();
+
+   //
+   QList<double> list_b = QList<double>::fromVector(vector);
+
+   REQUIRE(list_a == list_b);
 }
 
 TEST_CASE("QList swap", "[qlist]")
