@@ -121,7 +121,6 @@ int QStringList::indexOf(const QRegularExpression8 &regExp, int from) const
    QRegularExpression8 re(regExp.pattern(), options);
 
    for (int i = from; i < this->size(); ++i) {
-
       if (re.match(this->at(i)).hasMatch()) {
          return i;
       }
@@ -130,7 +129,7 @@ int QStringList::indexOf(const QRegularExpression8 &regExp, int from) const
    return -1;
 }
 
-int QStringList::lastIndexOf( const QRegularExpression8 &regExp, int from) const
+int QStringList::lastIndexOf(const QRegularExpression8 &regExp, int from) const
 {
    if (from < 0) {
       from += this->size();

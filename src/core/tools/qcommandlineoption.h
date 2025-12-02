@@ -50,7 +50,7 @@ class Q_CORE_EXPORT QCommandLineOption
 
    QCommandLineOption &operator=(const QCommandLineOption &other);
 
-   QCommandLineOption &operator=(QCommandLineOption && other) {
+   QCommandLineOption &operator=(QCommandLineOption &&other) {
       qSwap(d, other.d);
       return *this;
    }

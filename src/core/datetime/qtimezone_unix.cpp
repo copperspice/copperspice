@@ -728,7 +728,7 @@ void QTzTimeZonePrivate::init(const QByteArray &ianaId)
       // Open named tz, try modern path first, if fails try legacy path
       tzif.setFileName("/usr/share/zoneinfo/" + QString::fromUtf8(ianaId));
 
-      if (!tzif.open(QIODevice::ReadOnly)) {
+      if (! tzif.open(QIODevice::ReadOnly)) {
          tzif.setFileName("/usr/lib/zoneinfo/" + QString::fromUtf8(ianaId));
 
          if (! tzif.open(QIODevice::ReadOnly)) {

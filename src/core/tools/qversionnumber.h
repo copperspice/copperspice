@@ -44,17 +44,21 @@ class QVersionNumber
 
       // set the InlineSegmentMarker and set length to zero
       SegmentStorage()
-      {}
+      { }
 
-      SegmentStorage(const QVector<int> &seg) : pointer_segments(seg) {
+      SegmentStorage(const QVector<int> &seg)
+         : pointer_segments(seg)
+      {
       }
 
-      explicit SegmentStorage(QVector<int> &&seg) : pointer_segments(std::move(seg)) {
-
+      explicit SegmentStorage(QVector<int> &&seg)
+         : pointer_segments(std::move(seg))
+      {
       }
 
-      SegmentStorage(std::initializer_list<int> args) : pointer_segments(args) {
-
+      SegmentStorage(std::initializer_list<int> args)
+         : pointer_segments(args)
+      {
       }
 
       int size() const {
@@ -82,7 +86,8 @@ class QVersionNumber
    QVersionNumber() : m_segments()
    { }
 
-   explicit QVersionNumber(const QVector<int> &seg) : m_segments(seg)
+   explicit QVersionNumber(const QVector<int> &seg)
+      : m_segments(seg)
    { }
 
    explicit QVersionNumber(QVector<int> &&seg)

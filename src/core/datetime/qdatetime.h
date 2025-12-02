@@ -60,7 +60,7 @@ class Q_CORE_EXPORT QDate
 {
  public:
    enum MonthNameType {
-      DateFormat = 0,
+      DateFormat,
       StandaloneFormat
    };
 
@@ -89,6 +89,8 @@ class Q_CORE_EXPORT QDate
 
    QDateTime endOfDay(const QTimeZone &zone = default_tz()) const;
 
+   void getDate(int *year, int *month, int *day) const;
+
    bool isNull() const {
       return ! isValid();
    }
@@ -101,10 +103,10 @@ class Q_CORE_EXPORT QDate
    int year() const;
    int weekNumber(int *yearNumber = nullptr) const;
 
-   static QString shortMonthName(int month, MonthNameType type = DateFormat);
-   static QString shortDayName(int weekday, MonthNameType type = DateFormat);
    static QString longMonthName(int month, MonthNameType type  = DateFormat);
    static QString longDayName(int weekday, MonthNameType type  = DateFormat);
+   static QString shortMonthName(int month, MonthNameType type = DateFormat);
+   static QString shortDayName(int weekday, MonthNameType type = DateFormat);
 
    constexpr qint64 toJulianDay() const {
       return jd;
@@ -113,7 +115,6 @@ class Q_CORE_EXPORT QDate
    QString toString(Qt::DateFormat format = Qt::TextDate) const;
    QString toString(const QString &format) const;
 
-   void getDate(int *year, int *month, int *day) const;
    bool setDate(int year, int month, int day);
 
    QDateTime startOfDay(const QTimeZone &zone = default_tz()) const;
@@ -182,10 +183,8 @@ class Q_CORE_EXPORT QTime
    QTime(int h, int m, int s = 0, int ms = 0);
 
    [[nodiscard]] QTime addSecs(int seconds) const;
-   int secsTo(const QTime &value) const;
-
    [[nodiscard]] QTime addMSecs(int msecs) const;
-   int msecsTo(const QTime &value) const;
+
 
    int elapsed() const;
 
@@ -204,9 +203,12 @@ class Q_CORE_EXPORT QTime
       return mds == NullTime ? 0 : mds;
    }
 
+   int msecsTo(const QTime &value) const;
    int restart();
 
+   int secsTo(const QTime &value) const;
    bool setHMS(int h, int m, int s, int ms = 0);
+
    void start();
 
    QString toString(Qt::DateFormat format = Qt::TextDate) const;
@@ -301,7 +303,6 @@ class Q_CORE_EXPORT QDateTime
    QString timeZoneAbbreviation() const;
 
    QDateTime toLocalTime() const;
-
    qint64 toMSecsSinceEpoch() const;
    qint64 toSecsSinceEpoch() const;
 

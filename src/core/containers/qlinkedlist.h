@@ -63,8 +63,6 @@ class QLinkedList
    using Java_MutableIterator   = QMutableLinkedListIterator<T>;
 
    QLinkedList() = default;
-   QLinkedList(const QLinkedList<T> &other) = default;
-   QLinkedList(QLinkedList<T> &&other)      = default;
 
    QLinkedList(std::initializer_list<T> args)
       : m_data(args)
@@ -74,6 +72,9 @@ class QLinkedList
    QLinkedList(Input_Iterator first, Input_Iterator last)
       : m_data(first, last)
    { }
+
+   QLinkedList(const QLinkedList<T> &other) = default;
+   QLinkedList(QLinkedList<T> &&other)      = default;
 
    ~QLinkedList() = default;
 
@@ -114,10 +115,6 @@ class QLinkedList
       return m_data.empty();
    }
 
-   bool isEmpty() const {
-      return m_data.empty();
-   }
-
    bool endsWith(const T &value) const {
       return ! isEmpty() && m_data.back() == value;
    }
@@ -138,6 +135,10 @@ class QLinkedList
 
    const_reference front() const {
       return m_data.front();
+   }
+
+   bool isEmpty() const {
+      return m_data.empty();
    }
 
    reference last() {

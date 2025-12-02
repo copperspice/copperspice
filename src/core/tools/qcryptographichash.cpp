@@ -276,7 +276,6 @@ QByteArray QCryptographicHash::result() const
    }
 
    switch (d->method) {
-
       case Sha1: {
          Sha1State copy = d->sha1Context;
          d->result.resize(20);
@@ -393,7 +392,6 @@ QByteArray QCryptographicHash::result() const
          sha3Final(&copy, reinterpret_cast<BitSequence *>(d->result.data()));
          break;
       }
-
    }
 
    return d->result;
@@ -403,6 +401,7 @@ QByteArray QCryptographicHash::hash(const QByteArray &data, Algorithm method)
 {
    QCryptographicHash hash(method);
    hash.addData(data);
+
    return hash.result();
 }
 

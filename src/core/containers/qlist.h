@@ -72,8 +72,6 @@ class QList
    using Java_MutableIterator   = QMutableListIterator<T>;
 
    QList() = default;
-   QList(const QList<T> &other) = default;
-   QList(QList<T> &&other)      = default;
 
    QList(std::initializer_list<T> args)
       :  m_data(args)
@@ -83,6 +81,9 @@ class QList
    QList(Input_Iterator first, Input_Iterator last)
       : m_data(first, last)
    { }
+
+   QList(const QList<T> &other) = default;
+   QList(QList<T> &&other)      = default;
 
    ~QList() = default;
 
@@ -151,10 +152,6 @@ class QList
       return m_data.empty();
    }
 
-   bool isEmpty() const {
-      return m_data.empty();
-   }
-
    bool endsWith(const T &value) const {
       return ! isEmpty() && m_data.back() == value;
    }
@@ -194,6 +191,12 @@ class QList
       return retval;
    }
 
+   void insert(size_type i, const T &value);
+
+   bool isEmpty() const {
+      return m_data.empty();
+   }
+
    T &last() {
       Q_ASSERT(! isEmpty());
       return m_data.back();
@@ -207,12 +210,6 @@ class QList
    const_reference constLast() const {
       Q_ASSERT(! isEmpty());
       return m_data.back();
-   }
-
-   void insert(size_type i, const T &value);
-
-   size_type length() const {
-      return size();
    }
 
    size_type lastIndexOf(const T &value, size_type from = -1) const {
@@ -230,6 +227,10 @@ class QList
       }
 
       return retval;
+   }
+
+   size_type length() const {
+      return size();
    }
 
    QList<T> mid(size_type pos, size_type length = -1) const;
@@ -317,16 +318,18 @@ class QList
    T value(size_type i) const;
    T value(size_type i, const T &defaultValue) const;
 
-   // to from
+   // from
    static QList<T> fromSet(const QSet<T> &set);
    static QList<T> fromVector(const QVector<T> &vector);
 
    static QList<T> fromStdList(const std::list<T> &other) {
       QList<T> tmp;
       std::copy(other.begin(), other.end(), std::back_inserter(tmp));
+
       return tmp;
    }
 
+   // to
    QSet<T> toSet() const;
    QVector<T> toVector() const;
 

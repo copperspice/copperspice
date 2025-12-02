@@ -120,7 +120,7 @@ class QContiguousCache
 
    QContiguousCache<T> &operator=(const QContiguousCache<T> &other);
 
-   QContiguousCache<T> &operator=(QContiguousCache<T> && other) {
+   QContiguousCache<T> &operator=(QContiguousCache<T> &&other) {
       qSwap(d, other.d);
       return *this;
    }

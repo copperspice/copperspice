@@ -58,18 +58,18 @@ class QVarLengthArray
 
    inline explicit QVarLengthArray(int size = 0);
 
-   QVarLengthArray(const QVarLengthArray<T, Prealloc> &other)
-      : a(Prealloc), s(0), ptr(reinterpret_cast<T *>(array))
-   {
-      append(other.constData(), other.size());
-   }
-
    QVarLengthArray(std::initializer_list<T> args)
       : a(Prealloc), s(0), ptr(reinterpret_cast<T *>(array))
    {
       if (args.size()) {
          append(args.begin(), args.size());
       }
+   }
+
+   QVarLengthArray(const QVarLengthArray<T, Prealloc> &other)
+      : a(Prealloc), s(0), ptr(reinterpret_cast<T *>(array))
+   {
+      append(other.constData(), other.size());
    }
 
    ~QVarLengthArray()
@@ -95,7 +95,8 @@ class QVarLengthArray
          realloc(s, s << 1);
       }
 
-      const int index = s++;
+      const int index = s;
+      ++s;
 
       if constexpr (std::is_trivially_copy_assignable_v<T>) {
          ptr[index] = value;
@@ -161,12 +162,12 @@ class QVarLengthArray
    }
 
    T &first() {
-      Q_ASSERT(!isEmpty());
+      Q_ASSERT(! isEmpty());
       return *begin();
    }
 
    const T &first() const {
-      Q_ASSERT(!isEmpty());
+      Q_ASSERT(! isEmpty());
       return *begin();
    }
 
@@ -178,18 +179,7 @@ class QVarLengthArray
       return first();
    }
 
-   T &last() {
-      Q_ASSERT(! isEmpty());
-      return *(end() - 1);
-   }
-
-   const T &last() const {
-      Q_ASSERT(!isEmpty());
-      return *(end() - 1);
-   }
-
    int indexOf(const T &value, int from = 0) const;
-   int lastIndexOf(const T &value, int from = -1) const;
 
    void insert(int index, const T &value);
    void insert(int index, int count, const T &value);
@@ -204,18 +194,30 @@ class QVarLengthArray
       return (s == 0);
    }
 
+   T &last() {
+      Q_ASSERT(! isEmpty());
+      return *(end() - 1);
+   }
+
+   const T &last() const {
+      Q_ASSERT(!isEmpty());
+      return *(end() - 1);
+   }
+
+   int lastIndexOf(const T &value, int from = -1) const;
+
    int length() const {
       return s;
+   }
+
+   void pop_back() {
+      removeLast();
    }
 
    void prepend(const T &value);
 
    void push_back(const T &value) {
       append(value);
-   }
-
-   void pop_back() {
-      removeLast();
    }
 
    void replace(int index, const T &value);
@@ -233,6 +235,7 @@ class QVarLengthArray
    void reserve(int size);
 
    void squeeze();
+
    int size() const {
       return s;
    }
@@ -298,18 +301,18 @@ class QVarLengthArray
    }
 
    // operators
+   QVarLengthArray<T, Prealloc> &operator=(std::initializer_list<T> list) {
+      resize(list.size());
+      std::copy(list.begin(), list.end(), this->begin());
+
+      return *this;
+   }
+
    QVarLengthArray<T, Prealloc> &operator=(const QVarLengthArray<T, Prealloc> &other) {
       if (this != &other) {
          clear();
          append(other.constData(), other.size());
       }
-
-      return *this;
-   }
-
-   QVarLengthArray<T, Prealloc> &operator=(std::initializer_list<T> list) {
-      resize(list.size());
-      std::copy(list.begin(), list.end(), this->begin());
 
       return *this;
    }
@@ -336,7 +339,6 @@ class QVarLengthArray
    }
 
  private:
-   friend class QPodList<T, Prealloc>;
    void realloc(int size, int alloc);
 
    int a;      // capacity
@@ -348,6 +350,8 @@ class QVarLengthArray
       qint64 q_for_alignment_1;
       double q_for_alignment_2;
    };
+
+   friend class QPodList<T, Prealloc>;
 };
 
 template <class T, int Prealloc>

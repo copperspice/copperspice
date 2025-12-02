@@ -31,8 +31,7 @@
 
 static bool isConfigFunction(QEasingCurve::Type type)
 {
-   return type >= QEasingCurve::InElastic
-         && type <= QEasingCurve::OutInBounce;
+   return type >= QEasingCurve::InElastic && type <= QEasingCurve::OutInBounce;
 }
 
 class QEasingCurveFunction
@@ -45,8 +44,7 @@ class QEasingCurveFunction
       OutIn
    };
 
-   QEasingCurveFunction(QEasingCurveFunction::Type type = In, qreal period = 0.3, qreal amplitude = 1.0,
-         qreal overshoot = 1.70158)
+   QEasingCurveFunction(QEasingCurveFunction::Type type = In, qreal period = 0.3, qreal amplitude = 1.0, qreal overshoot = 1.70158)
       : _t(type), _p(period), _a(amplitude), _o(overshoot)
    { }
 
@@ -55,6 +53,7 @@ class QEasingCurveFunction
 
    virtual qreal value(qreal t);
    virtual QEasingCurveFunction *copy() const;
+
    bool operator==(const QEasingCurveFunction &other);
 
    Type _t;
@@ -76,19 +75,16 @@ QEasingCurveFunction *QEasingCurveFunction::copy() const
 bool QEasingCurveFunction::operator==(const QEasingCurveFunction &other)
 {
    return _t == other._t &&
-         qFuzzyCompare(_p, other._p) &&
-         qFuzzyCompare(_a, other._a) &&
-         qFuzzyCompare(_o, other._o);
+         qFuzzyCompare(_p, other._p) && qFuzzyCompare(_a, other._a) && qFuzzyCompare(_o, other._o);
 }
 
 class QEasingCurvePrivate
 {
  public:
    QEasingCurvePrivate()
-      : type(QEasingCurve::Linear),
-        config(nullptr),
-        func(&easeNone)
+      : type(QEasingCurve::Linear), config(nullptr), func(&easeNone)
    { }
+
    ~QEasingCurvePrivate()
    {
       delete config;
@@ -110,6 +106,7 @@ struct ElasticEase : public QEasingCurveFunction {
       ElasticEase *rv = new ElasticEase(_t);
       rv->_p = _p;
       rv->_a = _a;
+
       return rv;
    }
 
@@ -144,6 +141,7 @@ struct BounceEase : public QEasingCurveFunction {
    QEasingCurveFunction *copy() const override {
       BounceEase *rv = new BounceEase(_t);
       rv->_a = _a;
+
       return rv;
    }
 
@@ -379,7 +377,6 @@ QEasingCurve::QEasingCurve(Type type)
 QEasingCurve::QEasingCurve(const QEasingCurve &other)
    : d_ptr(new QEasingCurvePrivate)
 {
-   // ### non-atomic, requires malloc on shallow copy
    *d_ptr = *other.d_ptr;
 
    if (other.d_ptr->config) {
@@ -394,8 +391,7 @@ QEasingCurve::~QEasingCurve()
 
 bool QEasingCurve::operator==(const QEasingCurve &other) const
 {
-   bool res = d_ptr->func == other.d_ptr->func
-         && d_ptr->type == other.d_ptr->type;
+   bool res = d_ptr->func == other.d_ptr->func && d_ptr->type == other.d_ptr->type;
 
    if (res) {
       if (d_ptr->config && other.d_ptr->config) {
@@ -513,7 +509,7 @@ void QEasingCurve::setType(Type type)
 
 void QEasingCurve::setCustomType(EasingFunction func)
 {
-   if (!func) {
+   if (! func) {
       qWarning("QEasingCurve::setCustomType() Invalid callback (nullptr)");
       return;
    }

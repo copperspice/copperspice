@@ -96,7 +96,6 @@ inline int qstrncmp(const char *str1, const char *str2, uint len)
 Q_CORE_EXPORT int qstricmp(const char *, const char *);
 Q_CORE_EXPORT int qstrnicmp(const char *, const char *, uint len);
 
-// qChecksum: Internet checksum
 Q_CORE_EXPORT quint16 qChecksum(const char *s, uint len);
 
 template <int N>
@@ -152,18 +151,6 @@ class Q_CORE_EXPORT QByteArray
    QByteArray(const char *str, int size = -1);
    QByteArray(int size, char ch);
 
-   QByteArray(const QByteArray &other)
-      : d(other.d)
-   {
-      d->ref.ref();
-   }
-
-   QByteArray(QByteArray &&other)
-      : d(other.d)
-   {
-      other.d = Data::sharedNull();
-   }
-
    QByteArray(int size, Qt::NoDataOverload dummy);
 
    QByteArray(QByteArrayDataPtr dd)
@@ -174,6 +161,18 @@ class Q_CORE_EXPORT QByteArray
       if (! d->ref.deref()) {
          Data::deallocate(d);
       }
+   }
+
+   QByteArray(const QByteArray &other)
+      : d(other.d)
+   {
+      d->ref.ref();
+   }
+
+   QByteArray(QByteArray &&other)
+      : d(other.d)
+   {
+      other.d = Data::sharedNull();
    }
 
    inline char at(int i) const;
@@ -270,13 +269,10 @@ class Q_CORE_EXPORT QByteArray
    QByteArray &prepend(const char *str, int len);
    QByteArray &prepend(const QByteArray &value);
 
-   QByteArray rightJustified(int width, char fill = ' ', bool truncate = false) const;
-   QByteArray right(int len) const;
-   void resize(int size);
-   inline void reserve(int size);
-
    QByteArray &remove(char ch);
    QByteArray &remove(int pos, int len);
+
+   QByteArray repeated(int times) const;
 
    QByteArray &replace(int pos, int len, const char *str);
    QByteArray &replace(int pos, int len, const char *str, int size);
@@ -291,7 +287,11 @@ class Q_CORE_EXPORT QByteArray
    QByteArray &replace(const char *before, const QByteArray &after);
    QByteArray &replace(char before, char after);
 
-   QByteArray repeated(int times) const;
+   void resize(int size);
+   inline void reserve(int size);
+
+   QByteArray rightJustified(int width, char fill = ' ', bool truncate = false) const;
+   QByteArray right(int len) const;
 
    bool startsWith(const QByteArray &value) const;
    bool startsWith(char ch) const;
@@ -300,13 +300,14 @@ class Q_CORE_EXPORT QByteArray
    QByteArray simplified() const;
 
    inline int size() const;
+
+   QList<QByteArray> split(char sep) const;
+
    inline void squeeze();
 
    void swap(QByteArray &other) {
       qSwap(d, other.d);
    }
-
-   QList<QByteArray> split(char sep) const;
 
    void truncate(int pos);
    QByteArray trimmed() const;

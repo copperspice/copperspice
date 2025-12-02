@@ -250,7 +250,7 @@ class QMap
 
    QList<Val> values() const;
 
-   // to from
+   // to
    std::map<Key, Val, C> toStdMap() const;
 
    // iterators
@@ -643,7 +643,7 @@ Val &QMap<Key, Val, C>::operator[](const Key &key)
    return iter->second;
 }
 
-// to from
+// to
 
 template <class Key, class Val, class C>
 std::map<Key, Val, C> QMap<Key, Val, C>::toStdMap() const

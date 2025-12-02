@@ -74,7 +74,7 @@ struct Q_CORE_EXPORT QArrayData {
    AllocationOptions detachFlags() const {
       AllocationOptions result;
 
-      if (!ref.isSharable()) {
+      if (! ref.isSharable()) {
          result |= Unsharable;
       }
 

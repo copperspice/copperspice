@@ -70,14 +70,16 @@ class QSet
    using Java_MutableIterator = QMutableSetIterator<T>;
 
    QSet() = default;
-   QSet(const QSet<T> &other) = default;
-   QSet(QSet<T> &&other) = default;
 
    QSet(std::initializer_list<T> args)
-      : m_data(args)  {}
+      : m_data(args)
+   { }
 
    template <class Input_Iterator>
    QSet(Input_Iterator first, Input_Iterator last);
+
+   QSet(const QSet<T> &other) = default;
+   QSet(QSet<T> &&other) = default;
 
    // methods
    size_type capacity() const {
@@ -102,12 +104,37 @@ class QSet
       return m_data.empty();
    }
 
+   size_type erase(const key_type &key) {
+      return m_data.erase(key);
+   }
+
+   iterator erase(const_iterator pos) {
+      return m_data.erase(pos);
+   }
+
+   iterator erase(const_iterator first, const_iterator last) {
+      return m_data.erase(first, last);
+   }
+
+   iterator find(const T &value) {
+      return m_data.find(value);
+   }
+
+   const_iterator find(const T &value) const {
+      return m_data.find(value);
+   }
+
+   const_iterator constFind(const T &value) const {
+      return find(value);
+   }
+
+
    bool isEmpty() const {
       return m_data.empty();
    }
 
-   size_type erase(const key_type &key) {
-      return m_data.erase(key);
+   iterator insert(const T &value) {
+      return m_data.insert(value).first;
    }
 
    QSet<T> &intersect(const QSet<T> &other);
@@ -173,30 +200,6 @@ class QSet
 
    const_iterator constEnd() const {
       return m_data.end();
-   }
-
-   iterator erase(const_iterator pos) {
-      return m_data.erase(pos);
-   }
-
-   iterator erase(const_iterator first, const_iterator last) {
-      return m_data.erase(first, last);
-   }
-
-   iterator find(const T &value) {
-      return m_data.find(value);
-   }
-
-   const_iterator find(const T &value) const {
-      return m_data.find(value);
-   }
-
-   const_iterator constFind(const T &value) const {
-      return find(value);
-   }
-
-   iterator insert(const T &value) {
-      return m_data.insert(value).first;
    }
 
    // reverse iterators - do not apply

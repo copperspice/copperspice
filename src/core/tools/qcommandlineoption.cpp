@@ -37,17 +37,17 @@ class QCommandLineOptionPrivate : public QSharedData
 
    void setNames(const QStringList &nameList);
 
-   // The list of names used for this option.
+   // list of names used for this option
    QStringList names;
 
    // The documentation name for the value, if one is expected
    // Example: "-o <file>" means valueName == "file"
    QString valueName;
 
-   // The description used for this option.
+   // description used for this option
    QString description;
 
-   // The list of default values used for this option.
+   // list of default values used for this option
    QStringList defaultValues;
 };
 
@@ -92,9 +92,38 @@ QCommandLineOption &QCommandLineOption::operator=(const QCommandLineOption &othe
    return *this;
 }
 
+QStringList QCommandLineOption::defaultValues() const
+{
+   return d->defaultValues;
+}
+
+QString QCommandLineOption::description() const
+{
+   return d->description;
+}
+
 QStringList QCommandLineOption::names() const
 {
    return d->names;
+}
+
+void QCommandLineOption::setDefaultValue(const QString &defaultValue)
+{
+   d->defaultValues.clear();
+
+   if (! defaultValue.isEmpty()) {
+      d->defaultValues << defaultValue;
+   }
+}
+
+void QCommandLineOption::setDefaultValues(const QStringList &defaultValues)
+{
+   d->defaultValues = defaultValues;
+}
+
+void QCommandLineOption::setDescription(const QString &description)
+{
+   d->description = description;
 }
 
 void QCommandLineOptionPrivate::setNames(const QStringList &nameList)
@@ -138,31 +167,3 @@ QString QCommandLineOption::valueName() const
    return d->valueName;
 }
 
-void QCommandLineOption::setDescription(const QString &description)
-{
-   d->description = description;
-}
-
-QString QCommandLineOption::description() const
-{
-   return d->description;
-}
-
-void QCommandLineOption::setDefaultValue(const QString &defaultValue)
-{
-   d->defaultValues.clear();
-
-   if (! defaultValue.isEmpty()) {
-      d->defaultValues << defaultValue;
-   }
-}
-
-void QCommandLineOption::setDefaultValues(const QStringList &defaultValues)
-{
-   d->defaultValues = defaultValues;
-}
-
-QStringList QCommandLineOption::defaultValues() const
-{
-   return d->defaultValues;
-}

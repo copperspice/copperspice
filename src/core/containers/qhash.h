@@ -68,9 +68,6 @@ class QHash
 
    QHash() = default;
 
-   QHash(const QHash<Key, Val, Hash, KeyEqual> &other) = default;
-   QHash(QHash<Key, Val, Hash, KeyEqual> &&other) = default;
-
    QHash(std::initializer_list<std::pair<const Key, Val>> list, const Hash &hash = Hash(),
          const KeyEqual &key = KeyEqual())
       : m_data(list, 1, hash, key)
@@ -92,6 +89,9 @@ class QHash
    QHash(Input_Iterator first, Input_Iterator last, const Hash &hash = Hash(), const KeyEqual &key = KeyEqual())
       : m_data(first, last, hash, key)
    { }
+
+   QHash(const QHash<Key, Val, Hash, KeyEqual> &other) = default;
+   QHash(QHash<Key, Val, Hash, KeyEqual> &&other) = default;
 
    ~QHash() = default;
 
@@ -124,10 +124,6 @@ class QHash
 
    bool empty() const {
       return isEmpty();
-   }
-
-   bool isEmpty() const {
-      return m_data.empty();
    }
 
    QPair<iterator, iterator> equal_range(const Key &key) {
@@ -171,18 +167,22 @@ class QHash
       return m_data.insert_or_assign(key, std::move(value)).first;
    }
 
+   bool isEmpty() const {
+      return m_data.empty();
+   }
+
    const Key key(const Val &value) const;
    const Key key(const Val &value, const Key &defaultKey) const;
 
    QList<Key> keys() const;
    QList<Key> keys(const Val &value) const;
 
-   void reserve(size_type size) {
-      m_data.reserve(size);
-   }
-
    size_type remove(const Key &key)  {
       return m_data.erase(key);
+   }
+
+   void reserve(size_type size) {
+      m_data.reserve(size);
    }
 
    size_type size() const {

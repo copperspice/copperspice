@@ -66,13 +66,11 @@ class QVector
    QVector() = default;
    explicit QVector(size_type size)
       : m_data(size)
-   {
-   }
+   { }
 
    QVector(size_type size, const T &value)
       : m_data(size, value)
-   {
-   }
+   { }
 
    QVector(const QVector<T> &other) = default;
    QVector(QVector<T> &&other) = default;
@@ -83,7 +81,8 @@ class QVector
 
    template <class Input_Iterator>
    QVector(Input_Iterator first, Input_Iterator last)
-      : m_data(first, last) {}
+      : m_data(first, last)
+   { }
 
    ~QVector() = default;
 
@@ -491,7 +490,7 @@ class QVector
       return *this;
    }
 
-   QVector<T> &operator<< (const T &value) {
+   QVector<T> &operator<<(const T &value) {
       append(value);
       return *this;
    }

@@ -307,7 +307,7 @@ class QMultiMap
    QList<Val> values() const;
    QList<Val> values(const Key &key) const;
 
-   // to from
+   // to
    std::multimap<Key, Val, C> toStdMultiMap() const;
 
    // iterators
@@ -794,7 +794,7 @@ Val &QMultiMap<Key, Val, C>::operator[](const Key &key)
    return iter->second;
 }
 
-// to from
+// to
 
 template <class Key, class Val, class C>
 std::multimap<Key, Val, C> QMultiMap<Key, Val, C>::toStdMultiMap() const

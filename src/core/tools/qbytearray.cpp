@@ -791,6 +791,7 @@ QByteArray &QByteArray::append(char ch)
 
    d->data()[d->size++] = ch;
    d->data()[d->size] = '\0';
+
    return *this;
 }
 
@@ -805,6 +806,7 @@ static inline QByteArray &qbytearray_insert(QByteArray *ba,
 
    int oldsize = ba->size();
    ba->resize(qMax(pos, oldsize) + len);
+
    char *dst = ba->data();
 
    if (pos > oldsize) {
@@ -814,6 +816,7 @@ static inline QByteArray &qbytearray_insert(QByteArray *ba,
    }
 
    memcpy(dst + pos, arr, len);
+
    return *ba;
 }
 

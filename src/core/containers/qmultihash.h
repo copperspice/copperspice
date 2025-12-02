@@ -54,6 +54,7 @@ class QMultiHash
    using key_equal       = typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::key_equal;
 
    using allocator_type  = typename std::unordered_multimap<Key, Val, Hash, KeyEqual>::allocator_type;
+
    using const_pointer   = const Val *;
    using const_reference = const Val &;
 
@@ -62,13 +63,10 @@ class QMultiHash
    class const_iterator;
 
    // java
-   using Java_Iterator          = QMultiHashIterator<Key, Val, Hash, KeyEqual>;
-   using Java_MutableIterator   = QMutableMultiHashIterator<Key, Val, Hash, KeyEqual>;
+   using Java_Iterator        = QMultiHashIterator<Key, Val, Hash, KeyEqual>;
+   using Java_MutableIterator = QMutableMultiHashIterator<Key, Val, Hash, KeyEqual>;
 
    QMultiHash() = default;
-
-   QMultiHash(const QMultiHash<Key, Val, Hash, KeyEqual> &other) = default;
-   QMultiHash(QMultiHash<Key, Val, Hash, KeyEqual> &&other) = default;
 
    QMultiHash(std::initializer_list<std::pair<const Key, Val>> list, const Hash &hash = Hash(),
          const KeyEqual &key = KeyEqual())
@@ -92,6 +90,9 @@ class QMultiHash
          const KeyEqual &key = KeyEqual())
       : m_data(first, last, hash, key)
    { }
+
+   QMultiHash(const QMultiHash<Key, Val, Hash, KeyEqual> &other) = default;
+   QMultiHash(QMultiHash<Key, Val, Hash, KeyEqual> &&other) = default;
 
    ~QMultiHash() = default;
 
@@ -122,18 +123,14 @@ class QMultiHash
       return m_data.count(key);
    }
 
-   size_type count(const Key &key, const Val &value) const;
-
    size_type count() const {
       return m_data.size();
    }
 
+   size_type count(const Key &key, const Val &value) const;
+
    bool empty() const {
       return isEmpty();
-   }
-
-   bool isEmpty() const {
-      return m_data.empty();
    }
 
    QPair<iterator, iterator> equal_range(const Key &key) {
@@ -215,19 +212,15 @@ class QMultiHash
       return m_data.emplace(key, std::move(value));
    }
 
+   bool isEmpty() const {
+      return m_data.empty();
+   }
+
    const Key key(const Val &value) const;
    const Key key(const Val &value, const Key &defaultKey) const;
 
    QList<Key> keys() const;
    QList<Key> keys(const Val &value) const;
-
-   size_type remove(const Key &key)  {
-      return m_data.erase(key);
-   }
-
-   void reserve(size_type size) {
-      m_data.reserve(size);
-   }
 
    iterator replace(const Key &key, const Val &value) {
       auto iter = m_data.find(key);
@@ -242,7 +235,16 @@ class QMultiHash
       return iter;
    }
 
+
+   size_type remove(const Key &key)  {
+      return m_data.erase(key);
+   }
+
    size_type remove(const Key &key, const Val &value);
+
+   void reserve(size_type size) {
+      m_data.reserve(size);
+   }
 
    size_type size() const {
       // returns unsigned, must convert to signed
