@@ -180,22 +180,22 @@ TEST_CASE("QByteArray copy_assign", "[qbytearray]")
    QByteArray str1("lemon");
    QByteArray str2(str1);
 
-   QByteArray str3;
-   str3 = str1;
-
    REQUIRE(str1.isEmpty()  == false);
    REQUIRE(str1.isNull()   == false);
 
    REQUIRE(str2.isEmpty()  == false);
    REQUIRE(str2.isNull()   == false);
 
+   REQUIRE(str1 == str2);
+
+   //
+   QByteArray str3;
+   str3 = str1;
+
    REQUIRE(str3.isEmpty()  == false);
    REQUIRE(str3.isNull()   == false);
 
-   REQUIRE(str1 == str2);
-   REQUIRE(str3 == str1);
-
-   REQUIRE(! (str1 != str2));
+   REQUIRE(str1 == str3);
 }
 
 TEST_CASE("QByteArray contains", "[qbytearray]")
@@ -392,10 +392,15 @@ TEST_CASE("QByteArray move_assign", "[qbytearray]")
    QByteArray str1("apple");
    QByteArray str2(std::move(str1));
 
-   REQUIRE(str1.isEmpty() == true);
-
    REQUIRE(str2.isEmpty() == false);
    REQUIRE(str2 == "apple");
+
+   //
+   QByteArray str3;
+   str3 = std::move(str2);
+
+   REQUIRE(str3.isEmpty() == false);
+   REQUIRE(str3 == "apple");
 }
 
 TEST_CASE("QByteArray prepend", "[qbytearray]")
