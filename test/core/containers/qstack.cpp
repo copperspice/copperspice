@@ -74,26 +74,6 @@ TEST_CASE("QStack begin_end", "[qstack]")
    }
 }
 
-TEST_CASE("QStack empty", "[qstack]")
-{
-   QStack<QString> stack;
-
-   REQUIRE(stack.isEmpty() == true);
-   REQUIRE(stack.size() == 0);
-}
-
-TEST_CASE("QStack length", "[qstack]")
-{
-   QStack<QString> stack;
-   stack.push("watermelon");
-   stack.push("apple");
-   stack.push("pear");
-   stack.push("grapefruit");
-
-   REQUIRE(stack.length() == 4);
-   REQUIRE(stack.size() == 4);
-}
-
 TEST_CASE("QStack clear", "[qstack]")
 {
    QStack<QString> stack;
@@ -107,6 +87,29 @@ TEST_CASE("QStack clear", "[qstack]")
    REQUIRE(stack.size() == 0);
 }
 
+TEST_CASE("QStack copy_assign", "[qstack]")
+{
+   QStack<QString> stack_1;
+   stack_1.push("lemon");
+   stack_1.push("pear");
+
+   QStack stack_2(stack_1);
+
+   REQUIRE(stack_1.size() == 2);
+   REQUIRE(stack_2.size() == 2);
+
+   REQUIRE(stack_1 == stack_2);
+
+   //
+   QStack<QString> stack_3;
+   stack_3 = stack_1;
+
+   REQUIRE(stack_1.size() == 2);
+   REQUIRE(stack_3.size() == 2);
+
+   REQUIRE(stack_1 == stack_3);
+}
+
 TEST_CASE("QStack contains", "[qstack]")
 {
    QStack<QString> stack;
@@ -117,6 +120,14 @@ TEST_CASE("QStack contains", "[qstack]")
 
    REQUIRE(stack.contains("pear") == true);
    REQUIRE(stack.contains("orange") == false);
+}
+
+TEST_CASE("QStack empty", "[qstack]")
+{
+   QStack<QString> stack;
+
+   REQUIRE(stack.isEmpty() == true);
+   REQUIRE(stack.size() == 0);
 }
 
 TEST_CASE("QStack erase", "[qstack]")
@@ -136,26 +147,6 @@ TEST_CASE("QStack erase", "[qstack]")
    REQUIRE(stack.contains("grapefruit") == true );
 
    REQUIRE(stack.length() == 3);
-}
-
-TEST_CASE("QStack remove", "[qstack]")
-{
-   QStack<QString> stack;
-   stack.push("watermelon");
-   stack.push("apple");
-   stack.push("pear");
-   stack.push("grapefruit");
-
-   stack.removeOne("apple");
-   stack.remove(0);
-
-   REQUIRE(stack.contains("apple") == false);
-   REQUIRE(stack.contains("watermelon") == false);
-
-   REQUIRE(stack.contains("pear") == true);
-   REQUIRE(stack.contains("grapefruit") == true);
-
-   REQUIRE(stack.length() == 2);
 }
 
 TEST_CASE("QStack insert", "[qstack]")
@@ -180,6 +171,41 @@ TEST_CASE("QStack insert", "[qstack]")
    REQUIRE(stack.contains("mango") == true);
    REQUIRE(stack[1] == "mango");
    REQUIRE(stack.length() == 5);
+}
+
+TEST_CASE("QStack length", "[qstack]")
+{
+   QStack<QString> stack;
+   stack.push("watermelon");
+   stack.push("apple");
+   stack.push("pear");
+   stack.push("grapefruit");
+
+   REQUIRE(stack.length() == 4);
+   REQUIRE(stack.size() == 4);
+}
+
+TEST_CASE("QStack move_assign", "[qstack]")
+{
+   QStack<QString> stack_1;
+   stack_1.push("lemon");
+   stack_1.push("pear");
+
+   QStack stack_2(std::move(stack_1));
+
+   REQUIRE(stack_2.size() == 2);
+
+   REQUIRE(stack_2[0] == "lemon");
+   REQUIRE(stack_2[1] == "pear");
+
+   //
+   QStack<QString> stack_3;
+   stack_3 = std::move(stack_2);
+
+   REQUIRE(stack_3.size() == 2);
+
+   REQUIRE(stack_3[0] == "lemon");
+   REQUIRE(stack_3[1] == "pear");
 }
 
 TEST_CASE("QStack pop", "[qstack]")
@@ -215,6 +241,45 @@ TEST_CASE("QStack position", "[qstack]")
    REQUIRE(stack.back()  == "grapefruit");
 }
 
+TEST_CASE("QStack remove", "[qstack]")
+{
+   QStack<QString> stack;
+   stack.push("watermelon");
+   stack.push("apple");
+   stack.push("pear");
+   stack.push("grapefruit");
+
+   stack.removeOne("apple");
+   stack.remove(0);
+
+   REQUIRE(stack.contains("apple") == false);
+   REQUIRE(stack.contains("watermelon") == false);
+
+   REQUIRE(stack.contains("pear") == true);
+   REQUIRE(stack.contains("grapefruit") == true);
+
+   REQUIRE(stack.length() == 2);
+}
+
+TEST_CASE("QStack swap", "[qstack]")
+{
+   QStack<QString> stack1;
+   stack1.push("watermelon");
+   stack1.push("apple");
+   stack1.push("pear");
+   stack1.push("grapefruit");
+
+   QStack<QString> stack2;
+   stack2.push("grape");
+   stack2.push("orange");
+   stack2.push("peach");
+
+   stack1.swap(stack2);
+
+   REQUIRE(stack1.contains("orange") == true);
+   REQUIRE(stack2.contains("orange") == false);
+}
+
 TEST_CASE("QStack toList", "[qstack]")
 {
    QStack<QString> stack;
@@ -245,23 +310,4 @@ TEST_CASE("QStack toList", "[qstack]")
         REQUIRE(stack.size() == 4);
         REQUIRE(stack.contains("pear") == true);
     }
-}
-
-TEST_CASE("QStack swap", "[qstack]")
-{
-   QStack<QString> stack1;
-   stack1.push("watermelon");
-   stack1.push("apple");
-   stack1.push("pear");
-   stack1.push("grapefruit");
-
-   QStack<QString> stack2;
-   stack2.push("grape");
-   stack2.push("orange");
-   stack2.push("peach");
-
-   stack1.swap(stack2);
-
-   REQUIRE(stack1.contains("orange") == true);
-   REQUIRE(stack2.contains("orange") == false);
 }
