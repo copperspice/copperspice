@@ -224,8 +224,7 @@ class QContiguousCache
    void free(Data *x);
 
    int sizeOfTypedData() {
-      // this is more or less the same as sizeof(Data), except that it doesn't
-      // count the padding at the end
+      // more or less the same as sizeof(Data), except this method does not count the padding at the end
       return reinterpret_cast<const char *>(&(reinterpret_cast<const Data *>(this))->array[1]) -
             reinterpret_cast<const char *>(this);
    }
@@ -245,6 +244,7 @@ void QContiguousCache<T>::detach_helper()
 
    x.d = malloc(d->alloc);
    x.d->ref.store(1);
+
    x.d->count    = d->count;
    x.d->start    = d->start;
    x.d->offset   = d->offset;
@@ -254,6 +254,7 @@ void QContiguousCache<T>::detach_helper()
 
    T *dest = x.p->array + x.d->start;
    T *src  = p->array + d->start;
+
    int oldcount = x.d->count;
 
    while (oldcount--) {
@@ -336,7 +337,7 @@ void QContiguousCache<T>::setCapacity(int size)
       }
    }
 
-   /* free old */
+   // free old
    free(p);
    d = x.d;
 }
@@ -360,7 +361,9 @@ void QContiguousCache<T>::clear()
          }
       }
 
-      d->count = d->start = d->offset = 0;
+      d->count  = 0;
+      d->start  = 0;
+      d->offset = 0;
 
    } else {
       union {
@@ -374,7 +377,7 @@ void QContiguousCache<T>::clear()
       x.d->count = x.d->start = x.d->offset = 0;
       x.d->sharable = true;
 
-      if (!d->ref.deref()) {
+      if (! d->ref.deref()) {
          free(p);
       }
 
@@ -407,7 +410,7 @@ QContiguousCache<T> &QContiguousCache<T>::operator=(const QContiguousCache<T> &o
    other.d->ref.ref();
 
    if (! d->ref.deref()) {
-      free(d);
+      free(p);
    }
 
    d = other.d;
