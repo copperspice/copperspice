@@ -60,6 +60,7 @@ target_sources(CsCoreTest
    ${CMAKE_CURRENT_SOURCE_DIR}/concurrent/qthreadpool.cpp
 
    ${CMAKE_CURRENT_SOURCE_DIR}/containers/qcache.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/containers/qcontiguouscache.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/containers/qflatmap.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/containers/qhash.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/containers/qlinkedlist.cpp
