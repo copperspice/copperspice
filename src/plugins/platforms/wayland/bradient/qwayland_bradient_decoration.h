@@ -30,6 +30,7 @@
 #include <qmargins.h>
 #include <qpainter.h>
 #include <qpointf.h>
+#include <qrectf.h>
 #include <qstatictext.h>
 
 #include <qwayland_abstract_decoration_p.h>
@@ -61,6 +62,8 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandBradientDecoration : public QWaylandAbstra
    void paint(QPaintDevice *device) override;
 
  private:
+   bool clickButton(Qt::MouseButtons b, Button btn);
+
    void processMouseTop(QWaylandInputDevice *inputDevice, const QPointF &local, Qt::MouseButtons b, Qt::KeyboardModifiers mods);
    void processMouseBottom(QWaylandInputDevice *inputDevice, const QPointF &local, Qt::MouseButtons b, Qt::KeyboardModifiers mods);
    void processMouseLeft(QWaylandInputDevice *inputDevice, const QPointF &local, Qt::MouseButtons b, Qt::KeyboardModifiers mods);
@@ -68,6 +71,10 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandBradientDecoration : public QWaylandAbstra
 
    int m_factor;
    Button m_clicking;
+
+   QRectF closeButtonRect() const;
+   QRectF maximizeButtonRect() const;
+   QRectF minimizeButtonRect() const;
 
    QColor m_foregroundColor;
    QColor m_backgroundColor;

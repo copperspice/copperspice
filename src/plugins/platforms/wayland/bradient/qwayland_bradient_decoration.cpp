@@ -32,6 +32,73 @@
 
 namespace QtWaylandClient {
 
+#define BUTTON_SPACING 5
+#define BUTTON_WIDTH   10
+
+static const char *const qt_close_xpm[] = {
+   "10 10 2 1",
+   "# c #000000",
+   ". c None",
+   "..........",
+   ".##....##.",
+   "..##..##..",
+   "...####...",
+   "....##....",
+   "...####...",
+   "..##..##..",
+   ".##....##.",
+   "..........",
+   ".........."
+};
+
+static const char *const qt_maximize_xpm[] = {
+   "10 10 2 1",
+   "# c #000000",
+   ". c None",
+   "#########.",
+   "#########.",
+   "#.......#.",
+   "#.......#.",
+   "#.......#.",
+   "#.......#.",
+   "#.......#.",
+   "#.......#.",
+   "#########.",
+   ".........."
+};
+
+static const char *const qt_minimize_xpm[] = {
+   "10 10 2 1",
+   "# c #000000",
+   ". c None",
+   "..........",
+   "..........",
+   "..........",
+   "..........",
+   "..........",
+   "..........",
+   "..........",
+   ".#######..",
+   ".#######..",
+   ".........."
+};
+
+static const char *const qt_normalizeup_xpm[] = {
+   "10 10 2 1",
+   "# c #000000",
+   ". c None",
+   "...######.",
+   "...######.",
+   "...#....#.",
+   ".######.#.",
+   ".######.#.",
+   ".#....###.",
+   ".#....#...",
+   ".#....#...",
+   ".######...",
+   ".........."
+};
+
 QWaylandBradientDecoration::QWaylandBradientDecoration()
    : QWaylandAbstractDecoration(), m_factor(1), m_clicking(Button::None)
 {
@@ -43,6 +110,32 @@ QWaylandBradientDecoration::QWaylandBradientDecoration()
    option.setWrapMode(QTextOption::NoWrap);
 
    m_windowTitle.setTextOption(option);
+}
+
+bool QWaylandBradientDecoration::clickButton(Qt::MouseButtons b, Button btn)
+{
+   if (isLeftClicked(b)) {
+      m_clicking = btn;
+
+   } else if (isLeftReleased(b)) {
+      if (m_clicking == btn) {
+         m_clicking = None;
+         return true;
+
+      } else {
+         m_clicking = None;
+      }
+   }
+
+   return false;
+}
+
+QRectF QWaylandBradientDecoration::closeButtonRect() const
+{
+   auto buttonSize = BUTTON_WIDTH * m_factor;
+
+   return QRectF(window()->frameGeometry().width() - buttonSize - ((BUTTON_SPACING * 2) * m_factor),
+         (margins().top() - buttonSize) / 2, buttonSize, buttonSize);
 }
 
 bool QWaylandBradientDecoration::handleMouse(QWaylandInputDevice *inputDevice, const QPointF &local, const QPointF &global,
@@ -72,6 +165,22 @@ bool QWaylandBradientDecoration::handleTouch(QWaylandInputDevice *inputDevice, c
 QMargins QWaylandBradientDecoration::margins() const
 {
    return QMargins(3 * m_factor, 30 * m_factor, 3 * m_factor, 3 * m_factor);
+}
+
+QRectF QWaylandBradientDecoration::minimizeButtonRect() const
+{
+   auto buttonSize = BUTTON_WIDTH * m_factor;
+
+   return QRectF(window()->frameGeometry().width() - buttonSize * 3 - ((BUTTON_SPACING * 4) * m_factor),
+         (margins().top() - buttonSize) / 2, buttonSize, buttonSize);
+}
+
+QRectF QWaylandBradientDecoration::maximizeButtonRect() const
+{
+   auto buttonSize = BUTTON_WIDTH * m_factor;
+
+   return QRectF(window()->frameGeometry().width() - buttonSize * 2 - ((BUTTON_SPACING * 3) * m_factor),
+         (margins().top() - buttonSize) / 2, buttonSize, buttonSize);
 }
 
 void QWaylandBradientDecoration::paint(QPaintDevice *device)
