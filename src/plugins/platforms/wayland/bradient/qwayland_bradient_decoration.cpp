@@ -25,9 +25,13 @@
 
 #include <qwayland_bradient_decoration.h>
 
+#include <qcursor.h>
 #include <qpalette.h>
 #include <qtextoption.h>
+#include <qwindowsysteminterface.h>
 
+#include <qwayland_shellsurface_p.h>
+#include <qwayland_toplevel_p.h>
 #include <qwayland_window_p.h>
 
 namespace QtWaylandClient {
@@ -141,9 +145,45 @@ QRectF QWaylandBradientDecoration::closeButtonRect() const
 bool QWaylandBradientDecoration::handleMouse(QWaylandInputDevice *inputDevice, const QPointF &local, const QPointF &global,
       Qt::MouseButtons b, Qt::KeyboardModifiers mods)
 {
-   // pending implementation
+   (void) global;
 
-   return false;
+   // Figure out what area mouse is in
+   if (closeButtonRect().contains(local)) {
+      if (clickButton(b, Close)) {
+         QWindowSystemInterface::handleCloseEvent(window());
+      }
+
+   } else if (maximizeButtonRect().contains(local)) {
+      if (clickButton(b, Maximize)) {
+         window()->setWindowState(waylandWindow()->isMaximized() ? Qt::WindowNoState : Qt::WindowMaximized);
+      }
+
+   } else if (minimizeButtonRect().contains(local)) {
+      if (clickButton(b, Minimize)) {
+         window()->setWindowState(Qt::WindowMinimized);
+      }
+
+   } else if (local.y() <= margins().top()) {
+      processMouseTop(inputDevice, local, b, mods);
+
+   } else if (local.y() > window()->height() + margins().top()) {
+      processMouseBottom(inputDevice, local, b, mods);
+
+   } else if (local.x() <= margins().left()) {
+      processMouseLeft(inputDevice, local, b, mods);
+
+   } else if (local.x() > window()->width() + margins().left()) {
+      processMouseRight(inputDevice, local, b, mods);
+
+   } else {
+      waylandWindow()->restoreMouseCursor(inputDevice);
+      setMouseButtons(b);
+      return false;
+   }
+
+   setMouseButtons(b);
+
+   return true;
 }
 
 bool QWaylandBradientDecoration::handleTouch(QWaylandInputDevice *inputDevice, const QPointF &local, const QPointF &global,
@@ -156,7 +196,21 @@ bool QWaylandBradientDecoration::handleTouch(QWaylandInputDevice *inputDevice, c
    bool handled = (state == Qt::TouchPointPressed);
 
    if (handled) {
-      // pending implementation
+      if (closeButtonRect().contains(local)) {
+         QWindowSystemInterface::handleCloseEvent(window());
+
+      } else if (maximizeButtonRect().contains(local)) {
+         window()->setWindowState(waylandWindow()->isMaximized() ? Qt::WindowNoState : Qt::WindowMaximized);
+
+      } else if (minimizeButtonRect().contains(local)) {
+         window()->setWindowState(Qt::WindowMinimized);
+
+      } else if (local.y() <= margins().top()) {
+         waylandWindow()->shellSurface()->topLevel()->move(inputDevice);
+
+      } else {
+         handled = false;
+      }
    }
 
    return handled;
