@@ -26,7 +26,10 @@
 #include <qwayland_bradient_decoration.h>
 
 #include <qcursor.h>
+#include <qlineargradient.h>
 #include <qpalette.h>
+#include <qpixmap.h>
+#include <qsizef.h>
 #include <qtextoption.h>
 #include <qwindowsysteminterface.h>
 
@@ -239,7 +242,98 @@ QRectF QWaylandBradientDecoration::maximizeButtonRect() const
 
 void QWaylandBradientDecoration::paint(QPaintDevice *device)
 {
-   // pending implementation
+   m_factor = std::lround((waylandWindow()->screen()->logicalDpi().first)/96.0);
+
+   QRect surfaceRect(QPoint(), window()->frameGeometry().size());
+
+   QRect clips[] = {
+      QRect(0, 0, surfaceRect.width(), margins().top()),
+      QRect(0, surfaceRect.height() - margins().bottom(), surfaceRect.width(), margins().bottom()),
+      QRect(0, margins().top(), margins().left(), surfaceRect.height() - margins().top() - margins().bottom()),
+      QRect(surfaceRect.width() - margins().right(), margins().top(), margins().left(),
+      surfaceRect.height() - margins().top() - margins().bottom())
+   };
+
+   QRect top = clips[0];
+
+   QPainter p(device);
+   p.setRenderHint(QPainter::Antialiasing);
+
+   // Title bar
+   QPoint gradCenter(top.center() + QPoint(30, 60));
+   QLinearGradient grad(top.topLeft(), top.bottomLeft());
+
+   QColor base(m_backgroundColor);
+   grad.setColorAt(0, base.lighter(100));
+   grad.setColorAt(1, base.darker(120));
+
+   QPainterPath roundedRect;
+   roundedRect.addRoundedRect(surfaceRect, 6, 6);
+
+   for (int i = 0; i < 4; ++i) {
+      p.save();
+      p.setClipRect(clips[i]);
+      p.fillPath(roundedRect, grad);
+      p.restore();
+   }
+
+   // Window icon
+   QIcon icon = waylandWindow()->windowIcon();
+
+   if (! icon.isNull()) {
+      QPixmap pixmap = icon.pixmap(QSize(128, 128));
+      QPixmap scaled = pixmap.scaled(22, 22, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+      QRectF iconRect(0, 0, 22, 22);
+      p.drawPixmap(iconRect.adjusted(margins().left() + BUTTON_SPACING, 4,
+         margins().left() + BUTTON_SPACING, 4), scaled, iconRect);
+   }
+
+   // Window title
+   QString windowTitleText = window()->title();
+
+   if (! windowTitleText.isEmpty()) {
+      if (m_windowTitle.text() != windowTitleText) {
+         m_windowTitle.setText(windowTitleText);
+         m_windowTitle.prepare();
+      }
+
+      QRect titleBar = top;
+      titleBar.setLeft(margins().left() + BUTTON_SPACING + (icon.isNull() ? 0 : 22 + BUTTON_SPACING));
+      titleBar.setRight(minimizeButtonRect().left() - BUTTON_SPACING);
+
+      p.save();
+      p.setClipRect(titleBar);
+      p.setPen(m_foregroundColor);
+
+      QSizeF size = m_windowTitle.size();
+      int dx = (top.width() - size.width()) / 2;
+      int dy = (top.height() - size.height()) / 2;
+
+      QFont font = p.font();
+      font.setBold(true);
+      p.setFont(font);
+
+      QPoint windowTitlePoint(top.topLeft().x() + dx, top.topLeft().y() + dy);
+      p.drawStaticText(windowTitlePoint, m_windowTitle);
+      p.restore();
+   }
+
+   p.save();
+
+   // close button
+   QPixmap closePixmap(qt_close_xpm);
+   p.drawPixmap(closeButtonRect(), closePixmap, closePixmap.rect());
+
+   // maximize button
+   QPixmap maximizePixmap(waylandWindow()->isMaximized() ? qt_normalizeup_xpm : qt_maximize_xpm);
+   p.drawPixmap(maximizeButtonRect(), maximizePixmap, maximizePixmap.rect());
+
+   // minimize button
+   QPixmap minimizePixmap(qt_minimize_xpm);
+   p.drawPixmap(minimizeButtonRect(), minimizePixmap, minimizePixmap.rect());
+
+   p.restore();
 }
 
 void QWaylandBradientDecoration::processMouseTop(QWaylandInputDevice *inputDevice, const QPointF &local, Qt::MouseButtons b,
