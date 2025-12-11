@@ -56,6 +56,7 @@
 #include <qwayland_shell_integrationfactory_p.h>
 #include <qwayland_shm_backingstore_p.h>
 #include <qwayland_shm_window_p.h>
+#include <qwayland_xdg_shellintegration_p.h>
 #include <qwayland_windowmanager_integration_p.h>
 
 namespace QtWaylandClient {
@@ -203,7 +204,16 @@ QPlatformWindow *QWaylandIntegration::createPlatformWindow(QWindow *window) cons
    }
 
    return new QWaylandShmWindow(window);
+}
 
+QWaylandShellIntegration *QWaylandIntegration::createShellIntegration(const QString &interfaceName)
+{
+   if (interfaceName == "xdg_shell") {
+      return new QWaylandXdgShellIntegration(m_display);
+
+   } else {
+      return nullptr;
+   }
 }
 
 QWaylandDisplay *QWaylandIntegration::display() const

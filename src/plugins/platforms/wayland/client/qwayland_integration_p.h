@@ -101,6 +101,8 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandIntegration : public QPlatformIntegration
    QWaylandInputDeviceIntegration *m_inputDeviceIntegration;
 
  private:
+   QWaylandShellIntegration *createShellIntegration(const QString &interfaceName);
+
    void initializeClientBufferIntegration();
    void initializeServerBufferIntegration();
    void initializeShellIntegration();
