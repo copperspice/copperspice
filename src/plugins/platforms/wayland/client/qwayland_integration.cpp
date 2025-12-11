@@ -317,10 +317,37 @@ void QWaylandIntegration::initializeClientBufferIntegration()
 {
    m_clientBufferIntegrationInitialized = true;
 
-   // pending implementation
+   QString targetKey;
+   bool disableHardwareIntegration = ! qgetenv("QT_WAYLAND_DISABLE_HW_INTEGRATION").isNull();
+
+   disableHardwareIntegration = disableHardwareIntegration || ! m_display->hardwareIntegration();
+
+   if (disableHardwareIntegration) {
+      QByteArray clientBufferIntegrationName = qgetenv("QT_WAYLAND_CLIENT_BUFFER_INTEGRATION");
+
+      if (clientBufferIntegrationName.isEmpty()) {
+         clientBufferIntegrationName = "wayland-egl";
+      }
+
+      targetKey = QString::fromUtf8(clientBufferIntegrationName);
+
+   } else {
+      targetKey = m_display->hardwareIntegration()->clientBufferIntegration();
+   }
+
+   if (targetKey.isEmpty()) {
+      qWarning("Unable to determine which client buffer integration to use");
+      return;
+   }
+
+   QStringList keys = QWaylandClientBufferIntegrationFactory::keys();
+
+   if (keys.contains(targetKey)) {
+      m_clientBufferIntegration = QWaylandClientBufferIntegrationFactory::create(targetKey, QStringList());
+   }
 
    if (m_clientBufferIntegration == nullptr) {
-      qWarning("Unable to load client buffer integration\n");
+      qWarning("Unable to load client buffer integration: %s\n", csPrintable(targetKey));
    } else {
       m_clientBufferIntegration->initialize(m_display);
    }
