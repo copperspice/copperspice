@@ -74,7 +74,7 @@ QWaylandInputDevice::QWaylandInputDevice(QWaylandDisplay *display, int version, 
      m_version(qMin(version, 3)), m_caps(0), m_time(0), m_serial(0),
      m_display(display), m_dataDevice(nullptr), m_touchDevice(nullptr),
      m_keyboard(nullptr), m_pointer(nullptr), m_touch(nullptr),
-     m_wl_display(display->wl_display()), m_wl_pointerSurface(nullptr)
+     m_wl_pointerSurface(nullptr)
 {
 #ifndef QT_NO_DRAGANDDROP
    if (m_display->dndSelectionHandler()) {

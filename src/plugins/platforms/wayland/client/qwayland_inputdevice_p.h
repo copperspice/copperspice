@@ -116,7 +116,6 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandInputDevice : public QObject, public QtWay
 
    QSharedPointer<QWaylandBuffer> m_pixmapCursor;
 
-   struct wl_display *m_wl_display;
    struct wl_surface *m_wl_pointerSurface;
 };
 
