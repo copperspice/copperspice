@@ -157,7 +157,9 @@ QPlatformClipboard *QWaylandIntegration::clipboard() const
 #ifndef QT_NO_OPENGL
 QPlatformOpenGLContext *QWaylandIntegration::createPlatformOpenGLContext(QOpenGLContext *context) const
 {
-   // pending implementation
+   if (m_display->clientBufferIntegration()) {
+      return m_display->clientBufferIntegration()->createPlatformOpenGLContext(context->format(), context->shareHandle());
+   }
 
    return nullptr;
 }
@@ -388,7 +390,42 @@ void QWaylandIntegration::initializeServerBufferIntegration()
 
 void QWaylandIntegration::initializeShellIntegration()
 {
-   // pending implementation
+   m_shellIntegrationInitialized = true;
+
+   QByteArray integrationName = qgetenv("QT_WAYLAND_SHELL_INTEGRATION");
+   QString targetKey = QString::fromUtf8(integrationName);
+
+   if (! targetKey.isEmpty()) {
+      QStringList keys = QWaylandShellIntegrationFactory::keys();
+
+      if (keys.contains(targetKey)) {
+
+#if defined(CS_SHOW_DEBUG_PLATFORM)
+         qDebug("Using shell integration plugin: %s", csPrintable(targetKey));
+#endif
+
+         m_shellIntegration = QWaylandShellIntegrationFactory::create(targetKey, QStringList());
+      }
+
+   } else {
+      QStringList preferredShells;
+      preferredShells.append("xdg_shell");
+
+      for (QString preferredShell : preferredShells) {
+         m_shellIntegration = createShellIntegration(preferredShell);
+
+         if (m_shellIntegration != nullptr) {
+            break;
+         }
+      }
+   }
+
+   if (m_shellIntegration != nullptr && ! m_shellIntegration->initialize(m_display)) {
+      delete m_shellIntegration;
+      m_shellIntegration = nullptr;
+
+      qWarning("Unable to load shell integration: %s", csPrintable(targetKey));
+   }
 }
 
 void QWaylandIntegration::initializeInputDeviceIntegration()
