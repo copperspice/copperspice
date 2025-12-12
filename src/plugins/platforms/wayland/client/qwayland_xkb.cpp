@@ -162,7 +162,7 @@ int QWaylandXkb::keysymToQtKey(xkb_keysym_t keysym, Qt::KeyboardModifiers &modif
       modifiers |= Qt::KeypadModifier;
 
    } else if (text.length() == 1 && text[0].unicode() > 0x1f
-      && text[0].unicode() != 0x7f && ! (keysym >= XKB_KEY_dead_grave && keysym <= XKB_KEY_dead_currency)) {
+         && text[0].unicode() != 0x7f && ! (keysym >= XKB_KEY_dead_grave && keysym <= XKB_KEY_dead_currency)) {
 
       code = text[0].toUpper()[0].unicode();
 
@@ -178,7 +178,7 @@ Qt::KeyboardModifiers QWaylandXkb::modifiers(struct xkb_state *state)
 {
    Qt::KeyboardModifiers modifiers = Qt::NoModifier;
 
-   xkb_state_component cstate = static_cast < xkb_state_component > (XKB_STATE_DEPRESSED | XKB_STATE_LATCHED | XKB_STATE_LOCKED);
+   xkb_state_component cstate = static_cast<xkb_state_component>(XKB_STATE_DEPRESSED | XKB_STATE_LATCHED | XKB_STATE_LOCKED);
 
    if (xkb_state_mod_name_is_active(state, XKB_MOD_NAME_SHIFT, cstate)) {
       modifiers |= Qt::ShiftModifier;

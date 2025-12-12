@@ -95,7 +95,6 @@ QWaylandGLContext::QWaylandGLContext(EGLDisplay eglDisplay, QWaylandDisplay *dis
          break;
 
 #ifdef EGL_VERSION_1_4
-
       case QSurfaceFormat::OpenGL:
          m_api = EGL_OPENGL_API;
          break;
