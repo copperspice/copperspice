@@ -95,6 +95,8 @@ function(cs_copy_plugins LIB_NAME)
 
          # wayland plugins
          install(FILES ${CS_PLUGIN_DIR}/CsGuiWayland${COPPERSPICE_VERSION_API}.so DESTINATION ${APP_INSTALL_DIR}/platforms OPTIONAL)
+         install(FILES ${CS_PLUGIN_DIR}/CsGuiWayland_Egl${COPPERSPICE_VERSION_API}.so DESTINATION ${APP_INSTALL_DIR}/platforms OPTIONAL)
+         install(FILES ${CS_PLUGIN_DIR}/CsGuiWayland_bradient${COPPERSPICE_VERSION_API}.so DESTINATION ${APP_INSTALL_DIR}/platforms OPTIONAL)
          install(FILES ${CS_INSTALLED_LIB_DIR}/libCsWaylandClient${COPPERSPICE_VERSION_API}.so DESTINATION ${APP_INSTALL_DIR} OPTIONAL)
 
       elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
