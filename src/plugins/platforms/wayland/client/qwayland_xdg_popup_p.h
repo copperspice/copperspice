@@ -49,7 +49,7 @@ class Q_WAYLAND_CLIENT_EXPORT QWaylandXdgPopup : public QWaylandPopup, public Qt
       return m_xdgSurface;
    }
 
-   void grab(QWaylandInputDevice *seat, uint serial);
+   void grab(QWaylandInputDevice *seat, uint serial) override;
 
  protected:
    void xdg_popup_popup_done() override;
