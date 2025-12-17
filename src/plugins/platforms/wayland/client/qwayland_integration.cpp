@@ -308,7 +308,7 @@ QWaylandServerBufferIntegration *QWaylandIntegration::serverBufferIntegration() 
 
 QWaylandShellIntegration *QWaylandIntegration::shellIntegration() const
 {
-   if (m_shellIntegrationInitialized) {
+   if (! m_shellIntegrationInitialized) {
       const_cast<QWaylandIntegration *>(this)->initializeShellIntegration();
    }
 

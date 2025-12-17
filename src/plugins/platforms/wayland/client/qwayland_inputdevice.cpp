@@ -334,7 +334,7 @@ void QWaylandInputDevice::setCursor(struct wl_buffer *buffer, const QPoint &hotS
       m_pointer->m_cursorBuffer = buffer;
 
       // hide cursor
-      if (buffer != nullptr) {
+      if (buffer == nullptr) {
          m_pointer->set_cursor(m_pointer->m_enterSerial, nullptr, 0, 0);
          return;
       }
