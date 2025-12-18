@@ -903,12 +903,15 @@ QWindow *QApplication::topLevelWindowAt(const QPoint &pos)
 
 QString QApplication::platformName()
 {
-   return QGuiApplicationPrivate::platform_name ?
-      *QGuiApplicationPrivate::platform_name : QString();
+   if (QApplicationPrivate::platform_name == nullptr) {
+      return QString();
+   } else {
+      return *QApplicationPrivate::platform_name;
+   }
 }
 
 static void init_platform(const QString &pluginArgument, const QString &platformPluginPath,
-                  const QString &platformThemeName, int &argc, char **argv)
+      const QString &platformThemeName, int &argc, char **argv)
 {
    // Split into platform arguments and key
    QStringList arguments   = pluginArgument.split(':');
@@ -918,11 +921,11 @@ static void init_platform(const QString &pluginArgument, const QString &platform
    arguments.append(QLibraryInfo::platformPluginArguments(pluginKey));
 
    // load the platform plugin
-   QGuiApplicationPrivate::platform_integration = QPlatformIntegrationFactory::create(pluginKey, arguments,
+   QApplicationPrivate::platform_integration = QPlatformIntegrationFactory::create(pluginKey, arguments,
          argc, argv, platformPluginPath);
 
-   if (QGuiApplicationPrivate::platform_integration != nullptr) {
-      QGuiApplicationPrivate::platform_name = new QString(pluginKey);
+   if (QApplicationPrivate::platform_integration != nullptr) {
+      QApplicationPrivate::platform_name = new QString(pluginKey);
 
    } else {
       QStringList keys = QPlatformIntegrationFactory::keys(platformPluginPath);
@@ -949,7 +952,6 @@ static void init_platform(const QString &pluginArgument, const QString &platform
 
       fatalMessage += "and should be located in a directory named 'platforms'\n\n";
 
-
       if (! keys.isEmpty()) {
          fatalMessage += QString("Available platform plugins: %1\n\n").formatArg(keys.join(", "));
       }
@@ -970,10 +972,10 @@ static void init_platform(const QString &pluginArgument, const QString &platform
       return;
    }
 
-   // Many platforms have created QScreens at this point. Finish initializing QHighDpiScaling
+   // many platforms have created QScreens at this point. Finish initializing QHighDpiScaling
    // to be prepared for early calls to qt_defaultDpi().
-   if (QGuiApplication::primaryScreen()) {
-      QGuiApplicationPrivate::highDpiScalingUpdated = true;
+   if (QApplication::primaryScreen() != nullptr) {
+      QApplicationPrivate::highDpiScalingUpdated = true;
       QHighDpiScaling::updateHighDpiScaling();
    }
 
@@ -986,25 +988,26 @@ static void init_platform(const QString &pluginArgument, const QString &platform
    }
 
    // (2) Ask the platform integration for a list of theme names
-   themeNames += QGuiApplicationPrivate::platform_integration->themeNames();
+   themeNames += QApplicationPrivate::platform_integration->themeNames();
 
    // (3) Look for a theme plugin
    for (const QString &themeName : themeNames) {
-      QGuiApplicationPrivate::platform_theme = QPlatformThemeFactory::create(themeName, platformPluginPath);
+      QApplicationPrivate::platform_theme =
+            QPlatformThemeFactory::create(themeName, platformPluginPath);
 
-      if (QGuiApplicationPrivate::platform_theme) {
+      if (QApplicationPrivate::platform_theme != nullptr) {
          break;
       }
    }
 
    // (4) If no theme plugin was found ask the platform integration to create a theme
-   if (! QGuiApplicationPrivate::platform_theme) {
+   if (QApplicationPrivate::platform_theme == nullptr) {
 
       for (const QString &themeName : themeNames) {
-         QGuiApplicationPrivate::platform_theme =
-                  QGuiApplicationPrivate::platform_integration->createPlatformTheme(themeName);
+         QApplicationPrivate::platform_theme =
+               QApplicationPrivate::platform_integration->createPlatformTheme(themeName);
 
-         if (QGuiApplicationPrivate::platform_theme) {
+         if (QApplicationPrivate::platform_theme != nullptr) {
             break;
          }
       }
@@ -1036,7 +1039,8 @@ static void init_platform(const QString &pluginArgument, const QString &platform
    }
 #endif
 
-   fontSmoothingGamma = QGuiApplicationPrivate::platformIntegration()->styleHint(QPlatformIntegration::FontSmoothingGamma).toReal();
+   fontSmoothingGamma = QApplicationPrivate::platformIntegration()->styleHint(
+         QPlatformIntegration::FontSmoothingGamma).toReal();
 }
 
 static void init_plugins(const QList<QString> &pluginList)
@@ -1054,8 +1058,8 @@ static void init_plugins(const QList<QString> &pluginList)
          plugin = QGenericPluginFactory::create(pluginSpec.mid(0, colonPos), pluginSpec.mid(colonPos + 1));
       }
 
-      if (plugin) {
-         QGuiApplicationPrivate::generic_plugin_list.append(plugin);
+      if (plugin != nullptr) {
+         QApplicationPrivate::generic_plugin_list.append(plugin);
 
       } else {
          qWarning() << "QApplication::init_plugins() " << "Plugin failed to load, " << pluginSpec;
@@ -1065,8 +1069,8 @@ static void init_plugins(const QList<QString> &pluginList)
 
 void QGuiApplicationPrivate::createPlatformIntegration()
 {
-   // Use the CS menus by default. Platform plugins that want to enable a native
-   // menu implementation can clear this flag.
+   // use CS menus by default, any platform plugin which wants to enable a native menu
+   // implementation can clear this flag
    QCoreApplication::setAttribute(Qt::AA_DontUseNativeMenuBar, true);
 
    QHighDpiScaling::initHighDpiScaling();
@@ -1096,7 +1100,7 @@ void QGuiApplicationPrivate::createPlatformIntegration()
    QString platformPluginPath = QString::fromUtf8(qgetenv("CS_GUI_PLATFORM_PLUGIN_PATH"));
    QString platformThemeName  = QString::fromUtf8(qgetenv("CS_GUI_PLATFORM_THEME"));
 
-   // Get command line parameters
+   // get command line parameters
    QString icon;
 
    int j = argc ? 1 : 0;
@@ -1303,7 +1307,7 @@ void QGuiApplicationPrivate::init()
       argc = j;
    }
 
-   // Load environment exported generic plugins
+   // load environment exported generic plugins
    QByteArray envPlugins = qgetenv("CS_GUI_GENERIC_PLUGINS");
 
    if (! envPlugins.isEmpty()) {
