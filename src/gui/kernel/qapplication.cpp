@@ -936,8 +936,14 @@ static void init_platform(const QString &pluginArgument, const QString &platform
       } else if (pluginKey == "windows") {
          fatalMessage += "Platform plugin file name is CsGuiWin*.dll ";
 
+      } else if (pluginKey == "wayland") {
+         fatalMessage += "Platform plugin file name is CsGuiWayland*.so ";
+
       } else if (pluginKey == "xcb") {
          fatalMessage += "Platform plugin file name is CsGuiXcb*.so ";
+
+      } else {
+         fatalMessage += "Platform plugin file name is Unknown ";
 
       }
 
@@ -1079,14 +1085,16 @@ void QGuiApplicationPrivate::createPlatformIntegration()
 
 #endif
 
-   // allow the plugin name to be changed
-   QString platformNameEnv = QString::fromUtf8(qgetenv("QT_QPA_PLATFORM"));
-   if (! platformNameEnv.isEmpty()) {
-      platformName = platformNameEnv;
+
+   // allow the plugin name to be set by the user, same as passing "-platform" on the command line
+   QString platformNewName = QString::fromUtf8(qgetenv("CS_GUI_PLATFORM_NAME"));
+
+   if (! platformNewName.isEmpty()) {
+      platformName = platformNewName;
    }
 
-   QString platformPluginPath = QString::fromUtf8(qgetenv("QT_QPA_PLATFORM_PLUGIN_PATH"));
-   QString platformThemeName  = QString::fromUtf8(qgetenv("QT_QPA_PLATFORMTHEME"));
+   QString platformPluginPath = QString::fromUtf8(qgetenv("CS_GUI_PLATFORM_PLUGIN_PATH"));
+   QString platformThemeName  = QString::fromUtf8(qgetenv("CS_GUI_PLATFORM_THEME"));
 
    // Get command line parameters
    QString icon;
@@ -1296,7 +1304,7 @@ void QGuiApplicationPrivate::init()
    }
 
    // Load environment exported generic plugins
-   QByteArray envPlugins = qgetenv("QT_QPA_GENERIC_PLUGINS");
+   QByteArray envPlugins = qgetenv("CS_GUI_GENERIC_PLUGINS");
 
    if (! envPlugins.isEmpty()) {
       for (const QByteArray &plugin : envPlugins.split(',')) {
