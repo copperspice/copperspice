@@ -118,6 +118,124 @@ macro(COPPERSPICE_RESOURCES RESOURCES)
 
          endif()
 
+      elseif("${rscext}" STREQUAL ".xml" AND "${rscname}" MATCHES "wl-.*")
+         string(SUBSTRING "${rscname}" 3 -1 rscname)
+
+         # cs wayland scanner (1a)
+         set(rscout ${CMAKE_CURRENT_BINARY_DIR}/qwayland-server-${rscname}.h)
+
+         if ("${T_PATH}" STREQUAL "")
+            add_custom_command(
+               OUTPUT ${rscout}
+               COMMAND CopperSpice::cs_wayland_scanner server-header "${resource}" "${rscout}"
+               MAIN_DEPENDENCY "${resource}"
+            )
+
+         else()
+            # cs was built in package mode
+
+            add_custom_command(
+               OUTPUT ${rscout}
+               COMMAND cmake -E env "$<JOIN:${T_PATH},;>" "$<TARGET_FILE:CopperSpice::cs_wayland_scanner>"
+                     server-header "${resource}" "${rscout}"
+               MAIN_DEPENDENCY "${resource}"
+            )
+
+         endif()
+
+         # cs wayland scanner (2a)
+         set(rscout ${CMAKE_CURRENT_BINARY_DIR}/qwayland-${rscname}.h)
+
+         if ("${T_PATH}" STREQUAL "")
+            add_custom_command(
+               OUTPUT ${rscout}
+               COMMAND CopperSpice::cs_wayland_scanner client-header "${resource}" "${rscout}"
+               MAIN_DEPENDENCY "${resource}"
+            )
+
+         else()
+            # cs was built in package mode
+
+            add_custom_command(
+               OUTPUT ${rscout}
+               COMMAND cmake -E env "$<JOIN:${T_PATH},;>" "$<TARGET_FILE:CopperSpice::cs_wayland_scanner>"
+                     client-header "${resource}" "${rscout}"
+               MAIN_DEPENDENCY "${resource}"
+            )
+
+         endif()
+
+         # cs wayland scanner (3a)
+         set(rscout ${CMAKE_CURRENT_BINARY_DIR}/qwayland-server-${rscname}.cpp)
+
+         if ("${T_PATH}" STREQUAL "")
+            add_custom_command(
+               OUTPUT ${rscout}
+               COMMAND CopperSpice::cs_wayland_scanner server-code "${resource}" "${rscout}"
+               MAIN_DEPENDENCY "${resource}"
+            )
+
+         else()
+            # cs was built in package mode
+
+            add_custom_command(
+               OUTPUT ${rscout}
+               COMMAND cmake -E env "$<JOIN:${T_PATH},;>" "$<TARGET_FILE:CopperSpice::cs_wayland_scanner>"
+                     server-code "${resource}" "${rscout}"
+               MAIN_DEPENDENCY "${resource}"
+            )
+
+         endif()
+
+         # cs wayland scanner (4a)
+         set(rscout ${CMAKE_CURRENT_BINARY_DIR}/qwayland-${rscname}.cpp)
+
+         if ("${T_PATH}" STREQUAL "")
+            add_custom_command(
+               OUTPUT ${rscout}
+               COMMAND CopperSpice::cs_wayland_scanner client-code "${resource}" "${rscout}"
+               MAIN_DEPENDENCY "${resource}"
+            )
+
+         else()
+            # cs was built in package mode
+
+            add_custom_command(
+               OUTPUT ${rscout}
+               COMMAND cmake -E env "$<JOIN:${T_PATH},;>" "$<TARGET_FILE:CopperSpice::cs_wayland_scanner>"
+                     client-code "${resource}" "${rscout}"
+               MAIN_DEPENDENCY "${resource}"
+            )
+
+         endif()
+
+         # upstream wayland scanner (1b)
+         set(rscout ${CMAKE_CURRENT_BINARY_DIR}/wayland-${rscname}-server-protocol.h)
+
+         add_custom_command(
+            OUTPUT ${rscout}
+            COMMAND wayland-scanner server-header "${resource}" "${rscout}"
+            MAIN_DEPENDENCY "${resource}"
+         )
+
+         # upstream wayland scanner (2b)
+         set(rscout ${CMAKE_CURRENT_BINARY_DIR}/wayland-${rscname}-client-protocol.h)
+
+         add_custom_command(
+            OUTPUT ${rscout}
+            COMMAND wayland-scanner client-header "${resource}" "${rscout}"
+            MAIN_DEPENDENCY "${resource}"
+         )
+
+         # upstream wayland scanner (3b)
+         set(rscout ${CMAKE_CURRENT_BINARY_DIR}/wayland-${rscname}-protocol.c)
+
+         add_custom_command(
+            OUTPUT ${rscout}
+            COMMAND wayland-scanner public-code "${resource}" "${rscout}"
+            MAIN_DEPENDENCY "${resource}"
+         )
+
       endif()
 
    endforeach()

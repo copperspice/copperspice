@@ -1,0 +1,70 @@
+/***********************************************************************
+*
+* Copyright (c) 2012-2025 Barbara Geller
+* Copyright (c) 2012-2025 Ansel Sermersheim
+*
+* Copyright (c) 2015 The Qt Company Ltd.
+* Copyright (c) 2012-2016 Digia Plc and/or its subsidiary(-ies).
+* Copyright (c) 2008-2012 Nokia Corporation and/or its subsidiary(-ies).
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software. You can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public License
+* version 2.1 as published by the Free Software Foundation.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* https://www.gnu.org/licenses/
+*
+***********************************************************************/
+
+#include <qwayland_xdg_shellintegration_p.h>
+
+#include <qwayland_display_p.h>
+#include <qwayland_window_p.h>
+#include <qwayland_xdg_shell_p.h>
+#include <qwayland_xdg_surface_p.h>
+
+namespace QtWaylandClient {
+
+QWaylandXdgShellIntegration::QWaylandXdgShellIntegration(QWaylandDisplay *display)
+   : m_display(display), m_xdgShell(nullptr)
+{
+   for (QWaylandDisplay::RegistryGlobal global : display->globals()) {
+      if (global.interface == "xdg_wm_base") {
+         m_xdgShell = new QWaylandXdgShell(display->wl_registry(), global.id);
+         break;
+      }
+   }
+}
+
+QWaylandShellSurface *QWaylandXdgShellIntegration::createShellSurface(QWaylandWindow *window)
+{
+   return m_xdgShell->createXdgSurface(window);
+}
+
+void QWaylandXdgShellIntegration::handleKeyboardFocusChanged(QWaylandWindow *newFocus, QWaylandWindow *oldFocus)
+{
+   if (newFocus != nullptr) {
+      auto *newSurface = dynamic_cast<QWaylandXdgSurface *>(newFocus->shellSurface());
+
+      if (newSurface != nullptr && ! newSurface->isTopLevel()) {
+         m_display->handleWindowActivated(newFocus);
+      }
+   }
+
+   if (oldFocus != nullptr) {
+      auto *oldSurface = dynamic_cast<QWaylandXdgSurface *>(oldFocus->shellSurface());
+
+      if (oldSurface != nullptr) {
+         if (! oldSurface->isTopLevel()) {
+            m_display->handleWindowDeactivated(oldFocus);
+         }
+      }
+   }
+}
+
+}

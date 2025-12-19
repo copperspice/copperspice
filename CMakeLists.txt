@@ -527,9 +527,17 @@ if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
    )
 
    if (WITH_GUI)
+      find_package(Fontconfig)
+      set_package_properties(Fontconfig PROPERTIES
+         PURPOSE "Required for fonts configuration support"
+         DESCRIPTION "Library for configuring and customizing font access"
+         URL "http://www.freedesktop.org/wiki/Software/fontconfig/"
+         TYPE REQUIRED
+      )
+
       find_package(X11 COMPONENTS ICE SM Xcursor Xext Xfixes Xi Xinerama Xrandr Xrender)
       set_package_properties(X11 PROPERTIES
-         PURPOSE "Required for X11/X.Org integration support"
+         PURPOSE "Required for the X11 disply plugin"
          DESCRIPTION "Open source implementation of the X Window System"
          URL "https://www.x.org"
          TYPE REQUIRED
@@ -538,9 +546,17 @@ if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
       find_package(XCB COMPONENTS xcb xcb-image xcb-icccm xcb-sync xcb-xfixes xcb-shm xcb-randr
                    xcb-shape xcb-keysyms xcb-xinerama xcb-xkb xcb-render xcb-render-util xcb-glx)
       set_package_properties(XCB PROPERTIES
-         PURPOSE "Required for XCB/X.Org integration support"
+         PURPOSE "Required for XCB integration support"
          DESCRIPTION "Open source implementation of the XCB Interface for the X11 Window System"
          URL "https://xcb.freedesktop.org"
+         TYPE REQUIRED
+      )
+
+      find_package(XKBCommon_X11)
+      set_package_properties(XKBCommon_X11 PROPERTIES
+         PURPOSE "Required for XKB X11 integration support"
+         DESCRIPTION "Keyboard library"
+         URL "https://xkbcommon.org"
          TYPE REQUIRED
       )
 
@@ -554,27 +570,21 @@ if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
 
       find_package(XKBCommon)
       set_package_properties(XKBCommon PROPERTIES
-         PURPOSE "Required for XKB integration support"
+         PURPOSE "Required for XKB integration support for X11 and Wayland"
          DESCRIPTION "Keyboard library"
          URL "https://xkbcommon.org"
          TYPE REQUIRED
       )
 
-      find_package(XKBCommon_X11)
-      set_package_properties(XKBCommon_X11 PROPERTIES
-         PURPOSE "Required for XKB X11 integration support"
-         DESCRIPTION "Keyboard library"
-         URL "https://xkbcommon.org"
-         TYPE REQUIRED
+      find_package(Wayland 1.18)
+      set_package_properties(Wayland PROPERTIES
+         PURPOSE "Required for the Wayland display plugin"
+         DESCRIPTION "Libraries for the Wayland display protocol"
+         URL "https://gitlab.freedesktop.org/wayland/wayland"
+         TYPE RECOMMENDED
       )
 
-      find_package(Fontconfig)
-      set_package_properties(Fontconfig PROPERTIES
-         PURPOSE "Required for fonts configuration support"
-         DESCRIPTION "Library for configuring and customizing font access"
-         URL "http://www.freedesktop.org/wiki/Software/fontconfig/"
-         TYPE REQUIRED
-      )
+      find_package(OpenGL COMPONENTS EGL)
    endif()
 
    if (WITH_MULTIMEDIA)
@@ -591,7 +601,7 @@ if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
       find_package(OpenGL)
       set_package_properties(OpenGL PROPERTIES
          PURPOSE "Required for OpenGL support"
-         DESCRIPTION "The Mesa 3D Graphics Library"
+         DESCRIPTION "Mesa 3D Graphics Library"
          URL "http://www.mesa3d.org/"
          TYPE REQUIRED
       )
@@ -710,7 +720,25 @@ if (WITH_GUI)
    endif()
 
    if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
-      set(BUILD_PLATFORMS_XCB_PLUGIN TRUE)
+
+      if (XCB_FOUND)
+         set(BUILD_PLATFORMS_XCB_PLUGIN TRUE)
+      endif()
+
+      if (Wayland_FOUND AND TARGET OpenGL::EGL)
+         set(BUILD_PLATFORMS_WAYLAND_PLUGIN TRUE)
+      endif()
+
+      if (NOT XCB_FOUND AND NOT WAYLAND_FOUND)
+         message("")
+         message("----------------------------------------------------------------------")
+         message("Both XCB and Wayland plugins can not be turned off when building CsGui")
+         message("----------------------------------------------------------------------")
+         message("")
+
+         message(FATAL_ERROR "Abort Configuration")
+      endif()
+
    endif()
 
    add_subdirectory(src/plugins/imageformats)

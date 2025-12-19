@@ -1,0 +1,47 @@
+<protocol name="qtkey_extension">
+
+    <copyright>
+***********************************************************************
+*
+* Copyright (c) 2012-2025 Barbara Geller
+* Copyright (c) 2012-2025 Ansel Sermersheim
+*
+* Copyright (C) 2015 The Qt Company Ltd.
+*
+* This file is part of CopperSpice.
+*
+* CopperSpice is free software, released under the BSD 2-Clause license.
+* For license details refer to LICENSE provided with this project.
+*
+* CopperSpice is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*
+* https://opensource.org/licenses/BSD-2-Clause
+*
+***********************************************************************
+    </copyright>
+
+    <interface name="qt_key_extension" version="2">
+        <event name="qtkey">
+          <description summary="qtkey event">
+             Serialized QKeyEvent
+          </description>
+
+          <arg name="surface" type="object" interface="wl_surface"/>
+          <arg name="time" type="uint"/>
+          <arg name="type" type="uint"/>
+          <arg name="key" type="uint"/>
+          <arg name="modifiers" type="uint"/>
+          <arg name="nativeScanCode" type="uint"/>
+          <arg name="nativeVirtualKey" type="uint"/>
+          <arg name="nativeModifiers" type="uint"/>
+          <arg name="text" type="string"/>
+          <arg name="autorepeat" type="uint"/>
+          <arg name="count" type="uint"/>
+        </event>
+
+        <request name="dummy">
+        </request>
+    </interface>
+</protocol>
