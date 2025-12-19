@@ -30,10 +30,6 @@
 #include <qregularexpression.h>
 #include <qscopedpointer.h>
 
-#ifdef Status
-#error qdatastream.h must be included before any header file that defines Status
-#endif
-
 class QDataStream;
 
 class QDataStreamPrivate;
@@ -77,7 +73,7 @@ class Q_CORE_EXPORT QDataStream
       LittleEndian = QSysInfo::LittleEndian
    };
 
-   enum Status {
+   enum DataStreamStatus {
       Ok,
       ReadPastEnd,
       ReadCorruptData,
@@ -105,8 +101,8 @@ class Q_CORE_EXPORT QDataStream
 
    bool atEnd() const;
 
-   Status status() const;
-   void setStatus(Status status);
+   DataStreamStatus status() const;
+   void setStatus(DataStreamStatus status);
    void resetStatus();
 
    FloatingPointPrecision floatingPointPrecision() const;
@@ -164,7 +160,7 @@ class Q_CORE_EXPORT QDataStream
    bool noswap;
    ByteOrder byteorder;
    int ver;
-   Status q_status;
+   DataStreamStatus q_status;
 };
 
 inline QIODevice *QDataStream::device() const
@@ -382,7 +378,7 @@ QDataStream &operator<<(QDataStream &stream, const QSet<T> &set)
 template <class Key, class T>
 QDataStream &operator>>(QDataStream &stream, QHash<Key, T> &hash)
 {
-   QDataStream::Status oldStatus = stream.status();
+   QDataStream::DataStreamStatus oldStatus = stream.status();
    stream.resetStatus();
 
    hash.clear();
@@ -431,7 +427,7 @@ QDataStream &operator<<(QDataStream &stream, const QHash<Key, T> &hash)
 template <class Key, class T>
 QDataStream &operator>>(QDataStream &stream, QMultiHash<Key, T> &hash)
 {
-   QDataStream::Status oldStatus = stream.status();
+   QDataStream::DataStreamStatus oldStatus = stream.status();
    stream.resetStatus();
 
    hash.clear();
@@ -480,7 +476,7 @@ QDataStream &operator<<(QDataStream &stream, const QMultiHash<Key, T> &hash)
 template <class aKey, class aT>
 QDataStream &operator>>(QDataStream &stream, QMap<aKey, aT> &map)
 {
-   QDataStream::Status oldStatus = stream.status();
+   QDataStream::DataStreamStatus oldStatus = stream.status();
    stream.resetStatus();
 
    map.clear();
@@ -529,7 +525,7 @@ QDataStream &operator<<(QDataStream &stream, const QMap<Key, Val, C> &map)
 template <class aKey, class aT>
 QDataStream &operator>>(QDataStream &stream, QMultiMap<aKey, aT> &map)
 {
-   QDataStream::Status oldStatus = stream.status();
+   QDataStream::DataStreamStatus oldStatus = stream.status();
    stream.resetStatus();
 
    map.clear();

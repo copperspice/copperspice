@@ -141,7 +141,7 @@ void QDataStream::setFloatingPointPrecision(QDataStream::FloatingPointPrecision 
    d->floatingPointPrecision = precision;
 }
 
-QDataStream::Status QDataStream::status() const
+QDataStream::DataStreamStatus QDataStream::status() const
 {
    return q_status;
 }
@@ -151,7 +151,7 @@ void QDataStream::resetStatus()
    q_status = Ok;
 }
 
-void QDataStream::setStatus(Status status)
+void QDataStream::setStatus(QDataStream::DataStreamStatus status)
 {
    if (q_status == Ok) {
       q_status = status;

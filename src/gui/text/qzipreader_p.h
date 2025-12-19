@@ -36,7 +36,7 @@ class QZipReaderPrivate;
 class Q_GUI_EXPORT QZipReader
 {
  public:
-   enum Status {
+   enum ReaderStatus {
       NoError,
       FileReadError,
       FileOpenError,
@@ -85,7 +85,7 @@ class Q_GUI_EXPORT QZipReader
    QByteArray fileData(const QString &fileName) const;
    bool extractAll(const QString &destinationDir) const;
 
-   Status status() const;
+   ReaderStatus status() const;
    void close();
 
  private:

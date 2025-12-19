@@ -34,7 +34,7 @@ class QZipWriterPrivate;
 class Q_GUI_EXPORT QZipWriter
 {
  public:
-   enum Status {
+   enum WriterStatus {
       NoError,
       FileWriteError,
       FileOpenError,
@@ -61,7 +61,7 @@ class Q_GUI_EXPORT QZipWriter
    bool isWritable() const;
    bool exists() const;
 
-   Status status() const;
+   WriterStatus status() const;
 
    void setCompressionPolicy(CompressionPolicy policy);
    CompressionPolicy compressionPolicy() const;

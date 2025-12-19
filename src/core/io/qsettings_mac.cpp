@@ -619,7 +619,7 @@ bool QMacSettingsPrivate::isWritable() const
    QMacSettingsPrivate *that = const_cast<QMacSettingsPrivate *>(this);
    QString impossibleKey("qt_internal/");
 
-   QSettings::Status oldStatus = that->m_status;
+   QSettings::SettingsStatus oldStatus = that->m_status;
    that->m_status = QSettings::NoError;
 
    that->set(impossibleKey, QVariant());

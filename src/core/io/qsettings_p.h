@@ -212,7 +212,7 @@ class QSettingsPrivate
 
    QString actualKey(const QString &key) const;
    void beginGroupOrArray(const QSettingsGroup &group);
-   void setStatus(QSettings::Status status) const;
+   void setStatus(QSettings::SettingsStatus status) const;
    void requestUpdate();
    void update();
 
@@ -253,7 +253,7 @@ class QSettingsPrivate
    int m_spec;
    bool fallbacks;
    bool pendingChanges;
-   mutable QSettings::Status m_status;
+   mutable QSettings::SettingsStatus m_status;
 
    QSettings *q_ptr;
 

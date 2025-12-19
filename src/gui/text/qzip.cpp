@@ -512,7 +512,7 @@ class QZipReaderPrivate : public QZipPrivate
 
    void scanFiles();
 
-   QZipReader::Status status;
+   QZipReader::ReaderStatus status;
 };
 
 class QZipWriterPrivate : public QZipPrivate
@@ -525,7 +525,7 @@ class QZipWriterPrivate : public QZipPrivate
         compressionPolicy(QZipWriter::AlwaysCompress) {
    }
 
-   QZipWriter::Status status;
+   QZipWriter::WriterStatus status;
    QFileDevice::Permissions permissions;
    QZipWriter::CompressionPolicy compressionPolicy;
 
@@ -799,7 +799,7 @@ void QZipWriterPrivate::addEntry(EntryType type, const QString &fileName, const 
 QZipReader::QZipReader(const QString &archive, QIODevice::OpenMode mode)
 {
    QScopedPointer<QFile> f(new QFile(archive));
-   QZipReader::Status status;
+   QZipReader::ReaderStatus status;
 
    if (f->open(mode) && f->error() == QFile::NoError) {
       status = NoError;
@@ -1037,7 +1037,7 @@ bool QZipReader::extractAll(const QString &destinationDir) const
    return true;
 }
 
-QZipReader::Status QZipReader::status() const
+QZipReader::ReaderStatus QZipReader::status() const
 {
    return d->status;
 }
@@ -1051,7 +1051,7 @@ QZipWriter::QZipWriter(const QString &fileName, QIODevice::OpenMode mode)
 {
    QScopedPointer<QFile> f(new QFile(fileName));
 
-   QZipWriter::Status status;
+   QZipWriter::WriterStatus status;
 
    if (f->open(mode) && f->error() == QFile::NoError) {
       status = QZipWriter::NoError;
@@ -1107,7 +1107,7 @@ bool QZipWriter::exists() const
    return f->exists();
 }
 
-QZipWriter::Status QZipWriter::status() const
+QZipWriter::WriterStatus QZipWriter::status() const
 {
    return d->status;
 }

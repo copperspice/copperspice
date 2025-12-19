@@ -187,7 +187,7 @@ class QTextStreamPrivate
    QTextStream::RealNumberNotation realNumberNotation;
    QTextStream::NumberFlags numberFlags;
 
-   QTextStream::Status status;
+   QTextStream::TextStatus status;
    QLocale locale;
    QTextStream *q_ptr;
 };
@@ -1110,7 +1110,7 @@ int QTextStream::realNumberPrecision() const
    return d->realNumberPrecision;
 }
 
-QTextStream::Status QTextStream::status() const
+QTextStream::TextStatus QTextStream::status() const
 {
    Q_D(const QTextStream);
    return d->status;
@@ -1122,7 +1122,7 @@ void QTextStream::resetStatus()
    d->status = Ok;
 }
 
-void QTextStream::setStatus(Status status)
+void QTextStream::setStatus(TextStatus status)
 {
    Q_D(QTextStream);
 

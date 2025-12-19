@@ -341,7 +341,7 @@ void QSettingsPrivate::beginGroupOrArray(const QSettingsGroup &group)
 
 // only set an error if one is not set, user always gets the first error that occurred.
 // always allow clearing errors
-void QSettingsPrivate::setStatus(QSettings::Status status) const
+void QSettingsPrivate::setStatus(QSettings::SettingsStatus status) const
 {
    if (status == QSettings::NoError || m_status == QSettings::NoError) {
       m_status = status;
@@ -2220,7 +2220,7 @@ QTextCodec *QSettings::iniCodec() const
 
 #endif
 
-QSettings::Status QSettings::status() const
+QSettings::SettingsStatus QSettings::status() const
 {
    Q_D(const QSettings);
    return d->m_status;

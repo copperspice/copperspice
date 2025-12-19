@@ -33,10 +33,6 @@
 
 #include <ctype.h>
 
-#ifdef Status // we seem to pick up a macro Status --> int somewhere
-#undef Status
-#endif
-
 class QIODevice;
 class QSettingsPrivate;
 
@@ -45,7 +41,7 @@ class Q_CORE_EXPORT QSettings : public QObject
    CORE_CS_OBJECT(QSettings)
 
  public:
-   enum Status {
+   enum SettingsStatus {
       NoError = 0,
       AccessError,
       FormatError
@@ -98,7 +94,7 @@ class Q_CORE_EXPORT QSettings : public QObject
 
    void clear();
    void sync();
-   Status status() const;
+   SettingsStatus status() const;
 
    void beginGroup(const QString &prefix);
    void endGroup();
