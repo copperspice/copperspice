@@ -24,7 +24,6 @@
 #include <qwayland_egl_config_p.h>
 
 #include <qbytearray.h>
-#include <qdebug.h>
 #include <qopenglcontext.h>
 
 #include <qmath_p.h>

@@ -24,6 +24,7 @@
 #ifndef QWAYLAND_EGL_CONFIG_H
 #define QWAYLAND_EGL_CONFIG_H
 
+#include <qdebug.h>               // add here to prevent older X11 define issues (mostly Debian 11)
 #include <qsizef.h>
 #include <qsurfaceformat.h>
 #include <qvector.h>
