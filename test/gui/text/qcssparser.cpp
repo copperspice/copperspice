@@ -310,4 +310,3 @@ TEST_CASE("QCssParser parse_scan", "[qcssparser]")
    REQUIRE(symbols.at(2).lexem() == " ");
    REQUIRE(symbols.at(3).lexem() == "\"here is /*a \\\"comment \"inside a string*/ done\"");
 }
-
