@@ -17,17 +17,25 @@
 *
 ***********************************************************************/
 
-#include <qtextobject.h>
+#include <qtextcharformat.h>
 
 #include <cs_catch2.h>
 
-TEST_CASE("QTextObject traits", "[qtextobject]")
+TEST_CASE("QTextCharFormat traits", "[qtextcharformat]")
 {
-   REQUIRE(std::is_copy_constructible_v<QTextObject> == false);
-   REQUIRE(std::is_move_constructible_v<QTextObject> == false);
+   REQUIRE(std::is_copy_constructible_v<QTextCharFormat> == true);
+   REQUIRE(std::is_move_constructible_v<QTextCharFormat> == true);
 
-   REQUIRE(std::is_copy_assignable_v<QTextObject> == false);
-   REQUIRE(std::is_move_assignable_v<QTextObject> == false);
+   REQUIRE(std::is_copy_assignable_v<QTextCharFormat> == true);
+   REQUIRE(std::is_move_assignable_v<QTextCharFormat> == true);
 
-   REQUIRE(std::has_virtual_destructor_v<QTextObject> == true);
+   REQUIRE(std::has_virtual_destructor_v<QTextCharFormat> == false);
+}
+
+TEST_CASE("QTextCharFormat valid", "[qtextcharformat]")
+{
+   QTextCharFormat fmt;
+
+   REQUIRE(fmt.isValid()  == true);
+   REQUIRE(fmt.isAnchor() == false);
 }

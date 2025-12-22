@@ -59,6 +59,8 @@ target_sources(CsGuiTest
    ${CMAKE_CURRENT_SOURCE_DIR}/kernel/qvariant.cpp
 
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qcssparser.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextblock.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextcharformat.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextobject.cpp
 )
 
