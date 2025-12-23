@@ -106,6 +106,15 @@ void Ginger::newTitle(QString value)
    m_title = value;
 }
 
+}   // namespace
+
+TEST_CASE("QMetaObject checkConnectArgs", "[qmetaobject]")
+{
+   REQUIRE(QMetaObject::checkConnectArgs("titleChanged(QString)", "newTitle(QString)") == true);
+   REQUIRE(QMetaObject::checkConnectArgs("titleChanged(QString)", "newTitle()") == true);
+   REQUIRE(QMetaObject::checkConnectArgs("titleChanged(QString)", "newTitle(QString, int)") == false);
+
+   REQUIRE(QMetaObject::checkConnectArgs("someSignal()", "someMethod(QString)") == false);
 }
 
 TEST_CASE("QMetaObject enums", "[qmetaobject]")
@@ -220,7 +229,7 @@ TEST_CASE("QMetaObject signature", "[qmetaobject]")
       REQUIRE(QMetaObject::normalizedSignature(data) == "mySlot(int&)");
    }
 
-  {
+   {
       QString data = "clearSelection(bool display_A = true)";
       REQUIRE(QMetaObject::normalizedSignature(data) == "clearSelection(bool)");
    }
