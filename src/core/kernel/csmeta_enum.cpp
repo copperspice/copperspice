@@ -26,6 +26,7 @@
 #include <csmeta.h>
 
 #include <qmetaobject.h>
+#include <qset.h>
 #include <qstringlist.h>
 #include <qstringparser.h>
 
@@ -153,15 +154,27 @@ QString QMetaEnum::valueToKeys(int value) const
 {
    QString keys;
 
+   // has this enum value been used
+   QSet<int> valueUsed;
+
    for (auto elem = m_data.begin(); elem != m_data.end(); ++elem) {
 
-      if (elem.value() & value) {
+      auto elementValue = elem.value();
+      const auto &elementKey = elem.key();
+
+      if ((elementValue & value) == elementValue) {
+
+         if (valueUsed.contains(elementValue )) {
+            continue;
+         }
+
+         valueUsed.insert(elementValue);
 
          if (keys.isEmpty()) {
-            keys = elem.key();
+            keys = elementKey;
 
          } else  {
-            keys = keys + '|' + elem.key();
+            keys = keys + '|' + elementKey;
 
          }
       }
