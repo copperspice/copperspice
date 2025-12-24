@@ -73,6 +73,8 @@ TEST_CASE("QMetaProperty enumerator", "[qmetaproperty]")
    QMetaProperty prop = metaObj.property(index);
 
    REQUIRE(prop.isValid() == true);
+   REQUIRE(prop.name() == "flavor");
+   REQUIRE(prop.propertyIndex() == index);
 
    QMetaEnum tmpEnum = prop.enumerator();
 
@@ -80,6 +82,11 @@ TEST_CASE("QMetaProperty enumerator", "[qmetaproperty]")
    REQUIRE(tmpEnum.name() == "Spices");
 
    REQUIRE(prop.isDesignable() == true);
+   REQUIRE(prop.isScriptable() == true);
+   REQUIRE(prop.isStored()     == true);
+
+   REQUIRE(prop.isEnumType()   == true);
+   REQUIRE(prop.isFlagType()   == false);
 }
 
 TEST_CASE("QMetaProperty external_enum", "[qmetaproperty]")
@@ -92,8 +99,10 @@ TEST_CASE("QMetaProperty external_enum", "[qmetaproperty]")
    REQUIRE(index >= 0);
 
    QMetaProperty prop = metaObj.property(index);
+
    REQUIRE(prop.isValid() == true);
    REQUIRE(prop.name() == "shape");
+   REQUIRE(prop.propertyIndex() == index);
 
    QMetaEnum tmpEnum = prop.enumerator();
 
@@ -102,7 +111,10 @@ TEST_CASE("QMetaProperty external_enum", "[qmetaproperty]")
 
    REQUIRE(prop.isDesignable() == false);
    REQUIRE(prop.isScriptable() == true);
-   REQUIRE(prop.isStored() == false);
+   REQUIRE(prop.isStored()     == false);
+
+   REQUIRE(prop.isEnumType()   == true);
+   REQUIRE(prop.isFlagType()   == false);
 }
 
 TEST_CASE("QMetaProperty type_name", "[qmetaproperty]")
@@ -114,13 +126,11 @@ TEST_CASE("QMetaProperty type_name", "[qmetaproperty]")
    int index = metaObj.indexOfProperty("flavor");
    QMetaProperty prop = metaObj.property(index);
 
-   QString name = prop.name();
-
    REQUIRE(prop.isValid() == true);
+   REQUIRE(prop.name() == "flavor");
+
    REQUIRE(prop.isReadable() == true);
    REQUIRE(prop.isWritable() == true);
 
    REQUIRE(prop.typeName() == "Ginger_MP::Spices");
-   REQUIRE(name == "flavor");
 }
-
