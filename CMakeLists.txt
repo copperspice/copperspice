@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18.0 FATAL_ERROR)
 
-cmake_policy(VERSION 3.18.0..3.29.6)
+cmake_policy(VERSION 3.18.0..3.31.10)
 
 if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.19.0")
    # allows spaces in ctest names
@@ -10,6 +10,11 @@ endif()
 if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.20.0")
    # enable RTTI on MSVC
    cmake_policy(SET CMP0117 OLD)
+endif()
+
+if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.31.0")
+   # normalized path
+   cmake_policy(SET CMP0177 NEW)
 endif()
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
