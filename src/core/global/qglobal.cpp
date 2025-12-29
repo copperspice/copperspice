@@ -105,6 +105,10 @@ QSysInfo::MacVersion QSysInfo::macVersion()
    } else if (osVersion.major == 15) {
       retval = MacVersion::MV_15;
 
+   // **
+   } else if (osVersion.major == 26) {
+      retval = MacVersion::MV_26;
+
    } else {
       retval = QSysInfo::MV_Unknown;
 

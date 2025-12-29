@@ -669,11 +669,14 @@ class Q_CORE_EXPORT QSysInfo
       MV_10_14 = 0x0004,
       MV_10_15 = 0x0005,
       MV_10_16 = 0x0006,                         // 10_16 and 11 are the same os
+
       MV_11    = 0x0006,
       MV_12    = 0x0007,
       MV_13    = 0x0008,
       MV_14    = 0x0009,
       MV_15    = 0x000A,
+
+      MV_26    = 0x000B,
 
       MV_EL_CAPITAN   = MV_10_11,                // current mimimum version
       MV_SIERRA       = MV_10_12,
@@ -686,6 +689,8 @@ class Q_CORE_EXPORT QSysInfo
       MV_VENTURA      = MV_13,
       MV_SONOMA       = MV_14,
       MV_SEQUOIA      = MV_15,
+
+      MV_TAHOE        = MV_26,
 
       MV_IOS       = 1 << 8,                     // unknown version
       MV_IOS_9_0   = MV_IOS | 9  << 4 | 0,       // 9.0
