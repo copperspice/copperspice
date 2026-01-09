@@ -1,7 +1,7 @@
 /***********************************************************************
 *
-* Copyright (c) 2016-2025 Barbara Geller
-* Copyright (c) 2016-2025 Ansel Sermersheim
+* Copyright (c) 2016-2026 Barbara Geller
+* Copyright (c) 2016-2026 Ansel Sermersheim
 *
 * This file is part of CsSignal.
 *
