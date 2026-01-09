@@ -1,9 +1,9 @@
 /***********************************************************************
 *
-* Copyright (c) 2012-2025 Barbara Geller
-* Copyright (c) 2012-2025 Ansel Sermersheim
+* Copyright (c) 2012-2026 Barbara Geller
+* Copyright (c) 2012-2026 Ansel Sermersheim
 *
-* Copyright (C) 2013 KlarÃ¤lvdalens Datakonsult AB (KDAB).
+* Copyright (C) 2013 Klarälvdalens Datakonsult AB (KDAB).
 *
 * This file is part of CopperSpice.
 *
