@@ -31,7 +31,6 @@
 #include <qscopedpointer.h>
 
 class QDataStream;
-
 class QDataStreamPrivate;
 
 Q_CORE_EXPORT QDataStream &operator<<(QDataStream &stream, const QString &str);

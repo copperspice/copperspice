@@ -46,7 +46,7 @@ static inline QString fromstrerror_helper(const char *str, const QByteArray &)
    return QString::fromUtf8(str);
 }
 
-}     // end namespace
+}   // end namespace
 #endif
 
 #ifdef Q_OS_WIN

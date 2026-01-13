@@ -306,6 +306,7 @@ QDataStream &QDataStream::operator>>(double &f)
       setStatus(ReadPastEnd);
 
    } else {
+
       if (! noswap) {
          quint64 tmp = bit_cast<quint64>(f);
 

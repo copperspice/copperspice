@@ -211,23 +211,21 @@ static bool writeBMPInfoHeader(QIODevice *iodev, const BMP_INFOHDR &header)
 
       return (iodev->write((char *)tmp, BMP_INFOHDR_SIZE) == BMP_INFOHDR_SIZE) ? true : false;
    }
+
    return false;
 }
 
-
 ICOReader::ICOReader(QIODevice *iodevice)
-   : iod(iodevice)
-   , startpos(0)
-   , headerRead(false)
+   : iod(iodevice), startpos(0), headerRead(false)
 {
 }
-
 
 int ICOReader::count()
 {
    if (readHeader()) {
       return iconDir.idCount;
    }
+
    return 0;
 }
 
@@ -243,18 +241,16 @@ bool ICOReader::canRead(QIODevice *iodev)
          if (readIconDirEntry(iodev, &ikonDir.idEntries[0])) {
             readBytes += ICONDIRENTRY_SIZE;
             // ICO format does not have a magic identifier, so we read 6 different values, which will hopefully be enough to identify the file.
-            if (   ikonDir.idReserved == 0
-               && ikonDir.idType == 1
-               && ikonDir.idEntries[0].bReserved == 0
-               && ikonDir.idEntries[0].wPlanes <= 1
-               && ikonDir.idEntries[0].wBitCount <= 32     // Bits per pixel
-               && ikonDir.idEntries[0].dwBytesInRes >= 40  // Must be over 40, since sizeof (infoheader) == 40
-            ) {
+            if (ikonDir.idReserved == 0  && ikonDir.idType == 1
+                  && ikonDir.idEntries[0].bReserved == 0 && ikonDir.idEntries[0].wPlanes <= 1
+                  && ikonDir.idEntries[0].wBitCount <= 32           // Bits per pixel
+                  && ikonDir.idEntries[0].dwBytesInRes >= 40) {     // Must be over 40, since sizeof(infoheader) == 40
                isProbablyICO = true;
             }
 
             if (iodev->isSequential()) {
-               // Our structs might be padded due to alignment, so we need to fetch each member before we ungetChar() !
+               // Our structs might be padded due to alignment, so we need to fetch each member before we ungetChar()
+
                quint32 tmp = ikonDir.idEntries[0].dwImageOffset;
                iodev->ungetChar((tmp >> 24) & 0xff);
                iodev->ungetChar((tmp >> 16) & 0xff);

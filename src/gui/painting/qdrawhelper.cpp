@@ -4932,13 +4932,16 @@ static void blend_untransformed_generic_rgb64(int count, const QSpan *spans, voi
 
          if (length > 0) {
             const int coverage = (spans->coverage * data->texture.const_alpha) >> 8;
+
             while (length) {
                int l = qMin(buffer_size, length);
                const QRgba64 *src = op.srcFetch64(src_buffer, &op, data, sy, sx, l);
+
                QRgba64 *dest = op.destFetch64(buffer, data->rasterBuffer, x, spans->y, l);
                op.func64(dest, src, l, coverage);
                op.destStore64(data->rasterBuffer, x, spans->y, dest, l);
-               x += l;
+
+               x  += l;
                sx += l;
                length -= l;
             }
@@ -4952,8 +4955,7 @@ static void blend_untransformed_argb(int count, const QSpan *spans, void *userDa
 {
    QSpanData *data = reinterpret_cast<QSpanData *>(userData);
 
-   if (data->texture.format != QImage::Format_ARGB32_Premultiplied
-      && data->texture.format != QImage::Format_RGB32) {
+   if (data->texture.format != QImage::Format_ARGB32_Premultiplied && data->texture.format != QImage::Format_RGB32) {
       blend_untransformed_generic(count, spans, userData);
       return;
    }
@@ -5020,6 +5022,7 @@ static inline void blend_sourceOver_rgb16_rgb16(quint16 *__restrict dest, const 
       *dest = interpolate_pixel_rgb16_255(*src, alpha, *dest, ialpha);
       ++dest;
       ++src;
+
       --length;
    }
 
@@ -5029,10 +5032,12 @@ static inline void blend_sourceOver_rgb16_rgb16(quint16 *__restrict dest, const 
    if (length32 && srcAlign == 0) {
       while (length32--) {
          const quint32 *src32 = reinterpret_cast<const quint32 *>(src);
+
          quint32 *dest32 = reinterpret_cast<quint32 *>(dest);
          *dest32 = interpolate_pixel_rgb16x2_255(*src32, alpha, *dest32, ialpha);
+
          dest += 2;
-         src += 2;
+         src  += 2;
       }
 
       length &= 0x1;
@@ -5095,12 +5100,14 @@ static void blend_untransformed_rgb565(int count, const QSpan *spans, void *user
             } else {
                const quint8 alpha = (coverage + 1) >> 3;
                const quint8 ialpha = 0x20 - alpha;
+
                if (alpha > 0) {
                   blend_sourceOver_rgb16_rgb16(dest, src, length, alpha, ialpha);
                }
             }
          }
       }
+
       ++spans;
    }
 }
@@ -5345,31 +5352,39 @@ static void blend_tiled_rgb565(int count, const QSpan *spans, void *userData)
          // We are dealing with one block of data
          // - More likely to fit in the cache
          // - can use memcpy
+
          int copy_image_width = qMin(image_width, int(spans->len));
          length = spans->len - copy_image_width;
          quint16 *src = ((quint16 *)data->rasterBuffer->scanLine(spans->y)) + x;
          quint16 *dest = src + copy_image_width;
+
          while (copy_image_width < length) {
             memcpy(dest, src, copy_image_width * sizeof(quint16));
             dest += copy_image_width;
             length -= copy_image_width;
             copy_image_width *= 2;
          }
+
          if (length > 0) {
             memcpy(dest, src, length * sizeof(quint16));
          }
+
       } else {
          const quint8 alpha = (coverage + 1) >> 3;
          const quint8 ialpha = 0x20 - alpha;
+
          if (alpha > 0) {
             while (length) {
                int l = qMin(image_width - sx, length);
+
                if (buffer_size < l) {
                   l = buffer_size;
                }
+
                quint16 *dest = ((quint16 *)data->rasterBuffer->scanLine(spans->y)) + x;
                const quint16 *src = (const quint16 *)data->texture.scanLine(sy) + sx;
                blend_sourceOver_rgb16_rgb16(dest, src, l, alpha, ialpha);
+
                x += l;
                sx += l;
                length -= l;
@@ -5388,8 +5403,7 @@ static void blend_transformed_bilinear_rgb565(int count, const QSpan *spans, voi
    QSpanData *data = reinterpret_cast<QSpanData *>(userData);
    QPainter::CompositionMode mode = data->rasterBuffer->compositionMode;
 
-   if (data->texture.format != QImage::Format_RGB16
-      || (mode != QPainter::CompositionMode_SourceOver
+   if (data->texture.format != QImage::Format_RGB16 || (mode != QPainter::CompositionMode_SourceOver
          && mode != QPainter::CompositionMode_Source)) {
       blend_src_generic(count, spans, userData);
       return;
@@ -5612,10 +5626,12 @@ static void blend_transformed_argb(int count, const QSpan *spans, void *userData
 
          int length = spans->len;
          const int coverage = (spans->coverage * data->texture.const_alpha) >> 8;
+
          while (length) {
             int l = qMin(length, buffer_size);
             const uint *end = buffer + l;
             uint *b = buffer;
+
             while (b < end) {
                int px = qBound(0, x >> 16, image_width - 1);
                int py = qBound(0, y >> 16, image_height - 1);
@@ -5649,10 +5665,12 @@ static void blend_transformed_argb(int count, const QSpan *spans, void *userData
 
          int length = spans->len;
          const int coverage = (spans->coverage * data->texture.const_alpha) >> 8;
+
          while (length) {
             int l = qMin(length, buffer_size);
             const uint *end = buffer + l;
             uint *b = buffer;
+
             while (b < end) {
                const qreal iw = w == 0 ? 1 : 1 / w;
                const qreal tx = x * iw;
@@ -5667,6 +5685,7 @@ static void blend_transformed_argb(int count, const QSpan *spans, void *userData
 
                ++b;
             }
+
             func(target, buffer, l, coverage);
             target += l;
             length -= l;
@@ -5681,15 +5700,15 @@ static void blend_transformed_rgb565(int count, const QSpan *spans, void *userDa
    QSpanData *data = reinterpret_cast<QSpanData *>(userData);
    QPainter::CompositionMode mode = data->rasterBuffer->compositionMode;
 
-   if (data->texture.format != QImage::Format_RGB16
-      || (mode != QPainter::CompositionMode_SourceOver
+   if (data->texture.format != QImage::Format_RGB16 || (mode != QPainter::CompositionMode_SourceOver
          && mode != QPainter::CompositionMode_Source)) {
       blend_src_generic(count, spans, userData);
       return;
    }
 
    quint16 buffer[buffer_size];
-   const int image_width = data->texture.width;
+
+   const int image_width  = data->texture.width;
    const int image_height = data->texture.height;
 
    if (data->fast_matrix) {
@@ -5701,6 +5720,7 @@ static void blend_transformed_rgb565(int count, const QSpan *spans, void *userDa
          const quint8 coverage = (data->texture.const_alpha * spans->coverage) >> 8;
          const quint8 alpha = (coverage + 1) >> 3;
          const quint8 ialpha = 0x20 - alpha;
+
          if (alpha == 0) {
             ++spans;
             continue;
@@ -5709,15 +5729,16 @@ static void blend_transformed_rgb565(int count, const QSpan *spans, void *userDa
          quint16 *dest = (quint16 *)data->rasterBuffer->scanLine(spans->y) + spans->x;
          const qreal cx = spans->x + qreal(0.5);
          const qreal cy = spans->y + qreal(0.5);
-         int x = int((data->m21 * cy
-                  + data->m11 * cx + data->dx) * fixed_scale);
-         int y = int((data->m22 * cy
-                  + data->m12 * cx + data->dy) * fixed_scale);
+
+         int x = int((data->m21 * cy + data->m11 * cx + data->dx) * fixed_scale);
+         int y = int((data->m22 * cy + data->m12 * cx + data->dy) * fixed_scale);
+
          int length = spans->len;
 
          while (length) {
             int l;
             quint16 *b;
+
             if (ialpha == 0) {
                l = length;
                b = dest;
@@ -5745,8 +5766,10 @@ static void blend_transformed_rgb565(int count, const QSpan *spans, void *userDa
             dest += l;
             length -= l;
          }
+
          ++spans;
       }
+
    } else {
       const qreal fdx = data->m11;
       const qreal fdy = data->m12;
@@ -5756,6 +5779,7 @@ static void blend_transformed_rgb565(int count, const QSpan *spans, void *userDa
          const quint8 coverage = (data->texture.const_alpha * spans->coverage) >> 8;
          const quint8 alpha = (coverage + 1) >> 3;
          const quint8 ialpha = 0x20 - alpha;
+
          if (alpha == 0) {
             ++spans;
             continue;
@@ -5771,9 +5795,11 @@ static void blend_transformed_rgb565(int count, const QSpan *spans, void *userDa
          qreal w = data->m23 * cy + data->m13 * cx + data->m33;
 
          int length = spans->len;
+
          while (length) {
             int l;
             quint16 *b;
+
             if (ialpha == 0) {
                l = length;
                b = dest;
@@ -5806,6 +5832,7 @@ static void blend_transformed_rgb565(int count, const QSpan *spans, void *userDa
             dest += l;
             length -= l;
          }
+
          ++spans;
       }
    }
@@ -5814,8 +5841,9 @@ static void blend_transformed_rgb565(int count, const QSpan *spans, void *userDa
 static void blend_transformed_tiled_argb(int count, const QSpan *spans, void *userData)
 {
    QSpanData *data = reinterpret_cast<QSpanData *>(userData);
+
    if (data->texture.format != QImage::Format_ARGB32_Premultiplied
-      && data->texture.format != QImage::Format_RGB32) {
+         && data->texture.format != QImage::Format_RGB32) {
       blend_src_generic(count, spans, userData);
       return;
    }
@@ -5825,6 +5853,7 @@ static void blend_transformed_tiled_argb(int count, const QSpan *spans, void *us
 
    int image_width = data->texture.width;
    int image_height = data->texture.height;
+
    const int scanline_offset = data->texture.bytesPerLine / 4;
 
    if (data->fast_matrix) {
@@ -5956,14 +5985,14 @@ static void blend_transformed_tiled_rgb565(int count, const QSpan *spans, void *
    QSpanData *data = reinterpret_cast<QSpanData *>(userData);
    QPainter::CompositionMode mode = data->rasterBuffer->compositionMode;
 
-   if (data->texture.format != QImage::Format_RGB16
-      || (mode != QPainter::CompositionMode_SourceOver
+   if (data->texture.format != QImage::Format_RGB16 || (mode != QPainter::CompositionMode_SourceOver
          && mode != QPainter::CompositionMode_Source)) {
       blend_src_generic(count, spans, userData);
       return;
    }
 
    quint16 buffer[buffer_size];
+
    const int image_width = data->texture.width;
    const int image_height = data->texture.height;
 
