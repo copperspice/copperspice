@@ -22,55 +22,18 @@
 **
 ****************************************************************************/
 
-#ifndef FORKFD_H
-#define FORKFD_H
+#if !defined(FFD_ATOMIC_H) & !defined(FFD_ATOMIC_RELAXED)
+#define FFD_ATOMIC_H
 
-#include <fcntl.h>
-#include <stdint.h>
-#include <sys/wait.h>
-#include <unistd.h> // to get the POSIX flags
-
-#if _POSIX_SPAWN > 0
-#  include <spawn.h>
+#if defined(__cplusplus) && __cplusplus >= 201103L
+#  include "forkfd_c11.h"
+#elif defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
+#  include "forkfd_c11.h"
+#elif defined(__GNUC__)
+#  include "forkfd_gcc.h"
 #endif
 
-#ifdef __cplusplus
-extern "C" {
+#endif /* FFD_ATOMIC_h && FFD_ATOMIC_RELAXED */
+#ifndef FFD_ATOMIC_RELAXED
+#  error "Could not determine atomics for this platform"
 #endif
-
-#define FFD_CLOEXEC             1
-#define FFD_NONBLOCK            2
-#define FFD_USE_FORK            4
-
-#define FFD_CHILD_PROCESS (-2)
-
-#define FFDW_NOHANG             1       /* WNOHANG */
-#define FFDW_NOWAIT             2       /* WNOWAIT */
-
-struct forkfd_info {
-    int32_t code;
-    int32_t status;
-};
-
-int forkfd(int flags, pid_t *ppid);
-int vforkfd(int flags, pid_t *ppid, int (*childFn)(void *), void *token);
-int forkfd_wait4(int ffd, struct forkfd_info *info, int options, struct rusage *rusage);
-static inline int forkfd_wait(int ffd, struct forkfd_info *info, struct rusage *rusage)
-{
-    return forkfd_wait4(ffd, info, 0, rusage);
-}
-int forkfd_close(int ffd);
-
-#if _POSIX_SPAWN > 0
-/* only for spawnfd: */
-#  define FFD_SPAWN_SEARCH_PATH   O_RDWR
-
-int spawnfd(int flags, pid_t *ppid, const char *path, const posix_spawn_file_actions_t *file_actions,
-            posix_spawnattr_t *attrp, char *const argv[], char *const envp[]);
-#endif
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif // FORKFD_H

@@ -1,6 +1,6 @@
 /****************************************************************************
 **
-** Copyright (C) 2015 Intel Corporation
+** Copyright (C) 2020 Intel Corporation.
 ** Copyright (C) 2015 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
 **
 ** Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,8 +29,13 @@
 
 #include "forkfd.h"
 
+/* Macros fine-tuning the build: */
+//#define FORKFD_NO_FORKFD 1                /* disable the forkfd() function */
+//#define FORKFD_NO_SPAWNFD 1               /* disable the spawnfd() function */
+//#define FORKFD_DISABLE_FORK_FALLBACK 1    /* disable falling back to fork() from system_forkfd() */
+
 #include <sys/types.h>
-#if defined(__OpenBSD__) || defined(__NetBSD__)
+#if defined(__OpenBSD__) || defined(__NetBSD__) || defined(__FreeBSD__)
 #  include <sys/param.h>
 #endif
 #include <sys/time.h>
@@ -59,9 +64,6 @@
 #    define HAVE_PIPE2    1
 #  endif
 #endif
-#if defined(__FreeBSD__) && __FreeBSD__ >= 9
-#  include <sys/procdesc.h>
-#endif
 
 #if _POSIX_VERSION-0 >= 200809L || _XOPEN_VERSION-0 >= 500
 #  define HAVE_WAITID   1
@@ -70,6 +72,11 @@
 #  undef HAVE_WAITID
 #endif
 
+#if (defined(__FreeBSD__) && defined(__FreeBSD_version) && __FreeBSD_version >= 1300000)
+#  include <sys/eventfd.h>
+#  define HAVE_EVENTFD 1
+#  define HAVE_WAITID   1
+#endif
 #if (defined(__FreeBSD__) && defined(__FreeBSD_version) && __FreeBSD_version >= 1000032) || \
     (defined(__OpenBSD__) && OpenBSD >= 201505) || \
     (defined(__NetBSD__) && __NetBSD_Version__ >= 600000000)
@@ -93,9 +100,22 @@
 #  endif
 #endif
 
-#ifndef FFD_ATOMIC_RELAXED
-#  include "forkfd_gcc.h"
+#include "forkfd_atomic.h"
+
+static int system_has_forkfd(void);
+static int system_forkfd(int flags, pid_t *ppid, int *system);
+static int system_vforkfd(int flags, pid_t *ppid, int (*)(void *), void *, int *system);
+static int system_forkfd_wait(int ffd, struct forkfd_info *info, int ffdwoptions, struct rusage *rusage);
+
+static int disable_fork_fallback(void)
+{
+#ifdef FORKFD_DISABLE_FORK_FALLBACK
+    /* if there's no system forkfd, we have to use the fallback */
+    return system_has_forkfd();
+#else
+    return 0;
 #endif
+}
 
 #define CHILDREN_IN_SMALL_ARRAY     16
 #define CHILDREN_IN_BIG_ARRAY       256
@@ -164,7 +184,7 @@ static ProcessInfo *tryAllocateInSection(Header *header, ProcessInfo entries[], 
     }
 
     /* there isn't an available entry, undo our increment */
-    ffd_atomic_add_fetch(&header->busyCount, -1, FFD_ATOMIC_RELAXED);
+    (void)ffd_atomic_add_fetch(&header->busyCount, -1, FFD_ATOMIC_RELAXED);
     return nullptr;
 }
 
@@ -226,6 +246,19 @@ static void convertStatusToForkfdInfo(int status, struct forkfd_info *info)
     }
 }
 
+#ifdef __GNUC__
+__attribute__((unused))
+#endif
+static int convertForkfdWaitFlagsToWaitFlags(int ffdoptions)
+{
+    int woptions = WEXITED;
+    if (ffdoptions & FFDW_NOWAIT)
+        woptions |= WNOWAIT;
+    if (ffdoptions & FFDW_NOHANG)
+        woptions |= WNOHANG;
+    return woptions;
+}
+
 static int tryReaping(pid_t pid, struct pipe_payload *payload)
 {
     /* reap the child */
@@ -267,9 +300,9 @@ static int tryReaping(pid_t pid, struct pipe_payload *payload)
 static void freeInfo(Header *header, ProcessInfo *entry)
 {
     entry->deathPipe = -1;
-    entry->pid = 0;
+    ffd_atomic_store(&entry->pid, 0, FFD_ATOMIC_RELEASE);
 
-    ffd_atomic_add_fetch(&header->busyCount, -1, FFD_ATOMIC_RELEASE);
+    (void)ffd_atomic_add_fetch(&header->busyCount, -1, FFD_ATOMIC_RELEASE);
     assert(header->busyCount >= 0);
 }
 
@@ -283,7 +316,8 @@ static void notifyAndFreeInfo(Header *header, ProcessInfo *entry,
     freeInfo(header, entry);
 }
 
-static void sigchld_handler(int signum)
+static void reapChildProcesses();
+static void sigchld_handler(int signum, siginfo_t *handler_info, void *handler_context)
 {
     /*
      * This is a signal handler, so we need to be careful about which functions
@@ -291,22 +325,41 @@ static void sigchld_handler(int signum)
      * specification at:
      *   http://pubs.opengroup.org/onlinepubs/9699919799/functions/V2_chap02.html#tag_15_04_03
      *
+     * The handler_info and handler_context parameters may not be valid, if
+     * we're a chained handler from another handler that did not use
+     * SA_SIGINFO. Therefore, we must obtain the siginfo ourselves directly by
+     * calling waitid.
+     *
+     * But we pass them anyway. Let's call the chained handler first, while
+     * those two arguments have a chance of being correct.
      */
+    if (old_sigaction.sa_handler != SIG_IGN && old_sigaction.sa_handler != SIG_DFL) {
+        if (old_sigaction.sa_flags & SA_SIGINFO)
+            old_sigaction.sa_sigaction(signum, handler_info, handler_context);
+        else
+            old_sigaction.sa_handler(signum);
+    }
 
     if (ffd_atomic_load(&forkfd_status, FFD_ATOMIC_RELAXED) == 1) {
-        /* is this one of our children? */
-        BigArray *array;
-        siginfo_t info;
-        struct pipe_payload payload;
-        int i;
+        int saved_errno = errno;
+        reapChildProcesses();
+        errno = saved_errno;
+    }
+}
 
-        memset(&info, 0, sizeof info);
-        memset(&payload, 0, sizeof payload);
+static inline void reapChildProcesses()
+{
+    /* is this one of our children? */
+    BigArray *array;
+    siginfo_t info;
+    struct pipe_payload payload;
+    int i;
+
+    memset(&info, 0, sizeof info);
+    memset(&payload, 0, sizeof payload);
 
 #ifdef HAVE_WAITID
-        if (!waitid_works)
-            goto search_arrays;
-
+    if (waitid_works) {
         /* be optimistic: try to see if we can get the child that exited */
 search_next_child:
         /* waitid returns -1 ECHILD if there are no further children at all;
@@ -319,9 +372,8 @@ search_next_child:
         waitid(P_ALL, 0, &info, WNOHANG | WNOWAIT | WEXITED);
         if (info.si_pid == 0) {
             /* there are no further un-waited-for children, so we can just exit.
-             * But before, transfer control to the chained SIGCHLD handler.
              */
-            goto chain_handler;
+            return;
         }
 
         for (i = 0; i < (int)sizeofarray(children.entries); ++i) {
@@ -359,12 +411,34 @@ search_next_child:
          * belongs to one of the chained SIGCHLD handlers. However, there might be another
          * child that exited and does belong to us, so we need to check each one individually.
          */
-
-search_arrays:
+    }
 #endif
 
-        for (i = 0; i < (int)sizeofarray(children.entries); ++i) {
-            int pid = ffd_atomic_load(&children.entries[i].pid, FFD_ATOMIC_ACQUIRE);
+    for (i = 0; i < (int)sizeofarray(children.entries); ++i) {
+        int pid = ffd_atomic_load(&children.entries[i].pid, FFD_ATOMIC_ACQUIRE);
+        if (pid <= 0)
+            continue;
+#ifdef HAVE_WAITID
+        if (waitid_works) {
+            /* The child might have been reaped by the block above in another thread,
+             * so first check if it's ready and, if it is, lock it */
+            if (!isChildReady(pid, &info) ||
+                    !ffd_atomic_compare_exchange(&children.entries[i].pid, &pid, -1,
+                                                 FFD_ATOMIC_RELAXED, FFD_ATOMIC_RELAXED))
+                continue;
+        }
+#endif
+        if (tryReaping(pid, &payload)) {
+            /* this is our child, send notification and free up this entry */
+            notifyAndFreeInfo(&children.header, &children.entries[i], &payload);
+        }
+    }
+
+    /* try the arrays */
+    array = ffd_atomic_load(&children.header.nextArray, FFD_ATOMIC_ACQUIRE);
+    while (array != nullptr) {
+        for (i = 0; i < (int)sizeofarray(array->entries); ++i) {
+            int pid = ffd_atomic_load(&array->entries[i].pid, FFD_ATOMIC_ACQUIRE);
             if (pid <= 0)
                 continue;
 #ifdef HAVE_WAITID
@@ -372,49 +446,19 @@ search_arrays:
                 /* The child might have been reaped by the block above in another thread,
                  * so first check if it's ready and, if it is, lock it */
                 if (!isChildReady(pid, &info) ||
-                        !ffd_atomic_compare_exchange(&children.entries[i].pid, &pid, -1,
+                        !ffd_atomic_compare_exchange(&array->entries[i].pid, &pid, -1,
                                                      FFD_ATOMIC_RELAXED, FFD_ATOMIC_RELAXED))
                     continue;
             }
 #endif
             if (tryReaping(pid, &payload)) {
                 /* this is our child, send notification and free up this entry */
-                notifyAndFreeInfo(&children.header, &children.entries[i], &payload);
+                notifyAndFreeInfo(&array->header, &array->entries[i], &payload);
             }
         }
 
-        /* try the arrays */
-        array = ffd_atomic_load(&children.header.nextArray, FFD_ATOMIC_ACQUIRE);
-        while (array != nullptr) {
-            for (i = 0; i < (int)sizeofarray(array->entries); ++i) {
-                int pid = ffd_atomic_load(&array->entries[i].pid, FFD_ATOMIC_ACQUIRE);
-                if (pid <= 0)
-                    continue;
-#ifdef HAVE_WAITID
-                if (waitid_works) {
-                    /* The child might have been reaped by the block above in another thread,
-                     * so first check if it's ready and, if it is, lock it */
-                    if (!isChildReady(pid, &info) ||
-                            !ffd_atomic_compare_exchange(&array->entries[i].pid, &pid, -1,
-                                                         FFD_ATOMIC_RELAXED, FFD_ATOMIC_RELAXED))
-                        continue;
-                }
-#endif
-                if (tryReaping(pid, &payload)) {
-                    /* this is our child, send notification and free up this entry */
-                    notifyAndFreeInfo(&array->header, &array->entries[i], &payload);
-                }
-            }
-
-            array = ffd_atomic_load(&array->header.nextArray, FFD_ATOMIC_ACQUIRE);
-        }
+        array = ffd_atomic_load(&array->header.nextArray, FFD_ATOMIC_ACQUIRE);
     }
-
-#ifdef HAVE_WAITID
-chain_handler:
-#endif
-    if (old_sigaction.sa_handler != SIG_IGN && old_sigaction.sa_handler != SIG_DFL)
-        old_sigaction.sa_handler(signum);
 }
 
 static void ignore_sigpipe()
@@ -435,6 +479,37 @@ static void ignore_sigpipe()
 #ifdef O_NOSIGPIPE
     ffd_atomic_store(&done, 1, FFD_ATOMIC_RELAXED);
 #endif
+}
+
+#if defined(__GNUC__) && (!defined(__FreeBSD__) || __FreeBSD__ < 10)
+__attribute((destructor, unused)) static void cleanup();
+#endif
+
+static void cleanup()
+{
+    BigArray *array;
+    /* This function is not thread-safe!
+     * It must only be called when the process is shutting down.
+     * At shutdown, we expect no one to be calling forkfd(), so we don't
+     * need to be thread-safe with what is done there.
+     *
+     * But SIGCHLD might be delivered to any thread, including this one.
+     * There's no way to prevent that. The correct solution would be to
+     * cooperatively delete. We don't do that.
+     */
+    if (ffd_atomic_load(&forkfd_status, FFD_ATOMIC_RELAXED) == 0)
+        return;
+
+    /* notify the handler that we're no longer in operation */
+    ffd_atomic_store(&forkfd_status, 0, FFD_ATOMIC_RELAXED);
+
+    /* free any arrays we might have */
+    array = ffd_atomic_load(&children.header.nextArray, FFD_ATOMIC_ACQUIRE);
+    while (array != nullptr) {
+        BigArray *next = ffd_atomic_load(&array->header.nextArray, FFD_ATOMIC_ACQUIRE);
+        free(array);
+        array = next;
+    }
 }
 
 static void forkfd_initialize()
@@ -459,8 +534,8 @@ static void forkfd_initialize()
     struct sigaction action;
     memset(&action, 0, sizeof action);
     sigemptyset(&action.sa_mask);
-    action.sa_flags = SA_NOCLDSTOP;
-    action.sa_handler = sigchld_handler;
+    action.sa_flags = SA_NOCLDSTOP | SA_SIGINFO;
+    action.sa_sigaction = sigchld_handler;
 
     /* ### RACE CONDITION
      * The sigaction function does a memcpy from an internal buffer
@@ -478,42 +553,13 @@ static void forkfd_initialize()
     ignore_sigpipe();
 #endif
 
-#ifndef __GNUC__
+#ifdef __GNUC__
+    (void) cleanup; /* suppress unused static function warning */
+#else
     atexit(cleanup);
 #endif
 
     ffd_atomic_store(&forkfd_status, 1, FFD_ATOMIC_RELAXED);
-}
-
-#ifdef __GNUC__
-__attribute((destructor, unused)) static void cleanup();
-#endif
-
-static void cleanup()
-{
-    BigArray *array;
-    /* This function is not thread-safe!
-     * It must only be called when the process is shutting down.
-     * At shutdown, we expect no one to be calling forkfd(), so we don't
-     * need to be thread-safe with what is done there.
-     *
-     * But SIGCHLD might be delivered to any thread, including this one.
-     * There's no way to prevent that. The correct solution would be to
-     * cooperatively delete. We don't do that.
-     */
-    if (ffd_atomic_load(&forkfd_status, FFD_ATOMIC_RELAXED) == 0)
-        return;
-
-    /* notify the handler that we're no longer in operation */
-    ffd_atomic_store(&forkfd_status, 0, FFD_ATOMIC_RELAXED);
-
-    /* free any arrays we might have */
-    array = children.header.nextArray;
-    while (array != nullptr) {
-        BigArray *next = array->header.nextArray;
-        free(array);
-        array = next;
-    }
 }
 
 static int create_pipe(int filedes[], int flags)
@@ -554,90 +600,8 @@ static int create_pipe(int filedes[], int flags)
     return ret;
 }
 
-#if defined(FORKFD_NO_SPAWNFD) && defined(__FreeBSD__) && __FreeBSD__ >= 9
-#  if __FreeBSD__ == 9
-/* PROCDESC is an optional feature in the kernel and wasn't enabled
- * by default on FreeBSD 9. So we need to check for it at runtime. */
-static ffd_atomic_int system_has_forkfd = FFD_ATOMIC_INIT(1);
-#  else
-/* On FreeBSD 10, PROCDESC was enabled by default. On v11, it's not an option
- * anymore and can't be disabled. */
-static const int system_has_forkfd = 1;
-#  endif
-
-static int system_forkfd(int flags, pid_t *ppid)
-{
-    int ret;
-    pid_t pid;
-    pid = pdfork(&ret, PD_DAEMON);
-    if (__builtin_expect(pid == -1, 0)) {
-#  if __FreeBSD__ == 9
-        if (errno == ENOSYS) {
-            /* PROCDESC wasn't compiled into the kernel: don't try it again. */
-            ffd_atomic_store(&system_has_forkfd, 0, FFD_ATOMIC_RELAXED);
-        }
-#  endif
-        return -1;
-    }
-    if (pid == 0) {
-        /* child process */
-        return FFD_CHILD_PROCESS;
-    }
-
-    /* parent process */
-    if (flags & FFD_CLOEXEC)
-        fcntl(ret, F_SETFD, FD_CLOEXEC);
-    if (flags & FFD_NONBLOCK)
-        fcntl(ret, F_SETFL, fcntl(ret, F_GETFL) | O_NONBLOCK);
-    if (ppid)
-        *ppid = pid;
-    return ret;
-}
-#else
-static const int system_has_forkfd = 0;
-static int system_forkfd(int flags, pid_t *ppid)
-{
-    (void)flags;
-    (void)ppid;
-    return -1;
-}
-#endif
-
 #ifndef FORKFD_NO_FORKFD
-/**
- * @brief forkfd returns a file descriptor representing a child process
- * @return a file descriptor, or -1 in case of failure
- *
- * forkfd() creates a file descriptor that can be used to be notified of when a
- * child process exits. This file descriptor can be monitored using select(2),
- * poll(2) or similar mechanisms.
- *
- * The @a flags parameter can contain the following values ORed to change the
- * behaviour of forkfd():
- *
- * @li @c FFD_NONBLOCK Set the O_NONBLOCK file status flag on the new open file
- * descriptor. Using this flag saves extra calls to fnctl(2) to achieve the same
- * result.
- *
- * @li @c FFD_CLOEXEC Set the close-on-exec (FD_CLOEXEC) flag on the new file
- * descriptor. You probably want to set this flag, since forkfd() does not work
- * if the original parent process dies.
- *
- * The file descriptor returned by forkfd() supports the following operations:
- *
- * @li read(2) When the child process exits, then the buffer supplied to
- * read(2) is used to return information about the status of the child in the
- * form of one @c siginfo_t structure. The buffer must be at least
- * sizeof(siginfo_t) bytes. The return value of read(2) is the total number of
- * bytes read.
- *
- * @li poll(2), select(2) (and similar) The file descriptor is readable (the
- * select(2) readfds argument; the poll(2) POLLIN flag) if the child has exited
- * or signalled via SIGCHLD.
- *
- * @li close(2) When the file descriptor is no longer required it should be closed.
- */
-int forkfd(int flags, pid_t *ppid)
+static int forkfd_fork_fallback(int flags, pid_t *ppid)
 {
     Header *header;
     ProcessInfo *info;
@@ -646,15 +610,7 @@ int forkfd(int flags, pid_t *ppid)
     int death_pipe[2];
     int sync_pipe[2];
     int ret;
-#ifdef __linux__
-    int efd;
-#endif
-
-    if (system_has_forkfd) {
-        ret = system_forkfd(flags, ppid);
-        if (system_has_forkfd)
-            return ret;
-    }
+    int efd = -1;
 
     (void) pthread_once(&forkfd_initialization, forkfd_initialize);
 
@@ -671,9 +627,8 @@ int forkfd(int flags, pid_t *ppid)
 #ifdef HAVE_EVENTFD
     /* try using an eventfd, which consumes less resources */
     efd = eventfd(0, EFD_CLOEXEC);
-    if (efd == -1)
 #endif
-    {
+    if (efd == -1) {
         /* try a pipe */
         if (create_pipe(sync_pipe, FFD_CLOEXEC) == -1) {
             /* failed both at eventfd and pipe; fail and pass errno */
@@ -700,14 +655,13 @@ int forkfd(int flags, pid_t *ppid)
     if (pid == 0) {
         /* this is the child process */
         /* first, wait for the all clear */
-#ifdef HAVE_EVENTFD
         if (efd != -1) {
+#ifdef HAVE_EVENTFD
             eventfd_t val64;
             EINTR_LOOP(ret, eventfd_read(efd, &val64));
             EINTR_LOOP(ret, close(efd));
-        } else
 #endif
-        {
+        } else {
             char c;
             EINTR_LOOP(ret, close(sync_pipe[1]));
             EINTR_LOOP(ret, read(sync_pipe[0], &c, sizeof c));
@@ -764,6 +718,112 @@ err_free:
     freeInfo(header, info);
     return -1;
 }
+
+/**
+ * @brief forkfd returns a file descriptor representing a child process
+ * @return a file descriptor, or -1 in case of failure
+ *
+ * forkfd() creates a file descriptor that can be used to be notified of when a
+ * child process exits. This file descriptor can be monitored using select(2),
+ * poll(2) or similar mechanisms.
+ *
+ * The @a flags parameter can contain the following values ORed to change the
+ * behaviour of forkfd():
+ *
+ * @li @c FFD_NONBLOCK Set the O_NONBLOCK file status flag on the new open file
+ * descriptor. Using this flag saves extra calls to fnctl(2) to achieve the same
+ * result.
+ *
+ * @li @c FFD_CLOEXEC Set the close-on-exec (FD_CLOEXEC) flag on the new file
+ * descriptor. You probably want to set this flag, since forkfd() does not work
+ * if the original parent process dies.
+ *
+ * @li @c FFD_USE_FORK Tell forkfd() to actually call fork() instead of a
+ * different system implementation that may be available. On systems where a
+ * different implementation is available, its behavior may differ from that of
+ * fork(), such as not calling the functions registered with pthread_atfork().
+ * If that's necessary, pass this flag.
+ *
+ * The file descriptor returned by forkfd() supports the following operations:
+ *
+ * @li read(2) When the child process exits, then the buffer supplied to
+ * read(2) is used to return information about the status of the child in the
+ * form of one @c siginfo_t structure. The buffer must be at least
+ * sizeof(siginfo_t) bytes. The return value of read(2) is the total number of
+ * bytes read.
+ *
+ * @li poll(2), select(2) (and similar) The file descriptor is readable (the
+ * select(2) readfds argument; the poll(2) POLLIN flag) if the child has exited
+ * or signalled via SIGCHLD.
+ *
+ * @li close(2) When the file descriptor is no longer required it should be closed.
+ */
+int forkfd(int flags, pid_t *ppid)
+{
+    int fd;
+    if (disable_fork_fallback())
+        flags &= ~FFD_USE_FORK;
+
+    if ((flags & FFD_USE_FORK) == 0) {
+        int system_forkfd_works;
+        fd = system_forkfd(flags, ppid, &system_forkfd_works);
+        if (system_forkfd_works || disable_fork_fallback())
+            return fd;
+    }
+
+    return forkfd_fork_fallback(flags, ppid);
+}
+
+/**
+ * @brief vforkfd returns a file descriptor representing a child process
+ * @return a file descriptor, or -1 in case of failure
+ *
+ * vforkfd() operates in the same way as forkfd() and the @a flags and @a ppid
+ * arguments are the same. See the forkfd() documentation for details on the
+ * possible values and information on the returned file descriptor.
+ *
+ * This function does not return @c FFD_CHILD_PROCESS. Instead, the function @a
+ * childFn is called in the child process with the @a token parameter as
+ * argument. If that function returns, its return value will be passed to
+ * _exit(2).
+ *
+ * This function differs from forkfd() the same way that vfork() differs from
+ * fork(): the parent process may be suspended while the child is has not yet
+ * called _exit(2) or execve(2). Additionally, on some systems, the child
+ * process may share memory with the parent process the same way an auxiliary
+ * thread would, so extreme care should be employed on what functions the child
+ * process uses before termination.
+ *
+ * The @c FFD_USE_FORK flag retains its behavior as described in the forkfd()
+ * documentation, including that of actually using fork(2) and no other
+ * implementation.
+ *
+ * Currently, only on Linux will this function have any behavior different from
+ * forkfd(). In all other systems, it is equivalent to the following code:
+ *
+ * @code
+ *     int ffd = forkfd(flags, &pid);
+ *     if (ffd == FFD_CHILD_PROCESS)
+ *         _exit(childFn(token));
+ * @endcode
+ */
+int vforkfd(int flags, pid_t *ppid, int (*childFn)(void *), void *token)
+{
+    int fd;
+    if ((flags & FFD_USE_FORK) == 0) {
+        int system_forkfd_works;
+        fd = system_vforkfd(flags, ppid, childFn, token, &system_forkfd_works);
+        if (system_forkfd_works || disable_fork_fallback())
+            return fd;
+    }
+
+    fd = forkfd_fork_fallback(flags, ppid);
+    if (fd == FFD_CHILD_PROCESS) {
+        /* child process */
+        _exit(childFn(token));
+    }
+    return fd;
+}
 #endif // FORKFD_NO_FORKFD
 
 #if _POSIX_SPAWN > 0 && !defined(FORKFD_NO_SPAWNFD)
@@ -779,12 +839,12 @@ int spawnfd(int flags, pid_t *ppid, const char *path, const posix_spawn_file_act
     /* we can only do work if we have a way to start the child in stopped mode;
      * otherwise, we have a major race condition. */
 
-    assert(!system_has_forkfd);
+    assert(!system_has_forkfd());
 
     (void) pthread_once(&forkfd_initialization, forkfd_initialize);
 
     info = allocateInfo(&header);
-    if (info == nullptr) {
+    if (info == NULL) {
         errno = ENOMEM;
         goto out;
     }
@@ -831,30 +891,16 @@ out:
 }
 #endif // _POSIX_SPAWN && !FORKFD_NO_SPAWNFD
 
-
-int forkfd_wait(int ffd, forkfd_info *info, struct rusage *rusage)
+int forkfd_wait4(int ffd, struct forkfd_info *info, int options, struct rusage *rusage)
 {
     struct pipe_payload payload;
     int ret;
 
-    if (system_has_forkfd) {
-#if defined(__FreeBSD__) && __FreeBSD__ >= 9
-        pid_t pid;
-        int status;
-        int options = WEXITED;
-
-        ret = pdgetpid(ffd, &pid);
-        if (ret == -1)
+    if (system_has_forkfd()) {
+        /* if this is one of our pipes, not a procdesc/pidfd, we'll get an EBADF */
+        ret = system_forkfd_wait(ffd, info, options, rusage);
+        if (disable_fork_fallback() || ret != -1 || errno != EBADF)
             return ret;
-        ret = fcntl(ffd, F_GETFL);
-        if (ret == -1)
-            return ret;
-        options |= (ret & O_NONBLOCK) ? WNOHANG : 0;
-        ret = wait4(pid, &status, options, rusage);
-        if (ret != -1 && info)
-            convertStatusToForkfdInfo(status, info);
-        return ret == -1 ? -1 : 0;
-#endif
     }
 
     ret = read(ffd, &payload, sizeof(payload));
@@ -875,3 +921,44 @@ int forkfd_close(int ffd)
 {
     return close(ffd);
 }
+
+#if defined(__FreeBSD__) && __FreeBSD__ >= 9
+#  include "forkfd_freebsd.c"
+#elif defined(__linux__)
+#  include "forkfd_linux.c"
+#else
+int system_has_forkfd()
+{
+    return 0;
+}
+
+int system_forkfd(int flags, pid_t *ppid, int *system)
+{
+    (void)flags;
+    (void)ppid;
+    *system = 0;
+    return -1;
+}
+
+int system_forkfd_wait(int ffd, struct forkfd_info *info, int options, struct rusage *rusage)
+{
+    (void)ffd;
+    (void)info;
+    (void)options;
+    (void)rusage;
+    return -1;
+}
+#endif
+#ifndef SYSTEM_FORKFD_CAN_VFORK
+int system_vforkfd(int flags, pid_t *ppid, int (*childFn)(void *), void *token, int *system)
+{
+    /* we don't have a way to vfork(), so fake it */
+    int ret = system_forkfd(flags, ppid, system);
+    if (ret == FFD_CHILD_PROCESS) {
+        /* child process */
+        _exit(childFn(token));
+    }
+    return ret;
+}
+#endif
+#undef SYSTEM_FORKFD_CAN_VFORK
