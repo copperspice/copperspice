@@ -53,7 +53,7 @@ class QWaylandGLContext : public QPlatformOpenGLContext
       return m_format;
    }
 
-   void (*getProcAddress(const QByteArray &procName)) () override;
+   FP_Void getProcAddress(const QByteArray &procName) override;
 
    bool isSharing() const override;
    bool isValid() const override;

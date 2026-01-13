@@ -85,15 +85,18 @@ class TextureVideoBuffer : public QAbstractVideoBuffer
    virtual ~TextureVideoBuffer() {
    }
 
-   MapMode mapMode() const {
+   MapMode mapMode() const override {
       return NotMapped;
    }
-   uchar *map(MapMode, int *, int *) {
+
+   uchar *map(MapMode, int *, int *) override {
       return nullptr;
    }
-   void unmap() {}
 
-   QVariant handle() const {
+   void unmap() override {
+   }
+
+   QVariant handle() const override {
       return QVariant::fromValue<unsigned int>(m_texture);
    }
 
