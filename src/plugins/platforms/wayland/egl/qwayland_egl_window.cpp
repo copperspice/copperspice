@@ -35,8 +35,10 @@ namespace QtWaylandClient {
 QWaylandEglWindow::QWaylandEglWindow(QWindow *window)
    : QWaylandWindow(window), m_waylandEglWindow(nullptr), m_eglSurface(nullptr),
      m_clientBufferIntegration(static_cast<QWaylandEglClientBufferIntegration *>(m_display->clientBufferIntegration())),
-     m_parentWindow(nullptr), m_resize(false), m_contentFBO(nullptr)
+     m_resize(false), m_contentFBO(nullptr)
 {
+   // unused: m_parentWindow(nullptr)
+
    QSurfaceFormat fmt = window->requestedFormat();
 
    if (m_display->supportsWindowDecoration()) {

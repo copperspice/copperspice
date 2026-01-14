@@ -67,7 +67,7 @@ class QWaylandEglWindow : public QWaylandWindow
    EGLConfig m_eglConfig;
 
    QWaylandEglClientBufferIntegration *m_clientBufferIntegration;
-   const QWaylandWindow *m_parentWindow;
+   // unused:  const QWaylandWindow *m_parentWindow;
 
    mutable bool m_resize;
    mutable QOpenGLFramebufferObject *m_contentFBO;
