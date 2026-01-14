@@ -568,7 +568,6 @@ void QPlatformCursorImage::set(const uchar *data, const uchar *mask,
    int m;
 
    int x = -1;
-   int w = 0;
 
    uchar *cursor_data = cursorImage.bits();
    int bpl = cursorImage.bytesPerLine();
@@ -597,17 +596,13 @@ void QPlatformCursorImage::set(const uchar *data, const uchar *mask,
 
             } else if (x >= 0 && m == 0) {
                x = -1;
-               w = 0;
-            }
-            if (m) {
-               w++;
+
             }
          }
       }
 
       if (x >= 0) {
          x = -1;
-         w = 0;
       }
 
       cursor_data += bpl;

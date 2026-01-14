@@ -2524,8 +2524,6 @@ bool QLocaleData::numberToCLocale(const QString &num, GroupSeparatorMode group_s
       --end;
    }
 
-   int group_cnt = 0;
-
    QString::const_iterator decpt_iter           = end;
    QString::const_iterator last_separator_iter  = end;
    QString::const_iterator start_of_digits_iter = end;
@@ -2575,7 +2573,6 @@ bool QLocaleData::numberToCLocale(const QString &num, GroupSeparatorMode group_s
             }
 
             last_separator_iter = iter;
-            ++group_cnt;
 
             // do not add the group separator
             ++iter;

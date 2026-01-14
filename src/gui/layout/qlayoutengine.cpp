@@ -62,7 +62,7 @@ void qGeomCalc(QVector<QLayoutStruct> &chain, int start, int count, int pos, int
 {
    int cHint = 0;
    int cMin  = 0;
-   int cMax  = 0;
+
    int sumStretch = 0;
    int sumSpacing = 0;
    int expandingCount = 0;
@@ -76,9 +76,10 @@ void qGeomCalc(QVector<QLayoutStruct> &chain, int start, int count, int pos, int
       QLayoutStruct *data = &chain[i];
 
       data->done = false;
+
       cHint += data->smartSizeHint();
       cMin  += data->minimumSize;
-      cMax  += data->maximumSize;
+
       sumStretch += data->stretch;
 
       if (! data->empty) {

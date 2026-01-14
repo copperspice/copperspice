@@ -1254,7 +1254,6 @@ QByteArray QFontSubset::toTruetype() const
 
    QVector<QTtfGlyph> glyphs;
 
-   uint sumAdvances = 0;
    for (int i = 0; i < numGlyphs; ++i) {
       glyph_t g = glyph_indices.at(i);
 
@@ -1282,10 +1281,6 @@ QByteArray QFontSubset::toTruetype() const
 
       font.maxp.maxPoints   = qMax(font.maxp.maxPoints, glyph.numPoints);
       font.maxp.maxContours = qMax(font.maxp.maxContours, glyph.numContours);
-
-      if (glyph.xMax > glyph.xMin) {
-         sumAdvances += glyph.xMax - glyph.xMin;
-      }
 
       glyphs.append(glyph);
       widths[i] = glyph.advanceWidth;

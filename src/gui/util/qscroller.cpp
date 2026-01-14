@@ -1678,7 +1678,6 @@ void QScrollerPrivate::setContentPositionHelperDragging(const QPointF &deltaPos)
    qDebug() << "  --> overshoot:" << overshootPosition << "- old pos:" << oldPos << "- new pos:" << newPos;
 #endif
 
-   QPointF oldClampedPos = clampToRect(oldPos, contentPosRange);
    QPointF newClampedPos = clampToRect(newPos, contentPosRange);
 
    // --- handle overshooting and stop if the coordinate is going back inside the normal area
@@ -1696,9 +1695,6 @@ void QScrollerPrivate::setContentPositionHelperDragging(const QPointF &deltaPos)
    bool canOvershootX = !noOvershootX && (alwaysOvershootX || contentPosRange.width());
    bool canOvershootY = !noOvershootY && (alwaysOvershootY || contentPosRange.height());
 
-   qreal oldOvershootX = (canOvershootX) ? oldPos.x() - oldClampedPos.x() : 0;
-   qreal oldOvershootY = (canOvershootY) ? oldPos.y() - oldClampedPos.y() : 0;
-
    qreal newOvershootX = (canOvershootX) ? newPos.x() - newClampedPos.x() : 0;
    qreal newOvershootY = (canOvershootY) ? newPos.y() - newClampedPos.y() : 0;
 
@@ -1712,8 +1708,6 @@ void QScrollerPrivate::setContentPositionHelperDragging(const QPointF &deltaPos)
 #endif
 
    if (sp->overshootDragResistanceFactor) {
-      oldOvershootX *= sp->overshootDragResistanceFactor;
-      oldOvershootY *= sp->overshootDragResistanceFactor;
       newOvershootX *= sp->overshootDragResistanceFactor;
       newOvershootY *= sp->overshootDragResistanceFactor;
    }
