@@ -456,4 +456,6 @@ int QCryptographicHash::hashLength(Algorithm method)
       case Sha3_512:
          return 64;
    }
+
+   return 0;
 }

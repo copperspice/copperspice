@@ -512,6 +512,8 @@ qint64 QNetworkDiskCache::expire()
       qDebug() << "QNetworkDiskCache::expire()"
             << "Removed:" << removedFiles << "Kept:" << cacheItems.count() - removedFiles;
    }
+#else
+   (void) removedFiles;
 #endif
 
    return totalSize;
