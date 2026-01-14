@@ -39,17 +39,19 @@ extern Q_CORE_EXPORT void qWinMsgHandler(QtMsgType type, QStringView str);
 static QtMsgHandler s_handler = nullptr;          // pointer to debug handler
 
 #if ! defined(Q_OS_WIN) && defined(_POSIX_THREAD_SAFE_FUNCTIONS) && _POSIX_VERSION >= 200112L
-namespace {
-   static inline QString fromstrerror_helper(int, const QByteArray &buf)
-   {
-      return QString::fromUtf8(buf);
-   }
 
-   static inline QString fromstrerror_helper(const char *str, const QByteArray &)
-   {
-      return QString::fromUtf8(str);
-   }
+namespace {
+[[maybe_unused]] static inline QString fromstrerror_helper(int, const QByteArray &buf)
+{
+   return QString::fromUtf8(buf);
 }
+
+[[maybe_unused]] static inline QString fromstrerror_helper(const char *str, const QByteArray &)
+{
+   return QString::fromUtf8(str);
+}
+
+}   // namespace
 #endif
 
 QString qt_error_string(int errorCode)
