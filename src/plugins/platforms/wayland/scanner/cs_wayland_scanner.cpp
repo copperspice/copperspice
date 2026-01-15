@@ -27,31 +27,33 @@
 
 #include <unistd.h>
 
-enum Option {
+enum class ScannerMode {
    ClientHeader,
    ServerHeader,
    ClientCode,
    ServerCode
-} option;
+};
+
+ScannerMode currentMode;
 
 bool isServerSide()
 {
-   return option == ServerHeader || option == ServerCode;
+   return currentMode == ScannerMode::ServerHeader || currentMode == ScannerMode::ServerCode;
 }
 
-bool parseOption(const QString &str, Option *option)
+bool parseMode(const QString &str)
 {
    if (str == "client-header") {
-      *option = ClientHeader;
+      currentMode = ScannerMode::ClientHeader;
 
    } else if (str == "server-header") {
-      *option = ServerHeader;
+      currentMode = ScannerMode::ServerHeader;
 
    } else if (str == "client-code") {
-      *option = ClientCode;
+      currentMode = ScannerMode::ClientCode;
 
    } else if (str == "server-code") {
-      *option = ServerCode;
+      currentMode = ScannerMode::ServerCode;
 
    } else {
       return false;
@@ -419,7 +421,7 @@ void process(QXmlStreamReader &xml, QFile &outputFile, const QByteArray &headerP
       return;
    }
 
-   if (option == ServerHeader) {
+   if (currentMode == ScannerMode::ServerHeader) {
       QByteArray inclusionGuard = QByteArray("CS_WAYLAND_SERVER_") + preProcessorProtocolName.constData();
 
       printf("#ifndef %s\n", inclusionGuard.constData());
@@ -610,7 +612,7 @@ void process(QXmlStreamReader &xml, QFile &outputFile, const QByteArray &headerP
       printf("#endif\n");
    }
 
-   if (option == ServerCode) {
+   if (currentMode == ScannerMode::ServerCode) {
       if (headerPath.isEmpty()) {
          printf("#include \"qwayland-server-%s.h\"\n", QByteArray(protocolName).replace('_', '-').constData());
       } else {
@@ -874,9 +876,9 @@ void process(QXmlStreamReader &xml, QFile &outputFile, const QByteArray &headerP
                printf("      static_cast<%s *>(r->%s_object)->%s_%s(r", interfaceName, interfaceNameStripped,
                      interfaceNameStripped, e.name.constData());
 
-               for (int i = 0; i < e.arguments.size(); ++i) {
+               for (int k = 0; k < e.arguments.size(); ++k) {
                   printf(",\n");
-                  const WaylandArgument &a = e.arguments.at(i);
+                  const WaylandArgument &a = e.arguments.at(k);
 
                   QByteArray cType  = waylandTo_CType(a.type, a.interface);
                   QByteArray csType = waylandTo_CsType(a.type, a.interface, e.request);
@@ -885,9 +887,8 @@ void process(QXmlStreamReader &xml, QFile &outputFile, const QByteArray &headerP
 
                   if (cType == csType) {
                      printf("            %s", argumentName);
-                  }
 
-                  else if (a.type == "string") {
+                  } else if (a.type == "string") {
                      printf("            QString::fromUtf8(%s)", argumentName);
                   }
                }
@@ -926,8 +927,8 @@ void process(QXmlStreamReader &xml, QFile &outputFile, const QByteArray &headerP
             printf("\n");
             printf("   {\n");
 
-            for (int i = 0; i < e.arguments.size(); ++i) {
-               const WaylandArgument &a = e.arguments.at(i);
+            for (int k = 0; k < e.arguments.size(); ++k) {
+               const WaylandArgument &a = e.arguments.at(k);
 
                if (a.type != "array") {
                   continue;
@@ -946,8 +947,8 @@ void process(QXmlStreamReader &xml, QFile &outputFile, const QByteArray &headerP
 
             printf("      %s_send_%s(resource", interfaceName, e.name.constData());
 
-            for (int i = 0; i < e.arguments.size(); ++i) {
-               const WaylandArgument &a = e.arguments.at(i);
+            for (int k = 0; k < e.arguments.size(); ++k) {
+               const WaylandArgument &a = e.arguments.at(k);
                printf(",\n");
 
                QByteArray cType  = waylandTo_CType(a.type, a.interface);
@@ -973,7 +974,7 @@ void process(QXmlStreamReader &xml, QFile &outputFile, const QByteArray &headerP
       printf("\n");
    }
 
-   if (option == ClientHeader) {
+   if (currentMode == ScannerMode::ClientHeader) {
       QByteArray inclusionGuard = QByteArray("WAYLAND_") + preProcessorProtocolName.constData();
 
       printf("#ifndef %s\n", csPrintable(inclusionGuard));
@@ -1101,7 +1102,7 @@ void process(QXmlStreamReader &xml, QFile &outputFile, const QByteArray &headerP
       printf("#endif\n");
    }
 
-   if (option == ClientCode) {
+   if (currentMode == ScannerMode::ClientCode) {
       if (headerPath.isEmpty()) {
          printf("#include \"qwayland-%s.h\"\n", QByteArray(protocolName).replace('_', '-').constData());
       } else {
@@ -1221,8 +1222,8 @@ void process(QXmlStreamReader &xml, QFile &outputFile, const QByteArray &headerP
 
             printf("   {\n");
 
-            for (int i = 0; i < e.arguments.size(); ++i) {
-               const WaylandArgument &a = e.arguments.at(i);
+            for (int k = 0; k < e.arguments.size(); ++k) {
+               const WaylandArgument &a = e.arguments.at(k);
 
                if (a.type != "array") {
                   continue;
@@ -1245,8 +1246,8 @@ void process(QXmlStreamReader &xml, QFile &outputFile, const QByteArray &headerP
 
             bool needsComma = false;
 
-            for (int i = 0; i < e.arguments.size(); ++i) {
-               const WaylandArgument &a = e.arguments.at(i);
+            for (int k = 0; k < e.arguments.size(); ++k) {
+               const WaylandArgument &a = e.arguments.at(k);
                bool isNewId = a.type == "new_id";
 
                if (isNewId && ! a.interface.isEmpty()) {
@@ -1312,9 +1313,9 @@ void process(QXmlStreamReader &xml, QFile &outputFile, const QByteArray &headerP
                printf("      (void) object;\n\n");
                printf("      static_cast<%s *>(data)->%s_%s(", interfaceName, interfaceNameStripped, e.name.constData());
 
-               for (int i = 0; i < e.arguments.size(); ++i) {
+               for (int k = 0; k < e.arguments.size(); ++k) {
                   printf("\n");
-                  const WaylandArgument &a = e.arguments.at(i);
+                  const WaylandArgument &a = e.arguments.at(k);
 
                   const char *argumentName = a.name.constData();
 
@@ -1324,7 +1325,7 @@ void process(QXmlStreamReader &xml, QFile &outputFile, const QByteArray &headerP
                      printf("         %s", argumentName);
                   }
 
-                  if (i < e.arguments.size() - 1) {
+                  if (k < e.arguments.size() - 1) {
                      printf(",");
                   }
                }
@@ -1362,7 +1363,7 @@ void process(QXmlStreamReader &xml, QFile &outputFile, const QByteArray &headerP
 
 int main(int argc, char **argv)
 {
-   if (argc <= 3 || ! parseOption(QString::fromUtf8(argv[1]), &option)) {
+   if (argc <= 3 || ! parseMode(QString::fromUtf8(argv[1]))) {
       fprintf(stderr, "Usage: %s [client-header|server-header|client-code|server-code] inputfile outputfile [header-path] [prefix]\n", argv[0]);
       return EXIT_FAILURE;
    }
