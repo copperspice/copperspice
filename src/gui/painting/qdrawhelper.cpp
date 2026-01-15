@@ -5409,7 +5409,7 @@ static void blend_transformed_bilinear_rgb565(int count, const QSpan *spans, voi
       return;
    }
 
-   quint16 buffer[buffer_size];
+   quint16 buffer[buffer_size] = {};
 
    const int src_minx = data->texture.x1;
    const int src_miny = data->texture.y1;
@@ -5706,7 +5706,7 @@ static void blend_transformed_rgb565(int count, const QSpan *spans, void *userDa
       return;
    }
 
-   quint16 buffer[buffer_size];
+   quint16 buffer[buffer_size] = {};
 
    const int image_width  = data->texture.width;
    const int image_height = data->texture.height;
@@ -5991,7 +5991,7 @@ static void blend_transformed_tiled_rgb565(int count, const QSpan *spans, void *
       return;
    }
 
-   quint16 buffer[buffer_size];
+   quint16 buffer[buffer_size] = {};
 
    const int image_width = data->texture.width;
    const int image_height = data->texture.height;
