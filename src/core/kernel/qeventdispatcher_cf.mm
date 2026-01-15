@@ -142,6 +142,8 @@ class RunLoopDebugger : public QObject
    };
 };
 
+#if defined(CS_SHOW_DEBUG_CORE_OSX)
+
 #define Q_ENUM_PRINTER(enumName) \
    static QString csPrintable##enumName(int value) \
    { \
@@ -150,6 +152,8 @@ class RunLoopDebugger : public QObject
 
 Q_ENUM_PRINTER(Activity);
 Q_ENUM_PRINTER(Result);
+
+#endif
 
 static QDebug operator<<(QDebug s, timespec tv)
 {
