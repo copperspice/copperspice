@@ -1253,7 +1253,7 @@ void QMessageBox::aboutCs(QWidget *parent, const QString &title)
 
    QLabel *msg2 = new QLabel;
    msg2->setText(tr("CopperSpice is a set of C++ libraries for developing cross platform applications <br>"
-                     "on X11, Windows, and Mac OS X\n"));
+                     "on Unix/Linux, Windows, and Mac OS X\n"));
 
    font = msg2->font();
    font.setPointSize(10);
