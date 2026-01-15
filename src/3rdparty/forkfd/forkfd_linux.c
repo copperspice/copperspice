@@ -69,8 +69,8 @@ static int sys_waitid(int which, int pid_or_pidfd, siginfo_t *infop, int options
 
 static int sys_clone(unsigned long cloneflags, int *ptid)
 {
-    void *child_stack = NULL;
-    int *ctid = NULL;
+    void *child_stack = nullptr;
+    int *ctid = nullptr;
     unsigned long newtls = 0;
 #if defined(__NR_clone2)
     size_t stack_size = 0;
@@ -125,7 +125,7 @@ static int detect_clone_pidfd_support()
      * sys_clone() mess above...
      */
 
-    sys_waitid(P_PIDFD, INT_MAX, NULL, WEXITED|WNOHANG, NULL);
+    sys_waitid(P_PIDFD, INT_MAX, nullptr, WEXITED|WNOHANG, nullptr);
     return errno == EBADF ? 1 : -1;
 }
 
