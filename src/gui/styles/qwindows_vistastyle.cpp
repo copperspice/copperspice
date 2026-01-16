@@ -73,8 +73,7 @@ bool QWindowsVistaStylePrivate::useVista()
 {
    return (QSysInfo::WindowsVersion >= QSysInfo::WV_VISTA
       && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based))
-      && QWindowsVistaStylePrivate::useXP()
-      && QWindowsVistaStylePrivate::pGetThemeTransitionDuration != nullptr;
+      && QWindowsVistaStylePrivate::useXP();
 }
 
 inline QObject *styleObject(const QStyleOption *option)
@@ -156,6 +155,7 @@ QWindowsVistaStyle::~QWindowsVistaStyle()
 static int buttonStateId(int flags, int partId)
 {
    int stateId = 0;
+
    if (partId == BP_RADIOBUTTON || partId == BP_CHECKBOX) {
       if (!(flags & QStyle::State_Enabled)) {
          stateId = RBS_UNCHECKEDDISABLED;
@@ -185,6 +185,7 @@ static int buttonStateId(int flags, int partId)
    } else {
       Q_ASSERT(1);
    }
+
    return stateId;
 }
 
@@ -198,26 +199,27 @@ void QWindowsVistaAnimation::paint(QPainter *painter, const QStyleOption *option
    painter->drawImage(option->rect, currentImage());
 }
 
-static inline bool supportsStateTransition(QStyle::PrimitiveElement element,
-   const QStyleOption *option,
-   const QWidget *widget)
+static inline bool supportsStateTransition(QStyle::PrimitiveElement element, const QStyleOption *option, const QWidget *widget)
 {
    bool result = false;
+
    switch (element) {
       case QStyle::PE_IndicatorRadioButton:
       case QStyle::PE_IndicatorCheckBox:
          result = true;
          break;
+
       // QTBUG-40634, do not animate when color is set in palette for PE_PanelLineEdit.
       case QStyle::PE_FrameLineEdit:
          result = !QWindowsXPStylePrivate::isLineEditBaseColorSet(option, widget);
          break;
+
       default:
          break;
    }
+
    return result;
 }
-
 
 void QWindowsVistaStyle::drawPrimitive(PrimitiveElement element, const QStyleOption *option,
    QPainter *painter, const QWidget *widget) const
@@ -304,14 +306,15 @@ void QWindowsVistaStyle::drawPrimitive(PrimitiveElement element, const QStyleOpt
                t->setEndImage(endImage);
 
                HTHEME theme;
+               DWORD duration;
+
                int partId;
-               int duration;
                int fromState = 0;
                int toState = 0;
 
                // translate state flags to UXTHEME states :
                if (element == PE_FrameLineEdit) {
-                  theme = QWindowsXPStylePrivate::pOpenThemeData(nullptr, L"Edit");
+                  theme  = OpenThemeData(nullptr, L"Edit");
                   partId = EP_EDITBORDER_NOSCROLL;
 
                   if (oldState & State_MouseOver) {
@@ -331,7 +334,8 @@ void QWindowsVistaStyle::drawPrimitive(PrimitiveElement element, const QStyleOpt
                   }
 
                } else {
-                  theme = QWindowsXPStylePrivate::pOpenThemeData(nullptr, L"Button");
+                  theme = OpenThemeData(nullptr, L"Button");
+
                   if (element == PE_IndicatorRadioButton) {
                      partId = BP_RADIOBUTTON;
                   } else if (element == PE_IndicatorCheckBox) {
@@ -345,8 +349,7 @@ void QWindowsVistaStyle::drawPrimitive(PrimitiveElement element, const QStyleOpt
                }
 
                // Retrieve the transition time between the states from the system.
-               if (theme && QWindowsXPStylePrivate::pGetThemeTransitionDuration(theme, partId, fromState, toState,
-                     TMT_TRANSITIONDURATIONS, &duration) == S_OK) {
+               if (theme && GetThemeTransitionDuration(theme, partId, fromState, toState, TMT_TRANSITIONDURATIONS, &duration) == S_OK) {
                   t->setDuration(duration);
                }
                t->setStartTime(QTime::currentTime());
@@ -354,10 +357,11 @@ void QWindowsVistaStyle::drawPrimitive(PrimitiveElement element, const QStyleOpt
                deleteClonedAnimationStyleOption(styleOption);
                d->startAnimation(t);
             }
+
             styleObject->setProperty("_q_no_animation", false);
          }
 
-      } // End of animation part
+      } // end of animation part
    }
 
    QRect rect = option->rect;
@@ -462,7 +466,7 @@ void QWindowsVistaStyle::drawPrimitive(PrimitiveElement element, const QStyleOpt
             // Since EP_EDITBORDER_HVSCROLL does not us borderfill, theme.noContent cannot be used for clipping
             int borderSize = 1;
 
-            QWindowsXPStylePrivate::pGetThemeInt(theme.handle(), theme.partId, theme.stateId, TMT_BORDERSIZE, &borderSize);
+            GetThemeInt(theme.handle(), theme.partId, theme.stateId, TMT_BORDERSIZE, &borderSize);
             QRegion clipRegion = option->rect;
             QRegion content = option->rect.adjusted(borderSize, borderSize, -borderSize, -borderSize);
 
@@ -483,9 +487,11 @@ void QWindowsVistaStyle::drawPrimitive(PrimitiveElement element, const QStyleOpt
 
             if (QWindowsXPStylePrivate::isLineEditBaseColorSet(option, widget)) {
                painter->fillRect(panel->rect, panel->palette.brush(QPalette::Base));
+
             } else {
                int partId = EP_BACKGROUND;
                int stateId = EBS_NORMAL;
+
                if (!isEnabled) {
                   stateId = EBS_DISABLED;
                } else if (state & State_ReadOnly) {
@@ -503,23 +509,26 @@ void QWindowsVistaStyle::drawPrimitive(PrimitiveElement element, const QStyleOpt
                }
 
                int bgType;
-               QWindowsXPStylePrivate::pGetThemeEnumValue(theme.handle(),
-                  partId, stateId, TMT_BGTYPE, &bgType);
+               GetThemeEnumValue(theme.handle(), partId, stateId, TMT_BGTYPE, &bgType);
 
                if ( bgType == BT_IMAGEFILE ) {
                   d->drawBackground(theme);
+
                } else {
                   QBrush fillColor = option->palette.brush(QPalette::Base);
+
                   if (!isEnabled) {
                      PROPERTYORIGIN origin = PO_NOTFOUND;
-                     QWindowsXPStylePrivate::pGetThemePropertyOrigin(theme.handle(), theme.partId, theme.stateId, TMT_FILLCOLOR, &origin);
+                     GetThemePropertyOrigin(theme.handle(), theme.partId, theme.stateId, TMT_FILLCOLOR, &origin);
+
                      // Use only if the fill property comes from our part
                      if ((origin == PO_PART || origin == PO_STATE)) {
                         COLORREF bgRef;
-                        QWindowsXPStylePrivate::pGetThemeColor(theme.handle(), partId, stateId, TMT_FILLCOLOR, &bgRef);
+                        GetThemeColor(theme.handle(), partId, stateId, TMT_FILLCOLOR, &bgRef);
                         fillColor = QBrush(qRgb(GetRValue(bgRef), GetGValue(bgRef), GetBValue(bgRef)));
                      }
                   }
+
                   painter->fillRect(option->rect, fillColor);
                }
             }
@@ -527,6 +536,7 @@ void QWindowsVistaStyle::drawPrimitive(PrimitiveElement element, const QStyleOpt
             if (panel->lineWidth > 0) {
                proxy()->drawPrimitive(PE_FrameLineEdit, panel, painter, widget);
             }
+
             return;
          }
          break;
@@ -645,7 +655,7 @@ void QWindowsVistaStyle::drawPrimitive(PrimitiveElement element, const QStyleOpt
 
 #ifndef QT_NO_ACCESSIBILITY
          } else if (!widget) {
-            newStyle = !QStyleHelper::hasAncestor(option->styleObject, QAccessible::MenuItem) ;
+            newStyle = ! QStyleHelper::hasAncestor(option->styleObject, QAccessible::MenuItem) ;
 #endif
          }
 
@@ -783,8 +793,7 @@ void QWindowsVistaStyle::drawPrimitive(PrimitiveElement element, const QStyleOpt
 
          if (buttonBox) {
             // draw white panel part
-            XPThemeData theme(widget, painter, QWindowsXPStylePrivate::TaskDialogTheme,
-                  TDLG_PRIMARYPANEL, 0, option->rect);
+            XPThemeData theme(widget, painter, QWindowsXPStylePrivate::TaskDialogTheme, TDLG_PRIMARYPANEL, 0, option->rect);
 
             QRect toprect = option->rect;
             toprect.setBottom(buttonBox->geometry().top());
@@ -826,6 +835,7 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
 
    QRect rect(option->rect);
    State flags = option->state;
+
    int partId  = 0;
    int stateId = 0;
 
@@ -847,7 +857,8 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
          }
 
          bool wasDefault = false;
-         bool isDefault = false;
+         bool isDefault  = false;
+
          if (const QStyleOptionButton *button = qstyleoption_cast<const QStyleOptionButton *>(option)) {
             wasDefault = styleObject->property("_q_isdefault").toBool();
             isDefault = button->features & QStyleOptionButton::DefaultButton;
@@ -887,22 +898,23 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
             t->setStartImage(startImage);
             QImage endImage = createAnimationBuffer(option, widget);
             QPainter endPainter(&endImage);
+
             styleOption->state = option->state;
             proxy()->drawControl(element, styleOption, &endPainter, widget);
             t->setEndImage(endImage);
 
-            int duration = 0;
-            HTHEME theme = QWindowsXPStylePrivate::pOpenThemeData(nullptr, L"Button");
+            HTHEME theme = OpenThemeData(nullptr, L"Button");
+            DWORD duration = 0;
 
             int fromState = buttonStateId(oldState, BP_PUSHBUTTON);
             int toState = buttonStateId(option->state, BP_PUSHBUTTON);
 
-            if (QWindowsXPStylePrivate::pGetThemeTransitionDuration(theme, BP_PUSHBUTTON, fromState, toState, TMT_TRANSITIONDURATIONS,
-                  &duration) == S_OK) {
+            if (GetThemeTransitionDuration(theme, BP_PUSHBUTTON, fromState, toState, TMT_TRANSITIONDURATIONS, &duration) == S_OK) {
                t->setDuration(duration);
             } else {
                t->setDuration(0);
             }
+
             t->setStartTime(QTime::currentTime());
             styleObject->setProperty("_q_no_animation", false);
 
@@ -912,11 +924,10 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
 
          QWindowsVistaAnimation *anim = dynamic_cast<QWindowsVistaAnimation *>(d->animationValue(styleObject));
 
-         if (anim) {
+         if (anim != nullptr) {
             anim->paint(painter, option);
             return;
          }
-
       }
    }
 
@@ -925,12 +936,13 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
          if (const QStyleOptionButton *btn = qstyleoption_cast<const QStyleOptionButton *>(option)) {
             themeNumber = QWindowsXPStylePrivate::ButtonTheme;
             partId = BP_PUSHBUTTON;
+
             if (btn->features & QStyleOptionButton::CommandLinkButton) {
                partId = BP_COMMANDLINK;
             }
 
             bool justFlat = (btn->features & QStyleOptionButton::Flat) && !(flags & (State_On | State_Sunken));
-            if (!(flags & State_Enabled) && ! (btn->features & QStyleOptionButton::Flat)) {
+            if (! (flags & State_Enabled) && ! (btn->features & QStyleOptionButton::Flat)) {
                stateId = PBS_DISABLED;
 
             } else if (justFlat) {
@@ -1427,9 +1439,7 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
                stateId += 3;
             }
 
-            XPThemeData theme(widget, painter,
-               QWindowsXPStylePrivate::HeaderTheme,
-               partId, stateId, option->rect);
+            XPThemeData theme(widget, painter, QWindowsXPStylePrivate::HeaderTheme, partId, stateId, option->rect);
             d->drawBackground(theme);
          }
          break;
@@ -1440,9 +1450,7 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
             stateId = MBI_DISABLED;
          }
 
-         XPThemeData theme(widget, painter,
-            QWindowsXPStylePrivate::MenuTheme,
-            MENU_BARBACKGROUND, stateId, option->rect);
+         XPThemeData theme(widget, painter, QWindowsXPStylePrivate::MenuTheme, MENU_BARBACKGROUND, stateId, option->rect);
          d->drawBackground(theme);
       }
       break;
@@ -1451,8 +1459,10 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
          if (const QStyleOptionToolBar *toolbar = qstyleoption_cast<const QStyleOptionToolBar *>(option)) {
             QPalette pal = option->palette;
             pal.setColor(QPalette::Dark, option->palette.background().color().darker(130));
+
             QStyleOptionToolBar copyOpt = *toolbar;
             copyOpt.palette = pal;
+
             QWindowsStyle::drawControl(element, &copyOpt, painter, widget);
          }
          break;
@@ -1546,8 +1556,9 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
          }
 
          if (newStyle && view && (vopt = qstyleoption_cast<const QStyleOptionViewItem *>(option))) {
+
             /*
-            can not currently get the correct selection color for "explorer style" views COLORREF cref = 0;
+            unable to find the correct selection color for "explorer style" views COLORREF cref = 0;
 
             XPThemeData theme(d->treeViewHelper(), 0, QString("LISTVIEW"), 0, 0);
             unsigned int res = pGetThemeColor(theme.handle(), LVP_LISTITEM, LISS_SELECTED, TMT_TEXTCOLOR, &cref);
@@ -1563,8 +1574,7 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
             adjustedOption.palette = palette;
 
             // hide the focusrect in singleselection as it is not required
-            if ((view->selectionMode() == QAbstractItemView::SingleSelection)
-               && !(vopt->state & State_KeyboardFocusChange)) {
+            if ((view->selectionMode() == QAbstractItemView::SingleSelection) && !(vopt->state & State_KeyboardFocusChange)) {
                adjustedOption.state &= ~State_HasFocus;
             }
 
@@ -1573,8 +1583,10 @@ void QWindowsVistaStyle::drawControl(ControlElement element, const QStyleOption 
          } else {
             QWindowsXPStyle::drawControl(element, option, painter, widget);
          }
+
          break;
       }
+
 #endif // QT_NO_ITEMVIEWS
 
 #ifndef QT_NO_COMBOBOX
@@ -2123,8 +2135,7 @@ QRect QWindowsVistaStyle::subElementRect(SubElement element, const QStyleOption 
       case SE_PushButtonContents:
          if (const QStyleOptionButton *btn = qstyleoption_cast<const QStyleOptionButton *>(option)) {
             MARGINS borderSize;
-            HTHEME theme = QWindowsXPStylePrivate::pOpenThemeData(widget ? QWindowsVistaStylePrivate::winId(widget)
-                     : nullptr, L"Button");
+            HTHEME theme = OpenThemeData(widget ? QWindowsVistaStylePrivate::winId(widget) : nullptr, L"Button");
 
             if (theme) {
                int stateId = PBS_NORMAL;
@@ -2145,8 +2156,7 @@ QRect QWindowsVistaStyle::subElementRect(SubElement element, const QStyleOption 
                int border = proxy()->pixelMetric(PM_DefaultFrameWidth, btn, widget);
                rect = option->rect.adjusted(border, border, -border, -border);
 
-               int result = QWindowsXPStylePrivate::pGetThemeMargins(theme,
-                     nullptr, BP_PUSHBUTTON, stateId, TMT_CONTENTMARGINS, nullptr, &borderSize);
+               int result = GetThemeMargins(theme, nullptr, BP_PUSHBUTTON, stateId, TMT_CONTENTMARGINS, nullptr, &borderSize);
 
                if (result == S_OK) {
                   rect.adjust(borderSize.cxLeftWidth, borderSize.cyTopHeight,
@@ -2581,11 +2591,10 @@ void QWindowsVistaStyle::polish(QWidget *widget)
          widget->setContentsMargins(3, 0, 4, 0);
          COLORREF bgRef;
 
-         HTHEME theme = QWindowsXPStylePrivate::pOpenThemeData(widget ? QWindowsVistaStylePrivate::winId(widget)
-                  : nullptr, L"TOOLTIP");
+         HTHEME theme = OpenThemeData(widget ? QWindowsVistaStylePrivate::winId(widget) : nullptr, L"TOOLTIP");
 
          if (theme) {
-            if (QWindowsXPStylePrivate::pGetThemeColor(theme, TTP_STANDARD, TTSS_NORMAL, TMT_TEXTCOLOR, &bgRef) == S_OK) {
+            if (GetThemeColor(theme, TTP_STANDARD, TTSS_NORMAL, TMT_TEXTCOLOR, &bgRef) == S_OK) {
                QColor textColor = QColor::fromRgb(bgRef);
                QPalette pal;
                pal.setColor(QPalette::All, QPalette::ToolTipText, textColor);

@@ -125,7 +125,8 @@ if(GTK2_FOUND)
       ${CMAKE_CURRENT_SOURCE_DIR}/styles/qgtkstyle_p.cpp
    )
 
-   list(APPEND EXTRA_GUI_LIBS
+   target_link_libraries(CsGui
+      PRIVATE
       ${GTK2_LIBRARIES}
    )
 
@@ -156,6 +157,11 @@ elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
       ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindows_style.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindows_xpstyle.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/styles/qwindows_vistastyle.cpp
-  )
+   )
+
+   target_link_libraries(CsGui
+      PRIVATE
+      uxtheme
+   )
 
 endif()
