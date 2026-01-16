@@ -542,7 +542,7 @@ if (CMAKE_SYSTEM_NAME MATCHES "(Linux|OpenBSD|FreeBSD|NetBSD|DragonFly)")
 
       find_package(X11 COMPONENTS ICE SM Xcursor Xext Xfixes Xi Xinerama Xrandr Xrender)
       set_package_properties(X11 PROPERTIES
-         PURPOSE "Required for the X11 disply plugin"
+         PURPOSE "Required for the X11 display plugin"
          DESCRIPTION "Open source implementation of the X Window System"
          URL "https://www.x.org"
          TYPE REQUIRED
