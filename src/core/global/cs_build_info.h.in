@@ -24,10 +24,10 @@
 #ifndef CS_BUILD_INFO_H_IN
 #define CS_BUILD_INFO_H_IN
 
-// CopperSpice Version  "2.0.0"
+// CopperSpice Version  "2.1.0"
 #define CS_VERSION_STR  "@PACKAGE_VERSION@"
 
-// CopperSpice Version  0x020000  (major << 16) + (minor << 8) + patch
+// CopperSpice Version  0x020100  (major << 16) + (minor << 8) + patch
 #define CS_VERSION      @HEX_VERSION@
 
 #if defined(__cplusplus)
