@@ -148,10 +148,3 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
       ${CMAKE_CURRENT_SOURCE_DIR}/painting/qdrawhelper_neon_asm.S
    )
 endif()
-
-if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-   list(APPEND EXTRA_GUI_LIBS
-      PRIVATE
-      msimg32
-   )
-endif()
