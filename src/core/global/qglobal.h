@@ -287,6 +287,11 @@
 #     define MAC_OS_X_VERSION_15     150000
 #  endif
 
+// Tahoe OS 26
+#  if ! defined(MAC_OS_X_VERSION_26)
+#     define MAC_OS_X_VERSION_26     260000
+#  endif
+
 #endif
 
 #ifdef __LSB_VERSION__

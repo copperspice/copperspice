@@ -164,6 +164,10 @@ QString QSysInfo::macEdition(MacVersion macVersion)
          retval = "Sequoia";
          break;
 
+      case QSysInfo::MacVersion::MV_26:
+         retval = "Tahoe";
+         break;
+
       default:
          break;
    }
