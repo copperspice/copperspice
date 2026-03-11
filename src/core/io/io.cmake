@@ -47,6 +47,7 @@ list(APPEND CORE_INCLUDES
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qfileinfolist.h
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qfileinfolistiterator.h
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qfilesystemwatcher.h
+   ${CMAKE_CURRENT_SOURCE_DIR}/io/qformat.h
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qfsfileengine.h
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qiodevice.h
    ${CMAKE_CURRENT_SOURCE_DIR}/io/qlockfile.h
