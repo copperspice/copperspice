@@ -29,6 +29,16 @@
 #include <format>
 #include <stdio.h>
 
+template<>
+struct std::formatter<QString, char> : std::formatter<const char *>
+{
+   // format the data
+   template<typename Context>
+   auto format(const QString &str, Context &ctx) const {
+      return std::formatter<const char *>::format(csPrintable(str), ctx);
+   }
+};
+
 template <typename... Args>
 void formatDebug(std::format_string<Args...> fmt, Args &&... args)
 {
