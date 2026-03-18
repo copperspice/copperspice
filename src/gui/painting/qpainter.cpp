@@ -27,6 +27,7 @@
 #include <qapplication.h>
 #include <qbitmap.h>
 #include <qdebug.h>
+#include <qformat.h>
 #include <qglyphrun.h>
 #include <qimage.h>
 #include <qmath.h>
@@ -1813,7 +1814,7 @@ void QPainter::setClipRegion(const QRegion &r, Qt::ClipOperation op)
 #if defined(CS_SHOW_DEBUG_GUI_PAINTING)
    QRect rect = r.boundingRect();
 
-   qDebug("QPainter::setClipRegion() size = %lld, bounding rectangle = [%d,%d,%d,%d]",
+   formatDebug("QPainter::setClipRegion() size = {:d}, bounding rectangle = [{:d}, {:d}, {:d}, {:d}]",
          r.rects().size(), rect.x(), rect.y(), rect.width(), rect.height());
 #endif
 

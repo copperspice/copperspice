@@ -24,6 +24,7 @@
 #include <qgridlayoutengine_p.h>
 
 #include <qdebug.h>
+#include <qformat.h>
 #include <qglobal.h>
 #include <qmath.h>
 #include <qvarlengtharray.h>
@@ -1223,7 +1224,7 @@ Qt::LayoutDirection QGridLayoutEngine::visualDirection() const
 void QGridLayoutEngine::dump(int indent) const
 {
    qDebug("%*sEngine", indent, "");
-   qDebug("%*s Items (%lld)", indent, "", q_items.count());
+   formatDebug("{:{}s} Items ({:d})", "", indent, q_items.count());
 
    int i;
 
