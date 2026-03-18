@@ -26,6 +26,7 @@
 #include <qdir.h>
 #include <qelapsedtimer.h>
 #include <qfileinfo.h>
+#include <qformat.h>
 #include <qmutex.h>
 #include <qprocess.h>
 #include <qregularexpression.h>
@@ -587,7 +588,7 @@ qint64 QProcessPrivate::bytesAvailableInChannel(const Channel *channel) const
    DWORD bytesAvail = channel->reader->bytesAvailable();
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcessPrivate::bytesAvailableInChannel(%lld) == %ld", channel - &stdinChannel, bytesAvail);
+   formatDebug("QProcessPrivate::bytesAvailableInChannel({:d}) == {:d}", channel - &stdinChannel, bytesAvail);
 #endif
 
    return bytesAvail;

@@ -29,6 +29,7 @@
 #include <qelapsedtimer.h>
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qformat.h>
 #include <qlist.h>
 #include <qmutex.h>
 #include <qplatformdefs.h>
@@ -653,8 +654,8 @@ qint64 QProcessPrivate::bytesAvailableInChannel(const Channel *channel) const
    }
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcess::bytesAvailableInChannel() channel = %d, available = %lld",
-         int(channel - &stdinChannel), available);
+   formatDebug("QProcess::bytesAvailableInChannel() channel = {:d}, available = {:d}",
+         channel - &stdinChannel, available);
 #endif
 
    return available;
@@ -668,8 +669,8 @@ qint64 QProcessPrivate::readFromChannel(const Channel *channel, char *data, qint
 #if defined(CS_SHOW_DEBUG_CORE_IO)
    int save_errno = errno;
 
-   qDebug("QProcess::readFromChannel() channel = %d, data = %s, maxlen = %lld, bytes read = %lld",
-         int(channel - &stdinChannel), qt_prettyDebug(data, bytesRead, 16).constData(), maxlen, bytesRead);
+   formatDebug("QProcess::readFromChannel() channel = {:d}, data = {:s}, maxlen = {:d}, bytes read = {:d}",
+         channel - &stdinChannel, qt_prettyDebug(data, bytesRead, 16).constData(), maxlen, bytesRead);
 
    errno = save_errno;
 #endif
@@ -689,11 +690,11 @@ bool QProcessPrivate::writeToStdin()
    qint64 written = qt_safe_write_nosignal(stdinChannel.pipe[1], data, bytesToWrite);
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcess::writeToStdin() data = %s, bytes to write = %lld, written = %lld",
+   formatDebug("QProcess::writeToStdin() data = {:s}, bytes to write = {:d}, written = {:d}",
          qt_prettyDebug(data, bytesToWrite, 16).constData(), bytesToWrite, written);
 
    if (written == -1)  {
-      qDebug("QProcess::writeToStdin() Failed to write, %s", csPrintable(qt_error_string(errno)));
+      formatDebug("QProcess::writeToStdin() Failed to write, {:s}", qt_error_string(errno));
    }
 #endif
 

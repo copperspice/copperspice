@@ -29,6 +29,7 @@
 #include <qdebug.h>
 #include <qdir.h>
 #include <qelapsedtimer.h>
+#include <qformat.h>
 #include <qsocketnotifier.h>
 #include <qstring.h>
 #include <qtimer.h>
@@ -507,7 +508,7 @@ bool QProcessPrivate::tryReadFromChannel(Channel *channel)
       setErrorAndEmit(QProcess::ReadError);
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-      qDebug("QProcessPrivate::tryReadFromChannel(%lld), failed to read from the process", channel - &stdinChannel);
+      formatDebug("QProcessPrivate::tryReadFromChannel({:d}), failed to read from the process", channel - &stdinChannel);
 #endif
 
       return false;
@@ -522,14 +523,14 @@ bool QProcessPrivate::tryReadFromChannel(Channel *channel)
       closeChannel(channel);
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-      qDebug("QProcessPrivate::tryReadFromChannel(%lld), 0 bytes available", channel - &stdinChannel);
+      formatDebug("QProcessPrivate::tryReadFromChannel({:d}), 0 bytes available", channel - &stdinChannel);
 #endif
       return false;
    }
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcessPrivate::tryReadFromChannel(%lld), read %d bytes from the process output",
-         channel - &stdinChannel, int(readBytes));
+   formatDebug("QProcessPrivate::tryReadFromChannel({:d}), read {:d} bytes from the process output",
+         channel - &stdinChannel, readBytes);
 #endif
 
    if (channel->closed) {
@@ -1253,8 +1254,8 @@ qint64 QProcess::writeData(const char *data, qint64 len)
 #endif
 
 #if defined(CS_SHOW_DEBUG_CORE_IO)
-   qDebug("QProcess::writeData(%p \"%s\", %lld) == %lld (written to buffer)",
-         data, qt_prettyDebug(data, len, 16).constData(), len, len);
+   formatDebug("QProcess::writeData(\"{:s}\", {:d}) == {:d} (written to buffer)",
+         qt_prettyDebug(data, len, 16).constData(), len, len);
 #endif
 
    return len;
