@@ -23,6 +23,7 @@
 
 #include <qhostinfo_p.h>
 
+#include <qformat.h>
 #include <qurl.h>
 
 #include <qmutexpool_p.h>
@@ -254,7 +255,7 @@ QHostInfo QHostInfoAgent::fromName(const QString &hostName)
          tmp += addresses.at(i).toString();
       }
 
-      qDebug("QHostInfoAgent::run() Found %lli entries for: %s", addresses.count(), csPrintable(tmp));
+      formatDebug("QHostInfoAgent::run() Found {:d} entries for: {:s}", addresses.count(), tmp);
    }
 #endif
 

@@ -22,6 +22,7 @@
 ***********************************************************************/
 
 #include <qelapsedtimer.h>
+#include <qformat.h>
 #include <qhostaddress.h>
 #include <qiodevice.h>
 #include <qnetworkinterface.h>
@@ -810,8 +811,9 @@ qint64 QNativeSocketEnginePrivate::nativeBytesAvailable() const
    }
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-   qDebug("QNativeSocketEnginePrivate::nativeBytesAvailable() == %lli", available);
+   formatDebug("QNativeSocketEnginePrivate::nativeBytesAvailable() Return value = {:d}", available);
 #endif
+
    return available;
 }
 

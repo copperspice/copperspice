@@ -26,6 +26,7 @@
 
 #include <qabstracteventdispatcher.h>
 #include <qdebug.h>
+#include <qformat.h>
 #include <qelapsedtimer.h>
 #include <qhostaddress.h>
 #include <qhostinfo.h>
@@ -469,7 +470,7 @@ bool QAbstractSocketPrivate::flush()
    }
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-   qDebug("QAbstractSocketPrivate::flush() %lld bytes written to the network", written);
+   formatDebug("QAbstractSocketPrivate::flush() {:d} bytes written to the network", written);
 #endif
 
    // remove what we wrote so far
@@ -691,8 +692,8 @@ void QAbstractSocketPrivate::_q_connectToNextAddress()
       host = addresses.takeFirst();
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-      qDebug("QAbstractSocketPrivate::_q_connectToNextAddress() Connecting to %s:%i, %lld left to try",
-             csPrintable(host.toString()), port, addresses.count());
+      formatDebug("QAbstractSocketPrivate::_q_connectToNextAddress() Connecting to {:s}:{:d}, {:d} left to try",
+             host.toString(), port, addresses.count());
 #endif
 
       if (cachedSocketDescriptor == -1 && !initSocketLayer(host.protocol())) {
@@ -862,7 +863,7 @@ bool QAbstractSocketPrivate::readFromSocket()
    buffer.chop(bytesToRead - (readBytes < 0 ? qint64(0) : readBytes));
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-   qDebug("QAbstractSocketPrivate::readFromSocket() Read %lld bytes, buffer size = %d",
+   formatDebug("QAbstractSocketPrivate::readFromSocket() Read {:d} bytes, buffer size = {:d}",
          readBytes, buffer.size());
 #endif
 
@@ -872,8 +873,7 @@ bool QAbstractSocketPrivate::readFromSocket()
       emit q->error(socketError);
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-      qDebug("QAbstractSocketPrivate::readFromSocket() Fead failed: %s",
-            q->errorString().toLatin1().constData());
+      formatDebug("QAbstractSocketPrivate::readFromSocket() Read failed: {:s}", q->errorString());
 #endif
       resetSocketLayer();
       return false;
@@ -1225,7 +1225,7 @@ qint64 QAbstractSocket::bytesAvailable() const
    }
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-   qDebug("QAbstractSocket::bytesAvailable() == %lld", available);
+   formatDebug("QAbstractSocket::bytesAvailable() == {:d}", available);
 #endif
 
    return available;
@@ -1832,8 +1832,8 @@ qint64 QAbstractSocket::readData(char *data, qint64 maxSize)
    }
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-   qDebug("QAbstractSocket::readData(%p \"%s\", %lli) == %lld [engine]",
-          data, qt_prettyDebug(data, 32, readBytes).data(), maxSize, readBytes);
+   qDebug("QAbstractSocket::readData(\"{:s}\", {:d}) == {:d} [engine]",
+          qt_prettyDebug(data, 32, readBytes).data(), maxSize, readBytes);
 #endif
 
    return readBytes;

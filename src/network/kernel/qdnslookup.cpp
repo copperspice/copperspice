@@ -26,6 +26,7 @@
 
 #include <qcoreapplication.h>
 #include <qdatetime.h>
+#include <qformat.h>
 #include <qthreadstorage.h>
 #include <qurl.h>
 
@@ -118,7 +119,7 @@ static void qt_qdnsservicerecord_sort(QList<QDnsServiceRecord> &records)
       }
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-      qDebug("qt_qdnsservicerecord_sort() Priority %i (size: %lli, total weight: %i)",
+      formatDebug("qt_qdnsservicerecord_sort() Priority {:d}, Size: {:d}, Total weight: {:d}",
              slicePriority, slice.size(), sliceWeight);
 #endif
 

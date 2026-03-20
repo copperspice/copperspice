@@ -25,6 +25,7 @@
 #include <qbytearray.h>
 #include <qdatetime.h>
 #include <qdebug.h>
+#include <qformat.h>
 #include <qnetworkinterface.h>
 #include <qsocketnotifier.h>
 #include <qstring.h>
@@ -1413,7 +1414,7 @@ qint64 QNativeSocketEnginePrivate::nativePendingDatagramSize() const
    delete[] buffer;
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-   qDebug("QNativeSocketEnginePrivate::nativePendingDatagramSize() == %lli", retval);
+   formatDebug("QNativeSocketEnginePrivate::nativePendingDatagramSize() Return value: {:d}", retval);
 #endif
 
    return retval;

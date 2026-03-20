@@ -25,6 +25,7 @@
 #include <qtcpserver_p.h>
 
 #include <qalgorithms.h>
+#include <qformat.h>
 #include <qhostaddress.h>
 #include <qlist.h>
 #include <qnetworkproxy.h>
@@ -304,8 +305,7 @@ bool QTcpServer::setSocketDescriptor(qintptr socketDescriptor)
       d->serverSocketErrorString = d->socketEngine->errorString();
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-      qDebug("QTcpServer::setSocketDescriptor(%lli) failed (%s)", socketDescriptor,
-            csPrintable(d->serverSocketErrorString));
+      formatDebug("QTcpServer::setSocketDescriptor({:d}) Failed: {:s}", socketDescriptor, d->serverSocketErrorString);
 #endif
 
       return false;
@@ -319,7 +319,7 @@ bool QTcpServer::setSocketDescriptor(qintptr socketDescriptor)
    d->port = d->socketEngine->localPort();
 
 #if defined(CS_SHOW_DEBUG_NETWORK)
-   qDebug("QTcpServer::setSocketDescriptor(%lli) succeeded.", socketDescriptor);
+   formatDebug("QTcpServer::setSocketDescriptor({:d}) Succeeded", socketDescriptor);
 #endif
 
    return true;
@@ -385,7 +385,7 @@ QTcpSocket *QTcpServer::nextPendingConnection()
 void QTcpServer::incomingConnection(qintptr socketDescriptor)
 {
 #if defined(CS_SHOW_DEBUG_NETWORK)
-   qDebug("QTcpServer::incomingConnection(%lli)", socketDescriptor);
+   formatDebug("QTcpServer::incomingConnection({:d})", socketDescriptor);
 #endif
 
    QTcpSocket *socket = new QTcpSocket(this);

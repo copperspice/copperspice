@@ -23,6 +23,8 @@
 
 #include <qhttp_protocolhandler_p.h>
 
+#include <qformat.h>
+
 #include <qhttp_networkconnectionchannel_p.h>
 #include <qnoncontiguousbytedevice_p.h>
 
@@ -37,7 +39,7 @@ void QHttpProtocolHandler::_q_receiveReply()
 
    if (! m_reply) {
       if (m_socket->bytesAvailable() > 0)
-         qWarning("QHttpProtocolHandler::_q_receiveReply() Called without QHttpNetworkReply, %lld bytes "
+         formatWarning("QHttpProtocolHandler::_q_receiveReply() Called without QHttpNetworkReply, {:d} bytes "
                " are pending", m_socket->bytesAvailable());
 
       m_channel->close();
@@ -419,8 +421,8 @@ bool QHttpProtocolHandler::sendRequest()
                if (m_channel->written != uploadByteDevice->pos()) {
                   // useful in tracking down an upload corruption
 
-                  qWarning("QHttpProtocolHandler::sendRequest() Internal error in sendRequest, expected to write at position "
-                     "%lld, however device is at %lld", m_channel->written, uploadByteDevice->pos());
+                  formatWarning("QHttpProtocolHandler::sendRequest() Internal error in sendRequest, expected to write at position "
+                     "{:d}, however device is at {:d}", m_channel->written, uploadByteDevice->pos());
 
                   Q_ASSERT(m_channel->written == uploadByteDevice->pos());
                   m_connection->d_func()->emitReplyError(m_socket, m_reply, QNetworkReply::ProtocolFailure);
