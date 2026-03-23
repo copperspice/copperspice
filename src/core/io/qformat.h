@@ -24,15 +24,30 @@
 #ifndef QFORMAT_H
 #define QFORMAT_H
 
+#include <qbytearray.h>
 #include <qdebug.h>
+#include <qstring.h>
 
 #include <format>
 #include <stdio.h>
 
+// specializations for specific custom data types
+
+// string types
 template<>
-struct std::formatter<QString, char> : std::formatter<const char *>
+struct std::formatter<QByteArray> : std::formatter<const char *>
 {
-   // format the data
+   // format data, delegate formatting to the base class
+   template<typename Context>
+   auto format(const QByteArray &str, Context &ctx) const {
+      return std::formatter<const char *>::format(str.constData(), ctx);
+   }
+};
+
+template<>
+struct std::formatter<QString> : std::formatter<const char *>
+{
+   // format data, delegate formatting to the base class
    template<typename Context>
    auto format(const QString &str, Context &ctx) const {
       return std::formatter<const char *>::format(csPrintable(str), ctx);
