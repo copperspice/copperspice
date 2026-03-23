@@ -85,7 +85,23 @@ TEST_CASE("qformat formatDebug-d", "[qformat]")
    csInstallMsgHandler(nullptr);
 }
 
-TEST_CASE("qformat formatDebug-e", "[qformat]")
+TEST_CASE("qformat formatter-qbytearray", "[qformat]")
+{
+   static QString output;
+   output.clear();
+
+   csInstallMsgHandler([](QtMsgType, QStringView msg) {output = msg;});
+
+   formatDebug("Strawberries and {:s}", QByteArray("watermelon"));
+   REQUIRE(output == "Strawberries and watermelon");
+
+   formatDebug("{} {:s} and {} {}", 7, QByteArray("strawberries"), 1, QString("watermelon") );
+   REQUIRE(output == "7 strawberries and 1 watermelon");
+
+   csInstallMsgHandler(nullptr);
+}
+
+TEST_CASE("qformat formatter-qstring", "[qformat]")
 {
    static QString output;
    output.clear();
