@@ -14,6 +14,7 @@ list(APPEND CORE_PUBLIC_INCLUDES
    QFileInfoList
    QFileInfoListIterator
    QFileSystemWatcher
+   QFormat
    QIODevice
    QLockFile
    QNoDebug
