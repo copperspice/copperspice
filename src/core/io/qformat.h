@@ -54,15 +54,7 @@ struct std::formatter<QString> : std::formatter<const char *>
    }
 };
 
-template <typename... Args>
-void formatDebug(std::format_string<Args...> fmt, Args &&... args)
-{
-   std::string tmp = std::format(fmt, std::forward<Args>(args)...);
-
-   QString msg = QString::fromStdString(tmp);
-   qt_message_output(QtDebugMsg, msg);
-}
-
+// free functions
 template <typename... Args>
 void formatCritical(std::format_string<Args...> fmt, Args &&... args)
 {
@@ -70,6 +62,15 @@ void formatCritical(std::format_string<Args...> fmt, Args &&... args)
 
    QString msg = QString::fromStdString(tmp);
    qt_message_output(QtCriticalMsg, msg);
+}
+
+template <typename... Args>
+void formatDebug(std::format_string<Args...> fmt, Args &&... args)
+{
+   std::string tmp = std::format(fmt, std::forward<Args>(args)...);
+
+   QString msg = QString::fromStdString(tmp);
+   qt_message_output(QtDebugMsg, msg);
 }
 
 template <typename... Args>
