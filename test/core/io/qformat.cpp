@@ -117,6 +117,44 @@ TEST_CASE("qformat formatter-qstring", "[qformat]")
    csInstallMsgHandler(nullptr);
 }
 
+TEST_CASE("qformat formatToQString", "[qformat]")
+{
+   QString output;
+
+   output = formatToQString("There are {:d} {}, confirm you want to {}", 5, "unsaved files", "exit the program");
+   REQUIRE(output == "There are 5 unsaved files, confirm you want to exit the program");
+
+   output = formatToQString("There are {:d} {}, confirm you want to {}", 2, "files selected", "DELETE these files");
+   REQUIRE(output == "There are 2 files selected, confirm you want to DELETE these files");
+
+   output = formatToQString("You have {:s} {:d} {}", QString("modified"), 8, "files");
+   REQUIRE(output == "You have modified 8 files");
+
+   output = formatToQString("{:*<6d} files", 42);
+   REQUIRE(output == "42**** files");
+
+   output = formatToQString("{:*^6d} files", 42);
+   REQUIRE(output == "**42** files");
+
+   output = formatToQString("{:*>6d} files", 42);
+   REQUIRE(output == "****42 files");
+
+   output = formatToQString("|{:5}|", "ABC");
+   REQUIRE(output == "|ABC  |");
+
+   output = formatToQString("{:+}", 150);
+   REQUIRE(output == "+150");
+
+   output = formatToQString("{:.2f}", 10.5739);
+   REQUIRE(output == "10.57");
+
+   output = formatToQString("{:04}", 15);
+   REQUIRE(output == "0015");
+
+   output = formatToQString("{:04}", 127);
+   REQUIRE(output == "0127");
+}
+
 TEST_CASE("qformat qdebug-lld", "[qformat]")
 {
    // generates a warning: format '%lld' expects argument of type 'long long int', but argument 2 has type 'int' [-Wformat=]
