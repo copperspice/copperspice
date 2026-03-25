@@ -91,6 +91,13 @@ void formatWarning(std::format_string<Args...> fmt, Args &&... args)
 }
 
 template <typename... Args>
+QString formatToQString(std::format_string<Args...> fmt, Args &&... args)
+{
+   std::string tmp = std::format(fmt, std::forward<Args>(args)...);
+   return QString::fromStdString(tmp);
+}
+
+template <typename... Args>
 void formatPrint(std::format_string<Args...> fmt, Args &&... args)
 {
    std::string tmp = std::format(fmt, std::forward<Args>(args)...);
