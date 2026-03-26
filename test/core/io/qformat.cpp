@@ -155,33 +155,3 @@ TEST_CASE("qformat formatToQString", "[qformat]")
    REQUIRE(output == "0127");
 }
 
-TEST_CASE("qformat qdebug-lld", "[qformat]")
-{
-   // generates a warning: format '%lld' expects argument of type 'long long int', but argument 2 has type 'int' [-Wformat=]
-   // qDebug("Display numeric value: %lld", 42);
-}
-
-TEST_CASE("qformat formatPrint-warnings", "[.][qformat]")
-{
-   // hidden test
-
-
-   // formatPrint("Display result: {:s} {:d} {:s} {:s}\n",
-   //    QString("pear and grape"), 32, QString("apple"), "and plum");
-
-   // ** remaining calls will display on the screen, enable for temporary testing
-   // formatPrint("Display numeric value: {:s}\n", "apple and orange");
-
-   // show text only
-   // formatPrint("Display numeric value: %d\n", 42);
-
-   // display --> "%d"
-   // formatPrint("%d\n", 18);
-
-   // display --> "%d"
-   // formatPrint("%d\n");
-
-   // formatDebug("Debug message, display numeric value: %d", 42);
-   // formatWarning("Warning message, display numeric value: %s", "warning");
-}
-
