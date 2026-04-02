@@ -155,3 +155,32 @@ TEST_CASE("qformat formatToQString", "[qformat]")
    REQUIRE(output == "0127");
 }
 
+// tools
+TEST_CASE("qformat formatter-qline", "[qformat]")
+{
+   QLine line(18, 5, 106, 82);
+
+   std::string outputA = std::format("Values for QLine are: {}", line);
+   REQUIRE(outputA == "Values for QLine are: [18, 5, 106, 82]");
+
+   QString outputB = formatToQString("Values for QLine are: {}", line);
+   REQUIRE(outputB == "Values for QLine are: [18, 5, 106, 82]");
+
+   QString outputC = formatToQString("Show QLine values with padding: {:>20}", line);
+   REQUIRE(outputC == "Show QLine values with padding:     [18, 5, 106, 82]");
+}
+
+TEST_CASE("qformat formatter-qlinef", "[qformat]")
+{
+   QLineF line(39.02, 3.90, 90.52, 22.50);
+
+   std::string outputA = std::format("Values for QLineF are: {}", line);
+   REQUIRE(outputA == "Values for QLineF are: [39.02, 3.9, 90.52, 22.5]");
+
+   QString outputB = formatToQString("Values for QLineF are: {}", line);
+   REQUIRE(outputB == "Values for QLineF are: [39.02, 3.9, 90.52, 22.5]");
+
+   QString outputC = formatToQString("Show QLineF values with padding: {:>30}", line);
+   REQUIRE(outputC == "Show QLineF values with padding:      [39.02, 3.9, 90.52, 22.5]");
+}
+
