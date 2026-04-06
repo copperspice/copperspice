@@ -184,3 +184,31 @@ TEST_CASE("qformat formatter-qlinef", "[qformat]")
    REQUIRE(outputC == "Show QLineF values with padding:      [39.02, 3.9, 90.52, 22.5]");
 }
 
+TEST_CASE("qformat formatter-qrect", "[qformat]")
+{
+   QRect rect(5, 10, 100, 150);
+
+   std::string outputA = std::format("Values for this QRect: {}", rect);
+   REQUIRE(outputA == "Values for this QRect: [5, 10, 100, 150]");
+
+   QString outputB = formatToQString("Values for this QRect: {}", rect);
+   REQUIRE(outputB == "Values for this QRect: [5, 10, 100, 150]");
+
+   QString outputC = formatToQString("Show QRect values with stars: {:*>25}", rect);
+   REQUIRE(outputC == "Show QRect values with stars: ********[5, 10, 100, 150]");
+}
+
+TEST_CASE("qformat formatter-qrectf", "[qformat]")
+{
+   QRectF rect(5.3, 10.91, 100.59, 150.01);
+
+   std::string outputA = std::format("Values for this QRectF: {}", rect);
+   REQUIRE(outputA == "Values for this QRectF: [5.3, 10.91, 100.59, 150.01]");
+
+   QString outputB = formatToQString("Values for this QRectF: {}", rect);
+   REQUIRE(outputB == "Values for this QRectF: [5.3, 10.91, 100.59, 150.01]");
+
+   QString outputC = formatToQString("Show QRectF values with stars: {:*>30}", rect);
+   REQUIRE(outputC == "Show QRectF values with stars: **[5.3, 10.91, 100.59, 150.01]");
+}
+
