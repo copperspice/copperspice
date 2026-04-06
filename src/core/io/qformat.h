@@ -27,6 +27,7 @@
 #include <qbytearray.h>
 #include <qdebug.h>
 #include <qline.h>
+#include <qrect.h>
 #include <qstring.h>
 
 #include <format>
@@ -74,6 +75,28 @@ struct std::formatter<QLineF> : std::formatter<std::string>
    template<typename Context>
    auto format(const QLineF &line, Context &ctx) const {
       std::string output = std::format("[{}, {}, {}, {}]", line.x1(), line.y1(), line.x2(), line.y2());
+      return std::formatter<std::string>::format(output, ctx);
+   }
+};
+
+template<>
+struct std::formatter<QRect> : std::formatter<std::string>
+{
+   // format data, delegate formatting to the base class
+   template<typename Context>
+   auto format(const QRect &rect, Context &ctx) const {
+      std::string output = std::format("[{}, {}, {}, {}]", rect.x(), rect.y(), rect.width(), rect.height());
+      return std::formatter<std::string>::format(output, ctx);
+   }
+};
+
+template<>
+struct std::formatter<QRectF> : std::formatter<std::string>
+{
+   // format data, delegate formatting to the base class
+   template<typename Context>
+   auto format(const QRectF &rect, Context &ctx) const {
+      std::string output = std::format("[{}, {}, {}, {}]", rect.x(), rect.y(), rect.width(), rect.height());
       return std::formatter<std::string>::format(output, ctx);
    }
 };
