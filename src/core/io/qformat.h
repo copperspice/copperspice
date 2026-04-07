@@ -27,6 +27,7 @@
 #include <qbytearray.h>
 #include <qdebug.h>
 #include <qline.h>
+#include <qpair.h>
 #include <qrect.h>
 #include <qstring.h>
 
@@ -53,6 +54,18 @@ struct std::formatter<QString> : std::formatter<const char *>
    template<typename Context>
    auto format(const QString &str, Context &ctx) const {
       return std::formatter<const char *>::format(csPrintable(str), ctx);
+   }
+};
+
+//
+template<typename T1, typename T2>
+struct std::formatter<QPair<T1, T2>> : std::formatter<std::string>
+{
+   // format data, delegate formatting to the base class
+   template<typename Context>
+   auto format(const QPair<T1, T2> &pair, Context &ctx) const {
+      std::string output = std::format("[{}, {}]", pair.first, pair.second);
+      return std::formatter<std::string>::format(output, ctx);
    }
 };
 
