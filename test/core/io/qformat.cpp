@@ -155,6 +155,34 @@ TEST_CASE("qformat formatToQString", "[qformat]")
    REQUIRE(output == "0127");
 }
 
+TEST_CASE("qformat formatter-qpair", "[qformat]")
+{
+   // A
+   QPair<int, int> pair_A(23, 37);
+
+   std::string outputA1 = std::format("Values for QPair are: {}", pair_A);
+   REQUIRE(outputA1 == "Values for QPair are: [23, 37]");
+
+   QString outputB1 = formatToQString("Values for QPair are: {}", pair_A);
+   REQUIRE(outputB1 == "Values for QPair are: [23, 37]");
+
+   QString outputC1 = formatToQString("Show QPair values with # padding: {:#>10}", pair_A);
+   REQUIRE(outputC1 == "Show QPair values with # padding: ##[23, 37]");
+
+   // B
+   QString data("apple");
+   QPair<QString, int> pair_B(data, 37);
+
+   std::string outputA2 = std::format("Values for QPair are: {}", pair_B);
+   REQUIRE(outputA2 == "Values for QPair are: [apple, 37]");
+
+   QString outputB2 = formatToQString("Values for QPair are: {}", pair_B);
+   REQUIRE(outputB2 == "Values for QPair are: [apple, 37]");
+
+   QString outputC2 = formatToQString("Show QPair values with padding: {:#>15}", pair_B);
+   REQUIRE(outputC2 == "Show QPair values with padding: ####[apple, 37]");
+}
+
 // tools
 TEST_CASE("qformat formatter-qline", "[qformat]")
 {
