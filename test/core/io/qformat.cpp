@@ -212,6 +212,34 @@ TEST_CASE("qformat formatter-qlinef", "[qformat]")
    REQUIRE(outputC == "Show QLineF values with padding:      [39.02, 3.9, 90.52, 22.5]");
 }
 
+TEST_CASE("qformat formatter-qmargins", "[qformat]")
+{
+   QMargins data(25, 14, 200, 50);
+
+   std::string outputA = std::format("Values for this QMargins: {}", data);
+   REQUIRE(outputA == "Values for this QMargins: [25, 14, 200, 50]");
+
+   QString outputB = formatToQString("Values for this QMargins: {}", data);
+   REQUIRE(outputB == "Values for this QMargins: [25, 14, 200, 50]");
+
+   QString outputC = formatToQString("Show QMargins values with stars: {:*>25}", data);
+   REQUIRE(outputC == "Show QMargins values with stars: ********[25, 14, 200, 50]");
+}
+
+TEST_CASE("qformat formatter-qmarginsf", "[qformat]")
+{
+   QMarginsF data(29.73, 14, 203.61, 40.35);
+
+   std::string outputA = std::format("Values for this QMarginsF: {}", data);
+   REQUIRE(outputA == "Values for this QMarginsF: [29.73, 14, 203.61, 40.35]");
+
+   QString outputB = formatToQString("Values for this QMarginsF: {}", data);
+   REQUIRE(outputB == "Values for this QMarginsF: [29.73, 14, 203.61, 40.35]");
+
+   QString outputC = formatToQString("Show QMarginsF values with stars: {:*>30}", data);
+   REQUIRE(outputC == "Show QMarginsF values with stars: ****[29.73, 14, 203.61, 40.35]");
+}
+
 TEST_CASE("qformat formatter-qrect", "[qformat]")
 {
    QRect rect(5, 10, 100, 150);
