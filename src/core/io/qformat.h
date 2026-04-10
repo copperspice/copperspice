@@ -27,6 +27,7 @@
 #include <qbytearray.h>
 #include <qdebug.h>
 #include <qline.h>
+#include <qmargins.h>
 #include <qpair.h>
 #include <qrect.h>
 #include <qstring.h>
@@ -88,6 +89,28 @@ struct std::formatter<QLineF> : std::formatter<std::string>
    template<typename Context>
    auto format(const QLineF &line, Context &ctx) const {
       std::string output = std::format("[{}, {}, {}, {}]", line.x1(), line.y1(), line.x2(), line.y2());
+      return std::formatter<std::string>::format(output, ctx);
+   }
+};
+
+template<>
+struct std::formatter<QMargins> : std::formatter<std::string>
+{
+   // format data, delegate formatting to the base class
+   template<typename Context>
+   auto format(const QMargins &data, Context &ctx) const {
+      std::string output = std::format("[{}, {}, {}, {}]", data.left(), data.top(), data.right(), data.bottom());
+      return std::formatter<std::string>::format(output, ctx);
+   }
+};
+
+template<>
+struct std::formatter<QMarginsF> : std::formatter<std::string>
+{
+   // format data, delegate formatting to the base class
+   template<typename Context>
+   auto format(const QMarginsF &data, Context &ctx) const {
+      std::string output = std::format("[{}, {}, {}, {}]", data.left(), data.top(), data.right(), data.bottom());
       return std::formatter<std::string>::format(output, ctx);
    }
 };
