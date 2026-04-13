@@ -39,11 +39,11 @@ TEST_CASE("QHostInfo basic_methods", "[qhostinfo]")
 {
    auto testApp = initCoreApp();
 
-   QHostInfo data = QHostInfo::fromName("copperspice.com");
+   QHostInfo data = QHostInfo::fromName("copperspice-ci-network.copperspice.com");
    QList<QHostAddress> list = data.addresses();
 
-   REQUIRE(data.hostName() == "copperspice.com");
+   REQUIRE(data.hostName() == "copperspice-ci-network.copperspice.com");
 
    REQUIRE(list.size() == 1);
-   REQUIRE(list[0].toString() == "69.89.11.103");
+   REQUIRE(list[0].toString() == "127.0.42.1");
 }
