@@ -4,22 +4,22 @@ list(APPEND SHAREDTOOLS_INCLUDES
    ${CMAKE_BINARY_DIR}/privateinclude/QtCore/private
    ${CMAKE_BINARY_DIR}/privateinclude/QtXml/private
 
-   ${CMAKE_SOURCE_DIR}/src/tools/shared
+   ${PROJECT_SOURCE_DIR}/src/tools/shared
 )
 
 list(APPEND SHAREDTOOLS_HEADERS
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/translator.h
-    ${CMAKE_SOURCE_DIR}/src/tools/shared/translatormessage.h
+    ${PROJECT_SOURCE_DIR}/src/tools/shared/translator.h
+    ${PROJECT_SOURCE_DIR}/src/tools/shared/translatormessage.h
 )
 
 target_sources(sharedtools
    PRIVATE
-   ${CMAKE_SOURCE_DIR}/src/tools/shared/numerus.cpp
-   ${CMAKE_SOURCE_DIR}/src/tools/shared/translator.cpp
-   ${CMAKE_SOURCE_DIR}/src/tools/shared/translatormessage.cpp
+   ${PROJECT_SOURCE_DIR}/src/tools/shared/numerus.cpp
+   ${PROJECT_SOURCE_DIR}/src/tools/shared/translator.cpp
+   ${PROJECT_SOURCE_DIR}/src/tools/shared/translatormessage.cpp
 
-   ${CMAKE_SOURCE_DIR}/src/tools/shared/qm.cpp
-   ${CMAKE_SOURCE_DIR}/src/tools/shared/ts.cpp
+   ${PROJECT_SOURCE_DIR}/src/tools/shared/qm.cpp
+   ${PROJECT_SOURCE_DIR}/src/tools/shared/ts.cpp
 )
 
 function_variable_fixup("${EXTRA_SHAREDTOOLS_CXXFLAGS}" EXTRA_SHAREDTOOLS_CXXFLAGS)

@@ -14,7 +14,7 @@ include_directories(
    ${CMAKE_BINARY_DIR}/privateinclude/QtXml/private
 
    ${CMAKE_CURRENT_SOURCE_DIR}
-   ${CMAKE_SOURCE_DIR}/src/tools/shared
+   ${PROJECT_SOURCE_DIR}/src/tools/shared
 )
 
 target_sources(lrelease${TOOLS_SUFFIX}

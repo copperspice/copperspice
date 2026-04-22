@@ -4,9 +4,9 @@ list(APPEND SQL_PUBLIC_INCLUDES
 )
 
 list(APPEND SQL_INCLUDES
-   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/oci/qsql_oci.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/oci/qocidriver.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/oci/qociresult.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/oci/qsql_oci.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/oci/qocidriver.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/oci/qociresult.h
 )
 
 # if(WITH_OCI_PLUGIN AND OCI_FOUND), unsupported at this time
@@ -21,8 +21,8 @@ if (FALSE)
 
    target_sources(CsSqlOci
       PRIVATE
-      ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/oci/qsql_oci.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/oci/main.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/oci/qsql_oci.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/oci/main.cpp
    )
 
    target_link_libraries(CsSqlOci

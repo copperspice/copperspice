@@ -4,9 +4,9 @@ list(APPEND SQL_PUBLIC_INCLUDES
 )
 
 list(APPEND SQL_INCLUDES
-   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qsql_odbc.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qodbcdriver.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qodbcresult.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qsql_odbc.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qodbcdriver.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qodbcresult.h
 )
 
 if (WITH_ODBC_PLUGIN AND ODBC_FOUND)
@@ -19,8 +19,8 @@ if (WITH_ODBC_PLUGIN AND ODBC_FOUND)
 
    target_sources(CsSqlOdbc
       PRIVATE
-      ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/main.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qsql_odbc.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/odbc/main.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/odbc/qsql_odbc.cpp
    )
 
    target_link_libraries(CsSqlOdbc
