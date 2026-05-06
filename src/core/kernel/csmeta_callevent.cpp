@@ -27,9 +27,9 @@
 
 CSMetaCallEvent::CSMetaCallEvent(const CsSignal::Internal::BentoAbstract *bento,
       const CsSignal::Internal::TeaCupAbstract *dataPack,
-      const QObject *sender, int signal_index, QSemaphore *semaphore)
+      const QObject *sender, int signal_index, QSemaphore *semaphore, std::function<void()> scrubFunction)
    : QEvent(MetaCall), m_bento(bento), m_dataPack(dataPack), m_sender(sender),
-     m_semaphore(semaphore), m_signal_index(signal_index)
+     m_semaphore(semaphore), m_signal_index(signal_index), m_scrubFunction(scrubFunction)
 {
 }
 
@@ -39,6 +39,12 @@ CSMetaCallEvent::~CSMetaCallEvent()
 
    if (m_semaphore) {
       m_semaphore->release();
+   }
+
+   if (m_scrubFunction) {
+      // used from a queued connection
+      // invokes a lambda expression which deletes the BentoAbstract object (bento)
+      m_scrubFunction();
    }
 }
 

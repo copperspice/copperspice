@@ -871,8 +871,10 @@ void QObject::queueSlot(CsSignal::PendingSlot data, CsSignal::ConnectionKind kin
    int signal_index = senderSignalIndex();
 
    if (kind == CsSignal::ConnectionKind::QueuedConnection)  {
-      CSMetaCallEvent *event = new CSMetaCallEvent(slot_Bento.release(), teaCup.release(),
-            sender, signal_index);
+      std::shared_ptr<CsSignal::Internal::BentoAbstract> shared_slotBento = std::move(slot_Bento);
+
+      CSMetaCallEvent *event = new CSMetaCallEvent(shared_slotBento.get(), teaCup.release(),
+            sender, signal_index, nullptr, [shared_slotBento] () mutable { shared_slotBento.reset(); });
 
       QCoreApplication::postEvent(this, event);
 
