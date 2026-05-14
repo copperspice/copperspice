@@ -59,10 +59,8 @@
 #include <X11/Xutil.h>
 #endif
 
-#if defined(XCB_USE_XINPUT2)
 #include <X11/extensions/XInput2.h>
 #include <X11/extensions/XI2proto.h>
-#endif
 
 #define XCOORD_MAX 16383
 
@@ -555,9 +553,7 @@ void QXcbWindow::create()
    Q_XCB_CALL(xcb_change_property(xcb_connection(), XCB_PROP_MODE_REPLACE, m_window,
          atom(QXcbAtom::_XEMBED_INFO), atom(QXcbAtom::_XEMBED_INFO), 32, 2, (void *)data));
 
-#if defined(XCB_USE_XINPUT2)
    connection()->xi2Select(m_window);
-#endif
 
    setWindowState(window()->windowState());
    setWindowFlags(window()->flags());
@@ -2407,12 +2403,10 @@ static inline bool doCheckUnGrabAncestor(QXcbConnection *conn)
    */
    if (conn) {
       const bool mouseButtonsPressed = (conn->buttons() != Qt::NoButton);
-#ifdef XCB_USE_XINPUT22
+
       return mouseButtonsPressed || (conn->isAtLeastXI22() && conn->xi2MouseEvents());
-#else
-      return mouseButtonsPressed;
-#endif
    }
+
    return true;
 }
 
@@ -2458,9 +2452,7 @@ void QXcbWindow::handleEnterNotifyEvent(int event_x, int event_y, int root_x, in
    quint8 mode, quint8 detail, xcb_timestamp_t timestamp)
 {
    connection()->setTime(timestamp);
-#ifdef XCB_USE_XINPUT21
    connection()->handleEnterEvent();
-#endif
 
    const QPoint global = QPoint(root_x, root_y);
 
@@ -2536,7 +2528,6 @@ void QXcbWindow::handleMotionNotifyEvent(const xcb_motion_notify_event_t *event)
    handleMotionNotifyEvent(event->event_x, event->event_y, event->root_x, event->root_y, modifiers, event->time);
 }
 
-#ifdef XCB_USE_XINPUT22
 static inline int fixed1616ToInt(FP1616 val)
 {
    return int((qreal(val >> 16)) + (val & 0xFFFF) / (qreal)0xFFFF);
@@ -2640,7 +2631,6 @@ void QXcbWindow::handleXIEnterLeave(xcb_ge_event_t *event)
          break;
    }
 }
-#endif
 
 QXcbWindow *QXcbWindow::toWindow()
 {
@@ -2789,7 +2779,7 @@ bool QXcbWindow::setMouseGrabEnabled(bool grab)
    if (!grab && connection()->mouseGrabber() == this) {
       connection()->setMouseGrabber(nullptr);
    }
-#ifdef XCB_USE_XINPUT22
+
    if (connection()->isAtLeastXI22() && connection()->xi2MouseEvents()) {
       bool result = connection()->xi2SetMouseGrabEnabled(m_window, grab);
       if (grab && result) {
@@ -2797,7 +2787,7 @@ bool QXcbWindow::setMouseGrabEnabled(bool grab)
       }
       return result;
    }
-#endif
+
    if (grab && !connection()->canGrab()) {
       return false;
    }

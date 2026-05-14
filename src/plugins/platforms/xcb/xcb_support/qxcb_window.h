@@ -138,10 +138,8 @@ class Q_XCB_EXPORT QXcbWindow : public QObject, public QXcbObject, public QXcbWi
    void handleFocusOutEvent(const xcb_focus_out_event_t *event) override;
    void handlePropertyNotifyEvent(const xcb_property_notify_event_t *event) override;
 
-#ifdef XCB_USE_XINPUT22
    void handleXIMouseEvent(xcb_ge_event_t *, Qt::MouseEventSource source = Qt::MouseEventNotSynthesized) override;
    void handleXIEnterLeave(xcb_ge_event_t *) override;
-#endif
 
    QXcbWindow *toWindow() override;
 

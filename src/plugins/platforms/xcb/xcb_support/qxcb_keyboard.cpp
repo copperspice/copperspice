@@ -38,11 +38,9 @@
 #include <stdio.h>
 #include <X11/keysym.h>
 
-#ifdef XCB_USE_XINPUT22
 #include <X11/extensions/XI2proto.h>
 #undef KeyPress
 #undef KeyRelease
-#endif
 
 #ifndef XK_ISO_Left_Tab
 #define XK_ISO_Left_Tab         0xFE20
@@ -818,7 +816,6 @@ void QXcbKeyboard::updateXKBStateFromCore(quint16 state)
    }
 }
 
-#ifdef XCB_USE_XINPUT22
 void QXcbKeyboard::updateXKBStateFromXI(void *modInfo, void *groupInfo)
 {
    if (m_config && !connection()->hasXKB()) {
@@ -837,7 +834,6 @@ void QXcbKeyboard::updateXKBStateFromXI(void *modInfo, void *groupInfo)
       }
    }
 }
-#endif
 
 quint32 QXcbKeyboard::xkbModMask(quint16 state)
 {

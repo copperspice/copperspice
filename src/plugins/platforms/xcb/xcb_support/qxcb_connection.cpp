@@ -60,9 +60,7 @@
 #include <X11/Xutil.h>
 #endif
 
-#if defined(XCB_USE_XINPUT2)
 #include <X11/extensions/XI2proto.h>
-#endif
 
 #ifdef XCB_USE_RENDER
 #include <xcb/render.h>
@@ -96,7 +94,6 @@ static inline void checkXcbPollForQueuedEvent()
 #define XCB_GE_GENERIC 35
 #endif
 
-#if defined(XCB_USE_XINPUT2)
 // Starting from the xcb version 1.9.3 struct xcb_ge_event_t has changed:
 // - "pad0" became "extension"
 // - "pad1" and "pad" became "pad0"
@@ -114,7 +111,6 @@ static inline bool isXIEvent(xcb_generic_event_t *event, int opCode)
    qt_xcb_ge_event_t *e = (qt_xcb_ge_event_t *)event;
    return e->extension == opCode;
 }
-#endif // XCB_USE_XINPUT2
 
 #ifdef XCB_USE_XLIB
 static const char *const xcbConnectionErrors[] = {
@@ -707,12 +703,10 @@ QXcbConnection::QXcbConnection(QXcbNativeInterface *nativeInterface, bool canGra
 
    initializeXRender();
 
-#if defined(XCB_USE_XINPUT2)
    m_xi2Enabled = false;
    if (! qgetenv("QT_XCB_NO_XI2").isEmpty()) {
       initializeXInput2();
    }
-#endif
 
    initializeXShape();
    initializeXKB();
@@ -790,9 +784,7 @@ QXcbConnection::~QXcbConnection()
    delete m_drag;
 #endif
 
-#if defined(XCB_USE_XINPUT2)
    finalizeXInput2();
-#endif
 
    if (m_reader->isRunning()) {
       sendConnectionEvent(QXcbAtom::_QT_CLOSE_CONNECTION);
@@ -1363,21 +1355,18 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
             break;
 
          case XCB_ENTER_NOTIFY:
-
-#ifdef XCB_USE_XINPUT22
             if (isAtLeastXI22() && xi2MouseEvents()) {
                break;
             }
-#endif
+
             HANDLE_PLATFORM_WINDOW_EVENT(xcb_enter_notify_event_t, event, handleEnterNotifyEvent);
             break;
 
          case XCB_LEAVE_NOTIFY:
-#ifdef XCB_USE_XINPUT22
             if (isAtLeastXI22() && xi2MouseEvents()) {
                break;
             }
-#endif
+
             m_keyboard->updateXKBStateFromCore(((xcb_leave_notify_event_t *)event)->state);
             HANDLE_PLATFORM_WINDOW_EVENT(xcb_leave_notify_event_t, event, handleLeaveNotifyEvent);
             break;
@@ -1454,14 +1443,14 @@ void QXcbConnection::handleXcbEvent(xcb_generic_event_t *event)
 
             break;
          }
-#if defined(XCB_USE_XINPUT2)
+
          case XCB_GE_GENERIC:
             // Here the windowEventListener is invoked from xi2HandleEvent()
             if (m_xi2Enabled && isXIEvent(event, m_xiOpCode)) {
                xi2HandleEvent(reinterpret_cast<xcb_ge_event_t *>(event));
             }
             break;
-#endif
+
          default:
             handled = false;
             break;
@@ -1848,7 +1837,6 @@ void *QXcbConnection::createVisualInfoForDefaultVisualId() const
 
 #endif
 
-#if defined(XCB_USE_XINPUT2)
 // it is safe to cast XI_* events here as long as we are only touching the first 32 bytes,
 // after that position event needs memmove, see xi2PrepareXIGenericDeviceEvent
 static inline bool isXIType(xcb_generic_event_t *event, int opCode, uint16_t type)
@@ -1860,7 +1848,6 @@ static inline bool isXIType(xcb_generic_event_t *event, int opCode, uint16_t typ
    xXIGenericDeviceEvent *xiEvent = reinterpret_cast<xXIGenericDeviceEvent *>(event);
    return xiEvent->evtype == type;
 }
-#endif
 
 static inline bool isValid(xcb_generic_event_t *event)
 {
@@ -1885,7 +1872,7 @@ bool QXcbConnection::compressEvent(xcb_generic_event_t *event, int currentIndex,
       }
       return false;
    }
-#if defined(XCB_USE_XINPUT2)
+
    // compress XI_* events
    if (responseType == XCB_GE_GENERIC) {
       if (!m_xi2Enabled) {
@@ -1894,12 +1881,14 @@ bool QXcbConnection::compressEvent(xcb_generic_event_t *event, int currentIndex,
 
       // compress XI_Motion, but not from tablet devices
       if (isXIType(event, m_xiOpCode, XI_Motion)) {
+
 #ifndef QT_NO_TABLETEVENT
          xXIDeviceEvent *xdev = reinterpret_cast<xXIDeviceEvent *>(event);
          if (const_cast<QXcbConnection *>(this)->tabletDataForDevice(xdev->sourceid)) {
             return false;
          }
-#endif // QT_NO_TABLETEVENT
+#endif
+
          for (int j = nextIndex; j < eventqueue->size(); ++j) {
             xcb_generic_event_t *next = eventqueue->at(j);
             if (!isValid(next)) {
@@ -1911,7 +1900,7 @@ bool QXcbConnection::compressEvent(xcb_generic_event_t *event, int currentIndex,
          }
          return false;
       }
-#ifdef XCB_USE_XINPUT22
+
       // compress XI_TouchUpdate for the same touch point id
       if (isXIType(event, m_xiOpCode, XI_TouchUpdate)) {
          xXIDeviceEvent *xiDeviceEvent = reinterpret_cast<xXIDeviceEvent *>(event);
@@ -1930,10 +1919,9 @@ bool QXcbConnection::compressEvent(xcb_generic_event_t *event, int currentIndex,
          }
          return false;
       }
-#endif
+
       return false;
    }
-#endif
 
    if (responseType == XCB_CONFIGURE_NOTIFY) {
       // compress multiple configure notify events for the same window
@@ -2557,7 +2545,6 @@ void QXcbConnection::initializeXKB()
 #endif
 }
 
-#if defined(XCB_USE_XINPUT22)
 bool QXcbConnection::xi2MouseEvents() const
 {
    static bool mouseViaXI2 = ! qgetenv("QT_XCB_NO_XI2_MOUSE").isEmpty();
@@ -2567,9 +2554,7 @@ bool QXcbConnection::xi2MouseEvents() const
 
    return mouseViaXI2 && !has_xinerama_extension;
 }
-#endif
 
-#if defined(XCB_USE_XINPUT2)
 static int xi2ValuatorOffset(unsigned char *maskPtr, int maskLen, int number)
 {
    int offset = 0;
@@ -2617,7 +2602,6 @@ void QXcbConnection::xi2PrepareXIGenericDeviceEvent(xcb_ge_event_t *event)
    // and allow casting, overwriting the full_sequence field.
    memmove((char *) event + 32, (char *) event + 36, event->length * 4);
 }
-#endif // defined(XCB_USE_XINPUT2)
 
 QXcbSystemTrayTracker *QXcbConnection::systemTrayTracker() const
 {

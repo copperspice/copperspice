@@ -31,8 +31,6 @@
 
 #include <cmath>
 
-#ifdef XCB_USE_XINPUT2
-
 #include <X11/extensions/XInput2.h>
 #include <X11/extensions/XI2proto.h>
 
@@ -75,12 +73,9 @@ void QXcbConnection::initializeXInput2()
       }
 
       if (m_xi2Enabled) {
+
 #if defined(CS_SHOW_DEBUG_PLATFORM)
-#ifdef XCB_USE_XINPUT22
          qDebug("QXcbConnection::initializeXInput2() XInput version %d.%d is available, supporting 2.2 or greater", xiMajor, m_xi2Minor);
-#else
-         qDebug("QXcbConnection::initializeXInput2() XInput version %d.%d is available, supporting 2.0", xiMajor, m_xi2Minor);
-#endif
 #endif
       }
 
@@ -148,7 +143,6 @@ void QXcbConnection::xi2SetupDevices()
                break;
             }
 
-#ifdef XCB_USE_XINPUT21
             case XIScrollClass: {
                XIScrollClassInfo *sci = reinterpret_cast<XIScrollClassInfo *>(devices[i].classes[c]);
                if (sci->scroll_type == XIScrollTypeVertical) {
@@ -189,7 +183,7 @@ void QXcbConnection::xi2SetupDevices()
 
                break;
             }
-#endif
+
             case XIKeyClass:
 #if defined(CS_SHOW_DEBUG_PLATFORM)
                qDebug() << "QXcbConnection::xi2SetupDevices() found keyboard";
@@ -197,11 +191,10 @@ void QXcbConnection::xi2SetupDevices()
 
                break;
 
-#ifdef XCB_USE_XINPUT22
             case XITouchClass:
                // will be handled in deviceForId()
                break;
-#endif
+
             default:
 #if defined(CS_SHOW_DEBUG_PLATFORM)
                qDebug() << "QXcbConnection::xi2SetupDevices() class = " << devices[i].classes[c]->type;
@@ -270,7 +263,6 @@ void QXcbConnection::xi2SetupDevices()
 
 #endif // QT_NO_TABLETEVENT
 
-#ifdef XCB_USE_XINPUT21
       if (scrollingDevice.orientations || scrollingDevice.legacyOrientations) {
          scrollingDevice.deviceId = devices[i].deviceid;
 
@@ -282,7 +274,6 @@ void QXcbConnection::xi2SetupDevices()
          qDebug() << "QXcbConnection::xi2SetupDevices() found scrolling device";
 #endif
       }
-#endif
 
       if (! isTablet) {
          // touchDeviceForId populates XInput2DeviceData the first time it is called
@@ -332,7 +323,6 @@ void QXcbConnection::xi2Select(xcb_window_t window)
    unsigned int bitMask = 0;
    unsigned char *xiBitMask = reinterpret_cast<unsigned char *>(&bitMask);
 
-#ifdef XCB_USE_XINPUT22
    if (isAtLeastXI22()) {
       bitMask |= XI_TouchBeginMask;
       bitMask |= XI_TouchUpdateMask;
@@ -377,10 +367,6 @@ void QXcbConnection::xi2Select(xcb_window_t window)
 
    const bool pointerSelected = isAtLeastXI22() && xi2MouseEvents();
 
-#else
-   const bool pointerSelected = false;
-#endif // XCB_USE_XINPUT22
-
    QSet<int> tabletDevices;
 
 #ifndef QT_NO_TABLETEVENT
@@ -401,9 +387,8 @@ void QXcbConnection::xi2Select(xcb_window_t window)
       }
       XISelectEvents(xDisplay, window, xiEventMask.data(), m_tabletData.count());
    }
-#endif // QT_NO_TABLETEVENT
+#endif
 
-#ifdef XCB_USE_XINPUT21
    // Enable each scroll device
    if (!m_scrollingDevices.isEmpty() && !pointerSelected) {
       // Only when XI2 mouse events are not enabled, otherwise motion and release are selected already.
@@ -427,9 +412,6 @@ void QXcbConnection::xi2Select(xcb_window_t window)
       }
       XISelectEvents(xDisplay, window, xiEventMask.data(), i);
    }
-#else
-   (void) xiBitMask;
-#endif
 
    {
       // Listen for hotplug events
@@ -470,7 +452,7 @@ XInput2TouchDeviceData *QXcbConnection::touchDeviceForId(int id)
          XIAnyClassInfo *classinfo = dev->xiDeviceInfo->classes[i];
 
          switch (classinfo->type) {
-#ifdef XCB_USE_XINPUT22
+
             case XITouchClass: {
                XITouchClassInfo *tci = reinterpret_cast<XITouchClassInfo *>(classinfo);
                maxTouchPoints = tci->num_touches;
@@ -490,7 +472,6 @@ XInput2TouchDeviceData *QXcbConnection::touchDeviceForId(int id)
                }
                break;
             }
-#endif
 
             case XIValuatorClass: {
                XIValuatorClassInfo *vci = reinterpret_cast<XIValuatorClassInfo *>(classinfo);
@@ -571,7 +552,7 @@ XInput2TouchDeviceData *QXcbConnection::touchDeviceForId(int id)
    return dev;
 }
 
-#if defined(XCB_USE_XINPUT21) || !defined(QT_NO_TABLETEVENT)
+#if ! defined(QT_NO_TABLETEVENT)
 static inline qreal fixed1616ToReal(FP1616 val)
 {
    return qreal(val) / 0x10000;
@@ -592,12 +573,9 @@ void QXcbConnection::xi2HandleEvent(xcb_ge_event_t *event)
       case XI_ButtonPress:
       case XI_ButtonRelease:
       case XI_Motion:
-
-#ifdef XCB_USE_XINPUT22
       case XI_TouchBegin:
       case XI_TouchUpdate:
       case XI_TouchEnd:
-#endif
       {
          xiDeviceEvent = reinterpret_cast<xXIDeviceEvent *>(event);
          eventListener = windowEventListenerFromId(xiDeviceEvent->event);
@@ -641,14 +619,11 @@ void QXcbConnection::xi2HandleEvent(xcb_ge_event_t *event)
    }
 #endif
 
-#ifdef XCB_USE_XINPUT21
    QHash<int, ScrollingDevice>::iterator device = m_scrollingDevices.find(sourceDeviceId);
    if (device != m_scrollingDevices.end()) {
       xi2HandleScrollEvent(xiEvent, device.value());
    }
-#endif
 
-#ifdef XCB_USE_XINPUT22
    if (xiDeviceEvent) {
       switch (xiDeviceEvent->evtype) {
          case XI_ButtonPress:
@@ -686,10 +661,8 @@ void QXcbConnection::xi2HandleEvent(xcb_ge_event_t *event)
             break;
       }
    }
-#endif
 }
 
-#ifdef XCB_USE_XINPUT22
 static qreal valuatorNormalized(double value, XIValuatorClassInfo *vci)
 {
    if (value > vci->max) {
@@ -973,7 +946,6 @@ bool QXcbConnection::xi2SetMouseGrabEnabled(xcb_window_t w, bool grab)
 
    return grabbed;
 }
-#endif // XCB_USE_XINPUT22
 
 void QXcbConnection::xi2HandleHierachyEvent(void *event)
 {
@@ -999,7 +971,6 @@ void QXcbConnection::xi2HandleDeviceChangedEvent(void *event)
       return;
    }
 
-#ifdef XCB_USE_XINPUT21
    // This code handles broken scrolling device drivers that reset absolute positions
    // when they are made active. Whenever a new slave device is made active the
    // primary pointer sends a DeviceChanged event with XISlaveSwitch, and the new
@@ -1023,12 +994,11 @@ void QXcbConnection::xi2HandleDeviceChangedEvent(void *event)
 
    updateScrollingDevice(*device, xiDeviceInfo->num_classes, xiDeviceInfo->classes);
    XIFreeDeviceInfo(xiDeviceInfo);
-#endif
+
 }
 
 void QXcbConnection::updateScrollingDevice(ScrollingDevice &scrollingDevice, int num_classes, void *classInfo)
 {
-#ifdef XCB_USE_XINPUT21
    XIAnyClassInfo **classes = reinterpret_cast<XIAnyClassInfo **>(classInfo);
    QPointF lastScrollPosition;
 
@@ -1056,11 +1026,8 @@ void QXcbConnection::updateScrollingDevice(ScrollingDevice &scrollingDevice, int
             scrollingDevice.lastScrollPosition.x(), scrollingDevice.lastScrollPosition.y());
    }
 #endif
-
-#endif
 }
 
-#ifdef XCB_USE_XINPUT21
 void QXcbConnection::handleEnterEvent()
 {
    QHash<int, ScrollingDevice>::iterator it = m_scrollingDevices.begin();
@@ -1083,11 +1050,9 @@ void QXcbConnection::handleEnterEvent()
       ++it;
    }
 }
-#endif
 
 void QXcbConnection::xi2HandleScrollEvent(void *event, ScrollingDevice &scrollingDevice)
 {
-#ifdef XCB_USE_XINPUT21
    xXIGenericDeviceEvent *xiEvent = reinterpret_cast<xXIGenericDeviceEvent *>(event);
 
    if (xiEvent->evtype == XI_Motion && scrollingDevice.orientations) {
@@ -1162,10 +1127,6 @@ void QXcbConnection::xi2HandleScrollEvent(void *event, ScrollingDevice &scrollin
          }
       }
    }
-#else
-   (void) event;
-   (void) scrollingDevice;
-#endif // XCB_USE_XINPUT21
 }
 
 Qt::MouseButton QXcbConnection::xiToQtMouseButton(uint32_t b)
@@ -1325,15 +1286,11 @@ bool QXcbConnection::xi2HandleTabletEvent(void *event, TabletData *tabletData, Q
          break;
    }
 
-#ifdef XCB_USE_XINPUT22
    // Synthesize mouse events since otherwise there are no mouse events from
    // the pen on the XI 2.2+ path.
    if (xi2MouseEvents() && eventListener) {
       eventListener->handleXIMouseEvent(reinterpret_cast<xcb_ge_event_t *>(event), Qt::MouseEventSynthesizedByCS);
    }
-#else
-   (void) eventListener;
-#endif
 
    return handled;
 }
@@ -1412,5 +1369,3 @@ QXcbConnection::TabletData *QXcbConnection::tabletDataForDevice(int id)
 }
 
 #endif // QT_NO_TABLETEVENT
-
-#endif // XCB_USE_XINPUT2
