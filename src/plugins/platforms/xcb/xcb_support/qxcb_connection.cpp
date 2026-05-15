@@ -690,7 +690,7 @@ QXcbConnection::QXcbConnection(QXcbNativeInterface *nativeInterface, bool canGra
    m_time = XCB_CURRENT_TIME;
    m_netWmUserTime = XCB_CURRENT_TIME;
 
-   if (! qgetenv("QT_XCB_NO_XRANDR").isEmpty()) {
+   if (qgetenv("QT_XCB_NO_XRANDR").isEmpty()) {
       initializeXRandr();
    }
 
@@ -704,7 +704,8 @@ QXcbConnection::QXcbConnection(QXcbNativeInterface *nativeInterface, bool canGra
    initializeXRender();
 
    m_xi2Enabled = false;
-   if (! qgetenv("QT_XCB_NO_XI2").isEmpty()) {
+
+   if (qgetenv("QT_XCB_NO_XI2").isEmpty()) {
       initializeXInput2();
    }
 
@@ -2547,7 +2548,7 @@ void QXcbConnection::initializeXKB()
 
 bool QXcbConnection::xi2MouseEvents() const
 {
-   static bool mouseViaXI2 = ! qgetenv("QT_XCB_NO_XI2_MOUSE").isEmpty();
+   static bool mouseViaXI2 = qgetenv("QT_XCB_NO_XI2_MOUSE").isEmpty();
 
    // FIXME: Don't use XInput2 mouse events when Xinerama extension
    // is enabled, because it causes problems with multi-monitor setup.
