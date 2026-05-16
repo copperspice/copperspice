@@ -308,6 +308,12 @@ void non_trivial ( QChar c, QString::const_iterator &iter, QString &retval, Enco
          retval.append('%');
          retval.append( toUpperHex(*++iter) );
          retval.append( toUpperHex(*++iter) );
+
+      } else {
+
+         retval.append('%');
+         retval.append( *++iter );
+         retval.append( *++iter );
       }
 
    } else if (c == '%' && action == DecodeCharacter) {
