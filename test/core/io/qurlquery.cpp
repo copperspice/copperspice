@@ -169,6 +169,21 @@ TEST_CASE("QUrlQuery empty", "[qurlquery]")
    REQUIRE(data.query() == QString("a=1"));
 }
 
+TEST_CASE("QUrlQuery escape-chars", "[qurlquery]")
+{
+   QUrlQuery qry;
+
+   QString q = "a \"quoted\" query";
+   qry.addQueryItem("q", q);
+
+   REQUIRE(qry.toString() == "q=a %22quoted%22 query");
+
+   QUrl url;
+   url.setQuery(qry);
+
+   REQUIRE(url.toString() == "?q=a %22quoted%22 query");
+}
+
 TEST_CASE("QUrlQuery move_assign", "[qurlquery]")
 {
    QUrlQuery data_a("width=1");
