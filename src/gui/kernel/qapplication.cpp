@@ -1223,7 +1223,7 @@ void QGuiApplicationPrivate::init()
    QCoreApplicationPrivate::is_app_running = false;
    QList<QString> pluginList;
 
-   // Get command line params
+   // get command line parameters
 #ifndef QT_NO_SESSIONMANAGER
    QString session_id;
    QString session_key;
@@ -1248,14 +1248,14 @@ void QGuiApplicationPrivate::init()
 
    for (int index = 1; index < m_argc; index++) {
 
-      if (! m_argv[index]) {
+      if (m_argv[index] == nullptr) {
          continue;
       }
 
       if (*m_argv[index] != '-') {
+         m_argv[currentArg] = m_argv[index];
          ++currentArg;
 
-         m_argv[currentArg] = m_argv[index];
          continue;
       }
 
@@ -1317,8 +1317,9 @@ void QGuiApplicationPrivate::init()
          s = QString::fromUtf8(m_argv[index]).toLower();
 
       } else {
-         ++currentArg;
          m_argv[currentArg] = m_argv[index];
+         ++currentArg;
+
       }
 
       if (! s.isEmpty()) {

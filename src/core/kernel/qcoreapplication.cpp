@@ -140,9 +140,9 @@ QString QCoreApplicationPrivate::appName() const
    retval = macMenuBarName();
 #endif
 
-   if (retval.isEmpty() && m_argv[0]) {
+   if (retval.isEmpty() && m_argv[0] != nullptr) {
       char *p = strrchr(m_argv[0], '/');
-      retval = QString::fromUtf8(p ? p + 1 : m_argv[0]);
+      retval = QString::fromUtf8(p != nullptr ? p + 1 : m_argv[0]);
    }
 
    return retval;
@@ -165,7 +165,7 @@ void QCoreApplicationPrivate::processCommandLineArguments()
    int currentArg = m_argc ? 1 : 0;
 
    for (int index = 1; index < m_argc; ++index) {
-      if (! m_argv[index]) {
+      if (m_argv[index] == nullptr) {
          continue;
       }
 
