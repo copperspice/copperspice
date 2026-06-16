@@ -486,17 +486,17 @@ static const QString context()
    return context;
 }
 
-static void recordMessage(Translator *tor, const QString &context, const QString &text, const QString &comment,
+static void recordMessage(Translator *trObj, const QString &context, const QString &text, const QString &comment,
    const QString &extracomment, bool plural, ConversionData &cd)
 {
    TranslatorMessage msg(context, text, comment, QString(), yyFileName, yyLineNo, QStringList(),
             TranslatorMessage::Type::Unfinished, plural);
 
    msg.setExtraComment(extracomment.simplified());
-   tor->extend(msg, cd);
+   trObj->extend(msg, cd);
 }
 
-static void parse(Translator *tor, ConversionData &cd)
+static void parse(Translator *trObj, ConversionData &cd)
 {
    QString text;
    QString com;
@@ -544,7 +544,7 @@ static void parse(Translator *tor, ConversionData &cd)
                }
 
                if (! text.isEmpty()) {
-                  recordMessage(tor, context(), text, com, extracomment, plural, cd);
+                  recordMessage(trObj, context(), text, com, extracomment, plural, cd);
                }
             }
             break;
@@ -578,7 +578,7 @@ static void parse(Translator *tor, ConversionData &cd)
                }
 
                if (! text.isEmpty()) {
-                  recordMessage(tor, contextOverride, text, com, extracomment, plural, cd);
+                  recordMessage(trObj, contextOverride, text, com, extracomment, plural, cd);
                }
             }
          }
@@ -651,7 +651,7 @@ static void parse(Translator *tor, ConversionData &cd)
    }
 }
 
-bool loadJava(Translator &translator, const QString &filename, ConversionData &cd)
+bool loadJava(Translator &trObj, const QString &filename, ConversionData &cd)
 {
    QFile file(filename);
 
@@ -679,7 +679,7 @@ bool loadJava(Translator &translator, const QString &filename, ConversionData &c
    yyCurLineNo = 1;
    yyParenLineNo = 1;
 
-   parse(&translator, cd);
+   parse(&trObj, cd);
 
    return true;
 }

@@ -106,10 +106,9 @@ class LU {
 
 static QString MagicComment(QLatin1String("TRANSLATOR"));
 
-static void recordMessage(
-    Translator *tor, const QString &context, const QString &text, const QString &comment,
-    const QString &extracomment, const QString &msgid, const TranslatorMessage::ExtraData &extra,
-    bool plural, const QString &fileName, int lineNo)
+static void recordMessage(Translator *trObj, const QString &context, const QString &text, const QString &comment,
+   const QString &extracomment, const QString &msgid, const TranslatorMessage::ExtraData &extra,
+   bool plural, const QString &fileName, int lineNo)
 {
     TranslatorMessage msg(
         context, text, comment, QString(),
@@ -118,9 +117,9 @@ static void recordMessage(
     msg.setExtraComment(extracomment.simplified());
     msg.setId(msgid);
     msg.setExtras(extra);
-    tor->extend(msg);
-}
 
+    trObj->extend(msg);
+}
 
 namespace QScript
 {
@@ -1524,9 +1523,9 @@ void QScriptParser::setLexer(QScript::Lexer *lex)
     lexer = lex;
 }
 
-void QScriptParser::setTranslator(Translator *tor)
+void QScriptParser::setTranslator(Translator *trObj)
 {
-    translator = tor;
+    translator = trObj;
 }
 
 bool QScriptParser::parse()

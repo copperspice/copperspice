@@ -1010,9 +1010,10 @@ bool savePO(const Translator &translator, QIODevice &dev, ConversionData &cd)
 
 static bool savePOT(const Translator &translator, QIODevice &dev, ConversionData &cd)
 {
-   Translator ttor = translator;
-   ttor.dropTranslations();
-   return savePO(ttor, dev, cd);
+   Translator trObj = translator;
+   trObj.dropTranslations();
+
+   return savePO(trObj, dev, cd);
 }
 
 int initPO()

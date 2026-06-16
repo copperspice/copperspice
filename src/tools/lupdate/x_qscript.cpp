@@ -761,8 +761,7 @@ const int QScriptGrammar::action_check [] = {
    -1, -1
 };
 
-static void recordMessage(
-   Translator *tor, const QString &context, const QString &text, const QString &comment,
+static void recordMessage(Translator *trObj, const QString &context, const QString &text, const QString &comment,
    const QString &extracomment, const QString &msgid, const TranslatorMessage::ExtraData &extra,
    bool plural, const QString &fileName, int lineNo)
 {
@@ -773,9 +772,9 @@ static void recordMessage(
    msg.setExtraComment(extracomment.simplified());
    msg.setId(msgid);
    msg.setExtras(extra);
-   tor->extend(msg);
-}
 
+   trObj->extend(msg);
+}
 
 namespace QScript {
 
@@ -2299,9 +2298,9 @@ void QScriptParser::setLexer(QScript::Lexer *lex)
    lexer = lex;
 }
 
-void QScriptParser::setTranslator(Translator *tor)
+void QScriptParser::setTranslator(Translator *trObj)
 {
-   translator = tor;
+   translator = trObj;
 }
 
 bool QScriptParser::parse()

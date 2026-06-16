@@ -189,14 +189,14 @@ int StringSimilarityMatcher::getSimilarityScore(const QString &strCandidate)
    return score;
 }
 
-QList<Candidate> similarTextHeuristicCandidates(const Translator *tor, const QString &text, int maxCandidates)
+QList<Candidate> similarTextHeuristicCandidates(const Translator *trObj, const QString &text, int maxCandidates)
 {
    QList<int> scores;
 
    QList<Candidate> candidates;
    StringSimilarityMatcher matcher(text);
 
-   for (const TranslatorMessage &mtm : tor->messages()) {
+   for (const TranslatorMessage &mtm : trObj->messages()) {
       if (mtm.type() == TranslatorMessage::Type::Unfinished || mtm.translation().isEmpty()) {
          continue;
       }

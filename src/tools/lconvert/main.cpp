@@ -115,14 +115,15 @@ int main(int argc, char *argv[])
    QCoreApplication app(argc, argv);
 
 #ifndef Q_OS_WIN
-   QTranslator translator;
-   QTranslator qtTranslator;
+   QTranslator trObj1;
+   QTranslator trObj2;
+
    QString sysLocale   = QLocale::system().name();
    QString resourceDir = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
 
-   if (translator.load("linguist_" + sysLocale, resourceDir) && qtTranslator.load("qt_" + sysLocale, resourceDir)) {
-      app.installTranslator(&translator);
-      app.installTranslator(&qtTranslator);
+   if (trObj1.load("linguist_" + sysLocale, resourceDir) && trObj2.load("cs_" + sysLocale, resourceDir)) {
+      app.installTranslator(&trObj1);
+      app.installTranslator(&trObj2);
    }
 #endif
 
@@ -143,7 +144,7 @@ int main(int argc, char *argv[])
    Translator::LocationsType locations = Translator::DefaultLocations;
 
    ConversionData cd;
-   Translator tr;
+   Translator trObj;
 
    for (int i = 1; i < args.size(); ++i) {
       if (args[i].startsWith("--")) {
@@ -250,61 +251,62 @@ int main(int argc, char *argv[])
       return usage(args);
    }
 
-   tr.setLanguageCode(Translator::guessLanguageCodeFromFileName(inFiles[0].name));
+   trObj.setLanguageCode(Translator::guessLanguageCodeFromFileName(inFiles[0].name));
 
-   if (!tr.load(inFiles[0].name, cd, inFiles[0].format)) {
+   if (! trObj.load(inFiles[0].name, cd, inFiles[0].format)) {
       std::cerr << csPrintable(cd.error());
       return 2;
    }
-   tr.reportDuplicates(tr.resolveDuplicates(), inFiles[0].name, verbose);
+   trObj.reportDuplicates(trObj.resolveDuplicates(), inFiles[0].name, verbose);
 
    for (int i = 1; i < inFiles.size(); ++i) {
-      Translator tr2;
-      if (!tr2.load(inFiles[i].name, cd, inFiles[i].format)) {
+      Translator trObj3;
+      if (! trObj3.load(inFiles[i].name, cd, inFiles[i].format)) {
          std::cerr << csPrintable(cd.error());
          return 2;
       }
-      tr2.reportDuplicates(tr2.resolveDuplicates(), inFiles[i].name, verbose);
-      for (int j = 0; j < tr2.messageCount(); ++j) {
-         tr.replaceSorted(tr2.message(j));
+
+      trObj3.reportDuplicates(trObj3.resolveDuplicates(), inFiles[i].name, verbose);
+      for (int j = 0; j < trObj3.messageCount(); ++j) {
+         trObj.replaceSorted(trObj3.message(j));
       }
    }
 
    if (! targetLanguage.isEmpty()) {
-      tr.setLanguageCode(targetLanguage);
+      trObj.setLanguageCode(targetLanguage);
    }
 
    if (! sourceLanguage.isEmpty()) {
-      tr.setSourceLanguageCode(sourceLanguage);
+      trObj.setSourceLanguageCode(sourceLanguage);
    }
 
    if (noObsolete) {
-      tr.stripObsoleteMessages();
+      trObj.stripObsoleteMessages();
    }
 
    if (noFinished) {
-      tr.stripFinishedMessages();
+      trObj.stripFinishedMessages();
    }
 
    if (dropTranslations) {
-      tr.dropTranslations();
+      trObj.dropTranslations();
    }
 
    if (noUiLines) {
-      tr.dropUiLines();
+      trObj.dropUiLines();
    }
 
    if (locations != Translator::DefaultLocations) {
-      tr.setLocationsType(locations);
+      trObj.setLocationsType(locations);
    }
 
-   tr.normalizeTranslations(cd);
+   trObj.normalizeTranslations(cd);
    if (! cd.errors().isEmpty()) {
       std::cerr << csPrintable(cd.error());
       cd.clearErrors();
    }
 
-   if (! tr.save(outFileName, cd, outFormat)) {
+   if (! trObj.save(outFileName, cd, outFormat)) {
       std::cerr << csPrintable(cd.error());
       return 3;
    }

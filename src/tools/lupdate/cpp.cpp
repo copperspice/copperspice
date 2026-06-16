@@ -1467,9 +1467,9 @@ IncludeCycleHash &CppFiles::includeCycles()
 
 TranslatorHash &CppFiles::translatedFiles()
 {
-   static TranslatorHash tors;
+   static TranslatorHash trHash;
 
-   return tors;
+   return trHash;
 }
 
 QSet<QString> &CppFiles::blacklistedFiles()
@@ -1508,9 +1508,9 @@ const Translator *CppFiles::getTranslator(const QString &cleanFile)
    return translatedFiles().value(cleanFile);
 }
 
-void CppFiles::setTranslator(const QString &cleanFile, const Translator *tor)
+void CppFiles::setTranslator(const QString &cleanFile, const Translator *trObj)
 {
-   translatedFiles().insert(cleanFile, tor);
+   translatedFiles().insert(cleanFile, trObj);
 }
 
 bool CppFiles::isBlacklisted(const QString &cleanFile)

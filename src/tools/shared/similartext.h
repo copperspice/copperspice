@@ -84,6 +84,6 @@ static inline int getSimilarityScore(const QString &str1, const QString &str2)
    return StringSimilarityMatcher(str1).getSimilarityScore(str2);
 }
 
-QList<Candidate> similarTextHeuristicCandidates(const Translator *tor, const QString &text, int maxCandidates);
+QList<Candidate> similarTextHeuristicCandidates(const Translator *trObj, const QString &text, int maxCandidates);
 
 #endif

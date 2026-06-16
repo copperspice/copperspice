@@ -115,17 +115,18 @@ int main(int argc, char **argv)
       }
    }
 
-   QTranslator translator;
-   QTranslator qtTranslator;
+   QTranslator trObj1;
+   QTranslator trObj2;
+
    QString sysLocale = QLocale::system().name();
 
-   if (translator.load(QString("linguist_") + sysLocale, resourceDir)) {
-      app.installTranslator(&translator);
+   if (trObj1.load(QString("linguist_") + sysLocale, resourceDir)) {
+      app.installTranslator(&trObj1);
 
-      if (qtTranslator.load(QString("cs_") + sysLocale, resourceDir)) {
-         app.installTranslator(&qtTranslator);
+      if (trObj2.load(QString("cs_") + sysLocale, resourceDir)) {
+         app.installTranslator(&trObj2);
       } else {
-         app.removeTranslator(&translator);
+         app.removeTranslator(&trObj1);
       }
    }
 

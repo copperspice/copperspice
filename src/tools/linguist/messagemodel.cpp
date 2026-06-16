@@ -180,10 +180,10 @@ bool DataModel::isWellMergeable(const DataModel *other) const
 
 bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent, bool &waitCursor)
 {
-   Translator tor;
+   Translator trObj;
    ConversionData cd;
 
-   bool ok = tor.load(fileName, cd, "auto");
+   bool ok = trObj.load(fileName, cd, "auto");
 
    if (! ok) {
       if (waitCursor) {
@@ -195,7 +195,7 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
       return false;
    }
 
-   if (! tor.messageCount()) {
+   if (! trObj.messageCount()) {
       if (waitCursor) {
          QApplication::restoreOverrideCursor();
          waitCursor = false;
@@ -207,7 +207,7 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
       return false;
    }
 
-   Translator::Duplicates dupes = tor.resolveDuplicates();
+   Translator::Duplicates dupes = trObj.resolveDuplicates();
 
    if (! dupes.byId.isEmpty() || ! dupes.byContents.isEmpty()) {
       QString err = tr("Duplicate messages found in '%1':").formatArg(fileName.toHtmlEscaped());
@@ -219,11 +219,12 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
             goto doWarn;
          }
 
-         err += tr("<p>* ID: %1").formatArg(tor.message(i).id().toHtmlEscaped());
+         err += tr("<p>* ID: %1").formatArg(trObj.message(i).id().toHtmlEscaped());
       }
 
       for (int j : dupes.byContents) {
-         const TranslatorMessage &msg = tor.message(j);
+         const TranslatorMessage &msg = trObj.message(j);
+
          if (++numdups >= 5) {
             err += tr("<p>[more duplicates omitted]");
             break;
@@ -247,8 +248,8 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
 
    m_srcFileName = fileName;
 
-   m_relativeLocations = (tor.locationsType() == Translator::RelativeLocations);
-   m_extra = tor.extras();
+   m_relativeLocations = (trObj.locationsType() == Translator::RelativeLocations);
+   m_extra             = trObj.extras();
    m_contextList.clear();
    m_numMessages = 0;
 
@@ -258,7 +259,7 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
    m_srcChars    = 0;
    m_srcCharsSpc = 0;
 
-   for (const TranslatorMessage &item : tor.messages()) {
+   for (const TranslatorMessage &item : trObj.messages()) {
       if (! contexts.contains(item.context())) {
          contexts.insert(item.context(), m_contextList.size());
          m_contextList.append(ContextItem(item.context()));
@@ -290,7 +291,7 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
 
    *langGuessed = false;
 
-   QString lang = tor.languageCode();
+   QString lang = trObj.languageCode();
 
    if (lang.isEmpty()) {
       lang = QFileInfo(fileName).baseName();
@@ -335,7 +336,7 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
    //   if that fails
    // 2. Assume English
 
-   lang = tor.sourceLanguageCode();
+   lang = trObj.sourceLanguageCode();
 
    if (lang.isEmpty()) {
       langLocale    = QLocale::C;
@@ -353,22 +354,24 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
 
 bool DataModel::save(const QString &fileName, QWidget *parent)
 {
-   Translator tor;
-   for (DataModelIterator it(this); it.isValid(); ++it) {
-      tor.append(it.current()->message());
+   Translator trObj;
+
+   for (DataModelIterator iter(this); iter.isValid(); ++iter) {
+      trObj.append(iter.current()->message());
    }
 
-   tor.setLanguageCode(Translator::makeLanguageCode(m_language, m_country));
-   tor.setSourceLanguageCode(Translator::makeLanguageCode(m_sourceLanguage, m_sourceCountry));
+   trObj.setLanguageCode(Translator::makeLanguageCode(m_language, m_country));
+   trObj.setSourceLanguageCode(Translator::makeLanguageCode(m_sourceLanguage, m_sourceCountry));
 
-   tor.setLocationsType(m_relativeLocations ? Translator::RelativeLocations
-                        : Translator::AbsoluteLocations);
-   tor.setExtras(m_extra);
+   trObj.setLocationsType(m_relativeLocations ? Translator::RelativeLocations : Translator::AbsoluteLocations);
+   trObj.setExtras(m_extra);
+
    ConversionData cd;
 
-   tor.normalizeTranslations(cd);
+   trObj.normalizeTranslations(cd);
 
-   bool ok = tor.save(fileName, cd, "auto");
+   bool ok = trObj.save(fileName, cd, "auto");
+
    if (ok) {
       setModified(false);
    }
@@ -400,11 +403,13 @@ bool DataModel::release(const QString &fileName, bool verbose, bool ignoreUnfini
       return false;
    }
 
-   Translator tor;
+   Translator trObj;
    QLocale locale(m_language, m_country);
-   tor.setLanguageCode(locale.name());
-   for (DataModelIterator it(this); it.isValid(); ++it) {
-      tor.append(it.current()->message());
+
+   trObj.setLanguageCode(locale.name());
+
+   for (DataModelIterator iter(this); iter.isValid(); ++iter) {
+      trObj.append(iter.current()->message());
    }
 
    ConversionData cd;
@@ -412,7 +417,7 @@ bool DataModel::release(const QString &fileName, bool verbose, bool ignoreUnfini
    cd.m_ignoreUnfinished = ignoreUnfinished;
    cd.m_saveMode = mode;
 
-   bool ok = saveQM(tor, file, cd);
+   bool ok = saveQM(trObj, file, cd);
    if (! ok) {
       QMessageBox::warning(parent, QObject::tr("Linguist"), cd.error());
    }

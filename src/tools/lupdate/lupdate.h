@@ -51,8 +51,8 @@ using UpdateOptions = QFlags<UpdateOption>;
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(UpdateOptions)
 
-Translator merge(const Translator &tor, const Translator &virginTor, const QList<Translator> &aliens,
-                 UpdateOptions options, QString &err);
+Translator merge(const Translator &trObj, const Translator &newTrObj, const QList<Translator> &aliens,
+      UpdateOptions options, QString &err);
 
 void loadCPP(Translator &translator, const QStringList &filenames, ConversionData &cd);
 bool loadJava(Translator &translator, const QString &filename, ConversionData &cd);
