@@ -153,19 +153,25 @@ int main(int argc, char *argv[])
       }
 
       if (args[i] == "-o" || args[i] == "-output-file") {
-         if (++i >= args.size()) {
+         ++i;
+
+         if (i >= args.size()) {
             return usage(args);
          }
          outFileName = args[i];
 
       } else if (args[i] == "-of" || args[i] == "-output-format") {
-         if (++i >= args.size()) {
+         ++i;
+
+         if (i >= args.size()) {
             return usage(args);
          }
          outFormat = args[i];
 
       } else if (args[i] == "-i" || args[i] == "-input-file") {
-         if (++i >= args.size()) {
+         ++i;
+
+         if (i >= args.size()) {
             return usage(args);
          }
          File file;
@@ -174,13 +180,17 @@ int main(int argc, char *argv[])
          inFiles.append(file);
 
       } else if (args[i] == "-if" || args[i] == "-input-format") {
-         if (++i >= args.size()) {
+         ++i;
+
+         if (i >= args.size()) {
             return usage(args);
          }
          inFormat = args[i];
 
       } else if (args[i] == "-drop-tags") {
-         if (++i >= args.size()) {
+         ++i;
+
+         if (i >= args.size()) {
             return usage(args);
          }
          cd.m_dropTags.append(args[i]);
@@ -189,13 +199,17 @@ int main(int argc, char *argv[])
          dropTranslations = true;
 
       } else if (args[i] == "-target-language") {
-         if (++i >= args.size()) {
+         ++i;
+
+         if (i >= args.size()) {
             return usage(args);
          }
          targetLanguage = args[i];
 
       } else if (args[i] == "-source-language") {
-         if (++i >= args.size()) {
+         ++i;
+
+         if (i >= args.size()) {
             return usage(args);
          }
          sourceLanguage = args[i];
@@ -214,7 +228,9 @@ int main(int argc, char *argv[])
          cd.m_sortContexts = true;
 
       } else if (args[i] == "-locations") {
-         if (++i >= args.size()) {
+         ++i;
+
+         if (i >= args.size()) {
             return usage(args);
          }
 

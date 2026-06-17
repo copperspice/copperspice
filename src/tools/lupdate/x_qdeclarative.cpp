@@ -270,7 +270,9 @@ class FindTrCalls: protected AST::Visitor
          if (i == comments.count() - 1) {
             break;
          }
-         commentLoc = comments.at(++i).lastLine;
+
+         ++i;
+         commentLoc = comments.at(i).lastLine;
       }
       return Comment();
    }

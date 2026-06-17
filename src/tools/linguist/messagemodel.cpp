@@ -214,7 +214,9 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
       int numdups = 0;
 
       for (int i : dupes.byId) {
-         if (++numdups >= 5) {
+         ++numdups;
+
+         if (numdups >= 5) {
             err += tr("<p>[more duplicates omitted]");
             goto doWarn;
          }
@@ -225,7 +227,9 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
       for (int j : dupes.byContents) {
          const TranslatorMessage &msg = trObj.message(j);
 
-         if (++numdups >= 5) {
+         ++numdups;
+
+         if (numdups >= 5) {
             err += tr("<p>[more duplicates omitted]");
             break;
          }

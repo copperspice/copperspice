@@ -119,10 +119,13 @@ void MessageHighlighter::highlightBlock(const QString &text)
 
                   // When a semicolon follows assume an Entity
                   start = pos;
-                  ch    = text.at(++pos);
+
+                  ++pos;
+                  ch = text.at(pos);
 
                   while (pos + 1 < len && ch != semicolon && ch.isLetterOrNumber()) {
-                     ch = text.at(++pos);
+                     ++pos;
+                     ch = text.at(pos);
                   }
 
                   if (ch == semicolon) {

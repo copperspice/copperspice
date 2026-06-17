@@ -299,11 +299,14 @@ bool FormMultiWidget::eventFilter(QObject *watched, QEvent *event)
 {
    int i = 0;
 
-   while (m_editors.at(i) != watched)
-      if (++i >= m_editors.count()) {
-         // Happens when deleting an editor
+   while (m_editors.at(i) != watched) {
+      ++i;
+
+      if (i >= m_editors.count()) {
+         // happens when deleting an editor
          return false;
       }
+   }
 
    if (event->type() == QEvent::FocusOut) {
       m_minusButtons.at(i)->setToolTip(QString());
