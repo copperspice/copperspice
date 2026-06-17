@@ -43,7 +43,7 @@
 #include <stdio.h>
 
 Translator::Translator()
-   : m_locationsType(AbsoluteLocations), m_indexOk(true)
+   : m_locationType(Translator::LocationType::Absolute), m_indexOk(true)
 {
 }
 

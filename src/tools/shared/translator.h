@@ -144,6 +144,13 @@ class Translator
    bool load(const QString &filename, ConversionData &err, const QString &format);
    bool save(const QString &filename, ConversionData &err, const QString &format) const;
 
+   enum LocationType {
+      None,
+      Absolute,
+      Relative,
+      Default,
+   };
+
    int find(const TranslatorMessage &msg) const;
    int find(const QString &context,
             const QString &comment, const QList<TranslatorMessage::Reference> &refs) const;
@@ -180,13 +187,12 @@ class Translator
       return m_sourceLanguage;
    }
 
-   enum LocationsType { DefaultLocations, NoLocations, RelativeLocations, AbsoluteLocations };
-   void setLocationsType(LocationsType lt) {
-      m_locationsType = lt;
+   void setLocationType(LocationType lt) {
+      m_locationType = lt;
    }
 
-   LocationsType locationsType() const {
-      return m_locationsType;
+   LocationType locationType() const {
+      return m_locationType;
    }
 
    static QString makeLanguageCode(QLocale::Language language, QLocale::Country country);
@@ -278,7 +284,7 @@ class Translator
 
    QList<TranslatorMessage> m_messages;         // stores the sequence position
 
-   LocationsType m_locationsType;
+   LocationType m_locationType;
 
    // A string beginning with a 2 or 3 letter language code (ISO 639-1
    // or ISO-639-2), followed by the optional country variant to distinguish

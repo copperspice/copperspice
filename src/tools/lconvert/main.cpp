@@ -141,7 +141,8 @@ int main(int argc, char *argv[])
    bool noFinished = false;
    bool verbose    = false;
    bool noUiLines  = false;
-   Translator::LocationsType locations = Translator::DefaultLocations;
+
+   Translator::LocationType locations = Translator::LocationType::Default;
 
    ConversionData cd;
    Translator trObj;
@@ -218,13 +219,13 @@ int main(int argc, char *argv[])
          }
 
          if (args[i] == "none") {
-            locations = Translator::NoLocations;
+            locations = Translator::LocationType::None;
 
          } else if (args[i] == "relative") {
-            locations = Translator::RelativeLocations;
+            locations = Translator::LocationType::Relative;
 
          } else if (args[i] == "absolute") {
-            locations = Translator::AbsoluteLocations;
+            locations = Translator::LocationType::Absolute;
 
          } else {
             return usage(args);
@@ -296,8 +297,8 @@ int main(int argc, char *argv[])
       trObj.dropUiLines();
    }
 
-   if (locations != Translator::DefaultLocations) {
-      trObj.setLocationsType(locations);
+   if (locations != Translator::LocationType::Default) {
+      trObj.setLocationType(locations);
    }
 
    trObj.normalizeTranslations(cd);

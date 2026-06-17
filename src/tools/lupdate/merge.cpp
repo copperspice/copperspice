@@ -326,7 +326,7 @@ Translator merge(const Translator &trObj, const Translator &newTrObj, const QLis
    Translator trOutObj;
    trOutObj.setLanguageCode(trObj.languageCode());
    trOutObj.setSourceLanguageCode(trObj.sourceLanguageCode());
-   trOutObj.setLocationsType(trObj.locationsType());
+   trOutObj.setLocationType(trObj.locationType());
 
    /*
      The types of all the messages from the vernacular translator

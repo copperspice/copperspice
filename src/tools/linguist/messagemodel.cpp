@@ -248,7 +248,7 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
 
    m_srcFileName = fileName;
 
-   m_relativeLocations = (trObj.locationsType() == Translator::RelativeLocations);
+   m_relativeLocations = (trObj.locationType() == Translator::LocationType::Relative);
    m_extra             = trObj.extras();
    m_contextList.clear();
    m_numMessages = 0;
@@ -363,7 +363,7 @@ bool DataModel::save(const QString &fileName, QWidget *parent)
    trObj.setLanguageCode(Translator::makeLanguageCode(m_language, m_country));
    trObj.setSourceLanguageCode(Translator::makeLanguageCode(m_sourceLanguage, m_sourceCountry));
 
-   trObj.setLocationsType(m_relativeLocations ? Translator::RelativeLocations : Translator::AbsoluteLocations);
+   trObj.setLocationType(m_relativeLocations ? Translator::LocationType::Relative : Translator::LocationType::Absolute);
    trObj.setExtras(m_extra);
 
    ConversionData cd;

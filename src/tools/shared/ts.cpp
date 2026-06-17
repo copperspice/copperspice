@@ -473,8 +473,9 @@ bool TSReader::read(Translator &translator)
                handleError();
             }
 
-            translator.setLocationsType(maybeRelative ? Translator::RelativeLocations :
-                                        maybeAbsolute ? Translator::AbsoluteLocations : Translator::NoLocations);
+            translator.setLocationType(maybeRelative ? Translator::LocationType::Relative :
+                  maybeAbsolute ? Translator::LocationType::Absolute : Translator::LocationType::None);
+
          } // </TS>
 
       } else {
@@ -671,7 +672,7 @@ bool saveTS(const Translator &translator, QIODevice &dev, ConversionData &cd)
 
          t << ">\n";
 
-         if (translator.locationsType() != Translator::NoLocations) {
+         if (translator.locationType() != Translator::LocationType::None) {
             QString cfile = currentFile;
             bool first = true;
 
@@ -681,7 +682,7 @@ bool saveTS(const Translator &translator, QIODevice &dev, ConversionData &cd)
                int ln = ref.lineNumber();
                QString ld;
 
-               if (translator.locationsType() == Translator::RelativeLocations) {
+               if (translator.locationType() == Translator::LocationType::Relative) {
                   if (ln != -1) {
                      int dlt = ln - currentLine[fn];
 

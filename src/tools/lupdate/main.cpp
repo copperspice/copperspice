@@ -192,13 +192,15 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
 
       trObj.makeFileNamesAbsolute(QFileInfo(fileName).absoluteDir());
 
+      if (options & UpdateOption::NoLocations) {
+         trObj.setLocationType(Translator::LocationType::None);
 
-      if (options & NoLocations) {
-         trObj.setLocationsType(Translator::NoLocations);
-      } else if (options & RelativeLocations) {
-         trObj.setLocationsType(Translator::RelativeLocations);
-      } else if (options & AbsoluteLocations) {
-         trObj.setLocationsType(Translator::AbsoluteLocations);
+      } else if (options & UpdateOption::RelativeLocations) {
+         trObj.setLocationType(Translator::LocationType::Relative);
+
+      } else if (options & UpdateOption::AbsoluteLocations) {
+         trObj.setLocationType(Translator::LocationType::Absolute);
+
       }
 
       if (options & Verbose) {
@@ -206,7 +208,7 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
       }
 
       UpdateOptions theseOptions = options;
-      if (trObj.locationsType() == Translator::NoLocations) {
+      if (trObj.locationType() == Translator::LocationType::None) {
          // Could be set from file
          theseOptions |= NoLocations;
       }
