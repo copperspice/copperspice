@@ -212,8 +212,8 @@ struct IncludeCycle {
    QSet<const ParseResults *> results;
 };
 
-typedef QHash<QString, IncludeCycle *>     IncludeCycleHash;
-typedef QHash<QString, const Translator *> TranslatorHash;
+using IncludeCycleHash = QHash<QString, IncludeCycle *>;
+using TranslatorHash   = QHash<QString, const Translator *>;
 
 class CppFiles
 {

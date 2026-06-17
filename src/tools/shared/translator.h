@@ -137,6 +137,10 @@ class Translator
  public:
    Translator();
 
+   // registration of file formats
+   using SaveFunction = bool (*)(const Translator &, QIODevice &out, ConversionData &data);
+   using LoadFunction = bool (*)(Translator &, QIODevice &in, ConversionData &data);
+
    bool load(const QString &filename, ConversionData &err, const QString &format);
    bool save(const QString &filename, ConversionData &err, const QString &format) const;
 
@@ -243,10 +247,6 @@ class Translator
    void setExtras(const QHash<QString, QString> &extras) {
       m_extra = extras;
    }
-
-   // registration of file formats
-   typedef bool (*SaveFunction)(const Translator &, QIODevice &out, ConversionData &data);
-   typedef bool (*LoadFunction)(Translator &, QIODevice &in, ConversionData &data);
 
    struct FileFormat {
       FileFormat()
