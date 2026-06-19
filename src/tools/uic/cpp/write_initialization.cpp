@@ -1770,8 +1770,10 @@ void WriteInitialization::writeProperties(const QString &varName,
          }
 
          if ((varName == m_mainFormVarName) && (&outStream == &m_refreshOut)) {
-            // only place (currently) where we output mainForm name to the retranslateUi()
-            // Other places output merely instances of a certain class (which cannot be main form, e.g. QListWidget).
+
+            // only place where we output mainForm name to the retranslateUi()
+            // other places output instances of a certain class (which can not be main form, like QListWidget).
+
             m_mainFormUsedInRetranslateUi = true;
          }
       }

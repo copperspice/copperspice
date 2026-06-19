@@ -572,7 +572,8 @@ restart:
                } while (! yyCh.isSpace());
 
                do {
-                  // Space beween "define" and macro name
+                  // space between "define" and macro name
+
                   yyCh = getChar();
 
                   if (yyCh == EOF) {
@@ -586,10 +587,10 @@ restart:
                } while (yyCh.isSpace());
 
                do {
-                  // Macro name
+                  // macro name
 
                   if (yyCh == '(') {
-                     // Argument list. Follows the name without a space, and no paren nesting is possible.
+                     // argument list, follows the name without a space and no parentheses and no nesting is possible.
 
                      do {
                         yyCh = getChar();
@@ -619,7 +620,7 @@ restart:
                } while (! yyCh.isSpace());
 
                do {
-                  // Shortcut the immediate newline case if no comments follow
+                  // shortcut the immediate newline case if no comments follow
 
                   yyCh = getChar();
 
@@ -1158,8 +1159,7 @@ restart:
 }
 
 
-//  The second part of this source file are namespace/class related utilities for the third part.
-
+//  second part of this source file are namespace/class related utilities for the third part.
 void CppParser::saveState(SavedState *state)
 {
    state->m_save_nsList   = m_namespaceList;
@@ -1716,17 +1716,15 @@ std::pair<QStringList, bool> CppParser::getList(Group kind)
 
 /*
  * match any expression that can return a number, which can be
- * 1. Literal number (e.g. '11')
- * 2. simple identifier (e.g. 'm_count')
- * 3. simple function call (e.g. 'size()' )
- * 4. function call on an object (e.g. 'list.size()')
- * 5. function call on an object (e.g. 'list->size()')
+ * 1. Literal number (for example, '11')
+ * 2. simple identifier (for example, 'm_count')
+ * 3. simple function call (for example, 'size()' )
+ * 4. function call on an object (for example, 'list.size()')
+ * 5. function call on an object (for example, 'list->size()')
  *
- * Other cases:
  * size(2,4)
  * list().size()
  * list(a,b).size(2,4)
- * etc...
  */
 bool CppParser::matchExpression()
 {

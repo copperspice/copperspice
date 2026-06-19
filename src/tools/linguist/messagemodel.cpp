@@ -336,8 +336,7 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
    }
 
    // Try to detect the correct source language in the following order
-   // 1. Look for the language attribute in the ts
-   //   if that fails
+   // 1. Look for the language attribute in the ts if that fails
    // 2. Assume English
 
    lang = trObj.sourceLanguageCode();
@@ -677,7 +676,7 @@ void MultiContextItem::putMessageItem(int pos, MessageItem *m)
 
 void MultiContextItem::appendMessageItems(const QList<MessageItem *> &m)
 {
-   QList<MessageItem *> nullItems = m; // Basically, just a reservation
+   QList<MessageItem *> nullItems = m;
 
    for (int i = 0; i < nullItems.count(); ++i) {
       nullItems[i] = nullptr;

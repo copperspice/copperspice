@@ -82,7 +82,7 @@ static int yyTok;
 static QString yyInStr;
 static int yyInPos;
 
-// The parser maintains the following global variables.
+// parser maintains the following global variables.
 static QString yyPackage;
 static QStack<Scope *> yyScope;
 
@@ -423,17 +423,15 @@ static bool matchStringOrNull(QString &s)
 
 /*
  * match any expression that can return a number, which can be
- * 1. Literal number (e.g. '11')
- * 2. simple identifier (e.g. 'm_count')
- * 3. simple function call (e.g. 'size()' )
- * 4. function call on an object (e.g. 'list.size()')
- * 5. function call on an object (e.g. 'list->size()')
+ * 1. Literal number (for example, '11')
+ * 2. simple identifier (for example, 'm_count')
+ * 3. simple function call (for example, 'size()' )
+ * 4. function call on an object (for example, 'list.size()')
+ * 5. function call on an object (for example, 'list->size()')
  *
- * Other cases:
  * size(2,4)
  * list().size()
  * list(a,b).size(2,4)
- * etc...
  */
 static bool matchExpression()
 {

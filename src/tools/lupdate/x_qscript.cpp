@@ -1756,7 +1756,7 @@ int QScript::Lexer::lex()
       }
    }
 
-   // no identifiers allowed directly after numeric literal, e.g. "3in" is bad
+   // no identifiers allowed directly after numeric literal, for example, "3in" is not allowed
    if ((state == Number || state == Octal || state == Hex) && isIdentLetter(current)) {
       state = Bad;
       err = IllegalIdentifier;

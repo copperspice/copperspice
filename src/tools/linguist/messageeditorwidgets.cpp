@@ -216,7 +216,7 @@ void FormWidget::setTranslation(const QString &text, bool userAction)
 
 void FormWidget::setEditingEnabled(bool enable)
 {
-   // Use read-only state so that the text can still be copied
+   // use read-only state so the text can still be copied
    m_editor->setReadOnly(!enable);
    m_label->setEnabled(enable);
 }
@@ -224,8 +224,6 @@ void FormWidget::setEditingEnabled(bool enable)
 
 class ButtonWrapper : public QWidget
 {
-   // no Q_OBJECT: no need to, and don't want the useless moc file
-
  public:
    ButtonWrapper(QWidget *wrapee, QWidget *relator) : m_wrapee(wrapee) {
       setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Ignored);
@@ -421,7 +419,7 @@ QString FormMultiWidget::getTranslation() const
 
 void FormMultiWidget::setEditingEnabled(bool enable)
 {
-   // Use read-only state so that the text can still be copied
+   // use read-only state so the text can still be copied
    for (int i = 0; i < m_editors.count(); ++i) {
       m_editors.at(i)->setReadOnly(!enable);
    }
@@ -461,7 +459,7 @@ void FormMultiWidget::plusButtonClicked()
 void FormMultiWidget::deleteEditor(int idx)
 {
    if (m_editors.count() == 1) {
-      // Don't just clear(), so the undo history is not lost
+      // Do not just clear(), so the undo history is not lost
       QTextCursor c = m_editors.first()->textCursor();
       c.select(QTextCursor::Document);
       c.removeSelectedText();

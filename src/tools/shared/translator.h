@@ -96,7 +96,7 @@ class ConversionData
    QString m_targetFileName;
    QStringList m_excludes;
    QDir m_sourceDir;
-   QDir m_targetDir;                            // FIXME: TS specific
+   QDir m_targetDir;                             // TS specific
    QSet<QString> m_projectRoots;
    QMultiHash<QString, QString> m_allCSources;
    QStringList m_includePath;
@@ -240,7 +240,7 @@ class Translator
 
    // additional file format specific data
    // note: use '<fileformat>:' as prefix for file format specific members,
-   // e.g. "po-flags", "po-msgid_plural"
+   // for example use "po-flags" for "po-msgid_plural"
 
    QString extra(const QString &ba) const;
    void setExtra(const QString &ba, const QString &var);

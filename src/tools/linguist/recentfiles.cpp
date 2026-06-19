@@ -47,9 +47,9 @@ RecentFiles::RecentFiles(const int maxEntries)
 
 /*
  * The logic is as follows:
- * - The most recent (i.e., topmost) item can be open ("in flux")
+ * - The most recent (topmost) item can be open ("in flux")
  * - The item is closed by either a timeout (3 min or so) or a
- *   "terminal action" (e.g., closing all files)
+ *   "terminal action" (for example, closing all files)
  * - While the item is open, modifications to the set of open files
  *   will modify that item instead of creating new items
  * - If the open item is modified to be equal to an existing item,
@@ -69,15 +69,15 @@ void RecentFiles::addFiles(const QStringList &names)
 {
    if (m_strLists.isEmpty() || names != m_strLists.first()) {
       if (m_groupOpen && !m_clone1st) {
-         // Group being open implies at least one item in the list
+         // group being open implies at least one item in the list
          m_strLists.removeFirst();
       }
 
       m_groupOpen = true;
 
-      // We do *not* sort the actual entries, as that would destroy the user's
-      // chosen arrangement. However, we do the searching on sorted lists, so
-      // we throw out (probably) obsolete arrangements.
+      // do *not* sort the actual entries as that would destroy the user's chosen arrangement.
+      // The searching is done on sorted lists, and usually obsolete arrangements are discarded
+
       QList<QStringList> sortedLists = m_strLists;
       for (int i = 0; i < sortedLists.size(); ++i) {
          sortedLists[i].sort();

@@ -123,11 +123,6 @@ CoMatrix::CoMatrix(const QString &str)
    char c = '\0', d;
    memset( b, 0, 52 );
 
-   /*
-     The Knuth books are not in the office only for show; they help make
-     loops 30% faster and 20% as readable.
-   */
-
    while ( (d = *text) != '\0' ) {
       setCoOccurence(*this, c, d);
 

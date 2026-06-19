@@ -99,12 +99,11 @@ static QString translationAttempt(const QString &oldTranslation, const QString &
    int pass;
 
    /*
-     This algorithm is hard to follow, so we'll consider an example
-     all along: oldTranslation is "XeT 3.0", oldSource is "TeX 3.0"
-     and newSource is "XeT 3.1".
+     This algorithm can be complicated, consider an example:
+        oldTranslation is "XeT 3.0", oldSource is "TeX 3.0" and newSource is "XeT 3.1".
 
-     First, we set up two tables: oldNumbers and newNumbers. In our
-     example, oldNumber[0] is "3.0" and newNumber[0] is "3.1".
+     First, we set up two tables: oldNumbers and newNumbers. In our example,
+     oldNumber[0] is "3.0" and newNumber[0] is "3.1".
    */
    for (i = 0, j = 0; i < oldSource.size(); i++, j++) {
       m = numberLength(oldSource, i);
@@ -121,9 +120,8 @@ static QString translationAttempt(const QString &oldTranslation, const QString &
    }
 
    /*
-     We now go over the old translation, "XeT 3.0", one letter at a
-     time, looking for numbers found in oldNumbers. Whenever such a
-     number is met, it is replaced with its newNumber equivalent. In
+     We go over the old translation, "XeT 3.0", one letter at a time, looking for numbers found in
+     oldNumbers. Whenever such a number is met, it is replaced with its newNumber equivalent. In
      our example, the "3.0" of "XeT 3.0" becomes "3.1".
    */
    for (i = 0; i < oldTranslation.length(); i++) {
@@ -137,14 +135,13 @@ static QString translationAttempt(const QString &oldTranslation, const QString &
       }
 
       /*
-        Let's find out if the last character ended a match. We make
-        two passes over the data. In the first pass, we try to
-        match only numbers that weren't matched yet; if that fails,
-        the second pass does the trick. This is useful in some
-        suspicious cases, flagged below.
+        find out if the last character ended a match. We make two passes over the data.
+        In the first pass we try to match only numbers which were not matched yet. 
+        If that fails the second pass will catch this. This is useful in odd cases which are flagged below.
       */
+
       for (pass = 0; pass < 2; pass++) {
-         best = p; // an impossible value
+         best = p;                            // an impossible value
          for (k = 0; k < p; k++) {
             if ((!met[k] || pass > 0) &&
                   matchedYet[k] == oldNumbers[k].length() &&
@@ -168,12 +165,10 @@ static QString translationAttempt(const QString &oldTranslation, const QString &
    }
 
    /*
-     We flag two kinds of suspicious cases. They are identified as
-     such with comments such as "{2000?}" at the end.
+     flag two kinds of suspicious cases. They are identified as such with comments such as "{2000?}" at the end.
 
-     Example of the first kind: old source text "TeX 3.0" translated
-     as "XeT 2.0" is flagged "TeX 2.0 {3.0?}", no matter what the
-     new text is.
+     Example of the first kind: old source text "TeX 3.0" translated as "XeT 2.0" is flagged "TeX 2.0 {3.0?}",
+     no matter what the new text is.
    */
 
    for (k = 0; k < p; k++) {
@@ -262,7 +257,7 @@ int applyNumberHeuristic(Translator &trObj)
 int applySameTextHeuristic(Translator &trObj)
 {
    QMap<QString, QStringList> translated;
-   QMap<QString, bool> avoid; // Want a QTreeSet, in fact
+   QMap<QString, bool> avoid;
    QVector<bool> untranslated(trObj.messageCount());
    int inserted = 0;
 
@@ -278,11 +273,9 @@ int applySameTextHeuristic(Translator &trObj)
          QMap<QString, QStringList>::const_iterator t = translated.constFind(key);
 
          if (t != translated.constEnd()) {
-            /*
-              The same source text is translated at least two
-              different ways. Do nothing then.
-            */
             if (*t != msg.translations()) {
+            // same source text is translated at least two different ways. Do nothing then.
+
                translated.remove(key);
                avoid.insert(key, true);
             }
@@ -308,11 +301,11 @@ int applySameTextHeuristic(Translator &trObj)
 }
 
 /*
-  Merges two Translator objects. The first one
-  is a set of source texts and translations for a previous version of
-  the internationalized program; the second one is a set of fresh
-  source texts newly extracted from the source code, without any
-  translation yet.
+
+Merges two Translator objects. The first one is a set of source texts and translations for a previous version of
+the internationalized program. The second one is a set of new source texts extracted from the source code,
+without any existing translations.
+
 */
 
 Translator merge(const Translator &trObj, const Translator &newTrObj, const QList<Translator> &aliens,
@@ -328,10 +321,8 @@ Translator merge(const Translator &trObj, const Translator &newTrObj, const QLis
    trOutObj.setSourceLanguageCode(trObj.sourceLanguageCode());
    trOutObj.setLocationType(trObj.locationType());
 
-   /*
-     The types of all the messages from the vernacular translator
-     are updated according to the virgin translator.
-   */
+   // all the messages from the old translator are updated according to the new translator
+
    for (TranslatorMessage m : trObj.messages()) {
       TranslatorMessage::Type newType = TranslatorMessage::Type::Finished;
 
@@ -377,16 +368,14 @@ Translator merge(const Translator &trObj, const Translator &newTrObj, const QLis
                mvi = newTrObj.find(m.context(), m.comment(), m.allReferences());
 
                if (mvi < 0) {
-                  // did not find it in the virgin, mark it as obsolete
+                  // did not find it in the new trObj, mark it as obsolete
                   goto makeObsolete;
                }
 
                mv = &newTrObj.constMessage(mvi);
 
-               // Do not just accept it if its on the same line number,
-               // but different source text.
-               // Also check if the texts are more or less similar before
-               // we consider them to represent the same message
+               // Do not accept it if its on the same line number but different source text.
+               // Check if the texts are more or less similar before we consider them to represent the same message
 
                if (getSimilarityScore(m.sourceText(), mv->sourceText()) < textSimilarityThreshold) {
                   goto makeObsolete;
@@ -394,8 +383,8 @@ Translator merge(const Translator &trObj, const Translator &newTrObj, const QLis
 
                // It is just slightly modified, assume that it is the same string
                extras = mv->extras();
-               // Mark it as unfinished. (Since the source text
-               // was changed it might require re-translating...)
+
+               // Mark it as unfinished. (Since the source text was changed it might require re-translating...)
 
                newType = TranslatorMessage::Type::Unfinished;
                ++similarTextHeuristicCount;
@@ -459,11 +448,10 @@ Translator merge(const Translator &trObj, const Translator &newTrObj, const QLis
                }
             }
 
-            // Always get the filename and linenumber info from the
-            // virgin Translator, in case it has changed location.
-            // This should also enable us to read a file that does not
-            // have the <location> element.
-            // why not use operator=()? Because it overwrites e.g. userData
+            // Always get the filename and linenumber info from the new Translator
+            // in case it has changed location.
+
+            // can not use operator=() because it overwrites userData
 
             m.setReferences(mv->allReferences());
             m.setPlural(mv->isPlural());
@@ -477,10 +465,8 @@ Translator merge(const Translator &trObj, const Translator &newTrObj, const QLis
       trOutObj.append(m);
    }
 
-   /*
-     Messages found only in the virgin translator are added to the
-     vernacular translator.
-   */
+   // messages found only in the main translator are added to the vernacular translator.
+
    for (const TranslatorMessage &mv : newTrObj.messages()) {
       if (mv.sourceText().isEmpty() && mv.id().isEmpty()) {
          if (trObj.find(mv.context()) >= 0) {
@@ -515,10 +501,7 @@ Translator merge(const Translator &trObj, const Translator &newTrObj, const QLis
       }
    }
 
-   /*
-   "Alien" translators can be used to augment the vernacular translator.
-   */
-
+   // "Alien" translators can be used to augment the vernacular translator
    for (const Translator &alf : aliens) {
 
       for (TranslatorMessage mv : alf.messages()) {
@@ -560,17 +543,13 @@ Translator merge(const Translator &trObj, const Translator &newTrObj, const QLis
       }
    }
 
-   /*
-     The same-text heuristic handles cases where a message has an
-     obsolete counterpart with a different context or comment.
-   */
+   // The same-text heuristic handles cases where a message has an
+   // obsolete counterpart with a different context or comment.
    int sameTextHeuristicCount = (options & HeuristicSameText) ? applySameTextHeuristic(trOutObj) : 0;
 
-   /*
-     The number heuristic handles cases where a message has an
-     obsolete counterpart with mostly numbers differing in the
-     source text.
-   */
+   // number heuristic handles cases where a message has an obsolete counterpart with mostly numbers
+   // differing in the source text.
+
    int sameNumberHeuristicCount = (options & HeuristicNumber) ? applyNumberHeuristic(trOutObj) : 0;
 
    if (options & Verbose) {
