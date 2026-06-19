@@ -172,9 +172,9 @@ class ContextItemDelegate : public QItemDelegate
 
 static const QVariant &pxObsolete()
 {
-   static const QVariant v =
-      QVariant::fromValue(QPixmap(":/images/s_check_obsolete.png"));
-   return v;
+   static const QVariant retval = QVariant::fromValue(QPixmap(":/images/s_check_obsolete.png"));
+
+   return retval;
 }
 
 class SortedMessagesModel : public QSortFilterProxyModel

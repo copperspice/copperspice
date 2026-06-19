@@ -37,14 +37,15 @@
 
 static QString protect(const QString &str)
 {
-   QString p = str;
-   p.replace(QChar('&'),  QString("&amp;"));
-   p.replace(QChar('\"'), QString("&quot;"));
-   p.replace(QChar('>'),  QString("&gt;"));
-   p.replace(QChar('<'),  QString("&lt;"));
-   p.replace(QChar('\''), QString("&apos;"));
+   QString retval = str;
 
-   return p;
+   retval.replace(QChar('&'),  QString("&amp;"));
+   retval.replace(QChar('\"'), QString("&quot;"));
+   retval.replace(QChar('>'),  QString("&gt;"));
+   retval.replace(QChar('<'),  QString("&lt;"));
+   retval.replace(QChar('\''), QString("&apos;"));
+
+   return retval;
 }
 
 Phrase::Phrase()

@@ -406,14 +406,17 @@ void FormMultiWidget::setTranslation(const QString &text, bool userAction)
 
 QString FormMultiWidget::getTranslation() const
 {
-   QString ret;
+   QString retval;
+
    for (int i = 0; i < m_editors.count(); ++i) {
       if (i) {
-         ret += QChar(Translator::BinaryVariantSeparator);
+         retval += QChar(Translator::BinaryVariantSeparator);
       }
-      ret += m_editors.at(i)->toPlainText();
+
+      retval += m_editors.at(i)->toPlainText();
    }
-   return ret;
+
+   return retval;
 }
 
 void FormMultiWidget::setEditingEnabled(bool enable)

@@ -990,13 +990,13 @@ void MultiDataModel::moveModel(int oldPos, int newPos)
 
 QStringList MultiDataModel::prettifyFileNames(const QStringList &names)
 {
-   QStringList out;
+   QStringList retval;
 
-   for (const QString & name : names) {
-    out << DataModel::prettifyFileName(name);
+   for (const QString &item : names) {
+      retval << DataModel::prettifyFileName(item);
    }
 
-   return out;
+   return retval;
 }
 
 QString MultiDataModel::condenseFileNames(const QStringList &names)
@@ -1053,14 +1053,14 @@ QString MultiDataModel::condenseFileNames(const QStringList &names)
          }
    }
 
-   QString ret = prefix + '{';
+   QString retval = prefix + '{';
 
    int pxl = prefix.length();
    int sxl = suffix.length();
 
    for (int j = 0; j < names.count(); ++j) {
       if (j) {
-         ret += ',';
+         retval += ',';
       }
 
       int off = pxl;
@@ -1068,15 +1068,16 @@ QString MultiDataModel::condenseFileNames(const QStringList &names)
       QString fn = names[j];
 
       if (fn.startsWith('=')) {
-         ret += '=';
+         retval += '=';
          ++off;
       }
-      ret += fn.mid(off, fn.length() - sxl - off);
+
+      retval += fn.mid(off, fn.length() - sxl - off);
    }
 
-   ret += '}' + suffix;
+   retval += '}' + suffix;
 
-   return ret;
+   return retval;
 }
 
 QStringList MultiDataModel::srcFileNames(bool pretty) const

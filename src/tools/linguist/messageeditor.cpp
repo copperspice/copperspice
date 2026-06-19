@@ -407,9 +407,9 @@ QTextEdit *MessageEditor::activeTranslation() const
 
    const QList<FormatTextEdit *> &editors = m_editors[m_currentModel].transTexts[m_currentNumerus]->getEditors();
 
-   for (QTextEdit * te : editors) {
-      if (te->hasFocus()) {
-         return te;
+   for (QTextEdit *item : editors) {
+      if (item->hasFocus()) {
+         return item;
       }
    }
 
@@ -442,16 +442,16 @@ QTextEdit *MessageEditor::activeTransComment() const
 
 QTextEdit *MessageEditor::activeEditor() const
 {
-   if (QTextEdit *te = activeTransComment()) {
-      return te;
+   if (QTextEdit *item = activeTransComment()) {
+      return item;
    }
    return activeTranslation();
 }
 
 QTextEdit *MessageEditor::activeOr1stEditor() const
 {
-   if (QTextEdit *te = activeTransComment()) {
-      return te;
+   if (QTextEdit *item = activeTransComment()) {
+      return item;
    }
    return activeOr1stTranslation();
 }
