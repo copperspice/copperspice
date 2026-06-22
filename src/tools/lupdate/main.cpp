@@ -207,13 +207,13 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
          printOut(QString("Updating '%1'...\n").formatArg(fn));
       }
 
-      UpdateOptions theseOptions = options;
+      UpdateOptions newOptions = options;
       if (trObj.locationType() == Translator::LocationType::None) {
          // Could be set from file
-         theseOptions |= NoLocations;
+         newOptions |= UpdateOption::NoLocations;
       }
 
-      Translator out = merge(trObj, fetchedTor, aliens, theseOptions, err);
+      Translator out = merge(trObj, fetchedTor, aliens, newOptions, err);
 
       if ((options & Verbose) && !err.isEmpty()) {
          printOut(err);
