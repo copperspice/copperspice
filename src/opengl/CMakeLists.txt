@@ -25,7 +25,7 @@ include_directories(
 
    ${CMAKE_CURRENT_SOURCE_DIR}
    ${CMAKE_CURRENT_SOURCE_DIR}/gl2paintengineex
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src
    ${OPENGL_INCLUDE_DIR}
 )
 

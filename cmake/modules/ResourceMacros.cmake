@@ -269,7 +269,7 @@ macro(MACRO_GENERATE_PACKAGE PC_NAME PC_REALNAME PC_CFLAGS PC_REQUIRES)
       set(PC_REQUIRES ${PC_REQUIRES})
 
       configure_file(
-         ${CMAKE_SOURCE_DIR}/cmake/pkgconfig.cmake
+         ${PROJECT_SOURCE_DIR}/cmake/pkgconfig.cmake
          ${CMAKE_BINARY_DIR}/pkgconfig/${PC_NAME}.pc
          @ONLY
       )

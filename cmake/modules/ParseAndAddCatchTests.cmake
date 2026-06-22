@@ -11,12 +11,12 @@
 #                                                                                                  #
 #  Usage                                                                                           #
 # 1. make sure this module is in the path or add this otherwise:                                   #
-#    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake.modules/")              #
+#    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake.modules/")              #
 # 2. make sure that you've enabled testing option for the project by the call:                     #
 #    enable_testing()                                                                              #
 # 3. add the lines to the script for testing target (sample CMakeLists.txt):                       #
 #        project(testing_target)                                                                   #
-#        set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake.modules/")          #
+#        set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake.modules/")          #
 #        enable_testing()                                                                          #
 #                                                                                                  #
 #        find_path(CATCH_INCLUDE_DIR "catch.hpp")                                                  #

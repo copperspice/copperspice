@@ -1,71 +1,71 @@
 list(APPEND MULTIMEDIA_PRIVATE_INCLUDES
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/audiodecoder/qgstreameraudiodecodercontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/audiodecoder/qgstreameraudiodecoderservice.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/audiodecoder/qgstreameraudiodecodersession.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/audiodecoder/qgstreameraudiodecoderserviceplugin.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/audiodecoder/qgstreameraudiodecodercontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/audiodecoder/qgstreameraudiodecoderservice.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/audiodecoder/qgstreameraudiodecodersession.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/audiodecoder/qgstreameraudiodecoderserviceplugin.h
 
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_audioencoder.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_capturedestination.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_capturebufferformat.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_container.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_control.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_imagecapture.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_imageencoder.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_imageprocessing.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_infocontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_metadata.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_recorder.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_resourcepolicy.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_serviceplugin.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_service.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_session.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_videoencoder.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_viewfindersettings.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_viewfindersettings2.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_zoom.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_audioencoder.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_capturedestination.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_capturebufferformat.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_container.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_control.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_imagecapture.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_imageencoder.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_imageprocessing.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_infocontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_metadata.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_recorder.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_resourcepolicy.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_serviceplugin.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_service.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_session.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_videoencoder.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_viewfindersettings.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_viewfindersettings2.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_zoom.h
 
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreameravailabilitycontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamermetadataprovider.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerplayerservice.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerplayerserviceplugin.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerstreamscontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerplayercontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerplayersession.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreameravailabilitycontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamermetadataprovider.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerplayerservice.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerplayerserviceplugin.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerstreamscontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerplayercontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerplayersession.h
 
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstutils_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreameraudioinputselector_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreameraudioprobecontrol_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamerbufferprobe_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamerbushelper_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamermessage_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideowidget_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideoinputdevicecontrol_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideoprobecontrol_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideorendererinterface_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideooverlay_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideowindow_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideorenderer_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorendererplugin_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorenderersink_p.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideobuffer_p.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstutils_p.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreameraudioinputselector_p.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreameraudioprobecontrol_p.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamerbufferprobe_p.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamerbushelper_p.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamermessage_p.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideowidget_p.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideoinputdevicecontrol_p.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideoprobecontrol_p.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideorendererinterface_p.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideooverlay_p.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideowindow_p.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideorenderer_p.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorendererplugin_p.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorenderersink_p.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideobuffer_p.h
 )
 
 if(WITH_MULTIMEDIA AND GStreamer_FOUND)
 
    set(GSTREAMER_TOOLS_SOURCES
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstutils.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreameraudioprobecontrol.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamerbufferprobe.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamerbushelper.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamermessage.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideowidget.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideoinputdevicecontrol.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideoprobecontrol.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideorendererinterface.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideooverlay.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideowindow.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideorenderer.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideobuffer.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstutils.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreameraudioprobecontrol.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamerbufferprobe.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamerbushelper.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamermessage.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideowidget.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideoinputdevicecontrol.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideoprobecontrol.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideorendererinterface.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideooverlay.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideowindow.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreamervideorenderer.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideobuffer.cpp
    )
 
    # plugin 1
@@ -77,16 +77,16 @@ if(WITH_MULTIMEDIA AND GStreamer_FOUND)
    target_sources(CsMultimedia_gst_audiodecoder
       PRIVATE
       ${GSTREAMER_TOOLS_SOURCES}
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/audiodecoder/qgstreameraudiodecodercontrol.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/audiodecoder/qgstreameraudiodecoderservice.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/audiodecoder/qgstreameraudiodecodersession.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/audiodecoder/qgstreameraudiodecoderserviceplugin.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/audiodecoder/qgstreameraudiodecodercontrol.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/audiodecoder/qgstreameraudiodecoderservice.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/audiodecoder/qgstreameraudiodecodersession.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/audiodecoder/qgstreameraudiodecoderserviceplugin.cpp
    )
 
    target_sources(CsMultimedia_gst_audiodecoder
       PRIVATE
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorendererplugin.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorenderersink.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorendererplugin.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorenderersink.cpp
    )
 
    target_link_libraries(CsMultimedia_gst_audiodecoder
@@ -124,32 +124,32 @@ if(WITH_MULTIMEDIA AND GStreamer_FOUND)
    target_sources(CsMultimedia_gst_camerabin
       PRIVATE
       ${GSTREAMER_TOOLS_SOURCES}
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_serviceplugin.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_service.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_session.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_control.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_audioencoder.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_container.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_imagecapture.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_imageencoder.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_zoom.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_imageprocessing.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_metadata.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_recorder.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_videoencoder.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_resourcepolicy.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_capturedestination.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_viewfindersettings.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_viewfindersettings2.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_capturebufferformat.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_infocontrol.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_serviceplugin.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_service.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_session.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_control.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_audioencoder.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_container.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_imagecapture.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_imageencoder.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_zoom.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_imageprocessing.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_metadata.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_recorder.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_videoencoder.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_resourcepolicy.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_capturedestination.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_viewfindersettings.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_viewfindersettings2.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_capturebufferformat.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/camera/camera_infocontrol.cpp
 
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreameraudioinputselector.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstreameraudioinputselector.cpp
    )
 
    target_sources(CsMultimedia_gst_camerabin
       PRIVATE
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorenderersink.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorenderersink.cpp
    )
 
    target_link_libraries(CsMultimedia_gst_camerabin
@@ -185,19 +185,19 @@ if(WITH_MULTIMEDIA AND GStreamer_FOUND)
    target_sources(CsMultimedia_gst_mediaplayer
       PRIVATE
       ${GSTREAMER_TOOLS_SOURCES}
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerplayerservice.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerstreamscontrol.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamermetadataprovider.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreameravailabilitycontrol.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerplayerserviceplugin.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerplayercontrol.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerplayersession.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerplayerservice.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerstreamscontrol.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamermetadataprovider.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreameravailabilitycontrol.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerplayerserviceplugin.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerplayercontrol.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/mediaplayer/qgstreamerplayersession.cpp
    )
 
    target_sources(CsMultimedia_gst_mediaplayer
       PRIVATE
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorendererplugin.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorenderersink.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorendererplugin.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/gstreamer/tools/qgstvideorenderersink.cpp
    )
 
    target_link_libraries(CsMultimedia_gst_mediaplayer

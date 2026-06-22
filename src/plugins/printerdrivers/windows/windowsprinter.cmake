@@ -1,6 +1,6 @@
 list(APPEND PRINTERDRIVERS_WIN_PRIVATE_INCLUDES
-	${CMAKE_SOURCE_DIR}/src/plugins/printerdrivers/windows/qwindowsprintersupport.h
-	${CMAKE_SOURCE_DIR}/src/plugins/printerdrivers/windows/qwindowsprintdevice.h
+	${PROJECT_SOURCE_DIR}/src/plugins/printerdrivers/windows/qwindowsprintersupport.h
+	${PROJECT_SOURCE_DIR}/src/plugins/printerdrivers/windows/qwindowsprintdevice.h
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -12,9 +12,9 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 
    target_sources(CsPrinterDriverWin
       PRIVATE
-   	${CMAKE_SOURCE_DIR}/src/plugins/printerdrivers/windows/main.cpp
-   	${CMAKE_SOURCE_DIR}/src/plugins/printerdrivers/windows/qwindowsprintersupport.cpp
-   	${CMAKE_SOURCE_DIR}/src/plugins/printerdrivers/windows/qwindowsprintdevice.cpp
+   	${PROJECT_SOURCE_DIR}/src/plugins/printerdrivers/windows/main.cpp
+   	${PROJECT_SOURCE_DIR}/src/plugins/printerdrivers/windows/qwindowsprintersupport.cpp
+   	${PROJECT_SOURCE_DIR}/src/plugins/printerdrivers/windows/qwindowsprintdevice.cpp
    )
 
    target_link_libraries(CsPrinterDriverWin

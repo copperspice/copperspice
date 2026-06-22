@@ -38,7 +38,7 @@ if(BUILD_PLATFORMS_XCB_PLUGIN AND XCB_GLX_LIB)
 
    target_include_directories(CsGuiXcb_Glx
       PRIVATE
-      ${CMAKE_SOURCE_DIR}/src/plugins/platforms/xcb/glx
+      ${PROJECT_SOURCE_DIR}/src/plugins/platforms/xcb/glx
    )
 
    target_compile_definitions(CsGuiXcb_Glx
