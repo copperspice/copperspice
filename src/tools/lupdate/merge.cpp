@@ -93,9 +93,14 @@ static QString translationAttempt(const QString &oldTranslation, const QString &
    QStringList newNumbers;
    QVector<bool> met(p);
    QVector<int> matchedYet(p);
-   int i, j;
-   int k = 0, ell, best;
-   int m, n;
+
+   int i;
+   int j;
+   int k = 0;
+   int ell;
+   int best;
+   int m;
+   int n;
    int pass;
 
    /*

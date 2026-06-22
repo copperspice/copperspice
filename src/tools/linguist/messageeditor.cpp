@@ -560,7 +560,9 @@ void MessageEditor::trackFocus(QWidget *widget)
 {
    m_focusWidget = widget;
 
-   int model, numerus;
+   int model;
+   int numerus;
+
    activeModelAndNumerus(&model, &numerus);
    if (model != m_currentModel || numerus != m_currentNumerus) {
       resetSelection();
