@@ -520,13 +520,13 @@ void Translator::dropUiLines()
    QString uiXt  = QString(".ui");
    QString juiXt = QString(".jui");
 
-   for (auto it = m_messages.begin(); it != m_messages.end(); ++it) {
+   for (auto iter = m_messages.begin(); iter != m_messages.end(); ++iter) {
 
       QHash<QString, int> have;
       QList<TranslatorMessage::Reference> refs;
 
-      for (const TranslatorMessage::Reference &itref : it->allReferences()) {
-         const QString &fn = itref.fileName();
+      for (const TranslatorMessage::Reference &item : iter->allReferences()) {
+         const QString &fn = item.fileName();
 
          if (fn.endsWith(uiXt) || fn.endsWith(juiXt)) {
             if (++have[fn] == 1) {
@@ -534,11 +534,11 @@ void Translator::dropUiLines()
             }
 
          } else {
-            refs.append(itref);
+            refs.append(item);
          }
       }
 
-      it->setReferences(refs);
+      iter->setReferences(refs);
    }
 }
 
