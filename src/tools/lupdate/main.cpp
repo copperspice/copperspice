@@ -203,7 +203,7 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
 
       }
 
-      if (options & Verbose) {
+      if (options & UpdateOption::Verbose) {
          printOut(QString("Updating '%1'...\n").formatArg(fn));
       }
 
@@ -215,19 +215,19 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
 
       Translator out = merge(trObj, fetchedTor, aliens, newOptions, err);
 
-      if ((options & Verbose) && !err.isEmpty()) {
+      if ((options & UpdateOption::Verbose) && ! err.isEmpty()) {
          printOut(err);
          err.clear();
       }
 
-      if (options & PluralOnly) {
-         if (options & Verbose) {
+      if (options & UpdateOption::PluralOnly) {
+         if (options & UpdateOption::Verbose) {
             printOut(QString("Stripping non plural forms in '%1'...\n").formatArg(fn));
          }
          out.stripNonPluralForms();
       }
 
-      if (options & NoObsolete) {
+      if (options & UpdateOption::NoObsolete) {
          out.stripObsoleteMessages();
       }
 
