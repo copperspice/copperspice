@@ -175,7 +175,7 @@ this project.
  * Email:    info@copperspice.com
 
 <!-- -->
- * Github:   https://github.com/copperspice
+ * GitHub:   https://github.com/copperspice
 
 <!-- -->
  * Forum:    https://forum.copperspice.com
