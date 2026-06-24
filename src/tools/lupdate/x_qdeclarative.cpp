@@ -263,10 +263,12 @@ class FindTrCalls: protected AST::Visitor
 
       int i = 0;
       int commentLoc = comments.at(i).lastLine;
+
       while (commentLoc <= loc) {
          if (commentLoc == loc) {
             return comments.at(i);
          }
+
          if (i == comments.count() - 1) {
             break;
          }
@@ -274,6 +276,7 @@ class FindTrCalls: protected AST::Visitor
          ++i;
          commentLoc = comments.at(i).lastLine;
       }
+
       return Comment();
    }
 

@@ -80,11 +80,11 @@ static bool loadTsFile(Translator &trObj, const QString &tsFileName, bool)
    ConversionData cd;
    bool ok = trObj.load(tsFileName, cd, "auto");
 
-   if (!ok) {
+   if (! ok) {
       printErr(QString("lrelease error: %1").formatArg(cd.error()));
 
    } else {
-      if (!cd.errors().isEmpty()) {
+      if (! cd.errors().isEmpty()) {
          printOut(cd.error());
       }
    }
@@ -111,6 +111,7 @@ static bool releaseTranslator(Translator &trObj, const QString &qmFileName, Conv
    }
 
    QFile file(qmFileName);
+
    if (! file.open(QIODevice::WriteOnly)) {
       printErr(QString("lrelease error: Unable to create '%1': %2\n").formatArg(qmFileName).formatArg(file.errorString()));
       return false;
@@ -121,13 +122,15 @@ static bool releaseTranslator(Translator &trObj, const QString &qmFileName, Conv
    bool ok = saveQM(trObj, file, cd);
    file.close();
 
-   if (!ok) {
+   if (! ok) {
       printErr(QString("lrelease error: Unable to save '%1': %2").formatArg(qmFileName).formatArg(cd.error()));
+
    } else if (! cd.errors().isEmpty()) {
       printOut(cd.error());
    }
 
    cd.clearErrors();
+
    return ok;
 }
 
@@ -140,12 +143,14 @@ static bool releaseTsFile(const QString &tsFileName, ConversionData &cd, bool re
    }
 
    QString qmFileName = tsFileName;
+
    for (const Translator::FileFormat &fmt : Translator::registeredFileFormats()) {
       if (qmFileName.endsWith('.' + fmt.extension)) {
          qmFileName.chop(fmt.extension.length() + 1);
          break;
       }
    }
+
    qmFileName += ".qm";
 
    return releaseTranslator(trObj, qmFileName, cd, removeIdentical);
@@ -170,6 +175,7 @@ int main(int argc, char **argv)
 
    ConversionData cd;
    cd.m_verbose = true;
+
    bool removeIdentical = false;
 
    Translator trObj;
@@ -203,6 +209,7 @@ int main(int argc, char **argv)
             printUsage();
             return 1;
          }
+
          cd.m_unTrPrefix = QString::fromUtf8(argv[++i]);
 
       } else if (! strcmp(argv[i], "-silent")) {
@@ -222,6 +229,7 @@ int main(int argc, char **argv)
             printUsage();
             return 1;
          }
+
          outputFile = QString::fromUtf8(argv[++i]);
 
       } else if (! strcmp(argv[i], "-help")) {
@@ -245,7 +253,7 @@ int main(int argc, char **argv)
    for (const QString &inputFile : inputFiles) {
 
       if (outputFile.isEmpty()) {
-         if (!releaseTsFile(inputFile, cd, removeIdentical)) {
+         if (! releaseTsFile(inputFile, cd, removeIdentical)) {
             return 1;
          }
 

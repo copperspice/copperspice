@@ -43,7 +43,7 @@ FindDialog::~FindDialog()
 
 void FindDialog::verifyText(const QString &text)
 {
-   m_ui->findNxt->setEnabled(!text.isEmpty());
+   m_ui->findNxt->setEnabled(! text.isEmpty());
 }
 
 void FindDialog::emitFindNext()

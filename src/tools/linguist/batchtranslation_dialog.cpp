@@ -115,7 +115,7 @@ void BatchTranslationDialog::startTranslation()
 
    for (MultiDataModelIterator it(m_dataModel, m_modelIndex); it.isValid(); ++it) {
       if (MessageItem *m = it.current()) {
-         if (!m->isObsolete()
+         if (! m->isObsolete()
                && (translateTranslated || m->translation().isEmpty())
                && (translateFinished || !m->isFinished())) {
 
@@ -144,7 +144,7 @@ void BatchTranslationDialog::startTranslation()
    done:
       ++msgidx;
 
-      if (!(msgidx & 15)) {
+      if (! (msgidx & 15)) {
          dlgProgress->setValue(msgidx);
       }
 

@@ -545,7 +545,9 @@ bool loadPO(Translator &translator, QIODevice &dev, ConversionData &cd)
 
                } else if (hdrName == "Content-Transfer-Encoding") {
                   if (hdrValue != "8bit") {
-                     cd.appendError(QString("Unexpected Content-Transfer-Encoding '%1'").formatArg(QString::fromLatin1(hdrValue)));
+                     cd.appendError(QString("Unexpected Content-Transfer-Encoding '%1'")
+                           .formatArg(QString::fromLatin1(hdrValue)));
+
                      return false;
                   }
 
@@ -991,6 +993,7 @@ bool savePO(const Translator &translator, QIODevice &dev, ConversionData &cd)
 
       } else {
          QString plural = msg.extra(QLatin1String("po-msgid_plural"));
+
          if (plural.isEmpty()) {
             plural = msg.sourceText();
          }
@@ -1005,6 +1008,7 @@ bool savePO(const Translator &translator, QIODevice &dev, ConversionData &cd)
          }
       }
    }
+
    return ok;
 }
 

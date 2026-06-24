@@ -159,7 +159,7 @@ void PrintOut::breakPage(bool init)
    p.setFont(f8);
 
    h1 = p.boundingRect(r1, LeftAlign, dateTime.toString()).height();
-   if (!init) {
+   if (! init) {
       p.drawText(r1, LeftAlign, dateTime.toString());
    }
 

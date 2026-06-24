@@ -41,7 +41,7 @@ Driver::~Driver()
 
 QString Driver::findOrInsertWidget(DomWidget *ui_widget)
 {
-   if (!m_widgets.contains(ui_widget)) {
+   if (! m_widgets.contains(ui_widget)) {
       m_widgets.insert(ui_widget, unique(ui_widget->attributeName(), ui_widget->attributeClass()));
    }
 
@@ -50,7 +50,7 @@ QString Driver::findOrInsertWidget(DomWidget *ui_widget)
 
 QString Driver::findOrInsertSpacer(DomSpacer *ui_spacer)
 {
-   if (!m_spacers.contains(ui_spacer)) {
+   if (! m_spacers.contains(ui_spacer)) {
       const QString name = ui_spacer->hasAttributeName() ? ui_spacer->attributeName() : QString();
       m_spacers.insert(ui_spacer, unique(name, "QSpacerItem"));
    }
@@ -60,7 +60,7 @@ QString Driver::findOrInsertSpacer(DomSpacer *ui_spacer)
 
 QString Driver::findOrInsertLayout(DomLayout *ui_layout)
 {
-   if (!m_layouts.contains(ui_layout)) {
+   if (! m_layouts.contains(ui_layout)) {
       const QString name = ui_layout->hasAttributeName() ? ui_layout->attributeName() : QString();
       m_layouts.insert(ui_layout, unique(name, ui_layout->attributeClass()));
    }
@@ -100,7 +100,7 @@ QString Driver::findOrInsertActionGroup(DomActionGroup *ui_group)
 
 QString Driver::findOrInsertAction(DomAction *ui_action)
 {
-   if (!m_actions.contains(ui_action)) {
+   if (! m_actions.contains(ui_action)) {
       m_actions.insert(ui_action, unique(ui_action->attributeName(), "QAction"));
    }
 

@@ -79,6 +79,7 @@ void RecentFiles::addFiles(const QStringList &names)
       // The searching is done on sorted lists, and usually obsolete arrangements are discarded
 
       QList<QStringList> sortedLists = m_strLists;
+
       for (int i = 0; i < sortedLists.size(); ++i) {
          sortedLists[i].sort();
       }
@@ -118,7 +119,6 @@ void RecentFiles::readConfig()
    for (const QVariant & v : val.toList()) {
       m_strLists << v.toStringList();
    }
-
 }
 
 void RecentFiles::writeConfig() const
@@ -131,4 +131,3 @@ void RecentFiles::writeConfig() const
 
    QSettings().setValue(configKey(), vals);
 }
-

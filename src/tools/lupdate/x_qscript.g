@@ -110,10 +110,9 @@ static void recordMessage(Translator *trObj, const QString &context, const QStri
    const QString &extracomment, const QString &msgid, const TranslatorMessage::ExtraData &extra,
    bool plural, const QString &fileName, int lineNo)
 {
-    TranslatorMessage msg(
-        context, text, comment, QString(),
-        fileName, lineNo, QStringList(),
+    TranslatorMessage msg(context, text, comment, QString(), fileName, lineNo, QStringList(),
         TranslatorMessage::Unfinished, plural);
+
     msg.setExtraComment(extracomment.simplified());
     msg.setId(msgid);
     msg.setExtras(extra);

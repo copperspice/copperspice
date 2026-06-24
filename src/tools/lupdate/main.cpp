@@ -123,8 +123,8 @@ static void printUsage()
 }
 
 static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFileNames,
-                          const QStringList &alienFiles, const QString &sourceLanguage, const QString &targetLanguage,
-                          UpdateOptions options, bool *fail)
+      const QStringList &alienFiles, const QString &sourceLanguage, const QString &targetLanguage,
+      UpdateOptions options, bool *fail)
 {
    for (int i = 0; i < fetchedTor.messageCount(); i++) {
       const TranslatorMessage &msg = fetchedTor.constMessage(i);
@@ -135,6 +135,7 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
    }
 
    QList<Translator> aliens;
+
    for (const QString &fileName : alienFiles) {
       ConversionData cd;
       Translator trObj;
@@ -148,6 +149,7 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
       trObj.resolveDuplicates();
       aliens << trObj;
    }
+
    QDir dir;
    QString err;
 
@@ -163,6 +165,7 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
          if (! trObj.load(fileName, cd, "auto")) {
             printErr(cd.error());
             *fail = true;
+
             continue;
          }
 
@@ -185,7 +188,7 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
             trObj.setLanguageCode(Translator::guessLanguageCodeFromFileName(fileName));
          }
 
-         if (!sourceLanguage.isEmpty()) {
+         if (! sourceLanguage.isEmpty()) {
             trObj.setSourceLanguageCode(sourceLanguage);
          }
       }
@@ -208,6 +211,7 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
       }
 
       UpdateOptions newOptions = options;
+
       if (trObj.locationType() == Translator::LocationType::None) {
          // Could be set from file
          newOptions |= UpdateOption::NoLocations;
@@ -234,7 +238,7 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
       out.stripEmptyContexts();
 
       out.normalizeTranslations(cd);
-      if (!cd.errors().isEmpty()) {
+      if (! cd.errors().isEmpty()) {
          printErr(cd.error());
          cd.clearErrors();
       }
@@ -618,6 +622,7 @@ int main(int argc, char **argv)
 
             } else {
                QString fn = QDir::cleanPath(fi.absoluteFilePath());
+
                if (fn.endsWith(".qrc", Qt::CaseInsensitive)) {
                   resourceFiles << fn;
 

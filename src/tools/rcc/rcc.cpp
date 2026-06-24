@@ -724,18 +724,18 @@ bool RCCResourceLibrary::output(QIODevice &outDevice, QIODevice &errorDevice)
          return false;
       }
 
-      if (!writeDataNames()) {
+      if (! writeDataNames()) {
          m_errorDevice->write("Could not write file names\n");
          return false;
       }
 
-      if (!writeDataStructure()) {
+      if (! writeDataStructure()) {
          m_errorDevice->write("Could not write data tree\n");
          return false;
       }
    }
 
-   if (!writeInitializer()) {
+   if (! writeInitializer()) {
       m_errorDevice->write("Could not write footer\n");
       return false;
    }
@@ -925,7 +925,7 @@ bool RCCResourceLibrary::writeDataStructure()
 
    QStack<RCCFileInfo *> pending;
 
-   if (!m_root) {
+   if (! m_root) {
       return false;
    }
 

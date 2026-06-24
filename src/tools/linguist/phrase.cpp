@@ -317,7 +317,7 @@ bool PhraseBook::save(const QString &fileName)
       t << "    <source>" << protect( p->source() ) << "</source>\n";
       t << "    <target>" << protect( p->target() ) << "</target>\n";
 
-      if (!p->definition().isEmpty())
+      if (! p->definition().isEmpty())
          t << "    <definition>" << protect( p->definition() )
            << "</definition>\n";
       t << "</phrase>\n";
@@ -367,4 +367,3 @@ QString PhraseBook::friendlyPhraseBookName() const
 
    return QString();
 }
-

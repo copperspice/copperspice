@@ -269,14 +269,14 @@ class CppParser
 
  private:
    struct IfdefState {
-      IfdefState() {}
+      IfdefState() { }
 
-      IfdefState(int _bracketDepth, int _braceDepth, int _parenDepth)
-         : bracketDepth(_bracketDepth), braceDepth(_braceDepth),
-           parenDepth(_parenDepth), elseLine(-1) {
+      IfdefState(int x_bracketDepth, int x_braceDepth, int x_parenDepth)
+         : bracketDepth(x_bracketDepth), braceDepth(x_braceDepth), parenDepth(x_parenDepth), elseLine(-1) {
       }
 
       SavedState state;
+
       int bracketDepth;
       int bracketDepth1st;
       int braceDepth;
@@ -602,6 +602,7 @@ restart:
                         if (yyCh == '\n') {
                            goto restart;
                         }
+
                      } while (yyCh != ')');
 
                      break;
@@ -645,11 +646,13 @@ restart:
 
                if (yyCh == 'f') {
                   // if, ifdef, ifndef
+
                   yyIfdefStack.push(IfdefState(yyBracketDepth, yyBraceDepth, yyParenDepth));
                   yyCh = getChar();
 
                } else if (yyCh == 'n') {
                   // include
+
                   do {
                      yyCh = getChar();
                   } while (yyCh != EOF && ! yyCh.isSpace() && yyCh != '"' && yyCh != '<');
@@ -696,7 +699,7 @@ restart:
 
                if (yyCh == 'l') {
                   // elif, else
-                  if (!yyIfdefStack.isEmpty()) {
+                  if (! yyIfdefStack.isEmpty()) {
                      IfdefState &is = yyIfdefStack.top();
 
                      if (is.elseLine != -1) {
@@ -705,7 +708,7 @@ restart:
                               || yyParenDepth != is.parenDepth1st) {
 
                            yyMsg(is.elseLine) << "Parenthesis/bracket/brace mismatch between "
-                                                 "#if and #else branches; using #if branch\n";
+                                 "#if and #else branches; using #if branch\n";
                         }
 
                      } else {
@@ -733,7 +736,7 @@ restart:
                               || yyParenDepth != is.parenDepth1st) {
 
                            yyMsg(is.elseLine) << "Parenthesis/brace mismatch between "
-                                                 "#if and #else branches; using #if branch\n";
+                                 "#if and #else branches; using #if branch\n";
                         }
 
                         yyBracketDepth = is.bracketDepth1st;
@@ -1049,8 +1052,7 @@ restart:
             case '}':
                if (yyBraceDepth == yyMinBraceDepth) {
                   if (! inDefine) {
-                     yyMsg(yyCurLineNo) << "Excess closing brace in C++ code"
-                                           " (or misuse of the preprocessor)\n";
+                     yyMsg(yyCurLineNo) << "Excess closing brace in C++ code (or misuse of the preprocessor)\n";
                   }
 
                   yyCh = getChar();
@@ -1073,8 +1075,7 @@ restart:
 
             case ')':
                if (yyParenDepth == 0) {
-                  yyMsg(yyCurLineNo) << "Excess closing parenthesis in C++ code"
-                                        " (or misuse of the preprocessor)\n";
+                  yyMsg(yyCurLineNo) << "Excess closing parenthesis in C++ code (or misuse of the preprocessor)\n";
 
                } else {
                   --yyParenDepth;
@@ -1094,8 +1095,7 @@ restart:
 
             case ']':
                if (yyBracketDepth == 0) {
-                  yyMsg(yyCurLineNo) << "Excess closing bracket in C++ code"
-                                        " (or misuse of the preprocessor)\n";
+                  yyMsg(yyCurLineNo) << "Excess closing bracket in C++ code (or misuse of the preprocessor)\n";
 
                } else {
                   --yyBracketDepth;
@@ -1124,6 +1124,7 @@ restart:
                      yyCh = getChar();
 
                   } while ((yyCh >= '0' && yyCh <= '9') || (yyCh >= 'a' && yyCh <= 'f') || (yyCh >= 'A' && yyCh <= 'F'));
+
                   return Tok_Integer;
                }
 
@@ -1270,6 +1271,7 @@ struct QualifyOneData {
    const QList<HashString> &m_qualify_nsList;
    int nsCount;
    const HashString &segment;
+
    QList<HashString> *resolved;
    QSet<HashStringList> *visitedUsings;
 };
@@ -1318,8 +1320,7 @@ bool CppParser::qualifyOneCallbackUsing(const Namespace *ns, void *context) cons
       if (! data->visitedUsings->contains(use)) {
          data->visitedUsings->insert(use);
 
-         if (qualifyOne(use.value(), use.value().count(), data->segment, data->resolved,
-                        data->visitedUsings)) {
+         if (qualifyOne(use.value(), use.value().count(), data->segment, data->resolved, data->visitedUsings)) {
             return true;
          }
       }
@@ -1748,6 +1749,7 @@ bool CppParser::matchExpression()
 
          if (yyTok == Tok_RightParen) {
             yyTok = getToken();
+
          } else {
             ++parenlevel;
          }
@@ -2007,6 +2009,7 @@ void CppParser::handleCsMarkTr(Group kind, QString prefix)
 
             } else {
                m_context = fctx->trQualification;
+
             }
 
             if (! fctx->hasTrFunctions && ! fctx->complained) {
@@ -2580,16 +2583,13 @@ void CppParser::parseInternal(ConversionData &cd, const QStringList &includeStac
 
 goteof:
    if (yyBraceDepth != 0) {
-      yyMsg(yyBraceLineNo) << "Unbalanced opening brace in C++ code"
-                              " (or misuse of the preprocessor)\n";
+      yyMsg(yyBraceLineNo) << "Unbalanced opening brace in C++ code (or misuse of the preprocessor)\n";
 
    } else if (yyParenDepth != 0) {
-      yyMsg(yyParenLineNo) << "Unbalanced opening parenthesis in C++ code"
-                              " (or misuse of the preprocessor)\n";
+      yyMsg(yyParenLineNo) << "Unbalanced opening parenthesis in C++ code (or misuse of the preprocessor)\n";
 
    } else if (yyBracketDepth != 0) {
-      yyMsg(yyBracketLineNo) << "Unbalanced opening bracket in C++ code"
-                                " (or misuse of the preprocessor)\n";
+      yyMsg(yyBracketLineNo) << "Unbalanced opening bracket in C++ code (or misuse of the preprocessor)\n";
    }
 }
 
@@ -2808,4 +2808,3 @@ void loadCPP(Translator &translator, const QStringList &filenames, ConversionDat
       }
    }
 }
-

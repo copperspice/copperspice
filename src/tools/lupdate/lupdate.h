@@ -34,17 +34,17 @@ class Translator;
 class TranslatorMessage;
 
 enum UpdateOption {
-   Verbose    = 1,
-   NoObsolete = 2,
-   PluralOnly = 4,
-   NoSorting  = 8,
-   HeuristicSameText = 16,
+   Verbose              = 1,
+   NoObsolete           = 2,
+   PluralOnly           = 4,
+   NoSorting            = 8,
+   HeuristicSameText    = 16,
    HeuristicSimilarText = 32,
-   HeuristicNumber = 64,
-   AbsoluteLocations = 256,
-   RelativeLocations = 512,
-   NoLocations = 1024,
-   NoUiLines = 2048
+   HeuristicNumber      = 64,
+   AbsoluteLocations    = 256,
+   RelativeLocations    = 512,
+   NoLocations          = 1024,
+   NoUiLines            = 2048
 };
 
 using UpdateOptions = QFlags<UpdateOption>;

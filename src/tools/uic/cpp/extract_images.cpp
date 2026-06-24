@@ -67,7 +67,7 @@ void ExtractImages::acceptUI(DomUI *node)
       QFileInfo fi(m_option.qrcOutputFile);
       QDir dir = fi.absoluteDir();
 
-      if (!dir.exists("images") && ! dir.mkdir("images")) {
+      if (! dir.exists("images") && ! dir.mkdir("images")) {
          fprintf(stderr, "%s: Error: Could not create image dir\n", csPrintable(m_option.messagePrefix()));
          return;
       }

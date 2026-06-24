@@ -88,6 +88,7 @@ static QString zeroKey(const QString &key)
 static QString translationAttempt(const QString &oldTranslation, const QString &oldSource, const QString &newSource)
 {
    int p = zeroKey(oldSource).count(QChar('0'));
+
    QString attempt;
    QStringList oldNumbers;
    QStringList newNumbers;
@@ -110,16 +111,20 @@ static QString translationAttempt(const QString &oldTranslation, const QString &
      First, we set up two tables: oldNumbers and newNumbers. In our example,
      oldNumber[0] is "3.0" and newNumber[0] is "3.1".
    */
+
    for (i = 0, j = 0; i < oldSource.size(); i++, j++) {
       m = numberLength(oldSource, i);
       n = numberLength(newSource, j);
+
       if (m > 0) {
          oldNumbers.append(oldSource.mid(i, m + 1));
          newNumbers.append(newSource.mid(j, n + 1));
+
          i += m;
          j += n;
          met[k] = false;
          matchedYet[k] = 0;
+
          k++;
       }
    }
@@ -129,6 +134,7 @@ static QString translationAttempt(const QString &oldTranslation, const QString &
      oldNumbers. Whenever such a number is met, it is replaced with its newNumber equivalent. In
      our example, the "3.0" of "XeT 3.0" becomes "3.1".
    */
+
    for (i = 0; i < oldTranslation.length(); i++) {
       attempt += oldTranslation[i];
       for (k = 0; k < p; k++) {
@@ -147,10 +153,11 @@ static QString translationAttempt(const QString &oldTranslation, const QString &
 
       for (pass = 0; pass < 2; pass++) {
          best = p;                            // an impossible value
+
          for (k = 0; k < p; k++) {
-            if ((!met[k] || pass > 0) &&
-                  matchedYet[k] == oldNumbers[k].length() &&
+            if ((! met[k] || pass > 0) && matchedYet[k] == oldNumbers[k].length() &&
                   numberLength(oldTranslation, i + 1 - matchedYet[k]) == matchedYet[k]) {
+
                // the longer the better
                if (best == p || matchedYet[k] > matchedYet[best]) {
                   best = k;
@@ -161,6 +168,7 @@ static QString translationAttempt(const QString &oldTranslation, const QString &
             attempt.truncate(attempt.length() - matchedYet[best]);
             attempt += newNumbers[best];
             met[best] = true;
+
             for (k = 0; k < p; k++) {
                matchedYet[k] = 0;
             }
@@ -211,6 +219,7 @@ int applyNumberHeuristic(Translator &trObj)
 {
    QMap<QString, QPair<QString, QString>> translated;
    QVector<bool> untranslated(trObj.messageCount());
+
    int inserted = 0;
 
    for (int i = 0; i < trObj.messageCount(); ++i) {
@@ -218,13 +227,14 @@ int applyNumberHeuristic(Translator &trObj)
       bool hasTranslation = msg.isTranslated();
 
       if (msg.type() == TranslatorMessage::Type::Unfinished) {
-         if (!hasTranslation) {
+         if (! hasTranslation) {
             untranslated[i] = true;
          }
 
       } else if (hasTranslation && msg.translations().count() == 1) {
          const QString &key = zeroKey(msg.sourceText());
-         if (!key.isEmpty()) {
+
+         if (! key.isEmpty()) {
             translated.insert(key, qMakePair(msg.sourceText(), msg.translation()));
          }
       }
@@ -235,7 +245,7 @@ int applyNumberHeuristic(Translator &trObj)
          TranslatorMessage &msg = trObj.message(i);
          const QString &key = zeroKey(msg.sourceText());
 
-         if (!key.isEmpty()) {
+         if (! key.isEmpty()) {
             QMap<QString, QPair<QString, QString>>::const_iterator t = translated.constFind(key);
 
             if (t != translated.constEnd() && t->first != msg.sourceText()) {
@@ -245,6 +255,7 @@ int applyNumberHeuristic(Translator &trObj)
          }
       }
    }
+
    return inserted;
 }
 
@@ -263,12 +274,14 @@ int applySameTextHeuristic(Translator &trObj)
 {
    QMap<QString, QStringList> translated;
    QMap<QString, bool> avoid;
+
    QVector<bool> untranslated(trObj.messageCount());
    int inserted = 0;
 
    for (int i = 0; i < trObj.messageCount(); ++i) {
       const TranslatorMessage &msg = trObj.message(i);
-      if (!msg.isTranslated()) {
+
+      if (! msg.isTranslated()) {
          if (msg.type() == TranslatorMessage::Type::Unfinished) {
             untranslated[i] = true;
          }
@@ -285,7 +298,7 @@ int applySameTextHeuristic(Translator &trObj)
                avoid.insert(key, true);
             }
 
-         } else if (!avoid.contains(key)) {
+         } else if (! avoid.contains(key)) {
             translated.insert(key, msg.translations());
          }
       }
@@ -302,6 +315,7 @@ int applySameTextHeuristic(Translator &trObj)
          }
       }
    }
+
    return inserted;
 }
 
@@ -316,8 +330,8 @@ without any existing translations.
 Translator merge(const Translator &trObj, const Translator &newTrObj, const QList<Translator> &aliens,
       UpdateOptions options, QString &err)
 {
-   int known = 0;
-   int neww = 0;
+   int known     = 0;
+   int neww      = 0;
    int obsoleted = 0;
    int similarTextHeuristicCount = 0;
 
@@ -402,11 +416,10 @@ Translator merge(const Translator &trObj, const Translator &newTrObj, const QLis
             mv = &newTrObj.message(mvi);
             extras = mv->extras();
 
-            if (! mv->id().isEmpty()
-                  && (mv->context() != m.context()
-                      || mv->sourceText() != m.sourceText()
-                      || mv->comment() != m.comment())) {
-               known++;
+            if (! mv->id().isEmpty() && (mv->context() != m.context() || mv->sourceText() != m.sourceText()
+                     || mv->comment() != m.comment())) {
+               ++known;
+
                newType = TranslatorMessage::Type::Unfinished;
                m.setContext(mv->context());
                m.setComment(mv->comment());
@@ -418,7 +431,7 @@ Translator merge(const Translator &trObj, const Translator &newTrObj, const QLis
                   m.setSourceText(mv->sourceText());
                   const QString &oldpluralsource = m.extra("po-msgid_plural");
 
-                  if (!oldpluralsource.isEmpty()) {
+                  if (! oldpluralsource.isEmpty()) {
                      extras.insert("po-old_msgid_plural", oldpluralsource);
                   }
                }
@@ -501,7 +514,7 @@ Translator merge(const Translator &trObj, const Translator &newTrObj, const QLis
          trOutObj.appendSorted(mv);
       }
 
-      if (! mv.sourceText().isEmpty() || !mv.id().isEmpty()) {
+      if (! mv.sourceText().isEmpty() || ! mv.id().isEmpty()) {
          ++neww;
       }
    }
@@ -587,4 +600,3 @@ Translator merge(const Translator &trObj, const Translator &newTrObj, const QLis
 
    return trOutObj;
 }
-

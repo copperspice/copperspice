@@ -159,7 +159,9 @@ class ContextItemDelegate : public QItemDelegate
          if (index.column() - 1 == m_dataModel->modelCount()) {
             QStyleOptionViewItem opt = option;
             opt.font.setBold(true);
+
             QItemDelegate::paint(painter, opt, index);
+
             return;
          }
       }
@@ -265,6 +267,7 @@ bool FocusWatcher::eventFilter(QObject *, QEvent *event)
    if (event->type() == QEvent::FocusIn) {
       m_messageEditor->setEditorFocusModel(-1);
    }
+
    return false;
 }
 
@@ -822,6 +825,7 @@ static QString fileFilters(bool allFirst)
    }
 
    filter.append(QObject::tr("All files (*)"));
+
    return filter;
 }
 
@@ -845,13 +849,13 @@ QStringList MainWindow::pickTranslationFiles()
       }
    }
 
-   return QFileDialog::getOpenFileNames(this, tr("Open Translation Files"), dir,
-               varFilt + fileFilters(true));
+   return QFileDialog::getOpenFileNames(this, tr("Open Translation Files"), dir, varFilt + fileFilters(true));
 }
 
 void MainWindow::saveInternal(int model)
 {
    QApplication::setOverrideCursor(Qt::WaitCursor);
+
    if (m_dataModel->save(model, this)) {
       updateCaption();
       statusBar()->showMessage(tr("File saved."), MessageMS);
@@ -885,7 +889,7 @@ void MainWindow::saveAs()
    }
 
    QString newFilename = QFileDialog::getSaveFileName(this, QString(), m_dataModel->srcFileName(m_currentIndex.model()),
-                         fileFilters(false));
+      fileFilters(false));
 
    if (! newFilename.isEmpty()) {
       if (m_dataModel->saveAs(m_currentIndex.model(), newFilename, this)) {
@@ -906,9 +910,9 @@ void MainWindow::releaseAs()
    QString newFilename = oldFile.path() + "/" + oldFile.completeBaseName() + ".qm";
 
    newFilename = QFileDialog::getSaveFileName(this, tr("Release"), newFilename,
-                 tr("Message files for released applications (*.qm)\nAll files (*)"));
+         tr("Message files for released applications (*.qm)\nAll files (*)"));
 
-   if (!newFilename.isEmpty()) {
+   if (! newFilename.isEmpty()) {
       if (m_dataModel->release(m_currentIndex.model(), newFilename, false, false, TranslatorMessage::SaveMode::Everything, this)) {
          statusBar()->showMessage(tr("File created."), MessageMS);
       }
@@ -1062,6 +1066,7 @@ bool MainWindow::searchItem(DataModel::FindLocation where, const QString &search
    }
 
    int foundOffset = text.indexOf(m_findText, 0, m_findMatchCase);
+
    return foundOffset >= 0;
 }
 
@@ -1185,7 +1190,7 @@ void MainWindow::updateTranslateHit(bool &hit)
    MessageItem *msgCargo = m_dataModel->getMessageItem(m_currentIndex);
 
    hit = (msgCargo != nullptr && ! msgCargo->isObsolete() &&
-               msgCargo->compare(m_translateDialog->findText(), false, m_translateDialog->caseSensitivity()));
+         msgCargo->compare(m_translateDialog->findText(), false, m_translateDialog->caseSensitivity()));
 }
 
 void MainWindow::translate(int mode)
@@ -1274,7 +1279,7 @@ void MainWindow::translate(int mode)
    if (! translatedCount) {
       qApp->beep();
       QMessageBox::warning(m_translateDialog, tr("Translate"),
-                           tr("Unable to find the string '%1'.").formatArg(findText));
+            tr("Unable to find the string '%1'.").formatArg(findText));
    }
 }
 
@@ -1283,14 +1288,14 @@ void MainWindow::newPhraseBook()
    QString name = QFileDialog::getSaveFileName(this, tr("Create New Phrase Book"),
                   m_phraseBookDir, tr("Phrase books (*.qph)\nAll files (*)"));
 
-   if (!name.isEmpty()) {
+   if (! name.isEmpty()) {
       PhraseBook pb;
       if (! m_settingsDialog) {
          m_settingsDialog = new SettingsDialog(this);
       }
 
       m_settingsDialog->setPhraseBook(&pb);
-      if (!m_settingsDialog->exec()) {
+      if (! m_settingsDialog->exec()) {
          return;
       }
 
@@ -1317,7 +1322,7 @@ bool MainWindow::isPhraseBookOpen(const QString &name)
 void MainWindow::selectPhraseBook()
 {
    QString name = QFileDialog::getOpenFileName(this, tr("Select Phrase Book"),
-                  m_phraseBookDir, tr("Phrase books (*.qph);;All files (*)"));
+         m_phraseBookDir, tr("Phrase books (*.qph);;All files (*)"));
 
    if (! name.isEmpty()) {
       m_phraseBookDir = QFileInfo(name).absolutePath();
@@ -1373,6 +1378,7 @@ void MainWindow::printPhraseBook(QAction *action)
    int pageNum = 0;
 
    QPrintDialog dlg(printer(), this);
+
    if (dlg.exec()) {
       printer()->setDocName(phraseBook->fileName());
       statusBar()->showMessage(tr("Printing..."));
@@ -1547,7 +1553,7 @@ bool MainWindow::maybeSave(int model)
 
       case QMessageBox::Yes:
          saveInternal(model);
-         return !m_dataModel->isModified(model);
+         return ! m_dataModel->isModified(model);
 
       case QMessageBox::No:
          break;
@@ -1758,7 +1764,7 @@ void MainWindow::doneAndNext()
       m_dataModel->setFinished(m_currentIndex, true);
    }
 
-   if (!m_messageEditor->focusNextUnfinished()) {
+   if (! m_messageEditor->focusNextUnfinished()) {
       nextUnfinished();
    }
 }
@@ -2171,8 +2177,8 @@ void MainWindow::updateModelIndex(const QModelIndex &index)
 void MainWindow::updateLatestModel(int model)
 {
    m_currentIndex = MultiDataIndex(model, m_currentIndex.context(), m_currentIndex.message());
-   bool enable   = false;
-   bool enableRw = false;
+   bool enable    = false;
+   bool enableRw  = false;
 
    MessageItem *msgCargo = nullptr;
 
@@ -2527,7 +2533,7 @@ bool MainWindow::maybeSavePhraseBook(PhraseBook *pb)
             return false;
 
          case QMessageBox::Yes:
-            if (!pb->save(pb->fileName())) {
+            if (! pb->save(pb->fileName())) {
                return false;
             }
             break;
@@ -2766,8 +2772,8 @@ void MainWindow::updateDanger(const MultiDataIndex &index, bool verbose)
          }
 
          if (m_ui.actionPhraseMatches->isChecked()) {
-            QString fsource = friendlyString(source);
-            QString ftranslation = friendlyString(translations.first());
+            QString fsource         = friendlyString(source);
+            QString ftranslation    = friendlyString(translations.first());
             QStringList lookupWords = fsource.split(' ');
 
             bool phraseFound;
@@ -2780,11 +2786,13 @@ void MainWindow::updateDanger(const MultiDataIndex &index, bool verbose)
                         if (ftranslation.indexOf(friendlyString(p->target())) >= 0) {
                            phraseFound = true;
                            break;
+
                         } else {
                            phraseFound = false;
                         }
                      }
                   }
+
                   if (! phraseFound) {
                      if (verbose) {
                         m_errorsView->addError(mi, ErrorsView::IgnoredPhrasebook, s);
@@ -2997,7 +3005,7 @@ void MainWindow::maybeUpdateStatistics(const MultiDataIndex &index)
 void MainWindow::updateStatistics()
 {
    // do not call this if stats dialog is not open, can be slow
-   if (! m_statistics || !m_statistics->isVisible() || m_currentIndex.model() < 0) {
+   if (! m_statistics || ! m_statistics->isVisible() || m_currentIndex.model() < 0) {
       return;
    }
 

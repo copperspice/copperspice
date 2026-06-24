@@ -611,7 +611,7 @@ bool saveTS(const Translator &translator, QIODevice &dev, ConversionData &cd)
 
    QStringList deps = translator.dependencies();
 
-   if (!deps.isEmpty()) {
+   if (! deps.isEmpty()) {
       t << "<dependencies>\n";
 
       for (const QString &dep : deps) {

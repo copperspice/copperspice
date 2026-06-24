@@ -118,21 +118,21 @@ static inline void setCoOccurence(CoMatrix &m, char c, char d)
 
 CoMatrix::CoMatrix(const QString &str)
 {
-   QByteArray ba = str.toUtf8();
+   QByteArray ba    = str.toUtf8();
    const char *text = ba.constData();
+
    char c = '\0', d;
    memset( b, 0, 52 );
 
-   while ( (d = *text) != '\0' ) {
+   while ((d = *text) != '\0') {
       setCoOccurence(*this, c, d);
 
-      if ( (c = *++text) != '\0' ) {
+      if ((c = *++text) != '\0') {
          setCoOccurence(*this, d, c);
          text++;
       }
    }
 }
-
 
 static inline int worth(const CoMatrix &m)
 {
@@ -178,8 +178,7 @@ int StringSimilarityMatcher::getSimilarityScore(const QString &strCandidate)
    CoMatrix cmTarget(strCandidate);
    int delta = qAbs(m_length - strCandidate.size());
 
-   int score = ( (worth(intersection(m_cm, cmTarget)) + 1) << 10 ) /
-               ( worth(reunion(m_cm, cmTarget)) + (delta << 1) + 1 );
+   int score = ( (worth(intersection(m_cm, cmTarget)) + 1) << 10 ) / ( worth(reunion(m_cm, cmTarget)) + (delta << 1) + 1 );
 
    return score;
 }

@@ -95,13 +95,16 @@ class ConversionData
    QString m_sourceFileName;
    QString m_targetFileName;
    QStringList m_excludes;
+
    QDir m_sourceDir;
    QDir m_targetDir;                             // TS specific
+
    QSet<QString> m_projectRoots;
    QMultiHash<QString, QString> m_allCSources;
    QStringList m_includePath;
    QStringList m_dropTags;                       // tags to be dropped
    QStringList m_errors;
+
    bool m_verbose;
    bool m_ignoreUnfinished;
    bool m_sortContexts;
@@ -298,17 +301,18 @@ class Translator
 
    QString m_language;
    QString m_sourceLanguage;
+
    QStringList m_dependencies;
    QHash<QString, QString> m_extra;
 
    mutable bool m_indexOk;
    mutable QHash<QString, int> m_ctxCmtIdx;
    mutable QHash<QString, int> m_idMsgIdx;
-   mutable QHash<TMMKey, int> m_msgIdx;
+   mutable QHash<TMMKey,  int> m_msgIdx;
 };
 
 bool getCountInfo(QLocale::Language language, QLocale::Country country,
-            QVector<std::variant<CountGuide, int>> *data, QStringList *forms, const char **gettextRules);
+      QVector<std::variant<CountGuide, int>> *data, QStringList *forms, const char **gettextRules);
 
 QString getCountInfoString();
 

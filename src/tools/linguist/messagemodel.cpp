@@ -47,9 +47,7 @@ MessageItem::MessageItem(const TranslatorMessage &message)
 
 bool MessageItem::compare(const QString &findText, bool matchSubstring, Qt::CaseSensitivity cs) const
 {
-   return matchSubstring
-          ? text().indexOf(findText, 0, cs) >= 0
-          : text().compare(findText, cs) == 0;
+   return matchSubstring ? text().indexOf(findText, 0, cs) >= 0 : text().compare(findText, cs) == 0;
 }
 
 ContextItem::ContextItem(const QString &context)
@@ -136,8 +134,7 @@ ContextItem *DataModel::findContext(const QString &context) const
    return nullptr;
 }
 
-MessageItem *DataModel::findMessage(const QString &context, const QString &sourcetext,
-               const QString &comment) const
+MessageItem *DataModel::findMessage(const QString &context, const QString &sourcetext, const QString &comment) const
 {
    if (ContextItem *ctx = findContext(context)) {
       return ctx->findMessage(sourcetext, comment);
@@ -171,7 +168,7 @@ static int calcMergeScore(const DataModel *one, const DataModel *two)
 
 bool DataModel::isWellMergeable(const DataModel *other) const
 {
-   if (!other->messageCount() || !messageCount()) {
+   if (! other->messageCount() || ! messageCount()) {
       return true;
    }
 
@@ -192,6 +189,7 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
       }
 
       QMessageBox::warning(parent, QObject::tr("Linguist"), cd.error());
+
       return false;
    }
 
@@ -202,7 +200,7 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
       }
 
       QMessageBox::warning(parent, QObject::tr("Linguist"),
-               tr("Translation file %1 is empty and will not be loaded.").formatArg(fileName.toHtmlEscaped()));
+            tr("Translation file %1 is empty and will not be loaded.").formatArg(fileName.toHtmlEscaped()));
 
       return false;
    }
@@ -234,7 +232,8 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
             break;
          }
 
-         err += tr("<p>* Context: %1<br>* Source: %2").formatArgs(msg.context().toHtmlEscaped(), msg.sourceText().toHtmlEscaped());
+         err += tr("<p>* Context: %1<br>* Source: %2")
+               .formatArgs(msg.context().toHtmlEscaped(), msg.sourceText().toHtmlEscaped());
 
          if (! msg.comment().isEmpty()) {
             err += tr("<br>* Comment: %3").formatArg(msg.comment().toHtmlEscaped());
@@ -254,6 +253,7 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
 
    m_relativeLocations = (trObj.locationType() == Translator::LocationType::Relative);
    m_extra             = trObj.extras();
+
    m_contextList.clear();
    m_numMessages = 0;
 
@@ -331,8 +331,8 @@ bool DataModel::load(const QString &fileName, bool *langGuessed, QWidget *parent
       }
 
       QMessageBox::warning(parent, QObject::tr("Linguist"),
-               tr("Linguist does not know the plural rules for %1.\n"
-               "Using a single universal form.").formatArg(m_localizedLanguage));
+            tr("Linguist does not know the plural rules for %1.\n"
+            "Using a single universal form.").formatArg(m_localizedLanguage));
    }
 
    // Try to detect the correct source language in the following order
@@ -388,21 +388,24 @@ bool DataModel::save(const QString &fileName, QWidget *parent)
 
 bool DataModel::saveAs(const QString &newFileName, QWidget *parent)
 {
-   if (!save(newFileName, parent)) {
+   if (! save(newFileName, parent)) {
       return false;
    }
 
    m_srcFileName = newFileName;
+
    return true;
 }
 
 bool DataModel::release(const QString &fileName, bool verbose, bool ignoreUnfinished,
-                        TranslatorMessage::SaveMode mode, QWidget *parent)
+      TranslatorMessage::SaveMode mode, QWidget *parent)
 {
    QFile file(fileName);
-   if (!file.open(QIODevice::WriteOnly)) {
+
+   if (! file.open(QIODevice::WriteOnly)) {
       QMessageBox::warning(parent, QObject::tr("Linguist"),
-                           tr("Unable to create '%2': %1").formatArg(file.errorString()).formatArg(fileName));
+            tr("Unable to create '%2': %1").formatArg(file.errorString()).formatArg(fileName));
+
       return false;
    }
 
@@ -421,9 +424,11 @@ bool DataModel::release(const QString &fileName, bool verbose, bool ignoreUnfini
    cd.m_saveMode = mode;
 
    bool ok = saveQM(trObj, file, cd);
+
    if (! ok) {
       QMessageBox::warning(parent, QObject::tr("Linguist"), cd.error());
    }
+
    return ok;
 }
 
@@ -438,11 +443,12 @@ void DataModel::doCharCounting(const QString &text, int &trW, int &trC, int &trC
             ++trW;
             inWord = true;
          }
+
       } else {
          inWord = false;
       }
 
-      if (!text[i].isSpace()) {
+      if (! text[i].isSpace()) {
          trC++;
       }
    }
@@ -635,6 +641,7 @@ MultiContextItem::MultiContextItem(int oldCount, ContextItem *ctx, bool writable
 void MultiContextItem::appendEmptyModel()
 {
    QList<MessageItem *> eList;
+
    for (int j = 0; j < messageCount(); ++j) {
       eList.append(nullptr);
    }
@@ -727,15 +734,15 @@ int MultiContextItem::findMessage(const QString &sourcetext, const QString &comm
 
 int MultiContextItem::findMessageById(const QString &id) const
 {
-    for (int i = 0, cnt = messageCount(); i < cnt; ++i) {
-        MultiMessageItem *mm = multiMessageItem(i);
+   for (int i = 0, cnt = messageCount(); i < cnt; ++i) {
+      MultiMessageItem *mm = multiMessageItem(i);
 
-        if (mm->id() == id) {
-            return i;
-        }
-    }
+      if (mm->id() == id) {
+         return i;
+      }
+   }
 
-    return -1;
+   return -1;
 }
 
 static const uchar paletteRGBs[7][3] = {
@@ -777,7 +784,8 @@ MultiDataModel::~MultiDataModel()
 QBrush MultiDataModel::brushForModel(int model) const
 {
    QBrush brush(m_colors[model % 7]);
-   if (!isModelWritable(model)) {
+
+   if (! isModelWritable(model)) {
       brush.setTexture(m_bitmap);
    }
 
@@ -1017,6 +1025,7 @@ QString MultiDataModel::condenseFileNames(const QStringList &names)
 
    for (int i = 1; i < names.count(); ++i) {
       QString fn = names[i];
+
       if (fn.startsWith('=')) {
          fn.remove(0, 1);
       }
@@ -1029,6 +1038,7 @@ QString MultiDataModel::condenseFileNames(const QStringList &names)
                }
                prefix.truncate(j);
             }
+
             break;
          }
 
@@ -1048,6 +1058,7 @@ QString MultiDataModel::condenseFileNames(const QStringList &names)
 
                suffix.remove(0, sxl - k + 1);
             }
+
             break;
          }
    }
@@ -1058,7 +1069,7 @@ QString MultiDataModel::condenseFileNames(const QStringList &names)
    int sxl = suffix.length();
 
    for (int j = 0; j < names.count(); ++j) {
-      if (j) {
+      if (j != 0) {
          retval += ',';
       }
 
@@ -1161,6 +1172,7 @@ MultiContextItem *MultiDataModel::findContext(const QString &context) const
 {
    for (int i = 0; i < m_multiContextList.size(); ++i) {
       const MultiContextItem &mc = m_multiContextList[i];
+
       if (mc.context() == context) {
          return const_cast<MultiContextItem *>(&mc);
       }
@@ -1195,6 +1207,7 @@ void MultiDataModel::setTranslation(const MultiDataIndex &index, const QString &
 
    msgCargo->setTranslation(translation);
    setModified(index.model(), true);
+
    emit translationChanged(index);
 }
 
@@ -1400,7 +1413,6 @@ void MultiDataModel::updateCountsOnRemove(int model, bool writable)
    }
 }
 
-
 MultiDataModelIterator::MultiDataModelIterator(MultiDataModel *dataModel, int model, int context, int message)
    : MultiDataIndex(model, context, message), m_dataModel(dataModel)
 {
@@ -1568,21 +1580,25 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
                   if (msgItem->translation().isEmpty()) {
                      return pxEmpty;
                   }
+
                   if (msgItem->danger()) {
                      return pxDanger;
                   }
+
                   return pxOff;
 
                case TranslatorMessage::Type::Finished:
                   if (msgItem->danger()) {
                      return pxWarning;
                   }
+
                   return pxOn;
 
                default:
                   return pxObsolete;
             }
          }
+
          return QVariant();
 
       } else if (role == SortRole) {
@@ -1597,24 +1613,29 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
 
             default:
                if (MessageItem *msgItem = mci->messageItem(column, row)) {
-                  int rslt = !msgItem->translation().isEmpty();
-                  if (!msgItem->danger()) {
+                  int rslt = ! msgItem->translation().isEmpty();
+
+                  if (! msgItem->danger()) {
                      rslt |= 2;
                   }
+
                   if (msgItem->isObsolete()) {
                      rslt |= 8;
+
                   } else if (msgItem->isFinished()) {
                      rslt |= 4;
                   }
+
                   return rslt;
                }
+
                return INT_MAX;
          }
-      } else if (role == Qt::ForegroundRole && column > 0
-                 && mci->multiMessageItem(row)->isObsolete()) {
+
+      } else if (role == Qt::ForegroundRole && column > 0 && mci->multiMessageItem(row)->isObsolete()) {
          return QBrush(Qt::darkGray);
-      } else if (role == Qt::ForegroundRole && column == numLangs
-                 && mci->multiMessageItem(row)->text().isEmpty()) {
+
+      } else if (role == Qt::ForegroundRole && column == numLangs && mci->multiMessageItem(row)->text().isEmpty()) {
          return QBrush(QColor(0, 0xa0, 0xa0));
 
       } else if (role == Qt::BackgroundRole) {
@@ -1638,6 +1659,7 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
                if (mci->context().isEmpty()) {
                   return tr("<unnamed context>");
                }
+
                return mci->context().simplified();
             }
 
@@ -1661,6 +1683,7 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
             if (subject->isFinished()) {
                return subject->finishedDangerCount() > 0 ? pxWarning : pxOn;
             }
+
             return subject->unfinishedDangerCount() > 0 ? pxDanger : pxOff;
          }
 

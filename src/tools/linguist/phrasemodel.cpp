@@ -131,7 +131,7 @@ bool PhraseModel::setData(const QModelIndex &index, const QVariant &value, int r
    int row = index.row();
    int column = index.column();
 
-   if (!index.isValid() || row >= plist.count() || role != Qt::EditRole) {
+   if (! index.isValid() || row >= plist.count() || role != Qt::EditRole) {
       return false;
    }
 

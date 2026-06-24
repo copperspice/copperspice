@@ -130,6 +130,7 @@ int main(int argc, char *argv[])
    QStringList args = app.arguments();
 
    QList<File> inFiles;
+
    QString inFormat("auto");
    QString outFileName;
    QString outFormat("auto");
@@ -158,6 +159,7 @@ int main(int argc, char *argv[])
          if (i >= args.size()) {
             return usage(args);
          }
+
          outFileName = args[i];
 
       } else if (args[i] == "-of" || args[i] == "-output-format") {
@@ -166,6 +168,7 @@ int main(int argc, char *argv[])
          if (i >= args.size()) {
             return usage(args);
          }
+
          outFormat = args[i];
 
       } else if (args[i] == "-i" || args[i] == "-input-file") {
@@ -174,9 +177,11 @@ int main(int argc, char *argv[])
          if (i >= args.size()) {
             return usage(args);
          }
+
          File file;
-         file.name = args[i];
+         file.name   = args[i];
          file.format = inFormat;
+
          inFiles.append(file);
 
       } else if (args[i] == "-if" || args[i] == "-input-format") {
@@ -185,6 +190,7 @@ int main(int argc, char *argv[])
          if (i >= args.size()) {
             return usage(args);
          }
+
          inFormat = args[i];
 
       } else if (args[i] == "-drop-tags") {
@@ -193,6 +199,7 @@ int main(int argc, char *argv[])
          if (i >= args.size()) {
             return usage(args);
          }
+
          cd.m_dropTags.append(args[i]);
 
       } else if (args[i] == "-drop-translations") {
@@ -204,6 +211,7 @@ int main(int argc, char *argv[])
          if (i >= args.size()) {
             return usage(args);
          }
+
          targetLanguage = args[i];
 
       } else if (args[i] == "-source-language") {
@@ -212,6 +220,7 @@ int main(int argc, char *argv[])
          if (i >= args.size()) {
             return usage(args);
          }
+
          sourceLanguage = args[i];
 
       } else if (args[i].startsWith("-h")) {
@@ -274,16 +283,20 @@ int main(int argc, char *argv[])
       std::cerr << csPrintable(cd.error());
       return 2;
    }
+
    trObj.reportDuplicates(trObj.resolveDuplicates(), inFiles[0].name, verbose);
 
    for (int i = 1; i < inFiles.size(); ++i) {
       Translator trObj3;
+
       if (! trObj3.load(inFiles[i].name, cd, inFiles[i].format)) {
          std::cerr << csPrintable(cd.error());
+
          return 2;
       }
 
       trObj3.reportDuplicates(trObj3.resolveDuplicates(), inFiles[i].name, verbose);
+
       for (int j = 0; j < trObj3.messageCount(); ++j) {
          trObj.replaceSorted(trObj3.message(j));
       }
@@ -318,6 +331,7 @@ int main(int argc, char *argv[])
    }
 
    trObj.normalizeTranslations(cd);
+
    if (! cd.errors().isEmpty()) {
       std::cerr << csPrintable(cd.error());
       cd.clearErrors();

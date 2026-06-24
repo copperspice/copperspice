@@ -166,7 +166,7 @@ int runRcc(int argc, char *argv[])
             library.setCompressLevel(args[++i].toInteger<int>());
 
          } else if (opt == "-threshold") {
-            if (!(i < argc - 1)) {
+            if (! (i < argc - 1)) {
                errorMsg = "Missing compression threshold";
                break;
             }

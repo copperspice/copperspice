@@ -169,13 +169,16 @@ static int getToken()
 
             case '/':
                yyCh = getChar();
+
                if ( yyCh == '/' ) {
                   do {
                      yyCh = getChar();
                      if (yyCh == EOF) {
                         break;
                      }
+
                      yyComment.append(yyCh);
+
                   } while (yyCh != '\n');
 
                   return Tok_Comment;
@@ -239,6 +242,7 @@ static int getToken()
                               }
                               unicode += sub;
                            }
+
                            yyCh = getChar();
                         }
 
@@ -269,15 +273,18 @@ static int getToken()
             case ':':
                yyCh = getChar();
                return Tok_Colon;
+
             case '\'':
                yyCh = getChar();
 
                if ( yyCh == '\\') {
                   yyCh = getChar();
                }
+
                do {
                   yyCh = getChar();
                } while ( yyCh != EOF && yyCh != '\'');
+
                yyCh = getChar();
                break;
 
@@ -293,6 +300,7 @@ static int getToken()
                if (yyParenDepth == 0) {
                   yyParenLineNo = yyCurLineNo;
                }
+
                yyParenDepth++;
                yyCh = getChar();
                return Tok_LeftParen;
@@ -319,6 +327,7 @@ static int getToken()
 
             case '+':
                yyCh = getChar();
+
                if (yyCh == '+') {
                   yyCh = getChar();
                   return Tok_PlusPlus;
@@ -328,6 +337,7 @@ static int getToken()
                   yyCh = getChar();
                   return Tok_PlusEq;
                }
+
                return Tok_Plus;
 
             case '0':
@@ -397,7 +407,7 @@ static bool matchString( QString &s )
          s += yyString;
       } else {
          yyMsg() << "String used in translation can contain only literals"
-                    " concatenated with other literals, not expressions or numbers.\n";
+               " concatenated with other literals, not expressions or numbers.\n";
 
          return false;
       }
@@ -412,12 +422,14 @@ static bool matchStringOrNull(QString &s)
 {
    bool matches = matchString(s);
 
-   if (!matches) {
+   if (! matches) {
       matches = (yyTok == Tok_null);
+
       if (matches) {
          yyTok = getToken();
       }
    }
+
    return matches;
 }
 
@@ -445,21 +457,27 @@ static bool matchExpression()
          if (parenlevel == 0) {
             break;
          }
+
          --parenlevel;
          yyTok = getToken();
+
       } else if (yyTok == Tok_LeftParen) {
          yyTok = getToken();
+
          if (yyTok == Tok_RightParen) {
             yyTok = getToken();
          } else {
             ++parenlevel;
          }
+
       } else if (yyTok == Tok_Ident) {
          continue;
+
       } else if (parenlevel == 0) {
          return false;
       }
    }
+
    return true;
 }
 
@@ -488,7 +506,7 @@ static void recordMessage(Translator *trObj, const QString &context, const QStri
    const QString &extracomment, bool plural, ConversionData &cd)
 {
    TranslatorMessage msg(context, text, comment, QString(), yyFileName, yyLineNo, QStringList(),
-            TranslatorMessage::Type::Unfinished, plural);
+         TranslatorMessage::Type::Unfinished, plural);
 
    msg.setExtraComment(extracomment.simplified());
    trObj->extend(msg, cd);
@@ -504,7 +522,7 @@ static void parse(Translator *trObj, ConversionData &cd)
    yyTok = getToken();
 
    while ( yyTok != Tok_Eof ) {
-      switch ( yyTok ) {
+      switch (yyTok) {
          case Tok_class:
             yyTok = getToken();
 
@@ -519,6 +537,7 @@ static void parse(Translator *trObj, ConversionData &cd)
             while (! match(Tok_LeftBrace)) {
                yyTok = getToken();
             }
+
             break;
 
          case Tok_tr:
@@ -533,6 +552,7 @@ static void parse(Translator *trObj, ConversionData &cd)
 
                } else if (match(Tok_Comma) && matchStringOrNull(com)) {
                   // comment
+
                   if ( match(Tok_RightParen)) {
                      // ok
 
@@ -551,16 +571,14 @@ static void parse(Translator *trObj, ConversionData &cd)
             QString contextOverride;
             yyTok = getToken();
 
-            if ( match(Tok_LeftParen) &&
-                  matchString(contextOverride) &&
-                  match(Tok_Comma) &&
-                  matchString(text) ) {
+            if ( match(Tok_LeftParen) && matchString(contextOverride) && match(Tok_Comma) && matchString(text) ) {
 
                com.clear();
                bool plural = false;
 
                if (! match(Tok_RightParen)) {
                   // look for comment
+
                   if ( match(Tok_Comma) && matchStringOrNull(com)) {
                      if (! match(Tok_RightParen)) {
                         if (match(Tok_Comma) && matchExpression() && match(Tok_RightParen)) {
@@ -618,6 +636,7 @@ static void parse(Translator *trObj, ConversionData &cd)
 
          case Tok_Package:
             yyTok = getToken();
+
             while (! match(Tok_Semicolon)) {
                switch (yyTok) {
                   case Tok_Ident:
@@ -644,7 +663,7 @@ static void parse(Translator *trObj, ConversionData &cd)
    if (! yyScope.isEmpty() ) {
       yyMsg(yyScope.top()->line) << "Unbalanced opening brace.\n";
 
-   } else if ( yyParenDepth != 0 ) {
+   } else if (yyParenDepth != 0) {
       yyMsg(yyParenLineNo) << "Unbalanced opening parenthesis.\n";
    }
 }
@@ -658,23 +677,26 @@ bool loadJava(Translator &trObj, const QString &filename, ConversionData &cd)
       return false;
    }
 
-   yyInPos = -1;
+   yyInPos    = -1;
    yyFileName = filename;
+
    yyPackage.clear();
    yyScope.clear();
-   yyTok = -1;
-   yyParenDepth = 0;
-   yyCurLineNo = 0;
+
+   yyTok         = -1;
+   yyParenDepth  = 0;
+   yyCurLineNo   = 0;
    yyParenLineNo = 1;
 
    QTextStream ts(&file);
 
    ts.setCodec(QTextCodec::codecForName("UTF-8"));
    ts.setAutoDetectUnicode(true);
-   yyInStr = ts.readAll();
-   yyInPos = 0;
-   yyFileName = filename;
-   yyCurLineNo = 1;
+
+   yyInStr       = ts.readAll();
+   yyInPos       = 0;
+   yyFileName    = filename;
+   yyCurLineNo   = 1;
    yyParenLineNo = 1;
 
    parse(&trObj, cd);
