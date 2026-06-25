@@ -38,6 +38,7 @@ class Q_CORE_EXPORT QSegfaultHandler
  public:
    static void initialize(char **, int);
 
+   // Install a custom crash callback invoked from qt_signal_handler.
    static void installCrashHandler(FP_Void h) {
       callback = h;
    }
