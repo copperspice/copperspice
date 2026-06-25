@@ -495,11 +495,7 @@ class QDESIGNER_UILIB_EXPORT DomIncludes
 
    // attribute data
    // child element data
-   uint m_children;
    QList<DomInclude *> m_include;
-   enum Child {
-      Include = 1
-   };
 
    DomIncludes(const DomIncludes &other);
    void operator = (const DomIncludes &other);
@@ -626,12 +622,7 @@ class QDESIGNER_UILIB_EXPORT DomResources
    bool m_has_attr_name;
 
    // child element data
-   uint m_children;
    QList<DomResource *> m_include;
-
-   enum Child {
-      Include = 1
-   };
 
    DomResources(const DomResources &other);
    void operator = (const DomResources &other);
@@ -681,7 +672,6 @@ class QDESIGNER_UILIB_EXPORT DomResource
    bool m_has_attr_location;
 
    // child element data
-   uint m_children;
 
    DomResource(const DomResource &other);
    void operator = (const DomResource &other);
@@ -1009,12 +999,7 @@ class QDESIGNER_UILIB_EXPORT DomButtonGroups
 
    // attribute data
    // child element data
-   uint m_children;
    QList<DomButtonGroup *> m_buttonGroup;
-
-   enum Child {
-      ButtonGroup = 1
-   };
 
    DomButtonGroups(const DomButtonGroups &other);
    void operator = (const DomButtonGroups &other);
@@ -1051,12 +1036,7 @@ class QDESIGNER_UILIB_EXPORT DomImages
 
    // attribute data
    // child element data
-   uint m_children;
    QList<DomImage *> m_image;
-
-   enum Child {
-      Image = 1
-   };
 
    DomImages(const DomImages &other);
    void operator = (const DomImages &other);
@@ -1230,12 +1210,8 @@ class QDESIGNER_UILIB_EXPORT DomCustomWidgets
 
    // attribute data
    // child element data
-   uint m_children;
    QList<DomCustomWidget *> m_customWidget;
 
-   enum Child {
-      CustomWidget = 1
-   };
 
    DomCustomWidgets(const DomCustomWidgets &other);
    void operator = (const DomCustomWidgets &other);
@@ -1503,12 +1479,7 @@ class QDESIGNER_UILIB_EXPORT DomProperties
 
    // attribute data
    // child element data
-   uint m_children;
    QList<DomPropertyData *> m_property;
-
-   enum Child {
-      Property = 1
-   };
 
    DomProperties(const DomProperties &other);
    void operator = (const DomProperties &other);
@@ -1790,11 +1761,7 @@ class QDESIGNER_UILIB_EXPORT DomTabStops
 
    // attribute data
    // child element data
-   uint m_children;
    QStringList m_tabStop;
-   enum Child {
-      TabStop = 1
-   };
 
    DomTabStops(const DomTabStops &other);
    void operator = (const DomTabStops &other);
@@ -2192,11 +2159,7 @@ class QDESIGNER_UILIB_EXPORT DomRow
 
    // attribute data
    // child element data
-   uint m_children;
    QList<DomProperty *> m_property;
-   enum Child {
-      Property = 1
-   };
 
    DomRow(const DomRow &other);
    void operator = (const DomRow &other);
@@ -2233,11 +2196,7 @@ class QDESIGNER_UILIB_EXPORT DomColumn
 
    // attribute data
    // child element data
-   uint m_children;
    QList<DomProperty *> m_property;
-   enum Child {
-      Property = 1
-   };
 
    DomColumn(const DomColumn &other);
    void operator = (const DomColumn &other);
@@ -2564,12 +2523,7 @@ class QDESIGNER_UILIB_EXPORT DomSpacer
    bool m_has_attr_name;
 
    // child element data
-   uint m_children;
    QList<DomProperty *> m_property;
-   enum Child {
-      Property = 1
-   };
-
    DomSpacer(const DomSpacer &other);
    void operator = (const DomSpacer &other);
 };
@@ -3003,12 +2957,7 @@ class QDESIGNER_UILIB_EXPORT DomGradient
    bool m_has_attr_coordinateMode;
 
    // child element data
-   uint m_children;
    QList<DomGradientStop *> m_gradientStop;
-   enum Child {
-      GradientStop = 1
-   };
-
    DomGradient(const DomGradient &other);
    void operator = (const DomGradient &other);
 };
@@ -4184,12 +4133,7 @@ class QDESIGNER_UILIB_EXPORT DomStringList
    bool m_has_attr_extraComment;
 
    // child element data
-   uint m_children;
    QStringList m_string;
-
-   enum Child {
-      String = 1
-   };
 
    DomStringList(const DomStringList &other);
    void operator = (const DomStringList &other);
@@ -5221,12 +5165,8 @@ class QDESIGNER_UILIB_EXPORT DomConnections
 
    // attribute data
    // child element data
-   uint m_children;
    QList<DomConnection *> m_connection;
 
-   enum Child {
-      Connection = 1
-   };
 
    DomConnections(const DomConnections &other);
    void operator = (const DomConnections &other);
@@ -5353,11 +5293,7 @@ class QDESIGNER_UILIB_EXPORT DomConnectionHints
 
    // attribute data
    // child element data
-   uint m_children;
    QList<DomConnectionHint *> m_hint;
-   enum Child {
-      Hint = 1
-   };
 
    DomConnectionHints(const DomConnectionHints &other);
    void operator = (const DomConnectionHints &other);
@@ -5463,11 +5399,7 @@ class QDESIGNER_UILIB_EXPORT DomWidgetData
 
    // attribute data
    // child element data
-   uint m_children;
    QList<DomProperty *> m_property;
-   enum Child {
-      Property = 1
-   };
 
    DomWidgetData(const DomWidgetData &other);
    void operator = (const DomWidgetData &other);
@@ -5503,11 +5435,7 @@ class QDESIGNER_UILIB_EXPORT DomDesignerData
 
    // attribute data
    // child element data
-   uint m_children;
    QList<DomProperty *> m_property;
-   enum Child {
-      Property = 1
-   };
 
    DomDesignerData(const DomDesignerData &other);
    void operator = (const DomDesignerData &other);

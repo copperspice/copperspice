@@ -694,13 +694,10 @@ void DomIncludes::clear(bool clear_all)
    if (clear_all) {
       m_text.clear();
    }
-
-   m_children = 0;
 }
 
 DomIncludes::DomIncludes()
 {
-   m_children = 0;
 }
 
 DomIncludes::~DomIncludes()
@@ -761,7 +758,6 @@ void DomIncludes::write(QXmlStreamWriter &writer, const QString &tagName) const
 
 void DomIncludes::setElementInclude(const QList<DomInclude *> &a)
 {
-   m_children |= Include;
    m_include = a;
 }
 
@@ -859,13 +855,10 @@ void DomResources::clear(bool clear_all)
       m_text.clear();
       m_has_attr_name = false;
    }
-
-   m_children = 0;
 }
 
 DomResources::DomResources()
 {
-   m_children = 0;
    m_has_attr_name = false;
 }
 
@@ -940,7 +933,6 @@ void DomResources::write(QXmlStreamWriter &writer, const QString &tagName) const
 
 void DomResources::setElementInclude(const QList<DomResource *> &a)
 {
-   m_children |= Include;
    m_include = a;
 }
 
@@ -950,13 +942,10 @@ void DomResource::clear(bool clear_all)
       m_text.clear();
       m_has_attr_location = false;
    }
-
-   m_children = 0;
 }
 
 DomResource::DomResource()
 {
-   m_children = 0;
    m_has_attr_location = false;
 }
 
@@ -1507,13 +1496,10 @@ void DomButtonGroups::clear(bool clear_all)
    if (clear_all) {
       m_text.clear();
    }
-
-   m_children = 0;
 }
 
 DomButtonGroups::DomButtonGroups()
 {
-   m_children = 0;
 }
 
 DomButtonGroups::~DomButtonGroups()
@@ -1574,7 +1560,6 @@ void DomButtonGroups::write(QXmlStreamWriter &writer, const QString &tagName) co
 
 void DomButtonGroups::setElementButtonGroup(const QList<DomButtonGroup *> &a)
 {
-   m_children |= ButtonGroup;
    m_buttonGroup = a;
 }
 
@@ -1586,13 +1571,10 @@ void DomImages::clear(bool clear_all)
    if (clear_all) {
       m_text.clear();
    }
-
-   m_children = 0;
 }
 
 DomImages::DomImages()
 {
-   m_children = 0;
 }
 
 DomImages::~DomImages()
@@ -1653,7 +1635,6 @@ void DomImages::write(QXmlStreamWriter &writer, const QString &tagName) const
 
 void DomImages::setElementImage(const QList<DomImage *> &a)
 {
-   m_children |= Image;
    m_image = a;
 }
 
@@ -1861,13 +1842,10 @@ void DomCustomWidgets::clear(bool clear_all)
    if (clear_all) {
       m_text.clear();
    }
-
-   m_children = 0;
 }
 
 DomCustomWidgets::DomCustomWidgets()
 {
-   m_children = 0;
 }
 
 DomCustomWidgets::~DomCustomWidgets()
@@ -1928,7 +1906,6 @@ void DomCustomWidgets::write(QXmlStreamWriter &writer, const QString &tagName) c
 
 void DomCustomWidgets::setElementCustomWidget(const QList<DomCustomWidget *> &a)
 {
-   m_children |= CustomWidget;
    m_customWidget = a;
 }
 
@@ -2395,13 +2372,10 @@ void DomProperties::clear(bool clear_all)
    if (clear_all) {
       m_text.clear();
    }
-
-   m_children = 0;
 }
 
 DomProperties::DomProperties()
 {
-   m_children = 0;
 }
 
 DomProperties::~DomProperties()
@@ -2462,7 +2436,6 @@ void DomProperties::write(QXmlStreamWriter &writer, const QString &tagName) cons
 
 void DomProperties::setElementProperty(const QList<DomPropertyData *> &a)
 {
-   m_children |= Property;
    m_property = a;
 }
 
@@ -2818,13 +2791,10 @@ void DomTabStops::clear(bool clear_all)
    if (clear_all) {
       m_text.clear();
    }
-
-   m_children = 0;
 }
 
 DomTabStops::DomTabStops()
 {
-   m_children = 0;
 }
 
 DomTabStops::~DomTabStops()
@@ -2882,7 +2852,6 @@ void DomTabStops::write(QXmlStreamWriter &writer, const QString &tagName) const
 
 void DomTabStops::setElementTabStop(const QStringList &a)
 {
-   m_children |= TabStop;
    m_tabStop = a;
 }
 
@@ -3332,13 +3301,10 @@ void DomRow::clear(bool clear_all)
    if (clear_all) {
       m_text.clear();
    }
-
-   m_children = 0;
 }
 
 DomRow::DomRow()
 {
-   m_children = 0;
 }
 
 DomRow::~DomRow()
@@ -3399,7 +3365,6 @@ void DomRow::write(QXmlStreamWriter &writer, const QString &tagName) const
 
 void DomRow::setElementProperty(const QList<DomProperty *> &a)
 {
-   m_children |= Property;
    m_property = a;
 }
 
@@ -3411,13 +3376,10 @@ void DomColumn::clear(bool clear_all)
    if (clear_all) {
       m_text.clear();
    }
-
-   m_children = 0;
 }
 
 DomColumn::DomColumn()
 {
-   m_children = 0;
 }
 
 DomColumn::~DomColumn()
@@ -3478,7 +3440,6 @@ void DomColumn::write(QXmlStreamWriter &writer, const QString &tagName) const
 
 void DomColumn::setElementProperty(const QList<DomProperty *> &a)
 {
-   m_children |= Property;
    m_property = a;
 }
 
@@ -4010,13 +3971,10 @@ void DomSpacer::clear(bool clear_all)
       m_text.clear();
       m_has_attr_name = false;
    }
-
-   m_children = 0;
 }
 
 DomSpacer::DomSpacer()
 {
-   m_children = 0;
    m_has_attr_name = false;
 }
 
@@ -4092,7 +4050,6 @@ void DomSpacer::write(QXmlStreamWriter &writer, const QString &tagName) const
 
 void DomSpacer::setElementProperty(const QList<DomProperty *> &a)
 {
-   m_children |= Property;
    m_property = a;
 }
 
@@ -4381,13 +4338,10 @@ void DomGradient::clear(bool clear_all)
       m_has_attr_spread = false;
       m_has_attr_coordinateMode = false;
    }
-
-   m_children = 0;
 }
 
 DomGradient::DomGradient()
 {
-   m_children = 0;
    m_has_attr_startX = false;
    m_attr_startX = 0.0;
    m_has_attr_startY = false;
@@ -4592,7 +4546,6 @@ void DomGradient::write(QXmlStreamWriter &writer, const QString &tagName) const
 
 void DomGradient::setElementGradientStop(const QList<DomGradientStop *> &a)
 {
-   m_children |= GradientStop;
    m_gradientStop = a;
 }
 
@@ -6476,13 +6429,10 @@ void DomStringList::clear(bool clear_all)
       m_has_attr_comment = false;
       m_has_attr_extraComment = false;
    }
-
-   m_children = 0;
 }
 
 DomStringList::DomStringList()
 {
-   m_children = 0;
    m_has_attr_notr = false;
    m_has_attr_comment = false;
    m_has_attr_extraComment = false;
@@ -6576,7 +6526,6 @@ void DomStringList::write(QXmlStreamWriter &writer, const QString &tagName) cons
 
 void DomStringList::setElementString(const QStringList &a)
 {
-   m_children |= String;
    m_string = a;
 }
 
@@ -8677,13 +8626,10 @@ void DomConnections::clear(bool clear_all)
    if (clear_all) {
       m_text.clear();
    }
-
-   m_children = 0;
 }
 
 DomConnections::DomConnections()
 {
-   m_children = 0;
 }
 
 DomConnections::~DomConnections()
@@ -8744,7 +8690,6 @@ void DomConnections::write(QXmlStreamWriter &writer, const QString &tagName) con
 
 void DomConnections::setElementConnection(const QList<DomConnection *> &a)
 {
-   m_children |= Connection;
    m_connection = a;
 }
 
@@ -8931,13 +8876,10 @@ void DomConnectionHints::clear(bool clear_all)
    if (clear_all) {
       m_text.clear();
    }
-
-   m_children = 0;
 }
 
 DomConnectionHints::DomConnectionHints()
 {
-   m_children = 0;
 }
 
 DomConnectionHints::~DomConnectionHints()
@@ -8998,7 +8940,6 @@ void DomConnectionHints::write(QXmlStreamWriter &writer, const QString &tagName)
 
 void DomConnectionHints::setElementHint(const QList<DomConnectionHint *> &a)
 {
-   m_children |= Hint;
    m_hint = a;
 }
 
@@ -9125,13 +9066,10 @@ void DomWidgetData::clear(bool clear_all)
    if (clear_all) {
       m_text.clear();
    }
-
-   m_children = 0;
 }
 
 DomWidgetData::DomWidgetData()
 {
-   m_children = 0;
 }
 
 DomWidgetData::~DomWidgetData()
@@ -9192,7 +9130,6 @@ void DomWidgetData::write(QXmlStreamWriter &writer, const QString &tagName) cons
 
 void DomWidgetData::setElementProperty(const QList<DomProperty *> &a)
 {
-   m_children |= Property;
    m_property = a;
 }
 
@@ -9204,13 +9141,10 @@ void DomDesignerData::clear(bool clear_all)
    if (clear_all) {
       m_text.clear();
    }
-
-   m_children = 0;
 }
 
 DomDesignerData::DomDesignerData()
 {
-   m_children = 0;
 }
 
 DomDesignerData::~DomDesignerData()
@@ -9271,7 +9205,6 @@ void DomDesignerData::write(QXmlStreamWriter &writer, const QString &tagName) co
 
 void DomDesignerData::setElementProperty(const QList<DomProperty *> &a)
 {
-   m_children |= Property;
    m_property = a;
 }
 
