@@ -154,6 +154,10 @@ class Translator
       Default,
    };
 
+   enum {
+      TextVariantSeparator   = 0x2762, // odd character nobody
+      BinaryVariantSeparator = 0x9c    // unicode "STRING TERMINATOR"
+   };
    int find(const TranslatorMessage &msg) const;
    int find(const QString &context,
             const QString &comment, const QList<TranslatorMessage::Reference> &refs) const;
@@ -273,11 +277,6 @@ class Translator
 
    static void registerFileFormat(const FileFormat &format);
    static QList<FileFormat> &registeredFileFormats();
-
-   enum {
-      TextVariantSeparator   = 0x2762, // odd character nobody
-      BinaryVariantSeparator = 0x9c    // unicode "STRING TERMINATOR"
-   };
 
  private:
    void insert(int idx, const TranslatorMessage &msg);

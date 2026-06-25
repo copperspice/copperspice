@@ -113,6 +113,13 @@ struct WriteInitialization : public TreeWalker
    using DomPropertyList = QList<DomProperty *>;
    using DomPropertyMap  = QHash<QString, DomProperty *>;
 
+   enum {
+      Use43UiFile      = 0,
+      TopLevelMargin,
+      ChildMargin,
+      SubLayoutMargin
+   };
+
    WriteInitialization(Uic *uic);
 
    // widgets
@@ -149,13 +156,6 @@ struct WriteInitialization : public TreeWalker
 
    // images
    void acceptImage(DomImage *image) override;
-
-   enum {
-      Use43UiFile = 0,
-      TopLevelMargin,
-      ChildMargin,
-      SubLayoutMargin
-   };
 
  private:
    enum {

@@ -268,6 +268,23 @@ class CppParser
    };
 
  private:
+
+   enum TokenType {
+      Tok_Eof, Tok_Class, Tok_Friend, Tok_Namespace, Tok_Using, Tok_Return,
+      Tok_CS_OBJECT, Tok_Access, Tok_Cancel,
+      Tok_Identifier, Tok_String, Tok_Arrow, Tok_Colon, Tok_ColonColon,
+      Tok_LeftBracket, Tok_RightBracket, Tok_LeftBrace, Tok_RightBrace, Tok_LeftParen, Tok_RightParen,
+      Tok_Comma,
+      Tok_Semicolon,
+      Tok_QuestionMark,
+      Tok_Equals,
+      Tok_Null,
+      Tok_Integer,
+      Tok_QuotedInclude,
+      Tok_AngledInclude,
+      Tok_Other
+   };
+
    struct IfdefState {
       IfdefState() { }
 
@@ -284,17 +301,6 @@ class CppParser
       int parenDepth;
       int parenDepth1st;
       int elseLine;
-   };
-
-   enum TokenType {
-      Tok_Eof, Tok_Class, Tok_Friend, Tok_Namespace, Tok_Using, Tok_Return,
-      Tok_CS_OBJECT, Tok_Access, Tok_Cancel,
-      Tok_Identifier, Tok_String, Tok_Arrow, Tok_Colon, Tok_ColonColon,
-      Tok_LeftBracket, Tok_RightBracket, Tok_LeftBrace, Tok_RightBrace, Tok_LeftParen, Tok_RightParen,
-      Tok_Comma, Tok_Semicolon, Tok_QuestionMark, Tok_Equals,
-      Tok_Null, Tok_Integer,
-      Tok_QuotedInclude, Tok_AngledInclude,
-      Tok_Other
    };
 
    std::ostream &yyMsg(int line = 0);
