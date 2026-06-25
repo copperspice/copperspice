@@ -1734,7 +1734,7 @@ void DomImage::write(QXmlStreamWriter &writer, const QString &tagName) const
       writer.writeAttribute("name", attributeName());
    }
 
-   if (m_children & Data) {
+   if (m_children & ImageContents) {
       m_data->write(writer, "data");
    }
 
@@ -1749,14 +1749,14 @@ DomImageData *DomImage::takeElementData()
 {
    DomImageData *a = m_data;
    m_data = nullptr;
-   m_children ^= Data;
+   m_children ^= ImageContents;
    return a;
 }
 
 void DomImage::setElementData(DomImageData *a)
 {
    delete m_data;
-   m_children |= Data;
+   m_children |= ImageContents;
    m_data = a;
 }
 
@@ -1764,7 +1764,7 @@ void DomImage::clearElementData()
 {
    delete m_data;
    m_data = nullptr;
-   m_children &= ~Data;
+   m_children &= ~ImageContents;
 }
 
 void DomImageData::clear(bool clear_all)
@@ -4316,7 +4316,7 @@ void DomGradientStop::write(QXmlStreamWriter &writer, const QString &tagName) co
       writer.writeAttribute("position", QString::number(attributePosition(), 'f', 15));
    }
 
-   if (m_children & Color) {
+   if (m_children & StopColor) {
       m_color->write(writer, "color");
    }
 
@@ -4331,14 +4331,15 @@ DomColor *DomGradientStop::takeElementColor()
 {
    DomColor *a = m_color;
    m_color = nullptr;
-   m_children ^= Color;
+   m_children ^= StopColor;
+
    return a;
 }
 
 void DomGradientStop::setElementColor(DomColor *a)
 {
    delete m_color;
-   m_children |= Color;
+   m_children |= StopColor;
    m_color = a;
 }
 
@@ -4346,7 +4347,7 @@ void DomGradientStop::clearElementColor()
 {
    delete m_color;
    m_color = nullptr;
-   m_children &= ~Color;
+   m_children &= ~StopColor;
 }
 
 void DomGradient::clear(bool clear_all)

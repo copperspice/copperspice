@@ -1106,12 +1106,14 @@ class QDESIGNER_UILIB_EXPORT DomImage
    void setElementData(DomImageData *a);
 
    bool hasElementData() const {
-      return m_children & Data;
+      return m_children & ImageContents;
    }
 
    void clearElementData();
 
  private:
+   static constexpr uint ImageContents = 1;
+
    QString m_text;
    void clear(bool clear_all = true);
 
@@ -1122,10 +1124,6 @@ class QDESIGNER_UILIB_EXPORT DomImage
    // child element data
    uint m_children;
    DomImageData *m_data;
-
-   enum Child {
-      Data = 1
-   };
 
    DomImage(const DomImage &other);
    void operator = (const DomImage &other);
@@ -2704,11 +2702,13 @@ class QDESIGNER_UILIB_EXPORT DomGradientStop
    DomColor *takeElementColor();
    void setElementColor(DomColor *a);
    bool hasElementColor() const {
-      return m_children & Color;
+      return m_children & StopColor;
    }
    void clearElementColor();
 
  private:
+   static constexpr uint StopColor = 1;
+
    QString m_text;
    void clear(bool clear_all = true);
 
@@ -2719,9 +2719,6 @@ class QDESIGNER_UILIB_EXPORT DomGradientStop
    // child element data
    uint m_children;
    DomColor *m_color;
-   enum Child {
-      Color = 1
-   };
 
    DomGradientStop(const DomGradientStop &other);
    void operator = (const DomGradientStop &other);
@@ -3151,6 +3148,8 @@ class QDESIGNER_UILIB_EXPORT DomColorRole
    void clearElementBrush();
 
  private:
+   static constexpr uint Brush = 1;
+
    QString m_text;
    void clear(bool clear_all = true);
 
@@ -3161,9 +3160,6 @@ class QDESIGNER_UILIB_EXPORT DomColorRole
    // child element data
    uint m_children;
    DomBrush *m_brush;
-   enum Child {
-      Brush = 1
-   };
 
    DomColorRole(const DomColorRole &other);
    void operator = (const DomColorRole &other);
@@ -4784,6 +4780,8 @@ class QDESIGNER_UILIB_EXPORT DomChar
    void clearElementUnicode();
 
  private:
+   static constexpr uint Unicode = 1;
+
    QString m_text;
    void clear(bool clear_all = true);
 
@@ -4791,9 +4789,6 @@ class QDESIGNER_UILIB_EXPORT DomChar
    // child element data
    uint m_children;
    int m_unicode;
-   enum Child {
-      Unicode = 1
-   };
 
    DomChar(const DomChar &other);
    void operator = (const DomChar &other);
@@ -4831,6 +4826,8 @@ class QDESIGNER_UILIB_EXPORT DomUrl
    void clearElementString();
 
  private:
+   static constexpr uint String = 1;
+
    QString m_text;
    void clear(bool clear_all = true);
 
@@ -4839,9 +4836,6 @@ class QDESIGNER_UILIB_EXPORT DomUrl
    uint m_children;
    DomString *m_string;
 
-   enum Child {
-      String = 1
-   };
 
    DomUrl(const DomUrl &other);
    void operator = (const DomUrl &other);

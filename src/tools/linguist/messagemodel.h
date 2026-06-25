@@ -871,7 +871,7 @@ class MessageModel : public QAbstractItemModel
    CS_OBJECT(MessageModel)
 
  public:
-   enum { SortRole = Qt::UserRole };
+   static constexpr uint SortRole = Qt::UserRole;
 
    MessageModel(QObject *parent, MultiDataModel *data);
 
