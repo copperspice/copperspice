@@ -144,9 +144,6 @@ class Translator
    using SaveFunction = bool (*)(const Translator &, QIODevice &out, ConversionData &data);
    using LoadFunction = bool (*)(Translator &, QIODevice &in, ConversionData &data);
 
-   bool load(const QString &filename, ConversionData &err, const QString &format);
-   bool save(const QString &filename, ConversionData &err, const QString &format) const;
-
    enum LocationType {
       None,
       Absolute,
@@ -158,70 +155,71 @@ class Translator
       TextVariantSeparator   = 0x2762, // odd character nobody
       BinaryVariantSeparator = 0x9c    // unicode "STRING TERMINATOR"
    };
-   int find(const TranslatorMessage &msg) const;
-   int find(const QString &context,
-            const QString &comment, const QList<TranslatorMessage::Reference> &refs) const;
-
-   int find(const QString &context) const;
-
-   void replaceSorted(const TranslatorMessage &msg);
-   void extend(const TranslatorMessage &msg, ConversionData &cd); // Only for single-location messages
-   void append(const TranslatorMessage &msg);
-   void appendSorted(const TranslatorMessage &msg);
-
-   void stripObsoleteMessages();
-   void stripFinishedMessages();
-   void stripEmptyContexts();
-   void stripNonPluralForms();
-   void stripIdenticalSourceTranslations();
-   void dropTranslations();
-   void dropUiLines();
-   void makeFileNamesAbsolute(const QDir &originalPath);
 
    struct Duplicates {
       QSet<int> byId;
       QSet<int> byContents;
    };
 
-   Duplicates resolveDuplicates();
-   void reportDuplicates(const Duplicates &dupes, const QString &fileName, bool verbose);
+   struct FileFormat {
+      enum FileType {
+         TranslationSource,
+         TranslationBinary
+      };
+
+      FileFormat()
+         : loader(nullptr), saver(nullptr), priority(-1) {
+      }
+
+      QString extension;     // such as "ts", "xlf", ...
+      QString description;   // human-readable description
+
+      FileType fileType;
+
+      LoadFunction loader;
+      SaveFunction saver;
+
+      int priority;          // 0 = highest, -1 = invisible
+   };
+
+   void append(const TranslatorMessage &msg);
+   void appendSorted(const TranslatorMessage &msg);
+
+   const TranslatorMessage &constMessage(int i) const {
+      return m_messages.at(i);
+   }
+
+   QStringList dependencies() const {
+      return m_dependencies;
+   }
+
+   void dropTranslations();
+   void dropUiLines();
+   void dump() const;
+
+   void extend(const TranslatorMessage &msg, ConversionData &cd); // Only for single-location messages
+
+   const QHash<QString, QString> &extras() const {
+      return m_extra;
+   }
+
+   int find(const TranslatorMessage &msg) const;
+   int find(const QString &context, const QString &comment,
+         const QList<TranslatorMessage::Reference> &refs) const;
+
+   int find(const QString &context) const;
 
    QString languageCode() const {
       return m_language;
    }
 
-   QString sourceLanguageCode() const {
-      return m_sourceLanguage;
-   }
-
-   void setLocationType(LocationType lt) {
-      m_locationType = lt;
-   }
+   bool load(const QString &filename, ConversionData &err, const QString &format);
 
    LocationType locationType() const {
       return m_locationType;
    }
 
-   static QString makeLanguageCode(QLocale::Language language, QLocale::Country country);
-   static void languageAndCountry(const QString &languageCode, QLocale::Language *lang, QLocale::Country *country);
-
-   void setLanguageCode(const QString &languageCode) {
-      m_language = languageCode;
-   }
-
-   void setSourceLanguageCode(const QString &languageCode) {
-      m_sourceLanguage = languageCode;
-   }
-
-   static QString guessLanguageCodeFromFileName(const QString &fileName);
-   QList<TranslatorMessage> messages() const;
-   static QStringList normalizedTranslations(const TranslatorMessage &m, int numPlurals);
-   void normalizeTranslations(ConversionData &cd);
-   QStringList normalizedTranslations(const TranslatorMessage &m, ConversionData &cd, bool *ok) const;
-
-   int messageCount() const {
-      return m_messages.size();
-   }
+   void makeFileNamesAbsolute(const QDir &originalPath);
 
    TranslatorMessage &message(int i) {
       return m_messages[i];
@@ -231,19 +229,56 @@ class Translator
       return m_messages.at(i);
    }
 
-   const TranslatorMessage &constMessage(int i) const {
-      return m_messages.at(i);
+   int messageCount() const {
+      return m_messages.size();
    }
 
-   void dump() const;
+   QList<TranslatorMessage> messages() const;
+
+   void normalizeTranslations(ConversionData &cd);
+   QStringList normalizedTranslations(const TranslatorMessage &m, ConversionData &cd, bool *ok) const;
+
+   Duplicates resolveDuplicates();
+
+   void replaceSorted(const TranslatorMessage &msg);
+   void reportDuplicates(const Duplicates &dupes, const QString &fileName, bool verbose);
+
+   void stripObsoleteMessages();
+   void stripFinishedMessages();
+   void stripEmptyContexts();
+   void stripNonPluralForms();
+   void stripIdenticalSourceTranslations();
+
+   bool save(const QString &filename, ConversionData &err, const QString &format) const;
 
    void setDependencies(const QStringList &dependencies) {
       m_dependencies = dependencies;
    }
 
-   QStringList dependencies() const {
-      return m_dependencies;
+   void setLocationType(LocationType lt) {
+      m_locationType = lt;
    }
+
+   void setLanguageCode(const QString &languageCode) {
+      m_language = languageCode;
+   }
+
+   void setSourceLanguageCode(const QString &languageCode) {
+      m_sourceLanguage = languageCode;
+   }
+
+   QString sourceLanguageCode() const {
+      return m_sourceLanguage;
+   }
+
+   static QString guessLanguageCodeFromFileName(const QString &fileName);
+   static void languageAndCountry(const QString &languageCode, QLocale::Language *lang, QLocale::Country *country);
+
+   static QString makeLanguageCode(QLocale::Language language, QLocale::Country country);
+   static QStringList normalizedTranslations(const TranslatorMessage &m, int numPlurals);
+
+   static void registerFileFormat(const FileFormat &format);
+   static QList<FileFormat> &registeredFileFormats();
 
    // additional file format specific data
    // note: use '<fileformat>:' as prefix for file format specific members,
@@ -253,36 +288,15 @@ class Translator
    void setExtra(const QString &ba, const QString &var);
    bool hasExtra(const QString &ba) const;
 
-   const QHash<QString, QString> &extras() const {
-      return m_extra;
-   }
-
    void setExtras(const QHash<QString, QString> &extras) {
       m_extra = extras;
    }
 
-   struct FileFormat {
-      FileFormat()
-         : loader(nullptr), saver(nullptr), priority(-1) {
-      }
-
-      QString extension;    // such as "ts", "xlf", ...
-      QString description;  // human-readable description
-      LoadFunction loader;
-      SaveFunction saver;
-
-      enum FileType { TranslationSource, TranslationBinary } fileType;
-      int priority;        // 0 = highest, -1 = invisible
-   };
-
-   static void registerFileFormat(const FileFormat &format);
-   static QList<FileFormat> &registeredFileFormats();
-
  private:
-   void insert(int idx, const TranslatorMessage &msg);
    void addIndex(int idx, const TranslatorMessage &msg) const;
    void delIndex(int idx) const;
    void ensureIndexed() const;
+   void insert(int idx, const TranslatorMessage &msg);
 
    QList<TranslatorMessage> m_messages;         // stores the sequence position
 

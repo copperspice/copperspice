@@ -25,50 +25,10 @@
 
 #include <qalgorithms.h>
 
-void DomUI::clear(bool clear_all)
-{
-   delete m_widget;
-   delete m_layoutDefault;
-   delete m_layoutFunction;
-   delete m_customWidgets;
-   delete m_tabStops;
-   delete m_images;
-   delete m_includes;
-   delete m_resources;
-   delete m_connections;
-   delete m_designerdata;
-   delete m_slots;
-   delete m_buttonGroups;
-
-   if (clear_all) {
-      m_text.clear();
-      m_has_attr_version = false;
-      m_has_attr_language = false;
-      m_has_attr_displayname = false;
-      m_has_attr_stdsetdef = false;
-      m_attr_stdsetdef = 0;
-      m_has_attr_stdSetDef = false;
-      m_attr_stdSetDef = 0;
-   }
-
-   m_children = 0;
-   m_widget = nullptr;
-   m_layoutDefault = nullptr;
-   m_layoutFunction = nullptr;
-   m_customWidgets = nullptr;
-   m_tabStops = nullptr;
-   m_images = nullptr;
-   m_includes = nullptr;
-   m_resources = nullptr;
-   m_connections = nullptr;
-   m_designerdata = nullptr;
-   m_slots = nullptr;
-   m_buttonGroups = nullptr;
-}
-
 DomUI::DomUI()
 {
    m_children = 0;
+
    m_has_attr_version = false;
    m_has_attr_language = false;
    m_has_attr_displayname = false;
@@ -104,6 +64,48 @@ DomUI::~DomUI()
    delete m_designerdata;
    delete m_slots;
    delete m_buttonGroups;
+}
+
+void DomUI::clear(bool clear_all)
+{
+   delete m_widget;
+   delete m_layoutDefault;
+   delete m_layoutFunction;
+   delete m_customWidgets;
+   delete m_tabStops;
+   delete m_images;
+   delete m_includes;
+   delete m_resources;
+   delete m_connections;
+   delete m_designerdata;
+   delete m_slots;
+   delete m_buttonGroups;
+
+   if (clear_all) {
+      m_text.clear();
+      m_has_attr_version = false;
+      m_has_attr_language = false;
+      m_has_attr_displayname = false;
+      m_has_attr_stdsetdef = false;
+      m_attr_stdsetdef = 0;
+      m_has_attr_stdSetDef = false;
+      m_attr_stdSetDef = 0;
+   }
+
+   m_children = 0;
+
+   m_widget = nullptr;
+   m_layoutDefault = nullptr;
+   m_layoutFunction = nullptr;
+   m_customWidgets = nullptr;
+   m_tabStops = nullptr;
+   m_images = nullptr;
+   m_includes = nullptr;
+   m_resources = nullptr;
+   m_connections = nullptr;
+   m_designerdata = nullptr;
+   m_slots = nullptr;
+   m_buttonGroups = nullptr;
 }
 
 void DomUI::read(QXmlStreamReader &reader)
@@ -393,7 +395,7 @@ void DomUI::setElementClass(const QString &a)
 DomWidget *DomUI::takeElementWidget()
 {
    DomWidget *a = m_widget;
-   m_widget = nullptr;
+   m_widget    = nullptr;
    m_children ^= Widget;
 
    return a;
@@ -410,7 +412,7 @@ DomLayoutDefault *DomUI::takeElementLayoutDefault()
 {
    DomLayoutDefault *a = m_layoutDefault;
    m_layoutDefault = nullptr;
-   m_children ^= LayoutDefault;
+   m_children     ^= LayoutDefault;
    return a;
 }
 
@@ -490,7 +492,7 @@ void DomUI::setElementImages(DomImages *a)
 DomIncludes *DomUI::takeElementIncludes()
 {
    DomIncludes *a = m_includes;
-   m_includes = nullptr;
+   m_includes  = nullptr;
    m_children ^= Includes;
    return a;
 }
@@ -577,11 +579,7 @@ void DomUI::setElementButtonGroups(DomButtonGroups *a)
    m_buttonGroups = a;
 }
 
-void DomUI::clearElementAuthor()
-{
-   m_children &= ~Author;
-}
-
+// *
 void DomUI::clearElementComment()
 {
    m_children &= ~Comment;
@@ -590,6 +588,11 @@ void DomUI::clearElementComment()
 void DomUI::clearElementExportMacro()
 {
    m_children &= ~ExportMacro;
+}
+
+void DomUI::clearElementAuthor()
+{
+   m_children &= ~Author;
 }
 
 void DomUI::clearElementClass()
@@ -686,16 +689,7 @@ void DomUI::clearElementButtonGroups()
    m_children &= ~ButtonGroups;
 }
 
-void DomIncludes::clear(bool clear_all)
-{
-   qDeleteAll(m_include);
-   m_include.clear();
-
-   if (clear_all) {
-      m_text.clear();
-   }
-}
-
+// *
 DomIncludes::DomIncludes()
 {
 }
@@ -704,6 +698,16 @@ DomIncludes::~DomIncludes()
 {
    qDeleteAll(m_include);
    m_include.clear();
+}
+
+void DomIncludes::clear(bool clear_all)
+{
+   qDeleteAll(m_include);
+   m_include.clear();
+
+   if (clear_all) {
+      m_text.clear();
+   }
 }
 
 void DomIncludes::read(QXmlStreamReader &reader)
@@ -761,17 +765,7 @@ void DomIncludes::setElementInclude(const QList<DomInclude *> &a)
    m_include = a;
 }
 
-void DomInclude::clear(bool clear_all)
-{
-   if (clear_all) {
-      m_text.clear();
-      m_has_attr_location = false;
-      m_has_attr_impldecl = false;
-   }
-
-   m_children = 0;
-}
-
+// *
 DomInclude::DomInclude()
 {
    m_children = 0;
@@ -782,6 +776,17 @@ DomInclude::DomInclude()
 
 DomInclude::~DomInclude()
 {
+}
+
+void DomInclude::clear(bool clear_all)
+{
+   if (clear_all) {
+      m_text.clear();
+      m_has_attr_location = false;
+      m_has_attr_impldecl = false;
+   }
+
+   m_children = 0;
 }
 
 void DomInclude::read(QXmlStreamReader &reader)
@@ -846,17 +851,7 @@ void DomInclude::write(QXmlStreamWriter &writer, const QString &tagName) const
    writer.writeEndElement();
 }
 
-void DomResources::clear(bool clear_all)
-{
-   qDeleteAll(m_include);
-   m_include.clear();
-
-   if (clear_all) {
-      m_text.clear();
-      m_has_attr_name = false;
-   }
-}
-
+// *
 DomResources::DomResources()
 {
    m_has_attr_name = false;
@@ -866,6 +861,17 @@ DomResources::~DomResources()
 {
    qDeleteAll(m_include);
    m_include.clear();
+}
+
+void DomResources::clear(bool clear_all)
+{
+   qDeleteAll(m_include);
+   m_include.clear();
+
+   if (clear_all) {
+      m_text.clear();
+      m_has_attr_name = false;
+   }
 }
 
 void DomResources::read(QXmlStreamReader &reader)
@@ -936,14 +942,7 @@ void DomResources::setElementInclude(const QList<DomResource *> &a)
    m_include = a;
 }
 
-void DomResource::clear(bool clear_all)
-{
-   if (clear_all) {
-      m_text.clear();
-      m_has_attr_location = false;
-   }
-}
-
+// *
 DomResource::DomResource()
 {
    m_has_attr_location = false;
@@ -951,6 +950,14 @@ DomResource::DomResource()
 
 DomResource::~DomResource()
 {
+}
+
+void DomResource::clear(bool clear_all)
+{
+   if (clear_all) {
+      m_text.clear();
+      m_has_attr_location = false;
+   }
 }
 
 void DomResource::read(QXmlStreamReader &reader)
@@ -1005,6 +1012,28 @@ void DomResource::write(QXmlStreamWriter &writer, const QString &tagName) const
    writer.writeEndElement();
 }
 
+// *
+DomActionGroup::DomActionGroup()
+{
+   m_children = 0;
+   m_has_attr_name = false;
+}
+
+DomActionGroup::~DomActionGroup()
+{
+   qDeleteAll(m_action);
+   m_action.clear();
+
+   qDeleteAll(m_actionGroup);
+   m_actionGroup.clear();
+
+   qDeleteAll(m_property);
+   m_property.clear();
+
+   qDeleteAll(m_attribute);
+   m_attribute.clear();
+}
+
 void DomActionGroup::clear(bool clear_all)
 {
    qDeleteAll(m_action);
@@ -1025,27 +1054,6 @@ void DomActionGroup::clear(bool clear_all)
    }
 
    m_children = 0;
-}
-
-DomActionGroup::DomActionGroup()
-{
-   m_children = 0;
-   m_has_attr_name = false;
-}
-
-DomActionGroup::~DomActionGroup()
-{
-   qDeleteAll(m_action);
-   m_action.clear();
-
-   qDeleteAll(m_actionGroup);
-   m_actionGroup.clear();
-
-   qDeleteAll(m_property);
-   m_property.clear();
-
-   qDeleteAll(m_attribute);
-   m_attribute.clear();
 }
 
 void DomActionGroup::read(QXmlStreamReader &reader)
@@ -1168,6 +1176,23 @@ void DomActionGroup::setElementAttribute(const QList<DomProperty *> &a)
    m_attribute = a;
 }
 
+// *
+DomAction::DomAction()
+{
+   m_children = 0;
+   m_has_attr_name = false;
+   m_has_attr_menu = false;
+}
+
+DomAction::~DomAction()
+{
+   qDeleteAll(m_property);
+   m_property.clear();
+
+   qDeleteAll(m_attribute);
+   m_attribute.clear();
+}
+
 void DomAction::clear(bool clear_all)
 {
    qDeleteAll(m_property);
@@ -1183,22 +1208,6 @@ void DomAction::clear(bool clear_all)
    }
 
    m_children = 0;
-}
-
-DomAction::DomAction()
-{
-   m_children = 0;
-   m_has_attr_name = false;
-   m_has_attr_menu = false;
-}
-
-DomAction::~DomAction()
-{
-   qDeleteAll(m_property);
-   m_property.clear();
-
-   qDeleteAll(m_attribute);
-   m_attribute.clear();
 }
 
 void DomAction::read(QXmlStreamReader &reader)
@@ -1297,16 +1306,7 @@ void DomAction::setElementAttribute(const QList<DomProperty *> &a)
    m_attribute = a;
 }
 
-void DomActionRef::clear(bool clear_all)
-{
-   if (clear_all) {
-      m_text.clear();
-      m_has_attr_name = false;
-   }
-
-   m_children = 0;
-}
-
+// *
 DomActionRef::DomActionRef()
 {
    m_children = 0;
@@ -1315,6 +1315,16 @@ DomActionRef::DomActionRef()
 
 DomActionRef::~DomActionRef()
 {
+}
+
+void DomActionRef::clear(bool clear_all)
+{
+   if (clear_all) {
+      m_text.clear();
+      m_has_attr_name = false;
+   }
+
+   m_children = 0;
 }
 
 void DomActionRef::read(QXmlStreamReader &reader)
@@ -1370,6 +1380,22 @@ void DomActionRef::write(QXmlStreamWriter &writer, const QString &tagName) const
    writer.writeEndElement();
 }
 
+// *
+DomButtonGroup::DomButtonGroup()
+{
+   m_children = 0;
+   m_has_attr_name = false;
+}
+
+DomButtonGroup::~DomButtonGroup()
+{
+   qDeleteAll(m_property);
+   m_property.clear();
+
+   qDeleteAll(m_attribute);
+   m_attribute.clear();
+}
+
 void DomButtonGroup::clear(bool clear_all)
 {
    qDeleteAll(m_property);
@@ -1384,21 +1410,6 @@ void DomButtonGroup::clear(bool clear_all)
    }
 
    m_children = 0;
-}
-
-DomButtonGroup::DomButtonGroup()
-{
-   m_children = 0;
-   m_has_attr_name = false;
-}
-
-DomButtonGroup::~DomButtonGroup()
-{
-   qDeleteAll(m_property);
-   m_property.clear();
-
-   qDeleteAll(m_attribute);
-   m_attribute.clear();
 }
 
 void DomButtonGroup::read(QXmlStreamReader &reader)
@@ -1488,6 +1499,11 @@ void DomButtonGroup::setElementAttribute(const QList<DomProperty *> &a)
    m_attribute = a;
 }
 
+// *
+DomButtonGroups::DomButtonGroups()
+{
+}
+
 void DomButtonGroups::clear(bool clear_all)
 {
    qDeleteAll(m_buttonGroup);
@@ -1496,10 +1512,6 @@ void DomButtonGroups::clear(bool clear_all)
    if (clear_all) {
       m_text.clear();
    }
-}
-
-DomButtonGroups::DomButtonGroups()
-{
 }
 
 DomButtonGroups::~DomButtonGroups()
@@ -1563,16 +1575,7 @@ void DomButtonGroups::setElementButtonGroup(const QList<DomButtonGroup *> &a)
    m_buttonGroup = a;
 }
 
-void DomImages::clear(bool clear_all)
-{
-   qDeleteAll(m_image);
-   m_image.clear();
-
-   if (clear_all) {
-      m_text.clear();
-   }
-}
-
+// *
 DomImages::DomImages()
 {
 }
@@ -1581,6 +1584,16 @@ DomImages::~DomImages()
 {
    qDeleteAll(m_image);
    m_image.clear();
+}
+
+void DomImages::clear(bool clear_all)
+{
+   qDeleteAll(m_image);
+   m_image.clear();
+
+   if (clear_all) {
+      m_text.clear();
+   }
 }
 
 void DomImages::read(QXmlStreamReader &reader)
@@ -1638,6 +1651,19 @@ void DomImages::setElementImage(const QList<DomImage *> &a)
    m_image = a;
 }
 
+// *
+DomImage::DomImage()
+{
+   m_children = 0;
+   m_has_attr_name = false;
+   m_data = nullptr;
+}
+
+DomImage::~DomImage()
+{
+   delete m_data;
+}
+
 void DomImage::clear(bool clear_all)
 {
    delete m_data;
@@ -1649,18 +1675,6 @@ void DomImage::clear(bool clear_all)
 
    m_children = 0;
    m_data = nullptr;
-}
-
-DomImage::DomImage()
-{
-   m_children = 0;
-   m_has_attr_name = false;
-   m_data = nullptr;
-}
-
-DomImage::~DomImage()
-{
-   delete m_data;
 }
 
 void DomImage::read(QXmlStreamReader &reader)
@@ -1748,18 +1762,7 @@ void DomImage::clearElementData()
    m_children &= ~ImageContents;
 }
 
-void DomImageData::clear(bool clear_all)
-{
-   if (clear_all) {
-      m_text.clear();
-      m_has_attr_format = false;
-      m_has_attr_length = false;
-      m_attr_length = 0;
-   }
-
-   m_children = 0;
-}
-
+// *
 DomImageData::DomImageData()
 {
    m_children = 0;
@@ -1771,6 +1774,18 @@ DomImageData::DomImageData()
 
 DomImageData::~DomImageData()
 {
+}
+
+void DomImageData::clear(bool clear_all)
+{
+   if (clear_all) {
+      m_text.clear();
+      m_has_attr_format = false;
+      m_has_attr_length = false;
+      m_attr_length = 0;
+   }
+
+   m_children = 0;
 }
 
 void DomImageData::read(QXmlStreamReader &reader)
@@ -1834,16 +1849,7 @@ void DomImageData::write(QXmlStreamWriter &writer, const QString &tagName) const
    writer.writeEndElement();
 }
 
-void DomCustomWidgets::clear(bool clear_all)
-{
-   qDeleteAll(m_customWidget);
-   m_customWidget.clear();
-
-   if (clear_all) {
-      m_text.clear();
-   }
-}
-
+// *
 DomCustomWidgets::DomCustomWidgets()
 {
 }
@@ -1852,6 +1858,16 @@ DomCustomWidgets::~DomCustomWidgets()
 {
    qDeleteAll(m_customWidget);
    m_customWidget.clear();
+}
+
+void DomCustomWidgets::clear(bool clear_all)
+{
+   qDeleteAll(m_customWidget);
+   m_customWidget.clear();
+
+   if (clear_all) {
+      m_text.clear();
+   }
 }
 
 void DomCustomWidgets::read(QXmlStreamReader &reader)
@@ -1909,16 +1925,7 @@ void DomCustomWidgets::setElementCustomWidget(const QList<DomCustomWidget *> &a)
    m_customWidget = a;
 }
 
-void DomHeader::clear(bool clear_all)
-{
-   if (clear_all) {
-      m_text.clear();
-      m_has_attr_location = false;
-   }
-
-   m_children = 0;
-}
-
+// *
 DomHeader::DomHeader()
 {
    m_children = 0;
@@ -1928,6 +1935,16 @@ DomHeader::DomHeader()
 
 DomHeader::~DomHeader()
 {
+}
+
+void DomHeader::clear(bool clear_all)
+{
+   if (clear_all) {
+      m_text.clear();
+      m_has_attr_location = false;
+   }
+
+   m_children = 0;
 }
 
 void DomHeader::read(QXmlStreamReader &reader)
@@ -2297,6 +2314,7 @@ void DomCustomWidget::setElementPropertyspecifications(DomPropertySpecifications
    m_propertyspecifications = a;
 }
 
+// *
 void DomCustomWidget::clearElementClass()
 {
    m_children &= ~Class;
@@ -2364,16 +2382,7 @@ void DomCustomWidget::clearElementPropertyspecifications()
    m_children &= ~Propertyspecifications;
 }
 
-void DomProperties::clear(bool clear_all)
-{
-   qDeleteAll(m_property);
-   m_property.clear();
-
-   if (clear_all) {
-      m_text.clear();
-   }
-}
-
+//
 DomProperties::DomProperties()
 {
 }
@@ -2382,6 +2391,16 @@ DomProperties::~DomProperties()
 {
    qDeleteAll(m_property);
    m_property.clear();
+}
+
+void DomProperties::clear(bool clear_all)
+{
+   qDeleteAll(m_property);
+   m_property.clear();
+
+   if (clear_all) {
+      m_text.clear();
+   }
 }
 
 void DomProperties::read(QXmlStreamReader &reader)
@@ -2439,16 +2458,7 @@ void DomProperties::setElementProperty(const QList<DomPropertyData *> &a)
    m_property = a;
 }
 
-void DomPropertyData::clear(bool clear_all)
-{
-   if (clear_all) {
-      m_text.clear();
-      m_has_attr_type = false;
-   }
-
-   m_children = 0;
-}
-
+// *
 DomPropertyData::DomPropertyData()
 {
    m_children = 0;
@@ -2457,6 +2467,16 @@ DomPropertyData::DomPropertyData()
 
 DomPropertyData::~DomPropertyData()
 {
+}
+
+void DomPropertyData::clear(bool clear_all)
+{
+   if (clear_all) {
+      m_text.clear();
+      m_has_attr_type = false;
+   }
+
+   m_children = 0;
 }
 
 void DomPropertyData::read(QXmlStreamReader &reader)
@@ -2512,17 +2532,7 @@ void DomPropertyData::write(QXmlStreamWriter &writer, const QString &tagName) co
    writer.writeEndElement();
 }
 
-void DomSizePolicyData::clear(bool clear_all)
-{
-   if (clear_all) {
-      m_text.clear();
-   }
-
-   m_children = 0;
-   m_horData = 0;
-   m_verData = 0;
-}
-
+// *
 DomSizePolicyData::DomSizePolicyData()
 {
    m_children = 0;
@@ -2532,6 +2542,17 @@ DomSizePolicyData::DomSizePolicyData()
 
 DomSizePolicyData::~DomSizePolicyData()
 {
+}
+
+void DomSizePolicyData::clear(bool clear_all)
+{
+   if (clear_all) {
+      m_text.clear();
+   }
+
+   m_children = 0;
+   m_horData  = 0;
+   m_verData  = 0;
 }
 
 void DomSizePolicyData::read(QXmlStreamReader &reader)
@@ -2784,15 +2805,7 @@ void DomLayoutFunction::write(QXmlStreamWriter &writer, const QString &tagName) 
    writer.writeEndElement();
 }
 
-void DomTabStops::clear(bool clear_all)
-{
-   m_tabStop.clear();
-
-   if (clear_all) {
-      m_text.clear();
-   }
-}
-
+// *
 DomTabStops::DomTabStops()
 {
 }
@@ -2800,6 +2813,15 @@ DomTabStops::DomTabStops()
 DomTabStops::~DomTabStops()
 {
    m_tabStop.clear();
+}
+
+void DomTabStops::clear(bool clear_all)
+{
+   m_tabStop.clear();
+
+   if (clear_all) {
+      m_text.clear();
+   }
 }
 
 void DomTabStops::read(QXmlStreamReader &reader)
@@ -2855,6 +2877,31 @@ void DomTabStops::setElementTabStop(const QStringList &a)
    m_tabStop = a;
 }
 
+// *
+DomLayout::DomLayout()
+{
+   m_children = 0;
+   m_has_attr_class = false;
+   m_has_attr_name = false;
+   m_has_attr_stretch = false;
+   m_has_attr_rowStretch = false;
+   m_has_attr_columnStretch = false;
+   m_has_attr_rowMinimumHeight = false;
+   m_has_attr_columnMinimumWidth = false;
+}
+
+DomLayout::~DomLayout()
+{
+   qDeleteAll(m_property);
+   m_property.clear();
+
+   qDeleteAll(m_attribute);
+   m_attribute.clear();
+
+   qDeleteAll(m_item);
+   m_item.clear();
+}
+
 void DomLayout::clear(bool clear_all)
 {
    qDeleteAll(m_property);
@@ -2878,30 +2925,6 @@ void DomLayout::clear(bool clear_all)
    }
 
    m_children = 0;
-}
-
-DomLayout::DomLayout()
-{
-   m_children = 0;
-   m_has_attr_class = false;
-   m_has_attr_name = false;
-   m_has_attr_stretch = false;
-   m_has_attr_rowStretch = false;
-   m_has_attr_columnStretch = false;
-   m_has_attr_rowMinimumHeight = false;
-   m_has_attr_columnMinimumWidth = false;
-}
-
-DomLayout::~DomLayout()
-{
-   qDeleteAll(m_property);
-   m_property.clear();
-
-   qDeleteAll(m_attribute);
-   m_attribute.clear();
-
-   qDeleteAll(m_item);
-   m_item.clear();
 }
 
 void DomLayout::read(QXmlStreamReader &reader)
@@ -3293,16 +3316,7 @@ void DomLayoutItem::setElementSpacer(DomSpacer *a)
    m_spacer = a;
 }
 
-void DomRow::clear(bool clear_all)
-{
-   qDeleteAll(m_property);
-   m_property.clear();
-
-   if (clear_all) {
-      m_text.clear();
-   }
-}
-
+// *
 DomRow::DomRow()
 {
 }
@@ -3311,6 +3325,16 @@ DomRow::~DomRow()
 {
    qDeleteAll(m_property);
    m_property.clear();
+}
+
+void DomRow::clear(bool clear_all)
+{
+   qDeleteAll(m_property);
+   m_property.clear();
+
+   if (clear_all) {
+      m_text.clear();
+   }
 }
 
 void DomRow::read(QXmlStreamReader &reader)
@@ -3368,16 +3392,7 @@ void DomRow::setElementProperty(const QList<DomProperty *> &a)
    m_property = a;
 }
 
-void DomColumn::clear(bool clear_all)
-{
-   qDeleteAll(m_property);
-   m_property.clear();
-
-   if (clear_all) {
-      m_text.clear();
-   }
-}
-
+// *
 DomColumn::DomColumn()
 {
 }
@@ -3386,6 +3401,16 @@ DomColumn::~DomColumn()
 {
    qDeleteAll(m_property);
    m_property.clear();
+}
+
+void DomColumn::clear(bool clear_all)
+{
+   qDeleteAll(m_property);
+   m_property.clear();
+
+   if (clear_all) {
+      m_text.clear();
+   }
 }
 
 void DomColumn::read(QXmlStreamReader &reader)
@@ -3443,6 +3468,27 @@ void DomColumn::setElementProperty(const QList<DomProperty *> &a)
    m_property = a;
 }
 
+// *
+DomItem::DomItem()
+{
+   m_children = 0;
+
+   m_has_attr_row = false;
+   m_attr_row = 0;
+
+   m_has_attr_column = false;
+   m_attr_column = 0;
+}
+
+DomItem::~DomItem()
+{
+   qDeleteAll(m_property);
+   m_property.clear();
+
+   qDeleteAll(m_item);
+   m_item.clear();
+}
+
 void DomItem::clear(bool clear_all)
 {
    qDeleteAll(m_property);
@@ -3460,24 +3506,6 @@ void DomItem::clear(bool clear_all)
    }
 
    m_children = 0;
-}
-
-DomItem::DomItem()
-{
-   m_children = 0;
-   m_has_attr_row = false;
-   m_attr_row = 0;
-   m_has_attr_column = false;
-   m_attr_column = 0;
-}
-
-DomItem::~DomItem()
-{
-   qDeleteAll(m_property);
-   m_property.clear();
-
-   qDeleteAll(m_item);
-   m_item.clear();
 }
 
 void DomItem::read(QXmlStreamReader &reader)
@@ -3962,6 +3990,18 @@ void DomWidget::setElementZOrder(const QStringList &a)
    m_zOrder = a;
 }
 
+// *
+DomSpacer::DomSpacer()
+{
+   m_has_attr_name = false;
+}
+
+DomSpacer::~DomSpacer()
+{
+   qDeleteAll(m_property);
+   m_property.clear();
+}
+
 void DomSpacer::clear(bool clear_all)
 {
    qDeleteAll(m_property);
@@ -3973,16 +4013,6 @@ void DomSpacer::clear(bool clear_all)
    }
 }
 
-DomSpacer::DomSpacer()
-{
-   m_has_attr_name = false;
-}
-
-DomSpacer::~DomSpacer()
-{
-   qDeleteAll(m_property);
-   m_property.clear();
-}
 
 void DomSpacer::read(QXmlStreamReader &reader)
 {
@@ -4053,6 +4083,7 @@ void DomSpacer::setElementProperty(const QList<DomProperty *> &a)
    m_property = a;
 }
 
+// *
 void DomColor::clear(bool clear_all)
 {
    if (clear_all) {
@@ -4194,6 +4225,21 @@ void DomColor::clearElementBlue()
    m_children &= ~Blue;
 }
 
+
+// *
+DomGradientStop::DomGradientStop()
+{
+   m_children = 0;
+   m_has_attr_position = false;
+   m_attr_position = 0.0;
+   m_color = nullptr;
+}
+
+DomGradientStop::~DomGradientStop()
+{
+   delete m_color;
+}
+
 void DomGradientStop::clear(bool clear_all)
 {
    delete m_color;
@@ -4206,19 +4252,6 @@ void DomGradientStop::clear(bool clear_all)
 
    m_children = 0;
    m_color = nullptr;
-}
-
-DomGradientStop::DomGradientStop()
-{
-   m_children = 0;
-   m_has_attr_position = false;
-   m_attr_position = 0.0;
-   m_color = nullptr;
-}
-
-DomGradientStop::~DomGradientStop()
-{
-   delete m_color;
 }
 
 void DomGradientStop::read(QXmlStreamReader &reader)
@@ -4307,39 +4340,7 @@ void DomGradientStop::clearElementColor()
    m_children &= ~StopColor;
 }
 
-void DomGradient::clear(bool clear_all)
-{
-   qDeleteAll(m_gradientStop);
-   m_gradientStop.clear();
-
-   if (clear_all) {
-      m_text.clear();
-      m_has_attr_startX = false;
-      m_attr_startX = 0.0;
-      m_has_attr_startY = false;
-      m_attr_startY = 0.0;
-      m_has_attr_endX = false;
-      m_attr_endX = 0.0;
-      m_has_attr_endY = false;
-      m_attr_endY = 0.0;
-      m_has_attr_centralX = false;
-      m_attr_centralX = 0.0;
-      m_has_attr_centralY = false;
-      m_attr_centralY = 0.0;
-      m_has_attr_focalX = false;
-      m_attr_focalX = 0.0;
-      m_has_attr_focalY = false;
-      m_attr_focalY = 0.0;
-      m_has_attr_radius = false;
-      m_attr_radius = 0.0;
-      m_has_attr_angle = false;
-      m_attr_angle = 0.0;
-      m_has_attr_type = false;
-      m_has_attr_spread = false;
-      m_has_attr_coordinateMode = false;
-   }
-}
-
+// *
 DomGradient::DomGradient()
 {
    m_has_attr_startX = false;
@@ -4371,6 +4372,39 @@ DomGradient::~DomGradient()
 {
    qDeleteAll(m_gradientStop);
    m_gradientStop.clear();
+}
+
+void DomGradient::clear(bool clear_all)
+{
+   qDeleteAll(m_gradientStop);
+   m_gradientStop.clear();
+
+   if (clear_all) {
+      m_text.clear();
+      m_has_attr_startX = false;
+      m_attr_startX = 0.0;
+      m_has_attr_startY = false;
+      m_attr_startY = 0.0;
+      m_has_attr_endX = false;
+      m_attr_endX = 0.0;
+      m_has_attr_endY = false;
+      m_attr_endY = 0.0;
+      m_has_attr_centralX = false;
+      m_attr_centralX = 0.0;
+      m_has_attr_centralY = false;
+      m_attr_centralY = 0.0;
+      m_has_attr_focalX = false;
+      m_attr_focalX = 0.0;
+      m_has_attr_focalY = false;
+      m_attr_focalY = 0.0;
+      m_has_attr_radius = false;
+      m_attr_radius = 0.0;
+      m_has_attr_angle = false;
+      m_attr_angle = 0.0;
+      m_has_attr_type = false;
+      m_has_attr_spread = false;
+      m_has_attr_coordinateMode = false;
+   }
 }
 
 void DomGradient::read(QXmlStreamReader &reader)
@@ -4549,6 +4583,25 @@ void DomGradient::setElementGradientStop(const QList<DomGradientStop *> &a)
    m_gradientStop = a;
 }
 
+// *
+DomBrush::DomBrush()
+{
+   m_kind = Unknown;
+
+   m_has_attr_brushStyle = false;
+   m_color    = nullptr;
+   m_texture  = nullptr;
+   m_gradient = nullptr;
+}
+
+DomBrush::~DomBrush()
+{
+   delete m_color;
+   delete m_texture;
+   delete m_gradient;
+}
+
+
 void DomBrush::clear(bool clear_all)
 {
    delete m_color;
@@ -4565,23 +4618,6 @@ void DomBrush::clear(bool clear_all)
    m_color = nullptr;
    m_texture = nullptr;
    m_gradient = nullptr;
-}
-
-DomBrush::DomBrush()
-{
-   m_kind = Unknown;
-
-   m_has_attr_brushStyle = false;
-   m_color = nullptr;
-   m_texture = nullptr;
-   m_gradient = nullptr;
-}
-
-DomBrush::~DomBrush()
-{
-   delete m_color;
-   delete m_texture;
-   delete m_gradient;
 }
 
 void DomBrush::read(QXmlStreamReader &reader)
@@ -6419,18 +6455,7 @@ void DomDateTime::clearElementDay()
    m_children &= ~Day;
 }
 
-void DomStringList::clear(bool clear_all)
-{
-   m_string.clear();
-
-   if (clear_all) {
-      m_text.clear();
-      m_has_attr_notr = false;
-      m_has_attr_comment = false;
-      m_has_attr_extraComment = false;
-   }
-}
-
+// *
 DomStringList::DomStringList()
 {
    m_has_attr_notr = false;
@@ -6441,6 +6466,18 @@ DomStringList::DomStringList()
 DomStringList::~DomStringList()
 {
    m_string.clear();
+}
+
+void DomStringList::clear(bool clear_all)
+{
+   m_string.clear();
+
+   if (clear_all) {
+      m_text.clear();
+      m_has_attr_notr = false;
+      m_has_attr_comment = false;
+      m_has_attr_extraComment = false;
+   }
 }
 
 void DomStringList::read(QXmlStreamReader &reader)
@@ -6529,17 +6566,7 @@ void DomStringList::setElementString(const QStringList &a)
    m_string = a;
 }
 
-void DomResourcePixmap::clear(bool clear_all)
-{
-   if (clear_all) {
-      m_text.clear();
-      m_has_attr_resource = false;
-      m_has_attr_alias = false;
-   }
-
-   m_children = 0;
-}
-
+// *
 DomResourcePixmap::DomResourcePixmap()
 {
    m_children = 0;
@@ -6550,6 +6577,17 @@ DomResourcePixmap::DomResourcePixmap()
 
 DomResourcePixmap::~DomResourcePixmap()
 {
+}
+
+void DomResourcePixmap::clear(bool clear_all)
+{
+   if (clear_all) {
+      m_text.clear();
+      m_has_attr_resource = false;
+      m_has_attr_alias = false;
+   }
+
+   m_children = 0;
 }
 
 void DomResourcePixmap::read(QXmlStreamReader &reader)
@@ -8618,16 +8656,7 @@ void DomProperty::setElementBrush(DomBrush *a)
    m_brush = a;
 }
 
-void DomConnections::clear(bool clear_all)
-{
-   qDeleteAll(m_connection);
-   m_connection.clear();
-
-   if (clear_all) {
-      m_text.clear();
-   }
-}
-
+// *
 DomConnections::DomConnections()
 {
 }
@@ -8636,6 +8665,16 @@ DomConnections::~DomConnections()
 {
    qDeleteAll(m_connection);
    m_connection.clear();
+}
+
+void DomConnections::clear(bool clear_all)
+{
+   qDeleteAll(m_connection);
+   m_connection.clear();
+
+   if (clear_all) {
+      m_text.clear();
+   }
 }
 
 void DomConnections::read(QXmlStreamReader &reader)
@@ -8693,6 +8732,18 @@ void DomConnections::setElementConnection(const QList<DomConnection *> &a)
    m_connection = a;
 }
 
+// *
+DomConnection::DomConnection()
+{
+   m_children = 0;
+   m_hints = nullptr;
+}
+
+DomConnection::~DomConnection()
+{
+   delete m_hints;
+}
+
 void DomConnection::clear(bool clear_all)
 {
    delete m_hints;
@@ -8703,17 +8754,6 @@ void DomConnection::clear(bool clear_all)
 
    m_children = 0;
    m_hints = nullptr;
-}
-
-DomConnection::DomConnection()
-{
-   m_children = 0;
-   m_hints = nullptr;
-}
-
-DomConnection::~DomConnection()
-{
-   delete m_hints;
 }
 
 void DomConnection::read(QXmlStreamReader &reader)
@@ -8868,16 +8908,7 @@ void DomConnection::clearElementHints()
    m_children &= ~Hints;
 }
 
-void DomConnectionHints::clear(bool clear_all)
-{
-   qDeleteAll(m_hint);
-   m_hint.clear();
-
-   if (clear_all) {
-      m_text.clear();
-   }
-}
-
+//
 DomConnectionHints::DomConnectionHints()
 {
 }
@@ -8886,6 +8917,16 @@ DomConnectionHints::~DomConnectionHints()
 {
    qDeleteAll(m_hint);
    m_hint.clear();
+}
+
+void DomConnectionHints::clear(bool clear_all)
+{
+   qDeleteAll(m_hint);
+   m_hint.clear();
+
+   if (clear_all) {
+      m_text.clear();
+   }
 }
 
 void DomConnectionHints::read(QXmlStreamReader &reader)
@@ -8943,18 +8984,7 @@ void DomConnectionHints::setElementHint(const QList<DomConnectionHint *> &a)
    m_hint = a;
 }
 
-void DomConnectionHint::clear(bool clear_all)
-{
-   if (clear_all) {
-      m_text.clear();
-      m_has_attr_type = false;
-   }
-
-   m_children = 0;
-   m_x = 0;
-   m_y = 0;
-}
-
+// *
 DomConnectionHint::DomConnectionHint()
 {
    m_children = 0;
@@ -8965,6 +8995,18 @@ DomConnectionHint::DomConnectionHint()
 
 DomConnectionHint::~DomConnectionHint()
 {
+}
+
+void DomConnectionHint::clear(bool clear_all)
+{
+   if (clear_all) {
+      m_text.clear();
+      m_has_attr_type = false;
+   }
+
+   m_children = 0;
+   m_x = 0;
+   m_y = 0;
 }
 
 void DomConnectionHint::read(QXmlStreamReader &reader)
@@ -9058,16 +9100,7 @@ void DomConnectionHint::clearElementY()
    m_children &= ~Y;
 }
 
-void DomWidgetData::clear(bool clear_all)
-{
-   qDeleteAll(m_property);
-   m_property.clear();
-
-   if (clear_all) {
-      m_text.clear();
-   }
-}
-
+// *
 DomWidgetData::DomWidgetData()
 {
 }
@@ -9076,6 +9109,16 @@ DomWidgetData::~DomWidgetData()
 {
    qDeleteAll(m_property);
    m_property.clear();
+}
+
+void DomWidgetData::clear(bool clear_all)
+{
+   qDeleteAll(m_property);
+   m_property.clear();
+
+   if (clear_all) {
+      m_text.clear();
+   }
 }
 
 void DomWidgetData::read(QXmlStreamReader &reader)
@@ -9133,16 +9176,7 @@ void DomWidgetData::setElementProperty(const QList<DomProperty *> &a)
    m_property = a;
 }
 
-void DomDesignerData::clear(bool clear_all)
-{
-   qDeleteAll(m_property);
-   m_property.clear();
-
-   if (clear_all) {
-      m_text.clear();
-   }
-}
-
+// *
 DomDesignerData::DomDesignerData()
 {
 }
@@ -9151,6 +9185,16 @@ DomDesignerData::~DomDesignerData()
 {
    qDeleteAll(m_property);
    m_property.clear();
+}
+
+void DomDesignerData::clear(bool clear_all)
+{
+   qDeleteAll(m_property);
+   m_property.clear();
+
+   if (clear_all) {
+      m_text.clear();
+   }
 }
 
 void DomDesignerData::read(QXmlStreamReader &reader)
@@ -9208,6 +9252,18 @@ void DomDesignerData::setElementProperty(const QList<DomProperty *> &a)
    m_property = a;
 }
 
+// *
+DomSlots::DomSlots()
+{
+   m_children = 0;
+}
+
+DomSlots::~DomSlots()
+{
+   m_signal.clear();
+   m_slot.clear();
+}
+
 void DomSlots::clear(bool clear_all)
 {
    m_signal.clear();
@@ -9218,17 +9274,6 @@ void DomSlots::clear(bool clear_all)
    }
 
    m_children = 0;
-}
-
-DomSlots::DomSlots()
-{
-   m_children = 0;
-}
-
-DomSlots::~DomSlots()
-{
-   m_signal.clear();
-   m_slot.clear();
 }
 
 void DomSlots::read(QXmlStreamReader &reader)
