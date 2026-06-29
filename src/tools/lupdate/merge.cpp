@@ -197,8 +197,9 @@ static QString translationAttempt(const QString &oldTranslation, const QString &
    */
    for (k = 0; k < p; k++) {
       for (ell = 0; ell < p; ell++) {
-         if (k != ell && oldNumbers[k] == oldNumbers[ell] && newNumbers[k] < newNumbers[ell])
+         if (k != ell && oldNumbers[k] == oldNumbers[ell] && newNumbers[k] < newNumbers[ell]) {
             attempt += " {" + newNumbers[k] + " or " + newNumbers[ell] + "?}";
+         }
       }
    }
    return attempt;

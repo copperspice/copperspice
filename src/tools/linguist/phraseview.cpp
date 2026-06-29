@@ -221,8 +221,9 @@ void PhraseView::setSourceText(int model, const QString &sourceText)
       return;
    }
 
-   for (Phrase * p : getPhrases(model, sourceText))
-   m_phraseModel->addPhrase(p);
+   for (Phrase * p : getPhrases(model, sourceText)) {
+      m_phraseModel->addPhrase(p);
+   }
 
    if (! sourceText.isEmpty() && m_doGuesses) {
       QList<Candidate> cl = similarTextHeuristicCandidates(m_dataModel, model, sourceText, MaxCandidates);

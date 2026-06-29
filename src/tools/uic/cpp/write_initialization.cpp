@@ -180,7 +180,7 @@ static bool checkProperty(const QString &fileName, const DomProperty *p)
          break;
 
       case DomProperty::Pixmap:
-         if (const DomResourcePixmap *drp = p->elementPixmap())
+         if (const DomResourcePixmap *drp = p->elementPixmap()) {
             if (drp->text().isEmpty()) {
                const QString msg = QString("%1: Warning, an invalid pixmap property '%2' was found")
                   .formatArg(fileName).formatArg(p->attributeName());
@@ -188,6 +188,7 @@ static bool checkProperty(const QString &fileName, const DomProperty *p)
 
                return false;
             }
+         }
          break;
 
       default:

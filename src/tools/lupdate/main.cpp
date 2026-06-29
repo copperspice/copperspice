@@ -172,13 +172,15 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
          trObj.resolveDuplicates();
          cd.clearErrors();
 
-         if (! targetLanguage.isEmpty() && targetLanguage != trObj.languageCode())
+         if (! targetLanguage.isEmpty() && targetLanguage != trObj.languageCode()) {
             printErr(QString("lupdate warning: Specified target language '%1' disagrees with"
                              " existing file's language '%2'. Ignoring.\n").formatArgs(targetLanguage, trObj.languageCode()));
+         }
 
-         if (! sourceLanguage.isEmpty() && sourceLanguage != trObj.sourceLanguageCode())
+         if (! sourceLanguage.isEmpty() && sourceLanguage != trObj.sourceLanguageCode()) {
             printErr(QString("lupdate warning: Specified source language '%1' disagrees with"
                              " existing file's language '%2'. Ignoring.\n").formatArgs(sourceLanguage, trObj.sourceLanguageCode()));
+         }
 
       } else {
          if (! targetLanguage.isEmpty()) {
@@ -645,9 +647,9 @@ int main(int argc, char **argv)
       return 1;
    }
 
-   if (! targetLanguage.isEmpty() && tsFileNames.count() != 1)
-      printErr("lupdate warning: -target-language usually only"
-               " makes sense with exactly one TS file.\n");
+   if (! targetLanguage.isEmpty() && tsFileNames.count() != 1) {
+      printErr("lupdate warning: -target-language usually only makes sense with exactly one TS file.\n");
+   }
 
    bool fail = false;
 

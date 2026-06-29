@@ -866,10 +866,12 @@ void MainWindow::saveInternal(int model)
 
 void MainWindow::saveAll()
 {
-   for (int i = 0; i < m_dataModel->modelCount(); ++i)
+   for (int i = 0; i < m_dataModel->modelCount(); ++i) {
       if (m_dataModel->isModelWritable(i)) {
          saveInternal(i);
       }
+   }
+
    recentFiles().closeGroup();
 }
 
@@ -942,10 +944,11 @@ void MainWindow::release()
 
 void MainWindow::releaseAll()
 {
-   for (int i = 0; i < m_dataModel->modelCount(); ++i)
+   for (int i = 0; i < m_dataModel->modelCount(); ++i) {
       if (m_dataModel->isModelWritable(i)) {
          releaseInternal(i);
       }
+   }
 }
 
 QPrinter *MainWindow::printer()
@@ -2632,12 +2635,13 @@ void MainWindow::updatePhraseDict(int model)
 
 void MainWindow::updatePhraseDicts()
 {
-   for (int i = 0; i < m_phraseDict.size(); ++i)
+   for (int i = 0; i < m_phraseDict.size(); ++i) {
       if (! m_dataModel->isModelWritable(i)) {
          m_phraseDict[i].clear();
       } else {
          updatePhraseDictInternal(i);
       }
+   }
 
    revalidate();
    m_phraseView->update();
@@ -2869,7 +2873,7 @@ void MainWindow::updateDanger(const MultiDataIndex &index, bool verbose)
 
             // Piggy-backed on the general place markers, we check the plural count marker.
             if (msgCargo->message().isPlural()) {
-               for (int i = 0; i < numTranslations; ++i)
+               for (int i = 0; i < numTranslations; ++i) {
                   if (m_dataModel->model(mi)->countRefNeeds().at(i) && ! translations[i].contains("%n")) {
                      if (verbose) {
                         m_errorsView->addError(mi, ErrorsView::NumerusMarkerMissing);
@@ -2878,6 +2882,7 @@ void MainWindow::updateDanger(const MultiDataIndex &index, bool verbose)
                      danger = true;
                      break;
                   }
+               }
             }
          }
       }

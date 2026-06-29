@@ -419,11 +419,12 @@ QTextEdit *MessageEditor::activeTranslation() const
 QTextEdit *MessageEditor::activeOr1stTranslation() const
 {
    if (m_currentNumerus < 0) {
-      for (int i = 0; i < m_editors.size(); ++i)
+      for (int i = 0; i < m_editors.size(); ++i) {
          if (m_editors[i].container->isVisible()
                && !m_editors[i].transTexts.first()->getEditors().first()->isReadOnly()) {
             return m_editors[i].transTexts.first()->getEditors().first();
          }
+      }
 
       return nullptr;
    }
@@ -873,10 +874,11 @@ void MessageEditor::beginFromSource()
 
 void MessageEditor::setEditorFocus()
 {
-   if (! widget()->hasFocus())
+   if (! widget()->hasFocus()) {
       if (QTextEdit *activeEditor = activeOr1stEditor()) {
          activeEditor->setFocus();
       }
+   }
 }
 
 void MessageEditor::setEditorFocusModel(int model)

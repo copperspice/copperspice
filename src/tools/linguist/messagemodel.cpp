@@ -695,8 +695,9 @@ void MultiContextItem::appendMessageItems(const QList<MessageItem *> &m)
 
    m_messageLists.last() += m;
 
-   for (MessageItem * mi : m)
-   m_multiMessageList.append(MultiMessageItem(mi));
+   for (MessageItem * mi : m) {
+      m_multiMessageList.append(MultiMessageItem(mi));
+   }
 }
 
 void MultiContextItem::removeMultiMessageItem(int pos)
@@ -1030,7 +1031,7 @@ QString MultiDataModel::condenseFileNames(const QStringList &names)
          fn.remove(0, 1);
       }
 
-      for (int j = 0; j < prefix.length(); ++j)
+      for (int j = 0; j < prefix.length(); ++j) {
          if (fn[j] != prefix[j]) {
             if (j < prefix.length()) {
                while (j > 0 && prefix[j - 1].isLetterOrNumber()) {
@@ -1041,11 +1042,12 @@ QString MultiDataModel::condenseFileNames(const QStringList &names)
 
             break;
          }
+      }
 
       int fnl = fn.length() - 1;
       int sxl = suffix.length() - 1;
 
-      for (int k = 0; k <= sxl; ++k)
+      for (int k = 0; k <= sxl; ++k) {
          if (fn[fnl - k] != suffix[sxl - k]) {
             if (k < sxl) {
                while (k > 0 && suffix[sxl - k + 1].isLetterOrNumber()) {
@@ -1061,6 +1063,7 @@ QString MultiDataModel::condenseFileNames(const QStringList &names)
 
             break;
          }
+      }
    }
 
    QString retval = prefix + '{';
