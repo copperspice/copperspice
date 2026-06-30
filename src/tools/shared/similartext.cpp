@@ -185,46 +185,50 @@ int StringSimilarityMatcher::getSimilarityScore(const QString &strCandidate)
 
 QList<Candidate> similarTextHeuristicCandidates(const Translator *trObj, const QString &text, int maxCandidates)
 {
-   QList<int> scores;
+   QList<int> scoreList;
 
-   QList<Candidate> candidates;
+   QList<Candidate> candidateList;
    StringSimilarityMatcher matcher(text);
 
-   for (const TranslatorMessage &mtm : trObj->messages()) {
-      if (mtm.type() == TranslatorMessage::Type::Unfinished || mtm.translation().isEmpty()) {
+   for (const TranslatorMessage &msg : trObj->messages()) {
+      if (msg.type() == TranslatorMessage::Type::Unfinished || msg.translation().isEmpty()) {
          continue;
       }
 
-      QString s = mtm.sourceText();
-      int score = matcher.getSimilarityScore(s);
+      QString sourceMsg = msg.sourceText();
+      int scoreCnt = matcher.getSimilarityScore(sourceMsg);
 
-      if (candidates.size() == maxCandidates && score > scores[maxCandidates - 1] ) {
-         candidates.removeLast();
+      if (candidateList.size() == maxCandidates && scoreCnt > scoreList[maxCandidates - 1] ) {
+         candidateList.removeLast();
       }
 
-      if (candidates.size() < maxCandidates && score >= textSimilarityThreshold) {
-         Candidate cand(s, mtm.translation() );
+      if (candidateList.size() < maxCandidates && scoreCnt >= textSimilarityThreshold) {
+         Candidate item(sourceMsg, msg.translation() );
 
          int i;
-         for (i = 0; i < candidates.size(); i++) {
-            if (score >= scores.at(i)) {
-               if (score == scores.at(i)) {
-                  if (candidates.at(i) == cand) {
+
+         for (i = 0; i < candidateList.size(); i++) {
+            if (scoreCnt >= scoreList.at(i)) {
+
+               if (scoreCnt == scoreList.at(i)) {
+                  if (candidateList.at(i) == item) {
                      goto continue_outer_loop;
                   }
 
                } else {
                   break;
                }
+
             }
          }
-         scores.insert(i, score);
-         candidates.insert(i, cand);
+
+         scoreList.insert(i, scoreCnt);
+         candidateList.insert(i, item);
       }
 
    continue_outer_loop:
       ;
    }
 
-   return candidates;
+   return candidateList;
 }

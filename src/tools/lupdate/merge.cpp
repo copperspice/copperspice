@@ -289,12 +289,12 @@ int applySameTextHeuristic(Translator &trObj)
 
       } else {
          const QString &key = msg.sourceText();
-         QMap<QString, QStringList>::const_iterator t = translated.constFind(key);
+         QMap<QString, QStringList>::const_iterator iter = translated.constFind(key);
 
-         if (t != translated.constEnd()) {
-            if (*t != msg.translations()) {
+         if (iter != translated.constEnd()) {
             // same source text is translated at least two different ways. Do nothing then.
 
+            if (*iter != msg.translations()) {
                translated.remove(key);
                avoid.insert(key, true);
             }
@@ -308,10 +308,11 @@ int applySameTextHeuristic(Translator &trObj)
    for (int i = 0; i < trObj.messageCount(); ++i) {
       if (untranslated[i]) {
          TranslatorMessage &msg = trObj.message(i);
-         QMap<QString, QStringList>::const_iterator t = translated.constFind(msg.sourceText());
 
-         if (t != translated.constEnd()) {
-            msg.setTranslations(*t);
+         QMap<QString, QStringList>::const_iterator iter = translated.constFind(msg.sourceText());
+
+         if (iter != translated.constEnd()) {
+            msg.setTranslations(*iter);
             ++inserted;
          }
       }
