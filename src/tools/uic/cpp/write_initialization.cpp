@@ -937,7 +937,7 @@ void WriteInitialization::acceptWidget(DomWidget *node)
       writeProperties(varName + "->header()", "QHeaderView", headerProperties, WritePropertyIgnoreObjectName);
 
    } else if (m_uic->customWidgetsInfo()->extends(className, "QTableView")
-               || m_uic->customWidgetsInfo()->extends(className, "QTableWidget")) {
+         || m_uic->customWidgetsInfo()->extends(className, "QTableWidget")) {
 
       static QStringList headerPrefixes = { "horizontalHeader", "verticalHeader" };
 

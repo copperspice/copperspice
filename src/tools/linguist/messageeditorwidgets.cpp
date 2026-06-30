@@ -393,9 +393,8 @@ void FormMultiWidget::setTranslation(const QString &text, bool userAction)
 
    updateLayout();
 
-   for (int i = 0; i < texts.count(); ++i)
+   for (int i = 0; i < texts.count(); ++i) {
       // this will emit n textChanged signals
-   {
       m_editors.at(i)->setPlainText(texts.at(i), userAction);
    }
 

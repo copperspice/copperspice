@@ -174,12 +174,12 @@ static void updateTsFiles(const Translator &fetchedTor, const QStringList &tsFil
 
          if (! targetLanguage.isEmpty() && targetLanguage != trObj.languageCode()) {
             printErr(QString("lupdate warning: Specified target language '%1' disagrees with"
-                             " existing file's language '%2'. Ignoring.\n").formatArgs(targetLanguage, trObj.languageCode()));
+                  " existing file's language '%2'. Ignoring.\n").formatArgs(targetLanguage, trObj.languageCode()));
          }
 
          if (! sourceLanguage.isEmpty() && sourceLanguage != trObj.sourceLanguageCode()) {
             printErr(QString("lupdate warning: Specified source language '%1' disagrees with"
-                             " existing file's language '%2'. Ignoring.\n").formatArgs(sourceLanguage, trObj.sourceLanguageCode()));
+                  " existing file's language '%2'. Ignoring.\n").formatArgs(sourceLanguage, trObj.sourceLanguageCode()));
          }
 
       } else {

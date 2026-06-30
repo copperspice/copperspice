@@ -395,6 +395,7 @@ void DomUI::setElementClass(const QString &a)
 DomWidget *DomUI::takeElementWidget()
 {
    DomWidget *a = m_widget;
+
    m_widget    = nullptr;
    m_children ^= Widget;
 
@@ -413,6 +414,7 @@ DomLayoutDefault *DomUI::takeElementLayoutDefault()
    DomLayoutDefault *a = m_layoutDefault;
    m_layoutDefault = nullptr;
    m_children     ^= LayoutDefault;
+
    return a;
 }
 
@@ -428,6 +430,7 @@ DomLayoutFunction *DomUI::takeElementLayoutFunction()
    DomLayoutFunction *a = m_layoutFunction;
    m_layoutFunction = nullptr;
    m_children ^= LayoutFunction;
+
    return a;
 }
 
@@ -449,6 +452,7 @@ DomCustomWidgets *DomUI::takeElementCustomWidgets()
    DomCustomWidgets *a = m_customWidgets;
    m_customWidgets = nullptr;
    m_children ^= CustomWidgets;
+
    return a;
 }
 
@@ -464,6 +468,7 @@ DomTabStops *DomUI::takeElementTabStops()
    DomTabStops *a = m_tabStops;
    m_tabStops = nullptr;
    m_children ^= TabStops;
+
    return a;
 }
 
@@ -479,6 +484,7 @@ DomImages *DomUI::takeElementImages()
    DomImages *a = m_images;
    m_images = nullptr;
    m_children ^= Images;
+
    return a;
 }
 
@@ -494,6 +500,7 @@ DomIncludes *DomUI::takeElementIncludes()
    DomIncludes *a = m_includes;
    m_includes  = nullptr;
    m_children ^= Includes;
+
    return a;
 }
 
@@ -509,6 +516,7 @@ DomResources *DomUI::takeElementResources()
    DomResources *a = m_resources;
    m_resources = nullptr;
    m_children ^= Resources;
+
    return a;
 }
 
@@ -524,6 +532,7 @@ DomConnections *DomUI::takeElementConnections()
    DomConnections *a = m_connections;
    m_connections = nullptr;
    m_children ^= Connections;
+
    return a;
 }
 
@@ -722,6 +731,7 @@ void DomIncludes::read(QXmlStreamReader &reader)
             if (tag == "include") {
                DomInclude *v = new DomInclude();
                v->read(reader);
+
                m_include.append(v);
                continue;
             }
@@ -793,6 +803,7 @@ void DomInclude::read(QXmlStreamReader &reader)
 {
    for (const QXmlStreamAttribute &attribute : reader.attributes()) {
       QStringView name = attribute.name();
+
       if (name == "location") {
          setAttributeLocation(attribute.value().toString());
          continue;
@@ -878,10 +889,12 @@ void DomResources::read(QXmlStreamReader &reader)
 {
    for (const QXmlStreamAttribute &attribute : reader.attributes()) {
       QStringView name = attribute.name();
+
       if (name == "name") {
          setAttributeName(attribute.value().toString());
          continue;
       }
+
       reader.raiseError("Unexpected attribute (DomResources) " + name.toString());
    }
 
@@ -895,6 +908,7 @@ void DomResources::read(QXmlStreamReader &reader)
             if (tag == "include") {
                DomResource *v = new DomResource();
                v->read(reader);
+
                m_include.append(v);
                continue;
             }
@@ -964,6 +978,7 @@ void DomResource::read(QXmlStreamReader &reader)
 {
    for (const QXmlStreamAttribute &attribute : reader.attributes()) {
       QStringView name = attribute.name();
+
       if (name == "location") {
          setAttributeLocation(attribute.value().toString());
          continue;
@@ -1065,6 +1080,7 @@ void DomActionGroup::read(QXmlStreamReader &reader)
          setAttributeName(attribute.value().toString());
          continue;
       }
+
       reader.raiseError("Unexpected attribute (DomActionGroup) " + name.toString());
    }
 
@@ -1074,6 +1090,7 @@ void DomActionGroup::read(QXmlStreamReader &reader)
       switch (reader.readNext()) {
          case QXmlStreamReader::StartElement: {
             const QString tag = reader.name().toString().toLower();
+
             if (tag == "action") {
                DomAction *v = new DomAction();
                v->read(reader);
@@ -1745,6 +1762,7 @@ DomImageData *DomImage::takeElementData()
    DomImageData *a = m_data;
    m_data = nullptr;
    m_children ^= ImageContents;
+
    return a;
 }
 
@@ -1951,10 +1969,12 @@ void DomHeader::read(QXmlStreamReader &reader)
 {
    for (const QXmlStreamAttribute &attribute : reader.attributes()) {
       QStringView name = attribute.name();
+
       if (name == "location") {
          setAttributeLocation(attribute.value().toString());
          continue;
       }
+
       reader.raiseError("Unexpected attribute (DomHeader) " + name.toString());
    }
 
@@ -4258,10 +4278,12 @@ void DomGradientStop::read(QXmlStreamReader &reader)
 {
    for (const QXmlStreamAttribute &attribute : reader.attributes()) {
       QStringView name = attribute.name();
+
       if (name == "position") {
          setAttributePosition(attribute.value().toString().toDouble());
          continue;
       }
+
       reader.raiseError("Unexpected attribute (DomGradientStop) " + name.toString());
    }
 
@@ -4411,6 +4433,7 @@ void DomGradient::read(QXmlStreamReader &reader)
 {
    for (const QXmlStreamAttribute &attribute : reader.attributes()) {
       QStringView name = attribute.name();
+
       if (name == "startx") {
          setAttributeStartX(attribute.value().toString().toDouble());
          continue;
@@ -4798,6 +4821,7 @@ void DomColorRole::read(QXmlStreamReader &reader)
          setAttributeRole(attribute.value().toString());
          continue;
       }
+
       reader.raiseError("Unexpected attribute (DomColorRole) " + name.toString());
    }
 
@@ -4814,6 +4838,7 @@ void DomColorRole::read(QXmlStreamReader &reader)
                setElementBrush(v);
                continue;
             }
+
             reader.raiseError("Unexpected element " + tag);
          }
          break;
@@ -8871,6 +8896,7 @@ DomConnectionHints *DomConnection::takeElementHints()
    DomConnectionHints *a = m_hints;
    m_hints = nullptr;
    m_children ^= Hints;
+
    return a;
 }
 

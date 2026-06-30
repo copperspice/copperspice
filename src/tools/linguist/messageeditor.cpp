@@ -321,6 +321,7 @@ void MessageEditor::reallyFixTabOrder()
 QStringList MessageEditor::translations(int model) const
 {
    QStringList translations;
+
    for (int i = 0; i < m_editors[model].transTexts.count() &&
          m_editors[model].transTexts.at(i)->isVisible(); ++i) {
       translations << m_editors[model].transTexts[i]->getTranslation();
@@ -421,7 +422,7 @@ QTextEdit *MessageEditor::activeOr1stTranslation() const
    if (m_currentNumerus < 0) {
       for (int i = 0; i < m_editors.size(); ++i) {
          if (m_editors[i].container->isVisible()
-               && !m_editors[i].transTexts.first()->getEditors().first()->isReadOnly()) {
+               && ! m_editors[i].transTexts.first()->getEditors().first()->isReadOnly()) {
             return m_editors[i].transTexts.first()->getEditors().first();
          }
       }

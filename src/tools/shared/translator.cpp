@@ -781,7 +781,7 @@ void Translator::normalizeTranslations(ConversionData &cd)
 
    if (truncated) {
       cd.appendError("Removed plural forms as the target language has less forms.\n"
-                     "If this sounds wrong, possibly the target language is not set or recognized.");
+            "If this sounds wrong, possibly the target language is not set or recognized.");
    }
 }
 

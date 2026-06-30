@@ -37,7 +37,6 @@
 #include <sourcecodeview.h>
 #include <statistics.h>
 #include <translate_dialog.h>
-// #include "formpreviewview.h"
 
 #include <qaction.h>
 #include <qalgorithms.h>

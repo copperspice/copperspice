@@ -257,16 +257,20 @@ class QDESIGNER_UILIB_EXPORT DomUI
    QString elementClass() const {
       return m_class;
    }
+
    void setElementClass(const QString &a);
    bool hasElementClass() const {
       return m_children & Class;
    }
+
    void clearElementClass();
 
    DomWidget *elementWidget() const {
       return m_widget;
    }
+
    DomWidget *takeElementWidget();
+
    void setElementWidget(DomWidget *a);
    bool hasElementWidget() const {
       return m_children & Widget;
@@ -276,17 +280,22 @@ class QDESIGNER_UILIB_EXPORT DomUI
    DomLayoutDefault *elementLayoutDefault() const {
       return m_layoutDefault;
    }
+
    DomLayoutDefault *takeElementLayoutDefault();
+
    void setElementLayoutDefault(DomLayoutDefault *a);
    bool hasElementLayoutDefault() const {
       return m_children & LayoutDefault;
    }
+
    void clearElementLayoutDefault();
 
    DomLayoutFunction *elementLayoutFunction() const {
       return m_layoutFunction;
    }
+
    DomLayoutFunction *takeElementLayoutFunction();
+
    void setElementLayoutFunction(DomLayoutFunction *a);
    bool hasElementLayoutFunction() const {
       return m_children & LayoutFunction;
@@ -296,56 +305,71 @@ class QDESIGNER_UILIB_EXPORT DomUI
    QString elementPixmapFunction() const {
       return m_pixmapFunction;
    }
+
    void setElementPixmapFunction(const QString &a);
    bool hasElementPixmapFunction() const {
       return m_children & PixmapFunction;
    }
+
    void clearElementPixmapFunction();
 
    DomCustomWidgets *elementCustomWidgets() const {
       return m_customWidgets;
    }
+
    DomCustomWidgets *takeElementCustomWidgets();
    void setElementCustomWidgets(DomCustomWidgets *a);
    bool hasElementCustomWidgets() const {
       return m_children & CustomWidgets;
    }
+
    void clearElementCustomWidgets();
 
    DomTabStops *elementTabStops() const {
       return m_tabStops;
    }
+
    DomTabStops *takeElementTabStops();
+
    void setElementTabStops(DomTabStops *a);
    bool hasElementTabStops() const {
       return m_children & TabStops;
    }
+
    void clearElementTabStops();
 
    DomImages *elementImages() const {
       return m_images;
    }
+
    DomImages *takeElementImages();
+
    void setElementImages(DomImages *a);
    bool hasElementImages() const {
       return m_children & Images;
    }
+
    void clearElementImages();
 
    DomIncludes *elementIncludes() const {
       return m_includes;
    }
+
    DomIncludes *takeElementIncludes();
+
    void setElementIncludes(DomIncludes *a);
    bool hasElementIncludes() const {
       return m_children & Includes;
    }
+
    void clearElementIncludes();
 
    DomResources *elementResources() const {
       return m_resources;
    }
+
    DomResources *takeElementResources();
+
    void setElementResources(DomResources *a);
    bool hasElementResources() const {
       return m_children & Resources;
@@ -355,7 +379,9 @@ class QDESIGNER_UILIB_EXPORT DomUI
    DomConnections *elementConnections() const {
       return m_connections;
    }
+
    DomConnections *takeElementConnections();
+
    void setElementConnections(DomConnections *a);
    bool hasElementConnections() const {
       return m_children & Connections;
@@ -2613,11 +2639,14 @@ class QDESIGNER_UILIB_EXPORT DomGradientStop
    DomColor *elementColor() const {
       return m_color;
    }
+
    DomColor *takeElementColor();
    void setElementColor(DomColor *a);
+
    bool hasElementColor() const {
       return m_children & StopColor;
    }
+
    void clearElementColor();
 
  private:
@@ -3180,7 +3209,7 @@ class QDESIGNER_UILIB_EXPORT DomPalette
 
  private:
    enum Child {
-      Active = 1,
+      Active   = 1,
       Inactive = 2,
       Disabled = 4
    };
@@ -3733,7 +3762,7 @@ class QDESIGNER_UILIB_EXPORT DomSize
 
  private:
    enum Child {
-      Width = 1,
+      Width  = 1,
       Height = 2
    };
 
@@ -3877,7 +3906,7 @@ class QDESIGNER_UILIB_EXPORT DomTime
 
  private:
    enum Child {
-      Hour = 1,
+      Hour   = 1,
       Minute = 2,
       Second = 4
    };
@@ -4540,10 +4569,12 @@ class QDESIGNER_UILIB_EXPORT DomRectF
    double elementX() const {
       return m_x;
    }
+
    void setElementX(double a);
    bool hasElementX() const {
       return m_children & X;
    }
+
    void clearElementX();
 
    double elementY() const {
@@ -4647,7 +4678,7 @@ class QDESIGNER_UILIB_EXPORT DomSizeF
 
  private:
    enum Child {
-      Width = 1,
+      Width  = 1,
       Height = 2
    };
 
@@ -4688,6 +4719,7 @@ class QDESIGNER_UILIB_EXPORT DomChar
    bool hasElementUnicode() const {
       return m_children & Unicode;
    }
+
    void clearElementUnicode();
 
  private:
@@ -5163,38 +5195,46 @@ class QDESIGNER_UILIB_EXPORT DomConnection
    bool hasElementSender() const {
       return m_children & Sender;
    }
+
    void clearElementSender();
 
    QString elementSignal() const {
       return m_signal;
    }
+
    void setElementSignal(const QString &a);
    bool hasElementSignal() const {
       return m_children & Signal;
    }
+
    void clearElementSignal();
 
    QString elementReceiver() const {
       return m_receiver;
    }
+
    void setElementReceiver(const QString &a);
    bool hasElementReceiver() const {
       return m_children & Receiver;
    }
+
    void clearElementReceiver();
 
    QString elementSlot() const {
       return m_slot;
    }
+
    void setElementSlot(const QString &a);
    bool hasElementSlot() const {
       return m_children & Slot;
    }
+
    void clearElementSlot();
 
    DomConnectionHints *elementHints() const {
       return m_hints;
    }
+
    DomConnectionHints *takeElementHints();
    void setElementHints(DomConnectionHints *a);
    bool hasElementHints() const {
@@ -5282,13 +5322,16 @@ class QDESIGNER_UILIB_EXPORT DomConnectionHint
    bool hasAttributeType() const {
       return m_has_attr_type;
    }
+
    QString attributeType() const {
       return m_attr_type;
    }
+
    void setAttributeType(const QString &a) {
       m_attr_type = a;
       m_has_attr_type = true;
    }
+
    void clearAttributeType() {
       m_has_attr_type = false;
    }
@@ -5297,19 +5340,23 @@ class QDESIGNER_UILIB_EXPORT DomConnectionHint
    int elementX() const {
       return m_x;
    }
+
    void setElementX(int a);
    bool hasElementX() const {
       return m_children & X;
    }
+
    void clearElementX();
 
    int elementY() const {
       return m_y;
    }
+
    void setElementY(int a);
    bool hasElementY() const {
       return m_children & Y;
    }
+
    void clearElementY();
 
  private:
@@ -5348,6 +5395,7 @@ class QDESIGNER_UILIB_EXPORT DomWidgetData
    QString text() const {
       return m_text;
    }
+
    void setText(const QString &s) {
       m_text = s;
    }
@@ -5438,7 +5486,7 @@ class QDESIGNER_UILIB_EXPORT DomSlots
  private:
    enum Child {
       Signal = 1,
-      Slot = 2
+      Slot   = 2
    };
 
    DomSlots(const DomSlots &other);

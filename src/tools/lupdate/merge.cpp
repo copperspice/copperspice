@@ -147,7 +147,7 @@ static QString translationAttempt(const QString &oldTranslation, const QString &
 
       /*
         find out if the last character ended a match. We make two passes over the data.
-        In the first pass we try to match only numbers which were not matched yet. 
+        In the first pass we try to match only numbers which were not matched yet.
         If that fails the second pass will catch this. This is useful in odd cases which are flagged below.
       */
 
@@ -202,6 +202,7 @@ static QString translationAttempt(const QString &oldTranslation, const QString &
          }
       }
    }
+
    return attempt;
 }
 
