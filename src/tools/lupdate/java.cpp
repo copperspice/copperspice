@@ -301,7 +301,7 @@ static int getToken()
                   yyParenLineNo = yyCurLineNo;
                }
 
-               yyParenDepth++;
+               ++yyParenDepth;
                yyCh = getChar();
                return Tok_LeftParen;
 

@@ -129,7 +129,7 @@ CoMatrix::CoMatrix(const QString &str)
 
       if ((c = *++text) != '\0') {
          setCoOccurence(*this, d, c);
-         text++;
+         ++text;
       }
    }
 }

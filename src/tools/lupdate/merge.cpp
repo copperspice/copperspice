@@ -125,7 +125,7 @@ static QString translationAttempt(const QString &oldTranslation, const QString &
          met[k] = false;
          matchedYet[k] = 0;
 
-         k++;
+         ++k;
       }
    }
 
@@ -139,7 +139,7 @@ static QString translationAttempt(const QString &oldTranslation, const QString &
       attempt += oldTranslation[i];
       for (k = 0; k < p; k++) {
          if (oldTranslation[i] == oldNumbers[k][matchedYet[k]]) {
-            matchedYet[k]++;
+            ++matchedYet[k];
          } else {
             matchedYet[k] = 0;
          }
