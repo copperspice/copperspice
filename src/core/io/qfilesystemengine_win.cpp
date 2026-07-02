@@ -609,84 +609,35 @@ QFileSystemEntry QFileSystemEngine::absoluteName(const QFileSystemEntry &entry)
 // FILE_INFO_BY_HANDLE_CLASS has been extended by FileIdInfo = 18
 static constexpr const FILE_INFO_BY_HANDLE_CLASS Q_FileIdInfo = static_cast<FILE_INFO_BY_HANDLE_CLASS>(18);
 
-#if defined(Q_CC_MINGW) && ! defined(STORAGE_INFO_OFFSET_UNKNOWN)
-
-#ifndef FILE_SUPPORTS_INTEGRITY_STREAMS
-
-struct _FILE_ID_128 {
-   BYTE Identifier[16];
-};
-
-using FILE_ID_128  = _FILE_ID_128;
-using PFILE_ID_128 = _FILE_ID_128 *;
-
-#endif
-
-struct _FILE_ID_INFO {
-   ULONGLONG VolumeSerialNumber;
-   FILE_ID_128 FileId;
-};
-
-using FILE_ID_INFO  = _FILE_ID_INFO;
-using PFILE_ID_INFO = *_FILE_ID_INFO;
-
-#endif
-
-// File ID for Windows up to version 7
-static inline QByteArray fileId(HANDLE handle)
-{
-   QByteArray result;
-   BY_HANDLE_FILE_INFORMATION info;
-
-   if (GetFileInformationByHandle(handle, &info)) {
-      result  = QByteArray::number(uint(info.nFileIndexLow), 16);
-      result += ':';
-      result += QByteArray::number(uint(info.nFileIndexHigh), 16);
-   }
-
-   return result;
-}
-
-// File ID for Windows starting from version 8
+// File ID for Windows version 8 or newer
 QByteArray fileIdWin8(HANDLE handle)
 {
-   using GetFileInformationByHandleExType = BOOL (WINAPI *)(HANDLE, FILE_INFO_BY_HANDLE_CLASS, void *, DWORD);
+   QByteArray retval;
 
-   // Dynamically resolve  GetFileInformationByHandleEx (Vista onwards).
-   static GetFileInformationByHandleExType getFileInformationByHandleEx = nullptr;
+   FILE_ID_INFO infoEx;
 
-   if (! getFileInformationByHandleEx) {
-      QSystemLibrary library("kernel32");
-      getFileInformationByHandleEx = (GetFileInformationByHandleExType)library.resolve("GetFileInformationByHandleEx");
+   if (GetFileInformationByHandleEx(handle, Q_FileIdInfo, &infoEx, sizeof(FILE_ID_INFO))) {
+      retval = QByteArray::number(infoEx.VolumeSerialNumber, 16);
+      retval += ':';
+      retval += QByteArray((const char *) &infoEx.FileId, sizeof(infoEx.FileId)).toHex();
    }
 
-   QByteArray result;
-
-   if (getFileInformationByHandleEx) {
-      FILE_ID_INFO infoEx;
-
-      if (getFileInformationByHandleEx(handle, Q_FileIdInfo, &infoEx, sizeof(FILE_ID_INFO))) {
-         result = QByteArray::number(infoEx.VolumeSerialNumber, 16);
-         result += ':';
-         result += QByteArray((char *) &infoEx.FileId, sizeof(infoEx.FileId)).toHex();
-      }
-   }
-
-   return result;
+   return retval;
 }
 
 QByteArray QFileSystemEngine::id(const QFileSystemEntry &entry)
 {
-   QByteArray result;
+   QByteArray retval;
+
    const HANDLE handle = CreateFile(&entry.nativeFilePath().toStdWString()[0],
          GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
-   if (handle) {
-      result = QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS8 ? fileIdWin8(handle) : fileId(handle);
+   if (handle != nullptr) {
+      retval = fileIdWin8(handle);
       CloseHandle(handle);
    }
 
-   return result;
+   return retval;
 }
 
 QString QFileSystemEngine::owner(const QFileSystemEntry &entry, QAbstractFileEngine::FileOwner own)
