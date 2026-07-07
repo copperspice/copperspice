@@ -202,13 +202,9 @@ QVariant QGenericUnixTheme::themeHint(ThemeHint hint) const
 class QKdeThemePrivate : public QPlatformThemePrivate
 {
  public:
-   QKdeThemePrivate(const QStringList &kdeDirs, int kdeVersion)
-      : kdeDirs(kdeDirs)
-      , kdeVersion(kdeVersion)
-      , toolButtonStyle(Qt::ToolButtonTextBesideIcon)
-      , toolBarIconSize(0)
-      , singleClick(true)
-      , wheelScrollLines(3)
+   QKdeThemePrivate(const QStringList &x_kdeDirs, int x_kdeVersion)
+      : kdeDirs(x_kdeDirs), kdeVersion(x_kdeVersion), toolButtonStyle(Qt::ToolButtonTextBesideIcon),
+        toolBarIconSize(0), singleClick(true), wheelScrollLines(3)
    { }
 
    static QString kdeGlobals(const QString &kdeDir, int kdeVersion) {
@@ -261,10 +257,10 @@ void QKdeThemePrivate::refresh()
 
    QHash<QString, QSettings *> kdeSettings;
 
-   QPalette systemPalette = QPalette();
-   readKdeSystemPalette(kdeDirs, kdeVersion, kdeSettings, &systemPalette);
-   resources.palettes[QPlatformTheme::SystemPalette] = new QPalette(systemPalette);
+   QPalette kdeSystemPalette = QPalette();
+   readKdeSystemPalette(kdeDirs, kdeVersion, kdeSettings, &kdeSystemPalette);
    //## TODO tooltip color
+   resources.palettes[QPlatformTheme::SystemPalette] = new QPalette(kdeSystemPalette);
 
    const QVariant styleValue = readKdeSetting("widgetStyle", kdeDirs, kdeVersion, kdeSettings);
 

@@ -866,14 +866,14 @@ QStringList QFontconfigDatabase::fallbacksForFamily(const QString &family, QFont
       duplicates.insert(family.toCaseFolded());
 
       for (int i = 0; i < fontSet->nfont; i++) {
-         FcChar8 *value = nullptr;
+         FcChar8 *familyStr = nullptr;
 
-         if (FcPatternGetString(fontSet->fonts[i], FC_FAMILY, 0, &value) != FcResultMatch) {
+         if (FcPatternGetString(fontSet->fonts[i], FC_FAMILY, 0, &familyStr) != FcResultMatch) {
             continue;
          }
 
          //         capitalize(value);
-         const QString familyName = QString::fromUtf8((const char *)value);
+         const QString familyName   = QString::fromUtf8((const char *)familyStr);
          const QString familyNameCF = familyName.toCaseFolded();
          if (!duplicates.contains(familyNameCF)) {
             fallbackFamilies << familyName;
