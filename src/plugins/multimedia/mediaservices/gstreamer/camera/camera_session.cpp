@@ -964,20 +964,20 @@ bool CameraBinSession::processBusMessage(const QGstreamerMessage &message)
          gchar *debug;
          gst_message_parse_error (gm, &err, &debug);
 
-         QString message;
+         QString errorMsg;
 
          if (err && err->message) {
-            message = QString::fromUtf8(err->message);
-            qWarning() << "CameraBin error:" << message;
+            errorMsg = QString::fromUtf8(err->message);
+            qWarning() << "CameraBin error:" << errorMsg;
          }
 
          //only report error messager from camerabin
          if (GST_MESSAGE_SRC(gm) == GST_OBJECT_CAST(m_camerabin)) {
-            if (message.isEmpty()) {
-               message = tr("Camera error");
+            if (errorMsg.isEmpty()) {
+               errorMsg = tr("Camera error");
             }
 
-            setError(int(QMediaRecorder::ResourceError), message);
+            setError(int(QMediaRecorder::ResourceError), errorMsg);
          }
 
 #if defined(CS_SHOW_DEBUG_PLUGINS_GSTREAMER)

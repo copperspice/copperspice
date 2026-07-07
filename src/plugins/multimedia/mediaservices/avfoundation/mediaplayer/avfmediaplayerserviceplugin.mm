@@ -62,6 +62,8 @@ QMediaServiceProviderHint::Features AVFMediaPlayerServicePlugin::supportedFeatur
 
 QMultimedia::SupportEstimate AVFMediaPlayerServicePlugin::hasSupport(const QString &mimeType, const QStringList &codecs) const
 {
+   (void) codecs;
+
    if (m_supportedMimeTypes.contains(mimeType)) {
       return QMultimedia::ProbablySupported;
    }

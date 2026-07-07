@@ -104,12 +104,12 @@ QList<QCameraViewfinderSettings> AVFCameraViewfinderSettingsControl2::supportedV
             if (!framerates.size())
                 framerates << AVFPSRange(); // The default value.
 
-            for (int i = 0; i < pixelFormats.size(); ++i) {
+            for (int k = 0; k < pixelFormats.size(); ++k) {
                 for (int j = 0; j < framerates.size(); ++j) {
                     QCameraViewfinderSettings newSet;
                     newSet.setResolution(res);
                     newSet.setPixelAspectRatio(par);
-                    newSet.setPixelFormat(pixelFormats[i]);
+                    newSet.setPixelFormat(pixelFormats[k]);
                     newSet.setMinimumFrameRate(framerates[j].first);
                     newSet.setMaximumFrameRate(framerates[j].second);
                     supportedSettings << newSet;

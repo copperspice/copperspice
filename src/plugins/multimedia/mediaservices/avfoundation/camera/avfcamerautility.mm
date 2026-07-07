@@ -555,6 +555,7 @@ void qt_set_framerate_limits(AVCaptureDevice *captureDevice, qreal minFPS, qreal
 void qt_set_framerate_limits(AVCaptureDevice *captureDevice, AVCaptureConnection *videoConnection,
                              qreal minFPS, qreal maxFPS)
 {
+   (void) videoConnection;
     Q_ASSERT(captureDevice);
 
     qt_set_framerate_limits(captureDevice, minFPS, maxFPS);
@@ -563,6 +564,7 @@ void qt_set_framerate_limits(AVCaptureDevice *captureDevice, AVCaptureConnection
 
 AVFPSRange qt_current_framerates(AVCaptureDevice *captureDevice, AVCaptureConnection *videoConnection)
 {
+   (void) videoConnection;
     Q_ASSERT(captureDevice);
 
     AVFPSRange fps;
