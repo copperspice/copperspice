@@ -53,18 +53,18 @@ class QXcbXSettingsPropertyValue
    {
    }
 
-   void updateValue(QXcbVirtualDesktop *screen, const QByteArray &name, const QVariant &value, int last_change_serial) {
-      if (last_change_serial <= this->last_change_serial) {
+   void updateValue(QXcbVirtualDesktop *screen, const QByteArray &name, const QVariant &newValue, int newLastChangeSerial) {
+      if (newLastChangeSerial <= last_change_serial) {
          return;
       }
 
-      this->value = value;
-      this->last_change_serial = last_change_serial;
+      value = newValue;
+      last_change_serial = newLastChangeSerial;
 
-      QLinkedList<QXcbXSettingsCallback>::const_iterator it = callback_links.begin();
-      for (; it != callback_links.end(); ++it) {
+      auto iter = callback_links.begin();
 
-         it->func(screen, name, value, it->handle);
+      for (; iter != callback_links.end(); ++iter) {
+         iter->func(screen, name, newValue, iter->handle);
       }
    }
 
@@ -85,36 +85,33 @@ class QXcbXSettingsPrivate
 {
  public:
    QXcbXSettingsPrivate(QXcbVirtualDesktop *screen)
-      : screen(screen)
-      , initialized(false) {
-   }
+      : m_initialized(false), m_screen(screen)
+   { }
 
    QByteArray getSettings() {
-      QXcbConnectionGrabber connectionGrabber(screen->connection());
+      QXcbConnectionGrabber connectionGrabber(m_screen->connection());
 
       int offset = 0;
       QByteArray settings;
-      xcb_atom_t _xsettings_atom = screen->connection()->atom(QXcbAtom::_XSETTINGS_SETTINGS);
       while (1) {
-         xcb_get_property_cookie_t get_prop_cookie =
-            xcb_get_property_unchecked(screen->xcb_connection(),
-               false,
-               x_settings_window,
-               _xsettings_atom,
-               _xsettings_atom,
-               offset / 4,
-               8192);
-         xcb_get_property_reply_t *reply = xcb_get_property_reply(screen->xcb_connection(), get_prop_cookie, nullptr);
+
+      xcb_atom_t newSettingsAtom = m_screen->connection()->atom(QXcbAtom::_XSETTINGS_SETTINGS);
+
+         xcb_get_property_cookie_t get_prop_cookie = xcb_get_property_unchecked(m_screen->xcb_connection(),
+               false, m_settingsWindow, newSettingsAtom, newSettingsAtom, offset / 4, 8192);
+
+         xcb_get_property_reply_t *get_prop_reply  = xcb_get_property_reply(m_screen->xcb_connection(), get_prop_cookie, nullptr);
          bool more = false;
-         if (!reply) {
+
+         if (! get_prop_reply) {
             return settings;
          }
 
-         settings += QByteArray((const char *)xcb_get_property_value(reply), xcb_get_property_value_length(reply));
-         offset += xcb_get_property_value_length(reply);
-         more = reply->bytes_after != 0;
+         settings += QByteArray((const char *)xcb_get_property_value(get_prop_reply), xcb_get_property_value_length(get_prop_reply));
+         offset   += xcb_get_property_value_length(get_prop_reply);
+         more      = get_prop_reply->bytes_after != 0;
 
-         free(reply);
+         free(get_prop_reply);
 
          if (!more) {
             break;
@@ -133,11 +130,12 @@ class QXcbXSettingsPrivate
    }
 
 #ifdef XCB_USE_XLIB
-   void populateSettings(const QByteArray &xSettings) {
-      if (xSettings.length() < 12) {
+   void populateSettings(const QByteArray &settings) {
+      if (settings.length() < 12) {
          return;
       }
-      char byteOrder = xSettings.at(0);
+
+      char byteOrder = settings.at(0);
       if (byteOrder != LSBFirst && byteOrder != MSBFirst) {
          qWarning("ByteOrder byte %d not 0 or 1", byteOrder);
          return;
@@ -148,13 +146,14 @@ class QXcbXSettingsPrivate
          qFromLittleEndian<t>((const uchar *)(x)) : \
          qFromBigEndian<t>((const uchar *)(x)))
 #define VALIDATE_LENGTH(x)    \
-        if ((size_t)xSettings.length() < (offset + local_offset + 12 + x)) { \
+        if ((size_t)settings.length() < (offset + local_offset + 12 + x)) { \
             qWarning("Length %d runs past end of data", x); \
             return;                                                     \
         }
 
-      uint number_of_settings = ADJUST_BO(byteOrder, quint32, xSettings.mid(8, 4).constData());
-      const char *data = xSettings.constData() + 12;
+      uint number_of_settings = ADJUST_BO(byteOrder, quint32, settings.mid(8, 4).constData());
+
+      const char *data = settings.constData() + 12;
       size_t offset = 0;
       for (uint i = 0; i < number_of_settings; i++) {
          int local_offset = 0;
@@ -203,16 +202,18 @@ class QXcbXSettingsPrivate
             value.setValue(color_value);
          }
          offset += local_offset;
-         settings[name].updateValue(screen, name, value, last_change_serial);
+         m_settings[name].updateValue(m_screen, name, value, last_change_serial);
       }
 
    }
 #endif //XCB_USE_XLIB
 
-   QXcbVirtualDesktop *screen;
-   xcb_window_t x_settings_window;
-   QMap<QByteArray, QXcbXSettingsPropertyValue> settings;
-   bool initialized;
+   bool m_initialized;
+
+   xcb_window_t m_settingsWindow;
+
+   QXcbVirtualDesktop *m_screen;
+   QMap<QByteArray, QXcbXSettingsPropertyValue> m_settings;
 };
 
 QXcbXSettings::QXcbXSettings(QXcbVirtualDesktop *screen)
@@ -243,19 +244,20 @@ QXcbXSettings::QXcbXSettings(QXcbVirtualDesktop *screen)
       return;
    }
 
-   d_ptr->x_settings_window = selection_result->owner;
+   d_ptr->m_settingsWindow = selection_result->owner;
+
    free(selection_result);
-   if (!d_ptr->x_settings_window) {
+   if (! d_ptr->m_settingsWindow) {
       return;
    }
 
    const uint32_t event = XCB_CW_EVENT_MASK;
    const uint32_t event_mask[] = { XCB_EVENT_MASK_STRUCTURE_NOTIFY | XCB_EVENT_MASK_PROPERTY_CHANGE };
-   xcb_change_window_attributes(screen->xcb_connection(), d_ptr->x_settings_window, event, event_mask);
+   xcb_change_window_attributes(screen->xcb_connection(), d_ptr->m_settingsWindow, event, event_mask);
 
 #ifdef XCB_USE_XLIB
    d_ptr->populateSettings(d_ptr->getSettings());
-   d_ptr->initialized = true;
+   d_ptr->m_initialized = true;
 #endif //XCB_USE_XLIB
 }
 
@@ -268,14 +270,14 @@ QXcbXSettings::~QXcbXSettings()
 bool QXcbXSettings::initialized() const
 {
    Q_D(const QXcbXSettings);
-   return d->initialized;
+   return d->m_initialized;
 }
 
 void QXcbXSettings::handlePropertyNotifyEvent(const xcb_property_notify_event_t *event)
 {
    Q_D(QXcbXSettings);
 
-   if (event->window != d->x_settings_window) {
+   if (event->window != d->m_settingsWindow) {
       return;
    }
 
@@ -287,21 +289,22 @@ void QXcbXSettings::handlePropertyNotifyEvent(const xcb_property_notify_event_t 
 void QXcbXSettings::registerCallbackForProperty(const QByteArray &property, QXcbXSettings::PropertyChangeFunc func, void *handle)
 {
    Q_D(QXcbXSettings);
-   d->settings[property].addCallback(func, handle);
+   d->m_settings[property].addCallback(func, handle);
 }
 
 void QXcbXSettings::removeCallbackForHandle(const QByteArray &property, void *handle)
 {
    Q_D(QXcbXSettings);
 
-   QXcbXSettingsPropertyValue &value = d->settings[property];
-   QLinkedList<QXcbXSettingsCallback>::iterator it = value.callback_links.begin();
+   QXcbXSettingsPropertyValue &value = d->m_settings[property];
 
-   while (it != value.callback_links.end()) {
-      if (it->handle == handle) {
-         it = value.callback_links.erase(it);
+   auto iter = value.callback_links.begin();
+
+   while (iter != value.callback_links.end()) {
+      if (iter->handle == handle) {
+         iter = value.callback_links.erase(iter);
       } else {
-         ++it;
+         ++iter;
       }
    }
 }
@@ -310,15 +313,14 @@ void QXcbXSettings::removeCallbackForHandle(void *handle)
 {
    Q_D(QXcbXSettings);
 
-   for (QMap<QByteArray, QXcbXSettingsPropertyValue>::const_iterator it = d->settings.cbegin();
-      it != d->settings.cend(); ++it) {
-      removeCallbackForHandle(it.key(), handle);
+   for (auto iter = d->m_settings.cbegin(); iter != d->m_settings.cend(); ++iter) {
+      removeCallbackForHandle(iter.key(), handle);
    }
 }
 
 QVariant QXcbXSettings::setting(const QByteArray &property) const
 {
    Q_D(const QXcbXSettings);
-   return d->settings.value(property).value;
+   return d->m_settings.value(property).value;
 }
 
