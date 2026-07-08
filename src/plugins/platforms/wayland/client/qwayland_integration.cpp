@@ -366,7 +366,8 @@ void QWaylandIntegration::initializeServerBufferIntegration()
 
    if (disableHardwareIntegration) {
       QByteArray serverBufferIntegrationName = qgetenv("QT_WAYLAND_SERVER_BUFFER_INTEGRATION");
-      QString targetKey = QString::fromUtf8(serverBufferIntegrationName);
+      targetKey = QString::fromUtf8(serverBufferIntegrationName);
+
    } else {
       targetKey = m_display->hardwareIntegration()->serverBufferIntegration();
    }
