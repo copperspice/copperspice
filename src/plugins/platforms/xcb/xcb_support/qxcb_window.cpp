@@ -420,8 +420,8 @@ void QXcbWindow::create()
       const xcb_visualtype_t *visual = nullptr;
       m_depth = platformScreen->screen()->root_depth;
 
-      uint32_t mask = 0;
-      uint32_t values[3];
+      uint32_t screenMask = 0;
+      uint32_t screenValues[3];
 
       if (connection()->hasDefaultVisualId()) {
          m_visualId = connection()->defaultVisualId();
@@ -446,10 +446,11 @@ void QXcbWindow::create()
                      uint32_t colormap = xcb_generate_id(xcb_connection());
                      xcb_create_colormap(xcb_connection(), XCB_COLORMAP_ALLOC_NONE, colormap,
                         xcb_parent_id, m_visualId);
-                     mask |= XCB_CW_BACK_PIXEL | XCB_CW_BORDER_PIXEL | XCB_CW_COLORMAP;
-                     values[0] = platformScreen->screen()->white_pixel;
-                     values[1] = platformScreen->screen()->black_pixel;
-                     values[2] = colormap;
+                     screenMask |= XCB_CW_BACK_PIXEL | XCB_CW_BORDER_PIXEL | XCB_CW_COLORMAP;
+
+                     screenValues[0] = platformScreen->screen()->white_pixel;
+                     screenValues[1] = platformScreen->screen()->black_pixel;
+                     screenValues[2] = colormap;
                      break;
                   }
                }
@@ -472,8 +473,8 @@ void QXcbWindow::create()
             0,                               // border width
             XCB_WINDOW_CLASS_INPUT_OUTPUT,   // window class
             m_visualId,                      // visual
-            mask,
-            values));
+            screenMask,
+            screenValues));
    }
 
    connection()->addWindowEventListener(m_window, this);

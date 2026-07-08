@@ -850,10 +850,10 @@ bool QXcbClipboard::clipboardReadProperty(xcb_window_t win, xcb_atom_t property,
       while (bytes_left) {
          // more to read
 
-         xcb_get_property_cookie_t cookie = Q_XCB_CALL(xcb_get_property(xcb_connection(), false, win, property, XCB_GET_PROPERTY_TYPE_ANY,
-                  offset, maxsize / 4));
+         xcb_get_property_cookie_t propertyCookie = Q_XCB_CALL(xcb_get_property(xcb_connection(), false, win, property,
+               XCB_GET_PROPERTY_TYPE_ANY, offset, maxsize / 4));
 
-         reply = xcb_get_property_reply(xcb_connection(), cookie, nullptr);
+         reply = xcb_get_property_reply(xcb_connection(), propertyCookie, nullptr);
 
          if (! reply || reply->type == XCB_NONE) {
             free(reply);

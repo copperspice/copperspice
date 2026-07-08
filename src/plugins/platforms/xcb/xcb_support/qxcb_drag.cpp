@@ -255,24 +255,26 @@ xcb_window_t QXcbDrag::findRealWindow(const QPoint &pos, xcb_window_t w, int md,
 
       free(reply);
 
-      xcb_get_geometry_cookie_t gcookie = xcb_get_geometry(xcb_connection(), w);
-      xcb_get_geometry_reply_t *greply = xcb_get_geometry_reply(xcb_connection(), gcookie, nullptr);
-      if (!greply) {
+      xcb_get_geometry_cookie_t geo_cookie = xcb_get_geometry(xcb_connection(), w);
+      xcb_get_geometry_reply_t *geo_reply  = xcb_get_geometry_reply(xcb_connection(), geo_cookie, nullptr);
+
+      if (! geo_reply) {
          return 0;
       }
 
-      QRect windowRect(greply->x, greply->y, greply->width, greply->height);
-      free(greply);
+      QRect windowRect(geo_reply->x, geo_reply->y, geo_reply->width, geo_reply->height);
+      free(geo_reply);
       if (windowRect.contains(pos)) {
          bool windowContainsMouse = !ignoreNonXdndAwareWindows;
          {
-            xcb_get_property_cookie_t cookie =
-               Q_XCB_CALL(xcb_get_property(xcb_connection(), false, w, connection()->atom(QXcbAtom::XdndAware),
-                     XCB_GET_PROPERTY_TYPE_ANY, 0, 0));
-            xcb_get_property_reply_t *reply = xcb_get_property_reply(xcb_connection(), cookie, nullptr);
+            xcb_get_property_cookie_t property_cookie = Q_XCB_CALL(xcb_get_property(xcb_connection(), false,
+                  w, connection()->atom(QXcbAtom::XdndAware), XCB_GET_PROPERTY_TYPE_ANY, 0, 0));
 
-            bool isAware = reply && reply->type != XCB_NONE;
-            free(reply);
+            xcb_get_property_reply_t *property_reply = xcb_get_property_reply(xcb_connection(), property_cookie, nullptr);
+
+            bool isAware = property_reply && property_reply->type != XCB_NONE;
+            free(property_reply);
+
             if (isAware) {
                const QPoint relPos = pos - windowRect.topLeft();
                // When ShapeInput and ShapeBounding are not set they return a single rectangle with the geometry of the window, this is why we
@@ -292,21 +294,22 @@ xcb_window_t QXcbDrag::findRealWindow(const QPoint &pos, xcb_window_t w, int md,
             }
          }
 
-         xcb_query_tree_cookie_t cookie = xcb_query_tree (xcb_connection(), w);
-         xcb_query_tree_reply_t *reply = xcb_query_tree_reply(xcb_connection(), cookie, nullptr);
+         xcb_query_tree_cookie_t tree_cookie = xcb_query_tree (xcb_connection(), w);
+         xcb_query_tree_reply_t *tree_reply  = xcb_query_tree_reply(xcb_connection(), tree_cookie, nullptr);
 
-         if (!reply) {
+         if (! tree_reply) {
             return 0;
          }
-         int nc = xcb_query_tree_children_length(reply);
-         xcb_window_t *c = xcb_query_tree_children(reply);
+
+         int nc = xcb_query_tree_children_length(tree_reply);
+         xcb_window_t *c = xcb_query_tree_children(tree_reply);
 
          xcb_window_t r = 0;
          for (uint i = nc; !r && i--;) {
             r = findRealWindow(pos - windowRect.topLeft(), c[i], md - 1, ignoreNonXdndAwareWindows);
          }
 
-         free(reply);
+         free(tree_reply);
          if (r) {
             return r;
          }
@@ -800,18 +803,18 @@ void QXcbDrag::handle_xdnd_position(QPlatformWindow *w, const xcb_client_message
       target_time = e->data.data32[3];
    }
 
-   QMimeData *dropData = nullptr;
+   QMimeData *mimeData = nullptr;
    Qt::DropActions supported_actions = Qt::IgnoreAction;
 
    if (currentDrag()) {
-      dropData = currentDrag()->mimeData();
+      mimeData = currentDrag()->mimeData();
       supported_actions = currentDrag()->supportedActions();
    } else {
-      dropData = platformDropData();
+      mimeData = platformDropData();
       supported_actions = Qt::DropActions(toDropAction(e->data.data32[4]));
    }
 
-   QPlatformDragQtResponse qt_response = QWindowSystemInterface::handleDrag(w->window(), dropData, p, supported_actions);
+   QPlatformDragQtResponse qt_response = QWindowSystemInterface::handleDrag(w->window(), mimeData, p, supported_actions);
    QRect answerRect(p + geometry.topLeft(), QSize(1, 1));
    answerRect = qt_response.answerRect().translated(geometry.topLeft()).intersected(geometry);
 
@@ -1037,20 +1040,20 @@ void QXcbDrag::handleDrop(QPlatformWindow *, const xcb_client_message_event_t *e
    }
 
    Qt::DropActions supported_drop_actions;
-   QMimeData *dropData = nullptr;
+   QMimeData *mimeData = nullptr;
 
    if (currentDrag()) {
-      dropData = currentDrag()->mimeData();
+      mimeData = currentDrag()->mimeData();
       supported_drop_actions = Qt::DropActions(l[4]);
    } else {
-      dropData = platformDropData();
+      mimeData = platformDropData();
       supported_drop_actions = accepted_drop_action;
 
       // Drop coming from another app? Update keyboard modifiers.
       QApplicationPrivate::modifier_buttons = QApplication::queryKeyboardModifiers();
    }
 
-   if (! dropData) {
+   if (! mimeData) {
       return;
    }
 
@@ -1060,8 +1063,9 @@ void QXcbDrag::handleDrop(QPlatformWindow *, const xcb_client_message_event_t *e
    //            dropData = QDragManager::dragPrivate(X11->dndDropTransactions.at(at).object)->data;
    // if we can't find it, then use the data in the drag manager
 
-   QPlatformDropQtResponse response = QWindowSystemInterface::handleDrop(currentWindow.data(), dropData, currentPosition,
-         supported_drop_actions);
+   QPlatformDropQtResponse response = QWindowSystemInterface::handleDrop(currentWindow.data(), mimeData,
+         currentPosition, supported_drop_actions);
+
    setExecutedDropAction(response.acceptedAction());
 
    xcb_client_message_event_t finished;

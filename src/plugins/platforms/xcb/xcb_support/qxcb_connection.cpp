@@ -473,10 +473,10 @@ void QXcbConnection::initializeScreens()
                timestamp = resources_current->config_timestamp;
                outputs = xcb_randr_get_screen_resources_current_outputs(resources_current.data());
             } else {
-               xcb_randr_get_screen_resources_cookie_t resourcesCookie =
+               xcb_randr_get_screen_resources_cookie_t tmpResourcesCookie =
                   xcb_randr_get_screen_resources(xcb_connection(), xcbScreen->root);
 
-               resources.reset(xcb_randr_get_screen_resources_reply(xcb_connection(), resourcesCookie, &error));
+               resources.reset(xcb_randr_get_screen_resources_reply(xcb_connection(), tmpResourcesCookie, &error));
 
                if (!resources || error) {
                   qWarning("QXcbConnection::initializeScreens() Failed to obtain the screen resources");
@@ -561,14 +561,16 @@ void QXcbConnection::initializeScreens()
          xcb_xinerama_query_screens_reply_t *screens = xcb_xinerama_query_screens_reply(m_connection, cookie, nullptr);
 
          if (screens) {
-            xcb_xinerama_screen_info_iterator_t it = xcb_xinerama_query_screens_screen_info_iterator(screens);
+            xcb_xinerama_screen_info_iterator_t iter = xcb_xinerama_query_screens_screen_info_iterator(screens);
 
-            while (it.rem) {
-               xcb_xinerama_screen_info_t *screen_info = it.data;
-               QXcbScreen *screen = new QXcbScreen(this, virtualDesktop, XCB_NONE, nullptr, screen_info, it.index);
+            while (iter.rem) {
+               xcb_xinerama_screen_info_t *screen_info = iter.data;
+
+               QXcbScreen *screen = new QXcbScreen(this, virtualDesktop, XCB_NONE, nullptr, screen_info, iter.index);
                siblings << screen;
                m_screens << screen;
-               xcb_xinerama_screen_info_next(&it);
+
+               xcb_xinerama_screen_info_next(&iter);
             }
 
             free(screens);
