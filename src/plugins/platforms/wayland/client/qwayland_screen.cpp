@@ -105,12 +105,12 @@ Qt::ScreenOrientation QWaylandScreen::orientation() const
 }
 
 void QWaylandScreen::output_geometry(int32_t x, int32_t y, int32_t width, int32_t height,
-      int subpixel, const QString &make, const QString &model, int32_t transform)
+      int subpixelValue, const QString &make, const QString &model, int32_t newTransform)
 {
-   (void) subpixel;
+   (void) subpixelValue;
    (void) make;
 
-   m_transform = transform;
+   m_transform = newTransform;
 
    if (! model.isEmpty()) {
       m_outputName = model;

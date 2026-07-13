@@ -322,9 +322,9 @@ EGLConfig QEglConfigChooser::chooseConfig()
       // sizes have been given, take the first, which will be a config with the smaller
       // (e.g. 16-bit) depth.
 
-      for (int i = 0; i < configs.size(); ++i) {
-         if (filterConfig(configs[i])) {
-            return configs.at(i);
+      for (int j = 0; j < configs.size(); ++j) {
+         if (filterConfig(configs[j])) {
+            return configs.at(j);
          }
       }
 

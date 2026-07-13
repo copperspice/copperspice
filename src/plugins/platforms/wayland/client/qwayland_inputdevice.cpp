@@ -797,7 +797,7 @@ void QWaylandInputDevice::Pointer::releaseButtons()
    }
 }
 
-void QWaylandInputDevice::Pointer::pointer_axis(uint32_t time, uint32_t axis, int32_t value)
+void QWaylandInputDevice::Pointer::pointer_axis(uint32_t time, uint32_t newAxis, int32_t value)
 {
    QWaylandWindow *window = m_focus;
 
@@ -812,7 +812,7 @@ void QWaylandInputDevice::Pointer::pointer_axis(uint32_t time, uint32_t axis, in
    // normalize value and inverse axis
    int valueDelta = wl_fixed_to_int(value) * -12;
 
-   if (axis == WL_POINTER_AXIS_HORIZONTAL_SCROLL) {
+   if (newAxis == WL_POINTER_AXIS_HORIZONTAL_SCROLL) {
       pixelDelta = QPoint();
       angleDelta.setX(valueDelta);
    } else {

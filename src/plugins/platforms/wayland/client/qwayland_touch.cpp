@@ -50,9 +50,10 @@ static inline qreal fromFixed(int f)
    return f / qreal(10000);
 }
 
-void QWaylandTouchExtension::touch_extension_touch(uint32_t time, uint32_t id, uint32_t state, int32_t x, int32_t y,
-      int32_t normalized_x, int32_t normalized_y, int32_t width, int32_t height, uint32_t pressure,
-      int32_t velocity_x, int32_t velocity_y, uint32_t flags, wl_array *rawdata)
+void QWaylandTouchExtension::touch_extension_touch(uint32_t time, uint32_t id, uint32_t state,
+      int32_t position_x, int32_t position_y, int32_t normalized_x, int32_t normalized_y,
+      int32_t width, int32_t height, uint32_t pressure, int32_t velocity_x, int32_t velocity_y,
+      uint32_t touchFlags, wl_array *rawdata)
 {
    if (m_inputDevice == nullptr) {
       QList<QWaylandInputDevice *> inputDevices = m_display->inputDevices();
@@ -93,16 +94,16 @@ void QWaylandTouchExtension::touch_extension_touch(uint32_t time, uint32_t id, u
       m_pointsLeft = sentPointCount;
    }
 
-   tp.flags = QTouchEvent::TouchPoint::InfoFlags(int(flags & 0xFFFF));
+   tp.flags = QTouchEvent::TouchPoint::InfoFlags(int(touchFlags & 0xFFFF));
 
    if (m_touchDevice == nullptr) {
-      registerDevice(flags >> 16);
+      registerDevice(touchFlags >> 16);
    }
 
    tp.area = QRectF(0, 0, fromFixed(width), fromFixed(height));
 
    // have surface-relative coords, need a (virtual) screen position
-   QPointF relPos = QPointF(fromFixed(x), fromFixed(y));
+   QPointF relPos = QPointF(fromFixed(position_x), fromFixed(position_y));
    QPointF delta = relPos - relPos.toPoint();
    tp.area.moveCenter(m_targetWindow->mapToGlobal(relPos.toPoint()) + delta);
 
@@ -215,9 +216,9 @@ void QWaylandTouchExtension::touchCanceled()
    }
 }
 
-void QWaylandTouchExtension::touch_extension_configure(uint32_t flags)
+void QWaylandTouchExtension::touch_extension_configure(uint32_t touchFlags)
 {
-   m_flags = flags;
+   m_flags = touchFlags;
 }
 
 }
