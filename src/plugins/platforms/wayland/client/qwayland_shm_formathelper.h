@@ -39,11 +39,11 @@ class QWaylandShmFormatHelper
  private:
    struct Array {
       Array(const size_t size, const wl_shm_format *data)
-         : size(size), data(data)
+         : m_size(size), m_data(data)
       { }
 
-      const size_t size;
-      const wl_shm_format *data;
+      const size_t m_size;
+      const wl_shm_format *m_data;
    };
 
    static const Array getData() {
@@ -75,9 +75,9 @@ class QWaylandShmFormatHelper
          WL_SHM_FORMAT_C8           //Format_Grayscale8,
       };
 
-      const size_t size = sizeof(formats_array) / sizeof(*formats_array);
+      const size_t newSize = sizeof(formats_array) / sizeof(*formats_array);
 
-      return Array(size, formats_array);
+      return Array(newSize, formats_array);
    }
 };
 
@@ -85,19 +85,19 @@ wl_shm_format QWaylandShmFormatHelper::fromQImageFormat(QImage::Format format)
 {
    Array array = getData();
 
-   if (array.size <= size_t(format)) {
+   if (array.m_size <= size_t(format)) {
       return wl_shm_format(INT_MIN);
    }
 
-   return array.data[format];
+   return array.m_data[format];
 }
 
 QImage::Format QWaylandShmFormatHelper::fromWaylandShmFormat(wl_shm_format format)
 {
    Array array = getData();
 
-   for (size_t i = 0; i < array.size; i++) {
-      if (array.data[i] == format) {
+   for (size_t i = 0; i < array.m_size; i++) {
+      if (array.m_data[i] == format) {
          return QImage::Format(i);
       }
    }
@@ -110,9 +110,9 @@ QVector < wl_shm_format > QWaylandShmFormatHelper::supportedWaylandFormats()
    QVector<wl_shm_format> retFormats;
    Array array = getData();
 
-   for (size_t i = 0; i < array.size; i++) {
-      if (int(array.data[i]) != INT_MIN && ! retFormats.contains(array.data[i])) {
-         retFormats.append(array.data[i]);
+   for (size_t i = 0; i < array.m_size; i++) {
+      if (int(array.m_data[i]) != INT_MIN && ! retFormats.contains(array.m_data[i])) {
+         retFormats.append(array.m_data[i]);
       }
    }
 
