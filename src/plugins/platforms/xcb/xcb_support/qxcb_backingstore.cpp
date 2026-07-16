@@ -140,10 +140,12 @@ QXcbShmImage::QXcbShmImage(QXcbScreen *screen, const QSize &size, uint depth, QI
    const xcb_setup_t *setup = xcb_get_setup(xcb_connection());
    xcb_format_t *fmt = xcb_setup_pixmap_formats(setup);
    xcb_format_t *fmtend = fmt + xcb_setup_pixmap_formats_length(setup);
-   for (; fmt != fmtend; ++fmt)
+
+   for (; fmt != fmtend; ++fmt) {
       if (fmt->depth == depth) {
          break;
       }
+   }
 
    Q_ASSERT(fmt != fmtend);
 

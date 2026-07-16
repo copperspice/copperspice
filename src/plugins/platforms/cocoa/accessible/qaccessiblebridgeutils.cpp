@@ -43,31 +43,43 @@ static bool performAction(QAccessibleInterface *iface, const QString &actionName
 QStringList effectiveActionNames(QAccessibleInterface *iface)
 {
     QStringList actions;
-    if (QAccessibleActionInterface *actionIface = iface->actionInterface())
+
+    if (QAccessibleActionInterface *actionIface = iface->actionInterface()) {
         actions = actionIface->actionNames();
+    }
 
     if (iface->valueInterface()) {
-        if (!actions.contains(QAccessibleActionInterface::increaseAction()))
+        if (! actions.contains(QAccessibleActionInterface::increaseAction())) {
             actions << QAccessibleActionInterface::increaseAction();
-        if (!actions.contains(QAccessibleActionInterface::decreaseAction()))
+        }
+
+        if (! actions.contains(QAccessibleActionInterface::decreaseAction())) {
             actions << QAccessibleActionInterface::decreaseAction();
+        }
     }
     return actions;
 }
 
 bool performEffectiveAction(QAccessibleInterface *iface, const QString &actionName)
 {
-    if (!iface)
-        return false;
-    if (performAction(iface, actionName))
-        return true;
-    if (actionName != QAccessibleActionInterface::increaseAction()
-        && actionName != QAccessibleActionInterface::decreaseAction())
-        return false;
+    if (! iface) {
+       return false;
+    }
+
+    if (performAction(iface, actionName)) {
+       return true;
+    }
+
+    if (actionName != QAccessibleActionInterface::increaseAction() && actionName != QAccessibleActionInterface::decreaseAction()) {
+       return false;
+    }
 
     QAccessibleValueInterface *valueIface = iface->valueInterface();
-    if (!valueIface)
+
+    if (! valueIface) {
         return false;
+    }
+
     bool success;
 
     const QVariant currentVariant = valueIface->currentValue();
@@ -75,11 +87,17 @@ bool performEffectiveAction(QAccessibleInterface *iface, const QString &actionNa
 
     if (! success || qFuzzyIsNull(stepSize)) {
         const double min = valueIface->minimumValue().toDouble(&success);
-        if (!success)
+
+        if (! success) {
             return false;
+        }
+
         const double max = valueIface->maximumValue().toDouble(&success);
-        if (!success)
+
+        if (! success) {
             return false;
+        }
+
         stepSize = (max - min) / 10;  // this is pretty arbitrary, we just need to provide something
         const int typ = currentVariant.type();
 
@@ -89,10 +107,15 @@ bool performEffectiveAction(QAccessibleInterface *iface, const QString &actionNa
         }
     }
     const double current = currentVariant.toDouble(&success);
-    if (!success)
-        return false;
-    if (actionName == QAccessibleActionInterface::decreaseAction())
+
+    if (! success) {
+       return false;
+    }
+
+    if (actionName == QAccessibleActionInterface::decreaseAction()) {
         stepSize = -stepSize;
+    }
+
     valueIface->setCurrentValue(current + stepSize);
     return true;
 }

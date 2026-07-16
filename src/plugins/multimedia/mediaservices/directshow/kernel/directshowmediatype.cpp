@@ -88,10 +88,12 @@ GUID DirectShowMediaType::convertPixelFormat(QVideoFrame::PixelFormat format)
 
    const int count = sizeof(qt_typeLookup) / sizeof(TypeLookup);
 
-   for (int i = 0; i < count; ++i)
+   for (int i = 0; i < count; ++i) {
       if (qt_typeLookup[i].pixelFormat == format) {
          return qt_typeLookup[i].mediaType;
       }
+   }
+
    return none;
 }
 

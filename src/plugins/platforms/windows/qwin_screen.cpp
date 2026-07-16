@@ -277,10 +277,11 @@ QList<QPlatformScreen *> QWindowsScreen::virtualSiblings() const
 {
    QList<QPlatformScreen *> result;
    if (m_data.flags & QWindowsScreenData::VirtualDesktop) {
-      for (QWindowsScreen *screen : QWindowsContext::instance()->screenManager().screens())
+      for (QWindowsScreen *screen : QWindowsContext::instance()->screenManager().screens()) {
          if (screen->data().flags & QWindowsScreenData::VirtualDesktop) {
             result.push_back(screen);
          }
+      }
    } else {
       result.push_back(const_cast<QWindowsScreen *>(this));
    }

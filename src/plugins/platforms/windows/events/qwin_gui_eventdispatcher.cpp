@@ -156,17 +156,21 @@ messageDebugEntries[] = {
 
 static inline const MessageDebugEntry *messageDebugEntry(UINT msg)
 {
-    for (size_t i = 0; i < sizeof(messageDebugEntries)/sizeof(MessageDebugEntry); i++)
-        if (messageDebugEntries[i].message == msg)
-            return messageDebugEntries + i;
+   for (size_t i = 0; i < sizeof(messageDebugEntries)/sizeof(MessageDebugEntry); i++) {
+      if (messageDebugEntries[i].message == msg) {
+         return messageDebugEntries + i;
+      }
+   }
 
-    return nullptr;
+   return nullptr;
 }
 
 const char *QWindowsGuiEventDispatcher::windowsMessageName(UINT msg)
 {
-    if (const MessageDebugEntry *e = messageDebugEntry(msg))
-        return e->description;
-    return "Unknown";
+   if (const MessageDebugEntry *e = messageDebugEntry(msg)) {
+      return e->description;
+   }
+
+   return "Unknown";
 }
 

@@ -187,10 +187,11 @@ void QXcbDrag::startDrag()
       }
    }
 
-   if (drag_types.size() > 3)
+   if (drag_types.size() > 3) {
       xcb_change_property(xcb_connection(), XCB_PROP_MODE_REPLACE, connection()->clipboard()->owner(),
          atom(QXcbAtom::XdndTypelist),
          XCB_ATOM_ATOM, 32, drag_types.size(), (const void *)drag_types.constData());
+   }
 
    setUseCompositing(current_virtual_desktop->compositingActive());
    setScreen(current_virtual_desktop->screens().constFirst()->screen());

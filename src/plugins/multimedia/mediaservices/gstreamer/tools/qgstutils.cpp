@@ -770,20 +770,22 @@ static const VideoFormat qt_videoFormatLookup[] = {
 
 static int indexOfVideoFormat(QVideoFrame::PixelFormat format)
 {
-   for (int i = 0; i < lengthOf(qt_videoFormatLookup); ++i)
+   for (int i = 0; i < lengthOf(qt_videoFormatLookup); ++i) {
       if (qt_videoFormatLookup[i].pixelFormat == format) {
          return i;
       }
+   }
 
    return -1;
 }
 
 static int indexOfVideoFormat(GstVideoFormat format)
 {
-   for (int i = 0; i < lengthOf(qt_videoFormatLookup); ++i)
+   for (int i = 0; i < lengthOf(qt_videoFormatLookup); ++i) {
       if (qt_videoFormatLookup[i].gstFormat == format) {
          return i;
       }
+   }
 
    return -1;
 }

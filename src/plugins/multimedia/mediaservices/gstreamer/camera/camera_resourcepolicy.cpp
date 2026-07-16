@@ -160,10 +160,11 @@ void CamerabinResourcePolicy::setResourceSet(CamerabinResourcePolicy::ResourceSe
 bool CamerabinResourcePolicy::isResourcesGranted() const
 {
 #ifdef HAVE_RESOURCE_POLICY
-   for (ResourcePolicy::Resource *resource : m_resource->resources())
+   for (ResourcePolicy::Resource *resource : m_resource->resources()) {
       if (! resource->isOptional() && !resource->isGranted()) {
          return false;
       }
+   }
 #endif
    return true;
 }

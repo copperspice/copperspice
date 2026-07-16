@@ -106,7 +106,7 @@ void QWaylandInputDevice::handleTouchPoint(int id, double x, double y, Qt::Touch
    // Find out the coordinates for Released events
    bool coordsOk = false;
 
-   if (state == Qt::TouchPointReleased)
+   if (state == Qt::TouchPointReleased) {
       for (auto item : m_touch->m_prevTouchPoints) {
          if (item.id == id) {
             tp.area  = item.area;
@@ -114,6 +114,7 @@ void QWaylandInputDevice::handleTouchPoint(int id, double x, double y, Qt::Touch
             break;
          }
       }
+   }
 
    if (! coordsOk) {
       QWaylandWindow *win = m_touch->m_focus;

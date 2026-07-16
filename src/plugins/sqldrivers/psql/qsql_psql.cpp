@@ -777,10 +777,12 @@ void QPSQLDriverPrivate::detectBackslashEscape()
       PGresult *result = exec(QString("SELECT '\\\\' x"));
 
       int status = PQresultStatus(result);
-      if (status == PGRES_COMMAND_OK || status == PGRES_TUPLES_OK)
+      if (status == PGRES_COMMAND_OK || status == PGRES_TUPLES_OK) {
          if (QString::fromLatin1(PQgetvalue(result, 0, 0)) == "\\") {
             hasBackslashEscape = true;
          }
+      }
+
       PQclear(result);
    }
 }

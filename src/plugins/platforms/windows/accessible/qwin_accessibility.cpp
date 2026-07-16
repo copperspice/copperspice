@@ -127,20 +127,26 @@ void QWindowsAccessibility::notifyAccessibilityUpdate(QAccessibleEvent *event)
     // so find the first parent that is a widget and that has a WId
     QAccessibleInterface *iface = event->accessibleInterface();
 
-    if (! isActive() || !iface || ! iface->isValid())
+    if (! isActive() || !iface || ! iface->isValid()) {
         return;
+    }
 
     QWindow *window = QWindowsAccessibility::windowHelper(iface);
 
     if (!window) {
         window = QApplication::focusWindow();
-        if (!window)
-            return;
+
+        if (! window) {
+           return;
+        }
     }
 
     QPlatformNativeInterface *platform = QApplication::platformNativeInterface();
-    if (!window->handle()) // Called before show(), no native window yet.
-        return;
+
+    if (! window->handle())  {
+       // Called before show(), no native window yet.
+       return;
+    }
 
     const HWND hWnd = reinterpret_cast<HWND>(platform->nativeResourceForWindow("handle", window));
 
@@ -167,12 +173,14 @@ QWindow *QWindowsAccessibility::windowHelper(const QAccessibleInterface *iface)
 
 IAccessible *QWindowsAccessibility::wrap(QAccessibleInterface *acc)
 {
-    if (! acc)
-        return nullptr;
+   if (! acc) {
+      return nullptr;
+   }
 
     // ### FIXME: maybe we should accept double insertions into the cache
-    if (!QAccessible::uniqueId(acc))
-        QAccessible::registerAccessibleInterface(acc);
+   if (! QAccessible::uniqueId(acc)) {
+       QAccessible::registerAccessibleInterface(acc);
+   }
 
     QWindowsMsaaAccessible *wacc = new QWindowsMsaaAccessible(acc);
 
@@ -192,8 +200,9 @@ bool QWindowsAccessibility::handleAccessibleObjectFromWindowRequest(HWND hwnd, W
         QApplicationPrivate::platformIntegration()->accessibility()->setActive(true);
 
         // Ignoring all requests while starting up
-        if (QCoreApplication::startingUp() || QCoreApplication::closingDown())
+        if (QCoreApplication::startingUp() || QCoreApplication::closingDown()) {
             return false;
+        }
 
         typedef LRESULT (WINAPI *PtrLresultFromObject)(REFIID, WPARAM, LPUNKNOWN);
         static PtrLresultFromObject ptrLresultFromObject = nullptr;

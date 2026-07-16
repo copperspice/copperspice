@@ -1417,7 +1417,8 @@ void QXcbKeyboard::updateModifiers()
          for (int x = 0; x < w; ++x) {
             xcb_keycode_t keyCode = modMap[x + bit * w];
             xcb_keycode_t *itk = modKeyCodes[i];
-            while (itk && *itk != XCB_NO_SYMBOL)
+
+            while (itk && *itk != XCB_NO_SYMBOL) {
                if (*itk++ == keyCode) {
                   uint sym = symbols[i];
                   if ((sym == XK_Alt_L || sym == XK_Alt_R)) {
@@ -1436,6 +1437,7 @@ void QXcbKeyboard::updateModifiers()
                      rmod_masks.hyper = mask;
                   }
                }
+            }
          }
       }
    }
@@ -1651,9 +1653,10 @@ void QXcbKeyboard::handleKeyEvent(xcb_window_t sourceWindow, QEvent::Type type, 
          filtered = inputContext->filterEvent(&event);
       }
 
-      if (!filtered)
+      if (! filtered) {
          QWindowSystemInterface::handleExtendedKeyEvent(window, time, QEvent::KeyPress, qtcode, modifiers,
-            code, sym, state, string, isAutoRepeat);
+               code, sym, state, string, isAutoRepeat);
+      }
    }
    xkb_state_unref(kb_state);
 }

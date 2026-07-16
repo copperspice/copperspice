@@ -132,9 +132,10 @@ static inline QVariant qDateTimeFromString(QString &val)
       return QVariant(QDateTime());
    }
 
-   if (val.length() == 14)
+   if (val.length() == 14) {
       // timestamps have the format yyyyMMddhhmmss
       val.insert(4, QChar('-')).insert(7, QChar('-')).insert(10, QChar('T')).insert(13, QChar(':')).insert(16, QChar(':'));
+   }
 
    return QVariant(QDateTime::fromString(val, Qt::ISODate));
 }

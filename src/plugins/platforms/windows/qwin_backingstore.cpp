@@ -77,11 +77,12 @@ void QWindowsBackingStore::flush(QWindow *window, const QRegion &region, const Q
          UPDATELAYEREDWINDOWINFO info = {sizeof(info), nullptr, &ptDst, &size, m_image->hdc(), &ptSrc, 0, &blend, ULW_ALPHA, &dirty};
          const BOOL result = QWindowsContext::user32dll.updateLayeredWindowIndirect(rw->handle(), &info);
 
-         if (!result)
+         if (! result) {
             qErrnoWarning("UpdateLayeredWindowIndirect failed for ptDst=(%d, %d),"
                " size=(%dx%d), dirty=(%dx%d %d, %d)", r.x(), r.y(),
                r.width(), r.height(), dirtyRect.width(), dirtyRect.height(),
                dirtyRect.x(), dirtyRect.y());
+         }
       } else {
          QWindowsContext::user32dll.updateLayeredWindow(rw->handle(), nullptr, &ptDst, &size, m_image->hdc(), &ptSrc, 0, &blend, ULW_ALPHA);
       }

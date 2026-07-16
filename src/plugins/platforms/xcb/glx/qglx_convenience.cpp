@@ -119,8 +119,9 @@ GLXFBConfig qglx_findConfig(Display *display, int screen , const QSurfaceFormat 
         checkedForceSoftwareOpenGL = true;
     }
 
-    if (forceSoftwareOpenGL)
+    if (forceSoftwareOpenGL) {
         qputenv("LIBGL_ALWAYS_SOFTWARE", QByteArray("1"));
+    }
 
     bool reduced = true;
     GLXFBConfig chosenConfig = nullptr;
@@ -153,8 +154,9 @@ GLXFBConfig qglx_findConfig(Display *display, int screen , const QSurfaceFormat 
 
                         XFree(visual);
 
-                        if (hasAlpha)
-                            break;
+                        if (hasAlpha) {
+                           break;
+                        }
                     }
 
                 } else {
@@ -164,13 +166,16 @@ GLXFBConfig qglx_findConfig(Display *display, int screen , const QSurfaceFormat 
 
             XFree(configs);
         }
-        if (!chosenConfig)
+
+        if (! chosenConfig) {
             reducedFormat = qglx_reduceSurfaceFormat(reducedFormat,&reduced);
+        }
     }
 
     // unset LIBGL_ALWAYS_SOFTWARE now so other processes don't inherit it
-    if (forceSoftwareOpenGL)
-        qunsetenv("LIBGL_ALWAYS_SOFTWARE");
+    if (forceSoftwareOpenGL) {
+       qunsetenv("LIBGL_ALWAYS_SOFTWARE");
+    }
 
     return chosenConfig;
 }
@@ -219,14 +224,17 @@ XVisualInfo *qglx_findVisualInfo(Display *display, int screen, QSurfaceFormat *f
             attribs.append(reducedFormat.depthBufferSize());
         }
 
-        if (reducedFormat.swapBehavior() != QSurfaceFormat::SingleBuffer)
+        if (reducedFormat.swapBehavior() != QSurfaceFormat::SingleBuffer) {
             attribs.append(GLX_DOUBLEBUFFER);
+        }
 
         attribs.append(XNone);
 
         visualInfo = glXChooseVisual(display, screen, attribs.data());
-        if (visualInfo)
+
+        if (visualInfo) {
             *format = reducedFormat;
+        }
 
         reducedFormat = qglx_reduceSurfaceFormat(reducedFormat, &reduced);
     }

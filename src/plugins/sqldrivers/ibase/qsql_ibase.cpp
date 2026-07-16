@@ -500,9 +500,10 @@ static char *readArrayBuffer(QList<QVariant> &list, char *buffer, short curDim,
    unsigned short strLen = arrayDesc->array_desc_length;
 
    if (curDim != dim) {
-      for (int i = 0; i < numElements[curDim]; ++i)
-         buffer = readArrayBuffer(list, buffer, curDim + 1, numElements,
-               arrayDesc, tc);
+      for (int i = 0; i < numElements[curDim]; ++i) {
+         buffer = readArrayBuffer(list, buffer, curDim + 1, numElements, arrayDesc, tc);
+      }
+
    } else {
       switch (dataType) {
          case blr_varying:
@@ -512,8 +513,9 @@ static char *readArrayBuffer(QList<QVariant> &list, char *buffer, short curDim,
          case blr_text2: {
             int o;
             for (int i = 0; i < numElements[dim]; ++i) {
-               for (o = 0; o < strLen && buffer[o] != 0; ++o )
+               for (o = 0; o < strLen && buffer[o] != 0; ++o) {
                   ;
+               }
 
                if (tc) {
                   valList.append(tc->toUnicode(buffer, o));
@@ -737,11 +739,11 @@ static char *createArrayBuffer(char *buffer, const QList<QVariant> &list,
             buffer = fillList<quint64>(buffer, list);
             break;
          case QVariant::String:
-            for (i = 0; i < list.size(); ++i)
+            for (i = 0; i < list.size(); ++i) {
                buffer = qFillBufferWithString(buffer, list.at(i).toString(),
-                     arrayDesc->array_desc_length,
-                     arrayDesc->array_desc_dtype == blr_varying,
-                     true, tc);
+                     arrayDesc->array_desc_length, arrayDesc->array_desc_dtype == blr_varying, true, tc);
+            }
+
             break;
          case QVariant::Date:
             for (i = 0; i < list.size(); ++i) {

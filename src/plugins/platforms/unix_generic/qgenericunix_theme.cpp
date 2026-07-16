@@ -755,11 +755,12 @@ QPlatformTheme *QGenericUnixTheme::createUnixTheme(const QString &name)
    }
 
 #ifndef QT_NO_SETTINGS
-   if (name == QKdeTheme::m_name)
+   if (name == QKdeTheme::m_name) {
 
       if (QPlatformTheme *kdeTheme = QKdeTheme::createKdeTheme()) {
          return kdeTheme;
       }
+   }
 #endif
 
    if (name == QGnomeTheme::m_name) {

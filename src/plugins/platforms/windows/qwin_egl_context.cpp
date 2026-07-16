@@ -853,10 +853,11 @@ QWindowsEGLContext::FP_Void QWindowsEGLContext::getProcAddress(const QByteArray 
       { "glDepthRangef", (void *) QWindowsEGLStaticContext::libGLESv2.glDepthRangef }
    };
 
-   for (size_t i = 0; i < sizeof(standardFuncs) / sizeof(StdFunc); ++i)
+   for (size_t i = 0; i < sizeof(standardFuncs) / sizeof(StdFunc); ++i) {
       if (procName == standardFuncs[i].name) {
          return reinterpret_cast<FP_Void>(standardFuncs[i].func);
       }
+   }
 
    QWindowsEGLStaticContext::libEGL.eglBindAPI(m_api);
 
