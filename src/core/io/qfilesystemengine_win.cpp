@@ -628,7 +628,7 @@ struct _FILE_ID_INFO {
 };
 
 using FILE_ID_INFO  = _FILE_ID_INFO;
-using PFILE_ID_INFO = *_FILE_ID_INFO;
+using PFILE_ID_INFO = _FILE_ID_INFO *;
 
 #endif
 

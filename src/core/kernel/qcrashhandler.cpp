@@ -281,6 +281,7 @@ static void print_backtrace(FILE *outb)
 }
 #endif
 
+// Custom signal handler entry point for crash diagnostics and user callbacks.
 void qt_signal_handler(int sig)
 {
    signal(sig, SIG_DFL);
