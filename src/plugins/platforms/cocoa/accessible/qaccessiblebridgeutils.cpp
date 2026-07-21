@@ -31,13 +31,14 @@ namespace QAccessibleBridgeUtils {
 
 static bool performAction(QAccessibleInterface *iface, const QString &actionName)
 {
-    if (QAccessibleActionInterface *actionIface = iface->actionInterface()) {
-        if (actionIface->actionNames().contains(actionName)) {
-            actionIface->doAction(actionName);
-            return true;
-        }
-    }
-    return false;
+   if (QAccessibleActionInterface *actionIface = iface->actionInterface()) {
+      if (actionIface->actionNames().contains(actionName)) {
+         actionIface->doAction(actionName);
+         return true;
+      }
+   }
+
+   return false;
 }
 
 QStringList effectiveActionNames(QAccessibleInterface *iface)
@@ -57,6 +58,7 @@ QStringList effectiveActionNames(QAccessibleInterface *iface)
             actions << QAccessibleActionInterface::decreaseAction();
         }
     }
+
     return actions;
 }
 
@@ -106,6 +108,7 @@ bool performEffectiveAction(QAccessibleInterface *iface, const QString &actionNa
             stepSize = qCeil(stepSize);
         }
     }
+
     const double current = currentVariant.toDouble(&success);
 
     if (! success) {
@@ -117,6 +120,7 @@ bool performEffectiveAction(QAccessibleInterface *iface, const QString &actionNa
     }
 
     valueIface->setCurrentValue(current + stepSize);
+
     return true;
 }
 

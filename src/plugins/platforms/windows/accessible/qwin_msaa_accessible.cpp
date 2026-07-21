@@ -318,19 +318,20 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::GetIDsOfNames(const _GUID &, w
 }
 
 HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::Invoke(long dispIdMember, const _GUID &,
-                  unsigned long, unsigned short wFlags, tagDISPPARAMS *pDispParams,
-                  tagVARIANT *pVarResult, tagEXCEPINFO *, unsigned int *)
+      unsigned long, unsigned short wFlags, tagDISPPARAMS *pDispParams,
+      tagVARIANT *pVarResult, tagEXCEPINFO *, unsigned int *)
 {
     HRESULT hr = DISP_E_MEMBERNOTFOUND;
 
-    switch (dispIdMember)
-    {
+    switch (dispIdMember) {
         case DISPID_ACC_PARENT:
             if (wFlags == DISPATCH_PROPERTYGET) {
                 if (! pVarResult) {
                     return E_INVALIDARG;
                 }
+
                 hr = get_accParent(&pVarResult->pdispVal);
+
             } else {
                 hr = DISP_E_MEMBERNOTFOUND;
             }
@@ -343,6 +344,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::Invoke(long dispIdMember, cons
                 }
 
                 hr = get_accChildCount(&pVarResult->lVal);
+
             } else {
                 hr = DISP_E_MEMBERNOTFOUND;
             }
@@ -483,9 +485,10 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::Invoke(long dispIdMember, cons
             break;
     }
 
-    if (!SUCCEEDED(hr)) {
+    if (! SUCCEEDED(hr)) {
         return hr;
     }
+
     return hr;
 }
 
@@ -533,6 +536,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accHitTest(long xLeft, long yT
 
     } else {
         IAccessible *iface = QWindowsAccessibility::wrap(child);
+
         if (iface) {
             (*pvarID).vt = VT_DISPATCH;
             (*pvarID).pdispVal = iface;
@@ -542,6 +546,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accHitTest(long xLeft, long yT
 
     // Did not find anything
     (*pvarID).vt = VT_EMPTY;
+
     return S_FALSE;
 }
 
@@ -549,7 +554,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accLocation(long *pxLeft, long
 {
     QAccessibleInterface *accessible = accessibleInterface();
     accessibleDebugClientCalls(accessible);
-    if (!accessible) {
+    if (! accessible) {
         return E_FAIL;
     }
 
@@ -560,9 +565,9 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accLocation(long *pxLeft, long
 
     const QRect rect = QHighDpi::toNativePixels(acc->rect(), QWindowsAccessibility::windowHelper(accessible));
 
-    *pxLeft = rect.x();
-    *pyTop = rect.y();
-    *pcxWidth = rect.width();
+    *pxLeft    = rect.x();
+    *pyTop     = rect.y();
+    *pcxWidth  = rect.width();
     *pcyHeight = rect.height();
 
     return S_OK;
@@ -581,113 +586,122 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accNavigate(long navDir, VARIA
     QAccessibleInterface *acc = nullptr;
 
     switch (navDir) {
-    case NAVDIR_FIRSTCHILD:
-        acc = accessible->child(0);
-        break;
+       case NAVDIR_FIRSTCHILD:
+           acc = accessible->child(0);
+           break;
 
-    case NAVDIR_LASTCHILD:
-        acc = accessible->child(accessible->childCount() - 1);
-        break;
+       case NAVDIR_LASTCHILD:
+           acc = accessible->child(accessible->childCount() - 1);
+           break;
 
-    case NAVDIR_NEXT:
-    case NAVDIR_PREVIOUS:
-        if (! varStart.lVal){
-            QAccessibleInterface *parent = accessible->parent();
-            if (parent && parent->isValid()) {
-                int index = parent->indexOfChild(accessible);
-                index += (navDir == NAVDIR_NEXT) ? 1 : -1;
-                if (index >= 0 && index < parent->childCount())
-                    acc = parent->child(index);
-            }
-        } else {
-            int index = varStart.lVal;
-            index += (navDir == NAVDIR_NEXT) ? 1 : -1;
-            if (index > 0 && index <= accessible->childCount())
-                acc = accessible->child(index - 1);
-        }
-        break;
+       case NAVDIR_NEXT:
+       case NAVDIR_PREVIOUS:
+           if (! varStart.lVal){
+               QAccessibleInterface *parent = accessible->parent();
+               if (parent && parent->isValid()) {
+                   int index = parent->indexOfChild(accessible);
+                   index += (navDir == NAVDIR_NEXT) ? 1 : -1;
 
-    // Geometrical
-    case NAVDIR_UP:
-    case NAVDIR_DOWN:
-    case NAVDIR_LEFT:
-    case NAVDIR_RIGHT: {
-        QAccessibleInterface *pIface = accessible->parent();
-        if (pIface && pIface->isValid()) {
-            const int indexOfOurself = pIface->indexOfChild(accessible);
-            QRect startg = accessible->rect();
-            QPoint startc = startg.center();
-            QAccessibleInterface *candidate = nullptr;
-            unsigned mindist = UINT_MAX;    // will work on screen sizes at least up to 46340x46340
-            const int sibCount = pIface->childCount();
+                   if (index >= 0 && index < parent->childCount()) {
+                       acc = parent->child(index);
+                   }
+               }
 
-            for (int i = 0; i < sibCount; ++i) {
-                QAccessibleInterface *sibling = nullptr;
-                sibling = pIface->child(i);
-                Q_ASSERT(sibling);
-                if (i == indexOfOurself || sibling->state().invisible) {
-                    //ignore ourself and invisible siblings
-                    continue;
-                }
+           } else {
+               int index = varStart.lVal;
+               index += (navDir == NAVDIR_NEXT) ? 1 : -1;
 
-                QRect sibg = sibling->rect();
-                QPoint sibc = sibg.center();
-                QPoint sibp;
-                QPoint startp;
-                QPoint distp;
-                switch (navDir) {
-                case NAVDIR_LEFT:
-                    startp = QPoint(startg.left(), startg.top() + startg.height() / 2);
-                    sibp = QPoint(sibg.right(), sibg.top() + sibg.height() / 2);
-                    if (QPoint(sibc - startc).x() >= 0) {
-                        continue;
-                    }
-                    distp = sibp - startp;
-                    break;
-                case NAVDIR_RIGHT:
-                    startp = QPoint(startg.right(), startg.top() + startg.height() / 2);
-                    sibp = QPoint(sibg.left(), sibg.top() + sibg.height() / 2);
-                    if (QPoint(sibc - startc).x() <= 0) {
-                        continue;
-                    }
-                    distp = sibp - startp;
-                    break;
-                case NAVDIR_UP:
-                    startp = QPoint(startg.left() + startg.width() / 2, startg.top());
-                    sibp = QPoint(sibg.left() + sibg.width() / 2, sibg.bottom());
-                    if (QPoint(sibc - startc).y() >= 0) {
-                        continue;
-                    }
-                    distp = sibp - startp;
-                    break;
-                case NAVDIR_DOWN:
-                    startp = QPoint(startg.left() + startg.width() / 2, startg.bottom());
-                    sibp = QPoint(sibg.left() + sibg.width() / 2, sibg.top());
-                    if (QPoint(sibc - startc).y() <= 0) {
-                        continue;
-                    }
-                    distp = sibp - startp;
-                    break;
-                default:
-                    break;
-                }
+               if (index > 0 && index <= accessible->childCount()) {
+                   acc = accessible->child(index - 1);
+               }
+           }
+           break;
 
-                // Since we're *comparing* (and not measuring) distances, we can compare the
-                // squared distance, (thus, no need to take the sqrt()).
-                unsigned dist = distp.x() * distp.x() + distp.y() * distp.y();
-                if (dist < mindist) {
-                    candidate = sibling;
-                    mindist = dist;
-                }
-            }
-            acc = candidate;
-        }
+       // Geometrical
+       case NAVDIR_UP:
+       case NAVDIR_DOWN:
+       case NAVDIR_LEFT:
+       case NAVDIR_RIGHT: {
+           QAccessibleInterface *pIface = accessible->parent();
+           if (pIface && pIface->isValid()) {
+               const int indexOfOurself = pIface->indexOfChild(accessible);
+               QRect startg = accessible->rect();
+               QPoint startc = startg.center();
+               QAccessibleInterface *candidate = nullptr;
+               unsigned mindist = UINT_MAX;    // will work on screen sizes at least up to 46340x46340
+               const int sibCount = pIface->childCount();
+
+               for (int i = 0; i < sibCount; ++i) {
+                   QAccessibleInterface *sibling = nullptr;
+                   sibling = pIface->child(i);
+
+                   Q_ASSERT(sibling);
+
+                   if (i == indexOfOurself || sibling->state().invisible) {
+                       //ignore ourself and invisible siblings
+                       continue;
+                   }
+
+                   QRect sibg = sibling->rect();
+                   QPoint sibc = sibg.center();
+                   QPoint sibp;
+                   QPoint startp;
+                   QPoint distp;
+
+                   switch (navDir) {
+                      case NAVDIR_LEFT:
+                          startp = QPoint(startg.left(), startg.top() + startg.height() / 2);
+                          sibp = QPoint(sibg.right(), sibg.top() + sibg.height() / 2);
+                          if (QPoint(sibc - startc).x() >= 0) {
+                              continue;
+                          }
+                          distp = sibp - startp;
+                          break;
+                      case NAVDIR_RIGHT:
+                          startp = QPoint(startg.right(), startg.top() + startg.height() / 2);
+                          sibp = QPoint(sibg.left(), sibg.top() + sibg.height() / 2);
+                          if (QPoint(sibc - startc).x() <= 0) {
+                              continue;
+                          }
+                          distp = sibp - startp;
+                          break;
+                      case NAVDIR_UP:
+                          startp = QPoint(startg.left() + startg.width() / 2, startg.top());
+                          sibp = QPoint(sibg.left() + sibg.width() / 2, sibg.bottom());
+                          if (QPoint(sibc - startc).y() >= 0) {
+                              continue;
+                          }
+                          distp = sibp - startp;
+                          break;
+                      case NAVDIR_DOWN:
+                          startp = QPoint(startg.left() + startg.width() / 2, startg.bottom());
+                          sibp = QPoint(sibg.left() + sibg.width() / 2, sibg.top());
+                          if (QPoint(sibc - startc).y() <= 0) {
+                              continue;
+                          }
+                          distp = sibp - startp;
+                          break;
+                      default:
+                          break;
+                   }
+
+                   // Since we're *comparing* (and not measuring) distances, we can compare the
+                   // squared distance, (thus, no need to take the sqrt()).
+                   unsigned dist = distp.x() * distp.x() + distp.y() * distp.y();
+                   if (dist < mindist) {
+                       candidate = sibling;
+                       mindist = dist;
+                   }
+               }
+               acc = candidate;
+           }
+       }
+           break;
+       default:
+           break;
     }
-        break;
-    default:
-        break;
-    }
-    if (!acc) {
+
+    if (! acc) {
         (*pvarEnd).vt = VT_EMPTY;
         return S_FALSE;
     }
@@ -734,6 +748,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accChildCount(long* pcount
     }
 
     *pcountChildren = accessible->childCount();
+
     return S_OK;
 }
 
@@ -755,6 +770,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accParent(IDispatch** ppdi
     }
 
     *ppdispParent = nullptr;
+
     return S_FALSE;
 }
 
@@ -770,11 +786,13 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::accDoDefaultAction(VARIANT var
 
     if (QAccessibleActionInterface *actionIface = accessible->actionInterface()) {
         const QString def = actionIface->actionNames().value(0);
-        if (!def.isEmpty()) {
+
+        if (! def.isEmpty()) {
             actionIface->doAction(def);
             return S_OK;
         }
     }
+
     return S_FALSE;
 }
 
@@ -808,6 +826,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accDescription(VARIANT var
     }
 
     QString descr;
+
     if (varID.lVal) {
         QAccessibleInterface *child = childPointer(accessible, varID);
 
@@ -815,9 +834,11 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accDescription(VARIANT var
             return E_FAIL;
         }
         descr = child->text(QAccessible::Description);
+
     } else {
         descr = accessible->text(QAccessible::Description);
     }
+
     if (descr.size()) {
         *pszDescription = QStringToBSTR(descr);
         return S_OK;
@@ -989,6 +1010,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accRole(VARIANT varID, VAR
     } else {
         (*pvarRole).vt = VT_EMPTY;
     }
+
     return S_OK;
 }
 
@@ -1010,6 +1032,7 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accState(VARIANT varID, VA
         }
 
         state = child->state();
+
     } else {
         state = accessible->state();
     }
@@ -1175,7 +1198,9 @@ HRESULT STDMETHODCALLTYPE QWindowsMsaaAccessible::get_accFocus(VARIANT *pvarID)
             }
         }
     }
+
     (*pvarID).vt = VT_EMPTY;
+
     return S_FALSE;
 }
 

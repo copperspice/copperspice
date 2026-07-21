@@ -67,8 +67,8 @@ QWaylandGLContext::QWaylandGLContext(EGLDisplay eglDisplay, QWaylandDisplay *dis
       }
 
       // fwdcompat bit is only for OpenGL 3.0 or newer
-      if (m_format.renderableType() == QSurfaceFormat::OpenGL && format.majorVersion() >= 3
-            && ! format.testOption(QSurfaceFormat::DeprecatedFunctions)) {
+      if (m_format.renderableType() == QSurfaceFormat::OpenGL && format.majorVersion() >= 3 &&
+            ! format.testOption(QSurfaceFormat::DeprecatedFunctions)) {
          flags |= EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
       }
 

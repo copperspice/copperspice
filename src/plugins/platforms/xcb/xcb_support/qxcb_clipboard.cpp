@@ -699,7 +699,8 @@ void QXcbClipboard::handleSelectionRequest(xcb_selection_request_event_t *req)
 
    if (req->target == multipleAtom) {
       QByteArray multi_data;
-      if (req->property == XCB_NONE || !clipboardReadProperty(req->requestor, req->property, false, &multi_data,
+
+      if (req->property == XCB_NONE || ! clipboardReadProperty(req->requestor, req->property, false, &multi_data,
             nullptr, &multi_type, &multi_format) || multi_format != 32) {
          // MULTIPLE property not formatted correctly
          xcb_send_event(xcb_connection(), false, req->requestor, XCB_EVENT_MASK_NO_EVENT, (const char *)&event);
@@ -719,10 +720,13 @@ void QXcbClipboard::handleSelectionRequest(xcb_selection_request_event_t *req)
       if (multi) {
          target = multi[imulti].target;
          property = multi[imulti].property;
+
       } else {
          target = req->target;
          property = req->property;
-         if (property == XCB_NONE) { // obsolete client
+
+         if (property == XCB_NONE) {
+            // obsolete client
             property = target;
          }
       }
@@ -830,7 +834,7 @@ bool QXcbClipboard::clipboardReadProperty(xcb_window_t win, xcb_atom_t property,
       return false;
    }
 
-   *type = reply->type;
+   *type   = reply->type;
    *format = reply->format;
 
    bytes_left = reply->bytes_after;
@@ -992,12 +996,13 @@ xcb_generic_event_t *QXcbClipboard::waitForClipboardEvent(xcb_window_t win, int 
 
       if (checkManager) {
          xcb_get_selection_owner_cookie_t cookie = xcb_get_selection_owner(xcb_connection(), atom(QXcbAtom::CLIPBOARD_MANAGER));
-         xcb_get_selection_owner_reply_t *reply = xcb_get_selection_owner_reply(xcb_connection(), cookie, nullptr);
+         xcb_get_selection_owner_reply_t *reply  = xcb_get_selection_owner_reply(xcb_connection(), cookie, nullptr);
 
          if (! reply || reply->owner == XCB_NONE) {
             free(reply);
             return nullptr;
          }
+
          free(reply);
       }
 

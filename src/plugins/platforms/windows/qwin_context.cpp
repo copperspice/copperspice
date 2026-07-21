@@ -290,8 +290,8 @@ bool QWindowsContext::initTouch(unsigned integrationOptions)
    }
 
    QWindowSystemInterface::registerTouchDevice(touchDevice);
-
    d->m_systemInfo |= QWindowsContext::SI_SupportsTouch;
+
    return true;
 }
 
@@ -303,8 +303,9 @@ void QWindowsContext::setTabletAbsoluteRange(int a)
 int QWindowsContext::processDpiAwareness()
 {
    int result;
-   if (QWindowsContext::shcoredll.getProcessDpiAwareness
-               && SUCCEEDED(QWindowsContext::shcoredll.getProcessDpiAwareness(nullptr, &result))) {
+
+   if (QWindowsContext::shcoredll.getProcessDpiAwareness &&
+         SUCCEEDED(QWindowsContext::shcoredll.getProcessDpiAwareness(nullptr, &result))) {
       return result;
    }
 
@@ -389,7 +390,7 @@ QString QWindowsContext::registerWindowClass(const QWindow *w)
    Q_ASSERT(w);
 
    const Qt::WindowFlags flags = w->flags();
-   const Qt::WindowFlags type = flags & Qt::WindowType_Mask;
+   const Qt::WindowFlags type  = flags & Qt::WindowType_Mask;
 
    // Determine style and icon.
    uint style = CS_DBLCLKS;
@@ -401,8 +402,8 @@ QString QWindowsContext::registerWindowClass(const QWindow *w)
       style |= CS_OWNDC;
    }
 
-   if (!(flags & Qt::NoDropShadowWindowHint) && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based)
-      && (type == Qt::Popup || w->property("_q_windowsDropShadow").toBool())) {
+   if (!(flags & Qt::NoDropShadowWindowHint) && (QSysInfo::WindowsVersion & QSysInfo::WV_NT_based) &&
+         (type == Qt::Popup || w->property("_q_windowsDropShadow").toBool())) {
       style |= CS_DROPSHADOW;
    }
 
@@ -413,6 +414,7 @@ QString QWindowsContext::registerWindowClass(const QWindow *w)
          style |= CS_SAVEBITS; // Save/restore background
          icon = false;
          break;
+
       case Qt::Dialog:
          if (!(flags & Qt::WindowSystemMenuHint)) {
             icon = false;
@@ -660,8 +662,7 @@ static inline bool findPlatformWindowHelper(const POINT &screenPoint, unsigned c
    // find a window by searching again with CWP_SKIPTRANSPARENT.
    // uses WS_EX_TRANSPARENT for Qt::WindowTransparentForInput as well.
 
-   if (!(cwexFlags & CWP_SKIPTRANSPARENT)
-      && (GetWindowLongPtr(child, GWL_EXSTYLE) & WS_EX_TRANSPARENT)) {
+   if (! (cwexFlags & CWP_SKIPTRANSPARENT) && (GetWindowLongPtr(child, GWL_EXSTYLE) & WS_EX_TRANSPARENT)) {
       const HWND nonTransparentChild = ChildWindowFromPointEx(*hwnd, point, cwexFlags | CWP_SKIPTRANSPARENT);
 
       if (QWindowsWindow *nonTransparentWindow = context->findPlatformWindow(nonTransparentChild)) {
@@ -677,7 +678,7 @@ static inline bool findPlatformWindowHelper(const POINT &screenPoint, unsigned c
 }
 
 QWindowsWindow *QWindowsContext::findPlatformWindowAt(HWND parent,
-   const QPoint &screenPointIn, unsigned cwex_flags) const
+      const QPoint &screenPointIn, unsigned cwex_flags) const
 {
    QWindowsWindow *result = nullptr;
    const POINT screenPoint = { screenPointIn.x(), screenPointIn.y() };

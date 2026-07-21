@@ -94,8 +94,9 @@ void QWindowsClipboardRetrievalMimeData::releaseDataObject(IDataObject *dataObje
 extern "C" LRESULT QT_WIN_CALLBACK qClipboardViewerWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
    LRESULT result = 0;
-   if (QWindowsClipboard::instance()
-         && QWindowsClipboard::instance()->clipboardViewerWndProc(hwnd, message, wParam, lParam, &result)) {
+
+   if (QWindowsClipboard::instance() &&
+         QWindowsClipboard::instance()->clipboardViewerWndProc(hwnd, message, wParam, lParam, &result)) {
       return result;
    }
 
@@ -206,12 +207,12 @@ static bool isProcessBeingDebugged(HWND hwnd)
 
 void QWindowsClipboard::propagateClipboardMessage(UINT message, WPARAM wParam, LPARAM lParam) const
 {
-   if (!m_nextClipboardViewer) {
+   if (! m_nextClipboardViewer) {
       return;
    }
 
-   if (QWindowsContext::user32dll.isHungAppWindow
-         && QWindowsContext::user32dll.isHungAppWindow(m_nextClipboardViewer)) {
+   if (QWindowsContext::user32dll.isHungAppWindow &&
+            QWindowsContext::user32dll.isHungAppWindow(m_nextClipboardViewer)) {
       qWarning("QWindowsClipboard::propagateClipboardMessage() Unable to send clipboard message to application");
       return;
    }

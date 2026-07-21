@@ -432,6 +432,7 @@ void QXcbConnection::initializeScreens()
 {
    xcb_screen_iterator_t it = xcb_setup_roots_iterator(m_setup);
    int xcbScreenNumber = 0;    // screen number in the xcb sense
+
    QXcbScreen *primaryScreen = nullptr;
 
    while (it.rem) {
@@ -472,15 +473,17 @@ void QXcbConnection::initializeScreens()
             if (outputCount) {
                timestamp = resources_current->config_timestamp;
                outputs = xcb_randr_get_screen_resources_current_outputs(resources_current.data());
+
             } else {
                xcb_randr_get_screen_resources_cookie_t tmpResourcesCookie =
                   xcb_randr_get_screen_resources(xcb_connection(), xcbScreen->root);
 
                resources.reset(xcb_randr_get_screen_resources_reply(xcb_connection(), tmpResourcesCookie, &error));
 
-               if (!resources || error) {
+               if (! resources || error) {
                   qWarning("QXcbConnection::initializeScreens() Failed to obtain the screen resources");
                   free(error);
+
                } else {
                   timestamp = resources->config_timestamp;
                   outputCount = xcb_randr_get_screen_resources_outputs_length(resources.data());
@@ -495,7 +498,7 @@ void QXcbConnection::initializeScreens()
                QScopedPointer<xcb_randr_get_output_primary_reply_t, QMallocDeleter> primary(
                   xcb_randr_get_output_primary_reply(xcb_connection(), primaryCookie, &error));
 
-               if (!primary || error) {
+               if (! primary || error) {
                   qWarning("QXcbConnection::initializeScreens() Failed to obtain the primary output of the screen");
                   free(error);
 
@@ -503,7 +506,7 @@ void QXcbConnection::initializeScreens()
                   for (int i = 0; i < outputCount; i++) {
                      QScopedPointer<xcb_randr_get_output_info_reply_t, QMallocDeleter> output(
                         xcb_randr_get_output_info_reply(xcb_connection(),
-                           xcb_randr_get_output_info_unchecked(xcb_connection(), outputs[i], timestamp), nullptr));
+                        xcb_randr_get_output_info_unchecked(xcb_connection(), outputs[i], timestamp), nullptr));
 
                      // Invalid, disconnected or disabled output
                      if (output == nullptr) {
@@ -540,7 +543,7 @@ void QXcbConnection::initializeScreens()
                      // always available if primary->output is XCB_NONE
                      // or currently disconnected output.
                      if (m_primaryScreenNumber == xcbScreenNumber) {
-                        if (!primaryScreen || (primary && outputs[i] == primary->output)) {
+                        if (! primaryScreen || (primary && outputs[i] == primary->output)) {
                            if (primaryScreen) {
                               primaryScreen->setPrimary(false);
                            }
@@ -576,6 +579,7 @@ void QXcbConnection::initializeScreens()
             free(screens);
          }
       }
+
       if (siblings.isEmpty()) {
          // If there are no XRandR outputs or XRandR extension is missing,
          // then create a fake/legacy screen.
@@ -696,7 +700,7 @@ QXcbConnection::QXcbConnection(QXcbNativeInterface *nativeInterface, bool canGra
       initializeXRandr();
    }
 
-   if (!has_randr_extension) {
+   if (! has_randr_extension) {
       initializeXinerama();
    }
 
@@ -705,6 +709,7 @@ QXcbConnection::QXcbConnection(QXcbNativeInterface *nativeInterface, bool canGra
 
    initializeXRender();
 
+   //
    m_xi2Enabled = false;
 
    if (qgetenv("QT_XCB_NO_XI2").isEmpty()) {
@@ -1908,8 +1913,10 @@ bool QXcbConnection::compressEvent(xcb_generic_event_t *event, int currentIndex,
       if (isXIType(event, m_xiOpCode, XI_TouchUpdate)) {
          xXIDeviceEvent *xiDeviceEvent = reinterpret_cast<xXIDeviceEvent *>(event);
          uint32_t id = xiDeviceEvent->detail % INT_MAX;
+
          for (int j = nextIndex; j < eventqueue->size(); ++j) {
             xcb_generic_event_t *next = eventqueue->at(j);
+
             if (!isValid(next)) {
                continue;
             }
@@ -2555,7 +2562,7 @@ bool QXcbConnection::xi2MouseEvents() const
    // FIXME: Don't use XInput2 mouse events when Xinerama extension
    // is enabled, because it causes problems with multi-monitor setup.
 
-   return mouseViaXI2 && !has_xinerama_extension;
+   return mouseViaXI2 && ! has_xinerama_extension;
 }
 
 static int xi2ValuatorOffset(unsigned char *maskPtr, int maskLen, int number)

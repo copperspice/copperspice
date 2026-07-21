@@ -2055,8 +2055,8 @@ void QWindowsXpNativeFileDialog::populateOpenFileName(OPENFILENAME *ofn, HWND ow
    // Flags
    ofn->Flags = (OFN_NOCHANGEDIR | OFN_HIDEREADONLY | OFN_EXPLORER | OFN_PATHMUSTEXIST);
 
-   if (m_options->fileMode() == QPlatformFileDialogOptions::ExistingFile
-      || m_options->fileMode() == QPlatformFileDialogOptions::ExistingFiles) {
+   if (m_options->fileMode() == QPlatformFileDialogOptions::ExistingFile ||
+         m_options->fileMode() == QPlatformFileDialogOptions::ExistingFiles) {
       ofn->Flags |= (OFN_FILEMUSTEXIST);
    }
 
@@ -2343,15 +2343,14 @@ QPlatformDialogHelper *createHelper(QPlatformTheme::DialogType type)
    switch (type) {
       case QPlatformTheme::FileDialog:
          // "Windows XP Professional x64 Edition has version number WV_5_2 (WV_2003)
-         if (QWindowsIntegration::instance()->options() & QWindowsIntegration::XpNativeDialogs
-            || QSysInfo::windowsVersion() <= QSysInfo::WV_2003) {
+         if (QWindowsIntegration::instance()->options() & QWindowsIntegration::XpNativeDialogs ||
+               QSysInfo::windowsVersion() <= QSysInfo::WV_2003) {
             return new QWindowsXpFileDialogHelper();
          }
 
          if (QSysInfo::windowsVersion() > QSysInfo::WV_2003) {
             return new QWindowsFileDialogHelper();
          }
-
 
       case QPlatformTheme::ColorDialog:
 

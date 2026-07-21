@@ -200,8 +200,8 @@ QPlatformTheme *QWaylandIntegration::createPlatformTheme(const QString &name) co
 
 QPlatformWindow *QWaylandIntegration::createPlatformWindow(QWindow *window) const
 {
-   if ((window->surfaceType() == QWindow::OpenGLSurface || window->surfaceType() == QWindow::RasterGLSurface)
-         && m_display->clientBufferIntegration()) {
+   if ((window->surfaceType() == QWindow::OpenGLSurface || window->surfaceType() == QWindow::RasterGLSurface) &&
+         m_display->clientBufferIntegration()) {
       return m_display->clientBufferIntegration()->createEglWindow(window);
    }
 

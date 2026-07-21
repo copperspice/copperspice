@@ -70,7 +70,7 @@ class QXcbXSettingsPropertyValue
 
    void addCallback(QXcbXSettings::PropertyChangeFunc func, void *handle) {
       QXcbXSettingsCallback callback;
-      callback.func = func;
+      callback.func   = func;
       callback.handle = handle;
       callback_links.append(callback);
    }
@@ -78,7 +78,6 @@ class QXcbXSettingsPropertyValue
    QVariant value;
    int last_change_serial;
    QLinkedList<QXcbXSettingsCallback> callback_links;
-
 };
 
 class QXcbXSettingsPrivate
@@ -93,10 +92,10 @@ class QXcbXSettingsPrivate
 
       int offset = 0;
       QByteArray settings;
-      while (1) {
 
       xcb_atom_t newSettingsAtom = m_screen->connection()->atom(QXcbAtom::_XSETTINGS_SETTINGS);
 
+      while (true) {
          xcb_get_property_cookie_t get_prop_cookie = xcb_get_property_unchecked(m_screen->xcb_connection(),
                false, m_settingsWindow, newSettingsAtom, newSettingsAtom, offset / 4, 8192);
 
@@ -113,7 +112,7 @@ class QXcbXSettingsPrivate
 
          free(get_prop_reply);
 
-         if (!more) {
+         if (! more) {
             break;
          }
       }
@@ -123,9 +122,11 @@ class QXcbXSettingsPrivate
 
    static int round_to_nearest_multiple_of_4(int value) {
       int remainder = value % 4;
-      if (!remainder) {
+
+      if (! remainder) {
          return value;
       }
+
       return value + 4 - remainder;
    }
 
@@ -145,6 +146,7 @@ class QXcbXSettingsPrivate
         ((b == LSBFirst) ?                          \
          qFromLittleEndian<t>((const uchar *)(x)) : \
          qFromBigEndian<t>((const uchar *)(x)))
+
 #define VALIDATE_LENGTH(x)    \
         if ((size_t)settings.length() < (offset + local_offset + 12 + x)) { \
             qWarning("Length %d runs past end of data", x); \
@@ -155,6 +157,7 @@ class QXcbXSettingsPrivate
 
       const char *data = settings.constData() + 12;
       size_t offset = 0;
+
       for (uint i = 0; i < number_of_settings; i++) {
          int local_offset = 0;
          VALIDATE_LENGTH(2);
@@ -175,32 +178,43 @@ class QXcbXSettingsPrivate
          local_offset += 4;
 
          QVariant value;
+
          if (type == XSettingsTypeString) {
             VALIDATE_LENGTH(4);
             int value_length = ADJUST_BO(byteOrder, qint32, data + offset + local_offset);
             local_offset += 4;
+
             VALIDATE_LENGTH(value_length);
             QByteArray value_string(data + offset + local_offset, value_length);
             value.setValue(value_string);
+
             local_offset += round_to_nearest_multiple_of_4(value_length);
+
          } else if (type == XSettingsTypeInteger) {
             VALIDATE_LENGTH(4);
             int value_length = ADJUST_BO(byteOrder, qint32, data + offset + local_offset);
             local_offset += 4;
+
             value.setValue(value_length);
+
          } else if (type == XSettingsTypeColor) {
             VALIDATE_LENGTH(2 * 4);
             quint16 red = ADJUST_BO(byteOrder, quint16, data + offset + local_offset);
             local_offset += 2;
+
             quint16 green = ADJUST_BO(byteOrder, quint16, data + offset + local_offset);
             local_offset += 2;
+
             quint16 blue = ADJUST_BO(byteOrder, quint16, data + offset + local_offset);
             local_offset += 2;
+
             quint16 alpha = ADJUST_BO(byteOrder, quint16, data + offset + local_offset);
             local_offset += 2;
+
             QColor color_value(red, green, blue, alpha);
             value.setValue(color_value);
          }
+
          offset += local_offset;
          m_settings[name].updateValue(m_screen, name, value, last_change_serial);
       }
@@ -231,14 +245,16 @@ QXcbXSettings::QXcbXSettings(QXcbVirtualDesktop *screen)
       free(error);
       return;
    }
+
    xcb_atom_t selection_owner_atom = atom_reply->atom;
    free(atom_reply);
 
-   xcb_get_selection_owner_cookie_t selection_cookie =
-      xcb_get_selection_owner(screen->xcb_connection(), selection_owner_atom);
+   xcb_get_selection_owner_cookie_t selection_cookie = xcb_get_selection_owner(screen->xcb_connection(),
+         selection_owner_atom);
 
-   xcb_get_selection_owner_reply_t *selection_result =
-      xcb_get_selection_owner_reply(screen->xcb_connection(), selection_cookie, &error);
+   xcb_get_selection_owner_reply_t *selection_result = xcb_get_selection_owner_reply(screen->xcb_connection(),
+         selection_cookie, &error);
+
    if (error) {
       free(error);
       return;
@@ -286,7 +302,8 @@ void QXcbXSettings::handlePropertyNotifyEvent(const xcb_property_notify_event_t 
 #endif //XCB_USE_XLIB
 }
 
-void QXcbXSettings::registerCallbackForProperty(const QByteArray &property, QXcbXSettings::PropertyChangeFunc func, void *handle)
+void QXcbXSettings::registerCallbackForProperty(const QByteArray &property,
+      QXcbXSettings::PropertyChangeFunc func, void *handle)
 {
    Q_D(QXcbXSettings);
    d->m_settings[property].addCallback(func, handle);
@@ -323,4 +340,3 @@ QVariant QXcbXSettings::setting(const QByteArray &property) const
    Q_D(const QXcbXSettings);
    return d->m_settings.value(property).value;
 }
-

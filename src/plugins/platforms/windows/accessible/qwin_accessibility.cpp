@@ -68,19 +68,22 @@ QWindowsAccessibility::QWindowsAccessibility()
 // Retrieve sound name by checking the icon property of a message box
 static inline QString messageBoxAlertSound(const QObject *messageBox)
 {
-    enum MessageBoxIcon { // Keep in sync with QMessageBox::Icon
+    // Keep in sync with QMessageBox::Icon
+    enum MessageBoxIcon {
         Information = 1,
-        Warning = 2,
-        Critical = 3
+        Warning     = 2,
+        Critical    = 3
     };
 
     switch (messageBox->property("icon").toInt()) {
-    case Information:
-        return QString("SystemAsterisk");
-    case Warning:
-        return QString("SystemExclamation");
-    case Critical:
-        return QString("SystemHand");
+       case Information:
+           return QString("SystemAsterisk");
+
+       case Warning:
+           return QString("SystemExclamation");
+
+       case Critical:
+           return QString("SystemHand");
     }
 
     return QString();
@@ -133,7 +136,7 @@ void QWindowsAccessibility::notifyAccessibilityUpdate(QAccessibleEvent *event)
 
     QWindow *window = QWindowsAccessibility::windowHelper(iface);
 
-    if (!window) {
+    if (! window) {
         window = QApplication::focusWindow();
 
         if (! window) {
@@ -150,25 +153,27 @@ void QWindowsAccessibility::notifyAccessibilityUpdate(QAccessibleEvent *event)
 
     const HWND hWnd = reinterpret_cast<HWND>(platform->nativeResourceForWindow("handle", window));
 
-    if (event->type() != QAccessible::MenuCommand && // MenuCommand is faked
-        event->type() != QAccessible::ObjectDestroyed) {
+    // MenuCommand is faked
+    if (event->type() != QAccessible::MenuCommand && event->type() != QAccessible::ObjectDestroyed) {
         ::NotifyWinEvent(event->type(), hWnd, OBJID_CLIENT, QAccessible::uniqueId(iface));
     }
-
 }
 
 QWindow *QWindowsAccessibility::windowHelper(const QAccessibleInterface *iface)
 {
-    QWindow *window = iface->window();
-    if (!window) {
-        QAccessibleInterface *acc = iface->parent();
-        while (acc && acc->isValid() && !window) {
-            window = acc->window();
-            QAccessibleInterface *par = acc->parent();
-            acc = par;
-        }
-    }
-    return window;
+   QWindow *window = iface->window();
+
+   if (! window) {
+      QAccessibleInterface *acc = iface->parent();
+
+      while (acc && acc->isValid() && ! window) {
+         window = acc->window();
+         QAccessibleInterface *par = acc->parent();
+         acc = par;
+      }
+   }
+
+   return window;
 }
 
 IAccessible *QWindowsAccessibility::wrap(QAccessibleInterface *acc)
@@ -182,12 +187,12 @@ IAccessible *QWindowsAccessibility::wrap(QAccessibleInterface *acc)
        QAccessible::registerAccessibleInterface(acc);
    }
 
-    QWindowsMsaaAccessible *wacc = new QWindowsMsaaAccessible(acc);
+   QWindowsMsaaAccessible *wacc = new QWindowsMsaaAccessible(acc);
 
-    IAccessible *iacc = nullptr;
-    wacc->QueryInterface(IID_IAccessible, reinterpret_cast<void **>(&iacc));
+   IAccessible *iacc = nullptr;
+   wacc->QueryInterface(IID_IAccessible, reinterpret_cast<void **>(&iacc));
 
-    return iacc;
+   return iacc;
 }
 
 bool QWindowsAccessibility::handleAccessibleObjectFromWindowRequest(HWND hwnd, WPARAM wParam, LPARAM lParam, LRESULT *lResult)
@@ -210,6 +215,7 @@ bool QWindowsAccessibility::handleAccessibleObjectFromWindowRequest(HWND hwnd, W
 
         if (! oleaccChecked) {
             oleaccChecked = true;
+
             ptrLresultFromObject = reinterpret_cast<PtrLresultFromObject>
                   (QSystemLibrary::resolve(QString("oleacc"), "LresultFromObject"));
         }
@@ -219,12 +225,15 @@ bool QWindowsAccessibility::handleAccessibleObjectFromWindowRequest(HWND hwnd, W
 
             if (window) {
                 QAccessibleInterface *acc = window->accessibleRoot();
+
                 if (acc) {
                     if (IAccessible *iface = wrap(acc)) {
                         *lResult = ptrLresultFromObject(IID_IAccessible, wParam, iface);  // ref == 2
+
                         if (*lResult) {
-                            iface->Release(); // the client will release the object again, and then it will destroy itself
+                            iface->Release();    // client will release the object again and then it will destroy itself
                         }
+
                         return true;
                     }
                 }

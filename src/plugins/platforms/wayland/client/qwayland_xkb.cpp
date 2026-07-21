@@ -161,8 +161,8 @@ int QWaylandXkb::keysymToQtKey(xkb_keysym_t keysym, Qt::KeyboardModifiers &modif
 
       modifiers |= Qt::KeypadModifier;
 
-   } else if (text.length() == 1 && text[0].unicode() > 0x1f
-         && text[0].unicode() != 0x7f && ! (keysym >= XKB_KEY_dead_grave && keysym <= XKB_KEY_dead_currency)) {
+   } else if (text.length() == 1 && text[0].unicode() > 0x1f &&
+         text[0].unicode() != 0x7f && ! (keysym >= XKB_KEY_dead_grave && keysym <= XKB_KEY_dead_currency)) {
 
       code = text[0].toUpper()[0].unicode();
 

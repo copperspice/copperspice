@@ -57,7 +57,7 @@ void QXcbConnection::initializeXInput2()
 
    if (XQueryExtension(xDisplay, "XInputExtension", &m_xiOpCode, &m_xiEventBase, &m_xiErrorBase)) {
       int xiMajor = 2;
-      m_xi2Minor = 2; // try 2.2 first, needed for TouchBegin/Update/End
+      m_xi2Minor  = 2;    // try 2.2 first, needed for TouchBegin/Update/End
 
       if (XIQueryVersion(xDisplay, &xiMajor, &m_xi2Minor) == BadRequest) {
          m_xi2Minor = 1; // for smooth scrolling 2.1 is enough
@@ -68,6 +68,7 @@ void QXcbConnection::initializeXInput2()
          } else {
             m_xi2Enabled = true;
          }
+
       } else {
          m_xi2Enabled = true;
       }
@@ -1299,15 +1300,23 @@ void QXcbConnection::xi2ReportTabletEvent(TabletData &tabletData, void *event)
 {
    xXIDeviceEvent *ev = reinterpret_cast<xXIDeviceEvent *>(event);
    QXcbWindow *xcbWindow = platformWindowFromId(ev->event);
-   if (!xcbWindow) {
+
+   if (! xcbWindow) {
       return;
    }
+
    QWindow *window = xcbWindow->window();
    const double scale = 65536.0;
+
    QPointF local(ev->event_x / scale, ev->event_y / scale);
    QPointF global(ev->root_x / scale, ev->root_y / scale);
-   double pressure = 0, rotation = 0, tangentialPressure = 0;
-   int xTilt = 0, yTilt = 0;
+
+   double pressure = 0;
+   double rotation = 0;
+   double tangentialPressure = 0;
+
+   int xTilt = 0;
+   int yTilt = 0;
 
    for (QHash<int, TabletData::ValuatorClassInfo>::iterator it = tabletData.valuatorInfo.begin(),
       ite = tabletData.valuatorInfo.end(); it != ite; ++it) {
@@ -1320,24 +1329,31 @@ void QXcbConnection::xi2ReportTabletEvent(TabletData &tabletData, void *event)
          case QXcbAtom::AbsPressure:
             pressure = normalizedValue;
             break;
+
          case QXcbAtom::AbsTiltX:
             xTilt = classInfo.curVal;
             break;
+
          case QXcbAtom::AbsTiltY:
             yTilt = classInfo.curVal;
             break;
+
          case QXcbAtom::AbsWheel:
             switch (tabletData.tool) {
                case QTabletEvent::Airbrush:
                   tangentialPressure = normalizedValue * 2.0 - 1.0; // Convert 0..1 range to -1..+1 range
                   break;
+
                case QTabletEvent::RotationStylus:
-                  rotation = normalizedValue * 360.0 - 180.0; // Convert 0..1 range to -180..+180 degrees
+                  rotation = normalizedValue * 360.0 - 180.0;       // Convert 0..1 range to -180..+180 degrees
                   break;
+
                default:    // Other types of styli do not use this valuator
                   break;
             }
+
             break;
+
          default:
             break;
       }
@@ -1354,8 +1370,8 @@ void QXcbConnection::xi2ReportTabletEvent(TabletData &tabletData, void *event)
 #endif
 
    QWindowSystemInterface::handleTabletEvent(window, ev->time, local, global,
-      tabletData.tool, tabletData.pointerType, tabletData.buttons, pressure,
-      xTilt, yTilt, tangentialPressure, rotation, 0, tabletData.serialId);
+         tabletData.tool, tabletData.pointerType, tabletData.buttons, pressure,
+         xTilt, yTilt, tangentialPressure, rotation, 0, tabletData.serialId);
 }
 
 QXcbConnection::TabletData *QXcbConnection::tabletDataForDevice(int id)
@@ -1365,6 +1381,7 @@ QXcbConnection::TabletData *QXcbConnection::tabletDataForDevice(int id)
          return &m_tabletData[i];
       }
    }
+
    return nullptr;
 }
 

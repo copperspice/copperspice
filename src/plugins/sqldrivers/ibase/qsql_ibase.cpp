@@ -527,33 +527,41 @@ static char *readArrayBuffer(QList<QVariant> &list, char *buffer, short curDim,
             }
             break;
          }
+
          case blr_long:
             valList = toList<long>(&buffer, numElements[dim], static_cast<long *>(0));
             break;
+
          case blr_short:
             valList = toList<short>(&buffer, numElements[dim]);
             break;
+
          case blr_int64:
             valList = toList<qint64>(&buffer, numElements[dim]);
             break;
+
          case blr_float:
             valList = toList<float>(&buffer, numElements[dim]);
             break;
+
          case blr_double:
             valList = toList<double>(&buffer, numElements[dim]);
             break;
+
          case blr_timestamp:
             for (int i = 0; i < numElements[dim]; ++i) {
                valList.append(fromTimeStamp(buffer));
                buffer += sizeof(ISC_TIMESTAMP);
             }
             break;
+
          case blr_sql_time:
             for (int i = 0; i < numElements[dim]; ++i) {
                valList.append(fromTime(buffer));
                buffer += sizeof(ISC_TIME);
             }
             break;
+
          case blr_sql_date:
             for (int i = 0; i < numElements[dim]; ++i) {
                valList.append(fromDate(buffer));
@@ -732,12 +740,15 @@ static char *createArrayBuffer(char *buffer, const QList<QVariant> &list,
                buffer = fillList<double>(buffer, list);
             }
             break;
+
          case QVariant::LongLong:
             buffer = fillList<qint64>(buffer, list);
             break;
+
          case QVariant::ULongLong:
             buffer = fillList<quint64>(buffer, list);
             break;
+
          case QVariant::String:
             for (i = 0; i < list.size(); ++i) {
                buffer = qFillBufferWithString(buffer, list.at(i).toString(),
@@ -745,6 +756,7 @@ static char *createArrayBuffer(char *buffer, const QList<QVariant> &list,
             }
 
             break;
+
          case QVariant::Date:
             for (i = 0; i < list.size(); ++i) {
                *((ISC_DATE *)buffer) = toDate(list.at(i).toDate());

@@ -618,7 +618,7 @@ QStringList QCoreTextFontDatabase::fallbacksForFamily(const QString &family, QFo
             if ([item isKindOfClass: [NSArray class]]) {
                NSArray *langs = [(NSArray *) item sortedArrayUsingFunction: languageMapSort
                                                                    context: languages];
-               for (NSArray * map in langs) {
+               for (NSArray *map in langs) {
                   fallbackList.append(familyNameFromPostScriptName([map objectAtIndex: 1]));
                }
 

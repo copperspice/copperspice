@@ -551,7 +551,7 @@ static void populateFromPattern(FcPattern *pattern)
    fontFile->indexValue = indexValue;
 
    QFont::Style style = (slant_value == FC_SLANT_ITALIC)
-      ? QFont::StyleItalic : ((slant_value == FC_SLANT_OBLIQUE)
+         ? QFont::StyleItalic : ((slant_value == FC_SLANT_OBLIQUE)
          ? QFont::StyleOblique : QFont::StyleNormal);
 
    // Note, weight should really be an int but registerFont incorrectly uses an enum
@@ -796,8 +796,8 @@ QFontEngine *QFontconfigDatabase::fontEngine(const QByteArray &fontData, qreal p
    return engine;
 }
 
-QStringList QFontconfigDatabase::fallbacksForFamily(const QString &family, QFont::Style style, QFont::StyleHint styleHint,
-   QChar::Script script) const
+QStringList QFontconfigDatabase::fallbacksForFamily(const QString &family, QFont::Style style,
+      QFont::StyleHint styleHint, QChar::Script script) const
 {
    QStringList fallbackFamilies;
    FcPattern *pattern = FcPatternCreate();
@@ -814,11 +814,13 @@ QStringList QFontconfigDatabase::fallbacksForFamily(const QString &family, QFont
    FcPatternAdd(pattern, FC_FAMILY, value, true);
 
    int slant_value = FC_SLANT_ROMAN;
+
    if (style == QFont::StyleItalic) {
       slant_value = FC_SLANT_ITALIC;
    } else if (style == QFont::StyleOblique) {
       slant_value = FC_SLANT_OBLIQUE;
    }
+
    FcPatternAddInteger(pattern, FC_SLANT, slant_value);
 
    Q_ASSERT(uint(script) < QChar::ScriptCount);
@@ -838,6 +840,7 @@ QStringList QFontconfigDatabase::fallbacksForFamily(const QString &family, QFont
 
       FcPattern *dummy = FcPatternCreate();
       FcDefaultSubstitute(dummy);
+
       FcChar8 *lang = nullptr;
       FcResult res = FcPatternGetString(dummy, FC_LANG, 0, &lang);
 
@@ -875,11 +878,13 @@ QStringList QFontconfigDatabase::fallbacksForFamily(const QString &family, QFont
          //         capitalize(value);
          const QString familyName   = QString::fromUtf8((const char *)familyStr);
          const QString familyNameCF = familyName.toCaseFolded();
-         if (!duplicates.contains(familyNameCF)) {
+
+         if (! duplicates.contains(familyNameCF)) {
             fallbackFamilies << familyName;
             duplicates.insert(familyNameCF);
          }
       }
+
       FcFontSetDestroy(fontSet);
    }
 
@@ -901,6 +906,7 @@ static FcPattern *queryFont(const FcChar8 *file, const QByteArray &data, int id,
    FcPattern *pattern = nullptr;
 
    FT_Face face;
+
    if (! FT_New_Memory_Face(lib, (const FT_Byte *)data.constData(), data.size(), id, &face)) {
       *count = face->num_faces;
 
@@ -923,7 +929,7 @@ QStringList QFontconfigDatabase::addApplicationFont(const QByteArray &fontData, 
       FcConfigAppFontAddFile(nullptr, (const FcChar8 *)":/non-existent");
       set = FcConfigGetFonts(nullptr, FcSetApplication); // try again
 
-      if (!set) {
+      if (! set) {
          return families;
       }
    }
@@ -935,8 +941,8 @@ QStringList QFontconfigDatabase::addApplicationFont(const QByteArray &fontData, 
 
    FcPattern *pattern;
    do {
-      pattern = queryFont((const FcChar8 *)QFile::encodeName(fileName).constData(),
-            fontData, id, blanks, &count);
+      pattern = queryFont((const FcChar8 *)QFile::encodeName(fileName).constData(), fontData, id, blanks, &count);
+
       if (! pattern) {
          return families;
       }
@@ -964,7 +970,7 @@ QString QFontconfigDatabase::resolveFontFamilyAlias(const QString &family) const
    }
 
    FcPattern *pattern = FcPatternCreate();
-   if (!pattern) {
+   if (! pattern) {
       return family;
    }
 
@@ -991,6 +997,7 @@ QFont QFontconfigDatabase::defaultFont() const
    // or https://bugs.freedesktop.org/show_bug.cgi?id=35482 is fixed
    FcPattern *dummy = FcPatternCreate();
    FcDefaultSubstitute(dummy);
+
    FcChar8 *lang = nullptr;
    FcResult res  = FcPatternGetString(dummy, FC_LANG, 0, &lang);
 
@@ -1025,9 +1032,10 @@ void QFontconfigDatabase::setupFontEngine(QFontEngineFT *engine, const QFontDef 
 
    if (useXftConf && !forcedAntialiasSetting) {
       void *antialiasResource = QGuiApplication::platformNativeInterface()->
-                  nativeResourceForScreen("antialiasingEnabled", QGuiApplication::primaryScreen());
+            nativeResourceForScreen("antialiasingEnabled", QGuiApplication::primaryScreen());
 
       int antialiasingEnabled = int(reinterpret_cast<qintptr>(antialiasResource));
+
       if (antialiasingEnabled > 0) {
          antialias = antialiasingEnabled - 1;
       }
@@ -1089,18 +1097,20 @@ void QFontconfigDatabase::setupFontEngine(QFontEngineFT *engine, const QFontDef 
 
       if (antialias) {
          QFontEngine::SubpixelAntialiasingType subpixelType = QFontEngine::Subpixel_None;
-         if (!(fontDef.styleStrategy & QFont::NoSubpixelAntialias)) {
+         if (! (fontDef.styleStrategy & QFont::NoSubpixelAntialias)) {
             subpixelType = subpixelTypeFromMatch(match, useXftConf);
          }
          engine->subpixelType = subpixelType;
 
          format = (subpixelType == QFontEngine::Subpixel_None)
-            ? QFontEngine::Format_A8 : QFontEngine::Format_A32;
+               ? QFontEngine::Format_A8 : QFontEngine::Format_A32;
+
       } else {
          format = QFontEngine::Format_Mono;
       }
 
       FcPatternDestroy(match);
+
    } else {
       format = antialias ? QFontEngine::Format_A8 : QFontEngine::Format_Mono;
    }
@@ -1111,5 +1121,3 @@ void QFontconfigDatabase::setupFontEngine(QFontEngineFT *engine, const QFontDef 
    engine->defaultFormat = format;
    engine->glyphFormat   = format;
 }
-
-

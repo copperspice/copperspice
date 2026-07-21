@@ -484,11 +484,11 @@ class QXcbConnection : public QObject
       }
    }
 
-   inline xcb_timestamp_t netWmUserTime() const {
+   xcb_timestamp_t netWmUserTime() const {
       return m_netWmUserTime;
    }
 
-   inline void setNetWmUserTime(xcb_timestamp_t t) {
+   void setNetWmUserTime(xcb_timestamp_t t) {
       if (t > m_netWmUserTime) {
          m_netWmUserTime = t;
       }
@@ -551,9 +551,11 @@ class QXcbConnection : public QObject
    QByteArray startupId() const {
       return m_startupId;
    }
+
    void setStartupId(const QByteArray &nextId) {
       m_startupId = nextId;
    }
+
    void clearStartupId() {
       m_startupId.clear();
    }

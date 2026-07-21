@@ -130,12 +130,14 @@ GLXFBConfig qglx_findConfig(Display *display, int screen , const QSurfaceFormat 
     while (!chosenConfig && reduced) {
         QVector<int> spec = qglx_buildSpec(reducedFormat, drawableBit);
         int confcount = 0;
+
         GLXFBConfig *configs;
         configs = glXChooseFBConfig(display, screen,spec.constData(),&confcount);
-        if (confcount)
-        {
+
+        if (confcount) {
             for (int i = 0; i < confcount; i++) {
                 chosenConfig = configs[i];
+
                 // Make sure we try to get an ARGB visual if the format asked for an alpha:
                 if (reducedFormat.hasAlpha()) {
                     int alphaSize;
@@ -195,7 +197,8 @@ XVisualInfo *qglx_findVisualInfo(Display *display, int screen, QSurfaceFormat *f
     // attempt to fall back to glXChooseVisual
     bool reduced = true;
     QSurfaceFormat reducedFormat = *format;
-    while (!visualInfo && reduced) {
+
+    while (! visualInfo && reduced) {
         QVarLengthArray<int, 13> attribs;
         attribs.append(GLX_RGBA);
 

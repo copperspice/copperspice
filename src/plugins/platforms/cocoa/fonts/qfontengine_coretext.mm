@@ -131,7 +131,7 @@ QFont::Weight QCoreTextFontEngine::qtWeightFromCFWeight(float value)
 }
 
 static void loadAdvancesForGlyphs(CTFontRef ctfont, QVarLengthArray<CGGlyph> &cgGlyphs, QGlyphLayout *glyphs, int len,
-   QFontEngine::ShaperFlags flags, const QFontDef &fontDef)
+      QFontEngine::ShaperFlags flags, const QFontDef &fontDef)
 {
    QVarLengthArray<CGSize> advances(len);
    CTFontGetAdvancesForGlyphs(ctfont, kCTFontOrientationHorizontal, cgGlyphs.data(), advances.data(), len);

@@ -100,7 +100,8 @@ class QMacPasteboardMimeAny : public QMacInternalPasteboardMime
    QMacPasteboardMimeAny() : QMacInternalPasteboardMime(MIME_QT_CONVERTOR | MIME_ALL)
    { }
 
-   ~QMacPasteboardMimeAny() { }
+   ~QMacPasteboardMimeAny()
+   { }
 
    QString convertorName() override;
 

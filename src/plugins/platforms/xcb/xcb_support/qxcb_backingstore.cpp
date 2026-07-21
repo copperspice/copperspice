@@ -130,10 +130,7 @@ class QXcbShmGraphicsBuffer : public QPlatformGraphicsBuffer
 };
 
 QXcbShmImage::QXcbShmImage(QXcbScreen *screen, const QSize &size, uint depth, QImage::Format format)
-   : QXcbObject(screen->connection())
-   , m_graphics_buffer(nullptr)
-   , m_gc(0)
-   , m_gc_window(0)
+   : QXcbObject(screen->connection()), m_graphics_buffer(nullptr), m_gc(0), m_gc_window(0)
 {
    Q_XCB_NOOP(connection());
 
@@ -155,14 +152,15 @@ QXcbShmImage::QXcbShmImage(QXcbScreen *screen, const QSize &size, uint depth, QI
          XCB_IMAGE_ORDER_MSB_FIRST, nullptr, ~0, nullptr);
 
    const int segmentSize = m_xcb_image->stride * m_xcb_image->height;
-   if (!segmentSize) {
+   if (! segmentSize) {
       return;
    }
 
    int id = shmget(IPC_PRIVATE, segmentSize, IPC_CREAT | 0600);
+
    if (id == -1) {
       qWarning("QXcbShmImage: shmget() failed (%d: %s) for size %d (%dx%d)",
-         errno, strerror(errno), segmentSize, size.width(), size.height());
+            errno, strerror(errno), segmentSize, size.width(), size.height());
    } else {
       m_shm_info.shmaddr = m_xcb_image->data = (quint8 *)shmat(id, nullptr, 0);
    }

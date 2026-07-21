@@ -178,8 +178,10 @@ void QXcbDrag::startDrag()
       atom(QXcbAtom::XdndSelection), connection()->time());
 
    QStringList fmts = QXcbMime::formatsHelper(drag()->mimeData());
+
    for (int i = 0; i < fmts.size(); ++i) {
       QVector<xcb_atom_t> atoms = QXcbMime::mimeAtomsForFormat(connection(), fmts.at(i));
+
       for (int j = 0; j < atoms.size(); ++j) {
          if (!drag_types.contains(atoms.at(j))) {
             drag_types.append(atoms.at(j));
@@ -189,8 +191,7 @@ void QXcbDrag::startDrag()
 
    if (drag_types.size() > 3) {
       xcb_change_property(xcb_connection(), XCB_PROP_MODE_REPLACE, connection()->clipboard()->owner(),
-         atom(QXcbAtom::XdndTypelist),
-         XCB_ATOM_ATOM, 32, drag_types.size(), (const void *)drag_types.constData());
+         atom(QXcbAtom::XdndTypelist), XCB_ATOM_ATOM, 32, drag_types.size(), (const void *)drag_types.constData());
    }
 
    setUseCompositing(current_virtual_desktop->compositingActive());
@@ -244,7 +245,7 @@ xcb_window_t QXcbDrag::findRealWindow(const QPoint &pos, xcb_window_t w, int md,
 
    if (md) {
       xcb_get_window_attributes_cookie_t cookie = xcb_get_window_attributes(xcb_connection(), w);
-      xcb_get_window_attributes_reply_t *reply = xcb_get_window_attributes_reply(xcb_connection(), cookie, nullptr);
+      xcb_get_window_attributes_reply_t *reply  = xcb_get_window_attributes_reply(xcb_connection(), cookie, nullptr);
 
       if (! reply) {
          return 0;
@@ -265,8 +266,10 @@ xcb_window_t QXcbDrag::findRealWindow(const QPoint &pos, xcb_window_t w, int md,
 
       QRect windowRect(geo_reply->x, geo_reply->y, geo_reply->width, geo_reply->height);
       free(geo_reply);
+
       if (windowRect.contains(pos)) {
-         bool windowContainsMouse = !ignoreNonXdndAwareWindows;
+         bool windowContainsMouse = ! ignoreNonXdndAwareWindows;
+
          {
             xcb_get_property_cookie_t property_cookie = Q_XCB_CALL(xcb_get_property(xcb_connection(), false,
                   w, connection()->atom(QXcbAtom::XdndAware), XCB_GET_PROPERTY_TYPE_ANY, 0, 0));
@@ -283,12 +286,15 @@ xcb_window_t QXcbDrag::findRealWindow(const QPoint &pos, xcb_window_t w, int md,
                if (connection()->hasInputShape()) {
                   windowContainsMouse = windowInteractsWithPosition(xcb_connection(), relPos, w, XCB_SHAPE_SK_INPUT);
                }
+
                if (windowContainsMouse && connection()->hasXShape()) {
                   windowContainsMouse = windowInteractsWithPosition(xcb_connection(), relPos, w, XCB_SHAPE_SK_BOUNDING);
                }
-               if (!connection()->hasInputShape() && !connection()->hasXShape()) {
+
+               if (! connection()->hasInputShape() && ! connection()->hasXShape()) {
                   windowContainsMouse = true;
                }
+
                if (windowContainsMouse) {
                   return w;
                }
@@ -306,11 +312,13 @@ xcb_window_t QXcbDrag::findRealWindow(const QPoint &pos, xcb_window_t w, int md,
          xcb_window_t *c = xcb_query_tree_children(tree_reply);
 
          xcb_window_t r = 0;
-         for (uint i = nc; !r && i--;) {
+
+         for (uint i = nc; ! r && i--;) {
             r = findRealWindow(pos - windowRect.topLeft(), c[i], md - 1, ignoreNonXdndAwareWindows);
          }
 
          free(tree_reply);
+
          if (r) {
             return r;
          }
@@ -318,7 +326,7 @@ xcb_window_t QXcbDrag::findRealWindow(const QPoint &pos, xcb_window_t w, int md,
          // We didn't find a client window. Just use the innermost window.
 
          // No children
-         if ( !windowContainsMouse) {
+         if (! windowContainsMouse) {
             return 0;
          } else {
             return w;
@@ -337,6 +345,7 @@ void QXcbDrag::move(const QPoint &globalPos)
 
    QXcbVirtualDesktop *virtualDesktop = nullptr;
    QPoint cursorPos;
+
    QXcbCursor::queryPointer(connection(), &virtualDesktop, &cursorPos);
    QXcbScreen *screen = virtualDesktop->screenAt(cursorPos);
    QPoint deviceIndependentPos = QHighDpiScaling::mapPositionFromNative(globalPos, screen);
@@ -646,13 +655,17 @@ static Window findXdndAwareParent(Window window)
       // check if window has XdndAware
       Atom type = 0;
       int f;
-      unsigned long n, a;
+
+      unsigned long n;
+      unsigned long a;
       unsigned char *data = 0;
+
       if (XGetWindowProperty(X11->display, window, ATOM(XdndAware), 0, 0, False,
             AnyPropertyType, &type, &f, &n, &a, &data) == Success) {
          if (data) {
             XFree(data);
          }
+
          if (type) {
             target = window;
             break;
@@ -664,17 +677,22 @@ static Window findXdndAwareParent(Window window)
       Window parent;
       Window *children;
       uint unused;
-      if (!XQueryTree(X11->display, window, &root, &parent, &children, &unused)) {
+
+      if (! XQueryTree(X11->display, window, &root, &parent, &children, &unused)) {
          break;
       }
+
       if (children) {
          XFree(children);
       }
+
       if (window == root) {
          break;
       }
+
       window = parent;
    }
+
    return target;
 }
 
@@ -684,7 +702,7 @@ static xcb_client_message_event_t last_enter_event;
 
 static bool checkEmbedded(QWidget *w, const XEvent *xe)
 {
-   if (!w) {
+   if (w == nullptr) {
       return false;
    }
 
@@ -692,7 +710,8 @@ static bool checkEmbedded(QWidget *w, const XEvent *xe)
       current_target = ((QExtraWidget *)current_embedding_widget)->extraData()->xDndProxy;
       current_proxy_target = current_target;
       qt_xdnd_send_leave();
-      current_target = 0;
+
+      current_target       = 0;
       current_proxy_target = 0;
       current_embedding_widget = 0;
    }
@@ -709,12 +728,16 @@ static bool checkEmbedded(QWidget *w, const XEvent *xe)
 
       ((XEvent *)xe)->xany.window = extra->xDndProxy;
       XSendEvent(X11->display, extra->xDndProxy, False, NoEventMask, (XEvent *)xe);
+
       if (currentWindow != w) {
          currentWindow = w;
       }
+
       return true;
    }
+
    current_embedding_widget = 0;
+
    return false;
 }
 #endif
@@ -736,9 +759,10 @@ void QXcbDrag::handleEnter(QPlatformWindow *window, const xcb_client_message_eve
    }
 
    xdnd_dragsource = event->data.data32[0];
-   if (!proxy) {
+   if (! proxy) {
       proxy = xdndProxy(connection(), xdnd_dragsource);
    }
+
    current_proxy_target = proxy ? proxy : xdnd_dragsource;
 
    if (event->data.data32[1] & 1) {
@@ -750,6 +774,7 @@ void QXcbDrag::handleEnter(QPlatformWindow *window, const xcb_client_message_eve
 
       if (reply && reply->type != XCB_NONE && reply->format == 32) {
          int length = xcb_get_property_value_length(reply) / 4;
+
          if (length > xdnd_max_type) {
             length = xdnd_max_type;
          }
@@ -1262,6 +1287,7 @@ void QXcbDrag::handleSelectionRequest(const xcb_selection_request_event_t *event
 
       if (at == -1) {
          xcb_window_t target = findXdndAwareParent(connection(), event->requestor);
+
          if (target) {
             if (event->time == XCB_CURRENT_TIME && current_target == target) {
                at = -2;

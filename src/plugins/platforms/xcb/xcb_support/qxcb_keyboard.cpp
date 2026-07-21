@@ -576,21 +576,27 @@ static const Qt::KeyboardModifiers ModsTbl[] = {
 Qt::KeyboardModifiers QXcbKeyboard::translateModifiers(int s) const
 {
    Qt::KeyboardModifiers ret = Qt::EmptyFlag;
+
    if (s & XCB_MOD_MASK_SHIFT) {
       ret |= Qt::ShiftModifier;
    }
+
    if (s & XCB_MOD_MASK_CONTROL) {
       ret |= Qt::ControlModifier;
    }
+
    if (s & rmod_masks.alt) {
       ret |= Qt::AltModifier;
    }
+
    if (s & rmod_masks.meta) {
       ret |= Qt::MetaModifier;
    }
+
    if (s & rmod_masks.altgr) {
       ret |= Qt::GroupSwitchModifier;
    }
+
    return ret;
 }
 
@@ -1172,8 +1178,8 @@ int QXcbKeyboard::keysymToQtKey(xcb_keysym_t keysym, Qt::KeyboardModifiers &modi
       }
       modifiers |= Qt::KeypadModifier;
 
-   } else if (text.length() == 1 && text[0].unicode() > 0x1f && text[0].unicode() != 0x7f
-      && ! (keysym >= XK_dead_grave && keysym <= XK_dead_currency)) {
+   } else if (text.length() == 1 && text[0].unicode() > 0x1f && text[0].unicode() != 0x7f &&
+         ! (keysym >= XK_dead_grave && keysym <= XK_dead_currency)) {
       code = text[0].toUpper()[0].unicode();
 
    } else {
@@ -1405,15 +1411,18 @@ void QXcbKeyboard::updateModifiers()
 
    // Figure out the modifier mapping, ICCCM 6.6
    xcb_keycode_t *modKeyCodes[numSymbols];
+
    for (size_t i = 0; i < numSymbols; ++i) {
       modKeyCodes[i] = xcb_key_symbols_get_keycode(m_key_symbols, symbols[i]);
    }
 
    xcb_keycode_t *modMap = xcb_get_modifier_mapping_keycodes(modMapReply);
    const int w = modMapReply->keycodes_per_modifier;
+
    for (size_t i = 0; i < numSymbols; ++i) {
       for (int bit = 0; bit < 8; ++bit) {
          uint mask = 1 << bit;
+
          for (int x = 0; x < w; ++x) {
             xcb_keycode_t keyCode = modMap[x + bit * w];
             xcb_keycode_t *itk = modKeyCodes[i];
@@ -1421,18 +1430,23 @@ void QXcbKeyboard::updateModifiers()
             while (itk && *itk != XCB_NO_SYMBOL) {
                if (*itk++ == keyCode) {
                   uint sym = symbols[i];
+
                   if ((sym == XK_Alt_L || sym == XK_Alt_R)) {
                      rmod_masks.alt = mask;
                   }
+
                   if ((sym == XK_Meta_L || sym == XK_Meta_R)) {
                      rmod_masks.meta = mask;
                   }
+
                   if (sym == XK_Mode_switch) {
                      rmod_masks.altgr = mask;
                   }
+
                   if ((sym == XK_Super_L) || (sym == XK_Super_R)) {
                      rmod_masks.super = mask;
                   }
+
                   if ((sym == XK_Hyper_L) || (sym == XK_Hyper_R)) {
                      rmod_masks.hyper = mask;
                   }
@@ -1445,6 +1459,7 @@ void QXcbKeyboard::updateModifiers()
    for (size_t i = 0; i < numSymbols; ++i) {
       free(modKeyCodes[i]);
    }
+
    free(modMapReply);
    resolveMaskConflicts();
 }
@@ -1644,7 +1659,7 @@ void QXcbKeyboard::handleKeyEvent(xcb_window_t sourceWindow, QEvent::Type type, 
 
       if (isMethod) {
          method.invoke(inputContext, Qt::DirectConnection, Q_RETURN_ARG(bool, filtered), Q_ARG(uint, sym),
-            Q_ARG(uint, code), Q_ARG(uint, state), Q_ARG(bool, true));
+               Q_ARG(uint, code), Q_ARG(uint, state), Q_ARG(bool, true));
       }
 
       if (! filtered && inputContext) {

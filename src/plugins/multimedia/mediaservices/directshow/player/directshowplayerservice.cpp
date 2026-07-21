@@ -685,8 +685,7 @@ int DirectShowPlayerService::findStreamType(IPin *pin) const
       bool audio = false;
       bool other = false;
 
-      for (AM_MEDIA_TYPE *type = nullptr; types->Next(1, &type, nullptr) == S_OK;
-         DirectShowMediaType::deleteType(type)) {
+      for (AM_MEDIA_TYPE *type = nullptr; types->Next(1, &type, nullptr) == S_OK; DirectShowMediaType::deleteType(type)) {
 
          if (type->majortype == MEDIATYPE_Audio) {
             audio = true;

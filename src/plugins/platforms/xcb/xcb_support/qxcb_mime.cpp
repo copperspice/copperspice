@@ -49,9 +49,7 @@ QString QXcbMime::mimeAtomToString(QXcbConnection *connection, xcb_atom_t a)
    }
 
    // special cases for string type
-   if (a == XCB_ATOM_STRING
-      || a == connection->atom(QXcbAtom::UTF8_STRING)
-      || a == connection->atom(QXcbAtom::TEXT)) {
+   if (a == XCB_ATOM_STRING || a == connection->atom(QXcbAtom::UTF8_STRING) || a == connection->atom(QXcbAtom::TEXT)) {
       return QLatin1String("text/plain");
    }
 
@@ -78,11 +76,12 @@ bool QXcbMime::mimeDataForAtom(QXcbConnection *connection, xcb_atom_t a, QMimeDa
    }
 
    bool ret = false;
+
    *atomFormat = a;
    *dataFormat = 8;
 
-   if ((a == connection->atom(QXcbAtom::UTF8_STRING) || a == XCB_ATOM_STRING || a == connection->atom(QXcbAtom::TEXT))
-      && QInternalMimeData::hasFormatHelper("text/plain", mimeData)) {
+   if ((a == connection->atom(QXcbAtom::UTF8_STRING) || a == XCB_ATOM_STRING || a == connection->atom(QXcbAtom::TEXT)) &&
+         QInternalMimeData::hasFormatHelper("text/plain", mimeData)) {
 
       if (a == connection->atom(QXcbAtom::UTF8_STRING)) {
          *data = QInternalMimeData::renderDataHelper("text/plain", mimeData);
@@ -93,6 +92,7 @@ bool QXcbMime::mimeDataForAtom(QXcbConnection *connection, xcb_atom_t a, QMimeDa
          *data = QString::fromUtf8(QInternalMimeData::renderDataHelper("text/plain", mimeData)).toLatin1();
          ret = true;
       }
+
       return ret;
    }
 
@@ -202,8 +202,8 @@ QVariant QXcbMime::mimeConvertToFormat(QXcbConnection *connection, xcb_atom_t a,
       const quint8 byte0 = data.at(0);
       const quint8 byte1 = data.at(1);
 
-      if ((byte0 == 0xff && byte1 == 0xfe) || (byte0 == 0xfe && byte1 == 0xff)
-         || (byte0 != 0 && byte1 == 0) || (byte0 == 0 && byte1 != 0)) {
+      if ((byte0 == 0xff && byte1 == 0xfe) || (byte0 == 0xfe && byte1 == 0xff) ||
+            (byte0 != 0 && byte1 == 0) || (byte0 == 0 && byte1 != 0)) {
 
          QTextCodec *codec = QTextCodec::codecForName("UTF-16");
          const QString str = codec->toUnicode(data);

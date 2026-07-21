@@ -511,8 +511,8 @@ xcb_cursor_t QXcbCursor::createNonStandardCursor(int cshape)
       cursor = xcb_generate_id(conn);
       xcb_create_cursor(conn, cursor, pm, pmm, 0, 0, 0, 0xFFFF, 0xFFFF, 0xFFFF, 8, 8);
 
-   } else if ((cshape >= Qt::SplitVCursor && cshape <= Qt::SplitHCursor)
-         || cshape == Qt::WhatsThisCursor || cshape == Qt::BusyCursor) {
+   } else if ((cshape >= Qt::SplitVCursor && cshape <= Qt::SplitHCursor) ||
+         cshape == Qt::WhatsThisCursor || cshape == Qt::BusyCursor) {
       int i = (cshape - Qt::SplitVCursor) * 2;
 
       xcb_pixmap_t pm = xcb_create_pixmap_from_bitmap_data(conn, m_screen->root(),
@@ -548,11 +548,11 @@ xcb_cursor_t QXcbCursor::createNonStandardCursor(int cshape)
       cursor = xcb_generate_id(conn);
       xcb_create_cursor(conn, cursor, pm, pmm, 0, 0, 0, 0xFFFF, 0xFFFF, 0xFFFF, 8, 8);
 
-   } else if (cshape == Qt::DragCopyCursor || cshape == Qt::DragMoveCursor
-         || cshape == Qt::DragLinkCursor) {
+   } else if (cshape == Qt::DragCopyCursor || cshape == Qt::DragMoveCursor ||
+         cshape == Qt::DragLinkCursor) {
       QImage image = QApplicationPrivate::instance()->getPixmapCursor(static_cast<Qt::CursorShape>(cshape)).toImage();
 
-      if (!image.isNull()) {
+      if (! image.isNull()) {
          xcb_pixmap_t pm = qt_xcb_XPixmapFromBitmap(m_screen, image);
          xcb_pixmap_t pmm = qt_xcb_XPixmapFromBitmap(m_screen, image.createAlphaMask());
          cursor = xcb_generate_id(conn);
@@ -568,8 +568,7 @@ xcb_cursor_t QXcbCursor::createNonStandardCursor(int cshape)
 #if defined(XCB_USE_XLIB)
 bool updateCursorTheme(void *dpy, const QByteArray &theme)
 {
-   if (!ptrXcursorLibraryGetTheme
-      || !ptrXcursorLibrarySetTheme) {
+   if (! ptrXcursorLibraryGetTheme || !ptrXcursorLibrarySetTheme) {
       return false;
    }
 
@@ -579,6 +578,7 @@ bool updateCursorTheme(void *dpy, const QByteArray &theme)
    }
 
    int setTheme = ptrXcursorLibrarySetTheme(dpy, theme.constData());
+
    return setTheme;
 }
 

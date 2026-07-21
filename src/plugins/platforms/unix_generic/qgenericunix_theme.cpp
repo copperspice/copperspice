@@ -216,9 +216,13 @@ class QKdeThemePrivate : public QPlatformThemePrivate
    }
 
    void refresh();
+
    static QVariant readKdeSetting(const QString &key, const QStringList &kdeDirs, int kdeVersion,
-      QHash<QString, QSettings *> &kdeSettings);
-   static void readKdeSystemPalette(const QStringList &kdeDirs, int kdeVersion, QHash<QString, QSettings *> &kdeSettings, QPalette *pal);
+         QHash<QString, QSettings *> &kdeSettings);
+
+   static void readKdeSystemPalette(const QStringList &kdeDirs, int kdeVersion,
+         QHash<QString, QSettings *> &kdeSettings, QPalette *pal);
+
    static QFont *kdeFont(const QVariant &fontValue);
    static QStringList kdeIconThemeSearchPaths(const QStringList &kdeDirs);
 
@@ -226,9 +230,11 @@ class QKdeThemePrivate : public QPlatformThemePrivate
    const int kdeVersion;
 
    ResourceHelper resources;
+
    QString iconThemeName;
    QString iconFallbackThemeName;
    QStringList styleNames;
+
    int toolButtonStyle;
    int toolBarIconSize;
    bool singleClick;
@@ -331,13 +337,15 @@ QVariant QKdeThemePrivate::readKdeSetting(const QString &key, const QStringList 
 {
    for (const QString &kdeDir : kdeDirs) {
       QSettings *settings = kdeSettings.value(kdeDir);
-      if (!settings) {
+
+      if (! settings) {
          const QString kdeGlobalsPath = kdeGlobals(kdeDir, kdeVersion);
          if (QFileInfo(kdeGlobalsPath).isReadable()) {
             settings = new QSettings(kdeGlobalsPath, QSettings::IniFormat);
             kdeSettings.insert(kdeDir, settings);
          }
       }
+
       if (settings) {
          const QVariant value = settings->value(key);
          if (value.isValid()) {
@@ -374,7 +382,9 @@ void QKdeThemePrivate::readKdeSystemPalette(const QStringList &kdeDirs, int kdeV
       // kcolorscheme.cpp: SetDefaultColors
       const QColor defaultWindowBackground(214, 210, 208);
       const QColor defaultButtonBackground(223, 220, 217);
+
       *pal = QPalette(defaultButtonBackground, defaultWindowBackground);
+
       return;
    }
 
@@ -398,12 +408,12 @@ void QKdeThemePrivate::readKdeSystemPalette(const QStringList &kdeDirs, int kdeV
    int h, s, v;
    button.getHsv(&h, &s, &v);
 
-   const QBrush whiteBrush = QBrush(Qt::white);
-   const QBrush buttonBrush = QBrush(button);
-   const QBrush buttonBrushDark = QBrush(button.darker(v > 128 ? 200 : 50));
-   const QBrush buttonBrushDark150 = QBrush(button.darker(v > 128 ? 150 : 75));
+   const QBrush whiteBrush          = QBrush(Qt::white);
+   const QBrush buttonBrush         = QBrush(button);
+   const QBrush buttonBrushDark     = QBrush(button.darker(v > 128 ? 200 : 50));
+   const QBrush buttonBrushDark150  = QBrush(button.darker(v > 128 ? 150 : 75));
    const QBrush buttonBrushLight150 = QBrush(button.lighter(v > 128 ? 150 : 75));
-   const QBrush buttonBrushLight = QBrush(button.lighter(v > 128 ? 200 : 50));
+   const QBrush buttonBrushLight    = QBrush(button.lighter(v > 128 ? 200 : 50));
 
    pal->setBrush(QPalette::Disabled, QPalette::WindowText, buttonBrushDark);
    pal->setBrush(QPalette::Disabled, QPalette::ButtonText, buttonBrushDark);
@@ -437,6 +447,7 @@ QFont *QKdeThemePrivate::kdeFont(const QVariant &fontValue)
       // Also retrieve the family for the constructor since we cannot use the
       // default constructor of QFont, which accesses QApplication::systemFont()
       // causing recursion.
+
       QString fontDescription;
       QString fontFamily;
 
@@ -454,6 +465,7 @@ QFont *QKdeThemePrivate::kdeFont(const QVariant &fontValue)
 
       if (!fontDescription.isEmpty()) {
          QFont font(fontFamily);
+
          if (font.fromString(fontDescription)) {
             return new QFont(font);
          }
@@ -471,6 +483,7 @@ QStringList QKdeThemePrivate::kdeIconThemeSearchPaths(const QStringList &kdeDirs
 
    for (const QString &candidate : kdeDirs) {
       const QFileInfo fi(candidate + iconPath);
+
       if (fi.isDir()) {
          paths.append(fi.absoluteFilePath());
       }
@@ -601,7 +614,7 @@ QPlatformTheme *QKdeTheme::createKdeTheme()
    return new QKdeTheme(kdeDirs, kdeVersion);
 }
 
-#if !defined(QT_NO_DBUS) && !defined(QT_NO_SYSTEMTRAYICON)
+#if ! defined(QT_NO_DBUS) && ! defined(QT_NO_SYSTEMTRAYICON)
 QPlatformSystemTrayIcon *QKdeTheme::createPlatformSystemTrayIcon() const
 {
    if (isDBusTrayAvailable()) {
@@ -629,14 +642,14 @@ class QGnomeThemePrivate : public QPlatformThemePrivate
    }
 
    void configureFonts(const QString &gtkFontName) const {
-      Q_ASSERT(!systemFont);
+      Q_ASSERT(! systemFont);
 
       const int split = gtkFontName.lastIndexOf(QChar(QChar::Space));
       float size = gtkFontName.mid(split + 1).toFloat();
       QString fontName = gtkFontName.left(split);
 
       systemFont = new QFont(fontName, size);
-      fixedFont = new QFont("monospace", systemFont->pointSize());
+      fixedFont  = new QFont("monospace", systemFont->pointSize());
       fixedFont->setStyleHint(QFont::TypeWriter);
    }
 
@@ -690,7 +703,7 @@ const QFont *QGnomeTheme::font(Font type) const
 {
    Q_D(const QGnomeTheme);
 
-   if (!d->systemFont) {
+   if (! d->systemFont) {
       d->configureFonts(gtkFontName());
    }
 
@@ -746,7 +759,6 @@ QString QGnomeTheme::standardButtonText(int button) const
 
    return QPlatformTheme::standardButtonText(button);
 }
-
 
 QPlatformTheme *QGenericUnixTheme::createUnixTheme(const QString &name)
 {

@@ -163,7 +163,7 @@ void QWaylandXdgTopLevel::xdg_toplevel_configure(int32_t width, int32_t height, 
    m_pending.states = Qt::WindowNoState;
 
    uint32_t *newState = static_cast<uint32_t *>(states->data);
-   size_t numStates = states->size / sizeof(uint32_t);
+   size_t numStates   = states->size / sizeof(uint32_t);
 
    for (size_t i = 0; i < numStates; ++i) {
       switch (newState[i]) {

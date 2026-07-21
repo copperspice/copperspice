@@ -102,18 +102,21 @@ void QWindowsInputContext::reset()
 {
    QPlatformInputContext::reset();
 
-   if (!m_compositionContext.hwnd) {
+   if (! m_compositionContext.hwnd) {
       return;
    }
 
    if (m_compositionContext.isComposing && !m_compositionContext.focusObject.isNull()) {
       QInputMethodEvent event;
-      if (!m_compositionContext.composition.isEmpty()) {
+
+      if (! m_compositionContext.composition.isEmpty()) {
          event.setCommitString(m_compositionContext.composition);
       }
+
       QCoreApplication::sendEvent(m_compositionContext.focusObject, &event);
       endContextComposition();
    }
+
    imeNotifyCancelComposition(m_compositionContext.hwnd);
    doneContext();
 }
@@ -126,6 +129,7 @@ void QWindowsInputContext::setFocusObject(QObject *)
    if (m_compositionContext.isComposing) {
       reset();
    }
+
    updateEnabled();
 }
 
