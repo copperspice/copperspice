@@ -30,14 +30,13 @@
 
 using namespace QPatternist;
 
-QXmlSerializerPrivate::QXmlSerializerPrivate(const QXmlQuery &query,
-      QIODevice *outputDevice)
+QXmlSerializerPrivate::QXmlSerializerPrivate(const QXmlQuery &newQuery, QIODevice *outputDevice)
    : isPreviousAtomic(false),
      state(QXmlSerializer::BeforeDocumentElement),
-     np(query.namePool().d),
+     np(newQuery.namePool().d),
      device(outputDevice),
      codec(QTextCodec::codecForMib(106)), /* UTF-8 */
-     query(query)
+     query(newQuery)
 {
    hasClosedElement.reserve(EstimatedTreeDepth);
    namespaces.reserve(EstimatedTreeDepth);

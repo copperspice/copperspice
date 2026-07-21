@@ -4609,14 +4609,16 @@ yyreduce:
             const QXmlName id(StandardNamespaces::fn, StandardLocalNames::id);
 
             if (name == id) {
-               const Expression::ID id = ands.first()->id();
-               if (!isVariableReference(id) && id != Expression::IDStringValue) {
+               const Expression::ID expressionId = ands.first()->id();
+
+               if (! isVariableReference(expressionId) && expressionId != Expression::IDStringValue) {
                   parseInfo->staticContext->error(QtXmlPatterns::tr("When function %1 is used for matching inside a pattern, "
                                                   "the argument must be a variable reference or a string literal.")
                                                   .formatArg(formatFunction(parseInfo->staticContext->namePool(), signature)),
                                                   ReportContext::XPST0003,
                                                   fromYYLTYPE((yyloc), parseInfo));
                }
+
             } else if (name == key) {
                if (ands.first()->id() != Expression::IDStringValue) {
                   parseInfo->staticContext->error(QtXmlPatterns::tr("In an XSL-T pattern, the first argument to function %1 "

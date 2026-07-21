@@ -42,8 +42,8 @@ class QXmlFormatterPrivate : public QXmlSerializerPrivate
    QStack<bool>    canIndent;
 };
 
-QXmlFormatterPrivate::QXmlFormatterPrivate(const QXmlQuery &query, QIODevice *const outputDevice)
-   : QXmlSerializerPrivate(query, outputDevice), indentationDepth(4), currentDepth(0)
+QXmlFormatterPrivate::QXmlFormatterPrivate(const QXmlQuery &newQuery, QIODevice *const outputDevice)
+   : QXmlSerializerPrivate(newQuery, outputDevice), indentationDepth(4), currentDepth(0)
 {
    indentString = '\n';
 

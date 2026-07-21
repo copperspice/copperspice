@@ -129,8 +129,8 @@ void MaintainingReader<TokenLookupClass, LookupKey>::validateElement(const Looku
                const int totalCount = all.count();
                QStringList allowed;
 
-               for (int i = 0; i < totalCount; ++i) {
-                  allowed.append(QPatternist::formatKeyword(TokenLookupClass::toString(all.at(i))));
+               for (int j = 0; j < totalCount; ++j) {
+                  allowed.append(QPatternist::formatKeyword(TokenLookupClass::toString(all.at(j))));
                }
 
                /* Note, we can't run toString() on attrName, because we're in this branch,

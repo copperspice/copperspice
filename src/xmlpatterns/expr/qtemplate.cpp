@@ -86,11 +86,11 @@ DynamicContext::Ptr Template::createContext(const TemplateInvoker *const invoker
    }
 
    if (isCallTemplate) {
-      const WithParam::Hash::const_iterator end(withParams.constEnd());
+      const WithParam::Hash::const_iterator iterEnd(withParams.constEnd());
 
-      for (WithParam::Hash::const_iterator it(withParams.constBegin()); it != end; ++it) {
-         if (!hashedParams.contains(it.key())) {
-            raiseXTSE0680(context, it.key(), this);
+      for (WithParam::Hash::const_iterator iter(withParams.constBegin()); iter != iterEnd; ++iter) {
+         if (!hashedParams.contains(iter.key())) {
+            raiseXTSE0680(context, iter.key(), this);
          }
       }
 
