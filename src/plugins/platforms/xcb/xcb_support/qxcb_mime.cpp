@@ -75,7 +75,7 @@ bool QXcbMime::mimeDataForAtom(QXcbConnection *connection, xcb_atom_t a, QMimeDa
       return false;
    }
 
-   bool ret = false;
+   bool retval = false;
 
    *atomFormat = a;
    *dataFormat = 8;
@@ -85,15 +85,15 @@ bool QXcbMime::mimeDataForAtom(QXcbConnection *connection, xcb_atom_t a, QMimeDa
 
       if (a == connection->atom(QXcbAtom::UTF8_STRING)) {
          *data = QInternalMimeData::renderDataHelper("text/plain", mimeData);
-         ret = true;
+         retval = true;
 
       } else if (a == XCB_ATOM_STRING || a == connection->atom(QXcbAtom::TEXT)) {
          // ICCCM says STRING is latin1
          *data = QString::fromUtf8(QInternalMimeData::renderDataHelper("text/plain", mimeData)).toLatin1();
-         ret = true;
+         retval = true;
       }
 
-      return ret;
+      return retval;
    }
 
    QString atomName = mimeAtomToString(connection, a);
@@ -118,18 +118,18 @@ bool QXcbMime::mimeDataForAtom(QXcbConnection *connection, xcb_atom_t a, QMimeDa
          *dataFormat = 16;
       }
 
-      ret = true;
+      retval = true;
 
    } else if ((a == XCB_ATOM_PIXMAP || a == XCB_ATOM_BITMAP) && mimeData->hasImage()) {
-      ret = true;
+      retval = true;
 
    } else if (atomName == "text/plain" && mimeData->hasFormat("text/uri-list")) {
       // return URLs also as plain text.
       *data = QInternalMimeData::renderDataHelper(atomName, mimeData);
-      ret = true;
+      retval = true;
    }
 
-   return ret;
+   return retval;
 }
 
 QVector<xcb_atom_t> QXcbMime::mimeAtomsForFormat(QXcbConnection *connection, const QString &format)

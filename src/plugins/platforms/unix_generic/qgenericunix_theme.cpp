@@ -478,18 +478,18 @@ QFont *QKdeThemePrivate::kdeFont(const QVariant &fontValue)
 
 QStringList QKdeThemePrivate::kdeIconThemeSearchPaths(const QStringList &kdeDirs)
 {
-   QStringList paths = QGenericUnixTheme::xdgIconThemePaths();
+   QStringList retval = QGenericUnixTheme::xdgIconThemePaths();
    const QString iconPath = "/share/icons";
 
    for (const QString &candidate : kdeDirs) {
       const QFileInfo fi(candidate + iconPath);
 
       if (fi.isDir()) {
-         paths.append(fi.absoluteFilePath());
+         retval.append(fi.absoluteFilePath());
       }
    }
 
-   return paths;
+   return retval;
 }
 
 QVariant QKdeTheme::themeHint(QPlatformTheme::ThemeHint hint) const
@@ -784,7 +784,7 @@ QPlatformTheme *QGenericUnixTheme::createUnixTheme(const QString &name)
 
 QStringList QGenericUnixTheme::themeNames()
 {
-   QStringList result;
+   QStringList retval;
 
    if (QApplication::desktopSettingsAware()) {
       const QByteArray desktopEnvironment = QApplicationPrivate::platformIntegration()->services()->desktopEnvironment();
@@ -803,25 +803,25 @@ QStringList QGenericUnixTheme::themeNames()
          if (desktopEnvironment == "KDE") {
 
 #ifndef QT_NO_SETTINGS
-            result.push_back(QKdeTheme::m_name);
+            retval.push_back(QKdeTheme::m_name);
 #endif
          } else if (gtkBasedEnvironments.contains(desktopName)) {
             // prefer the GTK2 theme implementation with native dialogs etc.
-            result.push_back("gtk2");
+            retval.push_back("gtk2");
 
             // fallback to the generic Gnome theme if loading the GTK2 theme fails
-            result.push_back(QGnomeTheme::m_name);
+            retval.push_back(QGnomeTheme::m_name);
          }
       }
 
       const QString session = QString::fromUtf8(qgetenv("DESKTOP_SESSION"));
-      if (!session.isEmpty() && session != "default" && ! result.contains(session)) {
-         result.push_back(session);
+      if (! session.isEmpty() && session != "default" && ! retval.contains(session)) {
+         retval.push_back(session);
       }
 
    } // desktopSettingsAware
 
-   result.append(QGenericUnixTheme::m_name);
+   retval.append(QGenericUnixTheme::m_name);
 
-   return result;
+   return retval;
 }

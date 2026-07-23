@@ -78,16 +78,16 @@ QWaylandAbstractDecoration::~QWaylandAbstractDecoration()
 
 static QRegion marginsRegion(const QSize &size, const QMargins &margins)
 {
-   QRegion r;
+   QRegion retval;
 
    const int widthWithMargins = margins.left() + size.width() + margins.right();
 
-   r += QRect(0, 0, widthWithMargins, margins.top());
-   r += QRect(0, size.height()+margins.top(), widthWithMargins, margins.bottom());
-   r += QRect(0, margins.top(), margins.left(), size.height());
-   r += QRect(size.width()+margins.left(), margins.top(), margins.right(), size.height());
+   retval += QRect(0, 0, widthWithMargins, margins.top());
+   retval += QRect(0, size.height()+margins.top(), widthWithMargins, margins.bottom());
+   retval += QRect(0, margins.top(), margins.left(), size.height());
+   retval += QRect(size.width()+margins.left(), margins.top(), margins.right(), size.height());
 
-   return r;
+   return retval;
 }
 
 void QWaylandAbstractDecoration::setWaylandWindow(QWaylandWindow *window)

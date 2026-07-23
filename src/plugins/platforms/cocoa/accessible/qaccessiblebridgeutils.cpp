@@ -43,23 +43,23 @@ static bool performAction(QAccessibleInterface *iface, const QString &actionName
 
 QStringList effectiveActionNames(QAccessibleInterface *iface)
 {
-    QStringList actions;
+    QStringList retval;
 
     if (QAccessibleActionInterface *actionIface = iface->actionInterface()) {
-        actions = actionIface->actionNames();
+        retval = actionIface->actionNames();
     }
 
     if (iface->valueInterface()) {
-        if (! actions.contains(QAccessibleActionInterface::increaseAction())) {
-            actions << QAccessibleActionInterface::increaseAction();
+        if (! retval.contains(QAccessibleActionInterface::increaseAction())) {
+            retval << QAccessibleActionInterface::increaseAction();
         }
 
-        if (! actions.contains(QAccessibleActionInterface::decreaseAction())) {
-            actions << QAccessibleActionInterface::decreaseAction();
+        if (! retval.contains(QAccessibleActionInterface::decreaseAction())) {
+            retval << QAccessibleActionInterface::decreaseAction();
         }
     }
 
-    return actions;
+    return retval;
 }
 
 bool performEffectiveAction(QAccessibleInterface *iface, const QString &actionName)

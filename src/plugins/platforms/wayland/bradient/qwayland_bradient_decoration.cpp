@@ -196,9 +196,9 @@ bool QWaylandBradientDecoration::handleTouch(QWaylandInputDevice *inputDevice, c
    (void) global;
    (void) mods;
 
-   bool handled = (state == Qt::TouchPointPressed);
+   bool retval = (state == Qt::TouchPointPressed);
 
-   if (handled) {
+   if (retval) {
       if (closeButtonRect().contains(local)) {
          QWindowSystemInterface::handleCloseEvent(window());
 
@@ -212,11 +212,11 @@ bool QWaylandBradientDecoration::handleTouch(QWaylandInputDevice *inputDevice, c
          waylandWindow()->shellSurface()->topLevel()->move(inputDevice);
 
       } else {
-         handled = false;
+         retval = false;
       }
    }
 
-   return handled;
+   return retval;
 }
 
 QMargins QWaylandBradientDecoration::margins() const

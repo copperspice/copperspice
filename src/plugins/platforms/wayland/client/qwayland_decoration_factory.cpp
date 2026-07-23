@@ -47,24 +47,24 @@ static QFactoryLoader *directLoader()
 
 QStringList QWaylandDecorationFactory::keys(const QString &pluginPath)
 {
-   QStringList list;
+   QStringList retval;
 
    if (! pluginPath.isEmpty()) {
       QCoreApplication::addLibraryPath(pluginPath);
-      list = directLoader()->keySet().toList();
+      retval = directLoader()->keySet().toList();
 
-      if (! list.isEmpty()) {
+      if (! retval.isEmpty()) {
          const QString postFix = " (from " + QDir::toNativeSeparators(pluginPath) + ')';
 
-         for (auto &item : list) {
+         for (auto &item : retval) {
             item.append(postFix);
          }
       }
    }
 
-   list.append(loader()->keySet().toList());
+   retval.append(loader()->keySet().toList());
 
-   return list;
+   return retval;
 }
 
 QWaylandAbstractDecoration *QWaylandDecorationFactory::create(const QString &platform, const QStringList &args, const QString &pluginPath)

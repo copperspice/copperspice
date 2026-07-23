@@ -1318,10 +1318,10 @@ void QXcbConnection::xi2ReportTabletEvent(TabletData &tabletData, void *event)
    int xTilt = 0;
    int yTilt = 0;
 
-   for (QHash<int, TabletData::ValuatorClassInfo>::iterator it = tabletData.valuatorInfo.begin(),
-      ite = tabletData.valuatorInfo.end(); it != ite; ++it) {
-      int valuator = it.key();
-      TabletData::ValuatorClassInfo &classInfo(it.value());
+   for (auto iter = tabletData.valuatorInfo.begin(), iterEnd = tabletData.valuatorInfo.end(); iter != iterEnd; ++iter) {
+      int valuator = iter.key();
+
+      TabletData::ValuatorClassInfo &classInfo(iter.value());
       xi2GetValuatorValueIfSet(event, classInfo.number, &classInfo.curVal);
       double normalizedValue = (classInfo.curVal - classInfo.minVal) / (classInfo.maxVal - classInfo.minVal);
 

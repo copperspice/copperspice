@@ -45,10 +45,11 @@ static const char *application_menu_strings[] = {
 QString qt_mac_applicationmenu_string(int type)
 {
    QString menuString = QString::fromLatin1(application_menu_strings[type]);
-   const QString translated = QCoreApplication::translate("QMenuBar", application_menu_strings[type]);
 
-   if (translated != menuString) {
-      return translated;
+   const QString retval = QCoreApplication::translate("QMenuBar", application_menu_strings[type]);
+
+   if (retval != menuString) {
+      return retval;
    } else {
       return QCoreApplication::translate("MAC_APPLICATION_MENU", application_menu_strings[type]);
    }

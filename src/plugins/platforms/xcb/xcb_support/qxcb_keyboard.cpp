@@ -575,29 +575,29 @@ static const Qt::KeyboardModifiers ModsTbl[] = {
 
 Qt::KeyboardModifiers QXcbKeyboard::translateModifiers(int s) const
 {
-   Qt::KeyboardModifiers ret = Qt::EmptyFlag;
+   Qt::KeyboardModifiers retval = Qt::EmptyFlag;
 
    if (s & XCB_MOD_MASK_SHIFT) {
-      ret |= Qt::ShiftModifier;
+      retval |= Qt::ShiftModifier;
    }
 
    if (s & XCB_MOD_MASK_CONTROL) {
-      ret |= Qt::ControlModifier;
+      retval |= Qt::ControlModifier;
    }
 
    if (s & rmod_masks.alt) {
-      ret |= Qt::AltModifier;
+      retval |= Qt::AltModifier;
    }
 
    if (s & rmod_masks.meta) {
-      ret |= Qt::MetaModifier;
+      retval |= Qt::MetaModifier;
    }
 
    if (s & rmod_masks.altgr) {
-      ret |= Qt::GroupSwitchModifier;
+      retval |= Qt::GroupSwitchModifier;
    }
 
-   return ret;
+   return retval;
 }
 
 void QXcbKeyboard::readXKBConfig()

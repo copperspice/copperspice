@@ -1139,21 +1139,21 @@ void QXcbConnection::handleXcbError(xcb_generic_error_t *error)
 
 static Qt::MouseButtons translateMouseButtons(int s)
 {
-   Qt::MouseButtons ret = Qt::EmptyFlag;
+   Qt::MouseButtons retval = Qt::EmptyFlag;
 
    if (s & XCB_BUTTON_MASK_1) {
-      ret |= Qt::LeftButton;
+      retval |= Qt::LeftButton;
    }
 
    if (s & XCB_BUTTON_MASK_2) {
-      ret |= Qt::MiddleButton;
+      retval |= Qt::MiddleButton;
    }
 
    if (s & XCB_BUTTON_MASK_3) {
-      ret |= Qt::RightButton;
+      retval |= Qt::RightButton;
    }
 
-   return ret;
+   return retval;
 }
 
 Qt::MouseButton QXcbConnection::translateMouseButton(xcb_button_t s)

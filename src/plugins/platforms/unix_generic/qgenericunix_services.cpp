@@ -119,22 +119,22 @@ static inline bool launch(const QString &launcher, const QUrl &url)
 #endif
 
 #if defined(QT_NO_PROCESS)
-   const bool ok = ::system(csPrintable(command + " &"));
+   const bool retval = ::system(csPrintable(command + " &"));
 #else
-   const bool ok = QProcess::startDetached(command);
+   const bool retval = QProcess::startDetached(command);
 #endif
 
-   if (!ok) {
-      qWarning("launch() Failed to start process %s", csPrintable(command));
+   if (! retval) {
+      qWarning("launch(): Failed to start process %s", csPrintable(command));
    }
 
-   return ok;
+   return retval;
 }
 
 QByteArray QGenericUnixServices::desktopEnvironment() const
 {
-   static const QByteArray result = detectDesktopEnvironment();
-   return result;
+   static const QByteArray retval = detectDesktopEnvironment();
+   return retval;
 }
 
 bool QGenericUnixServices::openUrl(const QUrl &url)

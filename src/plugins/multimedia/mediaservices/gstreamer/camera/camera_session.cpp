@@ -888,9 +888,12 @@ qint64 CameraBinSession::duration() const
       if (fileSink) {
          GstFormat format = GST_FORMAT_TIME;
          gint64 duration = 0;
-         bool ret = qt_gst_element_query_position(fileSink, format, &duration);
+
+         bool retval = qt_gst_element_query_position(fileSink, format, &duration);
+
          gst_object_unref(GST_OBJECT(fileSink));
-         if (ret) {
+
+         if (retval) {
             return duration / 1000000;
          }
       }

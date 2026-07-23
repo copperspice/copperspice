@@ -2332,19 +2332,19 @@ QPoint QXcbWindow::mapToGlobal(const QPoint &pos) const
       return pos;
    }
 
-   QPoint ret;
+   QPoint retval;
    xcb_translate_coordinates_cookie_t cookie = xcb_translate_coordinates(xcb_connection(),
          xcb_window(), xcbScreen()->root(), pos.x(), pos.y());
 
    xcb_translate_coordinates_reply_t *reply = xcb_translate_coordinates_reply(xcb_connection(), cookie, nullptr);
 
    if (reply) {
-      ret.setX(reply->dst_x);
-      ret.setY(reply->dst_y);
+      retval.setX(reply->dst_x);
+      retval.setY(reply->dst_y);
       free(reply);
    }
 
-   return ret;
+   return retval;
 }
 
 QPoint QXcbWindow::mapFromGlobal(const QPoint &pos) const
@@ -2353,19 +2353,19 @@ QPoint QXcbWindow::mapFromGlobal(const QPoint &pos) const
       return pos;
    }
 
-   QPoint ret;
+   QPoint retval;
    xcb_translate_coordinates_cookie_t cookie = xcb_translate_coordinates(xcb_connection(),
          xcbScreen()->root(), xcb_window(), pos.x(), pos.y());
 
    xcb_translate_coordinates_reply_t *reply = xcb_translate_coordinates_reply(xcb_connection(), cookie, nullptr);
 
    if (reply) {
-      ret.setX(reply->dst_x);
-      ret.setY(reply->dst_y);
+      retval.setX(reply->dst_x);
+      retval.setY(reply->dst_y);
       free(reply);
    }
 
-   return ret;
+   return retval;
 }
 
 void QXcbWindow::handleMapNotifyEvent(const xcb_map_notify_event_t *event)
@@ -2847,10 +2847,11 @@ bool QXcbWindow::setKeyboardGrabEnabled(bool grab)
          m_window, XCB_TIME_CURRENT_TIME, XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC);
 
    xcb_grab_keyboard_reply_t *reply = xcb_grab_keyboard_reply(xcb_connection(), cookie, nullptr);
-   bool result = !(!reply || reply->status != XCB_GRAB_STATUS_SUCCESS);
+
+   bool retval = ! (! reply || reply->status != XCB_GRAB_STATUS_SUCCESS);
    free(reply);
 
-   return result;
+   return retval;
 }
 
 bool QXcbWindow::setMouseGrabEnabled(bool grab)
@@ -2860,11 +2861,12 @@ bool QXcbWindow::setMouseGrabEnabled(bool grab)
    }
 
    if (connection()->isAtLeastXI22() && connection()->xi2MouseEvents()) {
-      bool result = connection()->xi2SetMouseGrabEnabled(m_window, grab);
-      if (grab && result) {
+      bool retval = connection()->xi2SetMouseGrabEnabled(m_window, grab);
+
+      if (grab && retval) {
          connection()->setMouseGrabber(this);
       }
-      return result;
+      return retval;
    }
 
    if (grab && ! connection()->canGrab()) {
@@ -2884,14 +2886,15 @@ bool QXcbWindow::setMouseGrabEnabled(bool grab)
          XCB_WINDOW_NONE, XCB_CURSOR_NONE, XCB_TIME_CURRENT_TIME);
 
    xcb_grab_pointer_reply_t *reply = xcb_grab_pointer_reply(xcb_connection(), cookie, nullptr);
-   bool result = !(!reply || reply->status != XCB_GRAB_STATUS_SUCCESS);
+
+   bool retval = ! (! reply || reply->status != XCB_GRAB_STATUS_SUCCESS);
    free(reply);
 
-   if (result) {
+   if (retval) {
       connection()->setMouseGrabber(this);
    }
 
-   return result;
+   return retval;
 }
 
 void QXcbWindow::setCursor(xcb_cursor_t cursor, bool isBitmapCursor)
@@ -3059,13 +3062,14 @@ void QXcbWindow::handleXEmbedMessage(const xcb_client_message_event_t *event)
 
 static inline xcb_rectangle_t qRectToXCBRectangle(const QRect &r)
 {
-   xcb_rectangle_t result;
-   result.x      = qMax(SHRT_MIN, r.x());
-   result.y      = qMax(SHRT_MIN, r.y());
-   result.width  = qMin((int)USHRT_MAX, r.width());
-   result.height = qMin((int)USHRT_MAX, r.height());
+   xcb_rectangle_t retval;
 
-   return result;
+   retval.x      = qMax(SHRT_MIN, r.x());
+   retval.y      = qMax(SHRT_MIN, r.y());
+   retval.width  = qMin((int)USHRT_MAX, r.width());
+   retval.height = qMin((int)USHRT_MAX, r.height());
+
+   return retval;
 }
 
 void QXcbWindow::setOpacity(qreal level)

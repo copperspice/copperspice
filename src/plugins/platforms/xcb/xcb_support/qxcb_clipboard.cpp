@@ -731,31 +731,35 @@ void QXcbClipboard::handleSelectionRequest(xcb_selection_request_event_t *req)
          }
       }
 
-      xcb_atom_t ret = XCB_NONE;
+      xcb_atom_t retval = XCB_NONE;
       if (target == XCB_NONE || property == XCB_NONE) {
          ;
+
       } else if (target == timestampAtom) {
          if (m_timestamp[mode] != XCB_CURRENT_TIME) {
             xcb_change_property(xcb_connection(), XCB_PROP_MODE_REPLACE, req->requestor,
                property, XCB_ATOM_INTEGER, 32, 1, &m_timestamp[mode]);
-            ret = property;
+
+            retval = property;
+
          } else {
             qWarning("QXcbClipboard: Invalid data timestamp");
          }
 
       } else if (target == targetsAtom) {
-         ret = sendTargetsSelection(d, req->requestor, property);
+         retval = sendTargetsSelection(d, req->requestor, property);
       } else {
-         ret = sendSelection(d, target, req->requestor, property);
+         retval = sendSelection(d, target, req->requestor, property);
       }
 
       if (nmulti > 0) {
-         if (ret == XCB_NONE) {
+         if (retval == XCB_NONE) {
             multi[imulti].property = XCB_NONE;
             multi_writeback = true;
          }
+
       } else {
-         event.property = ret;
+         event.property = retval;
          break;
       }
    }

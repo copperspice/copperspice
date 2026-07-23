@@ -1476,7 +1476,7 @@ static QString customMimeType(const QString &mimeType, int *lindex = nullptr)
    int len = sizeof(x_qt_windows_mime) - 1;
    int n = mimeType.lastIndexOf('\"') - len;
 
-   QString ret = mimeType.mid(len, n);
+   QString retval = mimeType.mid(len, n);
 
    const int beginPos = mimeType.indexOf(";index=");
 
@@ -1494,7 +1494,7 @@ static QString customMimeType(const QString &mimeType, int *lindex = nullptr)
       }
    }
 
-   return ret;
+   return retval;
 }
 
 bool QLastResortMimes::canConvertToMime(const QString &mimeType, IDataObject *pDataObj) const

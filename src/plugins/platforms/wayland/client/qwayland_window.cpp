@@ -930,10 +930,10 @@ bool QWaylandWindow::touchDragDecoration(QWaylandInputDevice *inputDevice, const
 static QWaylandWindow *findShellSurface(QWindow *window)
 {
    while (window != nullptr) {
-      auto w = dynamic_cast<QWaylandWindow *>(window->handle());
+      auto windowPtr = dynamic_cast<QWaylandWindow *>(window->handle());
 
-      if (w != nullptr && w->shellSurface() != nullptr) {
-         return w;
+      if (windowPtr != nullptr && windowPtr->shellSurface() != nullptr) {
+         return windowPtr;
       }
 
       auto tParent = window->transientParent();
@@ -941,7 +941,7 @@ static QWaylandWindow *findShellSurface(QWindow *window)
       if (tParent == nullptr) {
          window = window->parent();
       } else {
-          window = tParent;
+         window = tParent;
       }
    }
 
@@ -954,10 +954,10 @@ QWaylandWindow *QWaylandWindow::transientParent() const
    QWindow *ancestor = window()->transientParent();
 
    while (ancestor != nullptr) {
-      auto w = static_cast<QWaylandWindow *>(ancestor->handle());
+      auto windowPtr = static_cast<QWaylandWindow *>(ancestor->handle());
 
-      if (w != nullptr && w->shellSurface()) {
-         retval = w;
+      if (windowPtr != nullptr && windowPtr->shellSurface()) {
+         retval = windowPtr;
          break;
       }
 

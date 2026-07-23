@@ -104,25 +104,29 @@ QVariant QCupsPrintEngine::property(PrintEnginePropertyKey key) const
 {
    Q_D(const QCupsPrintEngine);
 
-   QVariant ret;
+   QVariant retval;
+
    switch (int(key)) {
       case PPK_SupportsMultipleCopies:
          // CUPS server always supports multiple copies, even if individual m_printDevice doesn't
-         ret = true;
+         retval = true;
          break;
+
       case PPK_NumberOfCopies:
-         ret = 1;
+         retval = 1;
          break;
+
       case PPK_CupsOptions:
-         ret = d->cupsOptions;
+         retval = d->cupsOptions;
          break;
+
       default:
-         ret = QPdfPrintEngine::property(key);
+         retval = QPdfPrintEngine::property(key);
          break;
    }
-   return ret;
-}
 
+   return retval;
+}
 
 QCupsPrintEnginePrivate::QCupsPrintEnginePrivate(QPrinter::PrinterMode m) : QPdfPrintEnginePrivate(m)
 {

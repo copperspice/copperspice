@@ -990,60 +990,60 @@ void QODBCDriverPrivate::splitTableQualifier(const QString &qualifier, QString &
 
 QODBCDriverPrivate::DefaultCase QODBCDriverPrivate::defaultCase() const
 {
-   DefaultCase ret;
+   DefaultCase retval;
    SQLUSMALLINT casing;
 
    int r = SQLGetInfo(hDbc, SQL_IDENTIFIER_CASE, &casing, sizeof(casing), nullptr);
 
    if ( r != SQL_SUCCESS) {
-      ret = Mixed;   // arbitrary case if driver cannot be queried
+      retval = Mixed;   // arbitrary case if driver cannot be queried
 
    } else {
       switch (casing) {
          case (SQL_IC_UPPER):
-            ret = Upper;
+            retval = Upper;
             break;
 
          case (SQL_IC_LOWER):
-            ret = Lower;
+            retval = Lower;
             break;
 
          case (SQL_IC_SENSITIVE):
-            ret = Sensitive;
+            retval = Sensitive;
             break;
 
          case (SQL_IC_MIXED):
          default:
-            ret = Mixed;
+            retval = Mixed;
             break;
       }
    }
 
-   return ret;
+   return retval;
 }
 
 
 // adjust the casing of an identifier to match what the database engine would have done to it.
 QString QODBCDriverPrivate::adjustCase(const QString &identifier) const
 {
-   QString ret = identifier;
+   QString retval = identifier;
 
    switch (defaultCase()) {
       case (Lower):
-         ret = identifier.toLower();
+         retval = identifier.toLower();
          break;
 
       case (Upper):
-         ret = identifier.toUpper();
+         retval = identifier.toUpper();
          break;
 
       case (Mixed):
       case (Sensitive):
       default:
-         ret = identifier;
+         retval = identifier;
    }
 
-   return ret;
+   return retval;
 }
 
 QODBCResult::QODBCResult(const QODBCDriver *db, QODBCDriverPrivate *p)
