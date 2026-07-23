@@ -43,7 +43,7 @@ struct XInput2TouchDeviceData {XInput2TouchDeviceData()
    QTouchDevice *qtTouchDevice;
    QHash<int, QWindowSystemInterface::TouchPoint> touchPoints;
 
-   // Stuff that is relevant only for touchpads
+   // relevant only for touchpads
    QHash<int, QPointF> pointPressedPosition; // in screen coordinates where each point was pressed
    QPointF firstPressedPosition;        // in screen coordinates where the first point was pressed
    QPointF firstPressedNormalPosition;  // device coordinates (0 to 1, 0 to 1) where the first point was pressed

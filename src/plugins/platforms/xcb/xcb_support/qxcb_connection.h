@@ -57,7 +57,7 @@
 #define XCB_USE_XINPUT22    // XI 2.2 adds multi-point touch support
 #endif
 
-#endif
+#endif   // XIScrollClass
 
 struct XInput2TouchDeviceData;
 struct xcb_randr_get_output_info_reply_t;

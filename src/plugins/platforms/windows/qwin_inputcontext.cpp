@@ -123,10 +123,8 @@ void QWindowsInputContext::reset()
 
 void QWindowsInputContext::setFocusObject(QObject *)
 {
-   // ### fixme: On Windows 8.1, it has been observed that the Input context
-   // remains active when this happens resulting in a lock-up. Consecutive
-   // key events still have VK_PROCESSKEY set and are thus ignored.
    if (m_compositionContext.isComposing) {
+      // can happen on Windows 8.1
       reset();
    }
 

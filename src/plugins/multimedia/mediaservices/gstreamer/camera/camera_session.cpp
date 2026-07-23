@@ -327,8 +327,7 @@ void CameraBinSession::setupCaptureResolution()
    const QSize videoResolution = m_videoEncodeControl->actualVideoSettings().resolution();
 
    // WrapperCameraBinSrc cannot have different caps on its imgsrc, vidsrc and vfsrc pads.
-   // If capture resolution is specified, use it also for the viewfinder to avoid caps negotiation
-   // to fail.
+   // If capture resolution is specified, use it also for the viewfinder to avoid caps negotiation to fail.
    if (m_usingWrapperCameraBinSrc) {
       if (m_captureMode == QCamera::CaptureStillImage && !imageResolution.isEmpty()) {
          viewfinderResolution = imageResolution;
@@ -698,8 +697,8 @@ void CameraBinSession::ViewfinderProbe::probeCaps(GstCaps *caps)
 
 void CameraBinSession::handleViewfinderChange()
 {
-   //the viewfinder will be reloaded
-   //shortly when the pipeline is started
+   // viewfinder will be reloaded shortly when the pipeline is started
+
    m_viewfinderHasChanged = true;
    emit viewfinderChanged();
 }
@@ -1247,7 +1246,7 @@ QList< QPair<int, int> > CameraBinSession::supportedFrameRates(const QSize &fram
 
    gst_caps_unref(supportedCaps);
 
-   //simplify to the list of rates only:
+   // simplify to the list of rates only:
    caps = gst_caps_make_writable(caps);
 
    for (uint i = 0; i < gst_caps_get_size(caps); i++) {
@@ -1404,9 +1403,9 @@ QList<QSize> CameraBinSession::supportedResolutions(QPair<int, int> rate,
 
    std::sort(res.begin(), res.end(), resolutionLessThan);
 
-   //if the range is continuos, populate is with the common rates
+   // if the range is continuous populate with common rates
    if (isContinuous && res.size() >= 2) {
-      //fill the ragne with common value
+
       static QList<QSize> commonSizes =
          QList<QSize>() << QSize(128, 96)
          << QSize(160, 120)

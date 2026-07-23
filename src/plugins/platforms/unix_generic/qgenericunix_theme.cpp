@@ -265,8 +265,9 @@ void QKdeThemePrivate::refresh()
 
    QPalette kdeSystemPalette = QPalette();
    readKdeSystemPalette(kdeDirs, kdeVersion, kdeSettings, &kdeSystemPalette);
-   //## TODO tooltip color
    resources.palettes[QPlatformTheme::SystemPalette] = new QPalette(kdeSystemPalette);
+
+   // ## tooltip color
 
    const QVariant styleValue = readKdeSetting("widgetStyle", kdeDirs, kdeVersion, kdeSettings);
 
@@ -401,9 +402,10 @@ void QKdeThemePrivate::readKdeSystemPalette(const QStringList &kdeDirs, int kdeV
    kdeColor(pal, QPalette::ToolTipBase, readKdeSetting("Colors:Tooltip/BackgroundNormal", kdeDirs, kdeVersion, kdeSettings));
    kdeColor(pal, QPalette::ToolTipText, readKdeSetting("Colors:Tooltip/ForegroundNormal", kdeDirs, kdeVersion, kdeSettings));
 
-   // The above code sets _all_ color roles to "normal" colors. In KDE, the disabled
-   // color roles are calculated by applying various effects described in kdeglobals.
-   // We use a bit simpler approach here, similar logic than in qt_palette_from_color().
+   // The above code sets all color roles to "normal" colors.
+   // In KDE, the disabled color roles are calculated by applying various effects described in kdeglobals.
+   // We use a simpler approach, similar logic than in qt_palette_from_color().
+
    const QColor button = pal->color(QPalette::Button);
    int h, s, v;
    button.getHsv(&h, &s, &v);
@@ -445,8 +447,7 @@ QFont *QKdeThemePrivate::kdeFont(const QVariant &fontValue)
    if (fontValue.isValid()) {
       // Read font value: Might be a QStringList as KDE stores fonts without quotes.
       // Also retrieve the family for the constructor since we cannot use the
-      // default constructor of QFont, which accesses QApplication::systemFont()
-      // causing recursion.
+      // default constructor of QFont, which accesses QApplication::systemFont() causing recursion.
 
       QString fontDescription;
       QString fontFamily;

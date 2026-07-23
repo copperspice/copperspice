@@ -162,7 +162,7 @@ GLXFBConfig qglx_findConfig(Display *display, int screen , const QSurfaceFormat 
                     }
 
                 } else {
-                    break; // Just choose the first in the list if there's no alpha requested
+                    break; // choose the first in the list if there is no alpha requested
                 }
             }
 

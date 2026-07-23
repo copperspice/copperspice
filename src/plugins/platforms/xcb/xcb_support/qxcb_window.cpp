@@ -1435,8 +1435,7 @@ void QXcbWindow::updateMotifWmHintsBeforeMap()
    }
 
    if (windowMinimumSize() == windowMaximumSize()) {
-      // fixed size, remove the resize handle (since mwm/dtwm
-      // isn't smart enough to do it itself)
+      // fixed size, remove the resize handle
       mwmhints.flags |= MWM_HINTS_FUNCTIONS;
 
       if (mwmhints.functions == MWM_FUNC_ALL) {
@@ -1700,8 +1699,7 @@ void QXcbWindow::lower()
    Q_XCB_CALL(xcb_configure_window(xcb_connection(), m_window, mask, values));
 }
 
-// Adapt the geometry to match the WM expection with regards
-// to gravity.
+// Adapt the geometry to match the WM expection with regards to gravity
 QRect QXcbWindow::windowToWmGeometry(QRect r) const
 {
    if (m_dirtyFrameMargins || m_frameMargins.isNull()) {
@@ -1765,8 +1763,9 @@ void QXcbWindow::propagateSizeHints()
 
 void QXcbWindow::requestActivateWindow()
 {
-   /* Never activate embedded windows; doing that would prevent the container
-    * to re-gain the keyboard focus later. */
+   // Never activate embedded windows; doing that would prevent the container
+   // to re-gain the keyboard focus later.
+
    if (m_embedded) {
       QPlatformWindow::requestActivateWindow();
       return;
@@ -2245,20 +2244,19 @@ void QXcbWindow::handleClientMessageEvent(const xcb_client_message_event_t *even
 
    } else if (event->type == atom(QXcbAtom::_NET_ACTIVE_WINDOW)) {
       doFocusIn();
-      // Ignore _NET_WM_STATE, MANAGER which are relate to tray icons
-      // and other messages.
 
    } else if (event->type == atom(QXcbAtom::MANAGER) || event->type == atom(QXcbAtom::_NET_WM_STATE)
          || event->type == atom(QXcbAtom::WM_CHANGE_STATE)) {
 
+      // ignore _NET_WM_STATE, MANAGER which are relate to tray icons and other messages.
 
    } else if (event->type == atom(QXcbAtom::_COMPIZ_DECOR_PENDING)
-      //silence the _COMPIZ and _GTK messages for now
          || event->type == atom(QXcbAtom::_COMPIZ_DECOR_REQUEST)
          || event->type == atom(QXcbAtom::_COMPIZ_DECOR_DELETE_PIXMAP)
          || event->type == atom(QXcbAtom::_COMPIZ_TOOLKIT_ACTION)
          || event->type == atom(QXcbAtom::_GTK_LOAD_ICONTHEMES)) {
 
+      // silence the _COMPIZ and _GTK messages for now
 
    } else {
       qWarning() << "QXcbWindow: Unhandled client message:" << connection()->atomName(event->type);
@@ -2294,8 +2292,8 @@ void QXcbWindow::handleConfigureNotifyEvent(const xcb_configure_notify_event_t *
    // be queried in the resize event.
    QPlatformWindow::setGeometry(actualGeometry);
 
-   // FIXME: In the case of the requestedGeometry not matching the actualGeometry due
-   // to e.g. the window manager applying restrictions to the geometry, the application
+   // ### In the case of the requestedGeometry not matching the actualGeometry due
+   // to the window manager applying restrictions to the geometry, the application
    // will never see a move/resize event if the actualGeometry is the same as the current
    // geometry, and may think the requested geometry was fulfilled.
    QWindowSystemInterface::handleGeometryChange(window(), actualGeometry);

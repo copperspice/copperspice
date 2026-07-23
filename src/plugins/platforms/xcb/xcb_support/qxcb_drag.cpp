@@ -170,8 +170,6 @@ bool QXcbDrag::eventFilter(QObject *o, QEvent *e)
 
 void QXcbDrag::startDrag()
 {
-   // #fixme enableEventFilter();
-
    init();
 
    xcb_set_selection_owner(xcb_connection(), connection()->clipboard()->owner(),
@@ -281,8 +279,11 @@ xcb_window_t QXcbDrag::findRealWindow(const QPoint &pos, xcb_window_t w, int md,
 
             if (isAware) {
                const QPoint relPos = pos - windowRect.topLeft();
-               // When ShapeInput and ShapeBounding are not set they return a single rectangle with the geometry of the window, this is why we
-               // need to check both here so that in the case one is set and the other is not we still get the correct result.
+
+               // When ShapeInput and ShapeBounding are not set they return a single rectangle
+               // with the geometry of the window, this is why we need to check both here so that
+               // in the case one is set and the other is not we still get the correct result.
+
                if (connection()->hasInputShape()) {
                   windowContainsMouse = windowInteractsWithPosition(xcb_connection(), relPos, w, XCB_SHAPE_SK_INPUT);
                }
@@ -323,7 +324,7 @@ xcb_window_t QXcbDrag::findRealWindow(const QPoint &pos, xcb_window_t w, int md,
             return r;
          }
 
-         // We didn't find a client window. Just use the innermost window.
+         // We did not find a client window, use the innermost window
 
          // No children
          if (! windowContainsMouse) {
@@ -1083,10 +1084,11 @@ void QXcbDrag::handleDrop(QPlatformWindow *, const xcb_client_message_event_t *e
       return;
    }
 
-   // ###
-   //        int at = findXdndDropTransactionByTime(target_time);
-   //        if (at != -1)
-   //            dropData = QDragManager::dragPrivate(X11->dndDropTransactions.at(at).object)->data;
+   //      int at = findXdndDropTransactionByTime(target_time);
+   //      if (at != -1) {
+   //            mimeData = QDragManager::dragPrivate(X11->dndDropTransactions.at(at).object)->data;
+   //      }
+
    // if we can't find it, then use the data in the drag manager
 
    QPlatformDropQtResponse response = QWindowSystemInterface::handleDrop(currentWindow.data(), mimeData,

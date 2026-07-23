@@ -182,7 +182,7 @@ IAccessible *QWindowsAccessibility::wrap(QAccessibleInterface *acc)
       return nullptr;
    }
 
-    // ### FIXME: maybe we should accept double insertions into the cache
+   // ### should we accept double insertions into the cache ?
    if (! QAccessible::uniqueId(acc)) {
        QAccessible::registerAccessibleInterface(acc);
    }

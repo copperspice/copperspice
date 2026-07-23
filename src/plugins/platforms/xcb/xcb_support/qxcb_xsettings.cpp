@@ -220,7 +220,7 @@ class QXcbXSettingsPrivate
       }
 
    }
-#endif //XCB_USE_XLIB
+#endif
 
    bool m_initialized;
 
@@ -274,7 +274,7 @@ QXcbXSettings::QXcbXSettings(QXcbVirtualDesktop *screen)
 #ifdef XCB_USE_XLIB
    d_ptr->populateSettings(d_ptr->getSettings());
    d_ptr->m_initialized = true;
-#endif //XCB_USE_XLIB
+#endif
 }
 
 QXcbXSettings::~QXcbXSettings()
@@ -299,7 +299,7 @@ void QXcbXSettings::handlePropertyNotifyEvent(const xcb_property_notify_event_t 
 
 #ifdef XCB_USE_XLIB
    d->populateSettings(d->getSettings());
-#endif //XCB_USE_XLIB
+#endif
 }
 
 void QXcbXSettings::registerCallbackForProperty(const QByteArray &property,

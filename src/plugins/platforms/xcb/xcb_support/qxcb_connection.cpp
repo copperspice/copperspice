@@ -2559,8 +2559,8 @@ bool QXcbConnection::xi2MouseEvents() const
 {
    static bool mouseViaXI2 = qgetenv("QT_XCB_NO_XI2_MOUSE").isEmpty();
 
-   // FIXME: Don't use XInput2 mouse events when Xinerama extension
-   // is enabled, because it causes problems with multi-monitor setup.
+   // ### do not use XInput2 mouse events when Xinerama extension
+   // is enabled because it causes problems with multi-monitor setup.
 
    return mouseViaXI2 && ! has_xinerama_extension;
 }
