@@ -164,8 +164,8 @@ bool QWindowsOpengl32DLL::init(bool softwareRendering)
       openglDll = softwareRendering ? swopengl : opengl32;
    }
 
-   openglDll = openglDll.toLower();
-   m_nonOpengl32 = openglDll != opengl32;
+   openglDll     = openglDll.toLower();
+   m_nonOpengl32 = (openglDll != opengl32);
 
 #if defined(CS_SHOW_DEBUG_PLATFORM)
    qDebug() << "QWindowsOpengl32DLL::init() Using WGL and OpenGL from" << openglDll;
@@ -1195,7 +1195,7 @@ QWindowsGLContext::QWindowsGLContext(QOpenGLStaticContext *staticContext, QOpenG
       // A window with an associated pixel format is mandatory.
       // When no SetPixelFormat() call has been made, the following will fail.
       m_pixelFormat = GetPixelFormat(dc);
-      bool ok = m_pixelFormat != 0;
+      bool ok = (m_pixelFormat != 0);
 
       if (!ok) {
          qWarning("QWindowsGLContext() Failed to get pixel format");

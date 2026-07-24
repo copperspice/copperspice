@@ -107,7 +107,9 @@ static inline QByteArray getGlString(GLenum param)
 static void updateFormatFromContext(QSurfaceFormat &format)
 {
    // Update the version, profile, and context bit of the format
-   int major = 0, minor = 0;
+   int major = 0;
+   int minor = 0;
+
    QByteArray versionString(getGlString(GL_VERSION));
    if (QPlatformOpenGLContext::parseOpenGLVersion(versionString, major, minor)) {
       format.setMajorVersion(major);

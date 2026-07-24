@@ -476,10 +476,18 @@ bool QWindowsFontEngine::getOutlineMetrics(glyph_t glyph, const QTransform &t, g
    GLYPHMETRICS gm;
    DWORD res = 0;
    MAT2 mat;
-   mat.eM11.value = mat.eM22.value = 1;
-   mat.eM11.fract = mat.eM22.fract = 0;
-   mat.eM21.value = mat.eM12.value = 0;
-   mat.eM21.fract = mat.eM12.fract = 0;
+
+   mat.eM11.value = 1;
+   mat.eM22.value = 1;
+
+   mat.eM11.fract = 0;
+   mat.eM22.fract = 0;
+
+   mat.eM21.value = 0;
+   mat.eM12.value = 0;
+
+   mat.eM21.fract = 0;
+   mat.eM12.fract = 0;
 
    if (t.type() > QTransform::TxTranslate) {
       // We need to set the transform using the HDC's world
@@ -506,8 +514,12 @@ bool QWindowsFontEngine::getOutlineMetrics(glyph_t glyph, const QTransform &t, g
 
    if (t.type() > QTransform::TxTranslate) {
       XFORM xform;
-      xform.eM11 = xform.eM22 = 1;
-      xform.eM12 = xform.eM21 = xform.eDx = xform.eDy = 0;
+      xform.eM11 = 1;
+      xform.eM22 = 1;
+      xform.eM12 = 0;
+      xform.eM21 = 0;
+      xform.eDx  = 0;
+      xform.eDy  = 0;
 
       SetWorldTransform(hdc, &xform);
       SetGraphicsMode(hdc, GM_COMPATIBLE);
@@ -733,10 +745,14 @@ static bool addGlyphToPath(glyph_t glyph, const QFixedPoint &position, HDC hdc,
    QPainterPath *path, bool ttf, glyph_metrics_t *metric = nullptr, qreal scale = 1)
 {
    MAT2 mat;
-   mat.eM11.value = mat.eM22.value = 1;
-   mat.eM11.fract = mat.eM22.fract = 0;
-   mat.eM21.value = mat.eM12.value = 0;
-   mat.eM21.fract = mat.eM12.fract = 0;
+   mat.eM11.value = 1;
+   mat.eM22.value = 1;
+   mat.eM11.fract = 0;
+   mat.eM22.fract = 0;
+   mat.eM21.value = 0;
+   mat.eM12.value = 0;
+   mat.eM21.fract = 0;
+   mat.eM12.fract = 0;
 
    GLYPHMETRICS gMetric;
    memset(&gMetric, 0, sizeof(GLYPHMETRICS));

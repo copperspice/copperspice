@@ -693,8 +693,12 @@ void QXcbConnection::xi2ProcessTouch(void *xiDevEvent, QXcbWindow *platformWindo
    QXcbScreen *screen = platformWindow->xcbScreen();
    qreal x = fixed1616ToReal(xiDeviceEvent->root_x);
    qreal y = fixed1616ToReal(xiDeviceEvent->root_y);
-   qreal nx = -1.0, ny = -1.0;
-   qreal w = 0.0, h = 0.0;
+
+   qreal nx = -1.0;
+   qreal ny = -1.0;
+   qreal w  =  0.0;
+   qreal h  =  0.0;
+
    bool majorAxisIsY = touchPoint.area.height() > touchPoint.area.width();
 
    for (int i = 0; i < dev->xiDeviceInfo->num_classes; ++i) {

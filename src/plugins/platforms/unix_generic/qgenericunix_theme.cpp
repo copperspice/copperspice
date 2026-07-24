@@ -256,9 +256,11 @@ void QKdeThemePrivate::refresh()
    styleNames << "Oxygen" << "fusion" << "windows";
 
    if (kdeVersion >= 5) {
-      iconFallbackThemeName = iconThemeName = "breeze";
+      iconFallbackThemeName = "breeze";
+      iconThemeName         = "breeze";
    } else {
-      iconFallbackThemeName = iconThemeName = "oxygen";
+      iconFallbackThemeName = "oxygen";
+      iconThemeName         = "oxygen";
    }
 
    QHash<QString, QSettings *> kdeSettings;

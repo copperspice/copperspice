@@ -477,7 +477,11 @@ xcb_window_t QXcbClipboard::requestor() const
    QXcbScreen *platformScreen = screen();
 
    if (!m_requestor && platformScreen) {
-      const int x = 0, y = 0, w = 3, h = 3;
+      const int x = 0;
+      const int y = 0;
+      const int w = 3;
+      const int h = 3;
+
       QXcbClipboard *that = const_cast<QXcbClipboard *>(this);
 
       xcb_window_t window = xcb_generate_id(xcb_connection());
@@ -578,7 +582,7 @@ xcb_atom_t QXcbClipboard::sendSelection(QMimeData *d, xcb_atom_t target, xcb_win
       // don't allow INCR transfers when using MULTIPLE or to
       // Motif clients (since Motif doesn't support INCR)
       static xcb_atom_t motif_clip_temporary = atom(QXcbAtom::CLIP_TEMPORARY);
-      bool allow_incr = property != motif_clip_temporary;
+      bool allow_incr = (property != motif_clip_temporary);
 
       // This 'bool' can be removed once there is a proper fix for QTBUG-32853
       if (m_clipboard_closing) {
@@ -1045,7 +1049,7 @@ QByteArray QXcbClipboard::clipboardReadIncrementalProperty(xcb_window_t win, xcb
       // We want to complete the INCR transfer even if we cannot
       // allocate more memory
       buf.resize(nbytes + 1);
-      alloc_error = buf.size() != nbytes + 1;
+      alloc_error = (buf.size() != (nbytes + 1));
    }
 
    for (;;) {
@@ -1132,7 +1136,7 @@ QByteArray QXcbClipboard::getSelection(xcb_atom_t selection, xcb_atom_t target, 
 
    if (clipboardReadProperty(win, property, true, &buf, nullptr, &type, nullptr)) {
       if (type == atom(QXcbAtom::INCR)) {
-         int nbytes = buf.size() >= 4 ? *((int *)buf.data()) : 0;
+         int nbytes = (buf.size() >= 4) ? *((int *)buf.data()) : 0;
          buf = clipboardReadIncrementalProperty(win, property, nbytes, false);
       }
    }

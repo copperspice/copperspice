@@ -494,7 +494,7 @@ void QWaylandInputDevice::Keyboard::keyboard_key(uint32_t serial, uint32_t time,
 {
    QWaylandWindow *window = m_focus;
    uint32_t code = key + 8;
-   bool isDown   = state != 0;
+   bool isDown   = (state != 0);
 
    QEvent::Type type = isDown ? QEvent::KeyPress : QEvent::KeyRelease;
    QString text;

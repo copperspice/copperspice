@@ -563,7 +563,7 @@ static void populateFromPattern(FcPattern *pattern)
       FcPatternGetDouble (pattern, FC_PIXEL_SIZE, 0, &pixel_size);
    }
 
-   bool fixedPitch = spacing_value >= FC_MONO;
+   bool fixedPitch = (spacing_value >= FC_MONO);
 
    // Note, stretch should really be an int but registerFont incorrectly uses an enum
    QFont::Stretch stretch = QFont::Stretch(stretchFromFcWidth(width_value));

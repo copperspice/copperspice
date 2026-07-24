@@ -1158,7 +1158,8 @@ bool QWindowsContext::windowsProc(HWND hwnd, UINT message, QtWindows::WindowsEve
 
          sessionManager->setActive(false);
          sessionManager->allowsInteraction();
-         const bool endsession = wParam != 0;
+
+         const bool endsession = (wParam != 0);
 
          // we receive the message for each toplevel window including hidden ones,
          // the aboutToQuit signal should be emitted only once.

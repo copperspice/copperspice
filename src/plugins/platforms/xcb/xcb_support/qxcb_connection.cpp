@@ -1763,7 +1763,10 @@ xcb_window_t QXcbConnection::getQtSelectionOwner()
 {
    if (!m_qtSelectionOwner) {
       xcb_screen_t *xcbScreen = primaryVirtualDesktop()->screen();
-      int x = 0, y = 0, w = 3, h = 3;
+      int x = 0;
+      int y = 0;
+      int w = 3;
+      int h = 3;
 
       m_qtSelectionOwner = xcb_generate_id(xcb_connection());
 

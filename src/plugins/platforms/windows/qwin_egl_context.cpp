@@ -354,7 +354,8 @@ bool QWindowsEGLStaticContext::initializeAngle(QWindowsOpenGLTester::Renderers p
          if (!libEGL.eglInitialize(*display, major, minor)) {
             libEGL.eglTerminate(*display);
             *display = EGL_NO_DISPLAY;
-            *major = *minor = 0;
+            *major   = 0;
+            *minor   = 0;
             return false;
          }
       }

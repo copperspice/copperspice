@@ -264,7 +264,8 @@ static inline void getCompositionStringConvertedRange(HIMC himc, int *selStart, 
 
    // Find the range of bytes with ATTR_TARGET_CONVERTED set.
    char attrBuffer[bufferSize];
-   *selStart = *selLength = 0;
+   *selStart  = 0;
+   *selLength = 0;
 
    if (const int attrLength = ImmGetCompositionString(himc, GCS_COMPATTR, attrBuffer, bufferSize)) {
       int start = 0;

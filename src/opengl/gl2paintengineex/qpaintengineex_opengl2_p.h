@@ -232,7 +232,10 @@ class QGL2PaintEngineExPrivate : public QPaintEngineExPrivate, protected QOpenGL
    QGL2PaintEngineEx *q;
    QGLEngineShaderManager *shaderManager;
    QGLPaintDevice *device;
-   int width, height;
+
+   int width;
+   int height;
+
    QGLContext *ctx;
    EngineMode mode;
 

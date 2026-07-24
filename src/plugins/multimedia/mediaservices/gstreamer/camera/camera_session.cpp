@@ -604,7 +604,8 @@ bool CameraBinSession::setOutputLocation(const QUrl &sink)
       return false;
    }
 
-   m_sink = m_actualSink = sink;
+   m_sink       = sink;
+   m_actualSink = sink;
 
    return true;
 }
@@ -1291,7 +1292,8 @@ static QPair<int, int> valueRange(const GValue *value, bool *continuous)
    int maxValue = 0;
 
    if (g_value_type_compatible(G_VALUE_TYPE(value), G_TYPE_INT)) {
-      minValue = maxValue = g_value_get_int(value);
+      minValue = g_value_get_int(value);
+      maxValue = minValue;
 
    } else if (GST_VALUE_HOLDS_INT_RANGE(value)) {
       minValue = gst_value_get_int_range_min(value);
