@@ -133,7 +133,7 @@ QFileSystemEntry QFileSystemEngine::getLinkTarget(const QFileSystemEntry &link, 
 #if defined(__GLIBC__) && ! defined(PATH_MAX)
 
 #define PATH_CHUNK_SIZE 256
-   char *s  = 0;
+   char *s  = nullptr;
    int len  = -1;
    int size = PATH_CHUNK_SIZE;
 

@@ -731,7 +731,8 @@ static QPixmap pixmapFromShellImageList(int iImageList, const SHFILEINFO &info)
       return result;
    }
 
-   IImageList *imageList = 0;
+   IImageList *imageList = nullptr;
+
    HRESULT hr = QWindowsContext::shell32dll.sHGetImageList(iImageList, iID_IImageList,
          reinterpret_cast<void **>(&imageList));
 

@@ -9299,7 +9299,7 @@ QWidget *QWidgetPrivate::widgetInNavigationDirection(Direction direction)
    const QPoint sourceCenter = sourceRect.center();
    const QWidget *sourceWindow = sourceWidget->window();
 
-   QWidget *targetWidget = 0;
+   QWidget *targetWidget = nullptr;
    int shortestDistance = INT_MAX;
 
    for (QWidget *targetCandidate : QApplication::allWidgets()) {

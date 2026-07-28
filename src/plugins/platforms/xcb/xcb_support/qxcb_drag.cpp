@@ -659,7 +659,7 @@ static Window findXdndAwareParent(Window window)
 
       unsigned long n;
       unsigned long a;
-      unsigned char *data = 0;
+      unsigned char *data = nullptr;
 
       if (XGetWindowProperty(X11->display, window, ATOM(XdndAware), 0, 0, False,
             AnyPropertyType, &type, &f, &n, &a, &data) == Success) {
@@ -698,7 +698,7 @@ static Window findXdndAwareParent(Window window)
 }
 
 // for embedding only
-static QWidget *current_embedding_widget  = 0;
+static QWidget *current_embedding_widget = nullptr;
 static xcb_client_message_event_t last_enter_event;
 
 static bool checkEmbedded(QWidget *w, const XEvent *xe)
@@ -718,7 +718,8 @@ static bool checkEmbedded(QWidget *w, const XEvent *xe)
    }
 
    QWExtra *extra = ((QExtraWidget *)w)->extraData();
-   if (extra && extra->xDndProxy != 0) {
+
+   if (extra != nullptr && extra->xDndProxy != 0) {
 
       if (current_embedding_widget != w) {
 

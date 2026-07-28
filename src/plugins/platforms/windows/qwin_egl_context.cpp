@@ -42,7 +42,7 @@ static void *resolveFunc(HMODULE lib, const char *name)
 {
    QString baseNameStr = QString::fromLatin1(name);
    QString nameStr;
-   void *proc = 0;
+   void *proc = nullptr;
 
    // Play nice with 32-bit mingw: Try func first, then func@0, func@4,
    // func@8, func@12, ..., func@64. The def file does not provide any aliases
@@ -341,7 +341,7 @@ bool QWindowsEGLStaticContext::initializeAngle(QWindowsOpenGLTester::Renderers p
             EGL_PLATFORM_ANGLE_DEVICE_TYPE_ANGLE, EGL_PLATFORM_ANGLE_DEVICE_TYPE_WARP_ANGLE, EGL_NONE
          }
       };
-      const EGLint *attributes = 0;
+      const EGLint *attributes = nullptr;
       if (preferredType & QWindowsOpenGLTester::AngleRendererD3d11) {
          attributes = anglePlatformAttributes[0];
       } else if (preferredType & QWindowsOpenGLTester::AngleRendererD3d9) {

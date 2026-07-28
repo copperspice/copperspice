@@ -994,7 +994,7 @@ void QXcbWindow::doFocusIn()
 
 static bool focusInPeeker(QXcbConnection *connection, xcb_generic_event_t *event)
 {
-   if (!event) {
+   if (event == nullptr) {
       // FocusIn event is not in the queue, proceed with FocusOut normally.
       QWindowSystemInterface::handleWindowActivated(nullptr, Qt::ActiveWindowFocusReason);
       return true;
@@ -1608,7 +1608,8 @@ void QXcbWindow::setParent(const QPlatformWindow *parent)
    QPoint topLeft = geometry().topLeft();
 
    xcb_window_t xcb_parent_id;
-   if (parent) {
+
+   if (parent != nullptr) {
       const QXcbWindow *qXcbParent = static_cast<const QXcbWindow *>(parent);
       xcb_parent_id = qXcbParent->xcb_window();
       m_embedded    = qXcbParent->window()->type() == Qt::ForeignWindow;
@@ -2284,7 +2285,8 @@ void QXcbWindow::handleConfigureNotifyEvent(const xcb_configure_notify_event_t *
 
    const QRect actualGeometry = QRect(pos, QSize(event->width, event->height));
    QPlatformScreen *newScreen = parent() ? parent()->screen() : screenForGeometry(actualGeometry);
-   if (!newScreen) {
+
+   if (newScreen == nullptr) {
       return;
    }
 

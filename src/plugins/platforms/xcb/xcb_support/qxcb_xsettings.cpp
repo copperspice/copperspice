@@ -241,7 +241,8 @@ QXcbXSettings::QXcbXSettings(QXcbVirtualDesktop *screen)
 
    xcb_generic_error_t *error = nullptr;
    xcb_intern_atom_reply_t *atom_reply = xcb_intern_atom_reply(screen->xcb_connection(), atom_cookie, &error);
-   if (error) {
+
+   if (error != nullptr) {
       free(error);
       return;
    }
@@ -255,7 +256,7 @@ QXcbXSettings::QXcbXSettings(QXcbVirtualDesktop *screen)
    xcb_get_selection_owner_reply_t *selection_result = xcb_get_selection_owner_reply(screen->xcb_connection(),
          selection_cookie, &error);
 
-   if (error) {
+   if (error != nullptr) {
       free(error);
       return;
    }

@@ -1069,7 +1069,7 @@ void QMenuBar::actionEvent(QActionEvent *e)
       if (e->type() == QEvent::ActionAdded) {
          QPlatformMenu *menu = getPlatformMenu(e->action());
 
-         if (menu) {
+         if (menu != nullptr) {
             QPlatformMenu *beforeMenu = nullptr;
 
             for (int beforeIndex = d->indexOf(e->action()) + 1;
@@ -1085,7 +1085,8 @@ void QMenuBar::actionEvent(QActionEvent *e)
 
       } else if (e->type() == QEvent::ActionRemoved) {
          QPlatformMenu *menu = getPlatformMenu(e->action());
-         if (menu) {
+
+         if (menu != nullptr) {
             d->platformMenuBar->removeMenu(menu);
          }
 
@@ -1101,7 +1102,7 @@ void QMenuBar::actionEvent(QActionEvent *e)
                d->platformMenuBar->removeMenu(cur);
             }
 
-            if (menu) {
+            if (menu != nullptr) {
                menu->setTag(reinterpret_cast<quintptr>(e->action()));
 
                QPlatformMenu *beforeMenu = nullptr;
@@ -1113,7 +1114,7 @@ void QMenuBar::actionEvent(QActionEvent *e)
                d->platformMenuBar->insertMenu(menu, beforeMenu);
             }
 
-         } else if (menu) {
+         } else if (menu != nullptr) {
             menu->setText(e->action()->text());
             menu->setVisible(e->action()->isVisible());
             menu->setEnabled(e->action()->isEnabled());
