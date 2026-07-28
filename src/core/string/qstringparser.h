@@ -93,7 +93,7 @@ class Q_CORE_EXPORT QStringParser
             // T must have a toUtf8() method, can not use csPrintable()
 
             qWarning("QStringParser::formatArg() Missing a place marker \n"
-                  "Format string: %s, Argument value: %lld\n", str.toLatin1().constData(), static_cast<long long>(value) );
+                  "Format string: \"%s\", Argument value: %lld\n", str.toLatin1().constData(), static_cast<long long>(value));
 
             return str;
          }
@@ -171,7 +171,7 @@ class Q_CORE_EXPORT QStringParser
             // T must have a toUtf8() method
 
             qWarning("QStringParser::formatArg() Missing place marker '%%n'\n"
-                  "Format string: %s, Argument value: %f\n", str.toLatin1().constData(), value);
+                  "Format string: \"%s\", Argument value: %f\n", str.toLatin1().constData(), value);
 
             return str;
          }
@@ -275,7 +275,7 @@ class Q_CORE_EXPORT QStringParser
             // T must have a toUtf8() method
 
             qWarning("QStringParser::formatArg() Missing place marker '%%n'\n"
-                  "Format string: %s, Argument value: %s\n", str.toLatin1().constData(), tmp.toLatin1().constData());
+                  "Format string: \"%s\", Argument value: %s\n", str.toLatin1().constData(), tmp.toLatin1().constData());
 
             return str;
          }
@@ -516,8 +516,8 @@ class Q_CORE_EXPORT QStringParser
          }
 
          if (argCount > cnt) {
-            qWarning("QStringParser::toInteger() Format string has %d arguments and %d place holders\n%s",
-                  int(argCount), cnt, csPrintable(str) );
+            qWarning("QStringParser::toInteger() Format string has %d arguments and %d place holders\n"
+                  "Format String: \"%s\"", int(argCount), cnt, csPrintable(str));
 
             argCount = cnt;
          }
