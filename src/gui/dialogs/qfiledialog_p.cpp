@@ -1280,6 +1280,7 @@ void QFileDialogPrivate::_q_deleteCurrent()
 
       QFileDevice::Permissions p(index.parent().data(QFileSystemModel::FilePermissions).toInt());
 
+      //
 #ifndef QT_NO_MESSAGEBOX
       Q_Q(QFileDialog);
 
@@ -1308,6 +1309,7 @@ void QFileDialogPrivate::_q_deleteCurrent()
             QMessageBox::warning(q, q->windowTitle(), QFileDialog::tr("Unable to delete directory."));
 #endif
          }
+
       } else {
          model->remove(index);
       }
@@ -1322,11 +1324,14 @@ void QFileDialogPrivate::_q_autoCompleteFileName(const QString &text)
    }
 
    QStringList multipleFiles = typedFiles();
+
    if (multipleFiles.count() > 0) {
       QModelIndexList oldFiles = qFileDialogUi->listView->selectionModel()->selectedRows();
       QModelIndexList newFiles;
+
       for (int i = 0; i < multipleFiles.count(); ++i) {
          QModelIndex idx = model->index(multipleFiles.at(i));
+
          if (oldFiles.contains(idx)) {
             oldFiles.removeAll(idx);
          } else {
@@ -1492,24 +1497,30 @@ void QFileDialogPrivate::_q_goToDirectory(const QString &path)
    QModelIndex index = qFileDialogUi->lookInCombo->model()->index(qFileDialogUi->lookInCombo->currentIndex(),
          qFileDialogUi->lookInCombo->modelColumn(),
          qFileDialogUi->lookInCombo->rootModelIndex());
+
    QString path2 = path;
-   if (!index.isValid()) {
+
+   if (! index.isValid()) {
       index = mapFromSource(model->index(getEnvironmentVariable(path)));
    } else {
       path2 = index.data(UrlRole).toUrl().toLocalFile();
       index = mapFromSource(model->index(path2));
    }
+
    QDir dir(path2);
+
    if (!dir.exists()) {
       dir = getEnvironmentVariable(path2);
    }
 
    if (dir.exists() || path2.isEmpty() || path2 == model->myComputer().toString()) {
       _q_enterDirectory(index);
+
 #ifndef QT_NO_MESSAGEBOX
    } else {
       QString message = QFileDialog::tr("%1\nDirectory not found.\nPlease verify the "
             "correct directory name was given.");
+
       QMessageBox::warning(q, q->windowTitle(), message.formatArg(path2));
 #endif // QT_NO_MESSAGEBOX
    }

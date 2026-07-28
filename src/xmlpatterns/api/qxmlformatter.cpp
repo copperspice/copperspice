@@ -32,8 +32,7 @@ using namespace QPatternist;
 class QXmlFormatterPrivate : public QXmlSerializerPrivate
 {
  public:
-   inline QXmlFormatterPrivate(const QXmlQuery &q,
-                               QIODevice *const outputDevice);
+   inline QXmlFormatterPrivate(const QXmlQuery &q, QIODevice *const outputDevice);
 
    int             indentationDepth;
    int             currentDepth;

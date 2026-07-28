@@ -102,10 +102,10 @@ void cs_require_version(int argc, char *argv[], const char *str)
       }
 
       QString errMsg = QApplication::tr("%1 requires CopperSpice version %2\n\nFound CopperSpice version %3\n")
-               .formatArg(qAppName()).formatArg(req_version).formatArg(cur_version);
+            .formatArg(qAppName()).formatArg(req_version).formatArg(cur_version);
 
       QMessageBox box(QMessageBox::Critical, QApplication::tr("Incompatible Library"),
-               errMsg, QMessageBox::Abort, nullptr);
+            errMsg, QMessageBox::Abort, nullptr);
 
       QIcon icon(":/copperspice/dialogs/images/cslogo-64.png");
       box.setWindowIcon(icon);
@@ -125,7 +125,9 @@ class QMessageBoxDetailsText : public QWidget
    class TextEdit : public QTextEdit
    {
     public:
-      TextEdit(QWidget *parent = nullptr) : QTextEdit(parent) { }
+      TextEdit(QWidget *parent = nullptr)
+         : QTextEdit(parent)
+      { }
 
       void contextMenuEvent(QContextMenuEvent *e)  override {
 
@@ -211,8 +213,10 @@ class DetailButton : public QPushButton
 
    QSize sizeHint() const override {
       ensurePolished();
+
       QStyleOptionButton opt;
       initStyleOption(&opt);
+
       const QFontMetrics fm = fontMetrics();
       opt.text = label(ShowLabel);
       QSize sz = fm.size(Qt::TextShowMnemonic, opt.text);
@@ -232,8 +236,7 @@ class QMessageBoxPrivate : public QDialogPrivate
 
  public:
    QMessageBoxPrivate()
-      : escapeButton(nullptr), defaultButton(nullptr), checkbox(nullptr),
-        clickedButton(nullptr), detailsButton(nullptr),
+      : escapeButton(nullptr), defaultButton(nullptr), checkbox(nullptr), clickedButton(nullptr), detailsButton(nullptr),
 #ifndef QT_NO_TEXTEDIT
         detailsText(nullptr),
 #endif
@@ -390,9 +393,11 @@ void QMessageBoxPrivate::setupLayout()
 #else
    grid->addWidget(buttonBox, grid->rowCount(), 0, 1, grid->columnCount());
 #endif
+
    if (detailsText) {
       grid->addWidget(detailsText, grid->rowCount(), 0, 1, grid->columnCount());
    }
+
    grid->setSizeConstraint(QLayout::SetNoConstraint);
    q->setLayout(grid);
    retranslateStrings();
@@ -428,6 +433,7 @@ void QMessageBoxPrivate::updateSize()
 #else
    // note: ideally on windows, hard and soft limits but it breaks compat
    int softLimit = qMin(screenSize.width() / 2, 500);
+
 #endif
 
    if (informativeLabel) {
@@ -449,26 +455,33 @@ void QMessageBoxPrivate::updateSize()
             opt.setWrapMode(QTextOption::WrapAnywhere);
             control->document()->setDefaultTextOption(opt);
          }
+
          width = hardLimit;
       }
    }
 
    if (informativeLabel) {
       label->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+
       QSizePolicy policy(QSizePolicy::Minimum, QSizePolicy::Preferred);
       policy.setHeightForWidth(true);
+
       informativeLabel->setSizePolicy(policy);
       width = qMax(width, layoutMinimumWidth());
 
-      if (width > hardLimit) { // longest word is really big, so wrap anywhere
+      if (width > hardLimit) {
+         // longest word is really big, so wrap anywhere
          informativeLabel->d_func()->ensureTextControl();
+
          if (QTextControl *control = informativeLabel->d_func()->control) {
             QTextOption opt = control->document()->defaultTextOption();
             opt.setWrapMode(QTextOption::WrapAnywhere);
             control->document()->setDefaultTextOption(opt);
          }
+
          width = hardLimit;
       }
+
       policy.setHeightForWidth(label->wordWrap());
       label->setSizePolicy(policy);
    }
@@ -540,6 +553,7 @@ void QMessageBoxPrivate::_q_buttonClicked(QAbstractButton *button)
       updateSize();
    } else
 #endif
+
    {
       clickedButton = button;
       q->done(execReturnCode(button)); // does not trigger closeEvent
@@ -550,6 +564,7 @@ void QMessageBoxPrivate::_q_buttonClicked(QAbstractButton *button)
 
          receiverToDisconnectOnClose = nullptr;
       }
+
       signalToDisconnectOnClose.clear();
       memberToDisconnectOnClose.clear();
    }
@@ -575,9 +590,10 @@ void QMessageBox::_q_buttonClicked(QAbstractButton *button)
    d->_q_buttonClicked(button);
 }
 
+// **
 QMessageBox::QMessageBox(QWidget *parent)
    : QDialog(*new QMessageBoxPrivate, parent, Qt::MSWindowsFixedSizeDialogHint | Qt::WindowTitleHint |
-        Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint)
+         Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint)
 {
    Q_D(QMessageBox);
    d->init();
@@ -587,7 +603,7 @@ QMessageBox::QMessageBox(Icon icon, const QString &title, const QString &text, S
    QWidget *parent, Qt::WindowFlags flags)
 
    : QDialog(*new QMessageBoxPrivate, parent, flags | Qt::MSWindowsFixedSizeDialogHint | Qt::WindowTitleHint |
-        Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint)
+         Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint)
 {
    Q_D(QMessageBox);
 
@@ -617,7 +633,6 @@ void QMessageBox::addButton(QAbstractButton *button, ButtonRole role)
    d->autoAddOkButton = false;
 }
 
-
 QPushButton *QMessageBox::addButton(const QString &text, ButtonRole role)
 {
    Q_D(QMessageBox);
@@ -628,7 +643,6 @@ QPushButton *QMessageBox::addButton(const QString &text, ButtonRole role)
 
    return pushButton;
 }
-
 
 QPushButton *QMessageBox::addButton(StandardButton button)
 {
@@ -988,23 +1002,28 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
 #else
          d->detectedEscapeButton->click();
 #endif
+
       }
+
       return;
    }
 
-#if !defined(QT_NO_CLIPBOARD) && !defined(QT_NO_SHORTCUT)
-#if !defined(QT_NO_TEXTEDIT)
+#if ! defined(QT_NO_CLIPBOARD) && ! defined(QT_NO_SHORTCUT)
+
+#if ! defined(QT_NO_TEXTEDIT)
    if (e == QKeySequence::Copy) {
       if (d->detailsText && d->detailsText->isVisible() && d->detailsText->copy()) {
          e->setAccepted(true);
          return;
       }
+
    } else if (e == QKeySequence::SelectAll && d->detailsText && d->detailsText->isVisible()) {
       d->detailsText->selectAll();
       e->setAccepted(true);
       return;
    }
-#endif // !QT_NO_TEXTEDIT
+#endif
+
 #if defined(Q_OS_WIN)
    if (e == QKeySequence::Copy) {
       QString separator = QString::fromLatin1("---------------------------\n");
@@ -1024,6 +1043,7 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
       for (int i = 0; i < buttons.count(); i++) {
          buttonTexts += buttons[i]->text() + "   ";
       }
+
       textToCopy += buttonTexts + separator;
 
 #ifndef QT_NO_TEXTEDIT
@@ -1037,7 +1057,8 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
    }
 #endif
 
-#endif // !QT_NO_CLIPBOARD && !QT_NO_SHORTCUT
+#endif // ! QT_NO_CLIPBOARD && ! QT_NO_SHORTCUT
+
 #ifndef QT_NO_SHORTCUT
    if (!(e->modifiers() & (Qt::AltModifier | Qt::ControlModifier | Qt::MetaModifier))) {
       int key = e->key() & ~Qt::KeyboardModifierMask;
@@ -1056,8 +1077,8 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
          }
       }
    }
-
 #endif
+
    QDialog::keyPressEvent(e);
 }
 

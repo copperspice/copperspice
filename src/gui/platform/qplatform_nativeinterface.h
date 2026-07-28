@@ -51,7 +51,7 @@ class Q_GUI_EXPORT QPlatformNativeInterface : public QObject
    using FP_Window       = void *(*)(QWindow *);
    using FP_BackingStore = void *(*)(QBackingStore *);
 
-   using FP_Void         = void(*)();
+   using FP_Void         = void  (*)();
 
    virtual FP_Integration nativeResourceFunctionForIntegration(const QByteArray &resource);
    virtual FP_Context nativeResourceFunctionForContext(const QByteArray &resource);

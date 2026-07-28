@@ -884,7 +884,7 @@ void QObject::queueSlot(CsSignal::PendingSlot data, CsSignal::ConnectionKind kin
          qWarning("QObject::activate() Dead lock detected while activating a BlockingQueuedConnection: "
                "Sender is %s(%p), receiver is %s(%p)", csPrintable(sender->metaObject()->className()),
                static_cast<void *>(sender),
-               csPrintable(this->metaObject()->className()), static_cast<void *>(this) );
+               csPrintable(this->metaObject()->className()), static_cast<void *>(this));
       }
 
       QSemaphore semaphore;

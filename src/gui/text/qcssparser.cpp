@@ -837,18 +837,23 @@ static Qt::Alignment parseAlignment(const QCss::Value *values, int count)
          case Value_Left:
             a[i] = Qt::AlignLeft;
             break;
+
          case Value_Right:
             a[i] = Qt::AlignRight;
             break;
+
          case Value_Top:
             a[i] = Qt::AlignTop;
             break;
+
          case Value_Bottom:
             a[i] = Qt::AlignBottom;
             break;
+
          case Value_Center:
             a[i] = Qt::AlignCenter;
             break;
+
          default:
             break;
       }
@@ -857,9 +862,11 @@ static Qt::Alignment parseAlignment(const QCss::Value *values, int count)
    if (a[0] == Qt::AlignCenter && a[1] != 0 && a[1] != Qt::AlignCenter) {
       a[0] = (a[1] == Qt::AlignLeft || a[1] == Qt::AlignRight) ? Qt::AlignVCenter : Qt::AlignHCenter;
    }
+
    if ((a[1] == 0 || a[1] == Qt::AlignCenter) && a[0] != Qt::AlignCenter) {
       a[1] = (a[0] == Qt::AlignLeft || a[0] == Qt::AlignRight) ? Qt::AlignVCenter : Qt::AlignHCenter;
    }
+
    return a[0] | a[1];
 }
 
@@ -929,6 +936,7 @@ static ColorData parseColorValue(QCss::Value v)
    int v3 = colorDigits.at(4).variant.toInt();
 
    int alpha = 255;
+
    if (tokenCount >= 7) {
       int alphaValue = colorDigits.at(6).variant.toInt();
       if (rgba && alphaValue <= 1) {
@@ -949,6 +957,7 @@ static QColor colorFromData(const ColorData &c, const QPalette &pal)
    } else if (c.type == ColorData::Role) {
       return pal.color(c.role);
    }
+
    return QColor();
 }
 
@@ -1617,6 +1626,7 @@ bool ValueExtractor::extractFont(QFont *font, int *fontSizeAdjustment)
 bool ValueExtractor::extractPalette(QBrush *fg, QBrush *sfg, QBrush *sbg, QBrush *abg)
 {
    bool hit = false;
+
    for (int i = 0; i < declarations.count(); ++i) {
       const Declaration &decl = declarations.at(i);
 

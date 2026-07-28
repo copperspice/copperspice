@@ -92,6 +92,7 @@ QErrorMessage::QErrorMessage(QWidget *parent)
    : QDialog(*new QErrorMessagePrivate, parent)
 {
    Q_D(QErrorMessage);
+
    d->icon   = new QLabel(this);
    d->errors = new QErrorMessageTextView(this);
    d->again  = new QCheckBox(this);
@@ -103,7 +104,7 @@ QErrorMessage::QErrorMessage(QWidget *parent)
    grid->addWidget(d->icon,   0,  0, Qt::AlignTop);
    grid->addWidget(d->errors, 0,  1);
    grid->addWidget(d->again,  1,  1, Qt::AlignTop);
-   grid->addWidget(d->ok,     2, 0, 1, 2, Qt::AlignCenter);
+   grid->addWidget(d->ok,     2,  0, 1, 2, Qt::AlignCenter);
 
    grid->setColumnStretch(1, 42);
    grid->setRowStretch(0, 42);

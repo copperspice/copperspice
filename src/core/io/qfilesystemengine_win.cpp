@@ -192,7 +192,6 @@ static void resolveLibs()
       // need to resolve the security info functions
 
       // protect initialization
-
       QRecursiveMutexLocker locker(QMutexPool::globalInstanceGet(&triedResolve));
 
       // check triedResolve again, since another thread may have already done the initialization
@@ -658,7 +657,7 @@ QString QFileSystemEngine::owner(const QFileSystemEntry &entry, QAbstractFileEng
                own == QAbstractFileEngine::OwnerUser  ? &pOwner : nullptr,
                own == QAbstractFileEngine::OwnerGroup ? &pOwner : nullptr, nullptr, nullptr, &pSD) == ERROR_SUCCESS) {
 
-            DWORD lowner = 64;
+            DWORD lowner  = 64;
             DWORD ldomain = 64;
             QVarLengthArray<wchar_t, 64> owner(lowner);
             QVarLengthArray<wchar_t, 64> domain(ldomain);
@@ -883,7 +882,7 @@ static bool tryDriveUNCFallback(const QFileSystemEntry &fname, QFileSystemMetaDa
       bool is_dir = false;
 
       if (path.startsWith("\\\\?\\UNC")) {
-         // UNC - stat doesn't work for all cases (Windows bug)
+         // UNC - stat does not work for all cases
 
          int s = path.indexOf(path.at(0), 7);
 

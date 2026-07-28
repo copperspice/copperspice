@@ -249,16 +249,19 @@ class Q_GUI_EXPORT QWidgetPrivate
    void setSharedPainter(QPainter *painter);
    QWidgetBackingStore *maybeBackingStore() const;
 
+
    void init(QWidget *desktopWidget, Qt::WindowFlags flags);
+
    void create_sys(WId window, bool initializeWindow, bool destroyOldWindow);
    void createRecursively();
    void createWinId();
-
    void createTLExtra();
    void createExtra();
+
    void deleteExtra();
    void createSysExtra();
    void deleteSysExtra();
+
    void createTLSysExtra();
    void deleteTLSysExtra();
    void updateSystemBackground();
@@ -388,13 +391,14 @@ class Q_GUI_EXPORT QWidgetPrivate
    void show_sys();
    void hide_sys();
    void hide_helper();
+
    void _q_showIfNotHidden();
 
    void setEnabled_helper(bool);
    void registerDropSite(bool);
    static void adjustFlags(Qt::WindowFlags &flags, QWidget *widget = nullptr);
-
    void updateFrameStrut();
+
    QRect frameStrut() const;
 
 #ifdef QT_KEYPAD_NAVIGATION

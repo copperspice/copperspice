@@ -1341,14 +1341,16 @@ void QFileDialog::accept()
       case Directory: {
          QString fn = files.first();
          QFileInfo info(fn);
-         if (!info.exists()) {
+
+         if (! info.exists()) {
             info = QFileInfo(d->getEnvironmentVariable(fn));
          }
 
-         if (!info.exists()) {
+         if (! info.exists()) {
 #ifndef QT_NO_MESSAGEBOX
             QString message = tr("%1\nDirectory not found");
             QMessageBox::warning(this, windowTitle(), message.formatArg(info.fileName()));
+
 #endif
             return;
          }
@@ -1364,12 +1366,13 @@ void QFileDialog::accept()
       case AnyFile: {
          QString fn = files.first();
          QFileInfo info(fn);
+
          if (info.isDir()) {
             setDirectory(info.absoluteFilePath());
             return;
          }
 
-         if (!info.exists()) {
+         if (! info.exists()) {
             int maxNameLength = d->maxNameLength(info.path());
             if (maxNameLength >= 0 && info.fileName().length() > maxNameLength) {
                return;
@@ -1377,7 +1380,7 @@ void QFileDialog::accept()
          }
 
          // check if we have to ask for permission to overwrite the file
-         if (!info.exists() || !confirmOverwrite() || acceptMode() == AcceptOpen) {
+         if (! info.exists() || ! confirmOverwrite() || acceptMode() == AcceptOpen) {
             d->emitFilesSelected(QStringList(fn));
             QDialog::accept();
 
@@ -1394,6 +1397,7 @@ void QFileDialog::accept()
             }
 #endif
          }
+
          return;
       }
 
@@ -1401,14 +1405,16 @@ void QFileDialog::accept()
       case ExistingFiles:
          for (int i = 0; i < files.count(); ++i) {
             QFileInfo info(files.at(i));
+
             if (! info.exists()) {
                info = QFileInfo(d->getEnvironmentVariable(files.at(i)));
             }
 
-            if (!info.exists()) {
+            if (! info.exists()) {
 #ifndef QT_NO_MESSAGEBOX
                QString message = tr("%1\nFile not found.");
                QMessageBox::warning(this, windowTitle(), message.formatArg(info.fileName()));
+
 #endif
                return;
             }

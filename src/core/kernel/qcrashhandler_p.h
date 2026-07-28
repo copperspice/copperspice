@@ -32,9 +32,6 @@ using FP_Void = void (*)();
 
 class Q_CORE_EXPORT QSegfaultHandler
 {
-   friend void qt_signal_handler(int);
-   static FP_Void callback;
-
  public:
    static void initialize(char **, int);
 
@@ -45,7 +42,12 @@ class Q_CORE_EXPORT QSegfaultHandler
    static FP_Void crashHandler() {
       return callback;
    }
+
+ private:
+   static FP_Void callback;
+   friend void qt_signal_handler(int);
 };
 
 #endif
-#endif // QCRASHHANDLER_P_H
+
+#endif

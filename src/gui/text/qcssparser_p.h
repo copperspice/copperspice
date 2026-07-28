@@ -142,6 +142,7 @@ enum Property {
    QtListNumberPrefix,
    QtListNumberSuffix,
    LineHeight,
+
    NumProperties
 };
 
@@ -250,6 +251,7 @@ enum Edge {
    RightEdge,
    BottomEdge,
    LeftEdge,
+
    NumEdges
 };
 
@@ -265,6 +267,7 @@ enum TileMode {
    TileMode_Round,
    TileMode_Stretch,
    TileMode_Repeat,
+
    NumKnownTileModes
 };
 
@@ -274,6 +277,7 @@ enum Repeat {
    Repeat_X,
    Repeat_Y,
    Repeat_XY,
+
    NumKnownRepeats
 };
 
@@ -283,6 +287,7 @@ enum Origin {
    Origin_Border,
    Origin_Content,
    Origin_Margin,
+
    NumKnownOrigins
 };
 
@@ -292,6 +297,7 @@ enum PositionMode {
    PositionMode_Relative,
    PositionMode_Absolute,
    PositionMode_Fixed,
+
    NumKnownPositionModes
 };
 
@@ -299,6 +305,7 @@ enum Attachment {
    Attachment_Unknown,
    Attachment_Fixed,
    Attachment_Scroll,
+
    NumKnownAttachments
 };
 
@@ -306,6 +313,7 @@ enum StyleFeature {
    StyleFeature_None = 0,
    StyleFeature_BackgroundColor = 1,
    StyleFeature_BackgroundGradient = 2,
+
    NumKnownStyleFeatures = 4
 };
 

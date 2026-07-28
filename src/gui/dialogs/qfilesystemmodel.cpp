@@ -793,7 +793,7 @@ bool QFileSystemModel::setData(const QModelIndex &idx, const QVariant &value, in
    const QString parentPath = filePath(parent(idx));
 
    if (newName.isEmpty() || QDir::toNativeSeparators(newName).contains(QDir::separator())
-      || ! QDir(filePath(parent(idx))).rename(oldName, newName)) {
+         || ! QDir(filePath(parent(idx))).rename(oldName, newName)) {
 
 #ifndef QT_NO_MESSAGEBOX
       QMessageBox::information(nullptr, QFileSystemModel::tr("Invalid Filename"), QFileSystemModel::tr("<b>\"%1\" is invalid.</b><br>"
