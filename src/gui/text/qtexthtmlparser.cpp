@@ -1299,7 +1299,7 @@ void QTextHtmlParserNode::applyCssDeclarations(const QVector<QCss::Declaration> 
             tableBorder = extractor.lengthValue(decl);
             break;
 
-         case QCss::Color:
+         case QCss::Property::ColorProperty:
             charFormat.setForeground(decl.colorValue());
             break;
 
@@ -2137,9 +2137,9 @@ QVector<QCss::Declaration> standardDeclarationForNode(const QTextHtmlParserNode 
                if (key.compare("href", Qt::CaseInsensitive) == 0 && ! node.attributes.at(i + 1).isEmpty()) {
                   needsUnderline     = true;
                   decl.d->property   = "color";
-                  decl.d->propertyId = QCss::Color;
+                  decl.d->propertyId = QCss::Property::ColorProperty;
 
-                  val.type = QCss::Value::Color;
+                  val.type = QCss::Value::Type::ColorValue;
                   val.variant = QVariant(QGuiApplication::palette().link());
 
                   decl.d->values = QVector<QCss::Value>() << val;

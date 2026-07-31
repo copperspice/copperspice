@@ -91,7 +91,7 @@ static const QCssKnownValue s_properties[NumProperties - 1] = {
    { "border-top-width", BorderTopWidth },
    { "border-width", BorderWidth },
    { "bottom", Bottom },
-   { "color", Color },
+   { "color", Property::ColorProperty },
    { "float", Float },
    { "font", Font },
    { "font-family", FontFamily },
@@ -150,7 +150,7 @@ static const QCssKnownValue s_properties[NumProperties - 1] = {
    { "width", Width }
 };
 
-static const QCssKnownValue s_values[NumKnownValues - 1] = {
+static const QCssKnownValue s_values[KnownValue_Count - 1] = {
    { "active", Value_Active },
    { "alternate-base", Value_AlternateBase },
    { "always", Value_Always },
@@ -226,7 +226,7 @@ static const QCssKnownValue s_values[NumKnownValues - 1] = {
 };
 
 //Map id to strings as they appears in the 'values' array above
-static const short s_indexOfId[NumKnownValues] = {
+static const short s_indexOfId[KnownValue_Count] = {
    0, 41, 48, 42, 49, 54, 35, 26, 70, 71, 25, 43, 5, 63, 47,
    29, 58, 59, 27, 51, 61, 6, 10, 39, 56, 19, 13, 17, 18, 20, 21, 50, 24, 46, 67, 37, 3, 2, 40, 62, 16,
    11, 57, 14, 32, 64, 33, 65, 55, 66, 34, 69, 8, 28, 38, 12, 36, 60, 7, 9, 4, 68, 53, 22, 23, 30, 31,
@@ -872,20 +872,20 @@ static Qt::Alignment parseAlignment(const QCss::Value *values, int count)
 
 static ColorData parseColorValue(QCss::Value v)
 {
-   if (v.type == Value::Identifier || v.type == Value::String) {
+   if (v.type == Value::Type::Identifier || v.type == Value::Type::String) {
       v.variant.convert(QVariant::Color);
-      v.type = Value::Color;
+      v.type = Value::Type::ColorValue;
    }
 
-   if (v.type == Value::Color) {
+   if (v.type == Value::Type::ColorValue) {
       return v.variant.value<QColor>();
    }
 
-   if (v.type == Value::KnownIdentifier && v.variant.toInt() == Value_Transparent) {
+   if (v.type == Value::Type::KnownIdentifier && v.variant.toInt() == Value_Transparent) {
       return QColor(Qt::transparent);
    }
 
-   if (v.type != Value::Function) {
+   if (v.type != Value::Type::Function) {
       return ColorData();
    }
 
@@ -895,7 +895,7 @@ static ColorData parseColorValue(QCss::Value v)
    }
 
    if ((lst.at(0).compare("palette", Qt::CaseInsensitive)) == 0) {
-      int role = findKnownValue(lst.at(1).trimmed(), s_values, NumKnownValues);
+      int role = findKnownValue(lst.at(1).trimmed(), s_values, KnownValue_Count);
 
       if (role >= Value_FirstColorRole && role <= Value_LastColorRole) {
          return (QPalette::ColorRole)(role - Value_FirstColorRole);
@@ -921,8 +921,9 @@ static ColorData parseColorValue(QCss::Value v)
 
    for (int i = 0; i < qMin(tokenCount, 7); i += 2) {
       if (colorDigits.at(i).type == Value::Percentage) {
-         colorDigits[i].variant = colorDigits.at(i).variant.toReal() * (255. / 100.);
-         colorDigits[i].type = Value::Number;
+         colorDigits[i].variant = colorDigits.at(i).variant.toReal() * (255.0 / 100.0);
+         colorDigits[i].type    = Value::Number;
+
       } else if (colorDigits.at(i).type != Value::Number) {
          return ColorData();
       }
@@ -1631,7 +1632,7 @@ bool ValueExtractor::extractPalette(QBrush *fg, QBrush *sfg, QBrush *sbg, QBrush
       const Declaration &decl = declarations.at(i);
 
       switch (decl.d->propertyId) {
-         case Color:
+         case Property::ColorProperty:
             *fg = decl.brushValue(m_palette);
             break;
 
@@ -3403,7 +3404,7 @@ bool Parser::parseTerm(Value *value)
          }
 
          value->type = Value::Identifier;
-         const int theid = findKnownValue(str, s_values, NumKnownValues);
+         const int theid = findKnownValue(str, s_values, KnownValue_Count);
 
          if (theid != 0) {
             value->type = Value::KnownIdentifier;
@@ -3425,7 +3426,7 @@ bool Parser::parseTerm(Value *value)
                return false;
             }
 
-            value->type = Value::Color;
+            value->type = Value::Type::ColorValue;
             value->variant = col;
 
          } else if (testFunction()) {

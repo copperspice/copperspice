@@ -41,7 +41,7 @@ namespace QCss {
 enum Property {
    UnknownProperty,
    BackgroundColor,
-   Color,
+   ColorProperty,
    Float,
    Font,
    FontFamily,
@@ -226,7 +226,7 @@ enum KnownValue {
    Value_On,
    Value_Off,
 
-   NumKnownValues
+   KnownValue_Count
 };
 
 enum BorderStyle {
@@ -243,7 +243,8 @@ enum BorderStyle {
    BorderStyle_Inset,
    BorderStyle_Outset,
    BorderStyle_Native,
-   NumKnownBorderStyles
+
+   BorderStyle_Count
 };
 
 enum Edge {
@@ -327,7 +328,7 @@ struct Value {
       Identifier,
       KnownIdentifier,
       Uri,
-      Color,
+      ColorValue,
       Function,
       TermOperatorSlash,
       TermOperatorComma
@@ -349,9 +350,18 @@ struct ColorData {
       Role
    };
 
-   ColorData() : role(QPalette::NoRole), type(Invalid) {}
-   ColorData(const QColor &col) : color(col), role(QPalette::NoRole), type(Color) {}
-   ColorData(QPalette::ColorRole r) : role(r), type(Role) {}
+   ColorData()
+      : role(QPalette::ColorRole::NoRole), type(ColorType::Invalid)
+   {}
+
+   ColorData(const QColor &col)
+      : color(col), role(QPalette::ColorRole::NoRole), type(ColorType::Color)
+   { }
+
+   ColorData(QPalette::ColorRole r)
+      : role(r), type(ColorType::Role)
+   { }
+
    QColor color;
    QPalette::ColorRole role;
 
@@ -367,15 +377,15 @@ struct BrushData {
    };
 
    BrushData()
-      : role(QPalette::NoRole), type(Invalid)
+      : role(QPalette::ColorRole::NoRole), type(BrushType::Invalid)
    { }
 
    BrushData(const QBrush &br)
-      : brush(br), role(QPalette::NoRole), type(Brush)
+      : brush(br), role(QPalette::ColorRole::NoRole), type(BrushType::Brush)
    { }
 
    BrushData(QPalette::ColorRole r)
-      : role(r), type(Role)
+      : role(r), type(BrushType::Role)
    { }
 
    QBrush brush;
@@ -420,7 +430,7 @@ struct BorderData {
 struct Q_GUI_EXPORT Declaration {
    struct DeclarationData : public QSharedData {
       DeclarationData()
-         : propertyId(UnknownProperty), important(false), inheritable(false)
+         : propertyId(Property::UnknownProperty), important(false), inheritable(false)
       { }
 
       QString property;
@@ -438,7 +448,7 @@ struct Q_GUI_EXPORT Declaration {
    { }
 
    bool isEmpty() const {
-      return d->property.isEmpty() && d->propertyId == UnknownProperty;
+      return d->property.isEmpty() && d->propertyId == Property::UnknownProperty;
    }
 
    // helper functions
@@ -576,7 +586,10 @@ struct Q_GUI_EXPORT Selector {
 };
 
 struct StyleRule {
-   StyleRule() : order(0) { }
+   StyleRule()
+      : order(0)
+   { }
+
    QVector<Selector> selectors;
    QVector<Declaration> declarations;
    int order;
@@ -614,9 +627,10 @@ struct StyleSheet {
    QVector<MediaRule> mediaRules;
    QVector<PageRule> pageRules;
    QVector<ImportRule> importRules;
-   StyleSheetOrigin origin;
 
+   StyleSheetOrigin origin;
    int depth;                                  // applicable only for inline style sheets
+
    QMultiHash<QString, StyleRule> nameIndex;
    QMultiHash<QString, StyleRule> idIndex;
 
@@ -788,23 +802,23 @@ class Q_GUI_EXPORT Parser
    }
 
    bool testElementName() {
-      return test(IDENT) || test(STAR);
+      return test(TokenType::IDENT) || test(TokenType::STAR);
    }
 
    bool testClass() {
-      return test(DOT);
+      return test(TokenType::DOT);
    }
 
    bool testAttrib() {
-      return test(LBRACKET);
+      return test(TokenType::LBRACKET);
    }
 
    bool testPseudo() {
-      return test(COLON);
+      return test(TokenType::COLON);
    }
 
    bool testMedium() {
-      return test(IDENT);
+      return test(TokenType::IDENT);
    }
 
    bool parseNextMedium(QStringList *media) {
@@ -816,27 +830,27 @@ class Q_GUI_EXPORT Parser
    }
 
    bool testPseudoPage() {
-      return test(COLON);
+      return test(TokenType::COLON);
    }
 
    bool testImport() {
-      return testTokenAndEndsWith(ATKEYWORD_SYM, make_view(QString("import")));
+      return testTokenAndEndsWith(TokenType::ATKEYWORD_SYM, make_view(QString("import")));
    }
 
    bool testMedia() {
-      return testTokenAndEndsWith(ATKEYWORD_SYM, make_view(QString("media")));
+      return testTokenAndEndsWith(TokenType::ATKEYWORD_SYM, make_view(QString("media")));
    }
 
    bool testPage() {
-      return testTokenAndEndsWith(ATKEYWORD_SYM, make_view(QString("page")));
+      return testTokenAndEndsWith(TokenType::ATKEYWORD_SYM, make_view(QString("page")));
    }
 
    bool testCombinator() {
-      return test(PLUS) || test(GREATER) || test(S);
+      return test(TokenType::PLUS) || test(TokenType::GREATER) || test(TokenType::S);
    }
 
    bool testProperty() {
-      return test(IDENT);
+      return test(TokenType::IDENT);
    }
 
    bool testTerm();
@@ -845,19 +859,20 @@ class Q_GUI_EXPORT Parser
    }
 
    bool parseNextExpr(QVector<Value> *values) {
-      if (!testExpr()) {
+      if (! testExpr()) {
          return recordError();
       }
+
       return parseExpr(values);
    }
 
    bool testPrio();
    bool testHexColor() {
-      return test(HASH);
+      return test(TokenType::HASH);
    }
 
    bool testFunction() {
-      return test(FUNCTION);
+      return test(TokenType::FUNCTION);
    }
 
    bool parseNextFunction(QString *name, QString *args) {
@@ -869,11 +884,13 @@ class Q_GUI_EXPORT Parser
    }
 
    bool lookupElementName() const {
-      return lookup() == IDENT || lookup() == STAR;
+      return lookup() == TokenType::IDENT || lookup() == TokenType::STAR;
    }
 
    void skipSpace() {
-      while (test(S)) {};
+      while (test(TokenType::S)) {
+         // do nothing
+      }
    }
 
    bool hasNext() const {
@@ -901,10 +918,10 @@ class Q_GUI_EXPORT Parser
 
    QString unquotedLexem() const;
    QString lexemUntil(TokenType t);
-   bool until(TokenType target, TokenType target2 = NONE);
+   bool until(TokenType target, TokenType target2 = TokenType::NONE);
 
    TokenType lookup() const {
-      return (index - 1) < symbols.count() ? symbols.at(index - 1).token : NONE;
+      return (index - 1) < symbols.count() ? symbols.at(index - 1).token : TokenType::NONE;
    }
 
    bool testTokenAndEndsWith(TokenType t, QStringView str);
