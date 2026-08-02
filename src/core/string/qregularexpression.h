@@ -329,7 +329,7 @@ namespace Cs {
 #endif
 
 template <typename S>
-class Q_CORE_EXPORT QRegularExpression
+class /*Q_CORE_EXPORT*/ QRegularExpression
 {
    public:
       QRegularExpression() = default;
