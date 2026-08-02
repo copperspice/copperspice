@@ -218,11 +218,13 @@ static void cpuidFeatures07_00(uint &ebx, uint &ecx)
 }
 
 #ifdef Q_OS_WIN
-// fallback overload in case this intrinsic does not exist: unsigned __int64 _xgetbv(unsigned int);
-inline quint64 _xgetbv(__int64)
-{
-   return 0;
-}
+#ifndef Q_CC_CLANG
+   // fallback overload in case this intrinsic does not exist: unsigned __int64 _xgetbv(unsigned int);
+   inline quint64 _xgetbv(__int64)
+   {
+      return 0;
+   }
+#endif
 #endif
 
 static void xgetbv(uint in, uint &eax, uint &edx)
