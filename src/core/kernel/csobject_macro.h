@@ -459,7 +459,7 @@ class cs_number<0>
 // do not remove the "{", this is required for part two of the macro
 
 #define CS_SIGNAL_2(signalName, ...) \
-   CsSignal::activate(*this, &cs_class::signalName, ##__VA_ARGS__);                 \
+   CsSignal::activate(*this, &cs_class::signalName __VA_OPT__(,) __VA_ARGS__);      \
    }  \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =          \
          decltype(cs_counter(cs_number<255>{}))::value;                             \
@@ -474,7 +474,7 @@ class cs_number<0>
    }  \
 
 #define CS_SIGNAL_OVERLOAD(signalName, argTypes, ...) \
-   CsSignal::activate(*this, static_cast<void (cs_class::*)argTypes>(&cs_class::signalName), ##__VA_ARGS__); \
+   CsSignal::activate(*this, static_cast<void (cs_class::*)argTypes>(&cs_class::signalName) __VA_OPT__(,) __VA_ARGS__); \
    }  \
    static constexpr const int CS_TOKENPASTE2(cs_counter_value, __LINE__) =          \
          decltype(cs_counter(cs_number<255>{}))::value;                             \
@@ -782,8 +782,8 @@ class cs_number<0>
 #define CORE_CS_SLOT_OVERLOAD(slotName, argTypes)              CS_SLOT_OVERLOAD(slotName, argTypes)
 
 #define CORE_CS_SIGNAL_1(access, ...)                          CS_SIGNAL_1(access, __VA_ARGS__)
-#define CORE_CS_SIGNAL_2(signalName, ...)                      CS_SIGNAL_2(signalName, ## __VA_ARGS__)
-#define CORE_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)     CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
+#define CORE_CS_SIGNAL_2(signalName, ...)                      CS_SIGNAL_2(signalName __VA_OPT__(,) __VA_ARGS__)
+#define CORE_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)     CS_SIGNAL_OVERLOAD(signalName, argTypes __VA_OPT__(,) __VA_ARGS__)
 
 #define CORE_CS_INVOKABLE_CONSTRUCTOR_1(access, ...)           CS_INVOKABLE_CONSTRUCTOR_1(access, __VA_ARGS__)
 #define CORE_CS_INVOKABLE_CONSTRUCTOR_2(className, ...)        CS_INVOKABLE_CONSTRUCTOR_2(className, __VA_ARGS__)
@@ -862,8 +862,8 @@ class cs_number<0>
 #define GUI_CS_SLOT_OVERLOAD(slotName, argTypes)                  CS_SLOT_OVERLOAD(slotName, argTypes)
 
 #define GUI_CS_SIGNAL_1(access, ...)                              CS_SIGNAL_1(access, __VA_ARGS__)
-#define GUI_CS_SIGNAL_2(signalName, ...)                          CS_SIGNAL_2(signalName, ## __VA_ARGS__)
-#define GUI_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)         CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
+#define GUI_CS_SIGNAL_2(signalName, ...)                          CS_SIGNAL_2(signalName __VA_OPT__(,) __VA_ARGS__)
+#define GUI_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)         CS_SIGNAL_OVERLOAD(signalName, argTypes __VA_OPT__(,) __VA_ARGS__)
 
 #define GUI_CS_ENUM(name)                                         CS_ENUM(name)
 #define GUI_CS_REGISTER_ENUM(...)                                 CS_REGISTER_ENUM(__VA_ARGS__)
@@ -936,8 +936,8 @@ class cs_number<0>
 #define MULTI_CS_SLOT_OVERLOAD(slotName, argTypes)                CS_SLOT_OVERLOAD(slotName, argTypes)
 
 #define MULTI_CS_SIGNAL_1(access, ...)                            CS_SIGNAL_1(access, __VA_ARGS__)
-#define MULTI_CS_SIGNAL_2(signalName, ...)                        CS_SIGNAL_2(signalName, ## __VA_ARGS__)
-#define MULTI_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)       CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
+#define MULTI_CS_SIGNAL_2(signalName, ...)                        CS_SIGNAL_2(signalName __VA_OPT__(,) __VA_ARGS__)
+#define MULTI_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)       CS_SIGNAL_OVERLOAD(signalName, argTypes __VA_OPT__(,) __VA_ARGS__)
 
 #define MULTI_CS_ENUM(name)                                       CS_ENUM(name)
 
@@ -1004,8 +1004,8 @@ class cs_number<0>
 #define NET_CS_SLOT_OVERLOAD(slotName, argTypes)                  CS_SLOT_OVERLOAD(slotName, argTypes)
 
 #define NET_CS_SIGNAL_1(access, ...)                              CS_SIGNAL_1(access, __VA_ARGS__)
-#define NET_CS_SIGNAL_2(signalName, ...)                          CS_SIGNAL_2(signalName, ## __VA_ARGS__)
-#define NET_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)         CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
+#define NET_CS_SIGNAL_2(signalName, ...)                          CS_SIGNAL_2(signalName __VA_OPT__(,) __VA_ARGS__)
+#define NET_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)         CS_SIGNAL_OVERLOAD(signalName, argTypes __VA_OPT__(,) __VA_ARGS__)
 
 #define NET_CS_INVOKABLE_METHOD_1(access, ...)                    CS_INVOKABLE_METHOD_1(access, __VA_ARGS__)
 #define NET_CS_INVOKABLE_METHOD_2(methodName)                     CS_INVOKABLE_METHOD_2(methodName)
@@ -1078,8 +1078,8 @@ class cs_number<0>
 #define OPENGL_CS_SLOT_OVERLOAD(slotName, argTypes)               CS_SLOT_OVERLOAD(slotName, argTypes)
 
 #define OPENGL_CS_SIGNAL_1(access, ...)                           CS_SIGNAL_1(access, __VA_ARGS__)
-#define OPENGL_CS_SIGNAL_2(signalName, ...)                       CS_SIGNAL_2(signalName, ## __VA_ARGS__)
-#define OPENGL_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)      CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
+#define OPENGL_CS_SIGNAL_2(signalName, ...)                       CS_SIGNAL_2(signalName __VA_OPT__(,) __VA_ARGS__)
+#define OPENGL_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)      CS_SIGNAL_OVERLOAD(signalName, argTypes __VA_OPT__(,) __VA_ARGS__)
 
 #else
 #define OPENGL_CS_OBJECT(className)                               CS_OBJECT_OUTSIDE(className)
@@ -1108,8 +1108,8 @@ class cs_number<0>
 #define SQL_CS_SLOT_OVERLOAD(slotName, argTypes)                  CS_SLOT_OVERLOAD(slotName, argTypes)
 
 #define SQL_CS_SIGNAL_1(access, ...)                              CS_SIGNAL_1(access, __VA_ARGS__)
-#define SQL_CS_SIGNAL_2(signalName, ...)                          CS_SIGNAL_2(signalName, ## __VA_ARGS__)
-#define SQL_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)         CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
+#define SQL_CS_SIGNAL_2(signalName, ...)                          CS_SIGNAL_2(signalName __VA_OPT__(,) __VA_ARGS__)
+#define SQL_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)         CS_SIGNAL_OVERLOAD(signalName, argTypes __VA_OPT__(,) __VA_ARGS__)
 
 #else
 #define SQL_CS_OBJECT(className)                                  CS_OBJECT_OUTSIDE(className)
@@ -1139,8 +1139,8 @@ class cs_number<0>
 #define SVG_CS_SLOT_OVERLOAD_BOOL(slotName, argTypes)             CS_SLOT_OVERLOAD_BOOL(slotName, argTypes)
 
 #define SVG_CS_SIGNAL_1(access, ...)                              CS_SIGNAL_1(access, __VA_ARGS__)
-#define SVG_CS_SIGNAL_2(signalName, ...)                          CS_SIGNAL_2(signalName, ## __VA_ARGS__)
-#define SVG_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)         CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
+#define SVG_CS_SIGNAL_2(signalName, ...)                          CS_SIGNAL_2(signalName __VA_OPT__(,) __VA_ARGS__)
+#define SVG_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)         CS_SIGNAL_OVERLOAD(signalName, argTypes __VA_OPT__(,) __VA_ARGS__)
 
 #define SVG_CS_PROPERTY_READ(name, method)                        CS_PROPERTY_READ(name, method)
 #define SVG_CS_PROPERTY_WRITE(name, method)                       CS_PROPERTY_WRITE(name, method)
@@ -1197,8 +1197,8 @@ class cs_number<0>
 #define VULKAN_CS_OBJECT_MULTIPLE(className, parentX)             CS_OBJECT_MULTIPLE(className, parentX)
 
 #define VULKAN_CS_SIGNAL_1(access, ...)                           CS_SIGNAL_1(access, __VA_ARGS__)
-#define VULKAN_CS_SIGNAL_2(signalName, ...)                       CS_SIGNAL_2(signalName, ## __VA_ARGS__)
-#define VULKAN_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)      CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
+#define VULKAN_CS_SIGNAL_2(signalName, ...)                       CS_SIGNAL_2(signalName __VA_OPT__(,) __VA_ARGS__)
+#define VULKAN_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)      CS_SIGNAL_OVERLOAD(signalName, argTypes __VA_OPT__(,) __VA_ARGS__)
 
 #else
 #define VULKAN_CS_OBJECT(className)                               CS_OBJECT_OUTSIDE(className)
@@ -1222,8 +1222,8 @@ class cs_number<0>
 #define XMLP_CS_SLOT_OVERLOAD(slotName, argTypes)                 CS_SLOT_OVERLOAD(slotName, argTypes)
 
 #define XMLP_CS_SIGNAL_1(access, ...)                             CS_SIGNAL_1(access, __VA_ARGS__)
-#define XMLP_CS_SIGNAL_2(signalName, ...)                         CS_SIGNAL_2(signalName, ## __VA_ARGS__)
-#define XMLP_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)        CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
+#define XMLP_CS_SIGNAL_2(signalName, ...)                         CS_SIGNAL_2(signalName __VA_OPT__(,) __VA_ARGS__)
+#define XMLP_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)        CS_SIGNAL_OVERLOAD(signalName, argTypes __VA_OPT__(,) __VA_ARGS__)
 
 #else
 #define XMLP_CS_OBJECT(className)                                 CS_OBJECT_OUTSIDE(className)
@@ -1252,8 +1252,8 @@ class cs_number<0>
 #define WEB_CS_SLOT_OVERLOAD(slotName, argTypes)                  CS_SLOT_OVERLOAD(slotName, argTypes)
 
 #define WEB_CS_SIGNAL_1(access, ...)                              CS_SIGNAL_1(access, __VA_ARGS__)
-#define WEB_CS_SIGNAL_2(signalName, ...)                          CS_SIGNAL_2(signalName, ## __VA_ARGS__)
-#define WEB_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)         CS_SIGNAL_OVERLOAD(signalName, argTypes, ## __VA_ARGS__)
+#define WEB_CS_SIGNAL_2(signalName, ...)                          CS_SIGNAL_2(signalName __VA_OPT__(,) __VA_ARGS__)
+#define WEB_CS_SIGNAL_OVERLOAD(signalName, argTypes, ...)         CS_SIGNAL_OVERLOAD(signalName, argTypes __VA_OPT__(,) __VA_ARGS__)
 
 #define WEB_CS_INVOKABLE_METHOD_1(access, ...)                    CS_INVOKABLE_METHOD_1(access, __VA_ARGS__)
 #define WEB_CS_INVOKABLE_METHOD_2(methodName)                     CS_INVOKABLE_METHOD_2(methodName)
