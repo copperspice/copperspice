@@ -282,7 +282,7 @@ int QPrintDialogPrivate::openWindowsPrintDialogModally()
    q->QDialog::setVisible(false);
 
 
-   // write values back...
+   // write values back
    if (result && (pd.dwResultAction == PD_RESULT_PRINT
          || pd.dwResultAction == PD_RESULT_APPLY)) {
       qt_win_read_back_PRINTDLGEX(&pd, q, this);
@@ -291,7 +291,7 @@ int QPrintDialogPrivate::openWindowsPrintDialogModally()
       printer->d_func()->validPrinter = !printer->printerName().isEmpty();
    }
 
-   // Cleanup...
+   // Cleanup
    GlobalFree(tempDevNames);
 
    q->done(result && doPrinting);

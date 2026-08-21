@@ -55,6 +55,7 @@
 #endif
 
 #if defined(Q_OS_WIN)
+// global function
 HMENU qt_getWindowsSystemMenu(const QWidget *w)
 {
    if (QWindow *window = QApplicationPrivate::windowForWidget(w)) {
@@ -67,6 +68,7 @@ HMENU qt_getWindowsSystemMenu(const QWidget *w)
 }
 #endif
 
+// global function
 enum Button {
    Old_Ok         = 1,
    Old_Cancel     = 2,
@@ -389,7 +391,7 @@ void QMessageBoxPrivate::setupLayout()
    grid->setHorizontalSpacing(0);
    q->setContentsMargins(24, 15, 24, 20);
 
-   // -- leave space for information label
+   // leave space for information label
    grid->setRowStretch(1, 100);
    grid->setRowMinimumHeight(2, 6);
 #else
@@ -424,7 +426,7 @@ void QMessageBoxPrivate::updateSize()
 
    int hardLimit = qMin(screenSize.width() - 480, 1000); // can never get bigger than this
 
-   // on small screens allows the messagebox be the same size as the screen
+   // on small screens allows the messagebox to be the same size as the screen
    if (screenSize.width() <= 1024) {
       hardLimit = screenSize.width();
    }
@@ -433,7 +435,6 @@ void QMessageBoxPrivate::updateSize()
    int softLimit = qMin(screenSize.width() / 2, 420);
 
 #else
-   // note: ideally on windows, hard and soft limits but it breaks compat
    int softLimit = qMin(screenSize.width() / 2, 500);
 
 #endif

@@ -487,7 +487,7 @@ class Q_CORE_EXPORT QStringParser
          const auto begin = str.cbegin();
          const auto end   = str.cend();
 
-         // populate the numbersUsed map with the %n's that occur in the string
+         // populate the numbersUsed map with each %n which occurs in the string
          for (auto iter = begin; iter != end; ++iter) {
 
             if (*iter == QChar32('%')) {
@@ -506,7 +506,7 @@ class Q_CORE_EXPORT QStringParser
             }
          }
 
-         // assign an argument number to each of the %n's
+         // assign an argument number to each of the %n
          int lastNumber = -1;
          int cnt        = 0;
 

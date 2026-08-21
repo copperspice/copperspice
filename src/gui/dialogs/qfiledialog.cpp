@@ -1323,7 +1323,7 @@ void QFileDialog::accept()
    }
 
    QString lineEditText = d->lineEdit()->text();
-   // "hidden feature" type .. and then enter, and it will move up a dir
+   // "hidden feature" type dot dot and then enter, and it will move up a dir
    // special case for ".."
 
    if (lineEditText == "..") {

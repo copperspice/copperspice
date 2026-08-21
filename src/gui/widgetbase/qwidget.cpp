@@ -404,7 +404,6 @@ int QWidget::devType() const
    return QInternal::Widget;
 }
 
-// w is a "this" ptr, passed as a param because QWorkspace needs special logic
 void QWidgetPrivate::adjustFlags(Qt::WindowFlags &flags, QWidget *w)
 {
    bool customize =  (flags & (Qt::CustomizeWindowHint
@@ -424,10 +423,6 @@ void QWidgetPrivate::adjustFlags(Qt::WindowFlags &flags, QWidget *w)
    }
 
    if (flags & Qt::CustomizeWindowHint) {
-      // modify window flags to make them consistent.
-      // Only enable this on non-Mac platforms. Since the old way of doing this would
-      // interpret WindowSystemMenuHint as a close button and we can't change that behavior
-      // we can't just add this in.
 
 #ifdef Q_OS_WIN
       if ((flags & (Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint | Qt::WindowContextHelpButtonHint))
@@ -444,9 +439,8 @@ void QWidgetPrivate::adjustFlags(Qt::WindowFlags &flags, QWidget *w)
       }
 
    } else if (customize && !(flags & Qt::FramelessWindowHint)) {
-      // if any of the window hints that affect the titlebar are set
-      // and the window is supposed to have frame, we add a titlebar
-      // and system menu by default.
+      // if any of the window hints which affect the titlebar are set and the
+      // window is supposed to have a frame, add a titlebar and system menu by default
 
       flags |= Qt::WindowSystemMenuHint;
       flags |= Qt::WindowTitleHint;
