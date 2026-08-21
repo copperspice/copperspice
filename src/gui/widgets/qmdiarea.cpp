@@ -360,10 +360,11 @@ QVector<QRect> MinOverlapPlacer::getCandidatePlacements(const QSize &size, const
    ylist.erase(std::unique(ylist.begin(), ylist.end()), ylist.end());
 
    result.reserve(ylist.size() * xlist.size());
-   for (int y : ylist)
+   for (int y : ylist) {
       for (int x : xlist) {
          result << QRect(QPoint(x, y), size);
       }
+   }
 
    return result;
 }

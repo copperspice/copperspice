@@ -1573,11 +1573,12 @@ QRegion QMdiSubWindowPrivate::getRegion(Operation operation) const
 
 QMdiSubWindowPrivate::Operation QMdiSubWindowPrivate::getOperation(const QPoint &pos) const
 {
-   OperationInfoMap::const_iterator it;
-   for (it = operationMap.constBegin(); it != operationMap.constEnd(); ++it)
-      if (it.value().region.contains(pos)) {
-         return it.key();
+   for (auto iter = operationMap.constBegin(); iter != operationMap.constEnd(); ++iter) {
+      if (iter.value().region.contains(pos)) {
+         return iter.key();
       }
+   }
+
    return None;
 }
 
