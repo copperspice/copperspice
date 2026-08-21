@@ -795,11 +795,9 @@ bool QFileSystemModel::setData(const QModelIndex &idx, const QVariant &value, in
    if (newName.isEmpty() || QDir::toNativeSeparators(newName).contains(QDir::separator())
          || ! QDir(filePath(parent(idx))).rename(oldName, newName)) {
 
-#ifndef QT_NO_MESSAGEBOX
       QMessageBox::information(nullptr, QFileSystemModel::tr("Invalid Filename"), QFileSystemModel::tr("<b>\"%1\" is invalid.</b><br>"
             "Use a filename with fewer characters or no punctuation.").formatArg(newName), QMessageBox::Ok);
 
-#endif
       return false;
 
    } else {

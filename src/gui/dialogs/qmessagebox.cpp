@@ -23,8 +23,6 @@
 
 #include <qmessagebox.h>
 
-#ifndef QT_NO_MESSAGEBOX
-
 #include <qaccessible.h>
 #include <qapplication.h>
 #include <qcheckbox.h>
@@ -1728,4 +1726,3 @@ QPixmap QMessageBox::standardIcon(Icon icon)
    return QMessageBoxPrivate::standardIcon(icon, nullptr);
 }
 
-#endif // QT_NO_MESSAGEBOX

@@ -348,7 +348,7 @@ void QPrintDialog::_q_collapseOrExpandDialog()
 #endif
 
 
-#if defined(Q_OS_UNIX) && !defined (Q_OS_DARWIN) && !defined(QT_NO_MESSAGEBOX)
+#if defined(Q_OS_UNIX) && ! defined (Q_OS_DARWIN)
 void QPrintDialog::_q_checkFields()
 {
    Q_D(QPrintDialog);

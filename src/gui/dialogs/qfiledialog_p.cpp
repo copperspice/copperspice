@@ -1281,7 +1281,6 @@ void QFileDialogPrivate::_q_deleteCurrent()
       QFileDevice::Permissions p(index.parent().data(QFileSystemModel::FilePermissions).toInt());
 
       //
-#ifndef QT_NO_MESSAGEBOX
       Q_Q(QFileDialog);
 
       if (!(p & QFile::WriteUser) && (QMessageBox::warning(q_func(), QFileDialog::tr("Delete"),
@@ -1295,19 +1294,10 @@ void QFileDialogPrivate::_q_deleteCurrent()
          return;
       }
 
-#else
-      if (!(p & QFile::WriteUser)) {
-         return;
-      }
-#endif
-
       // event loop has run, can NOT reuse index because the model might have removed it
       if (isDir) {
          if (! removeDirectory(filePath)) {
-
-#ifndef QT_NO_MESSAGEBOX
             QMessageBox::warning(q, q->windowTitle(), QFileDialog::tr("Unable to delete directory."));
-#endif
          }
 
       } else {
@@ -1489,10 +1479,7 @@ void QFileDialogPrivate::_q_enterDirectory(const QModelIndex &index)
 
 void QFileDialogPrivate::_q_goToDirectory(const QString &path)
 {
-
-#ifndef QT_NO_MESSAGEBOX
    Q_Q(QFileDialog);
-#endif
 
    QModelIndex index = qFileDialogUi->lookInCombo->model()->index(qFileDialogUi->lookInCombo->currentIndex(),
          qFileDialogUi->lookInCombo->modelColumn(),
@@ -1516,13 +1503,11 @@ void QFileDialogPrivate::_q_goToDirectory(const QString &path)
    if (dir.exists() || path2.isEmpty() || path2 == model->myComputer().toString()) {
       _q_enterDirectory(index);
 
-#ifndef QT_NO_MESSAGEBOX
    } else {
       QString message = QFileDialog::tr("%1\nDirectory not found.\nPlease verify the "
             "correct directory name was given.");
 
       QMessageBox::warning(q, q->windowTitle(), message.formatArg(path2));
-#endif // QT_NO_MESSAGEBOX
    }
 }
 

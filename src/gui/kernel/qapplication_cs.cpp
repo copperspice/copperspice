@@ -987,16 +987,12 @@ void QApplication::closeAllWindows()
 
 void QApplication::aboutCs()
 {
-#ifndef QT_NO_MESSAGEBOX
    QMessageBox::aboutCs(activeWindow());
-#endif
 }
 
 void QApplication::aboutQt()
 {
-#ifndef QT_NO_MESSAGEBOX
    QMessageBox::aboutCs(activeWindow());
-#endif
 }
 
 

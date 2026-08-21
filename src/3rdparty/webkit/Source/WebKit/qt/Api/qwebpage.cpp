@@ -2121,10 +2121,9 @@ void QWebPage::javaScriptConsoleMessage(const QString& message, int lineNumber, 
 void QWebPage::javaScriptAlert(QWebFrame *frame, const QString& msg)
 {
     Q_UNUSED(frame)
-#ifndef QT_NO_MESSAGEBOX
+
     QWidget* parent = (d->client) ? d->client->ownerWidget() : 0;
     QMessageBox::information(parent, tr("JavaScript Alert - %1").formatArg(mainFrame()->url().host()), msg.toHtmlEscaped(), QMessageBox::Ok);
-#endif
 }
 
 /*!
@@ -2136,13 +2135,10 @@ void QWebPage::javaScriptAlert(QWebFrame *frame, const QString& msg)
 bool QWebPage::javaScriptConfirm(QWebFrame *frame, const QString& msg)
 {
     Q_UNUSED(frame)
-#ifdef QT_NO_MESSAGEBOX
-    return true;
-#else
+
     QWidget* parent = (d->client) ? d->client->ownerWidget() : 0;
     return QMessageBox::Yes == QMessageBox::information(parent, tr("JavaScript Confirm - %1")
                   .formatArg(mainFrame()->url().host()), msg.toHtmlEscaped(), QMessageBox::Yes, QMessageBox::No);
-#endif
 }
 
 /*!
@@ -2186,15 +2182,11 @@ bool QWebPage::javaScriptPrompt(QWebFrame *frame, const QString& msg, const QStr
 */
 bool QWebPage::shouldInterruptJavaScript()
 {
-#ifdef QT_NO_MESSAGEBOX
-    return false;
-#else
     QWidget* parent = (d->client) ? d->client->ownerWidget() : 0;
 
     return QMessageBox::Yes == QMessageBox::information(parent, tr("JavaScript Problem - %1")
                   .formatArg(mainFrame()->url().host()), tr("The script on this page appears to have a problem. Do you want to stop the script?"),
                   QMessageBox::Yes, QMessageBox::No);
-#endif
 }
 
 void QWebPage::setFeaturePermission(QWebFrame* frame, Feature feature, PermissionPolicy policy)

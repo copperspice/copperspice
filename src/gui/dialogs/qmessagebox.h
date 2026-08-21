@@ -27,8 +27,6 @@
 #include <qdialog.h>
 #include <qplatform_dialoghelper.h>
 
-#ifndef QT_NO_MESSAGEBOX
-
 class QAbstractButton;
 class QCheckBox;
 class QLabel;
@@ -291,8 +289,5 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(QMessageBox::StandardButtons)
    " removed, use function cs_require_version(argc, argv, str) instead");
 
 Q_GUI_EXPORT void cs_require_version(int argc, char *argv[], const char *str);
-
-#endif // QT_NO_MESSAGEBOX
-
 
 #endif

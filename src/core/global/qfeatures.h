@@ -99,9 +99,6 @@
 // QLineEdit
 //#define QT_NO_LINEEDIT
 
-// QMessageBox
-//#define QT_NO_MESSAGEBOX
-
 // QMovie
 //#define QT_NO_MOVIE
 

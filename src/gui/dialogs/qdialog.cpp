@@ -66,11 +66,9 @@ static inline int themeDialogType(const QDialog *dialog)
    }
 #endif
 
-#ifndef QT_NO_MESSAGEBOX
    if (qobject_cast<const QMessageBox *>(dialog)) {
       return QPlatformTheme::MessageDialog;
    }
-#endif
 
 #ifndef QT_NO_ERRORMESSAGE
    if (qobject_cast<const QErrorMessage *>(dialog)) {

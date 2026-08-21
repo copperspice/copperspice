@@ -1347,11 +1347,9 @@ void QFileDialog::accept()
          }
 
          if (! info.exists()) {
-#ifndef QT_NO_MESSAGEBOX
             QString message = tr("%1\nDirectory not found");
             QMessageBox::warning(this, windowTitle(), message.formatArg(info.fileName()));
 
-#endif
             return;
          }
 
@@ -1384,7 +1382,6 @@ void QFileDialog::accept()
             d->emitFilesSelected(QStringList(fn));
             QDialog::accept();
 
-#ifndef QT_NO_MESSAGEBOX
          } else {
 
             auto result = QMessageBox::warning(this, windowTitle(),
@@ -1395,7 +1392,6 @@ void QFileDialog::accept()
                d->emitFilesSelected(QStringList(fn));
                QDialog::accept();
             }
-#endif
          }
 
          return;
@@ -1411,11 +1407,9 @@ void QFileDialog::accept()
             }
 
             if (! info.exists()) {
-#ifndef QT_NO_MESSAGEBOX
                QString message = tr("%1\nFile not found.");
                QMessageBox::warning(this, windowTitle(), message.formatArg(info.fileName()));
 
-#endif
                return;
             }
 
