@@ -249,6 +249,7 @@ class Q_GUI_EXPORT QWidgetPrivate
    void setSharedPainter(QPainter *painter);
    QWidgetBackingStore *maybeBackingStore() const;
 
+   void adjustFlags(Qt::WindowFlags &flags);
 
    void init(QWidget *desktopWidget, Qt::WindowFlags flags);
 
@@ -396,7 +397,6 @@ class Q_GUI_EXPORT QWidgetPrivate
 
    void setEnabled_helper(bool);
    void registerDropSite(bool);
-   static void adjustFlags(Qt::WindowFlags &flags, QWidget *widget = nullptr);
    void updateFrameStrut();
 
    QRect frameStrut() const;

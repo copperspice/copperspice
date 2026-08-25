@@ -404,9 +404,11 @@ int QWidget::devType() const
    return QInternal::Widget;
 }
 
-void QWidgetPrivate::adjustFlags(Qt::WindowFlags &flags, QWidget *w)
+void QWidgetPrivate::adjustFlags(Qt::WindowFlags &flags)
 {
-   bool customize =  (flags & (Qt::CustomizeWindowHint
+   Q_Q(QWidget);
+
+   bool customize = (flags & (Qt::CustomizeWindowHint
          | Qt::FramelessWindowHint
          | Qt::WindowTitleHint
          | Qt::WindowSystemMenuHint
@@ -417,7 +419,7 @@ void QWidgetPrivate::adjustFlags(Qt::WindowFlags &flags, QWidget *w)
 
    uint type = (flags & Qt::WindowType_Mask);
 
-   if ((type == Qt::Widget || type == Qt::SubWindow) && w && ! w->parent()) {
+   if ((type == Qt::Widget || type == Qt::SubWindow) && q->parent() == nullptr) {
       type = Qt::Window;
       flags |= Qt::Window;
    }
@@ -438,7 +440,7 @@ void QWidgetPrivate::adjustFlags(Qt::WindowFlags &flags, QWidget *w)
          flags &= ~Qt::FramelessWindowHint;
       }
 
-   } else if (customize && !(flags & Qt::FramelessWindowHint)) {
+   } else if (customize && ! (flags & Qt::FramelessWindowHint)) {
       // if any of the window hints which affect the titlebar are set and the
       // window is supposed to have a frame, add a titlebar and system menu by default
 
@@ -449,10 +451,7 @@ void QWidgetPrivate::adjustFlags(Qt::WindowFlags &flags, QWidget *w)
    if (customize) {
       // do not modify window flags if the user explicitly set them
 
-   } else if (type == Qt::Dialog || type == Qt::Sheet) {
-      flags |= Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowContextHelpButtonHint | Qt::WindowCloseButtonHint;
-
-   } else if (type == Qt::Tool) {
+   } else if (type == Qt::Dialog || type == Qt::Sheet || type == Qt::Tool) {
       flags |= Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint;
 
    } else {
@@ -460,7 +459,7 @@ void QWidgetPrivate::adjustFlags(Qt::WindowFlags &flags, QWidget *w)
             Qt::WindowMaximizeButtonHint | Qt::WindowCloseButtonHint | Qt::WindowFullscreenButtonHint;
    }
 
-   if (w->testAttribute(Qt::WA_TransparentForMouseEvents)) {
+   if (q->testAttribute(Qt::WA_TransparentForMouseEvents)) {
       flags |= Qt::WindowTransparentForInput;
    }
 }
@@ -549,7 +548,7 @@ void QWidgetPrivate::init(QWidget *parentWidget, Qt::WindowFlags flags)
    }
 
    else {
-      adjustFlags(m_privateData.m_flags, q);
+      adjustFlags(m_privateData.m_flags);
       resolveLayoutDirection();
 
       // opaque system background?
@@ -8238,7 +8237,7 @@ void QWidgetPrivate::setParent_sys(QWidget *newparent, Qt::WindowFlags flags)
       q->destroy();
    }
 
-   adjustFlags(flags, q);
+   adjustFlags(flags);
    m_privateData.m_flags = flags;
 
    q->setAttribute(Qt::WA_WState_Created, false);
@@ -9294,7 +9293,7 @@ QWidget *QWidgetPrivate::widgetInNavigationDirection(Direction direction)
    const QWidget *sourceWindow = sourceWidget->window();
 
    QWidget *targetWidget = nullptr;
-   int shortestDistance = INT_MAX;
+   int shortestDistance  = INT_MAX;
 
    for (QWidget *targetCandidate : QApplication::allWidgets()) {
 
