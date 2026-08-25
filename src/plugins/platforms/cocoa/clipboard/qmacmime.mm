@@ -90,6 +90,8 @@ QMacInternalPasteboardMime::~QMacInternalPasteboardMime()
 
 int QMacInternalPasteboardMime::count(QMimeData *mimeData)
 {
+   (void) mimeData;
+
    return 1;
 }
 

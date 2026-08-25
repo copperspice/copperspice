@@ -608,9 +608,9 @@ QStringList QCoreTextFontDatabase::fallbacksForFamily(const QString &family, QFo
       NSDictionary *fallbackDict = [NSDictionary dictionaryWithContentsOfFile:
                          @"/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreText.framework/Resources/DefaultFontFallbacks.plist"];
 
-      for (NSString * style in [fallbackDict allKeys]) {
-         NSArray *list = [fallbackDict valueForKey: style];
-         QFont::StyleHint fallbackStyleHint = styleHintFromNSString(style);
+      for (NSString *fallbackStyle in [fallbackDict allKeys]) {
+         NSArray *list = [fallbackDict valueForKey: fallbackStyle];
+         QFont::StyleHint fallbackStyleHint = styleHintFromNSString(fallbackStyle);
          QStringList fallbackList;
 
          for (id item in list) {
