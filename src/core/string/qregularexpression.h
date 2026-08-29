@@ -583,7 +583,7 @@ S QRegularExpression<S>::escape(const S &str)
 
 template <typename S>
 QList<QRegularExpressionMatch<S>> QRegularExpression<S>::globalMatch(const S &str, typename S::const_iterator offset,
-                  QMatchType matchType, QMatchOptionFlags matchOptions) const
+      QMatchType matchType, QMatchOptionFlags matchOptions) const
 {
    if (m_valid) {
       QList<QRegularExpressionMatch<S>> retval;
@@ -612,7 +612,7 @@ QList<QRegularExpressionMatch<S>> QRegularExpression<S>::globalMatch(const S &st
 
 template <typename S>
 QList<QRegularExpressionMatch<S>> QRegularExpression<S>::globalMatch(QStringView<S> str, typename S::const_iterator offset,
-                  QMatchType matchType, QMatchOptionFlags matchOptions) const
+      QMatchType matchType, QMatchOptionFlags matchOptions) const
 {
   if (m_valid) {
       QList<QRegularExpressionMatch<S>> retval;
@@ -640,8 +640,8 @@ QList<QRegularExpressionMatch<S>> QRegularExpression<S>::globalMatch(QStringView
 }
 
 template <typename S>
-QRegularExpressionMatch<S> QRegularExpression<S>::match(const S &str, typename S::const_iterator offset, QMatchType matchType,
-                  QMatchOptionFlags matchOptions) const
+QRegularExpressionMatch<S> QRegularExpression<S>::match(const S &str, typename S::const_iterator offset,
+      QMatchType matchType, QMatchOptionFlags matchOptions) const
 {
    if (m_valid) {
       cs_regex_ns::match_results<QRegexTraits<S>> matchResult;
@@ -688,7 +688,7 @@ QRegularExpressionMatch<S> QRegularExpression<S>::match(const S &str, typename S
 
 template <typename S>
 QRegularExpressionMatch<S> QRegularExpression<S>::match(QStringView<S> str, typename S::const_iterator offset,
-                  QMatchType matchType, QMatchOptionFlags matchOptions) const
+      QMatchType matchType, QMatchOptionFlags matchOptions) const
 {
    if (m_valid) {
       cs_regex_ns::match_results<QRegexTraits<S>> matchResult;

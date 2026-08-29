@@ -57,6 +57,7 @@ class QGL2PaintEngineState : public QPainterState
  public:
    QGL2PaintEngineState(QGL2PaintEngineState &other);
    QGL2PaintEngineState();
+
    ~QGL2PaintEngineState();
 
    uint isNew : 1;
@@ -75,8 +76,6 @@ class QGL2PaintEngineState : public QPainterState
 
 class Q_OPENGL_EXPORT QGL2PaintEngineEx : public QPaintEngineEx
 {
-   Q_DECLARE_PRIVATE(QGL2PaintEngineEx)
-
  public:
    QGL2PaintEngineEx();
 
@@ -142,6 +141,9 @@ class Q_OPENGL_EXPORT QGL2PaintEngineEx : public QPaintEngineEx
    bool shouldDrawCachedGlyphs(QFontEngine *, const QTransform &) const override;
 
    void setTranslateZ(GLfloat z);
+
+ private:
+   Q_DECLARE_PRIVATE(QGL2PaintEngineEx)
 };
 
 class QGL2PaintEngineExPrivate : public QPaintEngineExPrivate, protected QOpenGLExtensions
@@ -178,7 +180,7 @@ class QGL2PaintEngineExPrivate : public QPaintEngineExPrivate, protected QOpenGL
    void stroke(const QVectorPath &path, const QPen &pen);
    void drawTexture(const QGLRect &dest, const QGLRect &src, const QSize &textureSize, bool opaque, bool pattern = false);
    void drawPixmapFragments(const QPainter::PixmapFragment *fragments, int fragmentCount, const QPixmap &pixmap,
-                             QPainter::PixmapFragmentHints hints);
+      QPainter::PixmapFragmentHints hints);
 
    void drawCachedGlyphs(QFontEngine::GlyphFormat glyphFormat, QStaticTextItem *staticTextItem);
 
@@ -197,12 +199,11 @@ class QGL2PaintEngineExPrivate : public QPaintEngineExPrivate, protected QOpenGL
 
    // Calls drawVertexArrays to render into stencil buffer:
    void fillStencilWithVertexArray(const float *data, int count, const int *stops, int stopCount, const QGLRect &bounds,
-                                   StencilFillMode mode);
+         StencilFillMode mode);
 
    void fillStencilWithVertexArray(QGL2PEXVertexArray &vertexArray, bool useWindingFill) {
       fillStencilWithVertexArray((const float *) vertexArray.data(), 0, vertexArray.stops(), vertexArray.stopCount(),
-                                 vertexArray.boundingRect(),
-                                 useWindingFill ? WindingFillMode : OddEvenFillMode);
+            vertexArray.boundingRect(), useWindingFill ? WindingFillMode : OddEvenFillMode);
    }
 
    void setBrush(const QBrush &brush);
@@ -224,12 +225,18 @@ class QGL2PaintEngineExPrivate : public QPaintEngineExPrivate, protected QOpenGL
    void regenerateClip();
    void systemStateChanged() override;
 
-   static QGLEngineShaderManager* shaderManagerForEngine(QGL2PaintEngineEx *engine) { return engine->d_func()->shaderManager; }
-   static QGL2PaintEngineExPrivate *getData(QGL2PaintEngineEx *engine) { return engine->d_func(); }
+   static QGLEngineShaderManager* shaderManagerForEngine(QGL2PaintEngineEx *engine) {
+      return engine->d_func()->shaderManager;
+   }
+
+   static QGL2PaintEngineExPrivate *getData(QGL2PaintEngineEx *engine) {
+      return engine->d_func();
+   }
 
    static void cleanupVectorPath(QPaintEngineEx *engine, void *data);
 
    QGL2PaintEngineEx *q;
+
    QGLEngineShaderManager *shaderManager;
    QGLPaintDevice *device;
 

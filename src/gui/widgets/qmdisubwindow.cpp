@@ -1555,13 +1555,13 @@ QRegion QMdiSubWindowPrivate::getRegion(Operation operation) const
          break;
 
       case BottomLeftResize:
-         region = QRegion(0, height - titleBarHeight, titleBarHeight, titleBarHeight)
-            - QRegion(frameWidth, height - titleBarHeight, cornerConst, cornerConst);
+         region = QRegion(0, height - titleBarHeight, titleBarHeight, titleBarHeight) -
+               QRegion(frameWidth, height - titleBarHeight, cornerConst, cornerConst);
          break;
 
       case BottomRightResize:
-         region = QRegion(width - titleBarHeight, height - titleBarHeight, titleBarHeight, titleBarHeight)
-            - QRegion(width - titleBarHeight, height - titleBarHeight, cornerConst, cornerConst);
+         region = QRegion(width - titleBarHeight, height - titleBarHeight, titleBarHeight, titleBarHeight) -
+               QRegion(width - titleBarHeight, height - titleBarHeight, cornerConst, cornerConst);
          break;
 
       default:

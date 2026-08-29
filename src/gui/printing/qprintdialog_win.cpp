@@ -257,11 +257,11 @@ int QPrintDialogPrivate::openWindowsPrintDialogModally()
       done = true;
       doPrinting = false;
       result = (PrintDlgEx(&pd) == S_OK);
-      if (result && (pd.dwResultAction == PD_RESULT_PRINT
-            || pd.dwResultAction == PD_RESULT_APPLY)) {
+
+      if (result && (pd.dwResultAction == PD_RESULT_PRINT || pd.dwResultAction == PD_RESULT_APPLY)) {
          doPrinting = (pd.dwResultAction == PD_RESULT_PRINT);
-         if ((pd.Flags & PD_PAGENUMS)
-            && (pd.lpPageRanges[0].nFromPage > pd.lpPageRanges[0].nToPage)) {
+
+         if ((pd.Flags & PD_PAGENUMS) && (pd.lpPageRanges[0].nFromPage > pd.lpPageRanges[0].nToPage)) {
             pd.lpPageRanges[0].nFromPage = 1;
             pd.lpPageRanges[0].nToPage = 1;
             done = false;
@@ -272,19 +272,18 @@ int QPrintDialogPrivate::openWindowsPrintDialogModally()
          }
       }
 
-      if (!done) {
+      if (! done) {
          QMessageBox::warning(nullptr, QPrintDialog::tr("Print"),
             QPrintDialog::tr("The 'From' value cannot be greater than the 'To' value."),
             QPrintDialog::tr("OK"));
       }
-   } while (!done);
+
+   } while (! done);
 
    q->QDialog::setVisible(false);
 
-
    // write values back
-   if (result && (pd.dwResultAction == PD_RESULT_PRINT
-         || pd.dwResultAction == PD_RESULT_APPLY)) {
+   if (result && (pd.dwResultAction == PD_RESULT_PRINT || pd.dwResultAction == PD_RESULT_APPLY)) {
       qt_win_read_back_PRINTDLGEX(&pd, q, this);
 
       // update printer validity

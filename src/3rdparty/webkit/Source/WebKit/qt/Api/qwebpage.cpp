@@ -2185,8 +2185,8 @@ bool QWebPage::shouldInterruptJavaScript()
     QWidget* parent = (d->client) ? d->client->ownerWidget() : 0;
 
     return QMessageBox::Yes == QMessageBox::information(parent, tr("JavaScript Problem - %1")
-                  .formatArg(mainFrame()->url().host()), tr("The script on this page appears to have a problem. Do you want to stop the script?"),
-                  QMessageBox::Yes, QMessageBox::No);
+          .formatArg(mainFrame()->url().host()), tr("The script on this page appears to have a problem. "
+          "Do you want to stop the script?"), QMessageBox::Yes, QMessageBox::No);
 }
 
 void QWebPage::setFeaturePermission(QWebFrame* frame, Feature feature, PermissionPolicy policy)

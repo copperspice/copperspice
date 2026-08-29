@@ -1072,9 +1072,7 @@ void QMenuBar::actionEvent(QActionEvent *e)
          if (menu != nullptr) {
             QPlatformMenu *beforeMenu = nullptr;
 
-            for (int beforeIndex = d->indexOf(e->action()) + 1;
-               !beforeMenu && (beforeIndex < actions().size());
-               ++beforeIndex) {
+            for (int beforeIndex = d->indexOf(e->action()) + 1; ! beforeMenu && (beforeIndex < actions().size()); ++beforeIndex) {
                beforeMenu = getPlatformMenu(actions().at(beforeIndex));
             }
 
@@ -1091,15 +1089,15 @@ void QMenuBar::actionEvent(QActionEvent *e)
          }
 
       } else if (e->type() == QEvent::ActionChanged) {
-         QPlatformMenu *cur  = d->platformMenuBar->menuForTag(reinterpret_cast<quintptr>(e->action()));
+         QPlatformMenu *currentMenu = d->platformMenuBar->menuForTag(reinterpret_cast<quintptr>(e->action()));
          QPlatformMenu *menu = getPlatformMenu(e->action());
 
          // the menu associated with the action can change, need to
          // remove and/or insert the new platform menu
 
-         if (menu != cur) {
-            if (cur) {
-               d->platformMenuBar->removeMenu(cur);
+         if (menu != currentMenu) {
+            if (currentMenu != nullptr) {
+               d->platformMenuBar->removeMenu(currentMenu);
             }
 
             if (menu != nullptr) {
