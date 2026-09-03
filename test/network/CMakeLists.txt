@@ -68,6 +68,7 @@ target_sources(CsNetworkTest
    ${CMAKE_CURRENT_SOURCE_DIR}/socket/qudpsocket.cpp
 
    ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcertificate.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslcipher.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslkey.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/ssl/qsslsocket.cpp
 )
