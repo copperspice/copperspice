@@ -1,34 +1,34 @@
 list(APPEND MULTIMEDIA_PRIVATE_INCLUDES
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/directshow_plugin.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/directshow_plugin.h
 
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_global.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_service.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_control.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_session.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_viewfindersettingscontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_imageprocessingcontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsimage_capturecontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsvideo_renderer.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsvideo_devicecontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_global.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_service.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_control.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_session.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_viewfindersettingscontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_imageprocessingcontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsimage_capturecontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsvideo_renderer.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsvideo_devicecontrol.h
 
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshoweventloop.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowpinenum.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowmediatype.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshoweventloop.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowpinenum.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowmediatype.h
 
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/dsplayer_global.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowioreader.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowiosource.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowmediatypelist.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowplayercontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowplayerservice.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowsamplescheduler.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowvideorenderercontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/mediasamplevideobuffer.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/videosurfacefilter.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/dsplayer_global.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowioreader.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowiosource.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowmediatypelist.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowplayercontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowplayerservice.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowsamplescheduler.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowvideorenderercontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/mediasamplevideobuffer.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/videosurfacefilter.h
 
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowaudioendpointcontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowmetadatacontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/vmr9videowindowcontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowaudioendpointcontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowmetadatacontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/vmr9videowindowcontrol.h
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
@@ -41,34 +41,34 @@ if(CMAKE_SYSTEM_NAME MATCHES "Windows")
    target_sources(CsMultimedia_DirectShow
       PRIVATE
 
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/directshow_plugin.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/directshow_plugin.cpp
 
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_service.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_control.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_session.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_viewfindersettingscontrol.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_imageprocessingcontrol.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsimage_capturecontrol.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsvideo_renderer.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsvideo_devicecontrol.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_service.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_control.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_session.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_viewfindersettingscontrol.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dscamera_imageprocessingcontrol.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsimage_capturecontrol.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsvideo_renderer.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/camera/dsvideo_devicecontrol.cpp
 
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshoweventloop.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowmediatype.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowpinenum.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshoweventloop.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowmediatype.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/kernel/directshowpinenum.cpp
 
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowioreader.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowiosource.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowmediatypelist.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowplayercontrol.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowplayerservice.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowsamplescheduler.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowvideorenderercontrol.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/mediasamplevideobuffer.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/videosurfacefilter.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowioreader.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowiosource.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowmediatypelist.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowplayercontrol.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowplayerservice.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowsamplescheduler.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowvideorenderercontrol.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/mediasamplevideobuffer.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/videosurfacefilter.cpp
 
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowaudioendpointcontrol.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowmetadatacontrol.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/vmr9videowindowcontrol.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowaudioendpointcontrol.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/directshowmetadatacontrol.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/directshow/player/vmr9videowindowcontrol.cpp
     )
 
     target_link_libraries(CsMultimedia_DirectShow

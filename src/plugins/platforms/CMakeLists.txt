@@ -5,8 +5,8 @@ include_directories(
    ${CMAKE_BINARY_DIR}/include/QtGui/platformheaders
    ${CMAKE_BINARY_DIR}/privateinclude/QtGui/private/platforms
 
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/include
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/include
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src
 )
 
 

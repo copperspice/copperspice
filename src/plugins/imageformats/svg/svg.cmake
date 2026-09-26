@@ -1,5 +1,5 @@
 list(APPEND IMAGEFORMATS_SVG_PRIVATE_INCLUDES
-   ${CMAKE_SOURCE_DIR}/src/plugins/imageformats/svg/qsvgiohandler.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/imageformats/svg/qsvgiohandler.h
 )
 
 if(WITH_SVG)
@@ -10,8 +10,8 @@ if(WITH_SVG)
 
    target_sources(CsImageFormatsSvg
       PRIVATE
-      ${CMAKE_SOURCE_DIR}/src/plugins/imageformats/svg/main.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/imageformats/svg/qsvgiohandler.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/imageformats/svg/main.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/imageformats/svg/qsvgiohandler.cpp
    )
 
    target_link_libraries(CsImageFormatsSvg

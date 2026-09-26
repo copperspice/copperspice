@@ -1,39 +1,39 @@
 list(APPEND MULTIMEDIA_PRIVATE_INCLUDES
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraserviceplugin.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameracontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerametadatacontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfimagecapturecontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraservice.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerasession.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfstoragelocation.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfaudioinputselectorcontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerainfocontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfmediavideoprobecontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerarenderercontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameradevicecontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerafocuscontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraexposurecontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerautility.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraviewfindersettingscontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfimageencodercontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraflashcontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfvideoencodersettingscontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfmediacontainercontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfaudioencodersettingscontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfmediarecordercontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraserviceplugin.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameracontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerametadatacontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfimagecapturecontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraservice.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerasession.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfstoragelocation.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfaudioinputselectorcontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerainfocontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfmediavideoprobecontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerarenderercontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameradevicecontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerafocuscontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraexposurecontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerautility.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraviewfindersettingscontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfimageencodercontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraflashcontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfvideoencodersettingscontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfmediacontainercontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfaudioencodersettingscontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfmediarecordercontrol.h
 
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfdisplaylink.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayercontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayermetadatacontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayerservice.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayersession.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayerserviceplugin.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideooutput.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideowindowcontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideowidgetcontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideowidget.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideorenderercontrol.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideoframerenderer.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfdisplaylink.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayercontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayermetadatacontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayerservice.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayersession.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayerserviceplugin.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideooutput.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideowindowcontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideowidgetcontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideowidget.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideorenderercontrol.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideoframerenderer.h
 )
 
 if(WITH_MULTIMEDIA AND CMAKE_SYSTEM_NAME MATCHES "Darwin")
@@ -46,28 +46,28 @@ if(WITH_MULTIMEDIA AND CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
    target_sources(CsMultimedia_avf_camera
       PRIVATE
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraserviceplugin.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameracontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerametadatacontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfimagecapturecontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraservice.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerasession.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfstoragelocation.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfaudioinputselectorcontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerainfocontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfmediavideoprobecontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameradevicecontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerarenderercontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerafocuscontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraexposurecontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerautility.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraviewfindersettingscontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfimageencodercontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraflashcontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfvideoencodersettingscontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfmediacontainercontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfaudioencodersettingscontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfmediarecordercontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraserviceplugin.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameracontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerametadatacontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfimagecapturecontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraservice.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerasession.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfstoragelocation.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfaudioinputselectorcontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerainfocontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfmediavideoprobecontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameradevicecontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerarenderercontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerafocuscontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraexposurecontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcamerautility.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraviewfindersettingscontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfimageencodercontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfcameraflashcontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfvideoencodersettingscontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfmediacontainercontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfaudioencodersettingscontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/camera/avfmediarecordercontrol.mm
    )
 
    target_link_libraries(CsMultimedia_avf_camera
@@ -98,18 +98,18 @@ if(WITH_MULTIMEDIA AND CMAKE_SYSTEM_NAME MATCHES "Darwin")
 
    target_sources(CsMultimedia_avf_mediaplayer
       PRIVATE
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfdisplaylink.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayercontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayermetadatacontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayerservice.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayerserviceplugin.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayersession.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideooutput.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideowindowcontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideowidgetcontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideowidget.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideorenderercontrol.mm
-      ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideoframerenderer.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfdisplaylink.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayercontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayermetadatacontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayerservice.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayerserviceplugin.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfmediaplayersession.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideooutput.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideowindowcontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideowidgetcontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideowidget.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideorenderercontrol.mm
+      ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/mediaservices/avfoundation/mediaplayer/avfvideoframerenderer.mm
    )
 
    target_link_libraries(CsMultimedia_avf_mediaplayer
