@@ -504,7 +504,7 @@ template<class T>
 void Bento<T>::invoke(SlotBase *, const TeaCupAbstract *dataPack) const
 {
    // T must be a class or it will be a compiler error
-   auto methodPtr = &T::operator();
+   auto methodPtr = static_cast<void (T::*)() const>(&T::operator());
 
    this->invoke_internal(dataPack, methodPtr);
 }
