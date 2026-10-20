@@ -66,6 +66,17 @@ else()
    )
 endif()
 
+if (${PNG_FOUND})
+   include_directories(
+      # using system library
+      ${PNG_INCLUDE_DIR}
+   )
+else()
+   include_directories(
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng
+   )
+endif()
+
 include(accessible/accessible.cmake)
 include(animation/animation.cmake)
 include(dialogs/dialogs.cmake)
@@ -194,6 +205,13 @@ if (${JPEG_FOUND})
    target_link_libraries(CsGui
       PRIVATE
       ${JPEG_LIBRARIES}
+   )
+endif()
+
+if (${PNG_FOUND})
+   target_link_libraries(CsGui
+      PRIVATE
+      ${PNG_LIBRARIES}
    )
 endif()
 

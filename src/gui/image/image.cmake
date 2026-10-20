@@ -117,21 +117,6 @@ target_sources(CsGui
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libmng/libmng_trace.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libmng/libmng_write.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libmng/libmng_zlib.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/png.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngerror.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngget.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngmem.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngpread.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngread.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngrio.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngrtran.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngrutil.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngset.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngtrans.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngwio.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngwrite.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngwtran.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngwutil.c
 
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_aux.c
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_close.c
@@ -170,7 +155,10 @@ target_sources(CsGui
    ${CMAKE_SOURCE_DIR}/src/3rdparty/libtiff/libtiff/tif_zip.c
 )
 
-if (NOT ${JPEG_FOUND})
+if (${JPEG_FOUND})
+   # using system library
+
+else()
    target_sources(CsGui
       PRIVATE
       ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jaricom.c
@@ -219,6 +207,40 @@ if (NOT ${JPEG_FOUND})
       ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jquant1.c
       ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jquant2.c
       ${CMAKE_SOURCE_DIR}/src/3rdparty/libjpeg/jutils.c
+   )
+endif()
+
+if (${PNG_FOUND})
+   # using system library
+
+   target_link_libraries(CsCore
+      PUBLIC
+      ${PNG_LIBRARIES}
+   )
+
+   target_include_directories(CsCore
+      PRIVATE
+      ${PNG_INCLUDE_DIR}
+   )
+
+else()
+   target_sources(CsGui
+      PRIVATE
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/png.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngerror.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngget.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngmem.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngpread.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngread.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngrio.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngrtran.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngrutil.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngset.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngtrans.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngwio.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngwrite.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngwtran.c
+      ${CMAKE_SOURCE_DIR}/src/3rdparty/libpng/pngwutil.c
    )
 endif()
 

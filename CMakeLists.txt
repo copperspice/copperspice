@@ -308,6 +308,17 @@ if (NOT JPEG_FOUND)
    message(STATUS "libjpeg was not found, bundled library will be used\n")
 endif()
 
+find_package(PNG QUIET)
+set_package_properties(PNG PROPERTIES
+   PURPOSE "Used for PNG images"
+   DESCRIPTION "PNG Image Library"
+   URL "https://libpng.org"
+   TYPE RECOMMENDED
+)
+
+if (NOT PNG_FOUND)
+   message(STATUS "libpng was not found, bundled library will be used\n")
+endif()
 
 if (NOT CMAKE_SYSTEM_NAME MATCHES "Windows")
 
