@@ -529,10 +529,21 @@ class Q_CORE_EXPORT QStringParser
                int id = tmp.first;
                iter   = tmp.second;
 
-               int argIndex = numbersUsed[id];
+               if (id == -1) {
+                  // placeholder and no more data
+                  retval.append("%");
 
-               if (id != -1 && argIndex != -1) {
-                  retval.append(argList[argIndex]);
+               } else {
+                  int argIndex = numbersUsed[id];
+
+                  if (argIndex == -1) {
+                     // unclear if anyone can get here
+                     qDebug("QStringParser::formatArgs() Please report this issue (line 541)");
+
+                  } else {
+                     retval.append(argList[argIndex]);
+
+                  }
                }
 
                if (iter == end) {
