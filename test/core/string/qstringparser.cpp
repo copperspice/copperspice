@@ -56,6 +56,35 @@ TEST_CASE("QStringParser formatArg_uchar", "[qstringparser]")
    }
 }
 
+TEST_CASE("QStringParser formatArg_chain", "[qstringparser]")
+{
+   //
+   QString str    = "Values (A):  %1  %2  %3  %4  %5  %6  %7  %8  %9  %3  %2  %10  %11  %12";
+   QString result = str.formatArg("apple").formatArg("pear").formatArg(5).formatArg(3.14).formatArg("grape").formatArg(0);
+
+   REQUIRE(result == "Values (A):  apple  pear  5  3.14  grape  0  %7  %8  %9  5  pear  %10  %11  %12");
+
+   //
+   str    = "%1 + %2 = %3";
+   result = str.formatArg("5").formatArg("3").formatArg("8");
+
+   REQUIRE(result == "5 + 3 = 8");
+}
+
+TEST_CASE("QStringParser formatArg_no_chain", "[qstringparser]")
+{
+   QString str = "Values (B):  %1  %2  %3  %4  %5  %6  %7  %8  %9  %3  %2  %10  %11  %12";
+
+   str = QStringParser::formatArg(str, "apple");
+   str = QStringParser::formatArg(str, "pear");
+   str = QStringParser::formatArg(str, 5);
+   str = QStringParser::formatArg(str, 3.14);
+   str = QStringParser::formatArg(str, "grape");
+   str = QStringParser::formatArg(str, 0);
+
+   REQUIRE(str == "Values (B):  apple  pear  5  3.14  grape  0  %7  %8  %9  5  pear  %10  %11  %12");
+}
+
 TEST_CASE("QStringParser formatArg_str", "[qstringparser]")
 {
    QString str1 = "Hello %1";
@@ -322,6 +351,84 @@ TEST_CASE("QStringParser toInteger", "[qstringparser]")
    }
 }
 
+//
+TEST_CASE("QStringParser formatArgs_missingArg", "[qstringparser]")
+{
+   QString str = QString("Values (C):  %5 %7 %9").formatArgs(QString("Apple"), QString("Pear"));
+
+   REQUIRE(str == "Values (C):  Apple Pear %9");
+}
+
+TEST_CASE("QStringParser formatArgs_noArgs", "[qstringparser]")
+{
+   QString str = QStringParser::formatArgs(QString("Hello %1"));
+
+   REQUIRE(str == QString("Hello %1"));
+}
+
+TEST_CASE("QStringParser formatArgs_noHolder_A", "[qstringparser]")
+{
+   // prevent the following QWarning from displaying
+   // QStringParser::toInteger() Format string has 1 arguments and 0 place holders
+
+   static QString output;
+   output.clear();
+
+   csInstallMsgHandler([](QtMsgType, QStringView msg) {output = msg;});
+
+   QString str = QStringParser::formatArgs(QString(), 42);
+
+   REQUIRE(str == QString());
+
+   REQUIRE(output == "QStringParser::toInteger() Format string has 1 arguments and 0 place holders\n"
+      "Format String: \"\"");
+
+   csInstallMsgHandler(nullptr);
+}
+
+TEST_CASE("QStringParser formatArgs_noHolder_B", "[qstringparser]")
+{
+   // prevent the following QWarning from displaying
+   // QStringParser::toInteger() Format string has 1 arguments and 0 place holders
+
+   static QString output;
+   output.clear();
+
+   csInstallMsgHandler([](QtMsgType, QStringView msg) {output = msg;});
+
+   QString str = QStringParser::formatArgs(QString("Some text"), 42);
+
+   REQUIRE(str == QString("Some text"));
+
+   REQUIRE(output == "QStringParser::toInteger() Format string has 1 arguments and 0 place holders\n"
+      "Format String: \"Some text\"");
+
+   csInstallMsgHandler(nullptr);
+}
+
+TEST_CASE("QStringParser formatArgs_outOfOrder", "[qstringparser]")
+{
+   QString str = QStringParser::formatArgs(QString("%10  %1  %2  %3  %4  %5  %6  %7  %8  %9"),
+      QString("one"), QString("two"), QString("three"), QString("four"), QString("five"),
+      QString("six"), QString("seven"), QString("eight"), QString("nine"), QString("ten"));
+
+   REQUIRE(str == QString("ten  one  two  three  four  five  six  seven  eight  nine"));
+}
+
+TEST_CASE("QStringParser formatArgs_replaceNumeric", "[qstringparser]")
+{
+   QString str = QStringParser::formatArgs(QString("Count: %1, Total: %2"), 3, 10);
+
+   REQUIRE(str == QString("Count: 3, Total: 10"));
+}
+
+TEST_CASE("QStringParser formatArgs_repeatHolder", "[qstringparser]")
+{
+   QString str = QStringParser::formatArgs(QString("%1 + %1 = %2"), 2, 4);
+
+   REQUIRE(str == QString("2 + 2 = 4"));
+}
+
 TEST_CASE("QStringParser formatArgs_str", "[qstringparser]")
 {
    QString count = "1";
@@ -332,33 +439,4 @@ TEST_CASE("QStringParser formatArgs_str", "[qstringparser]")
    status = QStringParser::formatArgs(status, count, total, fName);
 
    REQUIRE(status == "Processing file 1 of 5: somefile.cpp");
-}
-
-TEST_CASE("QStringParser formatArg_chain", "[qstringparser]")
-{
-   //
-   QString str    = "Values (A):  %1  %2  %3  %4  %5  %6  %7  %8  %9  %3  %2  %10  %11  %12";
-   QString result = str.formatArg("apple").formatArg("pear").formatArg(5).formatArg(3.14).formatArg("grape").formatArg(0);
-
-   REQUIRE(result == "Values (A):  apple  pear  5  3.14  grape  0  %7  %8  %9  5  pear  %10  %11  %12");
-
-   //
-   str    = "%1 + %2 = %3";
-   result = str.formatArg("5").formatArg("3").formatArg("8");
-
-   REQUIRE(result == "5 + 3 = 8");
-}
-
-TEST_CASE("QStringParser formatArg_no_chain", "[qstringparser]")
-{
-   QString str = "Values (B):  %1  %2  %3  %4  %5  %6  %7  %8  %9  %3  %2  %10  %11  %12";
-
-   str = QStringParser::formatArg(str, "apple");
-   str = QStringParser::formatArg(str, "pear");
-   str = QStringParser::formatArg(str, 5);
-   str = QStringParser::formatArg(str, 3.14);
-   str = QStringParser::formatArg(str, "grape");
-   str = QStringParser::formatArg(str, 0);
-
-   REQUIRE(str == "Values (B):  apple  pear  5  3.14  grape  0  %7  %8  %9  5  pear  %10  %11  %12");
 }
