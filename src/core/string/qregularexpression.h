@@ -413,6 +413,8 @@ class Q_CORE_EXPORT QRegularExpression
 
    private:
       S m_pattern;
+      S m_internal_pattern;
+
       QPatternOptionFlags m_patternOptions = QPatternOption::NoPatternOption;
       cs_regex_ns::basic_regex<QChar32, QRegexTraits<S>> m_regex;
 
@@ -536,10 +538,8 @@ class Q_CORE_EXPORT QRegularExpressionMatch
 template <typename S>
 QRegularExpression<S>::QRegularExpression(const S &pattern, QPatternOptionFlags options)
 {
-   S regex_pattern = cs_internal_regexp_toCanonical(pattern, options);
-
    m_patternOptions = options;
-   setPattern(regex_pattern);
+   setPattern(pattern);
 }
 
 template <typename S>
@@ -752,6 +752,8 @@ void QRegularExpression<S>::setPattern(const S &pattern)
 {
    m_pattern = pattern;
 
+   m_internal_pattern = cs_internal_regexp_toCanonical(m_pattern, m_patternOptions);
+
    // declare flags
    typename cs_regex_ns::basic_regex<QChar32, QRegexTraits<S>>::flag_type flags;
    flags = 0;
@@ -770,11 +772,11 @@ void QRegularExpression<S>::setPattern(const S &pattern)
 
    // exact match
    if (m_patternOptions &QPatternOption::ExactMatchOption) {
-      m_pattern = "\\A(?:" + m_pattern + ")\\z";
+      m_internal_pattern = "\\A(?:" + m_internal_pattern + ")\\z";
    }
 
    try  {
-      m_regex.assign(m_pattern.cbegin(), m_pattern.cend(), flags);
+      m_regex.assign(m_internal_pattern.cbegin(), m_internal_pattern.cend(), flags);
       m_valid = true;
 
    } catch (std::exception &err) {
