@@ -38,10 +38,39 @@ TEST_CASE("QRegularExpression empty", "[qregularexpression]")
 
    REQUIRE(regExp.captureCount() == -1);
    REQUIRE(regExp.namedCaptureGroups().isEmpty() == true);
-   REQUIRE(regExp.pattern() == "");
+   REQUIRE(regExp.pattern() == QString());
+
 // REQUIRE(regExp.patternErrorOffset() == 0);    // emerald, add soon to CS
 
    REQUIRE(regExp.isValid() == false);
+}
+
+TEST_CASE("QRegularExpression global_match", "[qregularexpression]")
+{
+   QString8 str = "Sunday Monday Tuesday";
+   QRegularExpression regExp("(?<bob>\\w+)");
+
+   QList<QRegularExpressionMatch> result = regExp.globalMatch(str);
+
+   REQUIRE(result.size() == 3);
+
+   REQUIRE(result[0].captured(0) == "Sunday");
+   REQUIRE(result[1].captured(0) == "Monday");
+   REQUIRE(result[2].captured(0) == "Tuesday");
+}
+
+TEST_CASE("QRegularExpression look_ahead", "[qregularexpression]")
+{
+   QString8 str = "A wacky fox and sizeable pig jumped halfway over a blue moon";
+   QRegularExpression regExp("f(..?)x(?!a)");
+
+   QRegularExpressionMatch match = regExp.match(str);
+
+   REQUIRE(match.hasMatch() == true);
+   REQUIRE(match.hasPartialMatch() == false);
+
+   REQUIRE(match.captured(0) == "fox");
+   REQUIRE(match.captured(1) == "o");
 }
 
 TEST_CASE("QRegularExpression match_a", "[qregularexpression]")
@@ -70,18 +99,41 @@ TEST_CASE("QRegularExpression match_b", "[qregularexpression]")
    REQUIRE(match.captured(0) == "1.7");
 }
 
-TEST_CASE("QRegularExpression look_ahead", "[qregularexpression]")
+TEST_CASE("QRegularExpression name_captured", "[qregularexpression]")
 {
-   QString8 str = "A wacky fox and sizeable pig jumped halfway over a blue moon";
-   QRegularExpression regExp("f(..?)x(?!a)");
+   QString8 str = "Sunday Monday Tuesday";
+   QRegularExpression regExp("(?<groupA>da)(?<groupB>y)");
 
    QRegularExpressionMatch match = regExp.match(str);
 
-   REQUIRE(match.hasMatch() == true);
-   REQUIRE(match.hasPartialMatch() == false);
+   QList<QString> list = regExp.namedCaptureGroups();
 
-   REQUIRE(match.captured(0) == "fox");
-   REQUIRE(match.captured(1) == "o");
+   REQUIRE(list.count() == 2);
+
+   REQUIRE(match.captured("groupA") == "da");
+   REQUIRE(match.captured("groupB") == "y");
+}
+
+TEST_CASE("QRegularExpression patterns", "[qregularexpression]")
+{
+   QRegularExpression regExp_1;
+
+   regExp_1.setPattern(".*_");
+
+   REQUIRE(regExp_1.isValid() == true);
+
+   //
+   QRegularExpression regExp_2;
+
+   regExp_2.setPatternOptions(QPatternOption::WildcardOption);
+   regExp_2.setPattern("*_");
+
+   REQUIRE(regExp_2.isValid() == true);
+
+   //
+   QRegularExpression regExp_3("*_", QPatternOption::WildcardOption);
+
+   REQUIRE(regExp_3.isValid() == true);
 }
 
 TEST_CASE("QRegularExpression quantifiers", "[qregularexpression]")
@@ -93,6 +145,16 @@ TEST_CASE("QRegularExpression quantifiers", "[qregularexpression]")
 
    REQUIRE(match.captured(0) == "fox and sizeable pig");
    REQUIRE(match.captured(1) == "and sizeable");
+}
+
+TEST_CASE("QRegularExpression replace", "[qregularexpression]")
+{
+   QString8 str = "@3::A   A::@2::B   @A";
+
+   QRegularExpression regExp = QRegularExpression("(::)?@[0-9]+");
+   str.replace(regExp, "");
+
+   REQUIRE(str == "::A   A::B   @A");
 }
 
 TEST_CASE("QRegularExpression word_boundaries", "[qregularexpression]")
@@ -115,45 +177,6 @@ TEST_CASE("QRegularExpression whitespace", "[qregularexpression]")
    REQUIRE(match.captured(0) == "fox and sizeable");
    REQUIRE(match.captured(1) == "fox");
    REQUIRE(match.captured(2) == "sizeable");
-}
-
-TEST_CASE("QRegularExpression name_captured", "[qregularexpression]")
-{
-   QString8 str = "Sunday Monday Tuesday";
-   QRegularExpression regExp("(?<groupA>da)(?<groupB>y)");
-
-   QRegularExpressionMatch match = regExp.match(str);
-
-   QList<QString> list = regExp.namedCaptureGroups();
-
-   REQUIRE(list.count() == 2);
-
-   REQUIRE(match.captured("groupA") == "da");
-   REQUIRE(match.captured("groupB") == "y");
-}
-
-TEST_CASE("QRegularExpression global_match", "[qregularexpression]")
-{
-   QString8 str = "Sunday Monday Tuesday";
-   QRegularExpression regExp("(?<bob>\\w+)");
-
-   QList<QRegularExpressionMatch> result = regExp.globalMatch(str);
-
-   REQUIRE(result.size() == 3);
-
-   REQUIRE(result[0].captured(0) == "Sunday");
-   REQUIRE(result[1].captured(0) == "Monday");
-   REQUIRE(result[2].captured(0) == "Tuesday");
-}
-
-TEST_CASE("QRegularExpression replace", "[qregularexpression]")
-{
-   QString8 str = "@3::A   A::@2::B   @A";
-
-   QRegularExpression regExp = QRegularExpression("(::)?@[0-9]+");
-   str.replace(regExp, "");
-
-   REQUIRE(str == "::A   A::B   @A");
 }
 
 //
