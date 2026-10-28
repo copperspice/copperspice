@@ -282,11 +282,12 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
  private:
    Q_DECLARE_PRIVATE(QMessageBox)
 
-   GUI_CS_SLOT_1(Private, void _q_clicked(QPlatformDialogHelper::StandardButton button, QPlatformDialogHelper::ButtonRole role))
-   GUI_CS_SLOT_2(_q_clicked)
+   GUI_CS_SLOT_1(Private, void q_buttonClicked(QAbstractButton *button))
+   GUI_CS_SLOT_2(q_buttonClicked)
 
-   GUI_CS_SLOT_1(Private, void _q_buttonClicked(QAbstractButton *button))
-   GUI_CS_SLOT_2(_q_buttonClicked)
+   GUI_CS_SLOT_1(Private, void q_clicked(QPlatformDialogHelper::StandardButton button,
+         QPlatformDialogHelper::ButtonRole role))
+   GUI_CS_SLOT_2(q_clicked)
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(QMessageBox::StandardButtons)

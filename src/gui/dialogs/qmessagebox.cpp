@@ -246,9 +246,6 @@ class QMessageBoxPrivate : public QDialogPrivate
    {
    }
 
-   void _q_buttonClicked(QAbstractButton *);
-   void _q_clicked(QPlatformDialogHelper::StandardButton button, QPlatformDialogHelper::ButtonRole role);
-
    void detectEscapeButton();
    QAbstractButton *findButton(int button0, int button1, int button2, int flags);
    void addOldButtons(int button0, int button1, int button2);
@@ -269,6 +266,8 @@ class QMessageBoxPrivate : public QDialogPrivate
       const QString &button0Text, const QString &button1Text, const QString &button2Text,
       int defaultButtonNumber, int escapeButtonNumber);
 
+   void q_buttonClicked(QAbstractButton *);
+   void q_clicked(QPlatformDialogHelper::StandardButton button, QPlatformDialogHelper::ButtonRole role);
    static QMessageBox::StandardButton showNewMessageBox(QWidget *parent,
       QMessageBox::Icon icon, const QString &title, const QString &text,
       QMessageBox::StandardButtons buttons, QMessageBox::StandardButton defaultButton);
@@ -325,7 +324,7 @@ void QMessageBoxPrivate::init(const QString &title, const QString &text)
    buttonBox->setObjectName("qt_msgbox_buttonbox");
    buttonBox->setCenterButtons(q->style()->styleHint(QStyle::SH_MessageBox_CenterButtons, nullptr, q));
 
-   QObject::connect(buttonBox, &QDialogButtonBox::clicked, q, &QMessageBox::_q_buttonClicked);
+   QObject::connect(buttonBox, &QDialogButtonBox::clicked, q, &QMessageBox::q_buttonClicked);
 
    setupLayout();
    if (!title.isEmpty() || !text.isEmpty()) {
@@ -542,7 +541,7 @@ int QMessageBoxPrivate::execReturnCode(QAbstractButton *button)
    return ret;
 }
 
-void QMessageBoxPrivate::_q_buttonClicked(QAbstractButton *button)
+void QMessageBoxPrivate::q_buttonClicked(QAbstractButton *button)
 {
    Q_Q(QMessageBox);
 
@@ -570,7 +569,7 @@ void QMessageBoxPrivate::_q_buttonClicked(QAbstractButton *button)
    }
 }
 
-void QMessageBoxPrivate::_q_clicked(QPlatformDialogHelper::StandardButton button, QPlatformDialogHelper::ButtonRole role)
+void QMessageBoxPrivate::q_clicked(QPlatformDialogHelper::StandardButton button, QPlatformDialogHelper::ButtonRole role)
 {
    (void) role;
 
@@ -578,17 +577,6 @@ void QMessageBoxPrivate::_q_clicked(QPlatformDialogHelper::StandardButton button
    q->done(button);
 }
 
-void QMessageBox::_q_clicked(QPlatformDialogHelper::StandardButton button, QPlatformDialogHelper::ButtonRole role)
-{
-   Q_D(QMessageBox);
-   d->_q_clicked(button, role);
-}
-
-void QMessageBox::_q_buttonClicked(QAbstractButton *button)
-{
-   Q_D(QMessageBox);
-   d->_q_buttonClicked(button);
-}
 
 // **
 QMessageBox::QMessageBox(QWidget *parent)
@@ -1668,7 +1656,7 @@ void QMessageBoxPrivate::initHelper(QPlatformDialogHelper *obj)
    QPlatformMessageDialogHelper *tmp = dynamic_cast<QPlatformMessageDialogHelper *>(obj);
 
    if (tmp != nullptr) {
-      QObject::connect(tmp, &QPlatformMessageDialogHelper::clicked, q, &QMessageBox::_q_clicked);
+      QObject::connect(tmp, &QPlatformMessageDialogHelper::clicked, q, &QMessageBox::q_clicked);
 
       tmp->setOptions(options);
    }
@@ -1725,3 +1713,14 @@ QPixmap QMessageBox::standardIcon(Icon icon)
    return QMessageBoxPrivate::standardIcon(icon, nullptr);
 }
 
+void QMessageBox::q_buttonClicked(QAbstractButton *button)
+{
+   Q_D(QMessageBox);
+   d->q_buttonClicked(button);
+}
+
+void QMessageBox::q_clicked(QPlatformDialogHelper::StandardButton button, QPlatformDialogHelper::ButtonRole role)
+{
+   Q_D(QMessageBox);
+   d->q_clicked(button, role);
+}
