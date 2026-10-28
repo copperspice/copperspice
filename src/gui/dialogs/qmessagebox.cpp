@@ -52,6 +52,11 @@
 #include <qplatform_nativeinterface.h>
 #endif
 
+enum DetailButtonLabel {
+   ShowLabel = 0,
+   HideLabel = 1
+};
+
 #if defined(Q_OS_WIN)
 // global function
 HMENU qt_getWindowsSystemMenu(const QWidget *w)
@@ -80,12 +85,6 @@ enum Button {
    Old_ButtonMask = 0xFF,
    NewButtonMask  = 0xFFFFFC00
 };
-
-enum DetailButtonLabel {
-   ShowLabel = 0,
-   HideLabel = 1
-};
-
 void cs_require_version(int argc, char *argv[], const char *str)
 {
    QString cur_version = QString(CS_VERSION_STR);
@@ -164,14 +163,6 @@ class QMessageBoxDetailsText : public QWidget
       connect(textEdit, &TextEdit::copyAvailable, this, &QMessageBoxDetailsText::textCopyAvailable);
    }
 
-   void setText(const QString &text) {
-      textEdit->setPlainText(text);
-   }
-
-   QString text() const {
-      return textEdit->toPlainText();
-   }
-
    bool copy() {
 #ifdef QT_NO_CLIPBOARD
       return false;
@@ -185,8 +176,16 @@ class QMessageBoxDetailsText : public QWidget
 #endif
    }
 
+   void setText(const QString &text) {
+      textEdit->setPlainText(text);
+   }
+
    void selectAll() {
       textEdit->selectAll();
+   }
+
+   QString text() const {
+      return textEdit->toPlainText();
    }
 
  private:
@@ -247,25 +246,25 @@ class QMessageBoxPrivate : public QDialogPrivate
    {
    }
 
-   void init(const QString &title = QString(), const QString &text = QString());
-   void setupLayout();
    void _q_buttonClicked(QAbstractButton *);
    void _q_clicked(QPlatformDialogHelper::StandardButton button, QPlatformDialogHelper::ButtonRole role);
 
+   void detectEscapeButton();
    QAbstractButton *findButton(int button0, int button1, int button2, int flags);
    void addOldButtons(int button0, int button1, int button2);
 
    QAbstractButton *abstractButtonForId(int id) const;
    int execReturnCode(QAbstractButton *button);
 
-   void detectEscapeButton();
-   void updateSize();
+   void init(const QString &title = QString(), const QString &text = QString());
    int layoutMinimumWidth();
-   void retranslateStrings();
 
+   void retranslateStrings();
    static int showOldMessageBox(QWidget *parent, QMessageBox::Icon icon, const QString &title, const QString &text,
       int button0, int button1, int button2);
+   void setupLayout();
 
+   void updateSize();
    static int showOldMessageBox(QWidget *parent, QMessageBox::Icon icon, const QString &title, const QString &text,
       const QString &button0Text, const QString &button1Text, const QString &button2Text,
       int defaultButtonNumber, int escapeButtonNumber);
@@ -302,9 +301,9 @@ class QMessageBoxPrivate : public QDialogPrivate
    QSharedPointer<QMessageDialogOptions> options;
 
  private:
-   void initHelper(QPlatformDialogHelper *) override;
    void helperPrepareShow(QPlatformDialogHelper *) override;
    void helperDone(QDialog::DialogCode, QPlatformDialogHelper *) override;
+   void initHelper(QPlatformDialogHelper *) override;
 };
 
 void QMessageBoxPrivate::init(const QString &title, const QString &text)

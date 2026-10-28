@@ -63,14 +63,6 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    GUI_CS_PROPERTY_WRITE(informativeText, setInformativeText)
 
  public:
-   enum Icon {
-      NoIcon      = 0,
-      Information = 1,
-      Warning     = 2,
-      Critical    = 3,
-      Question    = 4
-   };
-
    enum ButtonRole {
       // keep QDialogButtonBox::ButtonRole, QMessageBox::ButtonRole, QPlatformDialogHelper ALL in sync
       InvalidRole = -1,
@@ -85,6 +77,14 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
       ApplyRole,
 
       NRoles
+   };
+
+   enum Icon {
+      NoIcon      = 0,
+      Information = 1,
+      Warning     = 2,
+      Critical    = 3,
+      Question    = 4
    };
 
    enum StandardButton {
@@ -114,7 +114,6 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
 
       YesAll             = YesToAll,          // obsolete
       NoAll              = NoToAll,           // obsolete
-
       Default            = 0x00000100,        // obsolete
       Escape             = 0x00000200,        // obsolete
       FlagMask           = 0x00000300,        // obsolete
@@ -125,6 +124,7 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    using StandardButtons = QFlags<StandardButton>;
 
    explicit QMessageBox(QWidget *parent = nullptr);
+
    QMessageBox(Icon icon, const QString &title, const QString &text, StandardButtons buttons = NoButton,
       QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
 
@@ -136,47 +136,64 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    void addButton(QAbstractButton *button, ButtonRole role);
    QPushButton *addButton(const QString &text, ButtonRole role);
    QPushButton *addButton(StandardButton button);
-   void removeButton(QAbstractButton *button);
+
+   QAbstractButton *button(StandardButton button) const;
+   QList<QAbstractButton *> buttons() const;
+
+   ButtonRole buttonRole(QAbstractButton *button) const;
+
+   QCheckBox *checkBox() const;
+   QAbstractButton *clickedButton() const;
+
+   QPushButton *defaultButton() const;
+
+#ifndef QT_NO_TEXTEDIT
+   QString detailedText() const;
+#endif
+
+   QAbstractButton *escapeButton() const;
+
+   Icon icon() const;
+   QPixmap iconPixmap() const;
+   QString informativeText() const;
 
    using QDialog::open;
    void open(QObject *receiver, const QString &member);
 
-   QList<QAbstractButton *> buttons() const;
-   ButtonRole buttonRole(QAbstractButton *button) const;
+   void removeButton(QAbstractButton *button);
+
+   StandardButton standardButton(QAbstractButton *button) const;
 
    void setStandardButtons(StandardButtons buttons);
    StandardButtons standardButtons() const;
-   StandardButton standardButton(QAbstractButton *button) const;
-   QAbstractButton *button(StandardButton which) const;
 
-   QPushButton *defaultButton() const;
+
+   void setCheckBox(QCheckBox *cb);
+
    void setDefaultButton(QPushButton *button);
    void setDefaultButton(StandardButton button);
 
-   QAbstractButton *escapeButton() const;
+#ifndef QT_NO_TEXTEDIT
+   void setDetailedText(const QString &text);
+#endif
+
    void setEscapeButton(QAbstractButton *button);
    void setEscapeButton(StandardButton button);
 
-   QAbstractButton *clickedButton() const;
+   void setIcon(QMessageBox::Icon icon);
+   void setIconPixmap(const QPixmap &pixmap);
+   void setInformativeText(const QString &text);
+
+   void setText(const QString &text);
+   void setTextFormat(Qt::TextFormat format);
+   void setTextInteractionFlags(Qt::TextInteractionFlags flags);
 
    QString text() const;
-   void setText(const QString &text);
-
-   Icon icon() const;
-   void setIcon(QMessageBox::Icon icon);
-
-   QPixmap iconPixmap() const;
-   void setIconPixmap(const QPixmap &pixmap);
-
    Qt::TextFormat textFormat() const;
-   void setTextFormat(Qt::TextFormat format);
-
-   void setTextInteractionFlags(Qt::TextInteractionFlags flags);
    Qt::TextInteractionFlags textInteractionFlags() const;
 
-   void setCheckBox(QCheckBox *cb);
-   QCheckBox *checkBox() const;
-
+   void setWindowTitle(const QString &title);
+   void setWindowModality(Qt::WindowModality windowModality);
    static StandardButton information(QWidget *parent, const QString &title,
       const QString &text, StandardButtons buttons = Ok, StandardButton defaultButton = NoButton);
 
@@ -249,29 +266,18 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
 
    QString buttonText(int button) const;
    void setButtonText(int button, const QString &text);
-
-   QString informativeText() const;
-   void setInformativeText(const QString &text);
-
-#ifndef QT_NO_TEXTEDIT
-   QString detailedText() const;
-   void setDetailedText(const QString &text);
-#endif
-
-   void setWindowTitle(const QString &title);
-   void setWindowModality(Qt::WindowModality windowModality);
-
    static QPixmap standardIcon(Icon icon);
    GUI_CS_SIGNAL_1(Public, void buttonClicked(QAbstractButton *button))
    GUI_CS_SIGNAL_2(buttonClicked, button)
 
  protected:
+   void changeEvent(QEvent *event) override;
+   void closeEvent(QCloseEvent *event) override;
+
    bool event(QEvent *event) override;
+   void keyPressEvent(QKeyEvent *event) override;
    void resizeEvent(QResizeEvent *event) override;
    void showEvent(QShowEvent *event) override;
-   void closeEvent(QCloseEvent *event) override;
-   void keyPressEvent(QKeyEvent *event) override;
-   void changeEvent(QEvent *event) override;
 
  private:
    Q_DECLARE_PRIVATE(QMessageBox)
