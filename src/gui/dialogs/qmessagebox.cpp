@@ -47,7 +47,7 @@
 #include <qdialog_p.h>
 #include <qlabel_p.h>
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN)
 #include <qt_windows.h>
 #include <qplatform_nativeinterface.h>
 #endif
@@ -91,10 +91,10 @@ void cs_require_version(int argc, char *argv[], const char *str)
    QString req_version = QString::fromLatin1(str);
 
    int current = (cur_version.section('.', 0, 0).toInteger<int>() << 16) +
-      (cur_version.section('.', 1, 1).toInteger<int>() << 8) + cur_version.section('.', 2, 2).toInteger<int>();
+         (cur_version.section('.', 1, 1).toInteger<int>() << 8) + cur_version.section('.', 2, 2).toInteger<int>();
 
    int required = (req_version.section('.', 0, 0).toInteger<int>() << 16) +
-      (req_version.section('.', 1, 1).toInteger<int>() << 8) + req_version.section('.', 2, 2).toInteger<int>();
+         (req_version.section('.', 1, 1).toInteger<int>() << 8) + req_version.section('.', 2, 2).toInteger<int>();
 
    if (current < required)   {
 
@@ -220,14 +220,17 @@ class DetailButton : public QPushButton
 
       const QFontMetrics fm = fontMetrics();
       opt.text = label(ShowLabel);
-      QSize sz = fm.size(Qt::TextShowMnemonic, opt.text);
-      QSize ret = style()->sizeFromContents(QStyle::CT_PushButton, &opt, sz, this).expandedTo(QApplication::globalStrut());
+
+      QSize sz     = fm.size(Qt::TextShowMnemonic, opt.text);
+      QSize retval = style()->sizeFromContents(QStyle::CT_PushButton, &opt, sz, this).expandedTo(QApplication::globalStrut());
+
       opt.text = label(HideLabel);
       sz = fm.size(Qt::TextShowMnemonic, opt.text);
 
-      ret = ret.expandedTo(style()->sizeFromContents(QStyle::CT_PushButton, &opt, sz, this).
+      retval = retval.expandedTo(style()->sizeFromContents(QStyle::CT_PushButton, &opt, sz, this).
             expandedTo(QApplication::globalStrut()));
-      return ret;
+
+      return retval;
    }
 };
 
@@ -243,8 +246,7 @@ class QMessageBoxPrivate : public QDialogPrivate
 #endif
         compatMode(false), autoAddOkButton(true), detectedEscapeButton(nullptr), informativeLabel(nullptr),
         options(new QMessageDialogOptions)
-   {
-   }
+   { }
 
    void detectEscapeButton();
    QAbstractButton *findButton(int button0, int button1, int button2, int flags);
@@ -311,7 +313,9 @@ void QMessageBoxPrivate::init(const QString &title, const QString &text)
 
    label = new QLabel;
    label->setObjectName("qt_msgbox_label");
-   label->setTextInteractionFlags(Qt::TextInteractionFlags(q->style()->styleHint(QStyle::SH_MessageBox_TextInteractionFlags, nullptr, q)));
+
+   label->setTextInteractionFlags(Qt::TextInteractionFlags(q->style()->
+         styleHint(QStyle::SH_MessageBox_TextInteractionFlags, nullptr, q)));
 
    label->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
    label->setOpenExternalLinks(true);
@@ -327,7 +331,7 @@ void QMessageBoxPrivate::init(const QString &title, const QString &text)
    QObject::connect(buttonBox, &QDialogButtonBox::clicked, q, &QMessageBox::q_buttonClicked);
 
    setupLayout();
-   if (!title.isEmpty() || !text.isEmpty()) {
+   if (! title.isEmpty() || !text.isEmpty()) {
       q->setWindowTitle(title);
       q->setText(text);
    }
@@ -346,6 +350,7 @@ void QMessageBoxPrivate::init(const QString &title, const QString &text)
 void QMessageBoxPrivate::setupLayout()
 {
    Q_Q(QMessageBox);
+
    delete q->layout();
 
    QGridLayout *grid = new QGridLayout;
@@ -372,6 +377,7 @@ void QMessageBoxPrivate::setupLayout()
 #endif
       grid->addWidget(informativeLabel, 1, hasIcon ? 2 : 1, 1, 1);
    }
+
    if (checkbox) {
       grid->addWidget(checkbox, informativeLabel ? 2 : 1, hasIcon ? 2 : 1, 1, 1, Qt::AlignLeft);
 #ifdef Q_OS_DARWIN
@@ -380,6 +386,7 @@ void QMessageBoxPrivate::setupLayout()
       grid->addItem(new QSpacerItem(1, 7, QSizePolicy::Fixed, QSizePolicy::Fixed), grid->rowCount(), 0);
 #endif
    }
+
 #ifdef Q_OS_DARWIN
    grid->addWidget(buttonBox, grid->rowCount(), hasIcon ? 2 : 1, 1, 1);
    grid->setMargin(0);
@@ -912,12 +919,15 @@ bool QMessageBox::event(QEvent *e)
       case QEvent::LayoutRequest:
          d_func()->updateSize();
          break;
+
       case QEvent::LanguageChange:
          d_func()->retranslateStrings();
          break;
+
       default:
          break;
    }
+
    return result;
 }
 
@@ -975,13 +985,11 @@ void QMessageBox::changeEvent(QEvent *ev)
    QDialog::changeEvent(ev);
 }
 
-
 void QMessageBox::keyPressEvent(QKeyEvent *e)
 {
    Q_D(QMessageBox);
 
    if (e->matches(QKeySequence::Cancel)) {
-
 
       if (d->detectedEscapeButton) {
 
@@ -1048,10 +1056,10 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
 #endif // ! QT_NO_CLIPBOARD && ! QT_NO_SHORTCUT
 
 #ifndef QT_NO_SHORTCUT
-   if (!(e->modifiers() & (Qt::AltModifier | Qt::ControlModifier | Qt::MetaModifier))) {
+   if (! (e->modifiers() & (Qt::AltModifier | Qt::ControlModifier | Qt::MetaModifier))) {
       int key = e->key() & ~Qt::KeyboardModifierMask;
 
-      if (key) {
+      if (key != 0) {
          const QList<QAbstractButton *> buttons = d->buttonBox->buttons();
 
          for (int i = 0; i < buttons.count(); ++i) {
