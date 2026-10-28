@@ -85,6 +85,33 @@ enum Button {
    Old_ButtonMask = 0xFF,
    NewButtonMask  = 0xFFFFFC00
 };
+
+static int oldButton(int button)
+{
+   switch (button & QMessageBox::ButtonMask) {
+      case QMessageBox::Ok:
+         return Old_Ok;
+      case QMessageBox::Cancel:
+         return Old_Cancel;
+      case QMessageBox::Yes:
+         return Old_Yes;
+      case QMessageBox::No:
+         return Old_No;
+      case QMessageBox::Abort:
+         return Old_Abort;
+      case QMessageBox::Retry:
+         return Old_Retry;
+      case QMessageBox::Ignore:
+         return Old_Ignore;
+      case QMessageBox::YesToAll:
+         return Old_YesAll;
+      case QMessageBox::NoToAll:
+         return Old_NoAll;
+      default:
+         return 0;
+   }
+}
+
 void cs_require_version(int argc, char *argv[], const char *str)
 {
    QString cur_version = QString(CS_VERSION_STR);
@@ -116,8 +143,36 @@ void cs_require_version(int argc, char *argv[], const char *str)
    }
 }
 
-#ifndef QT_NO_TEXTEDIT
+// file local functions
+static QMessageDialogOptions::Icon helperIcon(QMessageBox::Icon icon)
+{
+   switch (icon) {
+      case QMessageBox::NoIcon:
+         return QMessageDialogOptions::NoIcon;
 
+      case QMessageBox::Information:
+         return QMessageDialogOptions::Information;
+
+      case QMessageBox::Warning:
+         return QMessageDialogOptions::Warning;
+
+      case QMessageBox::Critical:
+         return QMessageDialogOptions::Critical;
+
+      case QMessageBox::Question:
+         return QMessageDialogOptions::Question;
+   }
+
+   return QMessageDialogOptions::NoIcon;
+}
+
+static QPlatformDialogHelper::StandardButtons helperStandardButtons(QMessageBox *q)
+{
+   QPlatformDialogHelper::StandardButtons buttons(int(q->standardButtons()));
+   return buttons;
+}
+
+#ifndef QT_NO_TEXTEDIT
 class QMessageBoxDetailsText : public QWidget
 {
    GUI_CS_OBJECT(QMessageBoxDetailsText)
@@ -307,6 +362,79 @@ class QMessageBoxPrivate : public QDialogPrivate
    void initHelper(QPlatformDialogHelper *) override;
 };
 
+void QMessageBoxPrivate::detectEscapeButton()
+{
+   if (escapeButton) {
+      // escape button explicitly set
+      detectedEscapeButton = escapeButton;
+      return;
+   }
+
+   // Cancel button automatically becomes escape button
+   detectedEscapeButton = buttonBox->button(QDialogButtonBox::Cancel);
+   if (detectedEscapeButton) {
+      return;
+   }
+
+   // If there is only one button, make it the escape button
+   const QList<QAbstractButton *> buttons = buttonBox->buttons();
+   if (buttons.count() == 1) {
+      detectedEscapeButton = buttons.first();
+      return;
+   }
+
+   // if the message box has one RejectRole button, make it the escape button
+   for (int i = 0; i < buttons.count(); i++) {
+      if (buttonBox->buttonRole(buttons.at(i)) == QDialogButtonBox::RejectRole) {
+
+         if (detectedEscapeButton) {
+            // already detected
+            detectedEscapeButton = nullptr;
+            break;
+         }
+         detectedEscapeButton = buttons.at(i);
+      }
+   }
+
+   if (detectedEscapeButton) {
+      return;
+   }
+
+   // if the message box has one NoRole button, make it the escape button
+   for (int i = 0; i < buttons.count(); i++) {
+      if (buttonBox->buttonRole(buttons.at(i)) == QDialogButtonBox::NoRole) {
+
+         if (detectedEscapeButton) {
+            // already detected
+            detectedEscapeButton = nullptr;
+            break;
+         }
+         detectedEscapeButton = buttons.at(i);
+      }
+   }
+}
+
+int QMessageBoxPrivate::execReturnCode(QAbstractButton *button)
+{
+   int ret = buttonBox->standardButton(button);
+
+   if (ret == QMessageBox::NoButton) {
+      ret = customButtonList.indexOf(button);    // if button == nullptr, sets to InvalidRole
+
+   } else if (compatMode) {
+      ret = oldButton(ret);
+
+   }
+
+   return ret;
+}
+
+QString QMessageBox::informativeText() const
+{
+   Q_D(const QMessageBox);
+   return d->informativeLabel ? d->informativeLabel->text() : QString();
+}
+
 void QMessageBoxPrivate::init(const QString &title, const QString &text)
 {
    Q_Q(QMessageBox);
@@ -345,6 +473,21 @@ void QMessageBoxPrivate::init(const QString &title, const QString &text)
 #endif
 
    icon = QMessageBox::NoIcon;
+}
+
+int QMessageBoxPrivate::layoutMinimumWidth()
+{
+   m_widgetLayout->activate();
+   return m_widgetLayout->totalMinimumSize().width();
+}
+
+void QMessageBoxPrivate::retranslateStrings()
+{
+#ifndef QT_NO_TEXTEDIT
+   if (detailsButton) {
+      detailsButton->setLabel(detailsText->isHidden() ? ShowLabel : HideLabel);
+   }
+#endif
 }
 
 void QMessageBoxPrivate::setupLayout()
@@ -411,10 +554,46 @@ void QMessageBoxPrivate::setupLayout()
    updateSize();
 }
 
-int QMessageBoxPrivate::layoutMinimumWidth()
+QPixmap QMessageBoxPrivate::standardIcon(QMessageBox::Icon icon, QMessageBox *mb)
 {
-   m_widgetLayout->activate();
-   return m_widgetLayout->totalMinimumSize().width();
+   QStyle *style = mb ? mb->style() : QApplication::style();
+   int iconSize = style->pixelMetric(QStyle::PM_MessageBoxIconSize, nullptr, mb);
+
+   QIcon tmpIcon;
+
+   switch (icon) {
+      case QMessageBox::Information:
+         tmpIcon = style->standardIcon(QStyle::SP_MessageBoxInformation, nullptr, mb);
+         break;
+      case QMessageBox::Warning:
+         tmpIcon = style->standardIcon(QStyle::SP_MessageBoxWarning, nullptr, mb);
+         break;
+      case QMessageBox::Critical:
+         tmpIcon = style->standardIcon(QStyle::SP_MessageBoxCritical, nullptr, mb);
+         break;
+      case QMessageBox::Question:
+         tmpIcon = style->standardIcon(QStyle::SP_MessageBoxQuestion, nullptr, mb);
+      default:
+         break;
+   }
+
+   if (! tmpIcon.isNull()) {
+      QWindow *window = nullptr;
+
+      if (mb) {
+         window = mb->windowHandle();
+
+         if (! window) {
+            if (const QWidget *nativeParent = mb->nativeParentWidget()) {
+               window = nativeParent->windowHandle();
+            }
+         }
+      }
+
+      return tmpIcon.pixmap(window, QSize(iconSize, iconSize));
+   }
+
+   return QPixmap();
 }
 
 void QMessageBoxPrivate::updateSize()
@@ -507,47 +686,6 @@ void QMessageBoxPrivate::updateSize()
    QCoreApplication::removePostedEvents(q, QEvent::LayoutRequest);
 }
 
-static int oldButton(int button)
-{
-   switch (button & QMessageBox::ButtonMask) {
-      case QMessageBox::Ok:
-         return Old_Ok;
-      case QMessageBox::Cancel:
-         return Old_Cancel;
-      case QMessageBox::Yes:
-         return Old_Yes;
-      case QMessageBox::No:
-         return Old_No;
-      case QMessageBox::Abort:
-         return Old_Abort;
-      case QMessageBox::Retry:
-         return Old_Retry;
-      case QMessageBox::Ignore:
-         return Old_Ignore;
-      case QMessageBox::YesToAll:
-         return Old_YesAll;
-      case QMessageBox::NoToAll:
-         return Old_NoAll;
-      default:
-         return 0;
-   }
-}
-
-int QMessageBoxPrivate::execReturnCode(QAbstractButton *button)
-{
-   int ret = buttonBox->standardButton(button);
-
-   if (ret == QMessageBox::NoButton) {
-      ret = customButtonList.indexOf(button);    // if button == nullptr, sets to InvalidRole
-
-   } else if (compatMode) {
-      ret = oldButton(ret);
-
-   }
-
-   return ret;
-}
-
 void QMessageBoxPrivate::q_buttonClicked(QAbstractButton *button)
 {
    Q_Q(QMessageBox);
@@ -584,6 +722,35 @@ void QMessageBoxPrivate::q_clicked(QPlatformDialogHelper::StandardButton button,
    q->done(button);
 }
 
+void QMessageBoxPrivate::helperPrepareShow(QPlatformDialogHelper *)
+{
+   Q_Q(QMessageBox);
+
+   options->setWindowTitle(q->windowTitle());
+   options->setText(q->text());
+   options->setInformativeText(q->informativeText());
+   options->setDetailedText(q->detailedText());
+   options->setIcon(helperIcon(q->icon()));
+   options->setStandardButtons(helperStandardButtons(q));
+}
+
+void QMessageBoxPrivate::helperDone(QDialog::DialogCode code, QPlatformDialogHelper *)
+{
+   Q_Q(QMessageBox);
+   clickedButton = q->button(QMessageBox::StandardButton(code));
+}
+
+void QMessageBoxPrivate::initHelper(QPlatformDialogHelper *obj)
+{
+   Q_Q(QMessageBox);
+
+   QPlatformMessageDialogHelper *tmp = dynamic_cast<QPlatformMessageDialogHelper *>(obj);
+
+   if (tmp != nullptr) {
+      QObject::connect(tmp, &QPlatformMessageDialogHelper::clicked, q, &QMessageBox::q_clicked);
+      tmp->setOptions(options);
+   }
+}
 
 // **
 QMessageBox::QMessageBox(QWidget *parent)
@@ -651,304 +818,22 @@ QPushButton *QMessageBox::addButton(StandardButton button)
    return pushButton;
 }
 
-void QMessageBox::removeButton(QAbstractButton *button)
-{
-   Q_D(QMessageBox);
-
-   d->customButtonList.removeAll(button);
-   if (d->escapeButton == button) {
-      d->escapeButton = nullptr;
-   }
-
-   if (d->defaultButton == button) {
-      d->defaultButton = nullptr;
-   }
-
-   d->buttonBox->removeButton(button);
-   d->updateSize();
-}
-
-void QMessageBox::setStandardButtons(StandardButtons buttons)
-{
-   Q_D(QMessageBox);
-   d->buttonBox->setStandardButtons(QDialogButtonBox::StandardButtons(int(buttons)));
-
-   QList<QAbstractButton *> buttonList = d->buttonBox->buttons();
-   if (! buttonList.contains(d->escapeButton)) {
-      d->escapeButton = nullptr;
-   }
-
-   if (!buttonList.contains(d->defaultButton)) {
-      d->defaultButton = nullptr;
-   }
-
-   d->autoAddOkButton = false;
-   d->updateSize();
-}
-
-QMessageBox::StandardButtons QMessageBox::standardButtons() const
-{
-   Q_D(const QMessageBox);
-   return QMessageBox::StandardButtons(int(d->buttonBox->standardButtons()));
-}
-
-QMessageBox::StandardButton QMessageBox::standardButton(QAbstractButton *button) const
-{
-   Q_D(const QMessageBox);
-   return (QMessageBox::StandardButton)d->buttonBox->standardButton(button);
-}
-
 QAbstractButton *QMessageBox::button(StandardButton which) const
 {
    Q_D(const QMessageBox);
    return d->buttonBox->button(QDialogButtonBox::StandardButton(which));
 }
 
-QAbstractButton *QMessageBox::escapeButton() const
+QMessageBox::ButtonRole QMessageBox::buttonRole(QAbstractButton *button) const
 {
    Q_D(const QMessageBox);
-   return d->escapeButton;
+   return QMessageBox::ButtonRole(d->buttonBox->buttonRole(button));
 }
 
-void QMessageBox::setEscapeButton(QAbstractButton *button)
-{
-   Q_D(QMessageBox);
-   if (d->buttonBox->buttons().contains(button)) {
-      d->escapeButton = button;
-   }
-}
-
-void QMessageBox::setEscapeButton(QMessageBox::StandardButton button)
-{
-   Q_D(QMessageBox);
-   setEscapeButton(d->buttonBox->button(QDialogButtonBox::StandardButton(button)));
-}
-
-void QMessageBoxPrivate::detectEscapeButton()
-{
-   if (escapeButton) { // escape button explicitly set
-      detectedEscapeButton = escapeButton;
-      return;
-   }
-
-   // Cancel button automatically becomes escape button
-   detectedEscapeButton = buttonBox->button(QDialogButtonBox::Cancel);
-   if (detectedEscapeButton) {
-      return;
-   }
-
-   // If there is only one button, make it the escape button
-   const QList<QAbstractButton *> buttons = buttonBox->buttons();
-   if (buttons.count() == 1) {
-      detectedEscapeButton = buttons.first();
-      return;
-   }
-
-   // if the message box has one RejectRole button, make it the escape button
-   for (int i = 0; i < buttons.count(); i++) {
-      if (buttonBox->buttonRole(buttons.at(i)) == QDialogButtonBox::RejectRole) {
-
-         if (detectedEscapeButton) {
-            // already detected
-            detectedEscapeButton = nullptr;
-            break;
-         }
-         detectedEscapeButton = buttons.at(i);
-      }
-   }
-   if (detectedEscapeButton) {
-      return;
-   }
-
-   // if the message box has one NoRole button, make it the escape button
-   for (int i = 0; i < buttons.count(); i++) {
-      if (buttonBox->buttonRole(buttons.at(i)) == QDialogButtonBox::NoRole) {
-
-         if (detectedEscapeButton) {
-            // already detected
-            detectedEscapeButton = nullptr;
-            break;
-         }
-         detectedEscapeButton = buttons.at(i);
-      }
-   }
-}
-
-QAbstractButton *QMessageBox::clickedButton() const
+QList<QAbstractButton *> QMessageBox::buttons() const
 {
    Q_D(const QMessageBox);
-   return d->clickedButton;
-}
-
-QPushButton *QMessageBox::defaultButton() const
-{
-   Q_D(const QMessageBox);
-   return d->defaultButton;
-}
-
-void QMessageBox::setDefaultButton(QPushButton *button)
-{
-   Q_D(QMessageBox);
-   if (!d->buttonBox->buttons().contains(button)) {
-      return;
-   }
-   d->defaultButton = button;
-   button->setDefault(true);
-   button->setFocus();
-}
-
-void QMessageBox::setDefaultButton(QMessageBox::StandardButton button)
-{
-   Q_D(QMessageBox);
-   setDefaultButton(d->buttonBox->button(QDialogButtonBox::StandardButton(button)));
-}
-
-void QMessageBox::setCheckBox(QCheckBox *cb)
-{
-   Q_D(QMessageBox);
-
-   if (cb == d->checkbox) {
-      return;
-   }
-
-   if (d->checkbox) {
-      d->checkbox->hide();
-      layout()->removeWidget(d->checkbox);
-      if (d->checkbox->parentWidget() == this) {
-         d->checkbox->setParent(nullptr);
-         d->checkbox->deleteLater();
-      }
-   }
-   d->checkbox = cb;
-   if (d->checkbox) {
-      QSizePolicy sp = d->checkbox->sizePolicy();
-      sp.setHorizontalPolicy(QSizePolicy::MinimumExpanding);
-      d->checkbox->setSizePolicy(sp);
-   }
-   d->setupLayout();
-}
-QCheckBox *QMessageBox::checkBox() const
-{
-   Q_D(const QMessageBox);
-   return d->checkbox;
-}
-QString QMessageBox::text() const
-{
-   Q_D(const QMessageBox);
-   return d->label->text();
-}
-
-void QMessageBox::setText(const QString &text)
-{
-   Q_D(QMessageBox);
-
-   d->label->setText(text);
-
-   d->label->setWordWrap(d->label->textFormat() == Qt::RichText ||
-      (d->label->textFormat() == Qt::AutoText && Qt::mightBeRichText(text)));
-
-   d->updateSize();
-}
-
-QMessageBox::Icon QMessageBox::icon() const
-{
-   Q_D(const QMessageBox);
-
-   return d->icon;
-}
-
-void QMessageBox::setIcon(Icon icon)
-{
-   Q_D(QMessageBox);
-
-   setIconPixmap(QMessageBoxPrivate::standardIcon((QMessageBox::Icon)icon, this));
-   d->icon = icon;
-}
-
-QPixmap QMessageBox::iconPixmap() const
-{
-   Q_D(const QMessageBox);
-
-   if (d->iconLabel && d->iconLabel->pixmap()) {
-      return *d->iconLabel->pixmap();
-   }
-   return QPixmap();
-}
-
-void QMessageBox::setIconPixmap(const QPixmap &pixmap)
-{
-   Q_D(QMessageBox);
-
-   d->iconLabel->setPixmap(pixmap);
-   d->icon = NoIcon;
-   d->setupLayout();
-}
-
-Qt::TextFormat QMessageBox::textFormat() const
-{
-   Q_D(const QMessageBox);
-   return d->label->textFormat();
-}
-
-void QMessageBox::setTextFormat(Qt::TextFormat format)
-{
-   Q_D(QMessageBox);
-   d->label->setTextFormat(format);
-   d->label->setWordWrap(format == Qt::RichText ||
-      (format == Qt::AutoText && Qt::mightBeRichText(d->label->text())));
-   d->updateSize();
-}
-
-Qt::TextInteractionFlags QMessageBox::textInteractionFlags() const
-{
-    Q_D(const QMessageBox);
-    return d->label->textInteractionFlags();
-}
-
-void QMessageBox::setTextInteractionFlags(Qt::TextInteractionFlags flags)
-{
-    Q_D(QMessageBox);
-    d->label->setTextInteractionFlags(flags);
-}
-
-bool QMessageBox::event(QEvent *e)
-{
-   bool result = QDialog::event(e);
-
-   switch (e->type()) {
-      case QEvent::LayoutRequest:
-         d_func()->updateSize();
-         break;
-
-      case QEvent::LanguageChange:
-         d_func()->retranslateStrings();
-         break;
-
-      default:
-         break;
-   }
-
-   return result;
-}
-
-void QMessageBox::resizeEvent(QResizeEvent *event)
-{
-   QDialog::resizeEvent(event);
-}
-
-
-void QMessageBox::closeEvent(QCloseEvent *e)
-{
-   Q_D(QMessageBox);
-
-   if (!d->detectedEscapeButton) {
-      e->ignore();
-      return;
-   }
-
-   QDialog::closeEvent(e);
-   d->clickedButton = d->detectedEscapeButton;
-   setResult(d->execReturnCode(d->detectedEscapeButton));
+   return d->buttonBox->buttons();
 }
 
 void QMessageBox::changeEvent(QEvent *ev)
@@ -960,6 +845,7 @@ void QMessageBox::changeEvent(QEvent *ev)
          if (d->icon != NoIcon) {
             setIcon(d->icon);
          }
+
          Qt::TextInteractionFlags flags(style()->styleHint(QStyle::SH_MessageBox_TextInteractionFlags, nullptr, this));
          d->label->setTextInteractionFlags(flags);
          d->buttonBox->setCenterButtons(style()->styleHint(QStyle::SH_MessageBox_CenterButtons, nullptr, this));
@@ -983,6 +869,90 @@ void QMessageBox::changeEvent(QEvent *ev)
          break;
    }
    QDialog::changeEvent(ev);
+}
+
+QCheckBox *QMessageBox::checkBox() const
+{
+   Q_D(const QMessageBox);
+   return d->checkbox;
+}
+
+QAbstractButton *QMessageBox::clickedButton() const
+{
+   Q_D(const QMessageBox);
+   return d->clickedButton;
+}
+
+void QMessageBox::closeEvent(QCloseEvent *e)
+{
+   Q_D(QMessageBox);
+
+   if (! d->detectedEscapeButton) {
+      e->ignore();
+      return;
+   }
+
+   QDialog::closeEvent(e);
+   d->clickedButton = d->detectedEscapeButton;
+   setResult(d->execReturnCode(d->detectedEscapeButton));
+}
+
+QPushButton *QMessageBox::defaultButton() const
+{
+   Q_D(const QMessageBox);
+   return d->defaultButton;
+}
+
+#ifndef QT_NO_TEXTEDIT
+QString QMessageBox::detailedText() const
+{
+   Q_D(const QMessageBox);
+   return d->detailsText ? d->detailsText->text() : QString();
+}
+#endif
+
+QAbstractButton *QMessageBox::escapeButton() const
+{
+   Q_D(const QMessageBox);
+   return d->escapeButton;
+}
+
+bool QMessageBox::event(QEvent *e)
+{
+   bool result = QDialog::event(e);
+
+   switch (e->type()) {
+      case QEvent::LayoutRequest:
+         d_func()->updateSize();
+         break;
+
+      case QEvent::LanguageChange:
+         d_func()->retranslateStrings();
+         break;
+
+      default:
+         break;
+   }
+
+   return result;
+}
+
+QMessageBox::Icon QMessageBox::icon() const
+{
+   Q_D(const QMessageBox);
+
+   return d->icon;
+}
+
+QPixmap QMessageBox::iconPixmap() const
+{
+   Q_D(const QMessageBox);
+
+   if (d->iconLabel && d->iconLabel->pixmap()) {
+      return *d->iconLabel->pixmap();
+   }
+
+   return QPixmap();
 }
 
 void QMessageBox::keyPressEvent(QKeyEvent *e)
@@ -1094,16 +1064,247 @@ void QMessageBox::open(QObject *receiver, const QString &member)
    QDialog::open();
 }
 
-QList<QAbstractButton *> QMessageBox::buttons() const
+void QMessageBox::removeButton(QAbstractButton *button)
 {
-   Q_D(const QMessageBox);
-   return d->buttonBox->buttons();
+   Q_D(QMessageBox);
+
+   d->customButtonList.removeAll(button);
+   if (d->escapeButton == button) {
+      d->escapeButton = nullptr;
+   }
+
+   if (d->defaultButton == button) {
+      d->defaultButton = nullptr;
+   }
+
+   d->buttonBox->removeButton(button);
+   d->updateSize();
 }
 
-QMessageBox::ButtonRole QMessageBox::buttonRole(QAbstractButton *button) const
+void QMessageBox::resizeEvent(QResizeEvent *event)
 {
-   Q_D(const QMessageBox);
-   return QMessageBox::ButtonRole(d->buttonBox->buttonRole(button));
+   QDialog::resizeEvent(event);
+}
+
+void QMessageBox::setCheckBox(QCheckBox *cb)
+{
+   Q_D(QMessageBox);
+
+   if (cb == d->checkbox) {
+      return;
+   }
+
+   if (d->checkbox) {
+      d->checkbox->hide();
+      layout()->removeWidget(d->checkbox);
+
+      if (d->checkbox->parentWidget() == this) {
+         d->checkbox->setParent(nullptr);
+         d->checkbox->deleteLater();
+      }
+   }
+
+   d->checkbox = cb;
+
+   if (d->checkbox) {
+      QSizePolicy sp = d->checkbox->sizePolicy();
+      sp.setHorizontalPolicy(QSizePolicy::MinimumExpanding);
+      d->checkbox->setSizePolicy(sp);
+   }
+
+   d->setupLayout();
+}
+
+void QMessageBox::setDefaultButton(QPushButton *button)
+{
+   Q_D(QMessageBox);
+
+   if (! d->buttonBox->buttons().contains(button)) {
+      return;
+   }
+
+   d->defaultButton = button;
+   button->setDefault(true);
+   button->setFocus();
+}
+
+void QMessageBox::setDefaultButton(QMessageBox::StandardButton button)
+{
+   Q_D(QMessageBox);
+   setDefaultButton(d->buttonBox->button(QDialogButtonBox::StandardButton(button)));
+}
+
+#ifndef QT_NO_TEXTEDIT
+void QMessageBox::setDetailedText(const QString &text)
+{
+   Q_D(QMessageBox);
+
+   if (text.isEmpty()) {
+      if (d->detailsText) {
+         d->detailsText->hide();
+         d->detailsText->deleteLater();
+      }
+
+      d->detailsText = nullptr;
+      removeButton(d->detailsButton);
+
+      if (d->detailsButton) {
+         d->detailsButton->hide();
+         d->detailsButton->deleteLater();
+      }
+
+      d->detailsButton = nullptr;
+
+   } else {
+
+      if (! d->detailsText) {
+         d->detailsText = new QMessageBoxDetailsText(this);
+
+         d->detailsText->hide();
+      }
+
+      if (! d->detailsButton) {
+         const bool autoAddOkButton = d->autoAddOkButton; // QTBUG-39334, addButton() clears the flag.
+         d->detailsButton = new DetailButton(this);
+         addButton(d->detailsButton, QMessageBox::ActionRole);
+         d->autoAddOkButton = autoAddOkButton;
+      }
+
+      d->detailsText->setText(text);
+   }
+
+   d->setupLayout();
+}
+#endif
+
+void QMessageBox::setEscapeButton(QAbstractButton *button)
+{
+   Q_D(QMessageBox);
+   if (d->buttonBox->buttons().contains(button)) {
+      d->escapeButton = button;
+   }
+}
+
+void QMessageBox::setEscapeButton(QMessageBox::StandardButton button)
+{
+   Q_D(QMessageBox);
+   setEscapeButton(d->buttonBox->button(QDialogButtonBox::StandardButton(button)));
+}
+
+void QMessageBox::setInformativeText(const QString &text)
+{
+   Q_D(QMessageBox);
+
+   if (text.isEmpty()) {
+      if (d->informativeLabel) {
+         d->informativeLabel->hide();
+         d->informativeLabel->deleteLater();
+      }
+
+      d->informativeLabel = nullptr;
+
+   } else {
+      if (!d->informativeLabel) {
+         QLabel *label = new QLabel;
+         label->setObjectName("qt_msgbox_informativelabel");
+         label->setTextInteractionFlags(Qt::TextInteractionFlags(style()->styleHint(QStyle::SH_MessageBox_TextInteractionFlags, nullptr, this)));
+         label->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+         label->setOpenExternalLinks(true);
+         label->setWordWrap(true);
+#ifdef Q_OS_DARWIN
+         // apply a smaller font the information label on the mac
+         label->setFont(cs_app_fonts_hash()->value("QTipLabel"));
+#endif
+         label->setWordWrap(true);
+         d->informativeLabel = label;
+      }
+      d->informativeLabel->setText(text);
+   }
+   d->setupLayout();
+}
+
+void QMessageBox::setIcon(Icon icon)
+{
+   Q_D(QMessageBox);
+
+   setIconPixmap(QMessageBoxPrivate::standardIcon((QMessageBox::Icon)icon, this));
+   d->icon = icon;
+}
+
+void QMessageBox::setIconPixmap(const QPixmap &pixmap)
+{
+   Q_D(QMessageBox);
+
+   d->iconLabel->setPixmap(pixmap);
+   d->icon = NoIcon;
+   d->setupLayout();
+}
+
+void QMessageBox::setStandardButtons(StandardButtons buttons)
+{
+   Q_D(QMessageBox);
+   d->buttonBox->setStandardButtons(QDialogButtonBox::StandardButtons(int(buttons)));
+
+   QList<QAbstractButton *> buttonList = d->buttonBox->buttons();
+   if (! buttonList.contains(d->escapeButton)) {
+      d->escapeButton = nullptr;
+   }
+
+   if (!buttonList.contains(d->defaultButton)) {
+      d->defaultButton = nullptr;
+   }
+
+   d->autoAddOkButton = false;
+   d->updateSize();
+}
+
+void QMessageBox::setText(const QString &text)
+{
+   Q_D(QMessageBox);
+
+   d->label->setText(text);
+
+   d->label->setWordWrap(d->label->textFormat() == Qt::RichText ||
+      (d->label->textFormat() == Qt::AutoText && Qt::mightBeRichText(text)));
+
+   d->updateSize();
+}
+
+void QMessageBox::setTextFormat(Qt::TextFormat format)
+{
+   Q_D(QMessageBox);
+   d->label->setTextFormat(format);
+   d->label->setWordWrap(format == Qt::RichText ||
+      (format == Qt::AutoText && Qt::mightBeRichText(d->label->text())));
+   d->updateSize();
+}
+
+void QMessageBox::setTextInteractionFlags(Qt::TextInteractionFlags flags)
+{
+    Q_D(QMessageBox);
+    d->label->setTextInteractionFlags(flags);
+}
+
+void QMessageBox::setWindowModality(Qt::WindowModality windowModality)
+{
+   QDialog::setWindowModality(windowModality);
+
+   if (parentWidget() && windowModality == Qt::WindowModal) {
+      setParent(parentWidget(), Qt::Sheet);
+   } else {
+      setParent(parentWidget(), Qt::Dialog);
+   }
+   setDefaultButton(d_func()->defaultButton);
+}
+
+void QMessageBox::setWindowTitle(const QString &title)
+{
+   // Message boxes on the mac do not have a title
+#ifndef Q_OS_DARWIN
+   QDialog::setWindowTitle(title);
+#else
+   (void) title;
+#endif
 }
 
 void QMessageBox::showEvent(QShowEvent *e)
@@ -1135,6 +1336,36 @@ void QMessageBox::showEvent(QShowEvent *e)
 #endif
 
    QDialog::showEvent(e);
+}
+
+QMessageBox::StandardButton QMessageBox::standardButton(QAbstractButton *button) const
+{
+   Q_D(const QMessageBox);
+   return (QMessageBox::StandardButton)d->buttonBox->standardButton(button);
+}
+
+QMessageBox::StandardButtons QMessageBox::standardButtons() const
+{
+   Q_D(const QMessageBox);
+   return QMessageBox::StandardButtons(int(d->buttonBox->standardButtons()));
+}
+
+QString QMessageBox::text() const
+{
+   Q_D(const QMessageBox);
+   return d->label->text();
+}
+
+Qt::TextFormat QMessageBox::textFormat() const
+{
+   Q_D(const QMessageBox);
+   return d->label->textFormat();
+}
+
+Qt::TextInteractionFlags QMessageBox::textInteractionFlags() const
+{
+    Q_D(const QMessageBox);
+    return d->label->textInteractionFlags();
 }
 
 static QMessageBox::StandardButton showNewMessageBox(QWidget *parent, QMessageBox::Icon icon, const QString &title,
@@ -1180,6 +1411,13 @@ static QMessageBox::StandardButton showNewMessageBox(QWidget *parent, QMessageBo
    return msgBox.standardButton(msgBox.clickedButton());
 }
 
+// static methods
+QMessageBox::StandardButton QMessageBox::critical(QWidget *parent, const QString &title,
+   const QString &text, StandardButtons buttons, StandardButton defaultButton)
+{
+   return showNewMessageBox(parent, Critical, title, text, buttons, defaultButton);
+}
+
 QMessageBox::StandardButton QMessageBox::information(QWidget *parent, const QString &title,
    const QString &text, StandardButtons buttons, StandardButton defaultButton)
 {
@@ -1197,12 +1435,6 @@ QMessageBox::StandardButton QMessageBox::warning(QWidget *parent, const QString 
    StandardButton defaultButton)
 {
    return showNewMessageBox(parent, Warning, title, text, buttons, defaultButton);
-}
-
-QMessageBox::StandardButton QMessageBox::critical(QWidget *parent, const QString &title,
-   const QString &text, StandardButtons buttons, StandardButton defaultButton)
-{
-   return showNewMessageBox(parent, Critical, title, text, buttons, defaultButton);
 }
 
 void QMessageBox::about(QWidget *parent, const QString &title, const QString &text)
@@ -1426,15 +1658,6 @@ int QMessageBoxPrivate::showOldMessageBox(QWidget *parent, QMessageBox::Icon ico
    return messageBox.exec();
 }
 
-void QMessageBoxPrivate::retranslateStrings()
-{
-#ifndef QT_NO_TEXTEDIT
-   if (detailsButton) {
-      detailsButton->setLabel(detailsText->isHidden() ? ShowLabel : HideLabel);
-   }
-#endif
-}
-
 QMessageBox::QMessageBox(const QString &title, const QString &text, Icon icon,
             int button0, int button1, int button2, QWidget *parent, Qt::WindowFlags flags)
     : QDialog(*new QMessageBoxPrivate, parent, flags
@@ -1510,209 +1733,6 @@ int QMessageBox::critical(QWidget *parent, const QString &title, const QString &
 {
    return QMessageBoxPrivate::showOldMessageBox(parent, Critical, title, text,
          button0Text, button1Text, button2Text, defaultButtonNumber, escapeButtonNumber);
-}
-
-#ifndef QT_NO_TEXTEDIT
-
-QString QMessageBox::detailedText() const
-{
-   Q_D(const QMessageBox);
-   return d->detailsText ? d->detailsText->text() : QString();
-}
-
-void QMessageBox::setDetailedText(const QString &text)
-{
-   Q_D(QMessageBox);
-
-   if (text.isEmpty()) {
-      if (d->detailsText) {
-         d->detailsText->hide();
-         d->detailsText->deleteLater();
-      }
-      d->detailsText = nullptr;
-      removeButton(d->detailsButton);
-      if (d->detailsButton) {
-         d->detailsButton->hide();
-         d->detailsButton->deleteLater();
-      }
-      d->detailsButton = nullptr;
-
-   } else {
-
-      if (!d->detailsText) {
-         d->detailsText = new QMessageBoxDetailsText(this);
-
-         d->detailsText->hide();
-      }
-      if (!d->detailsButton) {
-         const bool autoAddOkButton = d->autoAddOkButton; // QTBUG-39334, addButton() clears the flag.
-         d->detailsButton = new DetailButton(this);
-         addButton(d->detailsButton, QMessageBox::ActionRole);
-         d->autoAddOkButton = autoAddOkButton;
-      }
-      d->detailsText->setText(text);
-   }
-   d->setupLayout();
-}
-#endif // QT_NO_TEXTEDIT
-
-QString QMessageBox::informativeText() const
-{
-   Q_D(const QMessageBox);
-   return d->informativeLabel ? d->informativeLabel->text() : QString();
-}
-
-void QMessageBox::setInformativeText(const QString &text)
-{
-   Q_D(QMessageBox);
-
-   if (text.isEmpty()) {
-      if (d->informativeLabel) {
-         d->informativeLabel->hide();
-         d->informativeLabel->deleteLater();
-      }
-
-      d->informativeLabel = nullptr;
-
-   } else {
-      if (!d->informativeLabel) {
-         QLabel *label = new QLabel;
-         label->setObjectName("qt_msgbox_informativelabel");
-         label->setTextInteractionFlags(Qt::TextInteractionFlags(style()->styleHint(QStyle::SH_MessageBox_TextInteractionFlags, nullptr, this)));
-         label->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-         label->setOpenExternalLinks(true);
-         label->setWordWrap(true);
-#ifdef Q_OS_DARWIN
-         // apply a smaller font the information label on the mac
-         label->setFont(cs_app_fonts_hash()->value("QTipLabel"));
-#endif
-         label->setWordWrap(true);
-         d->informativeLabel = label;
-      }
-      d->informativeLabel->setText(text);
-   }
-   d->setupLayout();
-}
-
-void QMessageBox::setWindowTitle(const QString &title)
-{
-   // Message boxes on the mac do not have a title
-#ifndef Q_OS_DARWIN
-   QDialog::setWindowTitle(title);
-#else
-   (void) title;
-#endif
-}
-
-void QMessageBox::setWindowModality(Qt::WindowModality windowModality)
-{
-   QDialog::setWindowModality(windowModality);
-
-   if (parentWidget() && windowModality == Qt::WindowModal) {
-      setParent(parentWidget(), Qt::Sheet);
-   } else {
-      setParent(parentWidget(), Qt::Dialog);
-   }
-   setDefaultButton(d_func()->defaultButton);
-}
-
-QPixmap QMessageBoxPrivate::standardIcon(QMessageBox::Icon icon, QMessageBox *mb)
-{
-   QStyle *style = mb ? mb->style() : QApplication::style();
-   int iconSize = style->pixelMetric(QStyle::PM_MessageBoxIconSize, nullptr, mb);
-
-   QIcon tmpIcon;
-
-   switch (icon) {
-      case QMessageBox::Information:
-         tmpIcon = style->standardIcon(QStyle::SP_MessageBoxInformation, nullptr, mb);
-         break;
-      case QMessageBox::Warning:
-         tmpIcon = style->standardIcon(QStyle::SP_MessageBoxWarning, nullptr, mb);
-         break;
-      case QMessageBox::Critical:
-         tmpIcon = style->standardIcon(QStyle::SP_MessageBoxCritical, nullptr, mb);
-         break;
-      case QMessageBox::Question:
-         tmpIcon = style->standardIcon(QStyle::SP_MessageBoxQuestion, nullptr, mb);
-      default:
-         break;
-   }
-
-   if (! tmpIcon.isNull()) {
-      QWindow *window = nullptr;
-      if (mb) {
-         window = mb->windowHandle();
-
-         if (! window) {
-            if (const QWidget *nativeParent = mb->nativeParentWidget()) {
-               window = nativeParent->windowHandle();
-            }
-         }
-      }
-
-      return tmpIcon.pixmap(window, QSize(iconSize, iconSize));
-   }
-
-   return QPixmap();
-}
-
-void QMessageBoxPrivate::initHelper(QPlatformDialogHelper *obj)
-{
-   Q_Q(QMessageBox);
-
-   QPlatformMessageDialogHelper *tmp = dynamic_cast<QPlatformMessageDialogHelper *>(obj);
-
-   if (tmp != nullptr) {
-      QObject::connect(tmp, &QPlatformMessageDialogHelper::clicked, q, &QMessageBox::q_clicked);
-
-      tmp->setOptions(options);
-   }
-}
-
-static QMessageDialogOptions::Icon helperIcon(QMessageBox::Icon icon)
-{
-   switch (icon) {
-      case QMessageBox::NoIcon:
-         return QMessageDialogOptions::NoIcon;
-
-      case QMessageBox::Information:
-         return QMessageDialogOptions::Information;
-
-      case QMessageBox::Warning:
-         return QMessageDialogOptions::Warning;
-
-      case QMessageBox::Critical:
-         return QMessageDialogOptions::Critical;
-
-      case QMessageBox::Question:
-         return QMessageDialogOptions::Question;
-   }
-
-   return QMessageDialogOptions::NoIcon;
-}
-
-static QPlatformDialogHelper::StandardButtons helperStandardButtons(QMessageBox *q)
-{
-   QPlatformDialogHelper::StandardButtons buttons(int(q->standardButtons()));
-   return buttons;
-}
-
-void QMessageBoxPrivate::helperPrepareShow(QPlatformDialogHelper *)
-{
-   Q_Q(QMessageBox);
-   options->setWindowTitle(q->windowTitle());
-   options->setText(q->text());
-   options->setInformativeText(q->informativeText());
-   options->setDetailedText(q->detailedText());
-   options->setIcon(helperIcon(q->icon()));
-   options->setStandardButtons(helperStandardButtons(q));
-}
-
-void QMessageBoxPrivate::helperDone(QDialog::DialogCode code, QPlatformDialogHelper *)
-{
-   Q_Q(QMessageBox);
-   clickedButton = q->button(QMessageBox::StandardButton(code));
 }
 
 // obsolete
