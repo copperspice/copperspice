@@ -1658,17 +1658,6 @@ int QMessageBoxPrivate::showOldMessageBox(QWidget *parent, QMessageBox::Icon ico
    return messageBox.exec();
 }
 
-QMessageBox::QMessageBox(const QString &title, const QString &text, Icon icon,
-            int button0, int button1, int button2, QWidget *parent, Qt::WindowFlags flags)
-    : QDialog(*new QMessageBoxPrivate, parent, flags
-              | Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint)
-{
-    Q_D(QMessageBox);
-    d->init(title, text);
-    setIcon(icon);
-    d->addOldButtons(button0, button1, button2);
-}
-
 // obsolete
 QPixmap QMessageBox::standardIcon(Icon icon)
 {

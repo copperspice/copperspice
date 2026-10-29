@@ -213,9 +213,6 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
 
 
 
-   QMessageBox(const QString &title, const QString &text, Icon icon,
-      int button0, int button1, int button2, QWidget *parent = nullptr,
-      Qt::WindowFlags flags = Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
 
 
 
