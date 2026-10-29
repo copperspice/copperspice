@@ -1658,12 +1658,6 @@ int QMessageBoxPrivate::showOldMessageBox(QWidget *parent, QMessageBox::Icon ico
    return messageBox.exec();
 }
 
-// obsolete
-QPixmap QMessageBox::standardIcon(Icon icon)
-{
-   return QMessageBoxPrivate::standardIcon(icon, nullptr);
-}
-
 void QMessageBox::q_buttonClicked(QAbstractButton *button)
 {
    Q_D(QMessageBox);

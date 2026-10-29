@@ -109,7 +109,10 @@ QErrorMessage::QErrorMessage(QWidget *parent)
    grid->setColumnStretch(1, 42);
    grid->setRowStretch(0, 42);
 
-   d->icon->setPixmap(QMessageBox::standardIcon(QMessageBox::Information));
+   const QIcon icon = style()->standardIcon(QStyle::SP_MessageBoxInformation, nullptr, this);
+   const QPixmap pixmap = icon.pixmap(icon.availableSizes().first());
+
+   d->icon->setPixmap(pixmap);
    d->icon->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
    d->again->setChecked(true);
