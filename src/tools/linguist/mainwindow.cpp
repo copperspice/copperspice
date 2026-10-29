@@ -629,11 +629,12 @@ bool MainWindow::openFiles(const QStringList &names, bool globalReadWrite)
             QApplication::restoreOverrideCursor();
             waitCursor = false;
 
-            int result = QMessageBox::information(this, tr("Loading File"),
-               tr("File '%1' does not seem to be related to the currently open file(s) '%2'.\n\n"
-               "Close the open file(s) first?")
-               .formatArgs(DataModel::prettifyPlainFileName(fname), m_dataModel->condensedSrcFileNames(true)),
-               QMessageBox::Yes | QMessageBox::Default, QMessageBox::No, QMessageBox::Cancel | QMessageBox::Escape);
+            QString bodyMsg = tr("Selected file '%1' does not appear to be related to the existing open file(s) '%2'.\n\n"
+                  "Close the open file(s) first?").formatArgs(DataModel::prettifyPlainFileName(fname),
+                  m_dataModel->condensedSrcFileNames(true));
+
+            int result = QMessageBox::information(this, tr("Loading File"), bodyMsg,
+                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
 
             switch (result) {
                case QMessageBox::Cancel:
@@ -655,11 +656,12 @@ bool MainWindow::openFiles(const QStringList &names, bool globalReadWrite)
             QApplication::restoreOverrideCursor();
             waitCursor = false;
 
-            int result = QMessageBox::information(this, tr("Loading File"),
-               tr("File '%1' is not related to the file '%2' which is being loaded.\n\n"
-               "Skip loading the first named file?")
-               .formatArgs(DataModel::prettifyPlainFileName(fname), opened.first().dataModel->srcFileName(true)),
-               QMessageBox::Yes | QMessageBox::Default, QMessageBox::No, QMessageBox::Cancel | QMessageBox::Escape);
+            QString bodyMsg = tr("Selected file '%1' is not related to the file '%2'.\n\n"
+                  "Skip opening the first file?").formatArgs(DataModel::prettifyPlainFileName(fname),
+                   opened.first().dataModel->srcFileName(true));
+
+            int result = QMessageBox::information(this, tr("Loading File"), bodyMsg,
+                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
 
             switch (result) {
 
@@ -1519,8 +1521,8 @@ bool MainWindow::maybeSaveAll()
       return true;
    }
 
-   int result = QMessageBox::information(this, tr("Linguist"), tr("Do you want to save the modified files?"),
-            QMessageBox::Yes | QMessageBox::Default, QMessageBox::No, QMessageBox::Cancel | QMessageBox::Escape);
+   int result = QMessageBox::information(this, tr("Linguist"), tr("Do you want to save the modified file(s)?"),
+         QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
 
    switch (result) {
 
@@ -1545,8 +1547,8 @@ bool MainWindow::maybeSave(int model)
    }
 
    int result = QMessageBox::information(this, tr("Linguist"),
-            tr("Do you want to save '%1'?").formatArg(m_dataModel->srcFileName(model, true)),
-            QMessageBox::Yes | QMessageBox::Default, QMessageBox::No, QMessageBox::Cancel | QMessageBox::Escape);
+         tr("Do you want to save '%1?'").formatArg(m_dataModel->srcFileName(model, true)),
+         QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
 
    switch (result) {
 
@@ -2527,8 +2529,8 @@ bool MainWindow::maybeSavePhraseBook(PhraseBook *pb)
    if (pb->isModified()) {
 
       int result = QMessageBox::information(this, tr("Linguist"),
-               tr("Do you want to save phrase book '%1'?").formatArg(pb->friendlyPhraseBookName()),
-               QMessageBox::Yes | QMessageBox::Default, QMessageBox::No, QMessageBox::Cancel | QMessageBox::Escape);
+            tr("Do you want to save phrase book '%1'?").formatArg(pb->friendlyPhraseBookName()),
+            QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
 
       switch (result) {
          case QMessageBox::Cancel:
