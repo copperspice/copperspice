@@ -1439,7 +1439,6 @@ QMessageBox::StandardButton QMessageBox::warning(QWidget *parent, const QString 
 
 void QMessageBox::about(QWidget *parent, const QString &title, const QString &text)
 {
-
 #ifdef Q_OS_DARWIN
    static QPointer<QMessageBox> oldMsgBox;
 
@@ -1447,24 +1446,25 @@ void QMessageBox::about(QWidget *parent, const QString &title, const QString &te
       oldMsgBox->show();
       oldMsgBox->raise();
       oldMsgBox->activateWindow();
+
       return;
    }
-#endif
 
-   QMessageBox *msgBox = new QMessageBox(title, text, Information, 0, 0, 0, parent
-
-#ifdef Q_OS_DARWIN
-      , Qt::WindowTitleHint | Qt::WindowSystemMenuHint);
+   QMessageBox *msgBox = new QMessageBox(Information, title, text, NoButton, parent,
+         Qt::WindowTitleHint | Qt::WindowSystemMenuHint);
 #else
-      );
+
+   QMessageBox *msgBox = new QMessageBox(Information, title, text, NoButton, parent);
+
 #endif
 
    msgBox->setAttribute(Qt::WA_DeleteOnClose);
    QIcon icon = msgBox->windowIcon();
    QSize size = icon.actualSize(QSize(64, 64));
+
    msgBox->setIconPixmap(icon.pixmap(size));
 
-   // should perhaps be a style hint
+   // consider using a style hint
 #ifdef Q_OS_DARWIN
    oldMsgBox = msgBox;
 
