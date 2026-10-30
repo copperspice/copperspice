@@ -273,9 +273,12 @@ int QPrintDialogPrivate::openWindowsPrintDialogModally()
       }
 
       if (!done) {
-         QMessageBox::warning(nullptr, QPrintDialog::tr("Print"),
-            QPrintDialog::tr("The 'From' value cannot be greater than the 'To' value."),
-            QPrintDialog::tr("OK"));
+         QMessageBox msgBox(QMessageBox::Warning, QPrintDialog::tr("Print"),
+               QPrintDialog::tr("The 'From' value can not be greater than the 'To' value."),
+               QMessageBox::StandardButton::Ok, nullptr);
+
+         msgBox.setButtonText(QMessageBox::StandardButton::Ok, QPrintDialog::tr("OK"));
+         msgBox.exec();
       }
    } while (!done);
 
