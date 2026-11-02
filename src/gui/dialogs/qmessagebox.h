@@ -139,6 +139,7 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    QAbstractButton *button(StandardButton button) const;
    QList<QAbstractButton *> buttons() const;
 
+   QString buttonText(StandardButton buttonId) const;
    ButtonRole buttonRole(QAbstractButton *button) const;
 
    QCheckBox *checkBox() const;
@@ -166,6 +167,7 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    void setStandardButtons(StandardButtons buttons);
    StandardButtons standardButtons() const;
 
+   void setButtonText(StandardButton buttonId, const QString &text);
 
    void setCheckBox(QCheckBox *cb);
 
@@ -233,8 +235,6 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
       return critical(parent, title, text, StandardButtons(button0), button1);
    }
 
-   QString buttonText(int button) const;
-   void setButtonText(int button, const QString &text);
    GUI_CS_SIGNAL_1(Public, void buttonClicked(QAbstractButton *button))
    GUI_CS_SIGNAL_2(buttonClicked, button)
 

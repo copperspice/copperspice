@@ -836,6 +836,19 @@ QList<QAbstractButton *> QMessageBox::buttons() const
    return d->buttonBox->buttons();
 }
 
+QString QMessageBox::buttonText(StandardButton buttonId) const
+{
+   QString retval;
+
+   QAbstractButton *tmp = button(buttonId);
+
+   if (tmp != nullptr) {
+      retval = tmp->text();
+   }
+
+   return retval;
+}
+
 void QMessageBox::changeEvent(QEvent *ev)
 {
    Q_D(QMessageBox);
@@ -1084,6 +1097,15 @@ void QMessageBox::removeButton(QAbstractButton *button)
 void QMessageBox::resizeEvent(QResizeEvent *event)
 {
    QDialog::resizeEvent(event);
+}
+
+void QMessageBox::setButtonText(StandardButton buttonId, const QString &text)
+{
+   QAbstractButton *tmp = button(buttonId);
+
+   if (tmp != nullptr) {
+      tmp->setText(text);
+   }
 }
 
 void QMessageBox::setCheckBox(QCheckBox *cb)
