@@ -172,6 +172,44 @@ static QPlatformDialogHelper::StandardButtons helperStandardButtons(QMessageBox 
    return buttons;
 }
 
+static QMessageBox::StandardButton showNewMessageBox(QWidget *parent, QMessageBox::Icon icon, const QString &title,
+   const QString &text, QMessageBox::StandardButtons buttons, QMessageBox::StandardButton defaultButton)
+{
+   QMessageBox msgBox(icon, title, text, QMessageBox::NoButton, parent);
+   QDialogButtonBox *buttonBox = msgBox.findChild<QDialogButtonBox *>();
+
+   Q_ASSERT(buttonBox != nullptr);
+
+   uint mask = QMessageBox::FirstButton;
+
+   while (mask <= QMessageBox::LastButton) {
+      uint sb = buttons & mask;
+      mask <<= 1;
+
+      if (sb == 0) {
+         continue;
+      }
+
+      QPushButton *button = msgBox.addButton((QMessageBox::StandardButton)sb);
+
+      // Choose the first accept role as the default
+      if (msgBox.defaultButton()) {
+         continue;
+      }
+
+      if ((defaultButton == QMessageBox::NoButton && buttonBox->buttonRole(button) == QDialogButtonBox::AcceptRole)
+            || (defaultButton != QMessageBox::NoButton && sb == uint(defaultButton))) {
+         msgBox.setDefaultButton(button);
+      }
+   }
+
+   if (msgBox.exec() == -1) {
+      return QMessageBox::Cancel;
+   }
+
+   return msgBox.standardButton(msgBox.clickedButton());
+}
+
 #ifndef QT_NO_TEXTEDIT
 class QMessageBoxDetailsText : public QWidget
 {
@@ -1376,49 +1414,6 @@ Qt::TextInteractionFlags QMessageBox::textInteractionFlags() const
 {
     Q_D(const QMessageBox);
     return d->label->textInteractionFlags();
-}
-
-static QMessageBox::StandardButton showNewMessageBox(QWidget *parent, QMessageBox::Icon icon, const QString &title,
-   const QString &text, QMessageBox::StandardButtons buttons, QMessageBox::StandardButton defaultButton)
-{
-   // necessary for backwards compatibility
-   // handles (Yes, No) and (Yes|Default, No)
-
-   if (defaultButton && !(buttons & defaultButton)) {
-      return (QMessageBox::StandardButton)
-         QMessageBoxPrivate::showOldMessageBox(parent, icon, title, text, int(buttons), int(defaultButton), 0);
-   }
-
-   QMessageBox msgBox(icon, title, text, QMessageBox::NoButton, parent);
-   QDialogButtonBox *buttonBox = msgBox.findChild<QDialogButtonBox *>();
-   Q_ASSERT(buttonBox != nullptr);
-
-   uint mask = QMessageBox::FirstButton;
-   while (mask <= QMessageBox::LastButton) {
-      uint sb = buttons & mask;
-      mask <<= 1;
-
-      if (!sb) {
-         continue;
-      }
-
-      QPushButton *button = msgBox.addButton((QMessageBox::StandardButton)sb);
-      // Choose the first accept role as the default
-      if (msgBox.defaultButton()) {
-         continue;
-      }
-
-      if ((defaultButton == QMessageBox::NoButton && buttonBox->buttonRole(button) == QDialogButtonBox::AcceptRole)
-         || (defaultButton != QMessageBox::NoButton && sb == uint(defaultButton))) {
-         msgBox.setDefaultButton(button);
-      }
-   }
-
-   if (msgBox.exec() == -1) {
-      return QMessageBox::Cancel;
-   }
-
-   return msgBox.standardButton(msgBox.clickedButton());
 }
 
 // static methods
