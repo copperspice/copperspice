@@ -293,11 +293,12 @@ class QMessageBoxPrivate : public QDialogPrivate
 
  public:
    QMessageBoxPrivate()
-      : escapeButton(nullptr), defaultButton(nullptr), checkbox(nullptr), clickedButton(nullptr), detailsButton(nullptr),
+      : autoAddOkButton(true), clickedButton(nullptr), detectedEscapeButton(nullptr), escapeButton(nullptr),
+        informativeLabel(nullptr), checkbox(nullptr), defaultButton(nullptr), detailsButton(nullptr),
+
 #ifndef QT_NO_TEXTEDIT
         detailsText(nullptr),
 #endif
-        compatMode(false), autoAddOkButton(true), detectedEscapeButton(nullptr), informativeLabel(nullptr),
         options(new QMessageDialogOptions)
    { }
 
@@ -317,29 +318,34 @@ class QMessageBoxPrivate : public QDialogPrivate
 
    static QPixmap standardIcon(QMessageBox::Icon icon, QMessageBox *mb);
 
-   QLabel *label;
-   QMessageBox::Icon icon;
-   QLabel *iconLabel;
-   QDialogButtonBox *buttonBox;
-   QList<QAbstractButton *> customButtonList;
-   QAbstractButton *escapeButton;
-   QPushButton *defaultButton;
-   QCheckBox *checkbox;
+   bool autoAddOkButton;
+
    QAbstractButton *clickedButton;
+   QAbstractButton *detectedEscapeButton;
+   QAbstractButton *escapeButton;
+
+   QLabel *label;
+   QLabel *iconLabel;
+   QLabel *informativeLabel;
+
+   QMessageBox::Icon icon;
+
+   QCheckBox *checkbox;
+   QDialogButtonBox *buttonBox;
+   QPushButton *defaultButton;
+
    DetailButton *detailsButton;
 
 #ifndef QT_NO_TEXTEDIT
    QMessageBoxDetailsText *detailsText;
 #endif
 
-   bool compatMode;
-   bool autoAddOkButton;
-   QAbstractButton *detectedEscapeButton;
-   QLabel *informativeLabel;
-   QPointer<QObject> receiverToDisconnectOnClose;
    QString memberToDisconnectOnClose;
    QString signalToDisconnectOnClose;
 
+   QList<QAbstractButton *> customButtonList;
+
+   QPointer<QObject> receiverToDisconnectOnClose;
    QSharedPointer<QMessageDialogOptions> options;
 
  private:
