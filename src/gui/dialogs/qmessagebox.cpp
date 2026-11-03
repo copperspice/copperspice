@@ -72,46 +72,6 @@ HMENU qt_getWindowsSystemMenu(const QWidget *w)
 #endif
 
 // global function
-enum Button {
-   Old_Ok         = 1,
-   Old_Cancel     = 2,
-   Old_Yes        = 3,
-   Old_No         = 4,
-   Old_Abort      = 5,
-   Old_Retry      = 6,
-   Old_Ignore     = 7,
-   Old_YesAll     = 8,
-   Old_NoAll      = 9,
-   Old_ButtonMask = 0xFF,
-   NewButtonMask  = 0xFFFFFC00
-};
-
-static int oldButton(int button)
-{
-   switch (button & QMessageBox::ButtonMask) {
-      case QMessageBox::Ok:
-         return Old_Ok;
-      case QMessageBox::Cancel:
-         return Old_Cancel;
-      case QMessageBox::Yes:
-         return Old_Yes;
-      case QMessageBox::No:
-         return Old_No;
-      case QMessageBox::Abort:
-         return Old_Abort;
-      case QMessageBox::Retry:
-         return Old_Retry;
-      case QMessageBox::Ignore:
-         return Old_Ignore;
-      case QMessageBox::YesToAll:
-         return Old_YesAll;
-      case QMessageBox::NoToAll:
-         return Old_NoAll;
-      default:
-         return 0;
-   }
-}
-
 void cs_require_version(int argc, char *argv[], const char *str)
 {
    QString cur_version = QString(CS_VERSION_STR);
