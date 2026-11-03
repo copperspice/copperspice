@@ -195,26 +195,23 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
 
    void setWindowTitle(const QString &title);
    void setWindowModality(Qt::WindowModality windowModality);
-   static StandardButton information(QWidget *parent, const QString &title,
-      const QString &text, StandardButtons buttons = Ok, StandardButton defaultButton = NoButton);
-
-   static StandardButton question(QWidget *parent, const QString &title,
-      const QString &text, StandardButtons buttons = StandardButtons(Yes | No),
-      StandardButton defaultButton = NoButton);
-
-   static StandardButton warning(QWidget *parent, const QString &title,
-      const QString &text, StandardButtons buttons = Ok, StandardButton defaultButton = NoButton);
-
-   static StandardButton critical(QWidget *parent, const QString &title,
-      const QString &text, StandardButtons buttons = Ok, StandardButton defaultButton = NoButton);
 
    static void about(QWidget *parent, const QString &title, const QString &text);
    static void aboutCs(QWidget *parent, const QString &title = QString());
    static void aboutQt(QWidget *parent, const QString &title = QString());
 
+   static StandardButton critical(QWidget *parent, const QString &title,
+         const QString &text, StandardButtons buttons = Ok, StandardButton defaultButton = NoButton);
 
+   static StandardButton information(QWidget *parent, const QString &title,
+         const QString &text, StandardButtons buttons = Ok, StandardButton defaultButton = NoButton);
 
+   static StandardButton question(QWidget *parent, const QString &title,
+         const QString &text, StandardButtons buttons = StandardButtons(Yes | No),
+         StandardButton defaultButton = NoButton);
 
+   static StandardButton warning(QWidget *parent, const QString &title,
+         const QString &text, StandardButtons buttons = Ok, StandardButton defaultButton = NoButton);
 
 
    static StandardButton information(QWidget *parent, const QString &title, const QString &text,
