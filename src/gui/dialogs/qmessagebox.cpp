@@ -442,17 +442,13 @@ void QMessageBoxPrivate::detectEscapeButton()
 
 int QMessageBoxPrivate::execReturnCode(QAbstractButton *button)
 {
-   int ret = buttonBox->standardButton(button);
+   int retval = buttonBox->standardButton(button);
 
-   if (ret == QMessageBox::NoButton) {
-      ret = customButtonList.indexOf(button);    // if button == nullptr, sets to InvalidRole
-
-   } else if (compatMode) {
-      ret = oldButton(ret);
-
+   if (retval == QMessageBox::NoButton) {
+      retval = customButtonList.indexOf(button);    // if button is a nullptr this will set retval to InvalidRole
    }
 
-   return ret;
+   return retval;
 }
 
 QString QMessageBox::informativeText() const
