@@ -84,7 +84,6 @@ void cs_require_version(int argc, char *argv[], const char *str)
          (req_version.section('.', 1, 1).toInteger<int>() << 8) + req_version.section('.', 2, 2).toInteger<int>();
 
    if (current < required)   {
-
       if (! qApp) {
          new QApplication(argc, argv);
       }
@@ -206,6 +205,7 @@ class QMessageBoxDetailsText : public QWidget
       line->setFrameShadow(QFrame::Sunken);
 
       layout->addWidget(line);
+
       textEdit = new TextEdit();
       textEdit->setFixedHeight(100);
       textEdit->setFocusPolicy(Qt::NoFocus);
@@ -225,6 +225,7 @@ class QMessageBoxDetailsText : public QWidget
       }
 
       textEdit->copy();
+
       return true;
 #endif
    }
@@ -447,7 +448,7 @@ void QMessageBoxPrivate::init(const QString &title, const QString &text)
    QObject::connect(buttonBox, &QDialogButtonBox::clicked, q, &QMessageBox::q_buttonClicked);
 
    setupLayout();
-   if (! title.isEmpty() || !text.isEmpty()) {
+   if (! title.isEmpty() || ! text.isEmpty()) {
       q->setWindowTitle(title);
       q->setText(text);
    }
@@ -538,6 +539,7 @@ void QMessageBoxPrivate::setupLayout()
 
    grid->setSizeConstraint(QLayout::SetNoConstraint);
    q->setLayout(grid);
+
    retranslateStrings();
    updateSize();
 }
@@ -545,7 +547,7 @@ void QMessageBoxPrivate::setupLayout()
 QPixmap QMessageBoxPrivate::standardIcon(QMessageBox::Icon icon, QMessageBox *mb)
 {
    QStyle *style = mb ? mb->style() : QApplication::style();
-   int iconSize = style->pixelMetric(QStyle::PM_MessageBoxIconSize, nullptr, mb);
+   int iconSize  = style->pixelMetric(QStyle::PM_MessageBoxIconSize, nullptr, mb);
 
    QIcon tmpIcon;
 
@@ -553,14 +555,19 @@ QPixmap QMessageBoxPrivate::standardIcon(QMessageBox::Icon icon, QMessageBox *mb
       case QMessageBox::Information:
          tmpIcon = style->standardIcon(QStyle::SP_MessageBoxInformation, nullptr, mb);
          break;
+
       case QMessageBox::Warning:
          tmpIcon = style->standardIcon(QStyle::SP_MessageBoxWarning, nullptr, mb);
          break;
+
       case QMessageBox::Critical:
          tmpIcon = style->standardIcon(QStyle::SP_MessageBoxCritical, nullptr, mb);
          break;
+
       case QMessageBox::Question:
          tmpIcon = style->standardIcon(QStyle::SP_MessageBoxQuestion, nullptr, mb);
+         break;
+
       default:
          break;
    }
@@ -668,7 +675,7 @@ void QMessageBoxPrivate::updateSize()
 
    m_widgetLayout->activate();
    int height = (m_widgetLayout->hasHeightForWidth()) ? m_widgetLayout->totalHeightForWidth(width)
-      : m_widgetLayout->totalMinimumSize().height();
+         : m_widgetLayout->totalMinimumSize().height();
 
    q->setFixedSize(width, height);
    QCoreApplication::removePostedEvents(q, QEvent::LayoutRequest);
@@ -867,9 +874,12 @@ void QMessageBox::changeEvent(QEvent *ev)
          d->label->setFont(f);
       }
 #endif
+         break;
+
       default:
          break;
    }
+
    QDialog::changeEvent(ev);
 }
 
@@ -1054,8 +1064,15 @@ void QMessageBox::open(QObject *receiver, const QString &member)
 {
    Q_D(QMessageBox);
 
-   const QString &signal = ! member.isEmpty() && member.contains('*') ?
-      QString("buttonClicked(QAbstractButton*)") : QString("finished(int)");
+   QString signal;
+
+   if (member.contains('*'))  {
+      signal = QString("buttonClicked(QAbstractButton*)");
+
+   } else {
+      signal = QString("finished(int)");
+
+   }
 
    connect(this, signal, receiver, member);
 
@@ -1170,12 +1187,11 @@ void QMessageBox::setDetailedText(const QString &text)
 
       if (d->detailsText == nullptr) {
          d->detailsText = new QMessageBoxDetailsText(this);
-
          d->detailsText->hide();
       }
 
       if (d->detailsButton == nullptr ) {
-         const bool autoAddOkButton = d->autoAddOkButton; // QTBUG-39334, addButton() clears the flag.
+         const bool autoAddOkButton = d->autoAddOkButton;
          d->detailsButton = new DetailButton(this);
          addButton(d->detailsButton, QMessageBox::ActionRole);
          d->autoAddOkButton = autoAddOkButton;
@@ -1191,6 +1207,7 @@ void QMessageBox::setDetailedText(const QString &text)
 void QMessageBox::setEscapeButton(QAbstractButton *button)
 {
    Q_D(QMessageBox);
+
    if (d->buttonBox->buttons().contains(button)) {
       d->escapeButton = button;
    }
@@ -1218,10 +1235,14 @@ void QMessageBox::setInformativeText(const QString &text)
       if (d->informativeLabel == nullptr) {
          QLabel *label = new QLabel;
          label->setObjectName("qt_msgbox_informativelabel");
-         label->setTextInteractionFlags(Qt::TextInteractionFlags(style()->styleHint(QStyle::SH_MessageBox_TextInteractionFlags, nullptr, this)));
+
+         label->setTextInteractionFlags(Qt::TextInteractionFlags(style()->
+               styleHint(QStyle::SH_MessageBox_TextInteractionFlags, nullptr, this)));
+
          label->setAlignment(Qt::AlignTop | Qt::AlignLeft);
          label->setOpenExternalLinks(true);
          label->setWordWrap(true);
+
 #ifdef Q_OS_DARWIN
          // apply a smaller font the information label on the mac
          label->setFont(cs_app_fonts_hash()->value("QTipLabel"));
@@ -1229,8 +1250,10 @@ void QMessageBox::setInformativeText(const QString &text)
          label->setWordWrap(true);
          d->informativeLabel = label;
       }
+
       d->informativeLabel->setText(text);
    }
+
    d->setupLayout();
 }
 
@@ -1261,7 +1284,7 @@ void QMessageBox::setStandardButtons(StandardButtons buttons)
       d->escapeButton = nullptr;
    }
 
-   if (!buttonList.contains(d->defaultButton)) {
+   if (! buttonList.contains(d->defaultButton)) {
       d->defaultButton = nullptr;
    }
 
@@ -1276,7 +1299,7 @@ void QMessageBox::setText(const QString &text)
    d->label->setText(text);
 
    d->label->setWordWrap(d->label->textFormat() == Qt::RichText ||
-      (d->label->textFormat() == Qt::AutoText && Qt::mightBeRichText(text)));
+         (d->label->textFormat() == Qt::AutoText && Qt::mightBeRichText(text)));
 
    d->updateSize();
 }
@@ -1284,9 +1307,10 @@ void QMessageBox::setText(const QString &text)
 void QMessageBox::setTextFormat(Qt::TextFormat format)
 {
    Q_D(QMessageBox);
+
    d->label->setTextFormat(format);
-   d->label->setWordWrap(format == Qt::RichText ||
-      (format == Qt::AutoText && Qt::mightBeRichText(d->label->text())));
+   d->label->setWordWrap(format == Qt::RichText || (format == Qt::AutoText && Qt::mightBeRichText(d->label->text())));
+
    d->updateSize();
 }
 
@@ -1305,12 +1329,14 @@ void QMessageBox::setWindowModality(Qt::WindowModality windowModality)
    } else {
       setParent(parentWidget(), Qt::Dialog);
    }
+
    setDefaultButton(d_func()->defaultButton);
 }
 
 void QMessageBox::setWindowTitle(const QString &title)
 {
-   // Message boxes on the mac do not have a title
+   // Message boxes on OS X do not have a title
+
 #ifndef Q_OS_DARWIN
    QDialog::setWindowTitle(title);
 #else
@@ -1341,8 +1367,7 @@ void QMessageBox::showEvent(QShowEvent *e)
 #ifdef Q_OS_WIN
 
    if (const HMENU systemMenu = qt_getWindowsSystemMenu(this)) {
-      EnableMenuItem(systemMenu, SC_CLOSE, d->detectedEscapeButton ?
-         MF_BYCOMMAND | MF_ENABLED : MF_BYCOMMAND | MF_GRAYED);
+      EnableMenuItem(systemMenu, SC_CLOSE, d->detectedEscapeButton ? MF_BYCOMMAND | MF_ENABLED : MF_BYCOMMAND | MF_GRAYED);
    }
 #endif
 
@@ -1399,8 +1424,7 @@ QMessageBox::StandardButton QMessageBox::question(QWidget *parent, const QString
 }
 
 QMessageBox::StandardButton QMessageBox::warning(QWidget *parent, const QString &title,
-   const QString &text, StandardButtons buttons,
-   StandardButton defaultButton)
+   const QString &text, StandardButtons buttons, StandardButton defaultButton)
 {
    return showNewMessageBox(parent, Warning, title, text, buttons, defaultButton);
 }
@@ -1470,7 +1494,7 @@ void QMessageBox::aboutCs(QWidget *parent, const QString &title)
 
    QLabel *msg2 = new QLabel;
    msg2->setText(tr("CopperSpice is a set of C++ libraries for developing cross platform applications <br>"
-                     "on Unix/Linux, Windows, and Mac OS X\n"));
+         "on Unix/Linux, Windows, and Mac OS X\n"));
 
    font = msg2->font();
    font.setPointSize(10);
