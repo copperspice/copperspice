@@ -472,7 +472,7 @@ int QMessageBoxPrivate::layoutMinimumWidth()
 void QMessageBoxPrivate::retranslateStrings()
 {
 #ifndef QT_NO_TEXTEDIT
-   if (detailsButton) {
+   if (detailsButton != nullptr) {
       detailsButton->setLabel(detailsText->isHidden() ? ShowLabel : HideLabel);
    }
 #endif
@@ -502,14 +502,14 @@ void QMessageBoxPrivate::setupLayout()
    grid->addItem(indentSpacer, 0, hasIcon ? 1 : 0, 2, 1);
    grid->addWidget(label, 0, hasIcon ? 2 : 1, 1, 1);
 
-   if (informativeLabel) {
+   if (informativeLabel != nullptr) {
 #ifndef Q_OS_DARWIN
       informativeLabel->setContentsMargins(0, 7, 0, 7);
 #endif
       grid->addWidget(informativeLabel, 1, hasIcon ? 2 : 1, 1, 1);
    }
 
-   if (checkbox) {
+   if (checkbox != nullptr) {
       grid->addWidget(checkbox, informativeLabel ? 2 : 1, hasIcon ? 2 : 1, 1, 1, Qt::AlignLeft);
 #ifdef Q_OS_DARWIN
       grid->addItem(new QSpacerItem(1, 15, QSizePolicy::Fixed, QSizePolicy::Fixed), grid->rowCount(), 0);
@@ -532,7 +532,7 @@ void QMessageBoxPrivate::setupLayout()
    grid->addWidget(buttonBox, grid->rowCount(), 0, 1, grid->columnCount());
 #endif
 
-   if (detailsText) {
+   if (detailsText != nullptr) {
       grid->addWidget(detailsText, grid->rowCount(), 0, 1, grid->columnCount());
    }
 
@@ -568,10 +568,10 @@ QPixmap QMessageBoxPrivate::standardIcon(QMessageBox::Icon icon, QMessageBox *mb
    if (! tmpIcon.isNull()) {
       QWindow *window = nullptr;
 
-      if (mb) {
+      if (mb != nullptr) {
          window = mb->windowHandle();
 
-         if (! window) {
+         if (window == nullptr) {
             if (const QWidget *nativeParent = mb->nativeParentWidget()) {
                window = nativeParent->windowHandle();
             }
@@ -609,7 +609,7 @@ void QMessageBoxPrivate::updateSize()
 
 #endif
 
-   if (informativeLabel) {
+   if (informativeLabel != nullptr) {
       informativeLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
    }
 
@@ -633,7 +633,7 @@ void QMessageBoxPrivate::updateSize()
       }
    }
 
-   if (informativeLabel) {
+   if (informativeLabel != nullptr) {
       label->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 
       QSizePolicy policy(QSizePolicy::Minimum, QSizePolicy::Preferred);
@@ -679,7 +679,7 @@ void QMessageBoxPrivate::q_buttonClicked(QAbstractButton *button)
    Q_Q(QMessageBox);
 
 #ifndef QT_NO_TEXTEDIT
-   if (detailsButton && detailsText && button == detailsButton) {
+   if (detailsButton != nullptr && detailsText && button == detailsButton) {
       detailsButton->setLabel(detailsText->isHidden() ? HideLabel : ShowLabel);
       detailsText->setHidden(!detailsText->isHidden());
       updateSize();
@@ -691,7 +691,7 @@ void QMessageBoxPrivate::q_buttonClicked(QAbstractButton *button)
       q->done(execReturnCode(button)); // does not trigger closeEvent
       emit q->buttonClicked(button);
 
-      if (receiverToDisconnectOnClose) {
+      if (receiverToDisconnectOnClose != nullptr) {
          QObject::disconnect(q, signalToDisconnectOnClose, receiverToDisconnectOnClose, memberToDisconnectOnClose);
 
          receiverToDisconnectOnClose = nullptr;
@@ -773,7 +773,7 @@ void QMessageBox::addButton(QAbstractButton *button, ButtonRole role)
 {
    Q_D(QMessageBox);
 
-   if (! button) {
+   if (button == nullptr) {
       return;
    }
 
@@ -799,7 +799,8 @@ QPushButton *QMessageBox::addButton(StandardButton button)
    Q_D(QMessageBox);
 
    QPushButton *pushButton = d->buttonBox->addButton((QDialogButtonBox::StandardButton)button);
-   if (pushButton) {
+
+   if (pushButton != nullptr) {
       d->autoAddOkButton = false;
    }
 
@@ -888,7 +889,7 @@ void QMessageBox::closeEvent(QCloseEvent *e)
 {
    Q_D(QMessageBox);
 
-   if (! d->detectedEscapeButton) {
+   if (d->detectedEscapeButton == nullptr) {
       e->ignore();
       return;
    }
@@ -949,7 +950,7 @@ QPixmap QMessageBox::iconPixmap() const
 {
    Q_D(const QMessageBox);
 
-   if (d->iconLabel && d->iconLabel->pixmap()) {
+   if (d->iconLabel != nullptr && d->iconLabel->pixmap()) {
       return *d->iconLabel->pixmap();
    }
 
@@ -962,7 +963,7 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
 
    if (e->matches(QKeySequence::Cancel)) {
 
-      if (d->detectedEscapeButton) {
+      if (d->detectedEscapeButton != nullptr) {
 
 #ifdef Q_OS_DARWIN
          d->detectedEscapeButton->animateClick();
@@ -979,7 +980,7 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
 
 #if ! defined(QT_NO_TEXTEDIT)
    if (e == QKeySequence::Copy) {
-      if (d->detailsText && d->detailsText->isVisible() && d->detailsText->copy()) {
+      if (d->detailsText != nullptr && d->detailsText->isVisible() && d->detailsText->copy()) {
          e->setAccepted(true);
          return;
       }
@@ -1000,7 +1001,7 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
       textToCopy += windowTitle() + separator; // title
       textToCopy += d->label->text() + separator; // text
 
-      if (d->informativeLabel) {
+      if (d->informativeLabel != nullptr) {
          textToCopy += d->informativeLabel->text() + separator;
       }
 
@@ -1014,7 +1015,7 @@ void QMessageBox::keyPressEvent(QKeyEvent *e)
       textToCopy += buttonTexts + separator;
 
 #ifndef QT_NO_TEXTEDIT
-      if (d->detailsText) {
+      if (d->detailsText != nullptr) {
          textToCopy += d->detailsText->text() + separator;
       }
 #endif
@@ -1104,7 +1105,7 @@ void QMessageBox::setCheckBox(QCheckBox *cb)
       return;
    }
 
-   if (d->checkbox) {
+   if (d->checkbox != nullptr) {
       d->checkbox->hide();
       layout()->removeWidget(d->checkbox);
 
@@ -1116,7 +1117,7 @@ void QMessageBox::setCheckBox(QCheckBox *cb)
 
    d->checkbox = cb;
 
-   if (d->checkbox) {
+   if (d->checkbox != nullptr) {
       QSizePolicy sp = d->checkbox->sizePolicy();
       sp.setHorizontalPolicy(QSizePolicy::MinimumExpanding);
       d->checkbox->setSizePolicy(sp);
@@ -1150,7 +1151,7 @@ void QMessageBox::setDetailedText(const QString &text)
    Q_D(QMessageBox);
 
    if (text.isEmpty()) {
-      if (d->detailsText) {
+      if (d->detailsText != nullptr) {
          d->detailsText->hide();
          d->detailsText->deleteLater();
       }
@@ -1158,7 +1159,7 @@ void QMessageBox::setDetailedText(const QString &text)
       d->detailsText = nullptr;
       removeButton(d->detailsButton);
 
-      if (d->detailsButton) {
+      if (d->detailsButton != nullptr) {
          d->detailsButton->hide();
          d->detailsButton->deleteLater();
       }
@@ -1167,13 +1168,13 @@ void QMessageBox::setDetailedText(const QString &text)
 
    } else {
 
-      if (! d->detailsText) {
+      if (d->detailsText == nullptr) {
          d->detailsText = new QMessageBoxDetailsText(this);
 
          d->detailsText->hide();
       }
 
-      if (! d->detailsButton) {
+      if (d->detailsButton == nullptr ) {
          const bool autoAddOkButton = d->autoAddOkButton; // QTBUG-39334, addButton() clears the flag.
          d->detailsButton = new DetailButton(this);
          addButton(d->detailsButton, QMessageBox::ActionRole);
@@ -1206,7 +1207,7 @@ void QMessageBox::setInformativeText(const QString &text)
    Q_D(QMessageBox);
 
    if (text.isEmpty()) {
-      if (d->informativeLabel) {
+      if (d->informativeLabel != nullptr) {
          d->informativeLabel->hide();
          d->informativeLabel->deleteLater();
       }
@@ -1214,7 +1215,7 @@ void QMessageBox::setInformativeText(const QString &text)
       d->informativeLabel = nullptr;
 
    } else {
-      if (!d->informativeLabel) {
+      if (d->informativeLabel == nullptr) {
          QLabel *label = new QLabel;
          label->setObjectName("qt_msgbox_informativelabel");
          label->setTextInteractionFlags(Qt::TextInteractionFlags(style()->styleHint(QStyle::SH_MessageBox_TextInteractionFlags, nullptr, this)));
@@ -1325,7 +1326,7 @@ void QMessageBox::showEvent(QShowEvent *e)
       addButton(Ok);
    }
 
-   if (d->detailsButton) {
+   if (d->detailsButton != nullptr) {
       addButton(d->detailsButton, QMessageBox::ActionRole);
    }
 
@@ -1409,7 +1410,7 @@ void QMessageBox::about(QWidget *parent, const QString &title, const QString &te
 #ifdef Q_OS_DARWIN
    static QPointer<QMessageBox> oldMsgBox;
 
-   if (oldMsgBox && oldMsgBox->text() == text) {
+   if (oldMsgBox != nullptr && oldMsgBox->text() == text) {
       oldMsgBox->show();
       oldMsgBox->raise();
       oldMsgBox->activateWindow();
@@ -1494,7 +1495,7 @@ void QMessageBox::aboutCs(QWidget *parent, const QString &title)
 
    QGridLayout *layout = new QGridLayout;
 
-   if (csImage)  {
+   if (csImage != nullptr)  {
       layout->addWidget(csImage, 0, 0, 2, 1);
    }
 
