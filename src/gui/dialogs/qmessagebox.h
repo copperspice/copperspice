@@ -213,23 +213,24 @@ class Q_GUI_EXPORT QMessageBox : public QDialog
    static StandardButton warning(QWidget *parent, const QString &title,
          const QString &text, StandardButtons buttons = Ok, StandardButton defaultButton = NoButton);
 
+   static int critical(QWidget *parent, const QString &title, const QString &text,
+         StandardButton button0, StandardButton button1) {
+      return critical(parent, title, text, StandardButtons(button0 | button1), button1);
+   }
 
    static StandardButton information(QWidget *parent, const QString &title, const QString &text,
-      StandardButton button0, StandardButton button1 = NoButton) {
-      return information(parent, title, text, StandardButtons(button0), button1);
+         StandardButton button0, StandardButton button1 = NoButton) {
+      return information(parent, title, text, StandardButtons(button0 | button1), button1);
    }
 
    static int question(QWidget *parent, const QString &title, const QString &text,
-      StandardButton button0, StandardButton button1) {
-      return question(parent, title, text, StandardButtons(button0), button1);
+         StandardButton button0, StandardButton button1) {
+      return question(parent, title, text, StandardButtons(button0 | button1), button1);
    }
 
-   static int warning(QWidget *parent, const QString &title, const QString &text, StandardButton button0, StandardButton button1) {
-      return warning(parent, title, text, StandardButtons(button0), button1);
-   }
-
-   static int critical(QWidget *parent, const QString &title, const QString &text, StandardButton button0, StandardButton button1) {
-      return critical(parent, title, text, StandardButtons(button0), button1);
+   static int warning(QWidget *parent, const QString &title, const QString &text,
+         StandardButton button0, StandardButton button1) {
+      return warning(parent, title, text, StandardButtons(button0 | button1), button1);
    }
 
    GUI_CS_SIGNAL_1(Public, void buttonClicked(QAbstractButton *button))
