@@ -4,15 +4,15 @@ list(APPEND SQL_PUBLIC_INCLUDES
 )
 
 list(APPEND SQL_INCLUDES
-   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/sqlite/qsql_sqlite.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/sqlite/qsqliteresult.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/sqlite/qsqlitedriver.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/sqlite/qsql_sqlite.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/sqlite/qsqliteresult.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/sqlite/qsqlitedriver.h
 )
 
 if (SQLite3_FOUND)
    target_sources(CsSql
       PRIVATE
-      ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/sqlite/qsql_sqlite.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/sqlite/qsql_sqlite.cpp
    )
 
    target_link_libraries(CsSql
@@ -22,14 +22,14 @@ if (SQLite3_FOUND)
 
 else()
    list(APPEND SQL_PRIVATE_INCLUDES
-      ${CMAKE_SOURCE_DIR}/src/3rdparty/sqlite/sqlite3.h
+      ${PROJECT_SOURCE_DIR}/src/3rdparty/sqlite/sqlite3.h
    )
 
    target_sources(CsSql
       PRIVATE
-      ${CMAKE_SOURCE_DIR}/src/3rdparty/sqlite/sqlite3.c
-      ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/sqlite/qsql_sqlite.cpp
+      ${PROJECT_SOURCE_DIR}/src/3rdparty/sqlite/sqlite3.c
+      ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/sqlite/qsql_sqlite.cpp
    )
 
-   include_directories(${CMAKE_SOURCE_DIR}/src/3rdparty/sqlite)
+   include_directories(${PROJECT_SOURCE_DIR}/src/3rdparty/sqlite)
 endif()

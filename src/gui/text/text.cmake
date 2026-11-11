@@ -178,133 +178,133 @@ target_sources(CsGui
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qtextodfwriter.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/text/qzip.cpp
 
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/autofit/autofit.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftbase.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftbbox.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftbitmap.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftglyph.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftinit.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftmm.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftsynth.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/fttype1.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/bdf/bdf.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/cache/ftccache.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/cache/ftcmanag.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/cache/ftcmru.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/cff/cff.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/cid/type1cid.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/gzip/ftgzip.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/lzw/ftlzw.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/otvalid/otvbase.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/otvalid/otvcommn.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/pcf/pcf.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/pfr/pfrcmap.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/pfr/pfrdrivr.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/pfr/pfrgload.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/pfr/pfrload.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/pfr/pfrobjs.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/pfr/pfrsbit.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/psaux/psaux.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/pshinter/pshinter.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/psnames/psnames.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/raster/raster.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/sdf/ftbsdf.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/sdf/ftsdf.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/sdf/ftsdfcommon.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/sdf/ftsdfrend.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/sfnt/sfnt.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/smooth/smooth.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/svg/svg.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/truetype/truetype.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/type1/type1.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/type42/type42.c
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/winfonts/winfnt.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/autofit/autofit.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftbase.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftbbox.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftbitmap.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftglyph.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftinit.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftmm.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftsynth.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/base/fttype1.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/bdf/bdf.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/cache/ftccache.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/cache/ftcmanag.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/cache/ftcmru.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/cff/cff.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/cid/type1cid.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/gzip/ftgzip.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/lzw/ftlzw.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/otvalid/otvbase.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/otvalid/otvcommn.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/pcf/pcf.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/pfr/pfrcmap.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/pfr/pfrdrivr.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/pfr/pfrgload.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/pfr/pfrload.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/pfr/pfrobjs.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/pfr/pfrsbit.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/psaux/psaux.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/pshinter/pshinter.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/psnames/psnames.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/raster/raster.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/sdf/ftbsdf.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/sdf/ftsdf.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/sdf/ftsdfcommon.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/sdf/ftsdfrend.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/sfnt/sfnt.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/smooth/smooth.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/svg/svg.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/truetype/truetype.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/type1/type1.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/type42/type42.c
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/winfonts/winfnt.c
 
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/fonts/resource_harfbuzz.cpp
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/fonts/resource_harfbuzz.cpp
 
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-aat-layout.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-aat-map.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-blob.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-buffer.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-buffer-serialize.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-buffer-verify.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-common.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-draw.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-face.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-face-builder.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-fallback-shape.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-font.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-map.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-number.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-aat-layout.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-aat-map.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-blob.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-buffer.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-buffer-serialize.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-buffer-verify.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-common.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-draw.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-face.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-face-builder.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-fallback-shape.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-font.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-map.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-number.cc
 
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-cff1-table.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-cff2-table.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-color.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-face.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-font.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-layout.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-map.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-math.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-metrics.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-name.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-fallback.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-normalize.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-arabic.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-default.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-hangul.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-hebrew.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-indic.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-indic-table.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-khmer.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-myanmar.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-syllabic.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-thai.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-use.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-vowel-constraints.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-tag.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-var.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-cff1-table.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-cff2-table.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-color.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-face.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-font.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-layout.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-map.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-math.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-metrics.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-name.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-fallback.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shape-normalize.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-arabic.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-default.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-hangul.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-hebrew.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-indic.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-indic-table.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-khmer.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-myanmar.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-syllabic.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-thai.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-use.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-shaper-vowel-constraints.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-tag.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-ot-var.cc
 
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-outline.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-paint.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-paint-extents.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-set.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shape.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shape-plan.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shaper.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-static.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-cff1.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-cff2.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-cff-common.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-input.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-instancer-solver.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-plan.cc
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-unicode.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-outline.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-paint.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-paint-extents.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-set.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shape.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shape-plan.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-shaper.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-static.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-cff1.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-cff2.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-cff-common.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-input.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-instancer-solver.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-subset-plan.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-unicode.cc
 
-   ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/graph/gsubgpos-context.cc
+   ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/graph/gsubgpos-context.cc
 )
 
 if (GTK2_FOUND)
    target_sources(CsGui
       PRIVATE
-      ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-glib.cc
-      ${CMAKE_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-gobject-structs.cc
+      ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-glib.cc
+      ${PROJECT_SOURCE_DIR}/src/3rdparty/harfbuzz/src/hb-gobject-structs.cc
    )
 endif()
 
 if (CMAKE_SYSTEM_NAME MATCHES "Windows")
    target_sources(CsGui
       PRIVATE
-      ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/builds/windows/ftdebug.c
-      ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftsystem.c
+      ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/builds/windows/ftdebug.c
+      ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftsystem.c
    )
 
 else()
    target_sources(CsGui
       PRIVATE
-      ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftdebug.c
-      ${CMAKE_SOURCE_DIR}/src/3rdparty/freetype/builds/unix/ftsystem.c
+      ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/src/base/ftdebug.c
+      ${PROJECT_SOURCE_DIR}/src/3rdparty/freetype/builds/unix/ftsystem.c
    )
 
    add_definitions(

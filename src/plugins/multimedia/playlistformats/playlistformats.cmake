@@ -5,12 +5,12 @@ set_target_properties(CsMultimedia_m3u PROPERTIES OUTPUT_NAME CsMultimedia_m3u${
 
 
 list(APPEND MULTIMEDIA_PRIVATE_INCLUDES
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/playlistformats/qm3u_plugin.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/playlistformats/qm3u_plugin.h
 )
 
 target_sources(CsMultimedia_m3u
    PRIVATE
-   ${CMAKE_SOURCE_DIR}/src/plugins/multimedia/playlistformats/qm3u_plugin.cpp
+   ${PROJECT_SOURCE_DIR}/src/plugins/multimedia/playlistformats/qm3u_plugin.cpp
 )
 
 target_link_libraries(CsMultimedia_m3u

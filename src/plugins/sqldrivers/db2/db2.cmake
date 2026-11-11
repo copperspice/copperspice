@@ -4,9 +4,9 @@ list(APPEND SQL_PUBLIC_INCLUDES
 )
 
 list(APPEND SQL_INCLUDES
-   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/db2/qsql_db2.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/db2/qdb2driver.h
-   ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/db2/qdb2result.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/db2/qsql_db2.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/db2/qdb2driver.h
+   ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/db2/qdb2result.h
 )
 
 # if(WITH_DB2_PLUGIN AND DB2_FOUND), unsupported at this time
@@ -21,8 +21,8 @@ if (FALSE)
 
    target_sources(CsSqlDb2
       PRIVATE
-      ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/db2/main.cpp
-      ${CMAKE_SOURCE_DIR}/src/plugins/sqldrivers/db2/qsql_db2.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/db2/main.cpp
+      ${PROJECT_SOURCE_DIR}/src/plugins/sqldrivers/db2/qsql_db2.cpp
    )
 
    target_link_libraries(CsSqlDb2
